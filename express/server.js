@@ -10,7 +10,6 @@ mongoose.connect("mongodb://localhost:27017/mbm-ecom", { useNewUrlParser: true, 
 
 /* TODO: body parser may be required */
 
-
 console.log('running')
 
 const book = {
@@ -21,27 +20,41 @@ const book = {
 
 const typeDefs = gql`
 
-    input Something {
-        model: String,
-        limit: Int,
-        skip:Int
-    }
-
     type Query {
         hello: Book,
         products: [Product]
         product(slug: String): Product
-        productPagination(data: Something): [Product]
+        productPagination(data: PaginationData): [Product]
     }
 
-    input ProductPaginationData {
+    input PaginationData {
         model: String
+        searchField: String
         searchTerm: String
-        filterCriteria: String
-        sortByCriteria: String
-        skip: Int
+        filterCriteria: [FilterCriteria]
+        sortByCriteria: [SortCriteria]
+        operators: [Operator]
+        cursor: Int
         limit: Int
     }
+
+    input Operator {
+        operator: String,
+        field: String,
+        value: String
+    }
+
+    input FilterCriteria {
+        field: String,
+        value: String
+    }
+
+    input SortCriteria {
+        field: String,
+        value: Int
+    }
+
+    scalar DateTime
 
     type Product {
         name: String
@@ -51,6 +64,7 @@ const typeDefs = gql`
         category: Category
         _collection: Collection,
         variations: [Variation]
+        createdAt: DateTime
     }
 
     type Variation {
@@ -59,7 +73,7 @@ const typeDefs = gql`
     }
 
     type Collection {
-        name: String,
+        name: String
         alias: String
     }
 
@@ -82,13 +96,41 @@ const resolvers = {
             return product.findOne({ slug }).populate('category').populate('_collection');
         },
         productPagination: (_, { data }) => {
-            console.log(data)
-            return product.find()
-        }
+            getCriterion(data);
+            return product.find();
     }
+}
+}
+
+/* pagination helper */
+const getCriterion = (data) => {
+
+    let criterion = {
+        match : {},
+        sort: { createdAt: -1},
+        skip: (data.cursor - 1) * data.limit,
+        limit: data.limit
+    }
+
+    /* if search term provided */
+    if(data.searchTerm.trim() !== "")
+         criterion.match[data.searchField] = { $regex: data.searchTerm, $options: "i" };
+    
+    /* if other filter criteria provided */
+    data.filterCriteria.forEach(item => criterion.match[item.field] = item.value);
+
+    /* add sort by fields */
+    data.sortByCriteria.forEach(item => criterion.sort[item.field] = item.value);
+
+    /* one popular custom filter would be date / date range */
+
+
+    console.log(criterion);
+
+
 }
 
 const apolloServer = new ApolloServer({ typeDefs, resolvers, playground: true, introspection: true });
 apolloServer.applyMiddleware({ app });
 
-app.listen({ port: 3000 }, () => console.log(`GraphQL server running on port: 6000 at http://localhost:3000${apolloServer.graphqlPath}`))
+app.listen({ port: 3000 }, () => console.log(`GraphQL server running at http://localhost:3000${apolloServer.graphqlPath}`))
