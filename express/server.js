@@ -34,8 +34,14 @@ const typeDefs = gql`
         filterCriteria: [FilterCriteria]
         sortByCriteria: [SortCriteria]
         operators: [Operator]
+        dateRange: DateRange
         cursor: Int
         limit: Int
+    }
+
+    input DateRange {
+        startDate: String,
+        endDate: String
     }
 
     input Operator {
@@ -102,6 +108,8 @@ const resolvers = {
 }
 }
 
+console.log(new Date())
+
 /* pagination helper */
 const getCriterion = (data) => {
 
@@ -112,6 +120,8 @@ const getCriterion = (data) => {
         limit: data.limit
     }
 
+    const dateField = "createdAt";
+
     /* if search term provided */
     if(data.searchTerm.trim() !== "")
          criterion.match[data.searchField] = { $regex: data.searchTerm, $options: "i" };
@@ -119,12 +129,20 @@ const getCriterion = (data) => {
     /* if other filter criteria provided */
     data.filterCriteria.forEach(item => criterion.match[item.field] = item.value);
 
+    /* add filters with operators */
+    data.operators.forEach(item => { criterion.match[item.field] = JSON.parse(`{ "${item.operator}" : "${item.value}" }`) });
+
+    /* add data range filters if provided */
+    if(data.dateRange !== undefined)
+        criterion.match[dateField] = JSON.parse(`{ "$gte": "${data.dateRange.startDate}", "$lte" : "${data.dateRange.endDate}" } `);
+
     /* add sort by fields */
     data.sortByCriteria.forEach(item => criterion.sort[item.field] = item.value);
+ //   db.gpsdatas.find({"createdAt" : { $gte : new ISODate("2012-01-12T20:15:31Z") }});
 
     /* one popular custom filter would be date / date range */
-
-
+    
+    // console.log(data);
     console.log(criterion);
 
 
