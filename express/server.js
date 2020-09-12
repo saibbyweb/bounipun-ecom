@@ -103,9 +103,9 @@ const resolvers = {
         },
         productPagination: (_, { data }) => {
             getCriterion(data);
-            return product.find();
+            return mongoose.model('Products').find();
+        }
     }
-}
 }
 
 console.log(new Date())
@@ -114,8 +114,8 @@ console.log(new Date())
 const getCriterion = (data) => {
 
     let criterion = {
-        match : {},
-        sort: { createdAt: -1},
+        match: {},
+        sort: { createdAt: -1 },
         skip: (data.cursor - 1) * data.limit,
         limit: data.limit
     }
@@ -123,9 +123,9 @@ const getCriterion = (data) => {
     const dateField = "createdAt";
 
     /* if search term provided */
-    if(data.searchTerm.trim() !== "")
-         criterion.match[data.searchField] = { $regex: data.searchTerm, $options: "i" };
-    
+    if (data.searchTerm.trim() !== "")
+        criterion.match[data.searchField] = { $regex: data.searchTerm, $options: "i" };
+
     /* if other filter criteria provided */
     data.filterCriteria.forEach(item => criterion.match[item.field] = item.value);
 
@@ -133,15 +133,23 @@ const getCriterion = (data) => {
     data.operators.forEach(item => { criterion.match[item.field] = JSON.parse(`{ "${item.operator}" : "${item.value}" }`) });
 
     /* add data range filters if provided */
-    if(data.dateRange !== undefined)
-        criterion.match[dateField] = JSON.parse(`{ "$gte": "${data.dateRange.startDate}", "$lte" : "${data.dateRange.endDate}" } `);
+    if (data.dateRange !== undefined) {
+        let dateObject = {}
+        if(data.dateRange.startDate !== undefined)
+            dateObject.$gte = new Date(data.dateRange.startDate);
+        
+        if(data.dateRange.endDate !== undefined)
+            dateObject.$lte = new Date(data.dateRange.endDate);
+
+        criterion.match[dateField] = dateObject;
+
+        // criterion.match[dateField] = JSON.parse(`{ "$gte": "${new Date(data.dateRange.startDate)}", "$lte" : "${new Date(data.dateRange.endDate)}" }`);
+    }
 
     /* add sort by fields */
     data.sortByCriteria.forEach(item => criterion.sort[item.field] = item.value);
- //   db.gpsdatas.find({"createdAt" : { $gte : new ISODate("2012-01-12T20:15:31Z") }});
+    //  { $gte : new ISODate("2012-01-12T20:15:31Z") };
 
-    /* one popular custom filter would be date / date range */
-    
     // console.log(data);
     console.log(criterion);
 
