@@ -1,5 +1,7 @@
-
 export default {
+  server: {
+    port: 8000
+  },
   /*
   ** Nuxt rendering mode
   ** See https://nuxtjs.org/api/configuration-mode
@@ -52,7 +54,23 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/apollo'
   ],
+
+  apollo: {
+    clientConfigs: {
+      default:{
+        httpEndpoint: "http://localhost:3000/graphql"
+      },
+      defaultOptions: {
+        httpEndpoint: "http://localhost:3000/graphql",
+        query: {
+          fetchPolicy: 'no-cache'
+        }
+      }
+    }
+  },
+
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options

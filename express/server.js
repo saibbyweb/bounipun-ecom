@@ -94,14 +94,23 @@ const typeDefs = gql`
     }
 `;
 
+let count = 0;
+
 const resolvers = {
     Query: {
-        hello: () => book,
+        hello: () => {
+          count++;
+          console.log(count);
+          return book;
+        },
         products: () => product.find(),
         product: async (_, { slug }) => {
             return product.findOne({ slug }).populate('category').populate('_collection');
         },
-        productPagination: (_, { data }) => {
+        productPagination: (_, { data }, {res}) => {
+  
+            console.log(res);
+            res.cookie('graph-cookie', "hmmm-dude", { maxAge: 2592000000, overwrite: true });
             getCriterion(data);
             return mongoose.model('Products').find();
         }
@@ -151,12 +160,17 @@ const getCriterion = (data) => {
     //  { $gte : new ISODate("2012-01-12T20:15:31Z") };
 
     // console.log(data);
-    console.log(criterion);
+    // console.log(criterion);
 
 
 }
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers, playground: true, introspection: true });
+const apolloServer = new ApolloServer({ typeDefs, resolvers, playground: true, context: (data) => {
+    return {
+        req: data.req,
+        res: data.res
+    }
+}, introspection: true });
 apolloServer.applyMiddleware({ app });
 
 app.listen({ port: 3000 }, () => console.log(`GraphQL server running at http://localhost:3000${apolloServer.graphqlPath}`))
