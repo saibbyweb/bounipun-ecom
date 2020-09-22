@@ -2,9 +2,15 @@
 <div class="container">
     <!-- <client-only> -->
     <h1>
-        {{ hello.name }}
-        {{ hello.author }}
+        {{ hellox.name }}
+        {{ hellox.author }}
     </h1>
+
+    <h1>
+        {{ hello }}
+    </h1>
+
+    <button @click="doThis"> Fetch </button>
 
 </div>
 </template>
@@ -14,16 +20,33 @@ import gql from "graphql-tag";
 export default {
     data() {
         return {
-            book: {}
+            book: {},
+            hellox: {
+                name: 'hey',
+                author: "suhaib"
+            }
         }
     },
     apollo: {
-        hello: gql`{ hello { name}}`
+        hello: {
+            query: gql `{ 
+            hello { 
+                name,
+                author
+            }
+        }`,
+            skip() {
+                return false
+            }
+        }
     },
-    mounted() {
-
-    },
-
+    methods: {
+        doThis() {
+            this.$apollo.queries.hello.skip = false;
+            this.$apollo.queries.hello.refetch()
+            console.log(this.$apollo.queries);
+        }
+    }
 }
 </script>
 

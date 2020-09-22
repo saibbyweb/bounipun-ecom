@@ -60,13 +60,10 @@ export default {
   apollo: {
     clientConfigs: {
       default:{
-        httpEndpoint: "http://localhost:3000/graphql"
-      },
-      defaultOptions: {
         httpEndpoint: "http://localhost:3000/graphql",
-        query: {
-          fetchPolicy: 'no-cache'
-        }
+        httpLinkOptions: {
+          credentials: 'include'
+        },
       }
     }
   },

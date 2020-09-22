@@ -1,10 +1,20 @@
 import express from "express";
 import { ApolloServer, gql } from "apollo-server-express";
 const app = express();
+import cors from "cors";
 import mongoose from "mongoose";
 import product from "./models/products";
+import cookieParser from "cookie-parser"
 import Category from "./models/category";
 import Collection from "./models/collection"
+
+const corsOptions = {
+    origin: "http://localhost:8000",
+    credentials: true
+};
+app.use(cors(corsOptions));
+
+app.use(cookieParser());
 
 mongoose.connect("mongodb://localhost:27017/mbm-ecom", { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 
@@ -98,19 +108,20 @@ let count = 0;
 
 const resolvers = {
     Query: {
-        hello: () => {
+        hello: (_, { data }, {req}) => {
           count++;
           console.log(count);
+          console.log(req.cookies);
           return book;
         },
         products: () => product.find(),
         product: async (_, { slug }) => {
             return product.findOne({ slug }).populate('category').populate('_collection');
         },
-        productPagination: (_, { data }, {res}) => {
+        productPagination: (_, { data }, {req}) => {
   
-            console.log(res);
-            res.cookie('graph-cookie', "hmmm-dude", { maxAge: 2592000000, overwrite: true });
+           
+            // res.cookie('graph-cookie', "hmmm-dude", { maxAge: 2592000000, overwrite: true });
             getCriterion(data);
             return mongoose.model('Products').find();
         }
@@ -165,12 +176,14 @@ const getCriterion = (data) => {
 
 }
 
+
 const apolloServer = new ApolloServer({ typeDefs, resolvers, playground: true, context: (data) => {
     return {
         req: data.req,
         res: data.res
     }
 }, introspection: true });
+
 apolloServer.applyMiddleware({ app });
 
 app.listen({ port: 3000 }, () => console.log(`GraphQL server running at http://localhost:3000${apolloServer.graphqlPath}`))
