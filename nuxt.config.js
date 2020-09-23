@@ -54,7 +54,8 @@ export default {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/apollo'
+    '@nuxtjs/apollo',
+    'cookie-universal-nuxt'
   ],
 
   apollo: {
@@ -66,6 +67,10 @@ export default {
         },
       }
     }
+  },
+
+  router: {
+    middleware: 'adminAuth'
   },
 
   /*
