@@ -1,4 +1,8 @@
-$primary_dark: pink;
-.global-header {
-    // background-color: green;
+$primary_dark: #333;
+$breakpoint-tablet: 768px;
+
+.center {
+    display:flex;
+    justify-content: center;
+    align-items: center;
 }
