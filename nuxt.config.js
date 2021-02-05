@@ -14,6 +14,9 @@ export default {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  devServer: {
+    inline: false
+  },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
@@ -34,8 +37,13 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/style-resources'
   ],
-
+  styleResources: {
+    scss: [
+      '~/assets/scss/global.scss'
+    ]
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},
 

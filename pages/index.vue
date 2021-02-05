@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <div>
+      <BounipunHeader />
       <Logo />
       <h1 class="title">
         bounipun-ecom
