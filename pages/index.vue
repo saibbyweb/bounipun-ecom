@@ -1,6 +1,8 @@
 <template>
-<div class="center">
+<div>
     <Logo />
+    <br>
+        <Logo />
 </div>
 </template>
 
@@ -9,7 +11,5 @@ export default {}
 </script>
 
 <style>
-.center {
-  padding:10px;
-}
+
 </style>

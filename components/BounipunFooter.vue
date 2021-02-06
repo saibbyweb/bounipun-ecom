@@ -1,25 +1,31 @@
 <template>
 <div class="footer">
     <!-- help section -->
-    <div class="help section">
-        <h3> Help </h3>
-        <Button class="item" v-for="item in helpSection" :key="item"> {{ item }} </Button>
+    <div class="center">
+        <div id="help" class="section">
+            <h3> Help </h3>
+            <Button class="item" v-for="item in helpSection" :key="item"> {{ item }} </Button>
+        </div>
     </div>
 
     <!-- find us on section -->
-    <div class="find-us-on section">
-        <h3> Find Us On </h3>
-        <Button class="item" v-for="item in findUsOnSection" :key="item"> {{ item }} </Button>
+    <div class="center">
+        <div id="find-us-on" class="section">
+            <h3> Find Us On </h3>
+            <Button class="item" v-for="item in findUsOnSection" :key="item"> {{ item }} </Button>
+        </div>
     </div>
 
     <!-- company section -->
-    <div class="company section">
-        <h3> Comapny </h3>
-        <Button class="item" v-for="item in companySection" :key="item"> {{ item }} </Button>
+    <div class="center">
+        <div id="company" class="section">
+            <h3> Comapny </h3>
+            <Button class="item" v-for="item in companySection" :key="item"> {{ item }} </Button>
+        </div>
     </div>
 
     <!-- card symbols section -->
-    <div class="card-symbols section">
+    <div id="card-symbols" class="section">
         <img src="/icons/visa.png" />
         <img src="/icons/maestro.png" />
         <img src="/icons/master_card.png" />
@@ -27,12 +33,12 @@
     </div>
 
     <!-- copyright -->
-    <div class="copyright section">
-        <span class="last-footer-item">  © 2005 - 2020 Bounipun </span>
+    <div id="copyright" class="section">
+        <span class="last-footer-item"> © 2005 - 2020 Bounipun </span>
     </div>
 
     <!-- crafted in kashmir -->
-    <div class="crafter-in-kashmir section" style="grid-column: 3; align-items: flex-end;">
+    <div id="crafted-in-kashmir" class="section">
         <span class="last-footer-item"> Crafted with ❤ in Kashmir </span>
     </div>
 
@@ -77,52 +83,110 @@ export default {
     display: grid;
     grid-template-columns: 33.33% auto 33.33%;
     grid-template-rows: auto auto auto;
+    padding: 1% 0 0 0;
+    box-sizing: border-box;
+
+    @media (max-width: $breakpoint-tablet) {
+        grid-template-columns: 50% 50%;
+        padding: 2% 0 0 0;
+    }
+
+    .center {
+        align-items: flex-start;
+    }
 
     .section {
         // border: 1px solid #efefef;
-        display:flex;
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 8%;
+        display: flex;
         box-sizing: border-box;
-        
-        h3 {
-            color: white;
-            margin: 6px 0;
-            text-transform: uppercase;
-            font-family: $primary_font;
-            font-weight: 900;
-            letter-spacing: 2px;
-            font-size:16px;
+
+        @media (max-width: $breakpoint-tablet) {
+            padding: 8%;
         }
 
-        .item {
-            background: transparent;
-            border: none;
-            color:white;
-            padding: 0;
-            margin:3px 0;
-            font-size:10px;
-            letter-spacing: 1px;
+        /* help, find us on, company */
+        &#help,
+        &#find-us-on,
+        &#company {
+            padding: 2%;
+            flex-direction: column;
+            align-items: flex-start;
+
+            h3 {
+                color: white;
+                margin: 6px 0;
+                text-transform: uppercase;
+                font-family: $primary_font;
+                font-weight: 900;
+                letter-spacing: 2px;
+                font-size: 20px;
+
+                @media (max-width: $breakpoint-tablet) {
+                    font-size: 4vw;
+                }
+            }
+
+            .item {
+                background: transparent;
+                border: none;
+                color: white;
+                padding: 0;
+                margin: 3px 0;
+                font-size: 12px;
+                letter-spacing: 1px;
+
+                @media (max-width: $breakpoint-tablet) {
+                    font-size: 2.8vw;
+                }
+            }
+        }
+
+        /* card symbols */
+        &#card-symbols {
+            grid-area: 2 / 1 / 2 / 4;
+            align-items: center;
+            justify-content: center;
+            padding: 0%;
+
+            img {
+                width: 80px;
+                margin: 1%;
+            }
+
+            @media (max-width: $breakpoint-tablet) {
+                grid-area: auto;
+                flex-wrap: wrap;
+                justify-content: center;
+
+                img {
+                    width: 35%;
+                }
+            }
+        }
+
+        &#copyright, &#crafted-in-kashmir {
+            padding:5%;
+        }
+
+        /* crafted in kashmir */
+        &#crafted-in-kashmir {
+            grid-column: 3;
+            justify-content: flex-end;
+
+            @media (max-width: $breakpoint-tablet) {
+                grid-column: auto;
+            }
         }
 
         .last-footer-item {
-            color:white;
-            font-size:10px;
-        }
+            color: white;
+            font-size: 15px;
 
-        &.card-symbols {
-            grid-area: 2 / 1 / 2 / 4;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            padding:0%;
-
-            img {
-                width:80px;
-                margin: 1%;
+            @media (max-width: $breakpoint-tablet) {
+                font-size: 2.8vw;
             }
         }
+
     }
 }
 </style>
