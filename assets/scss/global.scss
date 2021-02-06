@@ -1,5 +1,40 @@
 $primary_dark: #333;
 $breakpoint-tablet: 768px;
+$primary_font: 'SF-Pro';
+$secondary_font: 'Poppins';
+
+@font-face {
+    font-family: 'SF-Pro';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('~assets/fonts/SFProText-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'SF-Pro';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('~assets/fonts/SFProText-Semibold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('~assets/fonts/Poppins-Regular.ttf') format('truetype');
+}
+
+* {
+    font-family: 'Poppins';
+    outline: none;
+}
+
+button {
+    cursor: pointer;
+}
 
 .center {
     display:flex;
