@@ -83,12 +83,12 @@ export default {
     display: grid;
     grid-template-columns: 33.33% auto 33.33%;
     grid-template-rows: auto auto auto;
-    padding: 1% 0 0 0;
+    padding: 1% 0 2% 0;
     box-sizing: border-box;
 
     @media (max-width: $breakpoint-tablet) {
         grid-template-columns: 50% 50%;
-        padding: 2% 0 0 0;
+        padding: 2% 0 5% 0;
     }
 
     .center {
@@ -157,6 +157,7 @@ export default {
                 grid-area: auto;
                 flex-wrap: wrap;
                 justify-content: center;
+                align-content: flex-start;
 
                 img {
                     width: 35%;
@@ -164,8 +165,15 @@ export default {
             }
         }
 
-        &#copyright, &#crafted-in-kashmir {
-            padding:5%;
+        &#copyright,
+        &#crafted-in-kashmir {
+            align-items: center;
+            padding: 0 5%;
+
+            @media (max-width: $breakpoint-tablet) {
+                justify-content: center;
+                padding: 5%;
+            }
         }
 
         /* crafted in kashmir */
@@ -175,6 +183,7 @@ export default {
 
             @media (max-width: $breakpoint-tablet) {
                 grid-column: auto;
+                justify-content: flex-start;
             }
         }
 
