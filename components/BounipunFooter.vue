@@ -116,10 +116,10 @@ export default {
                 color: white;
                 margin: 6px 0;
                 text-transform: uppercase;
-                font-family: $primary_font;
+                font-family: $font_2_semibold;
                 font-weight: 900;
                 letter-spacing: 2px;
-                font-size: 20px;
+                font-size: 1.5vw;
 
                 @media (max-width: $breakpoint-tablet) {
                     font-size: 4vw;
@@ -132,8 +132,8 @@ export default {
                 color: white;
                 padding: 0;
                 margin: 3px 0;
-                font-size: 12px;
-                letter-spacing: 1px;
+                font-size: 1vw; 
+                color: #efefef;
 
                 @media (max-width: $breakpoint-tablet) {
                     font-size: 2.8vw;

@@ -1,7 +1,12 @@
 $primary_dark: #333;
+$secondary_dark: #333333cc;
 $breakpoint-tablet: 768px;
-$primary_font: 'SF-Pro';
-$secondary_font: 'Poppins';
+
+$font_1: 'Poppins';
+$font_1_semibold: 'Poppins SemiBold';
+
+$font_2: 'SF-Pro';
+$font_2_semibold: 'SF-Pro SemiBold';
 
 @font-face {
     font-family: 'SF-Pro';
@@ -12,7 +17,7 @@ $secondary_font: 'Poppins';
 }
 
 @font-face {
-    font-family: 'SF-Pro';
+    font-family: 'SF-Pro SemiBold';
     font-style: normal;
     font-weight: 700;
     font-display: swap;
@@ -27,22 +32,67 @@ $secondary_font: 'Poppins';
     src: url('~assets/fonts/Poppins-Regular.ttf') format('truetype');
 }
 
+@font-face {
+    font-family: 'Poppins SemiBold';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('~assets/fonts/Poppins-SemiBold.ttf') format('truetype');
+}
+
 body {
     margin:0;
     padding:0;
 }
 
 * {
-    font-family: 'Poppins';
+    font-family: $font_1;
     outline: none;
 }
 
 button {
     cursor: pointer;
+    border: none;
+    padding: 1% 3%;
+
+
+
+    &.action {
+        background-color: $primary_dark;
+        color: white;
+        font-family: $font_1_semibold;
+        font-size:16px;
+        text-transform: uppercase;
+        @media (max-width: $breakpoint-tablet) {
+            padding: 2% 5%;
+        }
+    }
+}
+
+h1, h2, h3, h4, h5, h6, p {
+    margin: 0;
+    padding: 0;
+    color: $primary_dark;
+}
+
+.page {
+    padding: 5%;
+
+    @media (max-width: $breakpoint-tablet) {
+        padding: 10%;
+    }
+
 }
 
 .center {
     display:flex;
     justify-content: center;
     align-items: center;
+}
+
+.center-col {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }
