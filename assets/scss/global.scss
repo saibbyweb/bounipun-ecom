@@ -82,6 +82,31 @@ h1, h2, h3, h4, h5, h6, p {
         padding: 10%;
     }
 
+    &.-wh {
+        padding: 0 0 5% 0;
+    }
+
+    .page-header {
+        background: $primary_dark;
+        width:100%;
+        height:8vh;
+        margin-bottom: 20px;
+
+        @media (max-width: $breakpoint-tablet) {
+            height:10vh;
+        }
+
+        .title {
+            color: white;
+            font-family: $font_1_semibold;
+            text-transform: uppercase;
+            font-size: 1.4vw;
+            @media (max-width: $breakpoint-tablet) {
+                font-size: 3.4vw;
+            }     
+        }
+    }
+
 }
 
 .center {
