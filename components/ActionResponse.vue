@@ -10,7 +10,7 @@
             {{ message }}
         </p>
 
-        <button v-if="action" class="action" @click="emit('click')"> 
+        <button v-if="action" class="action" @click="$emit('click')"> 
             {{ action }}
         </button>
     </div>

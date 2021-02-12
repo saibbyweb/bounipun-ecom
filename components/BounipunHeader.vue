@@ -1,7 +1,7 @@
 <template>
 <div :class="[{ 'scrolled': scrolled }, 'header']">
     <!-- menu -->
-    <div class="menu center">
+    <div class="menu center" @click="$emit('showMenu')">
         <img class="action-icon" :src="getIconPath('menu.png')" />
     </div>
 
@@ -12,7 +12,7 @@
 
     <!-- links -->
     <div class="shop-actions">
-        <img class="action-icon" :src="getIconPath('search.png')" />
+        <img class="action-icon" :src="getIconPath('search.png')" @click="$router.push('/search')" />
         <img class="action-icon" :src="getIconPath('heart.png')" />
         <img class="action-icon bag" :src="getIconPath('bag.png')" />
     </div>
