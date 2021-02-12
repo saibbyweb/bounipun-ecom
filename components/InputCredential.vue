@@ -1,7 +1,7 @@
 <template>
     <div class="input-credential">
         <label class="label"> {{ label }} </label>
-        <input class="input-box" :type="type" v-model="value" /> 
+        <input class="input-box" :type="type" v-model="value" :disabled="disabled"/> 
     </div>
 </template>
 
@@ -9,7 +9,8 @@
 export default {
     props: {
         label: String,
-        type: { type: String, default: 'text'}
+        type: { type: String, default: 'text'},
+        disabled: { type: Boolean, default:  false }
     },
     data() {
         return {
