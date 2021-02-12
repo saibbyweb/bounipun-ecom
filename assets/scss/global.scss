@@ -1,12 +1,16 @@
 $primary_dark: #333;
 $secondary_dark: #333333cc;
+$gray: #7f7f7f;
+$dark_gray: #464646;
 $breakpoint-tablet: 768px;
 
 $font_1: 'Poppins';
 $font_1_semibold: 'Poppins SemiBold';
+$font_1_bold: 'Poppins SemiBold';
 
 $font_2: 'SF-Pro';
 $font_2_semibold: 'SF-Pro SemiBold';
+$font_2_bold: 'SF-Pro Bold';
 
 @font-face {
     font-family: 'SF-Pro';
@@ -23,6 +27,14 @@ $font_2_semibold: 'SF-Pro SemiBold';
     font-display: swap;
     src: url('~assets/fonts/SFProText-Semibold.ttf') format('truetype');
 }
+/* sf pro bold */
+@font-face {
+    font-family: 'SF-Pro Bold';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url('~assets/fonts/SFProText-Bold.ttf') format('truetype');
+}
 
 @font-face {
     font-family: 'Poppins';
@@ -38,6 +50,14 @@ $font_2_semibold: 'SF-Pro SemiBold';
     font-weight: 700;
     font-display: swap;
     src: url('~assets/fonts/Poppins-SemiBold.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Poppins Bold';
+    font-style: normal;
+    font-weight: 900;
+    font-display: swap;
+    src: url('~assets/fonts/Poppins-Bold.ttf') format('truetype');
 }
 
 body {
@@ -58,14 +78,20 @@ button {
 
 
     &.action {
-        background-color: $primary_dark;
-        color: white;
-        font-family: $font_1_semibold;
-        font-size:16px;
-        text-transform: uppercase;
-        @media (max-width: $breakpoint-tablet) {
-            padding: 2% 5%;
-        }
+    background-color: $primary_dark;
+    color: white;
+    font-family: $font_1_semibold;
+    font-size:16px;
+    text-transform: uppercase;
+    @media (max-width: $breakpoint-tablet) {
+        padding: 2% 5%;
+        width:100%;
+    }
+}
+
+    &.clear {
+        background: transparent;
+        padding: 2% 5%;
     }
 }
 
