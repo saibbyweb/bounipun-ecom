@@ -34,6 +34,7 @@ export default {
     &#already {
         align-self: center;
         margin-top:20%;
+        text-align:center;
     }
 }
 .desc {

@@ -1,6 +1,7 @@
 <template>
 <div class="page center-col">
     <h3 class="heading"> Create new account </h3>
+    <InputCredential label="Name" />
     <InputCredential label="Phone Number" :disabled="otpSent" />
     <InputCredential label="One Time Password" v-if="otpSent" />
     <p class="desc otp-sent" v-if="otpSent"> A one time password has been sent to your mobile number. </p>
@@ -28,6 +29,7 @@ export default {
     text-transform: uppercase;
     color: $dark_gray;
     align-self: flex-start;
+    text-align:center;
 
     &#already {
         align-self: center;

@@ -41,6 +41,7 @@ export default {
     .input-box {
         padding: 10px 15px;
         border: none;
+        -webkit-appearance: none;
         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
         color: $gray;
         font-family: $font_2_semibold;

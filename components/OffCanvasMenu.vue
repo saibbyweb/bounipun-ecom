@@ -18,7 +18,7 @@
 
     <br>
     <!-- links -->
-    <button class="clear link"> FAQs </button>
+    <button class="clear link" @click="$router.push('/faqs')"> FAQs </button>
     <button class="clear link"> Help </button>
     <button class="clear link"> About Us </button>
     <button class="clear link"> Terms of Use </button>
@@ -48,9 +48,12 @@
         margin-bottom: 10px;
         display:flex;
         justify-content: flex-end;
-
+        align-items: center;
+        padding:0 10px;
+        box-sizing: border-box;
         .close {
-            padding:4%;
+            height: 5vw;
+            width: 5vw;
         }
     }
 

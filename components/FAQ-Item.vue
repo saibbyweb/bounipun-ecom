@@ -24,12 +24,14 @@ export default {
 .question {
     background: transparent;
     padding: 0;
+    font-family: $font_2_semibold;
 }
 .answer {
     height: 0;
     min-height: 0;
     overflow: hidden;
     transition: all 0.4s ease-in-out;
+    font-size:13px;
 
     &.active {
         min-height: 20px;
