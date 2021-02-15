@@ -4,160 +4,168 @@ $gray: #7f7f7f;
 $dark_gray: #464646;
 $breakpoint-tablet: 768px;
 
-$font_1: 'Poppins';
-$font_1_semibold: 'Poppins SemiBold';
-$font_1_bold: 'Poppins SemiBold';
+$font_1: "Poppins";
+$font_1_semibold: "Poppins SemiBold";
+$font_1_bold: "Poppins SemiBold";
 
-$font_2: 'SF-Pro';
-$font_2_semibold: 'SF-Pro SemiBold';
-$font_2_bold: 'SF-Pro Bold';
+$font_2: "SF-Pro";
+$font_2_semibold: "SF-Pro SemiBold";
+$font_2_bold: "SF-Pro Bold";
 
 @font-face {
-font-family: 'SF-Pro';
-font-style: normal;
-font-weight: 400;
-font-display: swap;
-src: url('~assets/fonts/SFProText-Regular.ttf') format('truetype');
+  font-family: "SF-Pro";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("~assets/fonts/SFProText-Regular.ttf") format("truetype");
 }
 
 @font-face {
-font-family: 'SF-Pro SemiBold';
-font-style: normal;
-font-weight: 700;
-font-display: swap;
-src: url('~assets/fonts/SFProText-Semibold.ttf') format('truetype');
+  font-family: "SF-Pro SemiBold";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("~assets/fonts/SFProText-Semibold.ttf") format("truetype");
 }
 /* sf pro bold */
 @font-face {
-font-family: 'SF-Pro Bold';
-font-style: normal;
-font-weight: 900;
-font-display: swap;
-src: url('~assets/fonts/SFProText-Bold.ttf') format('truetype');
+  font-family: "SF-Pro Bold";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("~assets/fonts/SFProText-Bold.ttf") format("truetype");
 }
 
 @font-face {
-font-family: 'Poppins';
-font-style: normal;
-font-weight: 400;
-font-display: swap;
-src: url('~assets/fonts/Poppins-Regular.ttf') format('truetype');
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("~assets/fonts/Poppins-Regular.ttf") format("truetype");
 }
 
 @font-face {
-font-family: 'Poppins SemiBold';
-font-style: normal;
-font-weight: 700;
-font-display: swap;
-src: url('~assets/fonts/Poppins-SemiBold.ttf') format('truetype');
+  font-family: "Poppins SemiBold";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("~assets/fonts/Poppins-SemiBold.ttf") format("truetype");
 }
 
 @font-face {
-font-family: 'Poppins Bold';
-font-style: normal;
-font-weight: 900;
-font-display: swap;
-src: url('~assets/fonts/Poppins-Bold.ttf') format('truetype');
+  font-family: "Poppins Bold";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("~assets/fonts/Poppins-Bold.ttf") format("truetype");
 }
 
 body {
-margin:0;
-padding:0;
+  margin: 0;
+  padding: 0;
 }
 
 * {
-font-family: $font_1;
-outline: none;
--webkit-tap-highlight-color: rgba(0,0,0,0);
--webkit-tap-highlight-color: transparent;
+  font-family: $font_1;
+  outline: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
 
 button {
-cursor: pointer;
-border: none;
-padding: 1% 3%;
+  cursor: pointer;
+  border: none;
+  padding: 1% 3%;
 
-.icon {
-    width:7%;
-}
+  .icon {
+    width: 7%;
+  }
 
+  &.action {
+    background-color: $primary_dark;
+    color: white;
+    font-family: $font_1_semibold;
+    font-size: 16px;
+    text-transform: uppercase;
+    @media (max-width: $breakpoint-tablet) {
+      padding: 2% 5%;
+      width: 100%;
+    }
+  }
 
-
-&.action {
-background-color: $primary_dark;
-color: white;
-font-family: $font_1_semibold;
-font-size:16px;
-text-transform: uppercase;
-@media (max-width: $breakpoint-tablet) {
-    padding: 2% 5%;
-    width:100%;
-}
-}
-
-&.clear {
+  &.clear {
     background: transparent;
     padding: 2% 5%;
-}
+  }
+
+  &.shop-now {
+      
+  }
 }
 
-h1, h2, h3, h4, h5, h6, p {
-margin: 0;
-padding: 0;
-color: $primary_dark;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  padding: 0;
+  color: $primary_dark;
 }
 
 .page {
-padding: 5%;
+  padding: 5%;
 
-@media (max-width: $breakpoint-tablet) {
+  @media (max-width: $breakpoint-tablet) {
     padding: 7%;
-}
+  }
 
-&.-wh {
+  &.-wh {
     padding: 0 0 5% 0;
-}
+  }
 
-.page-header {
+  .page-header {
     background: $primary_dark;
-    width:100%;
-    height:8vh;
+    width: 100%;
+    height: 8vh;
     margin-bottom: 20px;
 
     @media (max-width: $breakpoint-tablet) {
-        height:10vh;
+      height: 10vh;
     }
 
     .title {
-        color: white;
-        font-family: $font_1_semibold;
-        text-transform: uppercase;
-        font-size: 1.4vw;
-        @media (max-width: $breakpoint-tablet) {
-            font-size: 3.4vw;
-        }     
+      color: white;
+      font-family: $font_1_semibold;
+      text-transform: uppercase;
+      font-size: 1.4vw;
+      @media (max-width: $breakpoint-tablet) {
+        font-size: 3.4vw;
+      }
     }
-}
+  }
 
-.side-pad {
+  .side-pad {
     padding: 0% 5%;
 
     @media (max-width: $breakpoint-tablet) {
-        padding: 0 10%;
+      padding: 0 10%;
     }
-}
-
+  }
 }
 
 .center {
-display:flex;
-justify-content: center;
-align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .center-col {
-display:flex;
-justify-content: center;
-align-items: center;
-flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
