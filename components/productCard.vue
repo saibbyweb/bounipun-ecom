@@ -1,5 +1,5 @@
 <template>
-<div class="featured-product-card">
+<div class="product-card">
     <!-- main image container -->
     <div class="main-image-container center">
         <img class="main-image" :src="imagePath" />
@@ -10,8 +10,16 @@
         <!-- product name -->
         <div class="product-name center-col">
             <span class="name"> {{ details.name }} </span>
-            <span class="collection"> Bounipun / Adore </span>
+            <span class="collection"> {{ details.collection }} </span>
+            <span class="price"> {{ details.price }} </span>
         </div>
+    </div>
+
+    <!-- variants available -->
+    <div class="variants-available center">
+        <div v-if="variants.shawl !== undefined" class="variant"> Shawl </div>
+        <div v-if="variants.stole !== undefined" class="variant"> Stole </div>
+        <div v-if="variants.square !== undefined" class="variant"> Square </div>
     </div>
 
     <!-- shop now button -->
@@ -24,7 +32,20 @@
 <script>
 export default {
     props: {
-        details: Object,
+        details: {
+            type: Object,
+            default: {
+                name: 'Khatamband Search',
+                collection: 'Bounipun Karakul',
+                price: 'INR 20000'
+            },
+        },
+        variants: {
+            type: Object,
+            default: {
+                shawl: true
+            }
+        },
         image: {
             type: String,
             default: 'product1.png'
@@ -39,21 +60,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.featured-product-card {
+.product-card {
     width: 29vw;
     height: 36vw;
     overflow: hidden;
     padding: 1vw;
 
     @media (max-width: $breakpoint-tablet) {
-        width: 50vw;
+        width: 43vw;
         height: 100vw;
     }
 
     /* main image container */
     .main-image-container {
         width: 100%;
-        height: 80%;
+        height: 60%;
         overflow: hidden;
 
         .main-image {
@@ -64,7 +85,7 @@ export default {
     /* text-details */
     .text-details {
         width: 100%;
-        height: 12%;
+        height: 20%;
         padding-bottom: 2px;
 
         .product-name {
@@ -78,10 +99,24 @@ export default {
             font-size: 10px;
 
         }
+
+        .price {
+            font-size: 13px;
+            font-weight: 900;
+        }
     }
 
-    .actions {
-        height: 8%;
+    .variants-available {
+        height: 10%;
+
+        .variant {
+            color: $primary_dark;
+            border: 1px solid $primary_dark;
+            margin: 0 2px;
+            padding: 2px 5px;
+            font-size: 10px;
+        }
     }
+
 }
 </style>
