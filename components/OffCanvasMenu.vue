@@ -2,6 +2,7 @@
 <div class="off-canvas-menu">
     <!-- header -->
     <div class="header">
+        <h4 class="white"> Good Afternoon, Zubair </h4>
         <img class="close" src="/icons/light/close.png" @click="$emit('closeMenu')">
     </div>
 
@@ -12,6 +13,7 @@
     <button class="clear item"> Story </button>
 
     <!-- acc items -->
+    <button class="clear item"> My Account </button>
     <button class="clear item acc"> Profile Details </button>
     <button class="clear item acc"> Addresses </button>
     <button class="clear item acc"> Orders </button>
@@ -37,17 +39,18 @@
     height:100vh;
     margin-left:-70vw;
     transition: all 0.4s ease-in-out;
+    z-index: 3;
     &.visible {
         margin-left:0vw;
     }
 
     .header {
         background: $primary_dark;
-        height: 6vh;
+        height: 10vh;
         width: 100%;
         margin-bottom: 10px;
         display:flex;
-        justify-content: flex-end;
+        justify-content: space-around;
         align-items: center;
         padding:0 10px;
         box-sizing: border-box;
@@ -69,6 +72,7 @@
 
         &.acc {
             font-size: 10px;
+            padding-left:5%;
         }
     }
 

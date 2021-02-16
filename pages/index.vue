@@ -17,7 +17,7 @@
     <div class="mood-setter">
         <img src="/demo_images/mood1.png" />
         <div class="box">
-            <h3 class="heading"> Mood Setter - 1 </h3>
+            <h3 @click="$router.push('/collection')" class="heading"> Mood Setter - 1 </h3>
             <p class="desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
         </div>
     </div>
@@ -38,7 +38,7 @@
     <div class="mood-setter">
         <img src="/demo_images/mood2.png" />
         <div class="box">
-            <h3 class="heading"> Mood Setter - 2 </h3>
+            <h3 @click="$router.push('/search-results')" class="heading"> Mood Setter - 2 </h3>
             <p class="desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
         </div>
     </div>
