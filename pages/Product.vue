@@ -14,14 +14,15 @@
             </div>
         </div> -->
 
-    <div class="slideshow">
+    <!-- <div class="slideshow">
         <div v-hammer:swipe="onSwipe" class="slides-container" :style="'margin-left: ' + slideMargin + 'vw'">
             <div class="product-image" style="background-image: url('/demo_images/slider/hero-1.jpg')"> </div>
             <div class="product-image" style="background-image: url('/demo_images/slider/desk1.png')"> </div>
         </div>
-    </div>
+    </div> -->
     <!-- </client-only> -->
     <!-- slideshow -->
+    <slideshow />
     <!-- absolute elements like wishlist heart, collection text, share icon -->
     <!-- thumbnails -->
     <!-- product text details (product name, collection, base price -->
@@ -35,6 +36,7 @@
 </template>
 
 <script>
+import Slideshow from '../components/slideshow.vue';
 export default {
     data() {
         return {
