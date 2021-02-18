@@ -149,8 +149,29 @@
             </div>
         </div>
         <!-- product description -->
+        <div class="description">
+            <!-- title and action -->
+            <div class="title-and-switch">
+                <span class="title"> Description </span>
+                <span class="switch"> + </span>
+            </div>
+            <div class="title-and-switch">
+                <span class="title"> About Escape </span>
+                <span class="switch"> + </span>
+            </div>
+            <div class="title-and-switch">
+                <span class="title"> Shipping & Returns </span>
+                <span class="switch"> + </span>
+            </div>
+
+        </div>
         <!-- collection description -->
-        <!-- shipping and returns -->
+        <div class="about-escape">
+
+        </div>
+        <!-- shipping and returns description -->
+        <div class="shipping-and-returns">
+        </div>
     </div>
 </div>
 </template>
@@ -408,7 +429,7 @@ export default {
                 background-color: #33333376;
                 color: white;
                 padding: 5px 0px;
-                width:43%;
+                width: 43%;
                 margin: 10px;
 
                 &.active {
@@ -436,5 +457,27 @@ export default {
 
     }
 
+    /* description */
+    .description {
+        margin-top: 20px;
+
+        .title-and-switch {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            border-bottom: 1px solid #6a6a6a;
+
+            .title {
+                text-transform: uppercase;
+                color: $dark_gray;
+                letter-spacing: 1.5px;
+                font-size: 11px;
+            }
+
+            .switch {
+                padding: 0 10px;
+            }
+        }
+    }
 }
 </style>
