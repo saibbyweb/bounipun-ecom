@@ -1,15 +1,17 @@
 <template>
 <div class="homepage">
-    <div class="hero"> </div>
+    <!-- <div class="hero"> </div> -->
+    <slideshow size="cover" />
     <!-- new arrivals -->
     <home-section-heading heading="New Arrivals" tagline="checkout the latest from the house of bounipun" />
     <div class="scrollable-list">
         <div class="list">
-            <featured-product-card :details="{name: 'Khatamband Cashmere'}" />
-            <featured-product-card :details="{name: 'Kani Shawl'}" image="product2.png" />
-            <featured-product-card :details="{name: 'Pashmina'}" image="product3.png" />
-            <featured-product-card :details="{name: 'Kani Shawl'}" />
-            <featured-product-card :details="{name: 'Pashmina'}" image="product2.png" />
+            <featured-product-card :details="{name: 'Khatamband Cashmere'}" product="auto_2" />
+            <featured-product-card :details="{name: 'Kani Shawl'}" product="auto_5" />
+            <featured-product-card :details="{name: 'Kani Shawl'}" product="kara_1" />
+            <featured-product-card :details="{name: 'Kani Shawl'}" product="kara_3" />
+            <featured-product-card :details="{name: 'Khatamband Cashmere'}" product="kara_5" />
+
         </div>
     </div>
 
@@ -26,11 +28,12 @@
     <home-section-heading heading="Best Sellers" tagline="hottest selling items on bounipun" />
     <div class="scrollable-list">
         <div class="list">
-            <featured-product-card :details="{name: 'Khatamband Cashmere'}" image="product3.png" />
-            <featured-product-card :details="{name: 'Kani Shawl'}" image="product1.png" />
-            <featured-product-card :details="{name: 'Pashmina'}" image="product2.png" />
-            <featured-product-card :details="{name: 'Kani Shawl'}" image="product3.png" />
-            <featured-product-card :details="{name: 'Pashmina'}" image="product1.png" />
+            <featured-product-card :details="{name: 'Pashmina'}" product="auto_1" />
+            <featured-product-card :details="{name: 'Pashmina'}" product="auto_3" />
+            <featured-product-card :details="{name: 'Kani Shawl'}" product="auto_4" />
+            <featured-product-card :details="{name: 'Pashmina'}" product="auto_6" />
+            <featured-product-card :details="{name: 'Pashmina'}" product="kara_2" />
+            <featured-product-card :details="{name: 'Pashmina'}" product="kara_4" />
         </div>
     </div>
 
@@ -46,11 +49,12 @@
     <home-section-heading heading="Featured Designs" tagline="shop from the handpicked bounipun collection" />
     <div class="scrollable-list">
         <div class="list">
-            <featured-product-card :details="{name: 'Khatamband Cashmere'}" image="product2.png" />
-            <featured-product-card :details="{name: 'Kani Shawl'}" image="product1.png" />
-            <featured-product-card :details="{name: 'Pashmina'}" image="product3.png" />
-            <featured-product-card :details="{name: 'Kani Shawl'}" image="product2.png" />
-            <featured-product-card :details="{name: 'Pashmina'}" image="product1.png" />
+            <featured-product-card :details="{name: 'Khatamband Cashmere'}" product="auto_2" />
+            <featured-product-card :details="{name: 'Pashmina'}" product="auto_1" />
+            <featured-product-card :details="{name: 'Kani Shawl'}" product="auto_5" />
+            <featured-product-card :details="{name: 'Pashmina'}" product="auto_3" />
+            <featured-product-card :details="{name: 'Kani Shawl'}" product="kara_3" />
+            
         </div>
     </div>
     <!-- stamps/keywords  -->
@@ -119,6 +123,7 @@
     height: 100vw;
     overflow: hidden;
     position: relative;
+    margin-top:20px;
 
     img {
         top: 0;

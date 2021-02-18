@@ -61,8 +61,9 @@ export default {
                 'Facebook',
                 'Instagram',
                 'Twitter',
-                'Youtube',
-                'Snapchat'
+                'Pinterest'
+                // 'Youtube',
+                // 'Snapchat'
             ],
             companySection: [
                 'Our Story',
@@ -132,7 +133,7 @@ export default {
                 color: white;
                 padding: 0;
                 margin: 3px 0;
-                font-size: 1vw; 
+                font-size: 1vw;
                 color: #efefef;
 
                 @media (max-width: $breakpoint-tablet) {
@@ -147,20 +148,40 @@ export default {
             align-items: center;
             justify-content: center;
             padding: 0%;
+            display: grid;
+            grid-template-columns: 30% 30%;
+            grid-template-rows: 30% 30%;
 
             img {
                 width: 80px;
                 margin: 1%;
+
+                &:nth-child(1) {
+                    justify-self: center;
+                    align-self: center;
+                }
+
+                &:nth-child(2) {
+                    justify-self: center;
+                    align-self: center;
+                }
+
+                &:nth-child(3) {
+                    justify-self: center;
+                    align-self: center;
+                }
+
+                &:nth-child(4) {
+                    justify-self: center;
+                    align-self: center;
+                }
             }
 
             @media (max-width: $breakpoint-tablet) {
                 grid-area: auto;
-                flex-wrap: wrap;
-                justify-content: center;
-                align-content: flex-start;
 
                 img {
-                    width: 35%;
+                    width: 85%;
                 }
             }
         }

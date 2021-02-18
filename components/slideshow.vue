@@ -19,12 +19,16 @@ export default {
         slideshowOptions: {
             type: Object,
             default: () => {
-                return { thumbnails: true }
+                return { thumbnails: false }
             }
         },
         images: {
             type: Array,
-            default: () => ['desk1.png', 'desk2.png']
+            default: () => ['/demo_images/slider/desk1.png', '/hero/1.jpg']
+        },
+        size: {
+            type: String,
+            default: 'contain'
         }
     },
     data() {
@@ -40,7 +44,8 @@ export default {
         },
         getBackgroundImage(image, size) {
             return {
-                backgroundImage: `url('${image}')`
+                backgroundImage: `url('${image}')`,
+                backgroundSize: this.size
             }
         },
         isActive(index) {
@@ -97,7 +102,7 @@ export default {
                 height: 120vw;
                 width: 100vw;
                 overflow: hidden;
-                background-size: contain;
+                // background-size: contain;
                 background-position: center;
                 background-repeat: no-repeat;
 

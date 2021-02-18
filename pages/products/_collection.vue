@@ -1,7 +1,7 @@
 <template>
 <div class="product-page">
     <!-- product image slideshow container with thumbnails  -->
-    <slideshow v-if="showSlideshow" :images="images" />
+    <slideshow v-if="showSlideshow" :images="images" :slideshowOptions="{thumbnails: true}" />
     <!-- absolute elements like wishlist heart, collection text, share icon -->
     <!-- product text details (product name, collection, base price -->
     <div class="pad-10">
@@ -233,7 +233,7 @@ export default {
 
 <style lang="scss" scoped>
 .product-page {
-
+    margin-top:10vh;
     /* main text details */
     .main-details {
         h3 {

@@ -1,5 +1,5 @@
 <template>
-<div class="featured-product-card">
+<div @click="$router.push('/products/'+product)" class="featured-product-card">
     <!-- main image container -->
     <div class="main-image-container center">
         <img class="main-image" :src="imagePath" />
@@ -16,7 +16,7 @@
 
     <!-- shop now button -->
     <div class="center actions">
-        <button class="action shop-now">Shop Now</button>
+        <button class="clear shop-now">Shop Now</button>
     </div>
 </div>
 </template>
@@ -28,11 +28,20 @@ export default {
         image: {
             type: String,
             default: 'product1.png'
+        },
+        product: {
+            type: String,
+            default: 'auto_1'
         }
     },
     computed: {
         imagePath() {
-            return `/demo_images/${this.image}`
+            // return `/demo_images/${this.image}`
+            const param = this.product;
+            const prod = param.split("_");
+            const collection = prod[0];
+            const prodId = prod[1];
+            return `/demo_images/products/${collection}/${collection}_prod${prodId}_1.png`;
         }
     }
 };
@@ -46,14 +55,14 @@ export default {
     padding: 1vw;
 
     @media (max-width: $breakpoint-tablet) {
-        width: 50vw;
-        height: 100vw;
+        width: 60vw;
+        height: 110vw;
     }
 
     /* main image container */
     .main-image-container {
         width: 100%;
-        height: 80%;
+        height: 85%;
         overflow: hidden;
 
         .main-image {
@@ -63,25 +72,33 @@ export default {
 
     /* text-details */
     .text-details {
+        margin-top: 5px;
         width: 100%;
-        height: 12%;
+        height: 10%;
         padding-bottom: 2px;
 
         .product-name {
-            font-size: 12px;
+            font-size: 10px;
             text-transform: uppercase;
             font-weight: 900;
+            letter-spacing: 1px;
+            font-family: $font_2_bold
         }
 
         .collection {
+            font-family: $font_1;
             color: $gray;
-            font-size: 10px;
-
+            font-size: 9px;
         }
     }
 
     .actions {
-        height: 8%;
+        height: 5%;
+
+        .shop-now {
+            text-transform: uppercase;
+            font-family: $font_1;
+        }
     }
 }
 </style>
