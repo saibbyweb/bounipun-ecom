@@ -8,7 +8,7 @@
     </div>
     <!-- thumbnails -->
     <div v-if="slideshowOptions.thumbnails" class="thumbnails">
-        <div class="thumbnail" :key="index" v-for="(image, index) in images" :style="getBackgroundImage(image)"> </div>
+        <div @click="setActiveImage(index)" :class="[{active: isActive(index)},'thumbnail']" :key="index" v-for="(image, index) in images" :style="getBackgroundImage(image)"> </div>
     </div>
 </div>
 </template>
@@ -29,14 +29,22 @@ export default {
     },
     data() {
         return {
-            slideMargin: 0
+            slideMargin: 0,
+            activeIndex: 0
         }
     },
     methods: {
+        setActiveImage(index) {
+            this.activeIndex = index;
+            this.slideMargin = index * -100;
+        },
         getBackgroundImage(image, size) {
             return {
-                backgroundImage: `url('/demo_images/slider/${image}')`
+                backgroundImage: `url('${image}')`
             }
+        },
+        isActive(index) {
+            return this.activeIndex === index;
         },
         onSwipe(data) {
             const threshold = this.images.length - 1;
@@ -48,6 +56,7 @@ export default {
                     if (this.slideMargin === threshold * -100)
                         return;
                     this.slideMargin -= 100;
+                    this.activeIndex+= 1;
                     break;
                     /* swiped right */
                 case 4:
@@ -55,6 +64,7 @@ export default {
                     if (this.slideMargin === 0)
                         return;
                     this.slideMargin += 100;
+                    this.activeIndex-= 1;
                     break;
             }
         }
@@ -77,16 +87,17 @@ export default {
         }
 
         .slides-container {
+            touch-action: pan-y !important;
             display: flex;
             width: fit-content;
             margin-left: 0;
             transition: all 0.4s ease-in-out;
 
             .product-image {
-                height: 30vh;
+                height: 120vw;
                 width: 100vw;
                 overflow: hidden;
-                background-size: cover;
+                background-size: contain;
                 background-position: center;
                 background-repeat: no-repeat;
 
@@ -101,15 +112,24 @@ export default {
     .thumbnails {
         width: 100%;
         // background: rgb(169, 169, 169);
-        padding:10px;
+        padding:2px;
         display:flex;
 
         .thumbnail {
             width: 20vw;
             height:20vw;
             background-repeat: no-repeat;
-            background-size: cover;
+            background-position: center;
+            background-size: contain;
+            overflow:hidden;
             margin: 0 10px;
+            box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
+            transform: scale(1);
+            transition: all 0.3s ease-in-out;
+
+            &.active {
+                transform: scale(1.1);
+            }
         }
     }
 }

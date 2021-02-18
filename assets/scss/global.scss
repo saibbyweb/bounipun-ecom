@@ -6,7 +6,7 @@ $breakpoint-tablet: 768px;
 
 $font_1: "Poppins";
 $font_1_semibold: "Poppins SemiBold";
-$font_1_bold: "Poppins SemiBold";
+$font_1_bold: "Poppins Bold";
 
 $font_2: "SF-Pro";
 $font_2_semibold: "SF-Pro SemiBold";
@@ -71,6 +71,10 @@ body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-tap-highlight-color: transparent;
   box-sizing: border-box;
+}
+
+.pad-10 {
+  padding:6%;
 }
 
 button {
