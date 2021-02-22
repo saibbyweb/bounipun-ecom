@@ -3,7 +3,7 @@
     <div class="product-images">
         <!-- product image slideshow container with thumbnails  -->
         <slideshow v-if="showSlideshow" :images="images" :slideshowOptions="{thumbnails: true}" />
-        
+
         <span class="collection-vertical"> Bounipun Escape </span>
 
         <!-- wishlist icon -->
@@ -276,12 +276,12 @@ export default {
 
     .product-images {
         position: relative;
-        
+
         /* collection name, vertical */
         .collection-vertical {
             display: none;
             position: absolute;
-            font-size:12px;
+            font-size: 12px;
             left: 5%;
             bottom: 30%;
             transform: rotate(-90deg) translateY(-150%);
@@ -298,7 +298,7 @@ export default {
             transition: transform 0.3s ease-in-out;
 
             &.added {
-                transform: scale(1.3);
+                transform: scale(1.2);
             }
         }
 
@@ -314,6 +314,7 @@ export default {
                 transform: rotate(0deg) scale(1);
                 transition: transform 0.4s ease-in-out;
                 cursor: pointer;
+
                 &:hover {
                     transform: rotate(30deg) scale(1.1);
                 }
@@ -333,11 +334,15 @@ export default {
                     cursor: pointer;
                     margin: 10px 0;
                     width: 18px;
+                    background-color: white;
+                    border-radius: 1px 1px;
+                    box-sizing: content-box;
+                    padding:4px;
                 }
             }
 
-            .toggle:hover ~ .social {
-                opacity: 0.7;
+            .toggle:hover~.social {
+                opacity: 0.95;
             }
         }
     }

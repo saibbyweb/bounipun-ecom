@@ -13,7 +13,7 @@
     </div>
 
     <!-- thumbnails -->
-    <div class="scrollable-list">
+    <div ref="thumbnails" id="thumbnails-container" class="scrollable-list">
         <div class="list">
             <div v-if="slideshowOptions.thumbnails" class="thumbnails">
                 <div @click="setActiveImage(index)" :class="[{active: isActive(index)},'thumbnail']" :key="index" v-for="(image, index) in images" :style="getBackgroundImage(image)"> </div>
@@ -24,6 +24,9 @@
 </template>
 
 <script>
+import {
+    TweenLite
+} from "gsap"
 export default {
     props: {
         slideshowOptions: {
@@ -46,13 +49,17 @@ export default {
     data() {
         return {
             slideMargin: 0,
-            activeIndex: 0
+            activeIndex: 0,
+            thumbnailsMargin: 0
         }
     },
     methods: {
         setActiveImage(index) {
             this.activeIndex = index;
             this.slideMargin = index * -100;
+            TweenLite.to(this.$refs.thumbnails, 0.3, {
+                scrollLeft: index * 40
+            })
         },
         getBackgroundImage(image, size) {
             return {
@@ -62,6 +69,9 @@ export default {
         },
         isActive(index) {
             return this.activeIndex === index;
+        },
+        handleThumbnail(event) {
+            console.log(this.$refs.thumbnails.scrollLeft)
         },
         onSwipe(data) {
             const threshold = this.images.length - 1;
@@ -84,6 +94,9 @@ export default {
                     this.activeIndex -= 1;
                     break;
             }
+            TweenLite.to(this.$refs.thumbnails, 0.3, {
+                scrollLeft: this.activeIndex * 40
+            });
         }
     }
 }
@@ -124,6 +137,11 @@ export default {
             }
         }
 
+    }
+
+    #thumbnails-container {
+        margin-left: 0;
+        transition: all 0.2s ease-in-out;
     }
 
     .thumbnails {
