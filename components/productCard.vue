@@ -1,5 +1,5 @@
 <template>
-<div class="product-card">
+<div @click="$router.push('/products/'+product)" class="product-card">
     <!-- main image container -->
     <div class="main-image-container center">
         <img class="main-image" :src="imagePath" />
@@ -24,7 +24,7 @@
 
     <!-- shop now button -->
     <div class="center actions">
-        <button class="action shop-now">Shop Now</button>
+        <button class="clear shop-now">Shop Now</button>
     </div>
 </div>
 </template>
@@ -46,6 +46,10 @@ export default {
                 shawl: true
             }
         },
+        product: {
+            type: String,
+            default: 'auto_1'
+        },
         image: {
             type: String,
             default: 'product1.png'
@@ -53,7 +57,12 @@ export default {
     },
     computed: {
         imagePath() {
-            return `/demo_images/${this.image}`
+            // return `/demo_images/${this.image}`
+            const param = this.product;
+            const prod = param.split("_");
+            const collection = prod[0];
+            const prodId = prod[1];
+            return `/demo_images/products/${collection}/${collection}_prod${prodId}_1.png`;
         }
     }
 };
@@ -92,6 +101,7 @@ export default {
             font-size: 12px;
             text-transform: uppercase;
             font-weight: 900;
+            text-align: center;
         }
 
         .collection {
@@ -115,6 +125,15 @@ export default {
             margin: 0 2px;
             padding: 2px 5px;
             font-size: 10px;
+        }
+    }
+
+    .actions {
+        height: 5%;
+
+        .shop-now {
+            text-transform: uppercase;
+            font-family: $font_1;
         }
     }
 

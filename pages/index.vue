@@ -11,7 +11,6 @@
             <featured-product-card :details="{name: 'Kani Shawl'}" product="kara_1" />
             <featured-product-card :details="{name: 'Kani Shawl'}" product="kara_3" />
             <featured-product-card :details="{name: 'Khatamband Cashmere'}" product="kara_5" />
-
         </div>
     </div>
 
@@ -95,25 +94,6 @@
 
     .action {
         width: 50%;
-    }
-}
-
-.scrollable-list {
-    display: flex;
-    overflow-x: auto;
-    padding: 10px;
-
-    @media screen and (min-width: 768px) {
-        justify-content: center;
-    }
-
-    &::-webkit-scrollbar {
-        display: none;
-    }
-
-    .list {
-        display: flex;
-        width: fit-content;
     }
 }
 

@@ -122,9 +122,11 @@ p {
 
 .page {
   padding: 5%;
+  margin-top: 8vh;
 
   @media (max-width: $breakpoint-tablet) {
     padding: 7%;
+    margin-top: 10vh;
   }
 
   &.-wh {
@@ -176,4 +178,23 @@ p {
 
 .white {
   color: white;
+}
+
+.scrollable-list {
+  display: flex;
+  overflow-x: auto;
+  padding: 10px;
+
+  @media screen and (min-width: 768px) {
+      justify-content: center;
+  }
+
+  &::-webkit-scrollbar {
+      display: none;
+  }
+
+  .list {
+      display: flex;
+      width: fit-content;
+  }
 }

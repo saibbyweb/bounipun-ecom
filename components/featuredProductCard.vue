@@ -10,7 +10,7 @@
         <!-- product name -->
         <div class="product-name center-col">
             <span class="name"> {{ details.name }} </span>
-            <span class="collection"> Bounipun / Adore </span>
+            <span class="collection"> Bounipun Adore </span>
         </div>
     </div>
 
@@ -36,7 +36,6 @@ export default {
     },
     computed: {
         imagePath() {
-            // return `/demo_images/${this.image}`
             const param = this.product;
             const prod = param.split("_");
             const collection = prod[0];
@@ -82,7 +81,7 @@ export default {
             text-transform: uppercase;
             font-weight: 900;
             letter-spacing: 1px;
-            font-family: $font_2_bold
+            font-family: $font_1_bold;
         }
 
         .collection {

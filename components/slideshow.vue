@@ -13,8 +13,12 @@
     </div>
 
     <!-- thumbnails -->
-    <div v-if="slideshowOptions.thumbnails" class="thumbnails">
-        <div @click="setActiveImage(index)" :class="[{active: isActive(index)},'thumbnail']" :key="index" v-for="(image, index) in images" :style="getBackgroundImage(image)"> </div>
+    <div class="scrollable-list">
+        <div class="list">
+            <div v-if="slideshowOptions.thumbnails" class="thumbnails">
+                <div @click="setActiveImage(index)" :class="[{active: isActive(index)},'thumbnail']" :key="index" v-for="(image, index) in images" :style="getBackgroundImage(image)"> </div>
+            </div>
+        </div>
     </div>
 </div>
 </template>
@@ -124,7 +128,6 @@ export default {
 
     .thumbnails {
         width: 100%;
-        // background: rgb(169, 169, 169);
         padding: 2px;
         display: flex;
 
@@ -136,7 +139,7 @@ export default {
             background-size: contain;
             overflow: hidden;
             margin: 0 10px;
-            box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
+            box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.16);
             transform: scale(1);
             transition: all 0.3s ease-in-out;
 
@@ -157,11 +160,11 @@ export default {
         margin: 15px 0;
 
         .dot {
-            height: 10px;
-            width: 10px;
+            height: 7px;
+            width: 7px;
             border-radius: 50%;
             background-color: #969696;
-            margin: 0 10px 5px 10px;
+            margin: 0 5px 5px 5px;
 
             &.active {
                 background-color: #2b2b2b;

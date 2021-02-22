@@ -1,8 +1,28 @@
 <template>
 <div class="product-page">
-    <!-- product image slideshow container with thumbnails  -->
-    <slideshow v-if="showSlideshow" :images="images" :slideshowOptions="{thumbnails: true}" />
+    <div class="product-images">
+        <!-- product image slideshow container with thumbnails  -->
+        <slideshow v-if="showSlideshow" :images="images" :slideshowOptions="{thumbnails: true}" />
+        
+        <span class="collection-vertical"> Bounipun Escape </span>
+
+        <!-- wishlist icon -->
+        <img @click="addedToWishlist = !addedToWishlist" :class="[{'added': addedToWishlist },'wishlist']" :src="addedToWishlist ? '/icons/dark/wishlist-filled.png' : '/icons/dark/wishlist.png'" />
+
+        <!-- share icon -->
+        <div class="share-icons">
+            <img class="toggle" src="/icons/dark/share.png" />
+            <div class="social">
+                <img src="/icons/dark/social/facebook.png" />
+                <img src="/icons/dark/social/pinterest.png" />
+                <img src="/icons/dark/social/instagram.png" />
+                <img src="/icons/dark/social/whatsapp.png" />
+            </div>
+        </div>
+    </div>
+
     <!-- absolute elements like wishlist heart, collection text, share icon -->
+
     <!-- product text details (product name, collection, base price -->
     <div class="pad-10">
         <div class="main-details">
@@ -172,6 +192,24 @@
         <!-- shipping and returns description -->
         <div class="shipping-and-returns">
         </div>
+
+        <!-- related products -->
+        <div class="related-products">
+            <h4 class="section-heading"> Related Products </h4>
+            <div class="scrollable-list">
+                <div class="list">
+                    <product-card :details="{name: 'Khatamband Cashmere',
+                collection: 'Bounipun Karakul',
+                price: 'INR 20000'}" product="auto_2" :variants="{shawl: true, stole: true}" />
+
+                    <product-card :details="{name: 'Kani Shawl',
+                collection: 'Bounipun Adore',
+                price: 'INR 15000'}" product="auto_5" :variants="{square: true, stole: true}" />
+
+                    <product-card product="kara_3" :variants="{stole: true}" />
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </template>
@@ -222,7 +260,8 @@ export default {
             },
             images: [],
             slideMargin: 0,
-            quantity: 1
+            quantity: 1,
+            addedToWishlist: false
         }
     },
     methods: {
@@ -233,7 +272,76 @@ export default {
 
 <style lang="scss" scoped>
 .product-page {
-    margin-top:10vh;
+    margin-top: 10vh;
+
+    .product-images {
+        position: relative;
+        
+        /* collection name, vertical */
+        .collection-vertical {
+            display: none;
+            position: absolute;
+            font-size:12px;
+            left: 5%;
+            bottom: 30%;
+            transform: rotate(-90deg) translateY(-150%);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+
+        }
+
+        .wishlist {
+            position: absolute;
+            width: 20px;
+            top: 10%;
+            right: 10%;
+            transition: transform 0.3s ease-in-out;
+
+            &.added {
+                transform: scale(1.3);
+            }
+        }
+
+        .share-icons {
+            position: absolute;
+            right: 10%;
+            bottom: 20%;
+            display: flex;
+            flex-direction: column-reverse;
+
+            .toggle {
+                width: 20px;
+                transform: rotate(0deg) scale(1);
+                transition: transform 0.4s ease-in-out;
+                cursor: pointer;
+                &:hover {
+                    transform: rotate(30deg) scale(1.1);
+                }
+            }
+
+            .social {
+                display: none;
+                margin-bottom: 15px;
+                opacity: 0;
+                display: flex;
+                flex-direction: column-reverse;
+                justify-content: center;
+                align-items: center;
+                transition: opacity 0.4s ease-in-out;
+
+                img {
+                    cursor: pointer;
+                    margin: 10px 0;
+                    width: 18px;
+                }
+            }
+
+            .toggle:hover ~ .social {
+                opacity: 0.7;
+            }
+        }
+    }
+
     /* main text details */
     .main-details {
         h3 {
