@@ -1,11 +1,17 @@
 <template>
 <div class="slideshow-container">
     <div class="slideshow">
+        <!-- slideshow images -->
         <div v-hammer:swipe="onSwipe" class="slides-container" :style="'margin-left: ' + slideMargin + 'vw'">
-            <!-- <div class="product-image" :key="index" v-for="(image, index) in images" :style="'background-image: url(/demo_images/slider/'+image+')'"> </div> -->
             <div class="product-image" :key="index" v-for="(image, index) in images" :style="getBackgroundImage(image)"> </div>
         </div>
     </div>
+
+    <!-- indicator dots -->
+    <div class="dots">
+        <div :class="[{active: isActive(index)},'dot']" :key="index" v-for="(image, index) in images"> </div>
+    </div>
+
     <!-- thumbnails -->
     <div v-if="slideshowOptions.thumbnails" class="thumbnails">
         <div @click="setActiveImage(index)" :class="[{active: isActive(index)},'thumbnail']" :key="index" v-for="(image, index) in images" :style="getBackgroundImage(image)"> </div>
@@ -19,7 +25,9 @@ export default {
         slideshowOptions: {
             type: Object,
             default: () => {
-                return { thumbnails: false }
+                return {
+                    thumbnails: false
+                }
             }
         },
         images: {
@@ -61,7 +69,7 @@ export default {
                     if (this.slideMargin === threshold * -100)
                         return;
                     this.slideMargin -= 100;
-                    this.activeIndex+= 1;
+                    this.activeIndex += 1;
                     break;
                     /* swiped right */
                 case 4:
@@ -69,7 +77,7 @@ export default {
                     if (this.slideMargin === 0)
                         return;
                     this.slideMargin += 100;
-                    this.activeIndex-= 1;
+                    this.activeIndex -= 1;
                     break;
             }
         }
@@ -91,6 +99,7 @@ export default {
             display: none;
         }
 
+        /* slider container */
         .slides-container {
             touch-action: pan-y !important;
             display: flex;
@@ -102,7 +111,6 @@ export default {
                 height: 120vw;
                 width: 100vw;
                 overflow: hidden;
-                // background-size: contain;
                 background-position: center;
                 background-repeat: no-repeat;
 
@@ -117,16 +125,16 @@ export default {
     .thumbnails {
         width: 100%;
         // background: rgb(169, 169, 169);
-        padding:2px;
-        display:flex;
+        padding: 2px;
+        display: flex;
 
         .thumbnail {
             width: 20vw;
-            height:20vw;
+            height: 20vw;
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
-            overflow:hidden;
+            overflow: hidden;
             margin: 0 10px;
             box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
             transform: scale(1);
@@ -134,6 +142,29 @@ export default {
 
             &.active {
                 transform: scale(1.1);
+            }
+        }
+    }
+
+    /* indicator dots */
+    .dots {
+        width: 100vw;
+        height: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        box-sizing: border-box;
+        margin: 15px 0;
+
+        .dot {
+            height: 10px;
+            width: 10px;
+            border-radius: 50%;
+            background-color: #969696;
+            margin: 0 10px 5px 10px;
+
+            &.active {
+                background-color: #2b2b2b;
             }
         }
     }

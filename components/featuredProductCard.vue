@@ -70,7 +70,7 @@ export default {
         }
     }
 
-    /* text-details */
+    /* text-details */ 
     .text-details {
         margin-top: 5px;
         width: 100%;
