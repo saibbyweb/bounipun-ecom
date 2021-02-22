@@ -25,6 +25,10 @@ export default {
         if (process.client) {
             window.addEventListener('scroll', this.handleScroll);
         }
+        if (this.$route.name !== 'index') {
+            this.darkMode = true;
+            return;
+        }
     },
     destroyed() {
         if (process.client) {
@@ -38,18 +42,17 @@ export default {
     },
     methods: {
         handleScroll() {
-            if(this.$route.name === 'products-collection') {
+            if (this.$route.name !== 'index') {
                 this.darkMode = true;
                 return;
             }
 
-            if(window.scrollY > 200)
+            if (window.scrollY > 200)
                 this.darkMode = true;
             else
                 this.darkMode = false;
         },
         getIconPath(icon) {
-            // const directory = this.scrolled ? '/icons/light/' : '/icons/dark/';
             const directory = '/icons/light/';
             return directory + icon;
         }

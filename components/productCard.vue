@@ -34,16 +34,20 @@ export default {
     props: {
         details: {
             type: Object,
-            default: {
-                name: 'Khatamband Search',
-                collection: 'Bounipun Karakul',
-                price: 'INR 20000'
+            default: () => {
+                return {
+                    name: 'Khatamband Search',
+                    collection: 'Bounipun Karakul',
+                    price: 'INR 20000'
+                }
             },
         },
         variants: {
             type: Object,
-            default: {
-                shawl: true
+            default: () => {
+                return {
+                    shawl: true
+                }
             }
         },
         product: {

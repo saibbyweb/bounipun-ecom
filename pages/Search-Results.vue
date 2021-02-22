@@ -11,7 +11,7 @@
                 collection: 'Bounipun Adore',
                 price: 'INR 15000'}" product="auto_4" :variants="{square: true, stole: true}"/>
 
-        <product-card :variants="{stole: true}"/>
+        <!-- <product-card :variants="{stole: true}"/> -->
         <product-card :details="{name: 'Khatamband Cashmere',
                 collection: 'Bounipun Karakul',
                 price: 'INR 25000'}" product="auto_5" :variants="{shawl: true, stole: true}"/>
@@ -20,7 +20,7 @@
                 collection: 'Bounipun Autograph',
                 price: 'INR 8000'}" />
 
-        <product-card />
+        <!-- <product-card /> -->
         <product-card :details="{name: 'Khatamband Cashmere',
                 collection: 'Bounipun Karakul',
                 price: 'INR 25000'}" product="kara_4" :variants="{shawl: true, stole: true}" />
