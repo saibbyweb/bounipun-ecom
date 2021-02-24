@@ -38,6 +38,14 @@
         </div>
     </div>
 
+    <!-- sub total -->
+    <div class="sub-total">
+
+      <span class="label"> Sub Total:  </span>
+      <span class="value"> $ {{ subTotal }} </span>
+
+    </div>
+
     <div v-if="cartEmpty" class="side-pad">
         <ActionResponse icon="/icons/cart_empty.png" title="Bag Empty" message="Your bag is currently empty." action="Continue Shopping" />
     </div>
@@ -45,6 +53,8 @@
 </template>
 
 <script>
+import sumBy from "lodash/sumBy";
+
 export default {
     data() {
         return {
@@ -66,6 +76,9 @@ export default {
     computed: {
         cartEmpty: function () {
             return this.cartDetails.length === 0;
+        },
+        subTotal() {
+            return sumBy(this.cartDetails, (item) => item.price * item.quantity)
         }
     },
     methods: {
@@ -87,7 +100,7 @@ export default {
         box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
         margin: 20px;
         position: relative;
-        
+
         /* cart item thumbnail/image */
         .image-container {
             width: 35%;
@@ -96,6 +109,7 @@ export default {
                 width: 100%;
             }
         }
+
         /* cart item details and quantity input */
         .details-and-quantity {
             width: 65%;
@@ -139,12 +153,12 @@ export default {
             }
 
         }
-        
+
         /* remove icon */
         .remove-item {
             position: absolute;
             right: 3%;
-            top:10%;
+            top: 10%;
             width: 6%;
         }
 
@@ -154,6 +168,27 @@ export default {
             position: absolute;
             bottom: 10%;
             right: 3%;
+            color: $dark_gray;
+        }
+    }
+}
+.sub-total {
+    display:flex;
+    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
+    margin:10%;
+    justify-content: center;
+    
+    span {
+        font-family: $font_1_bold;
+        font-size:19px;
+        padding:10px;
+        margin:0 3px;
+        &.label {
+            color: $gray;
+            font-family: $font_1;
+            text-transform: uppercase;
+        }
+        &.value {
             color: $dark_gray;
         }
     }
