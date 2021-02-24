@@ -1,5 +1,5 @@
 <template>
-<div class="page -wh">
+<div class="cart page -wh">
     <div class="page-header center">
         <h2 class="title"> Shopping Bag </h2>
     </div>
@@ -19,6 +19,10 @@
                 <span class="name"> {{ item.name }} </span>
                 <!-- collection -->
                 <span class="collection"> {{ item.collection }} </span>
+                <!-- variant -->
+                <span class="variant"> {{ item.variant }} </span>
+                <!-- fabric -->
+                <span class="fabric"> {{ item.fabric }} </span>
                 <!-- price -->
                 <span class="price"> $ {{ item.price }} </span>
                 <!-- quantity selector -->
@@ -40,10 +44,13 @@
 
     <!-- sub total -->
     <div class="sub-total">
+        <span class="label"> Sub Total ( {{ cartDetails.length }} Items ) : </span>
+        <span class="value"> $ {{ subTotal }} </span>
+    </div>
 
-      <span class="label"> Sub Total:  </span>
-      <span class="value"> $ {{ subTotal }} </span>
-
+    <!-- proceed to address -->
+    <div class="pad-10">
+        <button @click="$router.push('/delivery-address')" class="action"> Proceed To Buy </button>
     </div>
 
     <div v-if="cartEmpty" class="side-pad">
@@ -61,12 +68,16 @@ export default {
             cartDetails: [{
                 name: "Khatamband Cashmere",
                 product: 'auto_2',
+                variant: 'Shawl',
+                fabric: '100% Cashmere / Feather Weight',
                 collection: 'Escape',
                 quantity: 1,
                 price: 299
             }, {
                 name: "Red Velvet",
                 product: 'auto_5',
+                variant: 'Stole',
+                fabric: 'Wool 80% / Silk 20% / Luxe Weight',
                 collection: 'Autograph',
                 quantity: 1,
                 price: 399
@@ -118,8 +129,11 @@ export default {
             justify-content: center;
 
             span {
+                color: $gray;
+                font-size: 11px;
 
                 &.name {
+                    color: $dark_gray;
                     font-family: $font_2;
                     text-transform: uppercase;
                     font-size: 12px;
@@ -127,12 +141,12 @@ export default {
 
                 &.collection {
                     font-family: $font_2;
-                    color: $gray;
                     font-size: 11px;
                     margin-bottom: 4px;
                 }
 
                 &.price {
+                    color: $dark_gray;
                     font-family: $font_1;
                     font-size: 12px;
                 }
@@ -149,6 +163,7 @@ export default {
                 select {
                     border: none;
                     font-size: 11px;
+                    background: transparent;
                 }
             }
 
@@ -172,24 +187,29 @@ export default {
         }
     }
 }
+
 .sub-total {
-    display:flex;
+    display: flex;
     box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
-    margin:10%;
+    margin: 10%;
     justify-content: center;
-    
+    align-items: center;
+
     span {
         font-family: $font_1_bold;
-        font-size:19px;
-        padding:10px;
-        margin:0 3px;
+        font-size: 12px;
+        padding: 10px;
+        margin: 0 3px;
+
         &.label {
             color: $gray;
             font-family: $font_1;
             text-transform: uppercase;
         }
+
         &.value {
             color: $dark_gray;
+            font-size: 17px;
         }
     }
 }
