@@ -24,7 +24,7 @@
 
     <!-- shop now button -->
     <div class="center actions">
-        <button class="clear shop-now">Shop Now</button>
+        <button class="clear shop-now"> {{ inWishlist ? 'Move to Cart' : 'Shop Now' }} </button>
     </div>
 </div>
 </template>
@@ -57,7 +57,8 @@ export default {
         image: {
             type: String,
             default: 'product1.png'
-        }
+        },
+        inWishlist: { type: Boolean, default: false }
     },
     computed: {
         imagePath() {

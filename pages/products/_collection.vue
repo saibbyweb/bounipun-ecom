@@ -168,29 +168,12 @@
                 </div>
             </div>
         </div>
-        <!-- product description -->
-        <div class="description">
-            <!-- title and action -->
-            <div class="title-and-switch">
-                <span class="title"> Description </span>
-                <span class="switch"> + </span>
-            </div>
-            <div class="title-and-switch">
-                <span class="title"> About Escape </span>
-                <span class="switch"> + </span>
-            </div>
-            <div class="title-and-switch">
-                <span class="title"> Shipping & Returns </span>
-                <span class="switch"> + </span>
-            </div>
 
-        </div>
-        <!-- collection description -->
-        <div class="about-escape">
-
-        </div>
-        <!-- shipping and returns description -->
-        <div class="shipping-and-returns">
+        <!-- accordions -->
+        <div class="accordions">
+            <Accordion heading="Description" />
+            <Accordion heading="About Escape" />
+            <Accordion heading="Shipping & Returns" />
         </div>
 
         <!-- related products -->
@@ -210,12 +193,21 @@
                 </div>
             </div>
         </div>
+
+        <inner-image-zoom class="product-image" :src="images[0]" :zoomSrc="images[0]" />
+
     </div>
 </div>
 </template>
 
 <script>
+import 'vue-inner-image-zoom/lib/vue-inner-image-zoom.css';
+import InnerImageZoom from 'vue-inner-image-zoom';
+
 export default {
+    components: {
+        'inner-image-zoom': InnerImageZoom
+    },
     mounted() {
         const param = this.$route.params.collection;
         const prod = param.split("_");
@@ -337,7 +329,7 @@ export default {
                     background-color: white;
                     border-radius: 1px 1px;
                     box-sizing: content-box;
-                    padding:4px;
+                    padding: 4px;
                 }
             }
 
@@ -540,10 +532,13 @@ export default {
 
             .fabric {
                 background-color: #33333376;
-                color: white;
                 padding: 5px 0px;
                 width: 43%;
                 margin: 10px;
+
+                span {
+                    color: white;
+                }
 
                 &.active {
                     box-shadow: 1px 1px 5px hsla(0, 0%, 0%, 0.16);
@@ -571,26 +566,8 @@ export default {
     }
 
     /* description */
-    .description {
+    .accordions {
         margin-top: 20px;
-
-        .title-and-switch {
-            display: flex;
-            justify-content: space-between;
-            margin: 20px 0;
-            border-bottom: 1px solid #6a6a6a;
-
-            .title {
-                text-transform: uppercase;
-                color: $dark_gray;
-                letter-spacing: 1.5px;
-                font-size: 11px;
-            }
-
-            .switch {
-                padding: 0 10px;
-            }
-        }
     }
 }
 </style>

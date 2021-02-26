@@ -4,6 +4,7 @@
         <!-- slideshow images -->
         <div v-hammer:swipe="onSwipe" class="slides-container" :style="'margin-left: ' + slideMargin + 'vw'">
             <div class="product-image" :key="index" v-for="(image, index) in images" :style="getBackgroundImage(image)"> </div>
+
         </div>
     </div>
 
@@ -24,10 +25,16 @@
 </template>
 
 <script>
+import 'vue-inner-image-zoom/lib/vue-inner-image-zoom.css';
+import InnerImageZoom from 'vue-inner-image-zoom';
+
 import {
     TweenLite
 } from "gsap"
 export default {
+    components: {
+        'inner-image-zoom': InnerImageZoom
+    },
     props: {
         slideshowOptions: {
             type: Object,
