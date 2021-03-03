@@ -64,7 +64,7 @@ export default {
             },
             {
                 product: "kara_2",
-                status: "Delivery Delayed",
+                status: "Shipped",
                 productName: "Kani Shawl",
                 collection: "Bounipun Escape",
                 fabric: "80% Wool - Feather Weight",

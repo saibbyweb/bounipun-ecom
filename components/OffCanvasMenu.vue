@@ -15,7 +15,7 @@
     <!-- acc items -->
     <button @click="$router.push('/my-account')" class="clear item"> My Account </button>
     <button @click="$router.push('/my-account/orders')" class="clear item acc"> Profile Details </button>
-    <button class="clear item acc"> Addresses </button>
+    <button @click="$router.push('/my-account/address-book')" class="clear item acc"> Addresses </button>
     <button class="clear item acc"> Orders </button>
 
     <br>
