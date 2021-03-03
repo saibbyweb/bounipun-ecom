@@ -171,7 +171,14 @@
 
         <!-- accordions -->
         <div class="accordions">
-            <Accordion heading="Description" />
+            <Accordion heading="Description">
+                <p> Design Specific Details</p>
+                <br>
+                <p> Fabric Specific Details </p>
+                <br>
+                <p> Variant Specific Details</p>
+                <br>
+            </Accordion>
             <Accordion heading="About Escape" />
             <Accordion heading="Shipping & Returns" />
         </div>
