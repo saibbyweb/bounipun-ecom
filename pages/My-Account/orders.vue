@@ -1,6 +1,5 @@
 <template>
 <div class="page orders">
-    <h1> Orders page </h1>
 
     <div class="order-item" v-for="(order, index) in orders" :key="index">
         <!-- status bar -->
@@ -20,9 +19,9 @@
             <div class="text-details">
                 <span class="name"> {{ order.productName }} </span>
                 <span class="collection"> {{ order.collection }} </span>
-                <span class="fabric"> {{ order.fabric }} </span>
-                <span class="quantity"> Qty: {{ order.quantity }} </span>
-                <span class="price"> {{ order.currency + order.price }} </span>
+                <span class="fabric"> Fabric: {{ order.fabric }} </span>
+                <span class="quantity"> Quantity: {{ order.quantity }} </span>
+                <span class="price"> Amount Paid: <b> {{ order.currency + order.price }} </b> </span>
             </div>
         </div>
 
@@ -34,7 +33,7 @@
             <!-- pre delivery -->
             <div class="pre-delivery">
                 <button> Track </button>
-                <button> Cancel </button>
+                <button :disabled="true"> Cancel </button>
                 <button> Help </button>
             </div>
             <!-- post delivery -->
@@ -59,7 +58,18 @@ export default {
                 collection: "Bounipun Autograph",
                 fabric: "100% Cashmere - Luxe Weight",
                 quantity: "2",
-                price: "899",
+                price: "899.00",
+                currency: "$",
+                rating: "0"
+            },
+            {
+                product: "kara_2",
+                status: "Delivery Delayed",
+                productName: "Kani Shawl",
+                collection: "Bounipun Escape",
+                fabric: "80% Wool - Feather Weight",
+                quantity: "1",
+                price: "249.00",
                 currency: "$",
                 rating: "0"
             }]
@@ -85,6 +95,7 @@ export default {
     .order-item {
         width: 100%;
         box-shadow: 1px 1px 15px rgba(51, 51, 51, 0.16);
+        margin: 20px 0;
 
         /* status bar */
         .status-bar {
@@ -93,7 +104,7 @@ export default {
             justify-content: space-between;
             background-color: #333333;
             width: 100%;
-            padding: 2% 4%;
+            padding: 3% 4%;
 
             /* status text */
             .status {
@@ -103,7 +114,7 @@ export default {
 
             /* icon */
             .arrow {
-                width: 3%;
+                width: 2%;
             }
         }
 
@@ -113,9 +124,9 @@ export default {
 
             .image-box {
                 width: 30%;
-                height: 40vw;
+                height: 30vw;
                 background-size: cover;
-                background-position: center;
+                background-position: top;
 
                 .image {
                     width: 100%;
@@ -141,6 +152,19 @@ export default {
                         text-transform: uppercase;
                         font-family: $font_1;
                         font-weight: 100;
+                        font-size:11px;
+                        margin-bottom:5px;
+                    }
+
+                    &.price {
+                        // font-size:12px;
+                        align-self: flex-end;
+                        margin:1% 10% 0 0;
+
+                        b {
+                            font-family: $font_1_semibold;
+                            font-size:12px;
+                        }
                     }
                 }
             }
@@ -151,20 +175,31 @@ export default {
             margin: 10px 0;
             height: 1px;
             width:100%;
+            opacity: 0.3;
             background-color: rgb(174, 174, 174);
         }
 
         /* actions */
         .actions {
             .pre-delivery {
-                padding: 5px 0;
+                padding: 10px 0;
                 display: flex;
                 justify-content: space-around;
 
                 button {
-                    border: 1px solid #333;
+                    border: 1px solid rgb(144, 144, 144);
                     background: transparent;
-                    width:25%;
+                    width:22%;
+                    font-size:10px;
+                    color: $primary_dark;
+                    text-transform: uppercase;
+                    
+
+                    &:disabled {
+                        border: 1px solid rgb(180, 180, 180);
+                        color: $gray;
+                    }
+
                 }
             }
         }
