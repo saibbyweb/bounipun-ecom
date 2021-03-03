@@ -18,7 +18,7 @@
     </div>
     <!-- account page list -->
     <div class="account-page-list">
-        <div class="account-page-item" v-for="(page, index) in pages" :key="index">
+        <div @click="$router.push('/my-account/'+page.path)" class="account-page-item" v-for="(page, index) in pages" :key="index">
 
             <!-- icon -->
             <div class="icon-box center">
@@ -48,6 +48,7 @@ export default {
                 name: "My Orders",
                 description: "Track your orders",
                 icon: "orders.png",
+                path: 'orders'
             }, {
                 name: "Address Book",
                 description: "Save addresses for quick checkouts",
@@ -116,7 +117,7 @@ export default {
         .account-page-item {
             display: flex;
             background-color: white;
-            padding: 10px;
+            padding: 15px 10px;
             border-bottom: 1px solid rgba(51, 51, 51, 0.1);
 
             .icon-box {
