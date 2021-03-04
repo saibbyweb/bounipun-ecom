@@ -12,9 +12,9 @@
     <button class="action" @click="updateAddress"> {{ updating ? 'Update' : 'Add' }} Address </button>
     </div>
 
-    <div class="response">
-    <Toast v-if="updated" msg="Address Updated" />
-    </div>
+    <!-- <div class="response"> -->
+    <Toast :show="updated" msg="Address Updated" />
+    <!-- </div> -->
 </div>
 </template>
 

@@ -52,11 +52,13 @@ export default {
             }, {
                 name: "Address Book",
                 description: "Save addresses for quick checkouts",
-                icon: "address.png"
+                icon: "address.png",
+                path: "address-book"
             }, {
                 name: "Profile Details",
                 description: "View or manage your profile",
-                icon: "profile.png"
+                icon: "profile.png",
+                path: "profile-details"
             }]
         }
     }

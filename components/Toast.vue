@@ -1,20 +1,29 @@
 <template>
-<div class="toast center">
-    <span class="msg">
-        {{ msg }}
-    </span>
+<div class="response">
+    <div v-if="show" class="toast center">
+        <span class="msg">
+            {{ msg }}
+        </span>
+    </div>
 </div>
 </template>
 
 <script>
 export default {
     props: {
-        msg: String
+        msg: String,
+        show: Boolean
     }
 }
 </script>
 
 <style lang="scss" scoped>
+.response {
+    position:relative;
+    height:20vw;
+    width:100%;
+}
+
 @keyframes showMessage {
     0% {
         bottom: -30%;
@@ -36,7 +45,7 @@ export default {
 
     .msg {
         padding: 10px;
-        font-size:10px;
+        font-size: 10px;
         background-color: #2d985c;
         color: white;
         font-weight: 500;
