@@ -9,7 +9,11 @@
     <DeliveryInput label="Pincode" v-model="deliveryAddress.pincode" />
     <br>
     <div class="actions center">
-    <button class="action"> {{ updating ? 'Update' : 'Add' }} Address </button>
+    <button class="action" @click="updateAddress"> {{ updating ? 'Update' : 'Add' }} Address </button>
+    </div>
+
+    <div class="response">
+    <Toast v-if="updated" msg="Address Updated" />
     </div>
 </div>
 </template>
@@ -38,7 +42,8 @@ export default {
                 email: "",
                 city: "",
                 pincode: ""
-            }
+            },
+            updated: false
         }
     },
     mounted() {
@@ -56,6 +61,10 @@ export default {
     methods: {
         fetchAddressDetails() {
             this.deliveryAddress = this.addressDetails;
+        },
+        updateAddress() {
+            this.updated = true;
+            setTimeout(() => this.updated = false, 3000);
         }
     }
 }
@@ -70,6 +79,19 @@ export default {
     justify-content: space-around;
 }
 .actions {
+    width:100%;
+
+    .action {
+        width: 80%;
+    }
+}
+
+.address-details {
+        box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
+}
+.response {
+    position:relative;
+    height:20vw;
     width:100%;
 }
 </style>

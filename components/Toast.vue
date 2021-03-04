@@ -1,7 +1,9 @@
 <template>
-    <div class="toast">
+<div class="toast center">
+    <span class="msg">
         {{ msg }}
-    </div>
+    </span>
+</div>
 </template>
 
 <script>
@@ -15,28 +17,29 @@ export default {
 <style lang="scss" scoped>
 @keyframes showMessage {
     0% {
-        bottom:-40px;
+        bottom: -30%;
     }
-    25% {
-        bottom: 70px;
-    }
-    75% {
-        bottom: 70px;
-    }
+
     100% {
-        bottom:-70px;
+        bottom: 20%;
     }
 }
+
 .toast {
-    background-color: #feed01;
-    color: #111111;
-    padding: 10px;
-    border-radius: 9px;
-    font-weight: 500;
+
     z-index: 2;
-    position: fixed;
-    bottom:-70px;
-    right:100px;
-    animation: showMessage 3s ease-in-out;
+    position: absolute;
+    bottom: 20%;
+    left: 0;
+    width: 100%;
+    animation: showMessage 1s ease-in-out;
+
+    .msg {
+        padding: 10px;
+        font-size:10px;
+        background-color: #2d985c;
+        color: white;
+        font-weight: 500;
+    }
 }
 </style>

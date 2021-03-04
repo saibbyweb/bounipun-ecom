@@ -3,16 +3,17 @@
 
     <div class="page-header center-col">
         <h2 class="title"> Address Book </h2>
-        <div v-if="showAddressForm" class="center indicator">
-            
-            <div @click="hideAddressForm" class="back-icon center">
-                <img src="/icons/light/back.png" />
-            </div>
+    </div>
 
-            <span class="activity">
-                {{ updating ? 'Updating' : 'New'}} Address
-            </span>
+    <div v-if="showAddressForm" class="center indicator">
+
+        <div @click="hideAddressForm" class="back-icon center">
+            <img src="/icons/light/back.png" />
         </div>
+
+        <span class="activity">
+            {{ updating ? 'Updating' : 'New'}} Address
+        </span>
     </div>
 
     <!-- address card -->
@@ -92,30 +93,28 @@ export default {
 
 <style lang="scss" scoped>
 .address-book {
-    .page-header {
-        .indicator {
-            width: 100%;
-            background-color: $primary_dark;
-            padding: 3%;
-            margin-top: 10px;
-            position: relative;
+    .indicator {
+        width: 100%;
+        background-color: $primary_dark;
+        padding: 3%;
+        margin-top: 10px;
+        position: relative;
 
-            .back-icon {
-                position:absolute;
-                top:0;
-                left:2%;
-                height:100%;
-                width: 10%;
+        .back-icon {
+            position: absolute;
+            top: 0;
+            left: 2%;
+            height: 100%;
+            width: 10%;
 
-                img {
-                    height:40%;
-                }
+            img {
+                height: 40%;
             }
+        }
 
-            .activity {
-                color: white;
-                font-size: 13px;
-            }
+        .activity {
+            color: white;
+            font-size: 13px;
         }
     }
 
