@@ -1,11 +1,5 @@
 <template>
 <div class="address-details center-col">
-
-    <div class="header">
-        <span @click="$emit('goBack')"> Go Back </span>
-        <span> {{ updating ? 'Update' : 'Add' }} Address </span>
-    </div>
-
     <DeliveryInput label="Name" v-model="deliveryAddress.name" />
     <DeliveryInput label="Phone Number" v-model="deliveryAddress.phoneNumber" />
     <DeliveryInput label="AddressLine1" v-model="deliveryAddress.addressLine1" />
@@ -13,7 +7,10 @@
     <DeliveryInput label="Email" v-model="deliveryAddress.email" />
     <DeliveryInput label="City" v-model="deliveryAddress.city" />
     <DeliveryInput label="Pincode" v-model="deliveryAddress.pincode" />
+    <br>
+    <div class="actions center">
     <button class="action"> {{ updating ? 'Update' : 'Add' }} Address </button>
+    </div>
 </div>
 </template>
 
@@ -71,5 +68,8 @@ export default {
     display:flex;
     align-items: center;
     justify-content: space-around;
+}
+.actions {
+    width:100%;
 }
 </style>

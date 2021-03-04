@@ -1,11 +1,17 @@
 <template>
 <div class="address-book page">
 
-    <!-- add new address card -->
-    <div v-if="!showAddressForm" class="address-card">
-        <div @click="showAddressForm = true" class="add-new center-col">
-            <span class="icon"> + </span>
-            <span class="label"> Add New Address </span>
+    <div class="page-header center-col">
+        <h2 class="title"> Address Book </h2>
+        <div v-if="showAddressForm" class="center indicator">
+            
+            <div @click="hideAddressForm" class="back-icon center">
+                <img src="/icons/light/back.png" />
+            </div>
+
+            <span class="activity">
+                {{ updating ? 'Updating' : 'New'}} Address
+            </span>
         </div>
     </div>
 
@@ -22,9 +28,17 @@
         </div>
     </div>
 
+    <!-- add new address card -->
+    <div v-if="!showAddressForm" class="address-card">
+        <div @click="showAddressForm = true" class="add-new center-col">
+            <span class="icon"> + </span>
+            <span class="label"> Add New Address </span>
+        </div>
+    </div>
+
     <!-- update address -->
     <div v-if="showAddressForm" class="update-address">
-    <UpdateAddress :updating="updating" :addressId="activeAddressId" :addressDetails="activeAddress" @goBack="hideAddressForm" />
+        <UpdateAddress :updating="updating" :addressId="activeAddressId" :addressDetails="activeAddress" @goBack="hideAddressForm" />
     </div>
 
 </div>
@@ -78,6 +92,32 @@ export default {
 
 <style lang="scss" scoped>
 .address-book {
+    .page-header {
+        .indicator {
+            width: 100%;
+            background-color: $primary_dark;
+            padding: 3%;
+            margin-top: 10px;
+            position: relative;
+
+            .back-icon {
+                position:absolute;
+                top:0;
+                left:2%;
+                height:100%;
+                width: 10%;
+
+                img {
+                    height:40%;
+                }
+            }
+
+            .activity {
+                color: white;
+                font-size: 13px;
+            }
+        }
+    }
 
     .saved-addresses {
         display: flex;
@@ -85,9 +125,7 @@ export default {
         flex-wrap: wrap;
     }
 
-    .update-address {
-
-    }
+    .update-address {}
 
     .address-card {
         border-radius: 5px;
