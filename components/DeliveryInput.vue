@@ -2,7 +2,7 @@
 <!-- delivery address field -->
 
     <div class="delivery-input">
-        <input class="field" type="text" />
+        <input class="field" type="text" :value="value" @input="$emit('input', $event.target.value)"/>
         <label class="label"> {{ label }} </label>
     </div>
 
@@ -11,7 +11,8 @@
 <script>
 export default {
     props: {
-        label: String
+        label: String,
+        value: String
     }
 }
 </script>
