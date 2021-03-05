@@ -6,7 +6,7 @@
     </div>
 
     <!-- indicator -->
-    <div class="center indicator">
+    <div v-if="!cardCreated" class="center indicator">
         <span class="activity">
             {{ redeemState ? 'Redeem' : 'Create'}} Gift Card
         </span>
@@ -28,7 +28,7 @@
     </div>
 
     <!-- create card -->
-    <div v-if="!redeemState" class="create-card center-col">
+    <div v-if="!redeemState && !cardCreated" class="create-card center-col">
         <!-- fields -->
         <div class="fields center-col">
             <input class="field" type="text" placeholder="Enter Amount" />
@@ -37,12 +37,17 @@
             <input class="field" type="text" placeholder="Recipient Email" />
         </div>
         <!-- redeem button -->
-        <button class="action"> Proceed to Purchase </button>
+        <button class="action" @click="createCard"> Proceed to Purchase </button>
 
         <span class="disclaimer"> *The Gift Card cannot be cancelled, refunded or returned. </span>
 
         <p class="desc"> Already have a bounipun card? </p>
         <span class="anchor" @click="redeemState = true"> Redeem a Bounipun card </span>
+    </div>
+
+    <!-- card created -->
+    <div v-if="cardCreated" class="card-created">
+        <ActionResponse icon="/icons/cart_empty.png" title="Gift Card Created" message="Bounipun Gift Card successfully sent to Oliverine Brown" action="Continue Shopping" />
     </div>
 
 </div>
@@ -52,7 +57,14 @@
 export default {
     data() {
         return {
-            redeemState: true
+            redeemState: true,
+            cardCreated: false
+        }
+    },
+    methods: {
+        createCard() {
+            this.redeemState = false;
+            this.cardCreated = true;
         }
     }
 }
