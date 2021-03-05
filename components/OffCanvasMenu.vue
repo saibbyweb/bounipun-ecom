@@ -14,9 +14,10 @@
 
     <!-- acc items -->
     <button @click="$router.push('/my-account')" class="clear item"> My Account </button>
-    <button @click="$router.push('/my-account/profile-details')" class="clear item acc"> Profile Details </button>
-    <button @click="$router.push('/my-account/address-book')" class="clear item acc"> Addresses </button>
     <button @click="$router.push('/my-account/orders')" class="clear item acc"> Orders </button>
+    <button @click="$router.push('/my-account/address-book')" class="clear item acc"> Address Book </button>
+    <button @click="$router.push('/my-account/profile-details')" class="clear item acc"> Profile Details </button>
+    <button @click="$router.push('/my-account/gift-cards')" class="clear item acc"> Gift Cards </button>
 
     <br>
     <!-- links -->
@@ -31,17 +32,18 @@
 
 <style lang="scss" scoped>
 .off-canvas-menu {
-    position:fixed;
-    top:0;
-    left:0;
+    position: fixed;
+    top: 0;
+    left: 0;
     background: white;
-    width:70vw;
-    height:100vh;
-    margin-left:-70vw;
+    width: 70vw;
+    height: 100vh;
+    margin-left: -70vw;
     transition: all 0.4s ease-in-out;
     z-index: 3;
+
     &.visible {
-        margin-left:0vw;
+        margin-left: 0vw;
     }
 
     .header {
@@ -49,11 +51,12 @@
         height: 10vh;
         width: 100%;
         margin-bottom: 10px;
-        display:flex;
+        display: flex;
         justify-content: space-around;
         align-items: center;
-        padding:0 10px;
+        padding: 0 10px;
         box-sizing: border-box;
+
         .close {
             height: 5vw;
             width: 5vw;
@@ -72,7 +75,7 @@
 
         &.acc {
             font-size: 10px;
-            padding-left:5%;
+            padding-left: 5%;
         }
     }
 
@@ -83,7 +86,7 @@
         width: 100%;
         text-align: left;
         padding: 2%;
-        margin-left:5px;
+        margin-left: 5px;
         opacity: 0.8;
 
     }
