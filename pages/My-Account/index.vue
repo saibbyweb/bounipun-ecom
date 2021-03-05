@@ -59,6 +59,11 @@ export default {
                 description: "View or manage your profile",
                 icon: "profile.png",
                 path: "profile-details"
+            },{
+                name: "Gift Cards",
+                description: "Redeem of send gift cards.",
+                icon: "giftcards.png",
+                path: "gift-cards"
             }]
         }
     }
