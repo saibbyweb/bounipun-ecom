@@ -5,9 +5,15 @@
         <h2 class="title"> Gift Cards </h2>
     </div>
 
+    <!-- indicator -->
+    <div class="center indicator">
+        <span class="activity">
+            {{ redeemState ? 'Redeem' : 'Create'}} Gift Card
+        </span>
+    </div>
+
     <!-- redeem gift card -->
-    <div class="redeem-card center-col">
-        <h3 class="heading"> Received a gift card ? </h3>
+    <div v-if="redeemState" class="redeem-card center-col">
         <!-- fields -->
         <div class="fields center-col">
             <input class="field" type="text" placeholder="Enter Gift Card No." />
@@ -15,18 +21,14 @@
         </div>
         <!-- redeem button -->
         <button class="action"> Redeem Card </button>
-    </div>
 
-    <!-- create new card action-->
-    <div class="create-card-action center-col">
         <p class="desc"> Give your loved ones the gift of choice with
             Bounipun Gift Cards. </p>
-        <button class="action"> Create Gift Card > </button>
+        <span class="anchor" @click="redeemState = false"> Create a Bounipun card </span>
     </div>
 
     <!-- create card -->
-    <div class="create-card center-col">
-        <h3 class="heading"> Create Gift Card </h3>
+    <div v-if="!redeemState" class="create-card center-col">
         <!-- fields -->
         <div class="fields center-col">
             <input class="field" type="text" placeholder="Enter Amount" />
@@ -37,7 +39,10 @@
         <!-- redeem button -->
         <button class="action"> Proceed to Purchase </button>
 
-        <span class="disclaimer"> The Gift Card cannot be cancelled, refunded or returned. </span>
+        <span class="disclaimer"> *The Gift Card cannot be cancelled, refunded or returned. </span>
+
+        <p class="desc"> Already have a bounipun card? </p>
+        <span class="anchor" @click="redeemState = true"> Redeem a Bounipun card </span>
     </div>
 
 </div>
@@ -45,12 +50,42 @@
 
 <script>
 export default {
-
+    data() {
+        return {
+            redeemState: true
+        }
+    }
 }
 </script>
 
 <style lang="scss" scoped>
 .gift-cards {
+
+    /* indicator */
+    .indicator {
+        width: 100%;
+        background-color: $primary_dark;
+        padding: 3%;
+        margin-top: 10px;
+        position: relative;
+
+        .back-icon {
+            position: absolute;
+            top: 0;
+            left: 2%;
+            height: 100%;
+            width: 10%;
+
+            img {
+                height: 40%;
+            }
+        }
+
+        .activity {
+            color: white;
+            font-size: 13px;
+        }
+    }
 
     /* redeem card */
     .redeem-card {
@@ -70,11 +105,24 @@ export default {
         margin-bottom: 10px;
 
         .field {
-            width: 80%;
+            width: 90%;
             margin: 10px 0;
             padding: 10px;
             border: 1px solid #c8c8c8;
         }
+    }
+
+    /* desc */
+    .desc {
+        margin-top: 20px;
+        font-size: 12px;
+        text-align: center;
+    }
+
+    /* anchor */
+    .anchor {
+        font-family: $font_1_bold;
+        text-transform: uppercase;
     }
 
     /* create card action */
@@ -97,8 +145,8 @@ export default {
         padding: 20px;
 
         .disclaimer {
-            margin-top:10px;
-            font-size:10px;
+            margin-top: 10px;
+            font-size: 8px;
             text-align: center;
         }
     }

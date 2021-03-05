@@ -4,7 +4,8 @@
     <div class="page-header center-col">
         <h2 class="title"> Address Book </h2>
     </div>
-
+    
+    <!-- indicator -->
     <div v-if="showAddressForm" class="center indicator">
 
         <div @click="hideAddressForm" class="back-icon center">
