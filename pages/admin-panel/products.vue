@@ -67,7 +67,7 @@ export default {
 <style lang="scss" scoped>
 .products {
     display: grid;
-    grid-template-columns: 70% 30%;
+    grid-template-columns: 67% 33%;
     grid-template-rows: auto auto;
 
     .filters {

@@ -13,15 +13,15 @@
     <SelectBox :options="collections" v-model="selectedCollection" label="Collection" />
     <!-- price/weight/stock -->
 
-     <!-- fabrics (checkboxes) -->
-    <CheckBoxes :options="allFabrics" label="Fabrics" />
-    
+    <!-- fabrics (checkboxes) -->
+    <CheckBoxes :options="feedFabrics()" :local="true" :label="'Select Fabrics for: '+variation.name" v-for="(variation, index) in selectedVariations" :key="index" />
     <!-- variation options - images, fabric, pricing -->
-        <!-- publish toggle -->
-        <toggle-button v-model="product.status" width="120" font-size="13" :labels="{checked: 'Live', unchecked: 'Unpublished'}"/>
-<!-- update button -->
-<br>
-<button class="action"> {{ editMode ? "Edit" : "Add" }} Product </button>
+
+    <!-- publish toggle -->
+    <toggle-button v-model="product.status" :width="120" :font-size="13" :labels="{checked: 'Live', unchecked: 'Unpublished'}" />
+    <!-- update button -->
+    <br>
+    <button class="action"> {{ editMode ? "Edit" : "Add" }} Product </button>
 </div>
 </template>
 
@@ -34,6 +34,14 @@ export default {
             return slugify(this.product.name, {
                 lower: true
             });
+        },
+        selectedVariations() {
+            return this.variations.filter(variation => variation.checked === true)
+        }
+    },
+    methods: {
+        feedFabrics() {
+            return JSON.parse(JSON.stringify(this.allFabrics));
         }
     },
     data() {
@@ -48,17 +56,21 @@ export default {
             },
             variations: [{
                 name: 'Shawl',
-                value: 'shawl'
+                value: 'shawl',
+                checked: false
             }, {
                 name: 'Stole',
-                value: 'stole'
+                value: 'stole',
+                checked: false
             }, {
                 name: 'Square',
-                value: 'square'
+                value: 'square',
+                checked: false
             }],
             collections: [{
                     name: 'Select Collection',
-                    value: false
+                    value: 'false',
+                    checked: false
                 },
                 {
                     name: 'Autograph',
@@ -75,24 +87,29 @@ export default {
             ],
             allFabrics: [{
                     name: 'Feather Weight',
-                    value: '1'
+                    value: '1',
+                    checked: false
                 }, {
                     name: 'Light Weight',
-                    value: '2'
+                    value: '2',
+                    checked: false
                 }, {
                     name: 'Warm Fabric',
-                    value: '3'
+                    value: '3',
+                    checked: false
                 },
                 {
                     name: 'Luxe Weight',
-                    value: '4'
+                    value: '4',
+                    checked: false
                 },
                 {
-                    name: 'Wool 70% / Silk 30%',
-                    value: '5'
+                    name: 'Wool 70%',
+                    value: '5',
+                    checked: false
                 }
             ],
-            selectedCollection: false
+            selectedCollection: 'false'
         }
     }
 }
