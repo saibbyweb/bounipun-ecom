@@ -39,7 +39,7 @@ export default {
 
     .checkboxes {
         box-sizing: border-box;
-      
+        flex-wrap: wrap;
         padding: 5%;
         width: 100%;
 
@@ -56,6 +56,7 @@ export default {
                 padding: 1%;
                 margin-top: 7px;
                 font-weight: 900;
+                text-align: center;
             }
 
             .check-input {

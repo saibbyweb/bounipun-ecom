@@ -4,7 +4,7 @@
     <!-- product name -->
     <InputBox label="Product Name" v-model="product.name" />
     <!-- slug -->
-    <InputBox label="Slug" v-model="product.name" />
+    <InputBox label="Slug" v-model="product.slug" :placeholder="suggestedSlug" />
     <!-- description -->
     <TextBox v-model="product.description" label="Description" />
     <!-- variations (checkboxes) -->
@@ -12,13 +12,30 @@
     <!-- collection -->
     <SelectBox :options="collections" v-model="selectedCollection" label="Collection" />
     <!-- price/weight/stock -->
+
+     <!-- fabrics (checkboxes) -->
+    <CheckBoxes :options="allFabrics" label="Fabrics" />
+    
     <!-- variation options - images, fabric, pricing -->
-    <!-- publish toggle -->
+        <!-- publish toggle -->
+        <toggle-button v-model="product.status" width="120" font-size="13" :labels="{checked: 'Live', unchecked: 'Unpublished'}"/>
+<!-- update button -->
+<br>
+<button class="action"> {{ editMode ? "Edit" : "Add" }} Product </button>
 </div>
 </template>
 
 <script>
+import slugify from "slugify";
+
 export default {
+    computed: {
+        suggestedSlug() {
+            return slugify(this.product.name, {
+                lower: true
+            });
+        }
+    },
     data() {
         return {
             editMode: false,
@@ -27,6 +44,7 @@ export default {
                 slug: "",
                 description: "",
                 collection: "",
+                status: false
             },
             variations: [{
                 name: 'Shawl',
@@ -53,6 +71,25 @@ export default {
                 {
                     name: 'Karakul',
                     value: 'karakul'
+                }
+            ],
+            allFabrics: [{
+                    name: 'Feather Weight',
+                    value: '1'
+                }, {
+                    name: 'Light Weight',
+                    value: '2'
+                }, {
+                    name: 'Warm Fabric',
+                    value: '3'
+                },
+                {
+                    name: 'Luxe Weight',
+                    value: '4'
+                },
+                {
+                    name: 'Wool 70% / Silk 30%',
+                    value: '5'
                 }
             ],
             selectedCollection: false

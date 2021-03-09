@@ -1,7 +1,7 @@
 <template>
     <div class="input-box">
         <label class="label"> {{ label }} </label>
-        <input class="input-box" :type="type" :value="value" @input="$emit('input', $event.target.value)" :disabled="disabled"/> 
+        <input class="input-box" :type="type" :placeholder="placeholder" :value="value" @input="$emit('input', $event.target.value)" :disabled="disabled"/> 
     </div>
 </template>
 
@@ -10,6 +10,7 @@ export default {
     props: {
         label: String,
         value: String,
+        placeholder: {type: String, default: ''},
         type: { type: String, default: 'text'},
         disabled: { type: Boolean, default:  false }
     }
@@ -41,7 +42,12 @@ export default {
         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
         color: $gray;
         font-family: $font_2;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
+
+        &::placeholder {
+            font-size: 11px;
+            opacity: 0.6;
+        }
     }
 }
 </style>
