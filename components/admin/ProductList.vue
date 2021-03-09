@@ -49,7 +49,7 @@ export default {
 
         &:hover {
               background-color: #492727;
-             transform: translateX(0px);
+              transform: translateX(0px);
         }
     }
 

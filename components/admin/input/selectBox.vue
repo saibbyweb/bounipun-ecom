@@ -1,5 +1,6 @@
 <template>
 <div class="select-box">
+    <label v-if="label !== undefined" class="label"> {{ label }} </label>
     <select class="select shadow" :value="value">
         <option v-for="(option, index) in options" :key="index" :value="option.value" @change="$emit('input', $event.target.value)"> {{ option.name }} </option>
     </select>
@@ -17,7 +18,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.form-container {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 2%;
+    width: 100%;
+}
+
 .select-box {
+
+    .label {
+        font-family: $font_2_bold;
+        color: $gray;
+        text-transform: uppercase;
+        font-size: 10px;
+        padding: 1%;
+        margin-left: 5px;
+        font-weight: 900;
+    }
+
     select {
         background: #ffffff;
         border: none;

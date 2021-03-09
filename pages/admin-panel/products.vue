@@ -89,7 +89,7 @@ export default {
 
     .update {
         grid-area: 2 / 2 / 2 / 3;
-        background: blue;
+        padding:10px;
     }
 }
 </style>
