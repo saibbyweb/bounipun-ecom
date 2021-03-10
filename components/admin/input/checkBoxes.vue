@@ -9,12 +9,15 @@
     </div>
 
     <!-- price boxes -->
-    <div v-if="local">
-        <InputBox v-for="(fabric, index) in selectedOptions" :key="index" :label="'Price Tag ('+fabric.name+')'" />
+    <div v-if="local" style="display:flex; flex-wrap:wrap; align-items: flex-end; justify-content:space-evenly;">
+        <div style="width:18%;" v-for="(fabric, index) in selectedOptions" :key="index">
+            <InputBox :label="getFabricLabel(fabric.name)" placeholder="Price"/>
+        </div>
     </div>
 </div>
 </template>
 
+    
 <script>
 export default {
     mounted() {
@@ -42,6 +45,10 @@ export default {
         }
     },
     methods: {
+        getFabricLabel(fabricName) {
+            return `${fabricName}`;
+            return `Price (${fabricName} - ${this.label})`
+        },
         getLocalOptions() {
             if (this.local === false) {
                 this.localOptions = this.options;
@@ -55,6 +62,7 @@ export default {
 }
 </script>
 
+    
 <style lang="scss" scoped>
 .checkboxes-container {
     display: flex;
@@ -97,8 +105,8 @@ export default {
             }
 
             .check-input {
-                width: 2vw;
-                height: 2vw;
+                width: 20px;
+                height: 20px;
                 cursor: pointer;
             }
         }

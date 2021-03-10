@@ -29,19 +29,20 @@ export default {
         font-family: $font_2_bold;
         color: $gray;
         text-transform: uppercase;
-        font-size: 10px;
+        font-size: 9px;
         padding:2%;
         margin-left:5px;
         font-weight: 900;
 }
 
     .input-box {
-        padding: 10px 15px;
+        padding: 10px 10px;
         border: none;
         -webkit-appearance: none;
         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
         color: $gray;
         font-family: $font_2;
+        font-size:11px;
         letter-spacing: 0.5px;
 
         &::placeholder {

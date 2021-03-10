@@ -7,7 +7,7 @@
     </div>
     <!-- list of products -->
     <div class="list">
-        <ProductList :products="products"/>
+        <ProductList :products="products" />
     </div>
     <!-- update product form -->
     <div class="update">
@@ -67,11 +67,21 @@ export default {
 <style lang="scss" scoped>
 .products {
     display: grid;
-    grid-template-columns: 67% 33%;
+    grid-template-columns: 65% 35%;
     grid-template-rows: auto auto;
+
+    @media(max-width: 768px) {
+        grid-template-columns: 100%;
+        grid-template-rows: auto auto auto;
+    }
 
     .filters {
         grid-area: 1 / 1 / 2 / 3;
+
+        @media(max-width: 768px) {
+            grid-area: 1 / 1 / 2 / 1;
+        }
+
         padding: 10px;
 
         .search {
@@ -84,12 +94,22 @@ export default {
 
     .list {
         grid-area: 2 / 1 / 2 / 2;
-        padding:10px;
+
+        @media(max-width: 768px) {
+            grid-area: 2 / 1 / 3 / 2;
+        }
+
+        padding: 10px;
     }
 
     .update {
         grid-area: 2 / 2 / 2 / 3;
-        padding:10px;
+
+        @media(max-width: 768px) {
+            grid-area: 3 / 1 / 4 / 2;
+        }
+
+        padding: 10px;
     }
 }
 </style>

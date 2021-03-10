@@ -27,7 +27,9 @@ export default {
 }
 
 .select-box {
-
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     .label {
         font-family: $font_2_bold;
         color: $gray;
@@ -44,7 +46,7 @@ export default {
         border-radius: 5px;
         padding: 10px 15px;
         margin: 3px;
-        font-size: 15px;
+        font-size: 11px;
         color: $dark_gray;
     }
 }

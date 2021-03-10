@@ -1,27 +1,36 @@
 <template>
 <div class="update-product">
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add' }} Product </h2>
+    <!-- bounipun style id -->
+    <InputBox label="Bounipun Style ID" v-model="product.styleId" />
     <!-- product name -->
     <InputBox label="Product Name" v-model="product.name" />
     <!-- slug -->
     <InputBox label="Slug" v-model="product.slug" :placeholder="suggestedSlug" />
     <!-- description -->
     <TextBox v-model="product.description" label="Description" />
-    <!-- variations (checkboxes) -->
-    <CheckBoxes :options="variations" label="variations" />
+    <!-- type of products -->
+    <SelectBox :options="productTypes" v-model="selectedProductType" label="Type of Product" />
     <!-- collection -->
     <SelectBox :options="collections" v-model="selectedCollection" label="Collection" />
-    <!-- price/weight/stock -->
+
+    <!-- color source -->
+    <SelectBox :options="colorSource" v-model="selectedColorSource" label="Color Options" />
+    <!-- variations (checkboxes) -->
+    <CheckBoxes :options="variations" label="variations" />
 
     <!-- fabrics (checkboxes) -->
-    <CheckBoxes :options="feedFabrics()" :local="true" :label="'Select Fabrics for: '+variation.name" v-for="(variation, index) in selectedVariations" :key="index" />
+    <CheckBoxes :options="feedFabrics()" :local="true" :label="variation.name" v-for="(variation, index) in selectedVariations" :key="index" />
     <!-- variation options - images, fabric, pricing -->
 
     <!-- publish toggle -->
-    <toggle-button v-model="product.status" :width="120" :font-size="13" :labels="{checked: 'Live', unchecked: 'Unpublished'}" />
-    <!-- update button -->
-    <br>
+    <div class="center-col">
+        <toggle-button v-model="product.status" :width="120" :font-size="13" :labels="{checked: 'Live', unchecked: 'Unpublished'}" />
+           <br>
     <button class="action"> {{ editMode ? "Edit" : "Add" }} Product </button>
+    </div>
+    <!-- update button -->
+ 
 </div>
 </template>
 
@@ -48,6 +57,7 @@ export default {
         return {
             editMode: false,
             product: {
+                styleId: '',
                 name: "",
                 slug: "",
                 description: "",
@@ -109,7 +119,35 @@ export default {
                     checked: false
                 }
             ],
-            selectedCollection: 'false'
+            selectedCollection: 'false',
+            productTypes: [{
+                    name: 'Select Product Type',
+                    value: 'select'
+                },
+                {
+                    name: 'Made to Order',
+                    value: 'made-to-order'
+                },
+                {
+                    name: 'Ready to Ship',
+                    value: 'ready-to-ship'
+                }
+            ],
+            selectedProductType: 'select',
+            colorSource: [{
+                    name: 'Select Color Source',
+                    value: 'select'
+                },
+                {
+                    name: 'Bounipun Color Catalogue',
+                    value: 'bck'
+                },
+                {
+                    name: 'Custom',
+                    value: 'custom'
+                }
+            ],
+            selectedColorSource: 'select'
         }
     }
 }
