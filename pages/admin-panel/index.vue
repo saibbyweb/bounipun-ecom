@@ -27,7 +27,8 @@ export default {
             cards: [{
                     name: 'Products',
                     path: '/products',
-                    desc: 'Manage Bounipun inventory'
+                    desc: 'Manage Bounipun inventory',
+                    path: '/admin-panel/products'
                 },
                 {
                     name: 'Collections',

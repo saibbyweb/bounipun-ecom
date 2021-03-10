@@ -36,7 +36,7 @@
                 <button class="qty"> {{ quantity }} </button>
                 <button> - </button>
             </div>
-            <button class="clear"> Size Chart </button>
+            <!-- <button class="clear"> Size Chart </button> -->
         </div>
         <!-- price and add to cart -->
         <div class="price-and-actions">

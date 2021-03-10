@@ -22,21 +22,21 @@
     <!-- fabrics (checkboxes) -->
     <CheckBoxes :options="feedFabrics()" :local="true" :label="variation.name" v-for="(variation, index) in selectedVariations" :key="index" />
     <!-- variation options - images, fabric, pricing -->
+ 
+     <!-- status (checkboxes) -->
+     <CheckBoxes :options="[{name: 'Publish', value: 'publish'}]" label="Status" />
 
-    <!-- publish toggle -->
     <div class="center-col">
-        <toggle-button v-model="product.status" :width="120" :font-size="13" :labels="{checked: 'Live', unchecked: 'Unpublished'}" />
-           <br>
-    <button class="action"> {{ editMode ? "Edit" : "Add" }} Product </button>
+        <br>
+        <button class="action"> {{ editMode ? "Edit" : "Add" }} Product </button>
     </div>
     <!-- update button -->
- 
+
 </div>
 </template>
 
 <script>
 import slugify from "slugify";
-
 export default {
     computed: {
         suggestedSlug() {

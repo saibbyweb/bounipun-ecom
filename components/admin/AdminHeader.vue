@@ -1,12 +1,12 @@
 <template>
 <div class="header center-col">
     <!-- bounipun logo -->
-    <div class="logo center">
+    <div @click="$router.push('/admin-panel')" class="logo center">
         <img src="/icons/light/logo.png" />
     </div>
 
     <div class="menu-links center">
-        <div class="menu-item" v-for="(item,index) in items" :key="index">
+        <div @click="$router.push(item.path)" class="menu-item" v-for="(item,index) in items" :key="index">
             <span> {{ item.name }} </span>
         </div>
     </div>
@@ -21,27 +21,27 @@ export default {
         return {
             items: [{
                     name: 'Products',
-                    path: '/products',
+                    path: '/admin-panel/products',
                     desc: 'Manage Bounipun inventory'
                 },
                 {
                     name: 'Collections',
-                    path: '/',
+                    path: '/admin-panel/collections',
                     desc: 'Manage techniques'
                 },
                 {
                     name: 'Categories',
-                    path: '/categories',
+                    path: '/admin-panel/collections',
                     desc: 'Add or remove list of categories'
                 },
                 {
                     name: 'Fabrics',
-                    path: '/fabrics',
+                    path: '/admin-panel/collections',
                     desc: 'Manage list and details of various fabrics'
                 },
                 {
                     name: 'Colors',
-                    path: '/colors',
+                    path: '/admin-panel/collections',
                     desc: 'Manage bounipun colors'
                 }
             ]
