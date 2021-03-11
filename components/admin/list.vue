@@ -7,34 +7,66 @@
     </div>
     <!-- data points -->
     <div class="item shadow" v-for="(item, index) in list" :key="index" :style="adjustItem()">
-        <span v-for="(value, propIndex) in Object.values(item)" :key="propIndex"> {{ value }} </span>
+        <span :class="setClasses(propIndex, value)" v-for="(value, propIndex) in Object.values(item)" :key="propIndex"> {{ value }} </span>
     </div>
 </div>
 </template>
 
 <script>
+import slugify from "slugify";
 export default {
     props: {
-        headings: {type: Array, default: () => []},
-        list: { type: Array, default: () => [{}]},
-        custom_css: { type: String, default: ''}
+        headings: {
+            type: Array,
+            default: () => []
+        },
+        list: {
+            type: Array,
+            default: () => [{}]
+        },
+        custom_css: {
+            type: String,
+            default: ''
+        }
     },
     computed: {
         columns() {
             const colLength = this.headings.length;
-            let colCSS = 'auto', i = 1;
-            while(i < colLength) {
-                colCSS+= ' auto'
+            let colCSS = 'auto',
+                i = 1;
+            while (i < colLength) {
+                colCSS += ' auto'
                 i++;
             }
             return colCSS;
         }
     },
     methods: {
+        setClasses(propIndex, value) {
+            /* slugify column heading and set as class name */
+            let classes = []
+            const heading = this.headings[propIndex];
+            const slugifiedHeading = slugify(heading, {
+                lower: true
+            });
+            classes.push(slugifiedHeading);
+            /* if status column, slugify the value and set it as class name for color coding */
+            if (slugifiedHeading === 'status') {
+                const slugifiedValue = slugify(value, {
+                    lower: true
+                });
+                classes.push(slugifiedValue);
+            }
+            return classes;
+        },
         adjustItem() {
-            if(this.custom_css !== '')
-                return { 'grid-template-columns': this.custom_css};
-            return { 'grid-template-columns': this.columns}
+            if (this.custom_css !== '')
+                return {
+                    'grid-template-columns': this.custom_css
+                };
+            return {
+                'grid-template-columns': this.columns
+            }
         }
     }
 }
@@ -60,8 +92,8 @@ export default {
         }
 
         &:hover {
-              background-color: #492727;
-              transform: translateX(0px);
+            background-color: #492727;
+            transform: translateX(0px);
         }
     }
 
@@ -84,17 +116,16 @@ export default {
 
         &.status {
             border-right: none;
-            color: white;
+            // color: white;
 
-            &.published {
+            &.yea {
                 background-color: green;
             }
 
-            &.not-published {
+            &.nay {
                 background-color: rgb(154, 56, 8);
             }
         }
     }
 }
 </style>
-

@@ -8,7 +8,7 @@
     <!-- list of products -->
     <div class="list">
         <!-- <ProductList :products="products" /> -->
-        <List :headings="headings" :list="products" custom_css="25% 20% 20% 15% 10% 10%"/>
+        <List class="product-list" :headings="headings" :list="products" custom_css="25% 20% 20% 15% 10% 10%" />
     </div>
     <!-- update product form -->
     <div class="update">
@@ -42,14 +42,14 @@ export default {
                     collection: 'Escape',
                     variations: 'Shawl/Square/Stole',
                     price: '5999',
-                    status: true
+                    status: 'Live'
                 }, {
                     name: 'Khatamband Cashmere',
                     slug: 'khatamband-cashmere',
                     collection: 'Adore',
                     variations: 'Shawl/Stole',
                     price: '12999',
-                    status: true
+                    status: 'Not Live'
                 },
                 {
                     name: 'Pashmina',
@@ -57,16 +57,28 @@ export default {
                     collection: 'Autograph',
                     variations: 'Stole',
                     price: '8999',
-                    status: false
+                    status: 'Live'
                 }
             ],
-            headings: ['Product Name', 'Slug', 'Variations','Collection','Price', 'Status']
+            headings: ['Product Name', 'Slug', 'Variations', 'Collection', 'Price', 'Status']
+        }
+    },
+    computed: {
+        productsValuesOptimized() {
+            return this.products.map(product => {
+                const status = product.status;
+                delete product.status;
+                return {
+                    ...product,
+                    Status: status ? 'Live' : 'Not Live'
+                }
+            })
         }
     }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .products {
     display: grid;
     grid-template-columns: 65% 35%;
@@ -102,6 +114,18 @@ export default {
         }
 
         padding: 10px;
+
+        .product-list {
+            .status {
+                color:white;
+                &.live {
+                     background-color: green;
+                }
+                &.not-live {
+                    background-color: rgb(154, 56, 8);
+                }
+            }
+        }
     }
 
     .update {
