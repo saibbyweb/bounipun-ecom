@@ -1,15 +1,16 @@
 <template>
-<div class="products">
+<div class="products crud">
     <!-- filters -->
     <div class="filters center">
         <input class="search shadow" type="text" placeholder="Search for products" />
         <SelectBox :options="filters" v-model="selectedFilter" />
     </div>
+
     <!-- list of products -->
     <div class="list">
-        <!-- <ProductList :products="products" /> -->
         <List class="product-list" :headings="headings" :list="products" custom_css="25% 20% 20% 15% 10% 10%" />
     </div>
+
     <!-- update product form -->
     <div class="update">
         <UpdateProduct />
@@ -80,62 +81,17 @@ export default {
 
 <style lang="scss">
 .products {
-    display: grid;
-    grid-template-columns: 65% 35%;
-    grid-template-rows: auto auto;
+    /* style status boxes */
+    .status {
+        color: white;
 
-    @media(max-width: 768px) {
-        grid-template-columns: 100%;
-        grid-template-rows: auto auto auto;
-    }
-
-    .filters {
-        grid-area: 1 / 1 / 2 / 3;
-
-        @media(max-width: 768px) {
-            grid-area: 1 / 1 / 2 / 1;
+        &.live {
+            background-color: rgb(98, 176, 98);
         }
 
-        padding: 10px;
-
-        .search {
-            width: 40%;
-            padding: 10px 15px;
-            border: none;
-            margin-right: 10px;
+        &.not-live {
+            background-color: rgb(193, 72, 12);
         }
-    }
-
-    .list {
-        grid-area: 2 / 1 / 2 / 2;
-
-        @media(max-width: 768px) {
-            grid-area: 2 / 1 / 3 / 2;
-        }
-
-        padding: 10px;
-
-        .product-list {
-            .status {
-                color:white;
-                &.live {
-                     background-color: green;
-                }
-                &.not-live {
-                    background-color: rgb(154, 56, 8);
-                }
-            }
-        }
-    }
-
-    .update {
-        grid-area: 2 / 2 / 2 / 3;
-
-        @media(max-width: 768px) {
-            grid-area: 3 / 1 / 4 / 2;
-        }
-
-        padding: 10px;
     }
 }
 </style>

@@ -13,19 +13,15 @@
     <SelectBox :options="productTypes" v-model="selectedProductType" label="Type of Product" />
     <!-- collection -->
     <SelectBox :options="collections" v-model="selectedCollection" label="Collection" />
-
     <!-- color source -->
     <SelectBox :options="colorSource" v-model="selectedColorSource" label="Color Options" />
     <!-- variations (checkboxes) -->
     <CheckBoxes :options="variations" label="variations" />
-
     <!-- fabrics (checkboxes) -->
     <CheckBoxes :options="feedFabrics()" :local="true" :label="variation.name" v-for="(variation, index) in selectedVariations" :key="index" />
     <!-- variation options - images, fabric, pricing -->
- 
      <!-- status (checkboxes) -->
-     <CheckBoxes :options="[{name: 'Publish', value: 'publish'}]" label="Status" />
-
+    <CheckBoxes :options="[{name: 'Publish', value: 'publish'}]" label="Status" />
     <div class="center-col">
         <br>
         <button class="action"> {{ editMode ? "Edit" : "Add" }} Product </button>

@@ -118,11 +118,11 @@ export default {
             border-right: none;
             // color: white;
 
-            &.yea {
+            &.live {
                 background-color: green;
             }
 
-            &.nay {
+            &.not-live {
                 background-color: rgb(154, 56, 8);
             }
         }

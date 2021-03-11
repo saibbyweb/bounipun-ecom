@@ -36,12 +36,12 @@ export default {
                 },
                 {
                     name: 'Fabrics',
-                    path: '/admin-panel/collections',
+                    path: '/admin-panel/fabrics',
                     desc: 'Manage list and details of various fabrics'
                 },
                 {
                     name: 'Colors',
-                    path: '/admin-panel/collections',
+                    path: '/admin-panel/colors',
                     desc: 'Manage bounipun colors'
                 }
             ]

@@ -1,13 +1,13 @@
 <template>
-<div class="collection crud">
+<div class="fabrics crud">
     <!-- filters -->
     <div class="filters center">
-        <input class="search shadow" type="text" placeholder="Search for collections" />
+        <input class="search shadow" type="text" placeholder="Search for Fabrics" />
         <SelectBox :options="filters" v-model="selectedFilter" />
     </div>
     <!-- list of collections -->
     <div class="list">
-        <List :list="collections" :headings="headings" custom_css="25% 25% 25% 25%" />
+        <List :list="fabrics" :headings="headings" custom_css="25% 25% 25% 25%" />
     </div>
     <!-- update collection form -->
     <div class="update">
@@ -34,30 +34,32 @@ export default {
                 value: 'escape'
             }],
             selectedFilter: 'all',
-            collections: [{
-                    name: 'Escape',
-                    slug: 'escape',
-                    description: 'Description for Escape',
+            fabrics: [{
+                    name: 'Light Weight',
+                    slug: 'light-weight',
+                    description: 'Description for...',
                     status: 'Live'
                 }, {
-                    name: 'Autograph',
-                    slug: 'autograph',
-                    description: 'Description for Autograph',
+                    name: 'Feather Weight',
+                    slug: 'feather-weight',
+                    description: 'Description for...',
                     status: 'Not Live'
                 },
                 {
-                    name: 'Karakul',
-                    slug: 'karakul',
-                    description: 'Description for Karakul',
+                    name: '100% Cashmere',
+                    slug: '100%-cashere',
+                    description: 'Description for...',
+                    status: 'Live'
+                },
+                {
+                    name: '80% Wool / 70% Silk',
+                    slug: '80%-wool-70%-silk',
+                    description: 'Description for...',
                     status: 'Live'
                 }
             ],
-            headings:['Collection Name', 'Slug', 'Description', 'Published']
+            headings: ['Fabric Name', 'Slug', 'Description', 'Published']
         }
     }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>
