@@ -6,16 +6,16 @@
         <span v-for="(heading, index) in headings" :key="index"> {{ heading }} </span>
     </div>
     <!-- data points -->
-    <!-- <div class="item" v-for="(item, index) in list" :key="index" :style="{'grid-template-columns': columns}">
-        <span v-for="(value, propIndex) in getValues(index)" :key="propIndex"> {{ value }} </span>
-    </div> -->
+    <div class="item shadow" v-for="(item, index) in list" :key="index" :style="adjustItem()">
+        <span v-for="(value, propIndex) in Object.values(item)" :key="propIndex"> {{ value }} </span>
+    </div>
 </div>
 </template>
 
 <script>
 export default {
     props: {
-        headings: {type: Array, default: () => ['Collection Name', 'Slug', 'Description', 'Status','Added 1 More Bro','It Works Bro']},
+        headings: {type: Array, default: () => []},
         list: { type: Array, default: () => [{}]},
         custom_css: { type: String, default: ''}
     },
@@ -45,7 +45,7 @@ export default {
     margin: 10px 0;
     display: grid;
     // grid-template-columns: 25% 20% 20% 15% 10% 10%;
-    grid-template-columns: auto auto auto;
+    // grid-template-columns: auto auto auto;
     transition: all 0.3s ease-in-out;
     cursor: pointer;
 

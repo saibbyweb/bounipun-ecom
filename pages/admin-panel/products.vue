@@ -7,7 +7,8 @@
     </div>
     <!-- list of products -->
     <div class="list">
-        <ProductList :products="products" />
+        <!-- <ProductList :products="products" /> -->
+        <List :headings="headings" :list="products" custom_css="25% 20% 20% 15% 10% 10%"/>
     </div>
     <!-- update product form -->
     <div class="update">
@@ -58,7 +59,8 @@ export default {
                     price: '8999',
                     status: false
                 }
-            ]
+            ],
+            headings: ['Product Name', 'Slug', 'Variations','Collection','Price', 'Status']
         }
     }
 }

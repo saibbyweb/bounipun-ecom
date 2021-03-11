@@ -8,7 +8,7 @@
     <!-- list of collections -->
     <div class="list">
         <!-- <CollectionList :collections="collections" /> -->
-        <List custom_css="auto auto 30% auto auto auto" />
+        <List :list="collections" :headings="headings" custom_css="25% 25% 25% 25%" />
     </div>
     <!-- update collection form -->
     <div class="update">
@@ -53,7 +53,8 @@ export default {
                     description: 'Description for Karakul',
                     status: false
                 }
-            ]
+            ],
+            headings:['Collection Name', 'Slug', 'Description', 'Published']
         }
     }
 }
