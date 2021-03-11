@@ -7,7 +7,8 @@
     </div>
     <!-- list of collections -->
     <div class="list">
-        <CollectionList :collections="collections" />
+        <!-- <CollectionList :collections="collections" /> -->
+        <List custom_css="auto auto 30% auto auto auto" />
     </div>
     <!-- update collection form -->
     <div class="update">
