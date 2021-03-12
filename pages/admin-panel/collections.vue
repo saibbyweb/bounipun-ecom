@@ -11,6 +11,7 @@
     </div>
     <!-- update collection form -->
     <div class="update">
+        <UpdateCollection />
     </div>
 </div>
 </template>

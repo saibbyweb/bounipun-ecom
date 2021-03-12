@@ -1,13 +1,13 @@
 <template>
-  <div>
+<div>
     <AdminHeader />
     <Nuxt />
-  </div>
+</div>
 </template>
 
 <script>
 export default {
-    
+
 }
 </script>
 
@@ -58,6 +58,21 @@ export default {
         }
 
         padding: 10px;
+
+        .heading {
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .label {
+            font-family: $font_2_bold;
+            color: $gray;
+            text-transform: uppercase;
+            font-size: 10px;
+            padding: 2%;
+            margin-left: 5px;
+            font-weight: 900;
+        }
     }
 }
 </style>

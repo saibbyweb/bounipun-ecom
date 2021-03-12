@@ -20,8 +20,10 @@
     <!-- fabrics (checkboxes) -->
     <CheckBoxes :options="feedFabrics()" :local="true" :label="variation.name" v-for="(variation, index) in selectedVariations" :key="index" />
     <!-- variation options - images, fabric, pricing -->
-     <!-- status (checkboxes) -->
-    <CheckBoxes :options="[{name: 'Publish', value: 'publish'}]" label="Status" />
+    <!-- status (checkboxes) -->
+    <!-- publish toggle -->
+    <Toggle v-model="product.status" label="Status" inactiveText="Not Live" />
+
     <div class="center-col">
         <br>
         <button class="action"> {{ editMode ? "Edit" : "Add" }} Product </button>
@@ -150,8 +152,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.heading {
-    text-transform: uppercase;
-    text-align: center;
-}
+
 </style>
