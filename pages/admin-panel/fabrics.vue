@@ -5,12 +5,13 @@
         <input class="search shadow" type="text" placeholder="Search for Fabrics" />
         <SelectBox :options="filters" v-model="selectedFilter" />
     </div>
-    <!-- list of collections -->
+    <!-- list of fabrics -->
     <div class="list">
         <List :list="fabrics" :headings="headings" custom_css="25% 25% 25% 25%" />
     </div>
-    <!-- update collection form -->
+    <!-- update fabrics form -->
     <div class="update">
+        <UpdateFabric />
     </div>
 </div>
 </template>

@@ -8,8 +8,8 @@
     <!-- description -->
     <TextBox v-model="collection.description" label="Description" />
     <!-- publish toggle -->
-    <Toggle v-model="collection.published" label="Status" inactiveText="Not Live" />
-
+    <Toggle v-model="collection.status" label="Status" inactiveText="Not Live" />
+    <!-- update button -->
     <div class="center-col">
         <br>
         <button class="action"> {{ editMode ? "Edit" : "Add" }} Collection </button>
@@ -27,7 +27,7 @@ export default {
                 id: "",
                 name: "",
                 description: "",
-                published: false
+                status: false
             }
         }
     }

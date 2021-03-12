@@ -11,7 +11,6 @@
         </div>
     </div>
 
-
 </div>
 </template>
 
@@ -40,6 +39,11 @@ export default {
                     desc: 'Manage list and details of various fabrics'
                 },
                 {
+                    name: 'Coupons',
+                    path: '/admin-panel/coupons',
+                    desc: 'Manage list and details of various fabrics'
+                },
+                {
                     name: 'Colors',
                     path: '/admin-panel/colors',
                     desc: 'Manage bounipun colors'
@@ -49,37 +53,44 @@ export default {
     }
 }
 </script>
+
 <style lang="scss" scoped>
 //
 .header {
-    padding:10px;
+    padding: 10px;
     background-color: $dark_gray;
+
     .logo {
-        width:15%;
+        width: 15%;
+
         img {
-            width:100%;
+            width: 100%;
         }
     }
+
     .menu-links {
-        width:100%;
+        width: 100%;
         padding-top: 10px;
+
         .menu-item {
-            padding:10px 3%;
-            color:$dark_gray;
+            padding: 10px 3%;
+            color: $dark_gray;
             border-radius: 5px;
             cursor: pointer;
             transition: all 0.2s ease-in-out;
+
             span {
                 color: rgb(208, 208, 208);
             }
 
             &:hover {
                 background-color: #c8c8c8ca;
+
                 // box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
                 //   transform: translateX(-3px);
                 span {
-                    color:$dark_gray;
-                  
+                    color: $dark_gray;
+
                 }
             }
         }
