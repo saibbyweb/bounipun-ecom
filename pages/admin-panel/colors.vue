@@ -9,8 +9,9 @@
     <div class="list">
         <List :list="colors" :headings="headings" custom_css="25% 25% 25% 25%" />
     </div>
-    <!-- update collection form -->
+    <!-- update colors form -->
     <div class="update">
+        <UpdateColor />
     </div>
 </div>
 </template>

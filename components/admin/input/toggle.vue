@@ -105,7 +105,7 @@ export default {
             margin-left: 15px;
 
             &.on {
-                margin-right: 20px;
+                margin-right: 25px;
             }
         }
     }

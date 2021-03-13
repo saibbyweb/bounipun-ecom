@@ -11,7 +11,7 @@
     </div>
     <!-- update coupons form -->
     <div class="update">
-        <UpdateFabric />
+        <UpdateCoupon />
     </div>
 </div>
 </template>
