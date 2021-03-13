@@ -1,8 +1,12 @@
-import { bro, dabaav, slugged } from "./second"
-const fun = () => 'Changed simple string are you serious...';
-console.log(bro)
-async function some() {
-    console.log(await dabaav());
-}
-console.log(slugged)
-console.log(fun());
+require("dotenv").config();
+import express from "express";
+console.log('hey from esbuilds');
+const app = express();
+const port = 4000;
+const staticFileMiddleware = express.static(__dirname +"/frontend");
+app.use(staticFileMiddleware)
+
+app.get('/api', (req, res)=> res.send('hi from typescript and esrun. why is it so fast'));
+
+
+app.listen(port, () => console.log(`ExpressJS server started running on ${port}`));

@@ -4,15 +4,24 @@
   "private": true,
   "scripts": {
     "dev": "NUXT_HOST=0.0.0.0 NUXT_PORT=8080 nuxt",
-    "build": "nuxt build",
+    "dev-server": "NODE_ENV=development nodemon --watch server --exec ts-eager server/index.ts",
+    "build-server": "NODE_ENV=production esbuild server/index.ts --bundle --outfile=dist/server.js --platform=node --external:express",
+    "build-and-run": "yarn run build-server && yarn run start-server",
+    "build-frontend": "nuxt build",
+    "build-frontend-spa": "nuxt build --spa",
     "start": "nuxt start",
+    "start-server": "node dist/server.js",
     "generate": "nuxt generate"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.5",
+    "axios": "^0.21.1",
     "core-js": "^3.8.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "gsap": "^3.6.0",
     "lodash": "^4.17.21",
+    "mongoose": "^5.12.0",
     "nuxt": "^2.14.12",
     "slugify": "^1.4.7",
     "vue-inner-image-zoom": "^1.0.1",
@@ -23,7 +32,9 @@
   },
   "devDependencies": {
     "@nuxtjs/style-resources": "^1.0.0",
+    "@types/express": "^4.17.11",
     "node-sass": "^4.14.1",
-    "sass-loader": "^10.0.1"
+    "sass-loader": "^10.0.1",
+    "ts-eager": "^1.1.3"
   }
 }

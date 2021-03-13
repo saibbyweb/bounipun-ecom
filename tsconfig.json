@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "watch": true,
+        "lib": ["ES2017"],
+        "allowSyntheticDefaultImports": true,
+        "isolatedModules": true
+    },
+    "include": ["./**/*"],
+    "exclude": ["node_modules"]
+}

@@ -3,7 +3,6 @@
     <div class="page-header center">
         <h2 class="title"> Shopping Bag </h2>
     </div>
-
     <!-- cart items -->
     <div class="cart-items">
         <!-- cart item -->
@@ -34,7 +33,6 @@
                 </div>
 
             </div>
-
             <!-- remove item -->
             <img class="remove-item" src="/icons/dark/remove-cart-item.png" />
             <!-- total product price -->
@@ -48,7 +46,7 @@
         <span class="value"> $ {{ subTotal }} </span>
     </div>
 
-    <!-- proceed to address -->
+    <!-- proceed to address page-->
     <div class="pad-10">
         <button @click="$router.push('/delivery-address')" class="action"> Proceed To Buy </button>
     </div>
