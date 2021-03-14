@@ -1,7 +1,6 @@
 require("dotenv").config();
 import express from "express";
-import { one } from "@helpers/essentials"
-console.log('hey from esbuilds', one);
+console.log('hey from esbuilds');
 const app = express();
 const port = 4000;
 const staticFileMiddleware = express.static(__dirname +"/frontend");
