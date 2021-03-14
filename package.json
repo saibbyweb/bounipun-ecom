@@ -3,20 +3,21 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "NUXT_HOST=0.0.0.0 NUXT_PORT=8080 nuxt",
-    "dev-server": "NODE_ENV=development nodemon --watch server --exec ts-eager server/index.ts",
-    "build-server": "NODE_ENV=production esbuild server/index.ts --bundle --outfile=dist/server.js --platform=node --external:express",
-    "build-and-run": "yarn run build-server && yarn run start-server",
-    "build-frontend": "nuxt build",
-    "build-frontend-spa": "nuxt build --spa",
-    "start": "nuxt start",
-    "start-server": "node dist/server.js",
-    "generate": "nuxt generate"
+    "frontend:generate": "nuxt generate",
+    "frontend:dev": "NUXT_HOST=0.0.0.0 NUXT_PORT=8080 nuxt",
+    "frontend:build": "nuxt build --spa",
+    "server:dev": "NODE_ENV=development nodemon --watch server --exec ts-eager server/index.ts",
+    "server:build": "NODE_ENV=production node serverBundle.js",
+    "build": "yarn run frontend:build && yarn run server:build",
+    "start": "node dist/server.js",
+    "start:dev": "yarn run frontend:dev && yarn run server:dev",
+    "up": "yarn run build && yarn run start"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.5",
     "axios": "^0.21.1",
     "core-js": "^3.8.3",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "gsap": "^3.6.0",
@@ -31,8 +32,10 @@
     "vue2-hammer": "^2.1.2"
   },
   "devDependencies": {
+    "@esbuild-plugins/node-resolve": "^0.0.14",
     "@nuxtjs/style-resources": "^1.0.0",
     "@types/express": "^4.17.11",
+    "esbuild-node-externals": "^1.0.2",
     "node-sass": "^4.14.1",
     "sass-loader": "^10.0.1",
     "ts-eager": "^1.1.3",

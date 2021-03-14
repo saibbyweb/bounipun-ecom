@@ -37,8 +37,12 @@ export default {
   styleResources: {
     scss: ["~/assets/scss/global.scss"]
   },
+  env: {
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    baseUrl: process.env.BASE_URL || ''
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   },

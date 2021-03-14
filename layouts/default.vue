@@ -8,6 +8,9 @@
 </template>
 <script>
 export default {
+  mounted() {
+    this.$axios.$get('/api').then(data => console.log(data))
+  },
   data() {
     return {
       showSearch: false,
