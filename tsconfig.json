@@ -4,7 +4,13 @@
         "watch": true,
         "lib": ["ES2017"],
         "allowSyntheticDefaultImports": true,
-        "isolatedModules": true
+        "isolatedModules": false,
+        "baseUrl": "server",
+        "moduleResolution": "node",
+        "paths": {
+            "@helpers/*": ["helpers/*"],
+            "@models/*": ["models/*"]
+        }
     },
     "include": ["./**/*"],
     "exclude": ["node_modules"]
