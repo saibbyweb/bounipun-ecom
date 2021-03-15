@@ -3,10 +3,19 @@ import express from "express";
 import mongoose from "mongoose";
 import path from "path";
 import cors from "cors";
+import aws from "aws-sdk";
 
 /* express app */
 const app = express();
 app.use(express.json());
+
+/* configuring aws */
+aws.config.update({
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    region: "ap-south-1"
+});
+
 
 /* environment */
 export const environment = process.env.NODE_ENV;
@@ -35,8 +44,8 @@ export const server = {
     }
 };
 
-/* mongoose */
-export { mongoose };
+/* mongoose & AWS */
+export { mongoose, aws };
 
 /* mongo db connection string */
 export const mongoConnectionString = process.env.MONGO_CONNECTION_STRING;

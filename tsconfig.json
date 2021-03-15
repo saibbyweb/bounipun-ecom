@@ -9,7 +9,8 @@
         "moduleResolution": "node",
         "paths": {
             "@helpers/*": ["helpers/*"],
-            "@models": ["models"]
+            "@models": ["models"],
+            "@routes/*": ["routes/*"]
         }
     },
     "include": ["./**/*"],
