@@ -1,10 +1,10 @@
 import { server, port, environment, dbConnect } from "@helpers/essentials";
-import { imageUpload } from "@models"
-import main from "@routes/admin/main"
+import mainRoutes from "@routes/admin/main"
 const { app } = server;
-// app.use(main);
 server.enableCorsIfNeeded();
 server.applyStaticMiddleware('/frontend');
+
+app.use('/', mainRoutes);
 
 /* connect to mongodb */
 dbConnect();

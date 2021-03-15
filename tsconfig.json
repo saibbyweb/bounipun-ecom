@@ -10,6 +10,7 @@
         "paths": {
             "@helpers/*": ["helpers/*"],
             "@models": ["models"],
+            "@models/*": ["models/*"],
             "@routes/*": ["routes/*"]
         }
     },

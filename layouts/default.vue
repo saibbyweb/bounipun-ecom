@@ -9,7 +9,7 @@
 <script>
 export default {
   mounted() {
-    this.$axios.$get('/api').then(data => console.log(data))
+    this.$axios.$get('/upload').then(data => console.log(data))
   },
   data() {
     return {

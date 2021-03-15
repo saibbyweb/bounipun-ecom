@@ -15,6 +15,8 @@
         <button class="action"> {{ editMode ? "Edit" : "Add" }} Fabric </button>
     </div>
 
+    <UploadImage label="Add Fabric Images"/>
+
 </div>
 </template>
 
@@ -28,7 +30,7 @@ export default {
                 name: "",
                 description: "",
                 status: false
-            }
+            },
         }
     }
 }
