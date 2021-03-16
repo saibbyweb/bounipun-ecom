@@ -1,5 +1,6 @@
 <template>
-<div class="update-fabric">
+<div class="contents">
+    <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Fabric </h2>
     <!-- fabric id -->
     <InputBox v-if="editMode" label="fabric ID" v-model="fabric._id" />
@@ -11,7 +12,7 @@
     <!-- <UploadImage :multipleUpload="false" label="Set Fabric Image"/> -->
     <!-- publish toggle -->
     <Toggle v-model="fabric.status" label="Status" />
-    
+
     <!-- update button -->
     <div class="center-col">
         <br>
@@ -45,16 +46,31 @@ export default {
             const result = await this.$updateDocument(this.model, this.fabric, this.editMode);
             this.loading = false;
 
-            if(result.updated) {
-                this.$emit('updated');
-                this.$flash(this);
-            }
+            if (!result.updated)
+                return;
+
+            this.$emit('updated');
+            this.setFabric(result.doc);
+            this.$flash(this);
 
         },
         setFabric(details) {
-            console.log('from update fabrics', details);
-            this.fabric = details;
+            const { _id, name, description, status } = details;
+            this.fabric = { _id, name, description, status };
             this.editMode = true;
+        },
+        closeForm() {
+            this.resetForm();
+            this.$emit('close');
+        },
+        resetForm() {
+            this.setFabric({
+                _id: "",
+                name: "",
+                description: "",
+                status: false
+            });
+            this.editMode = false;
         }
     }
 }

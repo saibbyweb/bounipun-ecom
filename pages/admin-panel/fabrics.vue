@@ -11,8 +11,8 @@
     </div>
     <!-- update fabrics form -->
     <div :class="{updating: showForm}" class="update">
-        <CancelUpdate v-if="showForm" @close="showForm = false" />
-        <UpdateFabric v-show="showForm" ref="updateFabric" @updated="fetchFabrics" />
+    
+        <UpdateFabric v-show="showForm" ref="updateFabric" @updated="fetchFabrics" @close="showForm = false" />
         <AddNewItem v-if="!showForm" label="fabric" @showForm="showForm = true"/>
     </div>
 </div>

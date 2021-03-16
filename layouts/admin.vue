@@ -76,6 +76,10 @@ export default {
             grid-area: 3 / 1 / 4 / 2;
         }
 
+        .contents {
+            position: relative;
+        }
+
         padding: 10px;
 
         .heading {
