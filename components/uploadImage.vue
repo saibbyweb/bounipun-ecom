@@ -1,7 +1,7 @@
 <template>
 <div class="">
     <!-- input element for selecting images for upload / hidden by css -->
-    <input type="file" accept="image/*" ref="selector" multiple v-on:change="handleFileSelection()" />
+    <input style="display:none;" type="file" accept="image/*" ref="selector" :multiple="multipleUpload" v-on:change="handleFileSelection()" />
     <button class="action upload-images" v-on:click="addFiles()">
         {{ label }}
     </button>
@@ -14,7 +14,7 @@
             <!-- actions -->
             <div class="actions center-col">
                 <img class="remove-file" src="/icons/light/remove-icon.png" @click="removeFile(key)" />
-                <input class="set-main-image" type="checkbox" v-model="image.mainImage" :checked="image.mainImage" @change="setMainImage(key, $event.target.checked)" />
+                <input v-if="multipleUpload" class="set-main-image" type="checkbox" v-model="image.mainImage" :checked="image.mainImage" @change="setMainImage(key, $event.target.checked)" />
             </div>
 
             <!-- progress indicator -->
@@ -23,6 +23,9 @@
                 <img class="upload-icon" wdith="60px" slot="legend-caption" src="/icons/light/upload-cloud.svg" />
             </vue-ellipse-progress>
             </div>
+
+            <!-- main image indicator -->
+            <span v-if="image.mainImage" class="main-image"> Main Image </span>
 
         </div>
     </div>
@@ -35,7 +38,8 @@ export default {
         label: {
             type: String,
             default: "Add Files"
-        }
+        },
+        multipleUpload: { type: Boolean, default: true }
     },
     data() {
         return {
@@ -51,6 +55,12 @@ export default {
         handleFileSelection() {
             /* list of selected files */
             let selectedFiles = this.$refs.selector.files;
+            
+            /* if multiple upload not allowed */
+            if(!this.multipleUpload) {
+                this.images = [];
+            }
+            
             /* upload files one by one */
             selectedFiles.forEach((file) => {
                 /* create image object */
@@ -159,16 +169,18 @@ export default {
 .previews {
     display: flex;
     flex-wrap: wrap;
+    justify-content: flex-start;
 
     .preview {
-        height: 100px;
-        width: 100px;
+        height: 70px;
+        width: 70px;
         background-size: cover;
         box-shadow: 1px 1px 15px rgba(0,0,0,0.16);
         margin:5px;
         border-radius: 3px;
         overflow: hidden;
         cursor: pointer;
+        position:relative;
 
         &.uploading {
             // filter: grayscale(100%);
@@ -210,6 +222,17 @@ export default {
         .upload-icon {
             width: 100%;
             height: 100%;
+        }
+
+        .main-image {
+            position: absolute;
+            bottom:0;
+            left:0;
+            width: 100%;
+            background:#33333383;
+            color:white;
+            font-size:9px;
+            text-align: center;
         }
     }
 }

@@ -15,7 +15,7 @@
         <button class="action"> {{ editMode ? "Edit" : "Add" }} Fabric </button>
     </div>
 
-    <UploadImage label="Add Fabric Images"/>
+    <UploadImage :multipleUpload="false" label="Add Fabric Images"/>
 
 </div>
 </template>
