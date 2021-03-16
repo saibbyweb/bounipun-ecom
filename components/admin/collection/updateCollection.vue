@@ -4,15 +4,15 @@
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add' }} Collection </h2>
     <!-- collection id -->
-    <InputBox v-if="editMode" label="Collection ID" v-model="collection._id" />
+    <InputBox v-if="editMode" label="Collection ID" v-model="doc._id" />
     <!-- collection name -->
-    <InputBox v-model="collection.name" label="Collection Name" />
+    <InputBox v-model="doc.name" label="Collection Name" />
     <!-- slug -->
-    <InputBox v-model="collection.slug" label="Slug" />
+    <InputBox v-model="doc.slug" label="Slug" />
     <!-- description -->
-    <TextBox v-model="collection.description" label="Description" />
+    <TextBox v-model="doc.description" label="Description" />
     <!-- publish toggle -->
-    <Toggle v-model="collection.status" label="Status" />
+    <Toggle v-model="doc.status" label="Status" />
     <!-- update button -->
     <div class="center-space">
         <!-- loading bar -->
@@ -30,11 +30,13 @@
 
 <script>
 export default {
+    props: {
+        model: String
+    },
     data() {
         return {
-            model: 'collections',
             editMode: false,
-            collection: {
+            doc: {
                 id: "",
                 name: "",
                 slug: "",
@@ -48,7 +50,7 @@ export default {
     methods: {
         async updateDocument(model, details, editMode) {
             this.loading = true;
-            const result = await this.$updateDocument(this.model, this.collection, this.editMode);
+            const result = await this.$updateDocument(this.model, this.doc, this.editMode);
             this.loading = false;
 
             if (!result.updated)
@@ -61,12 +63,12 @@ export default {
         },
         async deleteDocument() {
             this.loading = true;
-            const result = await this.$deleteDocument(this.model, this.collection._id);
+            const result = await this.$deleteDocument(this.model, this.doc._id);
             this.loading = false;
 
-            if(!result.deleted)
+            if (!result.deleted)
                 return;
-            
+
             this.$emit('updated');
             this.resetForm();
             this.$flash(this);
@@ -80,7 +82,7 @@ export default {
                 status
             } = details;
 
-            this.collection = {
+            this.doc = {
                 _id,
                 name,
                 slug,

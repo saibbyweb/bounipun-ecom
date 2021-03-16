@@ -1,8 +1,8 @@
 <template>
-<div class="fabrics crud">
+<div class="color-categories crud">
     <!-- filters -->
     <div :class="{updating: showForm}" class="filters center">
-        <input class="search shadow" type="text" placeholder="Search for Fabrics" />
+        <input class="search shadow" type="text" placeholder="Search for Color Categories" />
         <SelectBox :options="filters" v-model="selectedFilter" />
     </div>
     <!-- list of fabrics -->
@@ -11,8 +11,10 @@
     </div>
     <!-- update fabrics form -->
     <div :class="{updating: showForm}" class="update">
-        <UpdateFabric v-show="showForm" ref="updateComponent" @updated="fetchList" :model="model" @close="showForm = false" />
-        <AddNewItem v-if="!showForm" label="fabric" @showForm="showForm = true"/>
+    
+        <UpdateColorCategory v-show="showForm" ref="updateComponent" @updated="fetchList" :model="model" @close="showForm = false" />
+
+        <AddNewItem v-if="!showForm" label="Color Category" @showForm="showForm = true"/>
     </div>
 </div>
 </template>
@@ -24,9 +26,9 @@ export default {
         return {
             showForm: false,
             loading: false,
-            model: 'fabrics',
+            model: 'color_categories',
             filters: [{
-                name: 'All Collections',
+                name: 'All Color Categories',
                 value: 'all'
             }, {
                 name: "Karakul",
@@ -40,7 +42,7 @@ export default {
             }],
             selectedFilter: 'all',
             list: [],
-            headings: ['_id','Fabric Name', 'Description', 'Status']
+            headings: ['_id','Category Name', 'Description', 'Status']
         }
     },
     mounted() {

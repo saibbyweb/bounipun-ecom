@@ -7,11 +7,11 @@
     </div>
     <!-- list of collections -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="collections" :headings="headings" :model="model" @documentFetched="documentFetched" custom_css="10% 25% 25% 25% 15%" />
+        <List :list="list" :headings="headings" :model="model" @documentFetched="documentFetched" custom_css="10% 25% 25% 25% 15%" />
     </div>
     <!-- update collection form -->
     <div :class="{updating: showForm}" class="update">
-        <UpdateCollection v-show="showForm" ref="updateComponent" @updated="fetchCollections" @close="showForm = false"/>
+        <UpdateCollection v-show="showForm" ref="updateComponent" @updated="fetchList" :model="model" @close="showForm = false"/>
         <AddNewItem v-if="!showForm" label="collection" @showForm="showForm = true"/>
     </div>
 </div>
@@ -39,13 +39,13 @@ export default {
                 value: 'escape'
             }],
             selectedFilter: 'all',
-            collections: [
+            list: [
             ],
             headings: ['_id', 'Collection Name', 'Slug', 'Description', 'Published']
         }
     },
     mounted() {
-        this.fetchCollections();
+        this.fetchList();
     },
     methods: {
         documentFetched(doc) {
@@ -53,18 +53,18 @@ export default {
             this.editMode = true;
             console.log(this.$refs.updateComponent.populateForm(doc));
         },
-        async fetchCollections() {
+        async fetchList() {
             this.loading = true;
             const result = await this.$fetchCollection(this.model);
             this.loading = false;
 
             if (!result.fetched || result.docs.length === 0) {
-                this.collections = [];
+                this.list = [];
                 return;
             }
 
             /* extract list */
-            this.collections = result.docs.map(({
+            this.list = result.docs.map(({
                 _id,
                 name,
                 slug,

@@ -1,14 +1,8 @@
-import { mongoose, ObjectId } from "@helpers/essentials"
+import { mongoose } from "@helpers/essentials"
 
 /* schema */
 const schema = new mongoose.Schema({
     name: String,
-    code: String,
-    image: String,
-    type: {
-        type: ObjectId,
-        ref: 'color_categories'
-    },
     description: String,
     status: Boolean
 }, {
@@ -16,7 +10,7 @@ const schema = new mongoose.Schema({
 });
 
 /* model */
-const model = mongoose.model('color', schema);
+const model = mongoose.model('color_categories', schema);
 /* helper methods */
 export const methods = {
     register: () => { console.log('registered') },

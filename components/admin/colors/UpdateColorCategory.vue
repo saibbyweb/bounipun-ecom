@@ -1,15 +1,13 @@
 <template>
 <div class="contents">
     <CancelUpdate @close="closeForm" />
-    <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Fabric </h2>
+    <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Color Category </h2>
     <!-- fabric id -->
-    <InputBox v-if="editMode" label="fabric ID" v-model="doc._id" />
+    <InputBox v-if="editMode" label="Color Category ID" v-model="doc._id" />
     <!-- fabric name -->
-    <InputBox label="fabric Name" v-model="doc.name" />
+    <InputBox label="Color Category Name" v-model="doc.name" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
-    <!-- upload fabric image -->
-    <!-- <UploadImage :multipleUpload="false" label="Set Fabric Image"/> -->
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
 
