@@ -16,9 +16,10 @@
     <!-- update button -->
     <div class="center-col">
         <br>
-        <button @click="updateDocument" class="action" :disabled="loading"> {{ editMode ? "Edit" : "Add" }} Fabric </button>
-        <img v-if="loading" class="loading" src="/loading.gif" />
+                <img v-if="loading" class="loading" src="/loading.gif" />
         <img v-if="updated" class="action-complete" src="/complete.gif" />
+        <button @click="updateDocument" class="action" :disabled="loading"> {{ editMode ? "Edit" : "Add" }} Fabric </button>
+
     </div>
 
 </div>

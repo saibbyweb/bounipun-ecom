@@ -204,7 +204,10 @@ p, span {
 }
 .action-complete {
   margin-top:10px;
-  width: 70px;
+  width: 50px;
+}
+*::-webkit-scrollbar {
+  display: none;
 }
 
 

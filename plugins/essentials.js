@@ -1,6 +1,3 @@
-import axios from "axios";
-import { model } from "mongoose";
-
 const task = async promise => {
   let response;
   let error = false;
@@ -67,7 +64,7 @@ export default (context, inject) => {
     return result;
   };
   /* fetch document api */
-  const fetchDocument = async (model,_id) => {
+  const fetchDocument = async (model, _id) => {
     let result = { fetched: false, doc: {} };
     const documentFetch = context.$axios.$post("/getDocument", {
       model,
@@ -84,17 +81,16 @@ export default (context, inject) => {
     result.fetched = true;
     result.doc = response;
     return result;
-
   };
 
   /* notify */
-const flash = async (self) => {
+  const flash = async self => {
     self.updated = true;
-    setTimeout(() => self.updated = false, 1300);
-}
+    setTimeout(() => (self.updated = false), 1300);
+  };
 
   inject("fetchCollection", fetchCollection);
   inject("updateDocument", updateDocument);
   inject("fetchDocument", fetchDocument);
-  inject('flash', flash);
+  inject("flash", flash);
 };

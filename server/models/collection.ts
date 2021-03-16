@@ -12,4 +12,8 @@ const schema = new mongoose.Schema({
 
 /* model */
 const model = mongoose.model('collections', schema);
-export default { model }
+/* helper methods */
+export const methods = {
+    register: () => { console.log('registered') },
+}
+export default { model, methods };

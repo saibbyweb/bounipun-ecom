@@ -4,6 +4,7 @@ import fabric from "./fabric";
 
 const register = function () {
     fabric.methods.register();
+    collection.methods.register();
 }
 
 export { imageUpload, collection, fabric, register };

@@ -55,7 +55,7 @@ export default {
         },
         async fetchFabrics() {
             this.loading = true;
-            const result = await this.$fetchCollection('fabrics');
+            const result = await this.$fetchCollection(this.model);
             this.loading = false;
 
             if(!result.fetched || result.docs.length === 0) {
