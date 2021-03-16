@@ -7,7 +7,7 @@
     </div>
     <!-- list of fabrics -->
     <div class="list">
-        <List :list="fabrics" :model="model" :headings="headings" custom_css="50% 25% 25%" @documentFetched="documentFetched" />
+        <List :list="fabrics" :model="model" :headings="headings" custom_css="10% 40% 25% 25%" @documentFetched="documentFetched" />
     </div>
     <!-- update fabrics form -->
     <div class="update">
@@ -38,7 +38,7 @@ export default {
             }],
             selectedFilter: 'all',
             fabrics: [],
-            headings: ['Fabric Name', 'Description', 'Status']
+            headings: ['_id','Fabric Name', 'Description', 'Status']
         }
     },
     mounted() {

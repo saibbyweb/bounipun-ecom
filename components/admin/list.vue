@@ -7,7 +7,7 @@
     </div>
     <!-- data points -->
     <div @click="select(item, index)" :class="{selected: isSelected(index)}" class="item shadow" v-for="(item, index) in list" :key="index" :style="adjustItem()">
-        <span classx="setClasses(propIndex, value)" v-for="(value, propIndex) in Object.values(item)" :key="propIndex"> {{ value }} </span>
+        <span :class="setClasses(propIndex, value)" v-for="(value, propIndex) in Object.values(item)" :key="propIndex"> {{ value }} </span>
     </div>
 </div>
 </template>
@@ -152,6 +152,11 @@ export default {
         font-size: 13px;
         padding: 5px;
         font-family: $font_2;
+
+        &._id {
+            font-size:8px;
+            word-wrap:break-word;
+        }
 
         &.status {
             border-right: none;

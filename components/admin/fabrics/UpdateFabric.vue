@@ -66,6 +66,7 @@ export default {
         setFabric(details) {
             console.log('from update fabrics', details);
             this.fabric = details;
+            this.editMode = true;
         }
     }
 }
