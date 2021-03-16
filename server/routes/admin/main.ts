@@ -23,7 +23,8 @@ router.post('/uploadImage', uploader.single('productImage'), async (req: any, re
 /* get document route */
 router.post('/getDocument', async (req, res) => {
     const { model, _id } = req.body;
-    const document = await db.collection('imageuploads').findOne({ _id })
+    const collection = db.model(model);
+    const document = await collection.findOne({ _id })
     console.log(document);
     res.send(document);
 });
@@ -31,7 +32,8 @@ router.post('/getDocument', async (req, res) => {
 /* fetch collection */
 router.post('/fetchCollection', async (req, res) => {
     const { model } = req.body;
-    const documents = await db.collection(model).find().toArray();
+    const collection = db.model(model);
+    const documents = await collection.find();
     console.log(documents);
     res.send(documents);
 })
@@ -48,6 +50,7 @@ router.post('/updateDocument', async (req, res) => {
         result = await collection.findOneAndUpdate({ _id: details._id }, details, { upsert: true, returnOriginal: false });
     }
     else {
+        delete details._id;
         result = await new collection(details).save();
     }
 

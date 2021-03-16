@@ -1,9 +1,10 @@
 <template>
-<div class="">
+<div class="upload-container">
+    <label class="label"> {{ label }} </label>
     <!-- input element for selecting images for upload / hidden by css -->
     <input style="display:none;" type="file" accept="image/*" ref="selector" :multiple="multipleUpload" v-on:change="handleFileSelection()" />
-    <button class="action upload-images" v-on:click="addFiles()">
-        {{ label }}
+    <button class="file-selector" v-on:click="addFiles()">
+        Select File(s)
     </button>
 
     <!-- image previews -->
@@ -166,6 +167,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+.upload-container {
+    width:100%;
+
+        .label {
+        font-family: $font_2_bold;
+        color: $gray;
+        text-transform: uppercase;
+        font-size: 10px;
+        padding:2%;
+        margin-left:5px;
+        font-weight: 900;
+}
+
+    .file-selector {
+        padding:3px 5px;
+        border-radius: 2px;
+        font-size:10px;
+        background-color: rgb(122, 168, 122);
+        color:white;
+    }
+}
 .previews {
     display: flex;
     flex-wrap: wrap;

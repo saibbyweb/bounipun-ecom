@@ -73,6 +73,15 @@ export default {
             margin-left: 5px;
             font-weight: 900;
         }
+
+        .loading {
+            width:50px;
+            height:50px;
+        }
+
+        .actions {
+            width:100%;
+        }
     }
 }
 </style>

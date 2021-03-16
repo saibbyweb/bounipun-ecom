@@ -7,11 +7,11 @@
     </div>
     <!-- list of fabrics -->
     <div class="list">
-        <List :list="fabrics" :headings="headings" custom_css="25% 25% 25% 25%" />
+        <List :list="fabrics" :model="model" :headings="headings" custom_css="50% 25% 25%" @documentFetched="documentFetched" />
     </div>
     <!-- update fabrics form -->
     <div class="update">
-        <UpdateFabric />
+        <UpdateFabric ref="updateFabric" @updated="fetchFabrics" />
     </div>
 </div>
 </template>
@@ -21,6 +21,8 @@ export default {
     layout: 'admin',
     data() {
         return {
+            loading: false,
+            model: 'fabrics',
             filters: [{
                 name: 'All Collections',
                 value: 'all'
@@ -35,31 +37,41 @@ export default {
                 value: 'escape'
             }],
             selectedFilter: 'all',
-            fabrics: [{
-                    name: 'Light Weight',
-                    slug: 'light-weight',
-                    description: 'Description for...',
-                    status: 'Live'
-                }, {
-                    name: 'Feather Weight',
-                    slug: 'feather-weight',
-                    description: 'Description for...',
-                    status: 'Not Live'
-                },
-                {
-                    name: '100% Cashmere',
-                    slug: '100%-cashere',
-                    description: 'Description for...',
-                    status: 'Live'
-                },
-                {
-                    name: '80% Wool / 70% Silk',
-                    slug: '80%-wool-70%-silk',
-                    description: 'Description for...',
-                    status: 'Live'
-                }
-            ],
-            headings: ['Fabric Name', 'Slug', 'Description', 'Published']
+            fabrics: [],
+            headings: ['Fabric Name', 'Description', 'Status']
+        }
+    },
+    mounted() {
+        this.fetchFabrics();
+    },
+    methods: {
+        documentFetched(doc) {
+            console.log(doc);
+            console.log(this.$refs.updateFabric.setFabric(doc));
+        },
+        async fetchFabrics() {
+            this.loading = true;
+            const fetchFabrics = this.$axios.$post('/fetchCollection',{
+                model: 'fabrics'
+            });
+
+            /* wait for the request to complete */
+            const { response, error } = await this.$task(fetchFabrics);
+            this.loading = false;
+
+            if(error || response.length === 0) {
+                console.log('Could not fetch documents');
+                return;
+            }
+
+            this.fabrics = response.map(({_id, name, description, status}) => {
+                return {_id, name, description, status }
+            })
+
+            console.log(this.fabrics);
+            
+
+
         }
     }
 }

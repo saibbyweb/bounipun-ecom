@@ -6,8 +6,8 @@
         <span v-for="(heading, index) in headings" :key="index"> {{ heading }} </span>
     </div>
     <!-- data points -->
-    <div class="item shadow" v-for="(item, index) in list" :key="index" :style="adjustItem()">
-        <span :class="setClasses(propIndex, value)" v-for="(value, propIndex) in Object.values(item)" :key="propIndex"> {{ value }} </span>
+    <div @click="select(item, index)" :class="{selected: isSelected(index)}" class="item shadow" v-for="(item, index) in list" :key="index" :style="adjustItem()">
+        <span classx="setClasses(propIndex, value)" v-for="(value, propIndex) in Object.values(item)" :key="propIndex"> {{ value }} </span>
     </div>
 </div>
 </template>
@@ -27,6 +27,16 @@ export default {
         custom_css: {
             type: String,
             default: ''
+        },
+        model: {
+            type: String,
+            default: ''
+        }
+    },
+    data() {
+        return {
+            selected: null,
+            loading: false
         }
     },
     computed: {
@@ -42,6 +52,28 @@ export default {
         }
     },
     methods: {
+        isSelected(index) {
+            return this.selected === index
+        },
+        async select(item, index) {
+            this.selected = index;
+            this.loading = true;
+            const selectDocument = this.$axios.$post('/getDocument',{
+                model: this.model,
+                _id: item._id
+            });
+
+            /* wait for request to complete */
+            const {response, error} = await this.$task(selectDocument);
+
+            if(error) {
+                console.log('could not complete request');
+                return;
+            }
+
+            console.log(response);
+            this.$emit('documentFetched', response);
+        },
         setClasses(propIndex, value) {
             /* slugify column heading and set as class name */
             let classes = []
@@ -52,10 +84,10 @@ export default {
             classes.push(slugifiedHeading);
             /* if status column, slugify the value and set it as class name for color coding */
             if (slugifiedHeading === 'status') {
-                const slugifiedValue = slugify(value, {
-                    lower: true
-                });
-                classes.push(slugifiedValue);
+                // const slugifiedValue = slugify(value, {
+                //     lower: true
+                // });
+                // classes.push(slugifiedValue);
             }
             return classes;
         },
@@ -80,6 +112,13 @@ export default {
     // grid-template-columns: auto auto auto;
     transition: all 0.3s ease-in-out;
     cursor: pointer;
+
+    &.selected {
+        background-color: rgb(35, 148, 92) !important;
+        span {
+            color:white;
+        }
+    }
 
     &.heading {
         background-color: #492727;
