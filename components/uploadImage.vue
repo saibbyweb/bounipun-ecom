@@ -1,10 +1,31 @@
 <template>
 <div class="">
-    <!-- input element for selecting images for upload / hidden by css-->
+    <!-- input element for selecting images for upload / hidden by css -->
     <input type="file" accept="image/*" ref="selector" multiple v-on:change="handleFileSelection()" />
     <button class="action upload-images" v-on:click="addFiles()">
         {{ label }}
     </button>
+
+    <!-- image previews -->
+    <div class="previews">
+        <!-- list of images along with preview and remove button -->
+        <div :key="key" v-for="(image, key) in images" :class="{uploading: !image.uploaded}" class="preview center" :style="{backgroundImage: `url(${image.previewURL})`}">
+
+            <!-- actions -->
+            <div class="actions center-col">
+                <img class="remove-file" src="/icons/light/remove-icon.png" @click="removeFile(key)" />
+                <input class="set-main-image" type="checkbox" v-model="image.mainImage" :checked="image.mainImage" @change="setMainImage(key, $event.target.checked)" />
+            </div>
+
+            <!-- progress indicator -->
+            <div v-if="!image.uploaded" class="progress center">
+            <vue-ellipse-progress color="#41bf89" :size="70" :thickness="7" :legend="true" fontSize="1rem" :progress="image.uploadPercentage">
+                <img class="upload-icon" wdith="60px" slot="legend-caption" src="/icons/light/upload-cloud.svg" />
+            </vue-ellipse-progress>
+            </div>
+
+        </div>
+    </div>
 </div>
 </template>
 
@@ -47,7 +68,7 @@ export default {
                 /* actual file */
                 file,
                 /* local preview url */
-                previewUrl: URL.createObjectURL(file),
+                previewURL: URL.createObjectURL(file),
                 /* cancel token */
                 cancelToken: this.cancelToken.source(),
                 /* upload percentage  */
@@ -104,6 +125,20 @@ export default {
             imageObject.path = response.path;
             imageObject._id = response._id;
         },
+        setMainImage(key, value) {
+            /* if value set to true, turn all other main image flags off */
+            console.log('value was changed', value)
+            if (value) {
+                for (let i = 0; i < this.images.length; i++) {
+                    if (i !== key)
+                        this.images[i].mainImage = false;
+                }
+                return;
+            }
+
+            /* if value set to true */
+            setTimeout(() => this.images[key].mainImage = true, 100);
+        },
         removeFile(key) {
             /* if still uploading, cancel upload before removing from the list */
             if (!this.images[key].uploaded)
@@ -119,3 +154,63 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.previews {
+    display: flex;
+    flex-wrap: wrap;
+
+    .preview {
+        height: 100px;
+        width: 100px;
+        background-size: cover;
+        box-shadow: 1px 1px 15px rgba(0,0,0,0.16);
+        margin:5px;
+        border-radius: 3px;
+        overflow: hidden;
+        cursor: pointer;
+
+        &.uploading {
+            // filter: grayscale(100%);
+        }
+
+        &:hover {
+            .actions {
+                display: flex;
+            }
+
+            .progress {
+                display: none;
+            }
+        }
+
+        .actions {
+            display:none;
+            background-color: #33333383;
+            width:100%;
+            height:100%;
+
+            .remove-file {
+                width:30px;
+                height:30px;
+            }
+
+            .set-main-image {
+                width:30px;
+                height: 30px;
+            }
+        }
+
+        .progress {
+            background-color: #33333383;
+            height:100%;
+            width:100%;
+        }
+
+        .upload-icon {
+            width: 100%;
+            height: 100%;
+        }
+    }
+}
+</style>
