@@ -9,8 +9,6 @@ import path from "path";
 const schema = new mongoose.Schema({
     name: String,
     size: String,
-    path: String,
-    mainImage: Boolean,
     uploader: {
         type: String,
         default: "admin"
@@ -35,16 +33,26 @@ let localStorage = multer.diskStorage({
 /* aws storage - multer */
 let awsStorage = multerS3({
     s3: new aws.S3(),
-    bucket: "bounipun-ecom"
+    bucket: "bounipun-ecom",
+    key: function (req, file, cb) {
+        crypto.pseudoRandomBytes(16, function (err, raw) {
+          if (err) return cb(err)
+          const newName = raw.toString('hex') + path.extname(file.originalname);
+          cb(null, "original/" + newName)
+        })
+    }
 });
 
 /* multer uploader */
-export const uploader = multer({ storage: localStorage });
+export const uploader = multer({ storage: awsStorage });
 
 /* helper methods */
-const methods = {
+export const methods = {
     doSomething: () => { console.log('something done'); },
-    resizeProductImage: () => { }
+    saveImageDetails: async (image) => {
+        const uploadedImageDetails = await new model(image).save();
+        return uploadedImageDetails;
+    }
 }
 
 export default { model, methods }

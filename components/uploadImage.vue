@@ -132,7 +132,7 @@ export default {
         },
         updateImageObject(imageObject, response) {
             imageObject.uploaded = imageObject.uploadPercentage === 100;
-            imageObject.path = response.path;
+            imageObject.path = response.name;
             imageObject._id = response._id;
         },
         setMainImage(key, value) {
