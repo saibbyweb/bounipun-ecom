@@ -83,6 +83,26 @@ export default (context, inject) => {
     return result;
   };
 
+  /* delete document api */
+  const deleteDocument = async(model, _id) => {
+      let result = { deleted: false, doc: {} };
+      const deleteAttempt = context.$axios.$post('/deleteDocument', {
+          model,
+          _id
+      });
+
+      /* wait for request to complete */
+      const { response, error } = await task(deleteAttempt);
+
+      if(error) {
+          return result;
+      }
+
+      result.deleted = true;
+      result.doc = response;
+      return result;
+  }
+
   /* notify */
   const flash = async self => {
     self.updated = true;
@@ -92,5 +112,6 @@ export default (context, inject) => {
   inject("fetchCollection", fetchCollection);
   inject("updateDocument", updateDocument);
   inject("fetchDocument", fetchDocument);
+  inject("deleteDocument", deleteDocument);
   inject("flash", flash);
 };

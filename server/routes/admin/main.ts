@@ -57,6 +57,16 @@ router.post('/updateDocument', async (req, res) => {
     console.log(result);
 
     res.send(result);
+});
+
+/* delete document */
+router.post('/deleteDocument', async(req, res) => {
+    const { model, _id } = req.body;
+    const collection = db.model(model);
+    console.log(_id,model);
+    const result = await collection.findByIdAndDelete({_id});
+    console.log(result);
+    res.send(result);
 })
 
 router.get('/test', async (req, res) => {

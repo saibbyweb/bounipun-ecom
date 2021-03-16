@@ -51,11 +51,11 @@ export default {
                 return;
 
             this.$emit('updated');
-            this.setFabric(result.doc);
+            this.populateForm(result.doc);
             this.$flash(this);
 
         },
-        setFabric(details) {
+        populateForm(details) {
             const { _id, name, description, status } = details;
             this.fabric = { _id, name, description, status };
             this.editMode = true;
@@ -65,7 +65,7 @@ export default {
             this.$emit('close');
         },
         resetForm() {
-            this.setFabric({
+            this.populateForm({
                 _id: "",
                 name: "",
                 description: "",

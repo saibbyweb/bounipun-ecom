@@ -11,7 +11,7 @@
     </div>
     <!-- update collection form -->
     <div :class="{updating: showForm}" class="update">
-        <UpdateCollection v-show="showForm" ref="updateCollection" @updated="fetchCollections" @close="showForm = false"/>
+        <UpdateCollection v-show="showForm" ref="updateComponent" @updated="fetchCollections" @close="showForm = false"/>
         <AddNewItem v-if="!showForm" label="collection" @showForm="showForm = true"/>
     </div>
 </div>
@@ -51,7 +51,7 @@ export default {
         documentFetched(doc) {
             this.showForm = true;
             this.editMode = true;
-            console.log(this.$refs.updateCollection.setCollection(doc));
+            console.log(this.$refs.updateComponent.populateForm(doc));
         },
         async fetchCollections() {
             this.loading = true;
@@ -59,6 +59,7 @@ export default {
             this.loading = false;
 
             if (!result.fetched || result.docs.length === 0) {
+                this.collections = [];
                 return;
             }
 

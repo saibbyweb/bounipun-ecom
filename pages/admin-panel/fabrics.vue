@@ -12,7 +12,7 @@
     <!-- update fabrics form -->
     <div :class="{updating: showForm}" class="update">
     
-        <UpdateFabric v-show="showForm" ref="updateFabric" @updated="fetchFabrics" @close="showForm = false" />
+        <UpdateFabric v-show="showForm" ref="updateComponent" @updated="fetchFabrics" @close="showForm = false" />
         <AddNewItem v-if="!showForm" label="fabric" @showForm="showForm = true"/>
     </div>
 </div>
@@ -51,7 +51,7 @@ export default {
         documentFetched(doc) {
             this.showForm = true;
             this.editMode = true;
-            console.log(this.$refs.updateFabric.setFabric(doc));
+            console.log(this.$refs.updateComponent.populateForm(doc));
         },
         async fetchFabrics() {
             this.loading = true;
