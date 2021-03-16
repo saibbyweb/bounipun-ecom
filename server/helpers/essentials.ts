@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 import path from "path";
 import cors from "cors";
 import aws from "aws-sdk";
-
+let connection = {};
 /* express app */
 const app = express();
 app.use(express.json());
@@ -68,7 +68,6 @@ export const dbConnect = async (): Promise<any> => {
 
     /* attempting to connect */
     const connectionAttempt = mongoose.connect(mongoConnectionString, options);
-
     /* wait for the response */
     const { response: connection, error } = await task(connectionAttempt);
 

@@ -7,7 +7,7 @@ server.applyStaticMiddleware('/frontend');
 app.use('/', mainRoutes);
 
 /* connect to mongodb */
-dbConnect();
+const db = dbConnect();
 
 
 app.get('/api', (req, res) => res.send('Hi from typescript and esrun. why is it so fast'));

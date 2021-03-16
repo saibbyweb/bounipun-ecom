@@ -1,2 +1,3 @@
 import imageUpload from "./imageUpload";
-export { imageUpload }
+import collection from "./collection";
+export { imageUpload, collection }
