@@ -9,7 +9,7 @@
     "server:dev": "NODE_ENV=development nodemon --watch server --exec ts-eager server/index.ts",
     "server:build": "NODE_ENV=production node serverBundle.js",
     "build": "yarn run frontend:build && yarn run server:build",
-    "start": "node dist/server.js",
+    "start": "NODE_ENV=production node dist/server.js",
     "start:dev": "yarn run frontend:dev && yarn run server:dev",
     "up": "yarn run build && yarn run start"
   },
@@ -40,6 +40,7 @@
     "@esbuild-plugins/node-resolve": "^0.0.14",
     "@nuxtjs/style-resources": "^1.0.0",
     "@types/express": "^4.17.11",
+    "esbuild": "^0.9.2",
     "esbuild-node-externals": "^1.0.2",
     "node-sass": "^4.14.1",
     "sass-loader": "^10.0.1",
