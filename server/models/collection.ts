@@ -11,5 +11,5 @@ const schema = new mongoose.Schema({
 });
 
 /* model */
-const model = mongoose.model('collection', schema);
+const model = mongoose.model('collections', schema);
 export default { model }

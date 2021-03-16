@@ -13,7 +13,7 @@
     <!-- update button -->
     <div class="center-col">
         <br>
-        <button class="action"> {{ editMode ? "Edit" : "Add" }} Fabric </button>
+        <button @click="updateDocument" class="action"> {{ editMode ? "Edit" : "Add" }} Fabric </button>
     </div>
 
     <UploadImage :multipleUpload="false" label="Add Fabric Images"/>
@@ -25,6 +25,7 @@
 export default {
     data() {
         return {
+            model: 'fabrics',
             editMode: false,
             fabric: {
                 id: "",
@@ -35,8 +36,21 @@ export default {
         }
     },
     methods: {
-        updateDocument(model, details, editMode) {
+        async updateDocument(model, details, editMode) {
+            const update = this.$axios.$post('/updateDocument', { 
+                model: this.model,
+                details: this.fabric,
+                editMode: this.editMode
+            });
             
+            const { response, error } = await this.$task(update);
+
+            if(error) {
+                console.log('something wrong happened');
+            }
+
+            console.log(response);
+
         }
     }
 }
