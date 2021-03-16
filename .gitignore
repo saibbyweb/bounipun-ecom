@@ -73,6 +73,7 @@ dist
 server/frontend
 uploads
 static/demo_images/products
+demo_images_product
 
 # vuepress build output
 .vuepress/dist
