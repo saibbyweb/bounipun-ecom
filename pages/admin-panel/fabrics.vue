@@ -46,32 +46,24 @@ export default {
     },
     methods: {
         documentFetched(doc) {
-            console.log(doc);
             console.log(this.$refs.updateFabric.setFabric(doc));
         },
         async fetchFabrics() {
             this.loading = true;
-            const fetchFabrics = this.$axios.$post('/fetchCollection',{
-                model: 'fabrics'
-            });
 
-            /* wait for the request to complete */
-            const { response, error } = await this.$task(fetchFabrics);
+            const result = await this.$fetchCollection('fabrics');
+
             this.loading = false;
 
-            if(error || response.length === 0) {
-                console.log('Could not fetch documents');
+            if(!result.fetched || result.docs.length === 0) {
                 return;
             }
 
-            this.fabrics = response.map(({_id, name, description, status}) => {
+            /* extract list */
+            this.fabrics = result.docs.map(({_id, name, description, status}) => {
                 return {_id, name, description, status }
-            })
-
-            console.log(this.fabrics);
-            
-
-
+            });
+        
         }
     }
 }

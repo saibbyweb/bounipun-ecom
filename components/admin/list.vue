@@ -58,21 +58,16 @@ export default {
         async select(item, index) {
             this.selected = index;
             this.loading = true;
-            const selectDocument = this.$axios.$post('/getDocument',{
-                model: this.model,
-                _id: item._id
-            });
-
-            /* wait for request to complete */
-            const {response, error} = await this.$task(selectDocument);
-
-            if(error) {
-                console.log('could not complete request');
+            
+            const result = await this.$fetchDocument(this.model, item._id);
+            this.loading = false;
+            
+            if (!result.fetched) {
                 return;
             }
 
-            console.log(response);
-            this.$emit('documentFetched', response);
+            this.$emit('documentFetched', result.doc);
+
         },
         setClasses(propIndex, value) {
             /* slugify column heading and set as class name */
