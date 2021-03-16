@@ -19,11 +19,11 @@ export default {
         value: Boolean,
         activeText: {
             type: String,
-            default: 'Published'
+            default: 'Active'
         },
         inactiveText: {
             type: String,
-            default: 'Unpublished'
+            default: 'Inactive'
         },
         disabled: {
             type: Boolean,

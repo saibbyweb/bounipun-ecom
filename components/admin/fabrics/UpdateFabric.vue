@@ -1,25 +1,24 @@
 <template>
 <div class="update-fabric">
-    <h2 class="heading"> {{ editMode ? 'Update' : 'Add' }} Fabric </h2>
+    <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Fabric </h2>
     <!-- fabric id -->
-    <!-- <InputBox label="fabric ID" v-model="fabric.id" /> -->
+    <InputBox v-if="editMode" label="fabric ID" v-model="fabric._id" />
     <!-- fabric name -->
     <InputBox label="fabric Name" v-model="fabric.name" />
     <!-- description -->
     <TextBox v-model="fabric.description" label="Description" />
     <!-- upload fabric image -->
-    <UploadImage :multipleUpload="false" label="Set Fabric Image"/>
+    <!-- <UploadImage :multipleUpload="false" label="Set Fabric Image"/> -->
     <!-- publish toggle -->
-    <Toggle v-model="fabric.status" label="Status" inactiveText="Not Live" />
+    <Toggle v-model="fabric.status" label="Status" />
     
     <!-- update button -->
     <div class="center-col">
         <br>
         <button @click="updateDocument" class="action" :disabled="loading"> {{ editMode ? "Edit" : "Add" }} Fabric </button>
         <img v-if="loading" class="loading" src="/loading.gif" />
+        <img v-if="updated" class="action-complete" src="/complete.gif" />
     </div>
-
-   
 
 </div>
 </template>
@@ -36,23 +35,20 @@ export default {
                 description: "",
                 status: false
             },
-            loading: false
+            loading: false,
+            updated: false
         }
     },
     methods: {
         async updateDocument(model, details, editMode) {
             this.loading = true;
-
             const result = await this.$updateDocument(this.model, this.fabric, this.editMode);
             this.loading = false;
 
-            console.log(result);
-
             if(result.updated) {
                 this.$emit('updated');
+                this.$flash(this);
             }
-            
-            return;
 
         },
         setFabric(details) {

@@ -57,8 +57,10 @@ export default {
 <style lang="scss" scoped>
 //
 .header {
-    padding: 10px;
+    // padding: 10px;
     background-color: $dark_gray;
+    height:10vh;
+    overflow: hidden;
 
     .logo {
         width: 15%;
@@ -70,10 +72,10 @@ export default {
 
     .menu-links {
         width: 100%;
-        padding-top: 10px;
+        // padding-top: 10px;
 
         .menu-item {
-            padding: 10px 3%;
+            padding: 2px 1%;
             color: $dark_gray;
             border-radius: 5px;
             cursor: pointer;
@@ -81,6 +83,7 @@ export default {
 
             span {
                 color: rgb(208, 208, 208);
+                font-size: 11px;
             }
 
             &:hover {

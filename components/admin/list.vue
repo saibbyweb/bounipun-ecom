@@ -7,7 +7,7 @@
     </div>
     <!-- data points -->
     <div @click="select(item, index)" :class="{selected: isSelected(index)}" class="item shadow" v-for="(item, index) in list" :key="index" :style="adjustItem()">
-        <span :class="setClasses(propIndex, value)" v-for="(value, propIndex) in Object.values(item)" :key="propIndex"> {{ value }} </span>
+        <span :class="setClasses(propIndex, value)" v-for="(value, propIndex) in Object.values(item)" :key="propIndex"> {{ optimizeValue(value) }} </span>
     </div>
 </div>
 </template>
@@ -52,6 +52,13 @@ export default {
         }
     },
     methods: {
+        optimizeValue(value) {
+            console.log(typeof value);
+            if(typeof value === "boolean") {
+                return value ? 'Active' : 'Inactive'
+            }
+            return value;
+        },
         isSelected(index) {
             return this.selected === index
         },
@@ -61,7 +68,7 @@ export default {
             
             const result = await this.$fetchDocument(this.model, item._id);
             this.loading = false;
-            
+
             if (!result.fetched) {
                 return;
             }

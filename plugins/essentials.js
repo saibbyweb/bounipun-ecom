@@ -87,7 +87,14 @@ export default (context, inject) => {
 
   };
 
+  /* notify */
+const flash = async (self) => {
+    self.updated = true;
+    setTimeout(() => self.updated = false, 1300);
+}
+
   inject("fetchCollection", fetchCollection);
   inject("updateDocument", updateDocument);
-  inject("fetchDocument", fetchDocument)
+  inject("fetchDocument", fetchDocument);
+  inject('flash', flash);
 };

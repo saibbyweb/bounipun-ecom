@@ -1,17 +1,19 @@
 <template>
 <div class="fabrics crud">
     <!-- filters -->
-    <div class="filters center">
+    <div :class="{updating: showForm}" class="filters center">
         <input class="search shadow" type="text" placeholder="Search for Fabrics" />
         <SelectBox :options="filters" v-model="selectedFilter" />
     </div>
     <!-- list of fabrics -->
-    <div class="list">
+    <div :class="{updating: showForm}" class="list">
         <List :list="fabrics" :model="model" :headings="headings" custom_css="10% 40% 25% 25%" @documentFetched="documentFetched" />
     </div>
     <!-- update fabrics form -->
-    <div class="update">
-        <UpdateFabric ref="updateFabric" @updated="fetchFabrics" />
+    <div :class="{updating: showForm}" class="update">
+        <CancelUpdate v-if="showForm" @close="showForm = false" />
+        <UpdateFabric v-show="showForm" ref="updateFabric" @updated="fetchFabrics" />
+        <AddNewItem v-if="!showForm" label="fabric" @showForm="showForm = true"/>
     </div>
 </div>
 </template>
@@ -21,6 +23,7 @@ export default {
     layout: 'admin',
     data() {
         return {
+            showForm: false,
             loading: false,
             model: 'fabrics',
             filters: [{
@@ -46,13 +49,13 @@ export default {
     },
     methods: {
         documentFetched(doc) {
+            this.showForm = true;
+            this.editMode = true;
             console.log(this.$refs.updateFabric.setFabric(doc));
         },
         async fetchFabrics() {
             this.loading = true;
-
             const result = await this.$fetchCollection('fabrics');
-
             this.loading = false;
 
             if(!result.fetched || result.docs.length === 0) {
