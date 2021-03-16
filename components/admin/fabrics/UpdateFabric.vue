@@ -9,6 +9,7 @@
     <TextBox v-model="fabric.description" label="Description" />
     <!-- publish toggle -->
     <Toggle v-model="fabric.status" label="Status" inactiveText="Not Live" />
+    
     <!-- update button -->
     <div class="center-col">
         <br>
@@ -31,6 +32,11 @@ export default {
                 description: "",
                 status: false
             },
+        }
+    },
+    methods: {
+        updateDocument(model, details, editMode) {
+            
         }
     }
 }
