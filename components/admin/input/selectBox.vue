@@ -1,8 +1,8 @@
 <template>
 <div class="select-box">
     <label v-if="label !== undefined" class="label"> {{ label }} </label>
-    <select class="select shadow" :value="value">
-        <option v-for="(option, index) in options" :key="index" :value="option.value" @change="$emit('input', $event.target.value)"> {{ option.name }} </option>
+    <select class="select shadow" :value="value" @change="$emit('input', $event.target.value)">
+        <option v-for="(option, index) in options" :key="index" :value="option.value"> {{ option.name }} </option>
     </select>
 </div>
 </template>
