@@ -2,7 +2,6 @@
 <div class="contents">
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Color </h2>
-
     <!-- fabric id -->
     <InputBox v-if="editMode" label="Color ID" v-model="doc._id" />
     <!-- bounipun color code -->
@@ -13,6 +12,8 @@
     <SelectBox :options="colorCategories" v-model="doc.category" label="Type of Category" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
+    <!-- set color image -->
+    <UploadImage ref="imageUploader" :multipleUpload="false" label="Set Color Image" @updated="imageListUpdated" />
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
 
@@ -44,6 +45,7 @@ export default {
                 _id: "",
                 code: "",
                 name: "",
+                image: "",
                 category: "",
                 description: "",
                 status: false
@@ -53,6 +55,9 @@ export default {
         }
     },
     methods: {
+        imageListUpdated(list) {
+            this.doc.image = list.length > 0 ? list[0].path : "";
+        },
         async updateDocument(model, details, editMode) {
             this.loading = true;
             const result = await this.$updateDocument(this.model, this.doc, this.editMode);
@@ -83,6 +88,7 @@ export default {
                 _id,
                 code,
                 name,
+                image,
                 category,
                 description,
                 status
@@ -91,11 +97,13 @@ export default {
                 _id,
                 code,
                 name,
+                image,
                 category,
                 description,
                 status
             };
             this.editMode = true;
+            // this.$refs.imageUploader.assignImages();
         },
         closeForm() {
             this.resetForm();
@@ -106,6 +114,7 @@ export default {
                 _id: "",
                 code: "",
                 name: "",
+                image: "",
                 category: "",
                 description: "",
                 status: false

@@ -8,8 +8,6 @@
     <InputBox label="fabric Name" v-model="doc.name" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
-    <!-- upload fabric image -->
-    <!-- <UploadImage :multipleUpload="false" label="Set Fabric Image"/> -->
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
 

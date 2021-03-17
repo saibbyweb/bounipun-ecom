@@ -20,9 +20,9 @@
 
             <!-- progress indicator -->
             <div v-if="!image.uploaded" class="progress center">
-            <vue-ellipse-progress color="#41bf89" :size="70" :thickness="7" :legend="true" fontSize="1rem" :progress="image.uploadPercentage">
-                <img class="upload-icon" wdith="60px" slot="legend-caption" src="/icons/light/upload-cloud.svg" />
-            </vue-ellipse-progress>
+                <vue-ellipse-progress color="#41bf89" :size="70" :thickness="7" :legend="true" fontSize="1rem" :progress="image.uploadPercentage">
+                    <img class="upload-icon" wdith="60px" slot="legend-caption" src="/icons/light/upload-cloud.svg" />
+                </vue-ellipse-progress>
             </div>
 
             <!-- main image indicator -->
@@ -40,7 +40,11 @@ export default {
             type: String,
             default: "Add Files"
         },
-        multipleUpload: { type: Boolean, default: true }
+        multipleUpload: {
+            type: Boolean,
+            default: true
+        },
+        uploaded: Array
     },
     data() {
         return {
@@ -49,19 +53,55 @@ export default {
             uploadImageAPI: '/uploadImage'
         }
     },
+    watch: {
+        uploaded(newVal) {
+            if(newVal.length > 0)
+                this.assignImages();
+        }
+    },
     methods: {
+        assignImages(list) {
+            if(!list.length > 0)
+               return;
+               
+            this.images = [];
+            const baseAWSURL = "https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/";
+            list.forEach((image) => {
+                console.log(image);
+                const imageObject = {
+                    /* actual file */
+                    file: null,
+                    /* local preview url */
+                    previewURL: baseAWSURL + image.path,
+                    /* cancel token */
+                    cancelToken: null,
+                    /* upload percentage  */
+                    uploadPercentage: 100,
+                    /* uploaded flag */
+                    uploaded: true,
+                    /* main image flag */
+                    mainImage: image.mainImage,
+                    /* upload ID */
+                    _id: image._id,
+                    /* path to uploaded image */
+                    path: baseAWSURL + image.path
+                }
+
+               this.images.push(imageObject);
+            });
+        },
         addFiles() {
             this.$refs.selector.click();
         },
         handleFileSelection() {
             /* list of selected files */
             let selectedFiles = this.$refs.selector.files;
-            
+
             /* if multiple upload not allowed */
-            if(!this.multipleUpload) {
+            if (!this.multipleUpload) {
                 this.images = [];
             }
-            
+
             /* upload files one by one */
             selectedFiles.forEach((file) => {
                 /* create image object */
@@ -135,6 +175,7 @@ export default {
             imageObject.uploaded = imageObject.uploadPercentage === 100;
             imageObject.path = response.name;
             imageObject._id = response._id;
+            this.$emit('updated', this.images);
         },
         setMainImage(key, value) {
             /* if value set to true, turn all other main image flags off */
@@ -148,7 +189,10 @@ export default {
             }
 
             /* if value set to true */
-            setTimeout(() => this.images[key].mainImage = true, 100);
+            setTimeout(() => {
+                this.images[key].mainImage = true
+                this.$emit('updated', this.images);
+            }, 100);
         },
         removeFile(key) {
             /* if still uploading, cancel upload before removing from the list */
@@ -157,6 +201,8 @@ export default {
 
             /* remove from the images list */
             this.images.splice(key, 1);
+            this.$emit('updated', this.images);
+
         },
         resetFileSelection() {
             this.$refs.selector.type = 'text';
@@ -167,28 +213,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .upload-container {
-    width:100%;
+    width: 100%;
 
-        .label {
+    .label {
         font-family: $font_2_bold;
         color: $gray;
         text-transform: uppercase;
         font-size: 10px;
-        padding:2%;
-        margin-left:5px;
+        padding: 2%;
+        margin-left: 5px;
         font-weight: 900;
-}
+    }
 
     .file-selector {
-        padding:3px 5px;
+        padding: 3px 5px;
         border-radius: 2px;
-        font-size:10px;
+        font-size: 10px;
         background-color: rgb(122, 168, 122);
-        color:white;
+        color: white;
     }
 }
+
 .previews {
     display: flex;
     flex-wrap: wrap;
@@ -198,12 +244,12 @@ export default {
         height: 70px;
         width: 70px;
         background-size: cover;
-        box-shadow: 1px 1px 15px rgba(0,0,0,0.16);
-        margin:5px;
+        box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
+        margin: 5px;
         border-radius: 3px;
         overflow: hidden;
         cursor: pointer;
-        position:relative;
+        position: relative;
 
         &.uploading {
             // filter: grayscale(100%);
@@ -220,26 +266,26 @@ export default {
         }
 
         .actions {
-            display:none;
+            display: none;
             background-color: #33333383;
-            width:100%;
-            height:100%;
+            width: 100%;
+            height: 100%;
 
             .remove-file {
-                width:30px;
-                height:30px;
+                width: 30px;
+                height: 30px;
             }
 
             .set-main-image {
-                width:30px;
+                width: 30px;
                 height: 30px;
             }
         }
 
         .progress {
             background-color: #33333383;
-            height:100%;
-            width:100%;
+            height: 100%;
+            width: 100%;
         }
 
         .upload-icon {
@@ -249,12 +295,12 @@ export default {
 
         .main-image {
             position: absolute;
-            bottom:0;
-            left:0;
+            bottom: 0;
+            left: 0;
             width: 100%;
-            background:#33333383;
-            color:white;
-            font-size:9px;
+            background: #33333383;
+            color: white;
+            font-size: 9px;
             text-align: center;
         }
     }
