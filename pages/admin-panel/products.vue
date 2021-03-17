@@ -13,7 +13,7 @@
 
     <!-- update products form -->
     <div :class="{updating: showForm}" class="update">
-        <UpdateProduct v-show="showForm" ref="updateComponent" @updated="fetchList" :model="model" @close="showForm = false" :collections="collections" :variants="variants" :fabrics="fabrics"/>
+        <UpdateProduct v-show="showForm" ref="updateComponent" @updated="fetchList" :model="model" @close="showForm = false" :collections="collections" :variants="variants" :fabrics="fabrics" />
 
         <AddNewItem v-if="!showForm" label="Product" @showForm="showForm = true" />
     </div>
@@ -101,15 +101,24 @@ export default {
             this.editMode = true;
             this.$refs.updateComponent.populateForm(doc);
 
-            // if (doc.image === "")
-            //     return;
+            if (doc.colors.length === 0)
+                return;
 
             /* assign images */
-            // this.$refs.updateComponent.$refs.imageUploader.assignImages([{
-            //     _id: '',
-            //     mainImage: false,
-            //     path: doc.image
-            // }]);
+            setTimeout(() => {
+                this.$refs.updateComponent.populateVariants(doc.variants);
+                let i = 0;
+                doc.colors.forEach(color => {
+                    if (color.images.length === 0) {
+                        i++;
+                        return;
+                    }
+                    // console.log(this.$refs.updateComponent.$refs);
+                    this.$refs.updateComponent.$refs.imageUploader[i].assignImages(color.images);
+                    i++;
+                })
+            }, 1200);
+
         },
         async fetchList() {
             this.loading = true;

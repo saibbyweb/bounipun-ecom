@@ -15,7 +15,7 @@ const schema = new mongoose.Schema({
     colorSource: { type: String, enum: ['bounipun-colors', 'custom'] },
     /* colors */
     colors: [{ 
-        colorId: { type: ObjectId, ref: 'colors' }, 
+        _id: { type: ObjectId, ref: 'colors' }, 
         name: { type: String , default: '' }, 
         images: [{ _id: ObjectId, path: String, mainImage: Boolean }]
     }],

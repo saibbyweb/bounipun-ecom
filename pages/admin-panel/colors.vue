@@ -69,11 +69,14 @@ export default {
                 return;
 
             /* assign images */
-            this.$refs.updateComponent.$refs.imageUploader.assignImages([{
-                _id: '',
-                mainImage: false,
-                path: doc.image
-            }]);
+            setTimeout(() => {
+                this.$refs.updateComponent.$refs.imageUploader.assignImages([{
+                    _id: '',
+                    mainImage: false,
+                    path: doc.image
+                }]);
+            }, 1200);
+
         },
         async fetchList() {
             this.loading = true;

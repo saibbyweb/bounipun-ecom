@@ -20,17 +20,30 @@
     <!-- color source -->
     <SelectBox :options="colorSourceTypes" v-model="doc.colorSource" label="Select Color Source" />
 
+    <!-- add colors -->
+    <div v-show="doc.colorSource !== ''" class="colors" style="width:100%; position:relative;">
+
+        <div style="position:relative;" v-for="(color, index) in doc.colors" :key="index">
+            <!-- color selector (if color source is bounipun) -->
+            <!-- color name -->
+            <InputBox v-if="doc.colorSource === 'custom'" label="New Color Name" v-model="color.name" />
+            <!-- color images -->
+            <UploadImage ref="imageUploader" label="Upload Images" @updated="imageListUpdated($event, index)" />
+            <!-- remove color -->
+            <button class="action delete" style="font-size:9px; position: absolute; bottom:0; right:0;" @click="removeColor(index)"> Remove Color </button>
+
+            <hr width="100%" style="opacity: 0.3" />
+        </div>
+
+        <button class="action" style="font-size:9px; position: absolute; bottom: -30px;  right:10px;" @click="addNewColor"> Add Color </button>
+    </div>
+
     <!-- variations (checkboxes) -->
     <c-boxes :options="variants" label="Variants" />
 
-    <!-- <fabric-selector :label="variation.name" v-for="(variation, index) in selectedVariants" :key="index" :options="fabricOptions" /> -->
-
-    <!-- <fabric-selector :fabrics="fabrics" /> -->
-
+    <!-- fabric selector -->
     <fabric-selector :label="variant.name" v-for="(variant, index) in selectedVariantsWithFabricOptions" :key="index" :variant="variant" @fabricSelectionUpdated="fabricSelectionUpdated" />
 
-    <!-- set color image -->
-    <!-- <UploadImage ref="imageUploader" :multipleUpload="false" label="Set Color Image" @updated="imageListUpdated" /> -->
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
 
@@ -85,6 +98,7 @@ export default {
                 /* new types */
                 colorSource: "",
                 variants: [],
+                colors: [],
                 status: false
             },
             types: [{
@@ -118,6 +132,33 @@ export default {
         }
     },
     methods: {
+        /* populateVariant */
+        populateVariants(variants) {
+            console.log(variants);
+            variants.forEach(variant => {
+                let match = this.variants.find(({_id}) => _id === variant._id);
+                match.checked = true;
+            })
+        },
+        /* image list updated */
+        imageListUpdated(list, index) {
+            console.log(list, index);
+            this.doc.colors[index].images = list;
+        },
+        /* add new color */
+        addNewColor() {
+            this.doc.colors.push({
+                _id: null,
+                name: "",
+                images: []
+            });
+        },
+        /* remove color */
+        removeColor(key) {
+            if (this.doc.colors.length === 1)
+                return;
+            this.doc.colors.splice(key, 1);
+        },
         /* fabric selection */
         fabricSelectionUpdated(variant) {
             let details = {
@@ -127,24 +168,21 @@ export default {
 
             /* check if variant already exists in the array */
             let foundIndex = this.doc.variants.findIndex(element => element._id === variant._id);
-            
+
             /* if not found  */
-            if(foundIndex === -1)
+            if (foundIndex === -1)
                 this.doc.variants.push(details);
             else
                 this.doc.variants[foundIndex] = details;
-            
+
             this.doc.variants = this.doc.variants.filter(variant => variant.fabrics.length !== 0)
 
             console.log(this.doc.variants);
         },
-        imageListUpdated(list) {
-            this.doc.image = list.length > 0 ? list[0].path : "";
-        },
         async updateDocument() {
             console.log(this.doc);
             // return;
-            return;
+            // return;
 
             this.loading = true;
             const result = await this.$updateDocument(this.model, this.doc, this.editMode);
@@ -179,6 +217,9 @@ export default {
                 description,
                 type,
                 bounipun_collection,
+                colorSource,
+                variants,
+                colors,
                 status
             } = details;
             this.doc = {
@@ -189,6 +230,9 @@ export default {
                 description,
                 type,
                 bounipun_collection,
+                colorSource,
+                variants,
+                colors,
                 status
             };
             this.editMode = true;
@@ -206,6 +250,9 @@ export default {
                 description: "",
                 type: "",
                 bounipun_collection: "",
+                colorSource: "",
+                variants: [],
+                colors: [],
                 status: false
             });
             this.editMode = false;
