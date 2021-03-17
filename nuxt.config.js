@@ -47,7 +47,7 @@ export default {
   build: {
   },
   generate: {
-    dir: 'dist/frontend',
+    dir: 'test/frontend',
     routes: ['/products/auto_1', '/products/auto_2', '/products/auto_3', '/products/auto_4', '/products/auto_5', '/products/auto_6', '/products/kara_1', '/products/kara_2', '/products/kara_3', '/products/kara_4']
   }
 };

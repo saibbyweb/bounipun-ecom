@@ -71,7 +71,7 @@ export default {
         fabrics: Array
     },
     watch: {
-        selectedVariants(newVal) {
+        selectedVariantsWithFabricOptions(newVal) {
             console.log('changed',newVal);
         }
     },

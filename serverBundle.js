@@ -4,6 +4,6 @@ esbuild.build({
   entryPoints: ['server/index.ts'],
   bundle: true,
   platform: 'node',
-  outfile: 'dist/server.js',
+  outfile: 'test/server.js',
   external: ['express','mongoose']
 });
