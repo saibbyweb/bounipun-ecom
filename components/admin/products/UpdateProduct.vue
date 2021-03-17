@@ -1,156 +1,138 @@
 <template>
-<div class="update-product">
-    <h2 class="heading"> {{ editMode ? 'Update' : 'Add' }} Product </h2>
+<div class="contents">
+    <CancelUpdate @close="closeForm" />
+    <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Product </h2>
+    <!-- product id -->
+    <InputBox v-if="editMode" label="Product ID" v-model="doc._id" />
     <!-- bounipun style id -->
-    <InputBox label="Bounipun Style ID" v-model="product.styleId" />
+    <InputBox label="Bounipun Style ID" v-model="doc.styleId" />
     <!-- product name -->
-    <InputBox label="Product Name" v-model="product.name" />
+    <InputBox label="Product Name" v-model="doc.name" />
     <!-- slug -->
-    <InputBox label="Slug" v-model="product.slug" :placeholder="suggestedSlug" />
+    <InputBox label="Product Name" v-model="doc.slug" />
     <!-- description -->
-    <TextBox v-model="product.description" label="Description" />
-    <!-- type of products -->
-    <SelectBox :options="productTypes" v-model="selectedProductType" label="Type of Product" />
-    <!-- collection -->
-    <SelectBox :options="collections" v-model="selectedCollection" label="Collection" />
-    <!-- color source -->
-    <SelectBox :options="colorSource" v-model="selectedColorSource" label="Color Options" />
-    <!-- variations (checkboxes) -->
-    <CheckBoxes :options="variations" label="variations" />
-    <!-- fabrics (checkboxes) -->
-    <CheckBoxes :options="feedFabrics()" :local="true" :label="variation.name" v-for="(variation, index) in selectedVariations" :key="index" />
-    <!-- variation options - images, fabric, pricing -->
-    <!-- status (checkboxes) -->
-    <!-- publish toggle -->
-    <Toggle v-model="product.status" label="Status" inactiveText="Not Live" />
+    <TextBox v-model="doc.description" label="Description" />
+    <!-- type of product -->
+    <SelectBox :options="types" v-model="doc.type" label="Select Collection" />
+    <!-- collections -->
+    <SelectBox :options="collections" v-model="doc.bounipun_collection" label="Select Collection" />
 
-    <div class="center-col">
-        <br>
-        <button class="action"> {{ editMode ? "Edit" : "Add" }} Product </button>
-    </div>
+    <!-- set color image -->
+    <!-- <UploadImage ref="imageUploader" :multipleUpload="false" label="Set Color Image" @updated="imageListUpdated" /> -->
+    <!-- publish toggle -->
+    <Toggle v-model="doc.status" label="Status" />
+
     <!-- update button -->
+    <div class="center-space">
+        <!-- loading bar -->
+        <img v-if="loading" class="loading" src="/loading.gif" />
+        <!-- action complete gif -->
+        <img v-if="updated" class="action-complete" src="/complete.gif" />
+        <!-- update document -->
+        <button @click="updateDocument" class="action" :disabled="loading"> {{ editMode ? "Edit" : "Add" }} Color </button>
+        <!-- delete document -->
+        <button v-if="editMode" @click="deleteDocument" class="action delete" :disabled="loading"> Delete </button>
+    </div>
 
 </div>
 </template>
 
+        
 <script>
-import slugify from "slugify";
 export default {
-    computed: {
-        suggestedSlug() {
-            return slugify(this.product.name, {
-                lower: true
-            });
-        },
-        selectedVariations() {
-            return this.variations.filter(variation => variation.checked === true)
-        }
-    },
-    methods: {
-        feedFabrics() {
-            return JSON.parse(JSON.stringify(this.allFabrics));
-        }
+    props: {
+        model: String,
+        colorCategories: Array
     },
     data() {
         return {
             editMode: false,
-            product: {
-                styleId: '',
+            doc: {
+                _id: "",
+                styleId: "",
                 name: "",
                 slug: "",
                 description: "",
-                collection: "",
+                type: "",
+                bounipun_collection: "",
                 status: false
             },
-            variations: [{
-                name: 'Shawl',
-                value: 'shawl',
-                checked: false
-            }, {
-                name: 'Stole',
-                value: 'stole',
-                checked: false
-            }, {
-                name: 'Square',
-                value: 'square',
-                checked: false
-            }],
-            collections: [{
-                    name: 'Select Collection',
-                    value: 'false',
-                    checked: false
-                },
-                {
-                    name: 'Autograph',
-                    value: 'autograph'
-                },
-                {
-                    name: 'Escape',
-                    value: 'escape'
-                },
-                {
-                    name: 'Karakul',
-                    value: 'karakul'
-                }
+            types: [
+                { name: 'Select Type', value: ''},
+                { name: 'Made to Order', value: 'made-to-order'},
+                { name: 'Ready to Ship', value: 'ready-to-ship'}
             ],
-            allFabrics: [{
-                    name: 'Feather Weight',
-                    value: '1',
-                    checked: false
-                }, {
-                    name: 'Light Weight',
-                    value: '2',
-                    checked: false
-                }, {
-                    name: 'Warm Fabric',
-                    value: '3',
-                    checked: false
-                },
-                {
-                    name: 'Luxe Weight',
-                    value: '4',
-                    checked: false
-                },
-                {
-                    name: 'Wool 70%',
-                    value: '5',
-                    checked: false
-                }
-            ],
-            selectedCollection: 'false',
-            productTypes: [{
-                    name: 'Select Product Type',
-                    value: 'select'
-                },
-                {
-                    name: 'Made to Order',
-                    value: 'made-to-order'
-                },
-                {
-                    name: 'Ready to Ship',
-                    value: 'ready-to-ship'
-                }
-            ],
-            selectedProductType: 'select',
-            colorSource: [{
-                    name: 'Select Color Source',
-                    value: 'select'
-                },
-                {
-                    name: 'Bounipun Color Catalogue',
-                    value: 'bck'
-                },
-                {
-                    name: 'Custom',
-                    value: 'custom'
-                }
-            ],
-            selectedColorSource: 'select'
+            loading: false,
+            updated: false
+        }
+    },
+    methods: {
+        imageListUpdated(list) {
+            this.doc.image = list.length > 0 ? list[0].path : "";
+        },
+        async updateDocument(model, details, editMode) {
+            this.loading = true;
+            const result = await this.$updateDocument(this.model, this.doc, this.editMode);
+            this.loading = false;
+
+            if (!result.updated)
+                return;
+
+            this.$emit('updated');
+            this.populateForm(result.doc);
+            this.$flash(this);
+
+        },
+        async deleteDocument() {
+            this.loading = true;
+            const result = await this.$deleteDocument(this.model, this.doc._id);
+            this.loading = false;
+
+            if (!result.deleted)
+                return;
+
+            this.$emit('updated');
+            this.resetForm();
+            this.$flash(this);
+        },
+        populateForm(details) {
+            const {
+                _id,
+                code,
+                name,
+                image,
+                category,
+                description,
+                status
+            } = details;
+            this.doc = {
+                _id,
+                code,
+                name,
+                image,
+                category,
+                description,
+                status
+            };
+            this.editMode = true;
+            // this.$refs.imageUploader.assignImages();
+        },
+        closeForm() {
+            this.resetForm();
+            this.$emit('close');
+        },
+        resetForm() {
+            this.populateForm({
+                _id: "",
+                code: "",
+                name: "",
+                image: "",
+                category: "",
+                description: "",
+                status: false
+            });
+            this.editMode = false;
         }
     }
 }
 </script>
-
-<style lang="scss" scoped>
-
-</style>

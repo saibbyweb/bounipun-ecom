@@ -5,6 +5,7 @@ import colorCategory from "./colorCategory";
 import color from "./color";
 import variantCategories from "./variantCategories";
 import variants from "./variants"
+import product from "./product"
 
 
 const register = function () {
@@ -14,6 +15,7 @@ const register = function () {
     color.methods.register();
     variantCategories.methods.register();
     variants.methods.register();
+    product.methods.register();
 }
 
-export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, register };
+export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, register };

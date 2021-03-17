@@ -1,19 +1,21 @@
 <template>
 <div class="products crud">
     <!-- filters -->
-    <div class="filters center">
-        <input class="search shadow" type="text" placeholder="Search for products" />
+    <div :class="{updating: showForm}" class="filters center">
+        <input class="search shadow" type="text" placeholder="Search for Products" />
         <SelectBox :options="filters" v-model="selectedFilter" />
     </div>
 
     <!-- list of products -->
-    <div class="list">
-        <List class="product-list" :headings="headings" :list="products" custom_css="25% 20% 20% 15% 10% 10%" />
+    <div :class="{updating: showForm}" class="list">
+        <List :list="list" :model="model" :headings="headings" custom_css="10% 20% 20% 10% 10% 20% 10%" @documentFetched="documentFetched" />
     </div>
 
-    <!-- update product form -->
-    <div class="update">
-        <UpdateProduct />
+    <!-- update products form -->
+    <div :class="{updating: showForm}" class="update">
+        <UpdatePoduct v-show="showForm" ref="updateComponent" @updated="fetchList" :model="model" @close="showForm = false" :collections="collections" />
+
+        <AddNewItem v-if="!showForm" label="Product" @showForm="showForm = true" />
     </div>
 </div>
 </template>
@@ -23,75 +25,91 @@ export default {
     layout: 'admin',
     data() {
         return {
+            showForm: false,
+            loading: false,
+            model: 'products',
             filters: [{
                 name: 'All Products',
                 value: 'all'
             }, {
                 name: "Karakul",
                 value: 'karakul'
-            }, {
-                name: 'Autograph',
-                value: 'autograph'
-            }, {
-                name: 'Escape',
-                value: 'escape'
             }],
             selectedFilter: 'all',
-            products: [{
-                    name: 'Kani',
-                    slug: 'kani',
-                    collection: 'Escape',
-                    variations: 'Shawl/Square/Stole',
-                    price: '5999',
-                    status: 'Live'
-                }, {
-                    name: 'Khatamband Cashmere',
-                    slug: 'khatamband-cashmere',
-                    collection: 'Adore',
-                    variations: 'Shawl/Stole',
-                    price: '12999',
-                    status: 'Not Live'
-                },
-                {
-                    name: 'Pashmina',
-                    slug: 'pashmina',
-                    collection: 'Autograph',
-                    variations: 'Stole',
-                    price: '8999',
-                    status: 'Live'
-                }
-            ],
-            headings: ['Product Name', 'Slug', 'Variations', 'Collection', 'Price', 'Status']
+            list: [],
+            headings: ['_id', 'Color Code', 'Color Name', 'Image', 'Category', 'Description', 'Status'],
+            collections: [],
         }
     },
-    computed: {
-        productsValuesOptimized() {
-            return this.products.map(product => {
-                const status = product.status;
-                delete product.status;
+    async mounted() {
+        await this.fetchBounipunCollections();
+        await this.fetchList();
+    },
+    methods: {
+        async fetchBounipunCollections() {
+            const result = await this.$fetchCollection('collections');
+            this.collections = result.docs.map(({
+                _id,
+                name
+            }) => {
                 return {
-                    ...product,
-                    Status: status ? 'Live' : 'Not Live'
+                    name,
+                    value: _id
                 }
+            });
+            this.collections.unshift({
+                name: 'Select Collection',
+                value: ""
             })
+        },
+        documentFetched(doc) {
+            this.showForm = true;
+            this.editMode = true;
+            this.$refs.updateComponent.populateForm(doc);
+
+            // if (doc.image === "")
+            //     return;
+
+            /* assign images */
+            // this.$refs.updateComponent.$refs.imageUploader.assignImages([{
+            //     _id: '',
+            //     mainImage: false,
+            //     path: doc.image
+            // }]);
+        },
+        async fetchList() {
+            this.loading = true;
+            const result = await this.$fetchCollection(this.model);
+            this.loading = false;
+
+            if (!result.fetched || result.docs.length === 0) {
+                this.list = [];
+                return;
+            }
+
+            /* extract list */
+            this.list = result.docs.map(({
+                _id,
+                styleId,
+                slug,
+                description,
+                type,
+                bounipun_collection,
+                status
+            }) => {
+                /* resolve category name */
+                const foundCollection = this.collections.find(col => col.value === bounipun_collection)
+                return {
+                    _id,
+                    code,
+                    name,
+                    image,
+                    bounipun_collection: foundCollection.name,
+                    description,
+                    status
+                }
+            });
         }
     }
 }
 </script>
-
-<style lang="scss">
-.products {
-    /* style status boxes */
-    .status {
-        color: white;
-
-        &.live {
-            background-color: rgb(98, 176, 98);
-        }
-
-        &.not-live {
-            background-color: rgb(193, 72, 12);
-        }
-    }
-}
-</style>

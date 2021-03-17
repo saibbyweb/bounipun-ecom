@@ -78,10 +78,10 @@ export default {
     overflow: hidden;
 
     .logo {
-        width: 15%;
+        width: 12%;
 
         img {
-            width: 100%;
+            width: 80%;
         }
     }
 
@@ -90,7 +90,7 @@ export default {
         // padding-top: 10px;
 
         .menu-item {
-            padding: 2px 1%;
+            padding: 4px 1%;
             color: $dark_gray;
             border-radius: 5px;
             cursor: pointer;

@@ -11,7 +11,6 @@
     </div>
     <!-- update fabrics form -->
     <div :class="{updating: showForm}" class="update">
-
         <UpdateColor v-show="showForm" ref="updateComponent" @updated="fetchList" :model="model" @close="showForm = false" :colorCategories="colorCategories" />
 
         <AddNewItem v-if="!showForm" label="Color" @showForm="showForm = true" />
@@ -107,9 +106,7 @@ export default {
                     description,
                     status
                 }
-
             });
-
         }
     }
 }
