@@ -45,7 +45,7 @@ export default {
         }
     },
     methods: {
-        async updateDocument(model, details, editMode) {
+        async updateDocument() {
             this.loading = true;
             const result = await this.$updateDocument(this.model, this.doc, this.editMode);
             this.loading = false;

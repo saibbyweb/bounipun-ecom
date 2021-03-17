@@ -12,9 +12,9 @@ const schema = new mongoose.Schema({
         type: ObjectId,
         ref: 'collections'
     },
+    colorSource: { type: String, enum: ['bounipun-colors', 'custom'] },
     /* colors */
     colors: [{ 
-        source: { type: String, enum: ['bounipun-colors', 'custom'] }, 
         colorId: { type: ObjectId, ref: 'colors' }, 
         name: { type: String , default: '' }, 
         images: [{ _id: ObjectId, path: String, mainImage: Boolean }]

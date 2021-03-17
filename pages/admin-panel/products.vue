@@ -8,12 +8,12 @@
 
     <!-- list of products -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="list" :model="model" :headings="headings" custom_css="10% 20% 20% 10% 10% 20% 10%" @documentFetched="documentFetched" />
+        <List :list="list" :model="model" :headings="headings" custom_css="10% auto auto auto auto auto auto auto" @documentFetched="documentFetched" />
     </div>
 
     <!-- update products form -->
     <div :class="{updating: showForm}" class="update">
-        <UpdatePoduct v-show="showForm" ref="updateComponent" @updated="fetchList" :model="model" @close="showForm = false" :collections="collections" />
+        <UpdateProduct v-show="showForm" ref="updateComponent" @updated="fetchList" :model="model" @close="showForm = false" :collections="collections" :variants="variants" :fabrics="fabrics"/>
 
         <AddNewItem v-if="!showForm" label="Product" @showForm="showForm = true" />
     </div>
@@ -37,15 +37,49 @@ export default {
             }],
             selectedFilter: 'all',
             list: [],
-            headings: ['_id', 'Color Code', 'Color Name', 'Image', 'Category', 'Description', 'Status'],
+            headings: ['_id', 'StyleID', 'Name', 'Slug', 'Description', 'Type', 'Collection', 'Status'],
             collections: [],
+            variants: [],
+            fabrics: []
         }
     },
     async mounted() {
         await this.fetchBounipunCollections();
+        await this.fetchVariants();
+        await this.fetchFabrics();
         await this.fetchList();
+
     },
     methods: {
+        async fetchFabrics() {
+            const result = await this.$fetchCollection('fabrics');
+            this.fabrics = result.docs.map(({
+                _id,
+                name
+            }) => {
+                return {
+                    name,
+                    value: _id,
+                    _id,
+                    checked: false,
+                    price: ""
+                }
+            });
+        },
+        async fetchVariants() {
+            const result = await this.$fetchCollection('variants');
+            this.variants = result.docs.map(({
+                _id,
+                name
+            }) => {
+                return {
+                    name,
+                    _id,
+                    value: _id,
+                    checked: false
+                }
+            });
+        },
         async fetchBounipunCollections() {
             const result = await this.$fetchCollection('collections');
             this.collections = result.docs.map(({
@@ -60,7 +94,7 @@ export default {
             this.collections.unshift({
                 name: 'Select Collection',
                 value: ""
-            })
+            });
         },
         documentFetched(doc) {
             this.showForm = true;
@@ -91,6 +125,7 @@ export default {
             this.list = result.docs.map(({
                 _id,
                 styleId,
+                name,
                 slug,
                 description,
                 type,
@@ -98,14 +133,16 @@ export default {
                 status
             }) => {
                 /* resolve category name */
-                const foundCollection = this.collections.find(col => col.value === bounipun_collection)
+                const foundCollection = this.collections.find(col => col.value === bounipun_collection);
+
                 return {
                     _id,
-                    code,
+                    styleId,
                     name,
-                    image,
-                    bounipun_collection: foundCollection.name,
+                    slug,
                     description,
+                    type,
+                    bounipun_collection: foundCollection.name,
                     status
                 }
             });
