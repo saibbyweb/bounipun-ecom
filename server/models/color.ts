@@ -16,7 +16,7 @@ const schema = new mongoose.Schema({
 });
 
 /* model */
-const model = mongoose.model('color', schema);
+const model = mongoose.model('colors', schema);
 /* helper methods */
 export const methods = {
     register: () => { console.log('registered') },
