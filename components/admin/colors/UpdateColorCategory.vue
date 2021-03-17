@@ -49,23 +49,18 @@ export default {
             this.loading = true;
             const result = await this.$updateDocument(this.model, this.doc, this.editMode);
             this.loading = false;
-
             if (!result.updated)
                 return;
-
             this.$emit('updated');
             this.populateForm(result.doc);
             this.$flash(this);
-
         },
         async deleteDocument() {
             this.loading = true;
             const result = await this.$deleteDocument(this.model, this.doc._id);
             this.loading = false;
-
             if (!result.deleted)
                 return;
-
             this.$emit('updated');
             this.resetForm();
             this.$flash(this);

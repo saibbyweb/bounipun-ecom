@@ -29,6 +29,16 @@ export default {
                     desc: 'Manage techniques'
                 },
                 {
+                    name: 'Variant Categories',
+                    path: '/admin-panel/variantCategories',
+                    desc: 'Manage bounipun colors'
+                },
+                {
+                    name: 'Variants',
+                    path: '/admin-panel/variants',
+                    desc: 'Manage bounipun colors'
+                },
+                {
                     name: 'Categories',
                     path: '/admin-panel/collections',
                     desc: 'Add or remove list of categories'
@@ -39,15 +49,20 @@ export default {
                     desc: 'Manage list and details of various fabrics'
                 },
                 {
-                    name: 'Coupons',
-                    path: '/admin-panel/coupons',
-                    desc: 'Manage list and details of various fabrics'
+                    name: 'Colors Categories',
+                    path: '/admin-panel/colorCategories',
+                    desc: 'Manage bounipun colors'
                 },
                 {
                     name: 'Colors',
                     path: '/admin-panel/colors',
                     desc: 'Manage bounipun colors'
-                }
+                },
+                {
+                    name: 'Coupons',
+                    path: '/admin-panel/coupons',
+                    desc: 'Manage list and details of various fabrics'
+                },
             ]
         }
     }
@@ -59,7 +74,7 @@ export default {
 .header {
     // padding: 10px;
     background-color: $dark_gray;
-    height:10vh;
+    height: 10vh;
     overflow: hidden;
 
     .logo {

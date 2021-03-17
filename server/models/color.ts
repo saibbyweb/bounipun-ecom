@@ -2,14 +2,14 @@ import { mongoose, ObjectId } from "@helpers/essentials"
 
 /* schema */
 const schema = new mongoose.Schema({
-    name: String,
     code: String,
-    image: String,
-    type: {
+    name: String,
+    category: {
         type: ObjectId,
         ref: 'color_categories'
     },
     description: String,
+    image: String,
     status: Boolean
 }, {
     timestamps: true
