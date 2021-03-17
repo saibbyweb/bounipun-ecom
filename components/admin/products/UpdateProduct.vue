@@ -70,6 +70,11 @@ export default {
         variants: Array,
         fabrics: Array
     },
+    watch: {
+        selectedVariants(newVal) {
+            console.log('changed',newVal);
+        }
+    },
     computed: {
         selectedVariants() {
             return this.variants.filter(variant => variant.checked)
