@@ -38,11 +38,11 @@ export default {
                     path: '/admin-panel/variants',
                     desc: 'Manage bounipun colors'
                 },
-                {
-                    name: 'Categories',
-                    path: '/admin-panel/collections',
-                    desc: 'Add or remove list of categories'
-                },
+                // {
+                //     name: 'Categories',
+                //     path: '/admin-panel/collections',
+                //     desc: 'Add or remove list of categories'
+                // },
                 {
                     name: 'Fabrics',
                     path: '/admin-panel/fabrics',
@@ -58,11 +58,11 @@ export default {
                     path: '/admin-panel/colors',
                     desc: 'Manage bounipun colors'
                 },
-                {
-                    name: 'Coupons',
-                    path: '/admin-panel/coupons',
-                    desc: 'Manage list and details of various fabrics'
-                },
+                // {
+                //     name: 'Coupons',
+                //     path: '/admin-panel/coupons',
+                //     desc: 'Manage list and details of various fabrics'
+                // },
             ]
         }
     }

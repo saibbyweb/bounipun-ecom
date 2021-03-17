@@ -8,7 +8,7 @@
 
     <!-- list of products -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="list" :model="model" :headings="headings" custom_css="10% auto auto auto auto auto auto auto" @documentFetched="documentFetched" />
+        <List :list="list" :model="model" :headings="headings" custom_css="10% 10% 20% 20% 10% 10% 10% 10%" @documentFetched="documentFetched" />
     </div>
 
     <!-- update products form -->
@@ -100,6 +100,7 @@ export default {
             this.showForm = true;
             this.editMode = true;
             this.$refs.updateComponent.populateForm(doc);
+        
 
             if (doc.colors.length === 0)
                 return;
@@ -107,6 +108,8 @@ export default {
             /* assign images */
             setTimeout(() => {
                 this.$refs.updateComponent.populateVariants(doc.variants);
+                
+                // this.$refs.updateComponent.$refs.fabricSelector.populateFabricSelection(doc.variants);
                 let i = 0;
                 doc.colors.forEach(color => {
                     if (color.images.length === 0) {
@@ -116,8 +119,11 @@ export default {
                     // console.log(this.$refs.updateComponent.$refs);
                     this.$refs.updateComponent.$refs.imageUploader[i].assignImages(color.images);
                     i++;
-                })
-            }, 1200);
+                });
+
+               
+
+            }, 1300);
 
         },
         async fetchList() {

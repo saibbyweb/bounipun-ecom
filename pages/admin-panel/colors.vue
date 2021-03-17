@@ -105,7 +105,7 @@ export default {
                     code,
                     name,
                     image,
-                    category: foundCategory.name,
+                    category: foundCategory ? foundCategory.name : "Not available",
                     description,
                     status
                 }
