@@ -42,7 +42,7 @@
     <c-boxes :options="variants" label="Variants" />
 
     <!-- fabric selector -->
-    <fabric-selector ref="fabricSelector" :label="variant.name" v-for="(variant, index) in selectedVariantsWithFabricOptions" :key="index" :variant="variant" @fabricSelectionUpdated="fabricSelectionUpdated" />
+    <fabric-selector :ref="'fabricSelector'+variant._id" :label="variant.name" v-for="(variant, index) in selectedVariantsWithFabricOptions" :key="index" :variant="variant" @fabricSelectionUpdated="fabricSelectionUpdated" />
 
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />

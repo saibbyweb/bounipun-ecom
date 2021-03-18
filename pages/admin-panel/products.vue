@@ -129,15 +129,16 @@ export default {
                 let x = 0;
                 doc.variants.forEach(variant => {
                     if (variant.fabrics.length === 0) {
-                        x++;
                         return;
                     }
-                    console.log(this.$refs.updateComponent.$refs);
-                    this.$refs.updateComponent.$refs.fabricSelector[x].populateFabricSelection(variant);
-                    x++;
+                    // console.log(this.$refs.updateComponent.$refs);
+                    const fabricRef = `fabricSelector${variant._id}`;
+                    const fabricSelector = this.$refs.updateComponent.$refs[fabricRef];
+                    fabricSelector[0].populateFabricSelection(variant);
+              
                 });
 
-            }, 1000);
+            }, 1300);
 
         },
         async fetchList() {
