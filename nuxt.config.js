@@ -42,7 +42,7 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
    // baseUrl: process.env.BASE_URL || ''
-    baseUrl: 'https://bounipun-ecom-web.herokuapp.com'
+    baseUrl: process.env.NODE_ENV === 'development' ? process.env.BASE_URL : 'https://bounipun-ecom-web.herokuapp.com'
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
