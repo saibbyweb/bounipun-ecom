@@ -3,7 +3,7 @@
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Color </h2>
     <!-- fabric id -->
-    <InputBox v-if="editMode" label="Color ID" v-model="doc._id" />
+    <InputBox v-if="editMode" label="Color ID" v-model="doc._id" disabled/>
     <!-- bounipun color code -->
     <InputBox label="Bounipun Color Code" v-model="doc.code" />
     <!-- color name -->

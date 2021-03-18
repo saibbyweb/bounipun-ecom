@@ -100,30 +100,44 @@ export default {
             this.showForm = true;
             this.editMode = true;
             this.$refs.updateComponent.populateForm(doc);
-        
 
             if (doc.colors.length === 0)
                 return;
 
             /* assign images */
             setTimeout(() => {
-                this.$refs.updateComponent.populateVariants(doc.variants);
-                
-                // this.$refs.updateComponent.$refs.fabricSelector.populateFabricSelection(doc.variants);
                 let i = 0;
                 doc.colors.forEach(color => {
                     if (color.images.length === 0) {
                         i++;
                         return;
                     }
-                    // console.log(this.$refs.updateComponent.$refs);
                     this.$refs.updateComponent.$refs.imageUploader[i].assignImages(color.images);
                     i++;
                 });
+            }, 1000);
 
-               
+            /* need to check variants length */
+            if (doc.variants.length === 0)
+                return;
+            
+            this.$refs.updateComponent.populateVariants(doc.variants);
+            
+            /* populate variants */
+            setTimeout(() => {
 
-            }, 1300);
+                let x = 0;
+                doc.variants.forEach(variant => {
+                    if (variant.fabrics.length === 0) {
+                        x++;
+                        return;
+                    }
+                    console.log(this.$refs.updateComponent.$refs);
+                    this.$refs.updateComponent.$refs.fabricSelector[x].populateFabricSelection(variant);
+                    x++;
+                });
+
+            }, 1000);
 
         },
         async fetchList() {

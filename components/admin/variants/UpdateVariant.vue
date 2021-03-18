@@ -3,7 +3,7 @@
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Variant </h2>
     <!-- fabric id -->
-    <InputBox v-if="editMode" label="Color Category ID" v-model="doc._id" />
+    <InputBox v-if="editMode" label="Variant ID" v-model="doc._id" disabled/>
     <!-- fabric name -->
     <InputBox label="Variant Name" v-model="doc.name" />
     <!-- category -->

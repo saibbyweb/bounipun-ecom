@@ -3,7 +3,7 @@
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Product </h2>
     <!-- product id -->
-    <InputBox v-if="editMode" label="Product ID" v-model="doc._id" />
+    <InputBox v-if="editMode" label="Product ID" v-model="doc._id" disabled/>
     <!-- bounipun style id -->
     <InputBox label="Bounipun Style ID" v-model="doc.styleId" />
     <!-- product name -->
