@@ -1,5 +1,8 @@
 <template>
 <div>
+    <div class="loading center" v-if="$store.state.admin.loading">
+            <img src="/loading.gif" />
+    </div>
     <AdminHeader />
     <Nuxt />
 </div>
@@ -12,6 +15,19 @@ export default {
 </script>
 
 <style lang="scss">
+.loading {
+    position: fixed;
+    width: 100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index:2;
+    background-color: #3333335b;
+
+    img {
+        width:50px;
+    }
+}
 .crud {
     display: grid;
     grid-template-columns: 65% 35%;

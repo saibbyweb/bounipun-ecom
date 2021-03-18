@@ -11,6 +11,7 @@ const task = async promise => {
 };
 
 export default (context, inject) => {
+  const $store = context.store;
   inject("task", task);
 
   /* update document api */
@@ -22,7 +23,9 @@ export default (context, inject) => {
       editMode
     });
 
+    $store.commit("admin/setLoading", true);
     const { response, error } = await task(update);
+    $store.commit("admin/setLoading", false);
 
     /* if error occurred */
     if (error) {
@@ -44,7 +47,9 @@ export default (context, inject) => {
     });
 
     /* wait for the request to complete */
+    $store.commit("admin/setLoading", true);
     const { response, error } = await task(collectionFetch);
+    $store.commit("admin/setLoading", false);
 
     /* if error occurred */
     if (error) {
@@ -72,7 +77,9 @@ export default (context, inject) => {
     });
 
     /* wait for request to complete */
+    $store.commit("admin/setLoading", true);
     const { response, error } = await task(documentFetch);
+    $store.commit("admin/setLoading", false);
 
     if (error) {
       return result;
@@ -84,24 +91,27 @@ export default (context, inject) => {
   };
 
   /* delete document api */
-  const deleteDocument = async(model, _id) => {
-      let result = { deleted: false, doc: {} };
-      const deleteAttempt = context.$axios.$post('/deleteDocument', {
-          model,
-          _id
-      });
+  const deleteDocument = async (model, _id) => {
+    let result = { deleted: false, doc: {} };
+    const deleteAttempt = context.$axios.$post("/deleteDocument", {
+      model,
+      _id
+    });
 
-      /* wait for request to complete */
-      const { response, error } = await task(deleteAttempt);
+    /* wait for request to complete */
+    $store.commit("admin/setLoading", true);
 
-      if(error) {
-          return result;
-      }
+    const { response, error } = await task(deleteAttempt);
+    $store.commit("admin/setLoading", false);
 
-      result.deleted = true;
-      result.doc = response;
+    if (error) {
       return result;
-  }
+    }
+
+    result.deleted = true;
+    result.doc = response;
+    return result;
+  };
 
   /* notify */
   const flash = async self => {
