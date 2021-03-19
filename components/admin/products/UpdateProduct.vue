@@ -3,7 +3,7 @@
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Product </h2>
     <!-- product id -->
-    <InputBox v-if="editMode" label="Product ID" v-model="doc._id" disabled/>
+    <InputBox v-if="editMode" label="Product ID" v-model="doc._id" disabled />
     <!-- bounipun style id -->
     <InputBox label="Bounipun Style ID" v-model="doc.styleId" />
     <!-- product name -->
@@ -31,6 +31,9 @@
             <UploadImage ref="imageUploader" label="Upload Images" @updated="imageListUpdated($event, index)" />
             <!-- remove color -->
             <button class="action delete" style="font-size:9px; position: absolute; bottom:0; right:0;" @click="removeColor(index)"> Remove Color </button>
+
+            <!-- disclaimer box -->
+            <InputBox v-if="doc.colorSource === 'custom'" label="Disclaimer" v-model="color.disclaimer" />
 
             <hr width="100%" style="opacity: 0.3" />
         </div>
@@ -72,7 +75,7 @@ export default {
     },
     watch: {
         selectedVariantsWithFabricOptions(newVal) {
-            console.log('changed',newVal);
+            console.log('changed', newVal);
         }
     },
     computed: {
@@ -141,7 +144,9 @@ export default {
         populateVariants(variants) {
             console.log(variants);
             variants.forEach(variant => {
-                let match = this.variants.find(({_id}) => _id === variant._id);
+                let match = this.variants.find(({
+                    _id
+                }) => _id === variant._id);
                 match.checked = true;
             })
         },
@@ -155,7 +160,8 @@ export default {
             this.doc.colors.push({
                 _id: null,
                 name: "",
-                images: []
+                images: [],
+                disclaimer: ""
             });
         },
         /* remove color */

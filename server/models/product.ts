@@ -17,7 +17,8 @@ const schema = new mongoose.Schema({
     colors: [{ 
         _id: { type: ObjectId, ref: 'colors' }, 
         name: { type: String , default: '' }, 
-        images: [{ _id: ObjectId, path: String, mainImage: Boolean }]
+        images: [{ _id: ObjectId, path: String, mainImage: Boolean }],
+        disclaimer: { type: String, default: '' }
     }],
     /* variants */
     variants: [{
