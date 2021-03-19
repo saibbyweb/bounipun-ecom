@@ -69,11 +69,12 @@ export default (context, inject) => {
     return result;
   };
   /* fetch document api */
-  const fetchDocument = async (model, _id) => {
+  const fetchDocument = async (model, _id, requestedBy) => {
     let result = { fetched: false, doc: {} };
     const documentFetch = context.$axios.$post("/getDocument", {
       model,
-      _id
+      _id,
+      requestedBy: !requestedBy ? 'admin' : 'customer'
     });
 
     /* wait for request to complete */

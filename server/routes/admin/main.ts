@@ -22,10 +22,22 @@ router.post('/uploadImage', uploader.single('productImage'), async (req: any, re
 
 /* get document route */
 router.post('/getDocument', async (req, res) => {
-    const { model, _id } = req.body;
+    const { model, _id, requestedBy } = req.body;
     const collection = db.model(model);
-    const document = await collection.findOne({ _id })
-    console.log(document);
+    let document = await collection.findOne({ _id })
+    
+    if(requestedBy === 'customer') {
+        switch(model) {
+            /* products */
+            case 'products':
+                document =  await document.populate('bounipun_collection', 'name').execPopulate();
+                break;
+            default:
+            break;
+        }
+    }
+
+    // console.log(document);
     res.send(document);
 });
 
