@@ -3,7 +3,6 @@ import mainRoutes from "@routes/admin/main"
 const { app } = server;
 server.enableCorsIfNeeded();
 server.applyStaticMiddleware('/frontend');
-
 app.use('/', mainRoutes);
 
 /* connect to mongodb */

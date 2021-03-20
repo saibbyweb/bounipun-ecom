@@ -7,8 +7,11 @@ export default {
     },
     meta: [
       { charset: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1" },
-      { hid: "description", name: "description", content: "" },
+      {
+        name: "viewport",
+        content: "width=device-width, initial-scale=1, maximum-scale=1"
+      },
+      { hid: "description", name: "description", content: "" }
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
   },
@@ -20,7 +23,10 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{ src: '~/plugins/vue-hammer.js', mode: 'client' },'@/plugins/essentials.js'],
+  plugins: [
+    { src: "~/plugins/vue-hammer.js", mode: "client" },
+    "@/plugins/essentials.js"
+  ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -38,18 +44,28 @@ export default {
     scss: ["~/assets/scss/global.scss"]
   },
   env: {
-    baseAWSURL : "https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/"
+    baseAWSURL: "https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/"
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-   // baseUrl: process.env.BASE_URL || ''
-    baseUrl: process.env.NODE_ENV === 'development' ? process.env.BASE_URL : 'https://bounipun-ecom-web.herokuapp.com'
+    // baseUrl: process.env.BASE_URL || ''
+    baseUrl:
+      process.env.NODE_ENV === "development"
+        ? process.env.BASE_URL
+        : "https://bounipun-ecom-web.herokuapp.com"
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {
-  },
+  build: {},
+  // router: {
+  //   mode: 'hash'
+  // },
+  // buildDir: "test/frontend",
   generate: {
-    dir: 'test/frontend',
-    routes: ['/products/auto_1', '/products/auto_2', '/products/auto_3', '/products/auto_4', '/products/auto_5', '/products/auto_6', '/products/kara_1', '/products/kara_2', '/products/kara_3', '/products/kara_4']
+    dir: "test/frontend",
+    fallback: true
   }
+  // generate: {
+  //   dir: 'test/frontend',
+  //   routes: ['/products/auto_1', '/products/auto_2', '/products/auto_3', '/products/auto_4', '/products/auto_5', '/products/auto_6', '/products/kara_1', '/products/kara_2', '/products/kara_3', '/products/kara_4']
+  // }
 };

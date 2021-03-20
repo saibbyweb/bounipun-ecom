@@ -4,7 +4,7 @@
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Product </h2>
     
     <div class="center">
-    <a v-if="editMode" :href="`/products/${doc._id}`" target="_blank"> 
+    <a v-if="editMode" :href="`/products?_id=${doc._id}`" target="_blank"> 
     <span style="background:#333; text-align:center; color:white; font-size: 12px; padding:2px 4px; border-radius:2px;"> Preview Product ➚
     </span>
     </a>
