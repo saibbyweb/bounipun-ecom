@@ -110,6 +110,7 @@ export default {
             this.$emit('close');
         },
         resetForm() {
+            this.$refs.imageUploader.clearFileSelection();
             this.populateForm({
                 _id: "",
                 code: "",

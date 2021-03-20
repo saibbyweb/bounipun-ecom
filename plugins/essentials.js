@@ -40,10 +40,11 @@ export default (context, inject) => {
   };
 
   /* fetch collection api */
-  const fetchCollection = async model => {
+  const fetchCollection = async (model, requestedBy) => {
     let result = { fetched: false, docs: [] };
     const collectionFetch = context.$axios.$post("/fetchCollection", {
-      model
+      model,
+      requestedBy: !requestedBy ? 'default' : requestedBy
     });
 
     /* wait for the request to complete */
@@ -74,7 +75,7 @@ export default (context, inject) => {
     const documentFetch = context.$axios.$post("/getDocument", {
       model,
       _id,
-      requestedBy: !requestedBy ? 'admin' : 'customer'
+      requestedBy: !requestedBy ? 'default' : requestedBy
     });
 
     /* wait for request to complete */

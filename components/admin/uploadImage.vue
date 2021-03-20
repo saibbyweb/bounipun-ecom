@@ -60,6 +60,9 @@ export default {
         }
     },
     methods: {
+        clearFileSelection() {
+            this.images = [];
+        },
         assignImages(list) {
             if(!list.length > 0)
                return;

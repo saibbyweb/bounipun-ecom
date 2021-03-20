@@ -48,9 +48,25 @@ router.post('/getDocument', async (req, res) => {
 
 /* fetch collection */
 router.post('/fetchCollection', async (req, res) => {
-    const { model } = req.body;
-    const collection = db.model(model);
-    const documents = await collection.find();
+    const { model, requestedBy } = req.body;
+    console.log('Collection fetch requested: ', model);
+    const collection = db.model(model)
+    let documents: any  = collection.find();
+
+    /* check request source */
+    if (requestedBy === 'admin') {
+        switch (model) {
+            case 'colors':
+                documents = documents.populate('category','name');
+                break;
+            default:
+                break;
+        }
+    }
+    
+    /* wait for promise to resolve */
+    documents = await documents;
+
     console.log(documents);
     res.send(documents);
 })

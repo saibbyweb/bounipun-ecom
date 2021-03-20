@@ -217,7 +217,7 @@ export default {
     },
     methods: {
         async fetchProduct(slug) {
-            const result = await this.$fetchDocument('products', slug, true);
+            const result = await this.$fetchDocument('products', slug, 'customer');
             if (!result.fetched) {
                 alert('Couldnt fetch product, check url');
                 return;
