@@ -4,13 +4,16 @@
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Fabric </h2>
     <!-- fabric id -->
     <InputBox v-if="editMode" label="fabric ID" v-model="doc._id" disbaled />
+        <!-- code -->
+    <InputBox label="Code" v-model="doc.code" />
     <!-- fabric name -->
     <InputBox label="fabric Name" v-model="doc.name" />
+    <!-- info name -->
+    <InputBox label="Info #1" v-model="doc.info1" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
-
     <!-- update button -->
     <div class="center-space">
         <!-- loading bar -->
@@ -37,6 +40,8 @@ export default {
             doc: {
                 _id: "",
                 name: "",
+                code: "",
+                info1: "",
                 description: "",
                 status: false
             },
@@ -74,15 +79,21 @@ export default {
             const {
                 _id,
                 name,
+                code,
+                info1,
                 description,
                 status
             } = details;
+
             this.doc = {
                 _id,
                 name,
+                code,
+                info1,
                 description,
                 status
             };
+
             this.editMode = true;
         },
         closeForm() {
@@ -93,6 +104,8 @@ export default {
             this.populateForm({
                 _id: "",
                 name: "",
+                code: "",
+                info1: "",
                 description: "",
                 status: false
             });

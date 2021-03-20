@@ -40,7 +40,7 @@ export default {
             }],
             selectedFilter: 'all',
             list: [],
-            headings: ['_id','Fabric Name', 'Description', 'Status']
+            headings: ['_id','Fabric Name', 'Code', 'Status']
         }
     },
     mounted() {
@@ -63,8 +63,8 @@ export default {
             }
 
             /* extract list */
-            this.list = result.docs.map(({_id, name, description, status}) => {
-                return {_id, name, description, status }
+            this.list = result.docs.map(({_id, name, code, status}) => {
+                return {_id, name, code, status }
             });
         
         }

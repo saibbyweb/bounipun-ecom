@@ -2,6 +2,13 @@
 <div class="contents">
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Product </h2>
+    
+    <div class="center">
+    <a v-if="editMode" :href="`/products/${doc._id}`" target="_blank"> 
+    <span style="background:#333; text-align:center; color:white; font-size: 12px; padding:2px 4px; border-radius:2px;"> Preview Product ➚
+    </span>
+    </a>
+    </div>
     <!-- product id -->
     <InputBox v-if="editMode" label="Product ID" v-model="doc._id" disabled />
     <!-- bounipun style id -->

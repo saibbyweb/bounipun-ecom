@@ -35,7 +35,8 @@ export const server = {
         app.use(express.static(directory));
     }, enableCorsIfNeeded: () => {
         /* allow cors if development env */
-        if (environment === 'development') {
+        if (environment === 'development' || environment === 'production') {
+            console.log('CORS APPLIED')
             app.use(cors({
                 origin: true,
                 credentials: true

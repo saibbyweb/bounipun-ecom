@@ -129,7 +129,7 @@
                 <!-- fabric 1 -->
                 <div @click="activeFabricIndex = index" v-for="(fabric, index) in variants[activeVariantIndex].fabrics" :key="index" class="fabric center-col" :class="{active: activeFabricIndex === index}">
                     <span class="name"> {{ fabric.name }} </span>
-                    <!-- <span class="info"> Feather Weight </span> -->
+                    <span class="info"> {{ fabric.info1 }} </span>
                     <span class="price"> ${{ fabric.price }} </span>
                 </div>
             </div>
@@ -238,7 +238,9 @@ export default {
                     fabrics: variant.fabrics.map(fabric => {
                         return {
                             name: fabric._id.name,
-                            price: fabric.price
+                            price: fabric.price,
+                            code: fabric._id.code,
+                            info1: fabric._id.info1,
                         }
                     })
                 }
