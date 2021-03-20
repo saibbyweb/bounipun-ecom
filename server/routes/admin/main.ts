@@ -24,13 +24,18 @@ router.post('/uploadImage', uploader.single('productImage'), async (req: any, re
 router.post('/getDocument', async (req, res) => {
     const { model, _id, requestedBy } = req.body;
     const collection = db.model(model);
-    let document = await collection.findOne({ _id })
+    let document: any = await collection.findOne({ _id });
     
     if(requestedBy === 'customer') {
         switch(model) {
             /* products */
             case 'products':
-                document =  await document.populate('bounipun_collection', 'name').execPopulate();
+                document =  await document
+                .populate('bounipun_collection', 'name description')
+                .populate('variants._id', 'name info1 info2 code')
+                .populate('variants.fabrics._id')
+                .execPopulate();
+                
                 break;
             default:
             break;

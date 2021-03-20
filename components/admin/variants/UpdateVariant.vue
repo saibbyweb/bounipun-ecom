@@ -8,9 +8,17 @@
     <InputBox label="Variant Name" v-model="doc.name" />
     <!-- category -->
     <SelectBox :options="variantCategories" v-model="doc.category" label="Type of Variant" />
-    <!-- <InputBox label="Variant Category" v-model="doc.category" /> -->
+
+     <!-- code -->
+    <InputBox  v-model="doc.code" label="Bounipun Code" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
+
+    <!-- info #1 -->
+    <InputBox  v-model="doc.info1" label="Info #1" />
+
+    <!-- info #2 -->
+    <InputBox v-model="doc.info2" label="Info #2" />
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
 
@@ -42,7 +50,10 @@ export default {
                 _id: "",
                 name: "",
                 category: "",
+                code: "",
                 description: "",
+                info1: "",
+                info2: "",
                 status: false
             },
             loading: false,
@@ -83,14 +94,20 @@ export default {
                 _id,
                 name,
                 category,
+                code,
                 description,
+                info1,
+                info2,
                 status
             } = details;
             this.doc = {
                 _id,
                 name,
                 category,
+                code,
                 description,
+                info1,
+                info2,
                 status
             };
             this.editMode = true;
@@ -104,7 +121,10 @@ export default {
                 _id: "",
                 name: "",
                 category: "",
+                code: "",
                 description: "",
+                info1: "",
+                info2: "",
                 status: false
             });
             this.editMode = false;

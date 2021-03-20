@@ -2,7 +2,7 @@
 <div v-if="productFetched" class="product-page">
     <div class="product-images">
         <!-- product image slideshow container with thumbnails  -->
-        <slideshow :images="getImages(activeColorIndex)" :slideshowOptions="{thumbnails: true}" />
+        <slideshow ref="slideshow" :images="images[activeColorIndex]" :slideshowOptions="{thumbnails: true}" />
 
         <span class="collection-vertical"> Bounipun Escape </span>
 
@@ -33,16 +33,16 @@
         <!-- quantity picker and size chart-->
         <div class="quantity-and-size">
             <div class="quantity-picker">
-                <button> + </button>
+                <button @click="quantity > 1 && quantity--"> - </button>
                 <button class="qty"> {{ quantity }} </button>
-                <button> - </button>
+                <button @click="quantity < stockLimit && quantity++"> + </button>
             </div>
             <!-- <button class="clear"> Size Chart </button> -->
         </div>
         <!-- price and add to cart -->
         <div class="price-and-actions">
             <div class="price">
-                <h5> $249.00 </h5>
+                <h5> $ {{variants[activeVariantIndex].fabrics[activeFabricIndex].price }}.00 </h5>
                 <p> Taxes and Shipping Included </p>
             </div>
 
@@ -88,136 +88,94 @@
         <!-- dynamic  -->
         <div class="colors">
             <div class="color-boxes">
-                <div v-for="(color, index) in product.colors" :key="index" class="box-container center-col" @click="activeColorIndex = index">
-                    <div class="box" :style="setMainImageCSS(color.images)">
+                <div v-for="(color, index) in product.colors" :key="index" class="box-container center-col" @click="setActiveColor(index)" >
+                    <div class="box" :style="getMainImageCSS(color.images)" :class="{active: activeColorIndex === index}">
                     </div>
                     <span class="name"> {{ color.name }} </span>
                 </div>
             </div>
         </div>
 
-    </div>
+        <!-- divider -->
+        <div class="divider"> </div>
 
-    <!-- divider -->
-    <div class="divider"> </div>
-    <!-- variants available -->
-    <div class="variants-available">
-
-        <h4 class="section-heading">
-            Variants Available
-        </h4>
-        <!-- variants container -->
-        <div class="variants-container">
-            <!-- variant shawl-->
-            <div class="variant center-col">
-                <!-- image -->
-                <img class="illustration active" src="/demo_images/variants/shawl.png" />
-                <!-- variant name -->
-                <span class="name"> Shawl </span>
-                <!-- info 1 -->
-                <span class="info"> 40”x80” </span>
-                <!-- info 2 -->
-                <span class="info"> 101cm x 203cm </span>
-            </div>
-            <!-- variant square-->
-            <div class="variant center-col">
-                <!-- image -->
-                <img class="illustration" src="/demo_images/variants/square.png" />
-                <!-- variant name -->
-                <span class="name"> Square </span>
-                <!-- info 1 -->
-                <span class="info"> 52”x52” </span>
-                <!-- info 2 -->
-                <span class="info"> 101cm x 203cm </span>
-            </div>
-            <!-- variant stole-->
-            <div class="variant center-col">
-                <!-- image -->
-                <img class="illustration" src="/demo_images/variants/stole.png" />
-                <!-- variant name -->
-                <span class="name"> Stole </span>
-                <!-- info 1 -->
-                <span class="info"> 28”x80” </span>
-                <!-- info 2 -->
-                <span class="info"> 101cm x 203cm </span>
+        <!-- dynamic variant populate -->
+        <div class="variants-available">
+            <h4 class="section-heading">
+                Variants Available
+            </h4>
+            <!-- variants container -->
+            <div class="variants-container">
+                <div @click="setActiveVariant(index)" v-for="(variant, index) in variants" :key="index" class="variant center-col" >
+                    <!-- image -->
+                    <img class="illustration" :class="{active: activeVariantIndex === index}" src="/demo_images/variants/shawl.png" />
+                    <!-- variant name -->
+                    <span class="name"> {{ variant.name }} </span>
+                    <!-- info 1 -->
+                    <span class="info"> {{ variant.info1 }} </span>
+                    <!-- info 2 -->
+                    <span class="info"> {{ variant.info2 }} </span>
+                </div>
             </div>
         </div>
-    </div>
-    <!-- fabric -->
-    <div class="fabrics-available">
-        <h4 class="section-heading"> Fabric </h4>
-        <!-- fabrics available -->
-        <div class="fabrics-container">
-            <!-- fabric 1 -->
-            <div class="fabric center-col active">
-                <span class="name"> 100% Cashmere </span>
-                <span class="info"> Feather Weight </span>
-                <span class="price"> $249 </span>
-            </div>
-            <!-- fabric 2 -->
-            <div class="fabric center-col">
-                <span class="name"> 100% Cashmere </span>
-                <span class="info"> Light Weight </span>
-                <span class="price"> $399 </span>
-            </div>
 
-            <!-- fabric 3 -->
-            <div class="fabric center-col">
-                <span class="name"> 100% Cashmere </span>
-                <span class="info"> Warm Fabric </span>
-                <span class="price"> $549 </span>
-            </div>
+        <!-- dynamic fabric -->
+        <div class="fabrics-available">
+            <h4 class="section-heading"> Fabric </h4>
 
-            <!-- fabric 4 -->
-            <div class="fabric center-col">
-                <span class="name"> Wool 80% / Silk 20% </span>
-                <span class="info"> Luxe Weight </span>
-                <span class="price"> $245 </span>
-            </div>
+            <!-- fabrics available -->
+            <div class="fabrics-container">
 
-            <!-- fabric 5 -->
-            <div class="fabric center-col">
-                <span class="name"> Wool 70% / Silk 30% </span>
-                <span class="info"> Luxe Weight </span>
-                <span class="price"> $199 </span>
+                <!-- fabric 1 -->
+                <div @click="activeFabricIndex = index" v-for="(fabric, index) in variants[activeVariantIndex].fabrics" :key="index" class="fabric center-col" :class="{active: activeFabricIndex === index}">
+                    <span class="name"> {{ fabric.name }} </span>
+                    <!-- <span class="info"> Feather Weight </span> -->
+                    <span class="price"> ${{ fabric.price }} </span>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- accordions -->
-    <div class="accordions">
-        <Accordion heading="Description">
-            <p> Design Specific Details</p>
-            <br>
-            <p> Fabric Specific Details </p>
-            <br>
-            <p> Variant Specific Details</p>
-            <br>
-        </Accordion>
-        <Accordion heading="About Escape" />
-        <Accordion heading="Shipping & Returns" />
-    </div>
+        <!-- accordions -->
+        <div class="accordions">
+            <Accordion heading="Description">
+                <p> Design Specific Details</p>
+                <p> {{ product.description }} </p>
+                <br>
+                <p> Fabric Specific Details </p>
+                <br>
+                <p> Variant Specific Details</p>
+                <br>
+            </Accordion>
 
-    <!-- related products -->
-    <div class="related-products">
-        <h4 class="section-heading"> Related Products </h4>
-        <div class="scrollable-list">
-            <div class="list">
-                <product-card :details="{name: 'Khatamband Cashmere',
+            <!-- about collection -->
+            <Accordion :heading="`About ${product.bounipun_collection.name}`">
+                <p> {{ product.bounipun_collection.description }} </p>
+            </Accordion>
+
+            <Accordion heading="Shipping & Returns" />
+        </div>
+
+        <!-- related products -->
+        <div class="related-products">
+            <h4 class="section-heading"> Related Products </h4>
+            <div class="scrollable-list">
+                <div class="list">
+                    <product-card :details="{name: 'Khatamband Cashmere',
                 collection: 'Bounipun Karakul',
                 price: 'INR 20000'}" product="auto_2" :variants="{shawl: true, stole: true}" />
 
-                <product-card :details="{name: 'Kani Shawl',
+                    <product-card :details="{name: 'Kani Shawl',
                 collection: 'Bounipun Adore',
                 price: 'INR 15000'}" product="auto_5" :variants="{square: true, stole: true}" />
 
-                <product-card product="kara_3" :variants="{stole: true}" />
+                    <product-card product="kara_3" :variants="{stole: true}" />
+                </div>
             </div>
         </div>
+
+        <!-- <inner-image-zoom class="product-image" :src="images[0]" :zoomSrc="images[0]" /> -->
+
     </div>
-
-    <!-- <inner-image-zoom class="product-image" :src="images[0]" :zoomSrc="images[0]" /> -->
-
 </div>
 </template>
 
@@ -230,40 +188,9 @@ export default {
         'inner-image-zoom': InnerImageZoom
     },
     mounted() {
-        // const param = this.$route.params.collection;
-        // const prod = param.split("_");
-        // const collection = prod[0];
-        // const prodId = prod[1];
-        // const baseImagePath = `/demo_images/products/${collection}/${collection}_prod${prodId}_`;
-        // const images = []
-        // for (let i = 1; i < 6; i++) {
-        //     const imagePath = baseImagePath + i + '.png';
-        //     images.push(imagePath);
-        // }
-        // this.images = images;
-        // this.showSlideshow = true;
         const slug = this.$route.params.slug;
         this.fetchProduct(slug);
     },
-    // asyncData({
-    //     params,
-    //     route
-    // }) {
-    //     const param = params.collection;
-    //     const prod = param.split("_");
-    //     const collection = prod[0];
-    //     const prodId = prod[1];
-    //     const baseImagePath = `/demo_images/products/${collection}/${collection}_prod${prodId}_`;
-    //     const images = []
-    //     for (let i = 1; i < 6; i++) {
-    //         const imagePath = baseImagePath + i + '.png';
-    //         images.push(imagePath);
-    //     }
-    //     return {
-    //         images,
-    //         showSlideshow: true
-    //     }
-    // },
     data() {
         return {
             showSlideshow: false,
@@ -273,13 +200,18 @@ export default {
                 centerMode: true,
                 autoplay: false
             },
+            /* images with absolute paths */
             images: [],
             slideMargin: 0,
             quantity: 1,
             addedToWishlist: false,
             product: {},
-            activeColorIndex: 1,
-            productFetched: false
+            variants: [],
+            activeColorIndex: 0,
+            activeVariantIndex: 0,
+            activeFabricIndex: 0,
+            productFetched: false,
+            stockLimit: 5
         }
     },
     methods: {
@@ -293,28 +225,47 @@ export default {
             console.log(result);
             this.product = result.doc;
             this.productFetched = true;
-            // this.setImages(this.activeColorIndex);
-            // this.showSlideshow = true;
+            this.setImages();
+            this.setVariants();
         },
-        setImages(index) {
-            this.images = this.product.colors[index].images.map(fileName => process.env.baseAWSURL + fileName.path);
-
-            this.showSlideshow = true;
+        setVariants() {
+            this.variants = this.product.variants.map(variant => {
+                return {
+                    name: variant._id.name,
+                    info1: variant._id.info1,
+                    info2: variant._id.info2,
+                    code: variant._id.code,
+                    fabrics: variant.fabrics.map(fabric => {
+                        return {
+                            name: fabric._id.name,
+                            price: fabric.price
+                        }
+                    })
+                }
+            });
+            console.log(this.variants);
         },
-        getImages(index) {
-           const images = this.product.colors[index].images.map(fileName => process.env.baseAWSURL + fileName.path);
-
-            this.showSlideshow = true;
-            return images;
+        setActiveVariant(index) {
+            this.activeFabricIndex = 0;
+            this.activeVariantIndex = index;
         },
-        setMainImageCSS(images) {
+        setActiveColor(index) {
+            this.activeColorIndex = index;
+            this.$refs.slideshow.setActiveImage(0);
+        },
+        setImages() {
+            this.product.colors.forEach(color => {
+                const images = color.images.map(image => process.env.baseAWSURL + image.path);
+                this.images.push(images);
+            })
+        },
+        getMainImageCSS(images) {
             let mainImage = images.find(image => image.main === true);
             mainImage = mainImage === undefined ? images[0] : mainImage;;
             const mainImagePath = process.env.baseAWSURL + mainImage.path;
             const mainImageCSS = {
                 backgroundImage: `url(${mainImagePath})`
             };
-            console.log(mainImageCSS);
             return mainImageCSS;
         }
     }
@@ -417,11 +368,14 @@ export default {
     /* quantity and size */
     .quantity-and-size {
         margin-top: 10px;
+        
         display: flex;
 
         .quantity-picker {
             display: flex;
+            justify-content: space-around;
             border: 1px solid #919191;
+            width: 80px;
 
             button {
                 background: transparent;
@@ -441,7 +395,7 @@ export default {
                 }
 
                 &.qty {
-                    // width: 50%;
+                    width: 50%;
                     padding: 0 15px;
                 }
             }

@@ -36,7 +36,7 @@ export default {
             }],
             selectedFilter: 'all',
             list: [],
-            headings: ['_id','Variant Name', 'Category','Description', 'Status'],
+            headings: ['_id','Variant Name', 'Category','Code', 'Status'],
             variantCategories:[],
         }
     },
@@ -68,10 +68,10 @@ export default {
             }
 
             /* extract list */
-            this.list = result.docs.map(({_id, name, category,description, status}) => {
+            this.list = result.docs.map(({_id, name, category,code, status}) => {
                 /* resolve category name */
                 const foundCategory = this.variantCategories.find(cat => cat.value === category)
-                return {_id, name, category: foundCategory.name, description, status }
+                return {_id, name, category: foundCategory.name, code, status }
 
             });
         

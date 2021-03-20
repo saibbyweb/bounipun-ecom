@@ -7,7 +7,10 @@ const schema = new mongoose.Schema({
         type: ObjectId,
         ref: 'variant_categories'
     },
-    description: String,
+    code: { type: String, default: ''},
+    description: { type: String, default: ''},
+    info1: { type: String, default: ''}, 
+    info2: { type: String, default: ''},
     status: Boolean
 }, {
     timestamps: true
