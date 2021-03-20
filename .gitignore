@@ -72,7 +72,7 @@ typings/
 dist
 server/frontend
 uploads
-products
+/products
 
 # vuepress build output
 .vuepress/dist
