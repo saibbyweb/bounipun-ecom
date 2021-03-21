@@ -1,6 +1,6 @@
 import { server, mongoose } from "@helpers/essentials";
 import { uploader, methods as imageHelper } from "@models/imageUpload"
-import { register } from "@models";
+import { colorCategory, register } from "@models";
 register();
 
 const db = mongoose.connection;
@@ -49,7 +49,7 @@ router.post('/getDocument', async (req, res) => {
 /* fetch collection */
 router.post('/fetchCollection', async (req, res) => {
     const { model, requestedBy } = req.body;
-    console.log('Collection fetch requested: ', model);
+    // console.log('Collection fetch requested: ', model);
     const collection = db.model(model)
     let documents: any  = collection.find();
 
@@ -57,7 +57,20 @@ router.post('/fetchCollection', async (req, res) => {
     if (requestedBy === 'admin') {
         switch (model) {
             case 'colors':
-                documents = documents.populate('category','name');
+                documents = await documents.populate('category','name');
+                /* get color categories */
+                const colorCategories = await db.model('color_categories').find();
+                /* grouped data array */
+                let groupedData = {};
+                colorCategories.forEach((category:any) => {
+                    /* find all colors under this category */
+                    const colors = documents.filter(color => {
+                        return color.category._id.toString() === category._id.toString()
+                    });
+                    groupedData[category.name] = colors;
+                });
+                res.send(groupedData);
+                return;
                 break;
             default:
                 break;
@@ -67,7 +80,7 @@ router.post('/fetchCollection', async (req, res) => {
     /* wait for promise to resolve */
     documents = await documents;
 
-    console.log(documents);
+    console.log('sending DEFAULT RESPONSE');
     res.send(documents);
 })
 

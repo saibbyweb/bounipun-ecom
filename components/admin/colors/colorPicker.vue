@@ -1,7 +1,21 @@
 <template>
-    <div class="color-picker">
-        <h2 @click="fetchColors"> COLOR PICKER </h2>
+<div class="color-picker">
+    <h2 class="heading" @click="fetchColors"> Bounipun Colors </h2>
+    <!-- populate colors -->
+    <div class="color-data" v-for="(category, index) in allColors" :key="index">
+        <!-- category name -->
+        <span class="category-name"> {{ category.name }} </span>
+        <!-- color list -->
+        <div class="color-list">
+            <div @click="toggleSelect(color._id)" v-for="color in category.colors" :key="color._id" class="color-box center-col">
+                <img v-if="isSelected(color._id)" class="selected" src="/icons/green_check.png" />
+                <div style="height:40px; width:40px;" :style="{backgroundImage: `url(${color.image})`}" class="shadow box" :class="{active: isSelected(color._id)}"> </div>
+                <span class="color-name"> {{ color.name }} </span>
+            </div>
+        </div>
+        <hr align="left" />
     </div>
+</div>
 </template>
 
 <script>
@@ -10,7 +24,8 @@ export default {
         return {
             loading: false,
             model: 'colors',
-            allColors: []
+            allColors: [],
+            selectedColors: []
         }
     },
     mounted() {
@@ -21,8 +36,105 @@ export default {
             this.loading = true;
             const result = await this.$fetchCollection(this.model, 'admin');
             this.loading = false;
-            console.log(result,'colors fetched');
+            const categories = Object.keys(result.docs)
+
+            categories.forEach(catgeory => {
+                this.allColors.push({
+                    name: catgeory,
+                    colors: result.docs[catgeory].map(color => {
+                        return {
+                            _id: color._id,
+                            name: color.name,
+                            image: process.env.baseAWSURL + color.image
+                        }
+                    })
+                })
+            })
+
+            console.log(this.colorData, 'colors fetched');
+        },
+        isSelected(colorId) {
+            return this.selectedColors.findIndex(_id => _id === colorId) !== -1
+        },
+        toggleSelect(colorId) {
+            /* check if already exists */
+            let selectedColors = this.selectedColors;
+            const foundIndex = selectedColors.findIndex(_id => _id === colorId);
+            /* if exists */
+            if (foundIndex !== -1) {
+                selectedColors.splice(foundIndex, 1);
+                console.log('color removed')
+                return;
+            }
+            console.log('new color pushed')
+
+            selectedColors.push(colorId);
+            this.selectedColors = selectedColors;
+
         }
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.color-picker {
+    .heading {
+        font-size: 15px;
+    }
+
+    .color-data {
+
+        .category-name {
+            font-size: 13px;
+        }
+
+        .color-list {
+            display: flex;
+
+            .color-box {
+                margin: 5px;
+                cursor: pointer;
+                transition: all 0.2s ease-in-out;
+                position: relative;
+
+                * {
+                    transition: all 0.2s ease-in-out;
+                }
+
+                /* active box */
+                .active {
+                    border: 1px solid #348877;
+                }
+
+                /* actual chip box */
+                .box {
+                    border-radius: 3px;
+                    &:hover {
+                        transform: scale(1.05);
+                        
+                    }
+                }
+
+                .selected {
+                    position: absolute;
+                    top: -6%;
+                    right: -1%;
+                    width: 40%;
+                    z-index: 2;
+                }
+
+                .color-name {
+                    margin-top: 3px;
+                    font-size: 10px;
+                }
+            }
+
+        }
+
+        hr {
+            width: 90%;
+            opacity: 0.3;
+        }
+    }
+}
+</style>

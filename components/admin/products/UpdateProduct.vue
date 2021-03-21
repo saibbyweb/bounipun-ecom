@@ -28,7 +28,7 @@
     <SelectBox :options="colorSourceTypes" v-model="doc.colorSource" label="Select Color Source" />
     
     <!-- bounipun color picker -->
-    <ColorPicker />
+    <ColorPicker v-show="doc.colorSource === 'bounipun-colors'"/>
 
     <!-- add colors -->
     <div v-show="doc.colorSource !== ''" class="colors" style="width:100%; position:relative;">
