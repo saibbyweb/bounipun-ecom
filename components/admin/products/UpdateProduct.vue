@@ -28,13 +28,14 @@
     <SelectBox :options="colorSourceTypes" v-model="doc.colorSource" label="Select Color Source" />
     
     <!-- bounipun color picker -->
-    <ColorPicker v-show="doc.colorSource === 'bounipun-colors'"/>
+    <ColorPicker v-show="doc.colorSource === 'bounipun-colors'" @colorAdded=""/>
 
     <!-- add colors -->
     <div v-show="doc.colorSource !== ''" class="colors" style="width:100%; position:relative;">
 
         <div style="position:relative;" v-for="(color, index) in doc.colors" :key="index">
             <!-- color selector (if color source is bounipun) -->
+
             <!-- color name -->
             <InputBox v-if="doc.colorSource === 'custom'" label="New Color Name" v-model="color.name" />
             <!-- color images -->
@@ -48,7 +49,7 @@
             <hr width="100%" style="opacity: 0.3" />
         </div>
 
-        <button class="action" style="font-size:9px; position: absolute; bottom: -30px;  right:10px;" @click="addNewColor"> Add Color </button>
+        <button class="action" style="font-size:9px; position: absolute; bottom: -30px;  right:10px;" @click="addNewColor(null,'')"> Add Color </button>
     </div>
 
     <!-- variations (checkboxes) -->
@@ -166,10 +167,10 @@ export default {
             this.doc.colors[index].images = list;
         },
         /* add new color */
-        addNewColor() {
+        addNewColor(_id,name) {
             this.doc.colors.push({
-                _id: null,
-                name: "",
+                _id,
+                name,
                 images: [],
                 disclaimer: ""
             });

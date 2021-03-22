@@ -7,7 +7,7 @@
         <span class="category-name"> {{ category.name }} </span>
         <!-- color list -->
         <div class="color-list">
-            <div @click="toggleSelect(color._id)" v-for="color in category.colors" :key="color._id" class="color-box center-col">
+            <div @click="toggleSelect(color)" v-for="color in category.colors" :key="color._id" class="color-box center-col">
                 <img v-if="isSelected(color._id)" class="selected" src="/icons/green_check.png" />
                 <div style="height:40px; width:40px;" :style="{backgroundImage: `url(${color.image})`}" class="shadow box" :class="{active: isSelected(color._id)}"> </div>
                 <span class="color-name"> {{ color.name }} </span>
@@ -54,22 +54,31 @@ export default {
             console.log(this.colorData, 'colors fetched');
         },
         isSelected(colorId) {
-            return this.selectedColors.findIndex(_id => _id === colorId) !== -1
+            return this.selectedColors.findIndex(color => color._id === colorId) !== -1
         },
-        toggleSelect(colorId) {
+        toggleSelect(color) {
             /* check if already exists */
             let selectedColors = this.selectedColors;
-            const foundIndex = selectedColors.findIndex(_id => _id === colorId);
+            const foundIndex = selectedColors.findIndex(col => col._id === color._id);
+
             /* if exists */
             if (foundIndex !== -1) {
                 selectedColors.splice(foundIndex, 1);
                 console.log('color removed')
                 return;
             }
+
             console.log('new color pushed')
 
-            selectedColors.push(colorId);
+            /* selected color */
+            const selected = {
+                _id: color._id,
+                name: color.name
+            };
+
+            selectedColors.push(selected);
             this.selectedColors = selectedColors;
+            this.$emit('colorAdded', selected);
 
         }
     }
@@ -109,9 +118,10 @@ export default {
                 /* actual chip box */
                 .box {
                     border-radius: 3px;
+
                     &:hover {
                         transform: scale(1.05);
-                        
+
                     }
                 }
 
