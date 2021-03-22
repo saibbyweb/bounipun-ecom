@@ -42,6 +42,28 @@ router.post('/getDocument', async (req, res) => {
         }
     }
 
+    if(requestedBy === 'admin') {
+        console.log('requested by admin',model);
+        switch(model) {
+            /* products */
+            case 'products':
+                document = await document
+                .populate('colors._id','name')
+                .execPopulate();
+
+                /* update color name for color list */
+                document.colors.forEach(color => {
+                    color.name = color._id !== null ? color._id.name : color.name;
+                    
+                    color._id = color._id === null ? null : color._id._id;
+                });
+
+                break;
+            default:
+                break;
+        }
+    }
+
     // console.log(document);
     res.send(document);
 });

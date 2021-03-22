@@ -97,12 +97,21 @@ export default {
             });
         },
         documentFetched(doc) {
+            console.log(doc, 'product fetched')
+            const updateComponent = this.$refs.updateComponent;
+
             this.showForm = true;
             this.editMode = true;
-            this.$refs.updateComponent.populateForm(doc);
+            updateComponent.populateForm(doc);
 
             if (doc.colors.length === 0)
                 return;
+
+            /* if color source is bounipun colors */
+            if(doc.colorSource === 'bounipun-colors') {
+                console.log('I SHOULD UPDATED THE COLOR LIST')
+                updateComponent.$refs.colorPicker.populateColorSelection(doc.colors);
+            }
 
             /* assign images */
             setTimeout(() => {
@@ -112,7 +121,7 @@ export default {
                         i++;
                         return;
                     }
-                    this.$refs.updateComponent.$refs.imageUploader[i].assignImages(color.images);
+                    updateComponent.$refs.imageUploader[i].assignImages(color.images);
                     i++;
                 });
             }, 1000);
@@ -120,10 +129,10 @@ export default {
             /* need to check variants length */
             if (doc.variants.length === 0)
                 return;
-            
-            this.$refs.updateComponent.populateVariants(doc.variants);
-            
             /* populate variants */
+            updateComponent.populateVariants(doc.variants);
+            
+            /* populate fabrics */
             setTimeout(() => {
 
                 let x = 0;
@@ -131,9 +140,8 @@ export default {
                     if (variant.fabrics.length === 0) {
                         return;
                     }
-                    // console.log(this.$refs.updateComponent.$refs);
                     const fabricRef = `fabricSelector${variant._id}`;
-                    const fabricSelector = this.$refs.updateComponent.$refs[fabricRef];
+                    const fabricSelector = updateComponent.$refs[fabricRef];
                     fabricSelector[0].populateFabricSelection(variant);
               
                 });

@@ -28,7 +28,7 @@
     <SelectBox :options="colorSourceTypes" v-model="doc.colorSource" label="Select Color Source" />
     
     <!-- bounipun color picker -->
-    <ColorPicker v-show="doc.colorSource === 'bounipun-colors'" @colorAdded=""/>
+    <ColorPicker ref="colorPicker" v-show="doc.colorSource === 'bounipun-colors'" @colorAdded="addNewColor" @colorRemoved="removeColor" />
 
     <!-- add colors -->
     <div v-show="doc.colorSource !== ''" class="colors" style="width:100%; position:relative;">
@@ -37,7 +37,8 @@
             <!-- color selector (if color source is bounipun) -->
 
             <!-- color name -->
-            <InputBox v-if="doc.colorSource === 'custom'" label="New Color Name" v-model="color.name" />
+            <InputBox label="New Color Name" v-model="color.name" :disabled="bounipunColors"/>
+
             <!-- color images -->
             <UploadImage ref="imageUploader" label="Upload Images" @updated="imageListUpdated($event, index)" />
             <!-- remove color -->
@@ -49,7 +50,7 @@
             <hr width="100%" style="opacity: 0.3" />
         </div>
 
-        <button class="action" style="font-size:9px; position: absolute; bottom: -30px;  right:10px;" @click="addNewColor(null,'')"> Add Color </button>
+        <button v-if="doc.colorSource !== 'bounipun-colors'" class="action" style="font-size:9px; position: absolute; bottom: -30px;  right:10px;" @click="addNewColor({_id: null, name:''})"> Add Color </button>
     </div>
 
     <!-- variations (checkboxes) -->
@@ -86,10 +87,13 @@ export default {
     },
     watch: {
         selectedVariantsWithFabricOptions(newVal) {
-            console.log('changed', newVal);
+            // console.log('changed', newVal);
         }
     },
     computed: {
+        bounipunColors() {
+            return this.doc.colorSource === 'bounipun-colors';
+        },
         selectedVariants() {
             return this.variants.filter(variant => variant.checked)
         },
@@ -153,7 +157,7 @@ export default {
     methods: {
         /* populateVariant */
         populateVariants(variants) {
-            console.log(variants);
+            // console.log(variants);
             variants.forEach(variant => {
                 let match = this.variants.find(({
                     _id
@@ -163,17 +167,21 @@ export default {
         },
         /* image list updated */
         imageListUpdated(list, index) {
-            console.log(list, index);
+            // console.log(list, index);
             this.doc.colors[index].images = list;
         },
         /* add new color */
-        addNewColor(_id,name) {
+        addNewColor(color) {
+            // console.log(color);
             this.doc.colors.push({
-                _id,
-                name,
+                _id: color._id,
+                name: color.name,
                 images: [],
                 disclaimer: ""
             });
+        },
+        colorDeselected(color) {
+            
         },
         /* remove color */
         removeColor(key) {
@@ -199,10 +207,10 @@ export default {
 
             this.doc.variants = this.doc.variants.filter(variant => variant.fabrics.length !== 0)
 
-            console.log(this.doc.variants);
+            // console.log(this.doc.variants);
         },
         async updateDocument() {
-            console.log(this.doc);
+            // console.log(this.doc);
             // return;
             // return;
 

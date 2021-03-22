@@ -42,7 +42,7 @@ export default {
     },
     methods: {
         populateFabricSelection(variant) {
-            console.log(variant.fabrics, 'hiii there');
+            // console.log(variant.fabrics, 'hiii there');
             const selectedFabrics = variant.fabrics
 
             const preselectList = this.localVariant.fabrics.map(fabric => {
@@ -57,7 +57,7 @@ export default {
 
             });
 
-            console.log(preselectList);
+            // console.log(preselectList);
         },
         updateSelectionList() {
             this.$emit('fabricSelectionUpdated', {

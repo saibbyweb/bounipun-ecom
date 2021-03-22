@@ -70,7 +70,7 @@ export default {
             this.images = [];
             const baseAWSURL = "https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/";
             list.forEach((image) => {
-                console.log(image);
+                // console.log(image);
                 const imageObject = {
                     /* actual file */
                     file: null,
@@ -158,7 +158,7 @@ export default {
                 return;
             }
             /* response from server */
-            console.log(response);
+            // console.log(response);
             /* update image object */
             this.updateImageObject(imageObject, response);
         },
@@ -182,7 +182,7 @@ export default {
         },
         setMainImage(key, value) {
             /* if value set to true, turn all other main image flags off */
-            console.log('value was changed', value)
+            // console.log('value was changed', value)
             if (value) {
                 for (let i = 0; i < this.images.length; i++) {
                     if (i !== key)

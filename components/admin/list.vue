@@ -66,7 +66,7 @@ export default {
             this.selected = index;
             this.loading = true;
             
-            const result = await this.$fetchDocument(this.model, item._id);
+            const result = await this.$fetchDocument(this.model, item._id,'admin');
             this.loading = false;
 
             if (!result.fetched) {
