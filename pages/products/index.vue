@@ -263,6 +263,8 @@ export default {
             })
         },
         getMainImageCSS(images) {
+            if(images.length === 0)
+                return;
             let mainImage = images.find(image => image.main === true);
             mainImage = mainImage === undefined ? images[0] : mainImage;;
             const mainImagePath = process.env.baseAWSURL + mainImage.path;
@@ -458,6 +460,7 @@ export default {
     /* colors */
     .colors {
         margin-top: 20px;
+        
 
         .category-heading {
             font-family: $font_1_semibold;
@@ -470,7 +473,7 @@ export default {
 
         .color-boxes {
             display: flex;
-
+            flex-wrap: wrap;
             .box-container {
                 margin: 5px;
 

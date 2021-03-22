@@ -63,9 +63,11 @@ export default {
 
             /* if exists */
             if (foundIndex !== -1) {
+                const deselectedColor = selectedColors[foundIndex];
                 selectedColors.splice(foundIndex, 1);
-                this.$emit('colorRemoved', selected);
-                /* console.log('color removed') */;
+                this.$emit('colorRemoved', deselectedColor);
+                /* console.log('color removed') */
+                ;
                 return;
             }
 
@@ -80,7 +82,13 @@ export default {
             selectedColors.push(selected);
             this.selectedColors = selectedColors;
             this.$emit('colorAdded', selected);
-
+        },
+        deselectColor(color) {
+            const foundIndex = this.selectedColors.findIndex(col => col._id === color._id);
+            if (foundIndex !== -1) {
+                // const deselectedColor = selectedColors[foundIndex];
+                this.selectedColors.splice(foundIndex, 1);
+            }
         },
         populateColorSelection(list) {
             this.selectedColors = list.map(color => {

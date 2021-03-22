@@ -28,12 +28,12 @@
     <SelectBox :options="colorSourceTypes" v-model="doc.colorSource" label="Select Color Source" />
     
     <!-- bounipun color picker -->
-    <ColorPicker ref="colorPicker" v-show="doc.colorSource === 'bounipun-colors'" @colorAdded="addNewColor" @colorRemoved="removeColor" />
+    <ColorPicker ref="colorPicker" v-show="doc.colorSource === 'bounipun-colors'" @colorAdded="addNewColor" @colorRemoved="colorDeselected" />
 
     <!-- add colors -->
     <div v-show="doc.colorSource !== ''" class="colors" style="width:100%; position:relative;">
 
-        <div style="position:relative;" v-for="(color, index) in doc.colors" :key="index">
+        <div style="position:relative;" v-for="(color, index) in doc.colors" :key="color.key">
             <!-- color selector (if color source is bounipun) -->
 
             <!-- color name -->
@@ -42,7 +42,7 @@
             <!-- color images -->
             <UploadImage ref="imageUploader" label="Upload Images" @updated="imageListUpdated($event, index)" />
             <!-- remove color -->
-            <button class="action delete" style="font-size:9px; position: absolute; bottom:0; right:0;" @click="removeColor(index)"> Remove Color </button>
+            <button class="action delete" style="font-size:9px; position: absolute; bottom:0; right:0;" @click="removeColor(index, true)"> Remove Color </button>
 
             <!-- disclaimer box -->
             <InputBox v-if="doc.colorSource === 'custom'" label="Disclaimer" v-model="color.disclaimer" />
@@ -78,6 +78,8 @@
 </template>
 
 <script>
+import { v4 as uuidv4 } from "uuid";
+
 export default {
     props: {
         model: String,
@@ -122,7 +124,7 @@ export default {
                 colorSource: "",
                 variants: [],
                 colors: [],
-                status: false
+                status: false,
             },
             types: [{
                     name: 'Select Type',
@@ -177,17 +179,26 @@ export default {
                 _id: color._id,
                 name: color.name,
                 images: [],
-                disclaimer: ""
+                disclaimer: "",
+                key: uuidv4()
             });
         },
         colorDeselected(color) {
-            
+            /* find key of the deselected color */
+            const foundIndex = this.doc.colors.findIndex(col => col._id === color._id);
+            console.log(color, foundIndex,'DESELECTED');
+            /* remove color */
+            this.removeColor(foundIndex);
         },
         /* remove color */
-        removeColor(key) {
-            if (this.doc.colors.length === 1)
-                return;
+        removeColor(key, direct=false) {
+            // if (this.doc.colors.length === 1)
+            //     return;
+            const tobeRemoved = this.doc.colors[key];
             this.doc.colors.splice(key, 1);
+            if(this.bounipunColors && direct)
+                this.$refs.colorPicker.deselectColor(tobeRemoved);
+
         },
         /* fabric selection */
         fabricSelectionUpdated(variant) {
