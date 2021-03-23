@@ -2,7 +2,7 @@
 <div class="checkboxes-container fabric-selctor">
     <label class="label"> {{ label }} </label>
     <div class="checkboxes center">
-        <div class="checkbox center-col" v-for="(option, index) in localVariant.fabrics" :key="index">
+        <div class="checkbox center-col" v-for="(option,index) in localVariant.fabrics" :key="index">
             <!-- fabric selector -->
             <input class="check-input" type="checkbox" :value="option.value" v-model="option.checked" />
             <label class="label"> {{ option.name }} </label>
@@ -70,6 +70,15 @@ export default {
     data() {
         return {
             localVariant: JSON.parse(JSON.stringify(this.variant))
+        }
+    },
+    computed: {
+        localVariantx() {
+            /* filter fabrics according to variant */
+            let localCopy = JSON.parse(JSON.stringify(this.variant))
+            const fabrics = localCopy.fabrics.filter(fabric => fabric.code.startsWith(localCopy.code))
+            localCopy.fabrics = fabrics;
+            return localCopy
         }
     }
 }

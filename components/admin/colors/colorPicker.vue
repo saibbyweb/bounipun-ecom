@@ -67,7 +67,6 @@ export default {
                 selectedColors.splice(foundIndex, 1);
                 this.$emit('colorRemoved', deselectedColor);
                 /* console.log('color removed') */
-                ;
                 return;
             }
 

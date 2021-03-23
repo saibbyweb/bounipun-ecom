@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { v4 as uuidv4 } from "uuid";
 export default {
     layout: 'admin',
     data() {
@@ -55,11 +56,13 @@ export default {
             const result = await this.$fetchCollection('fabrics');
             this.fabrics = result.docs.map(({
                 _id,
-                name
+                name,
+                code,
             }) => {
                 return {
                     name,
                     value: _id,
+                    code,
                     _id,
                     checked: false,
                     price: ""
@@ -70,11 +73,13 @@ export default {
             const result = await this.$fetchCollection('variants');
             this.variants = result.docs.map(({
                 _id,
-                name
+                name,
+                code
             }) => {
                 return {
                     name,
                     _id,
+                    code,
                     value: _id,
                     checked: false
                 }
@@ -106,10 +111,12 @@ export default {
 
             if (doc.colors.length === 0)
                 return;
+            
+            /* add unique key to all colors */
+            doc.colors.forEach(color => color.key = uuidv4())
 
             /* if color source is bounipun colors */
             if(doc.colorSource === 'bounipun-colors') {
-                console.log('I SHOULD UPDATED THE COLOR LIST')
                 updateComponent.$refs.colorPicker.populateColorSelection(doc.colors);
             }
 

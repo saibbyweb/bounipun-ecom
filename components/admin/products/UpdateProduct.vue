@@ -57,7 +57,7 @@
     <c-boxes :options="variants" label="Variants" />
 
     <!-- fabric selector -->
-    <fabric-selector :ref="'fabricSelector'+variant._id" :label="variant.name" v-for="(variant, index) in selectedVariantsWithFabricOptions" :key="index" :variant="variant" @fabricSelectionUpdated="fabricSelectionUpdated" />
+    <fabric-selector :ref="'fabricSelector'+variant._id" :label="variant.name" v-for="(variant, index) in selectedVariantsWithFabricOptions" :key="variant._id" :variant="variant" @fabricSelectionUpdated="fabricSelectionUpdated" />
 
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
@@ -104,7 +104,9 @@ export default {
                 return {
                     _id: variant._id,
                     name: variant.name,
-                    fabrics: this.fabrics
+                    code: variant.code,
+                    fabrics: this.fabrics.filter(fabric => fabric.code.startsWith(variant.code))
+                    //fabrics: this.fabrics
                 }
             })
         }
