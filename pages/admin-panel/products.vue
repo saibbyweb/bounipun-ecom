@@ -13,7 +13,7 @@
 
     <!-- update products form -->
     <div :class="{updating: showForm}" class="update">
-        <UpdateProduct v-show="showForm" ref="updateComponent" @updated="fetchList" :model="model" @close="showForm = false" :collections="collections" :variants="variants" :fabrics="fabrics" />
+        <UpdateProduct v-if="showForm" ref="updateComponent" @updated="fetchList" :model="model" @close="showForm = false" :collections="collections" :variants="variants" :fabrics="fabrics" @resetVariants="resetVariants" />
 
         <AddNewItem v-if="!showForm" label="Product" @showForm="showForm = true" />
     </div>
@@ -21,7 +21,9 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from "uuid";
+import {
+    v4 as uuidv4
+} from "uuid";
 export default {
     layout: 'admin',
     data() {
@@ -58,11 +60,13 @@ export default {
                 _id,
                 name,
                 code,
+                info1,
             }) => {
                 return {
                     name,
                     value: _id,
                     code,
+                    info1,
                     _id,
                     checked: false,
                     price: ""
@@ -85,6 +89,9 @@ export default {
                 }
             });
         },
+        resetVariants() {
+            this.variants.forEach(variant => variant.checked = false);
+        },
         async fetchBounipunCollections() {
             const result = await this.$fetchCollection('collections');
             this.collections = result.docs.map(({
@@ -103,20 +110,26 @@ export default {
         },
         documentFetched(doc) {
             console.log(doc, 'product fetched')
-            const updateComponent = this.$refs.updateComponent;
+
 
             this.showForm = true;
             this.editMode = true;
+            setTimeout(() => this.populateForm(doc), 1500);
+            // this.populateForm(doc, updateComponent);
+        },
+        /* populate form */
+        populateForm(doc) {
+            const updateComponent = this.$refs.updateComponent;
             updateComponent.populateForm(doc);
 
             if (doc.colors.length === 0)
                 return;
-            
+
             /* add unique key to all colors */
             doc.colors.forEach(color => color.key = uuidv4())
 
             /* if color source is bounipun colors */
-            if(doc.colorSource === 'bounipun-colors') {
+            if (doc.colorSource === 'bounipun-colors') {
                 updateComponent.$refs.colorPicker.populateColorSelection(doc.colors);
             }
 
@@ -131,14 +144,14 @@ export default {
                     updateComponent.$refs.imageUploader[i].assignImages(color.images);
                     i++;
                 });
-            }, 1000);
+            }, 10);
 
             /* need to check variants length */
             if (doc.variants.length === 0)
                 return;
             /* populate variants */
             updateComponent.populateVariants(doc.variants);
-            
+
             /* populate fabrics */
             setTimeout(() => {
 
@@ -150,11 +163,10 @@ export default {
                     const fabricRef = `fabricSelector${variant._id}`;
                     const fabricSelector = updateComponent.$refs[fabricRef];
                     fabricSelector[0].populateFabricSelection(variant);
-              
+
                 });
 
-            }, 1300);
-
+            }, 13);
         },
         async fetchList() {
             this.loading = true;

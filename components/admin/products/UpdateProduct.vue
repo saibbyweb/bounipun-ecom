@@ -31,7 +31,7 @@
     <ColorPicker ref="colorPicker" v-show="doc.colorSource === 'bounipun-colors'" @colorAdded="addNewColor" @colorRemoved="colorDeselected" />
 
     <!-- add colors -->
-    <div v-show="doc.colorSource !== ''" class="colors" style="width:100%; position:relative;">
+    <div v-if="doc.colorSource !== ''" class="colors" style="width:100%; position:relative;">
 
         <div style="position:relative;" v-for="(color, index) in doc.colors" :key="color.key">
             <!-- color selector (if color source is bounipun) -->
@@ -69,7 +69,7 @@
         <!-- action complete gif -->
         <img v-if="updated" class="action-complete" src="/complete.gif" />
         <!-- update document -->
-        <button @click="updateDocument" class="action" :disabled="loading"> {{ editMode ? "Edit" : "Add" }} Product </button>
+        <button @click="updateDocument" class="action" :disabled="loading"> {{ editMode ? "Apply Changes" : "Add Product" }} </button>
         <!-- delete document -->
         <button v-if="editMode" @click="deleteDocument" class="action delete" :disabled="loading"> Delete </button>
     </div>
@@ -105,8 +105,9 @@ export default {
                     _id: variant._id,
                     name: variant.name,
                     code: variant.code,
-                    fabrics: this.fabrics.filter(fabric => fabric.code.startsWith(variant.code))
-                    //fabrics: this.fabrics
+                    fabrics: this.fabrics.filter(fabric => fabric.code.startsWith(variant.code)),
+                    // key: uuidv4()
+                    // fabrics: this.fabrics
                 }
             })
         }
@@ -162,6 +163,8 @@ export default {
         /* populateVariant */
         populateVariants(variants) {
             // console.log(variants);
+    
+
             variants.forEach(variant => {
                 let match = this.variants.find(({
                     _id
@@ -223,7 +226,8 @@ export default {
             // console.log(this.doc.variants);
         },
         async updateDocument() {
-            // console.log(this.doc);
+            console.log('PRODUCT TO BE UPDATED!:');
+            console.log(this.doc);
             // return;
             // return;
 
@@ -282,6 +286,7 @@ export default {
         },
         closeForm() {
             this.resetForm();
+            this.$emit('resetVariants');
             this.$emit('close');
         },
         resetForm() {

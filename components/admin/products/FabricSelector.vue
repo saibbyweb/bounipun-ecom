@@ -6,6 +6,7 @@
             <!-- fabric selector -->
             <input class="check-input" type="checkbox" :value="option.value" v-model="option.checked" />
             <label class="label"> {{ option.name }} </label>
+            <span style="margin: 0;font-size: 8px; font-style: italic; text-align:center; color: #333;"> {{ option.info1 }} </span>
             <!-- fabric price holder -->
             <input class="price shadow" v-if="option.checked" type="text" v-model="option.price" placeholder="Price"/>
         </div>
@@ -71,15 +72,6 @@ export default {
         return {
             localVariant: JSON.parse(JSON.stringify(this.variant))
         }
-    },
-    computed: {
-        localVariantx() {
-            /* filter fabrics according to variant */
-            let localCopy = JSON.parse(JSON.stringify(this.variant))
-            const fabrics = localCopy.fabrics.filter(fabric => fabric.code.startsWith(localCopy.code))
-            localCopy.fabrics = fabrics;
-            return localCopy
-        }
     }
 }
 </script>
@@ -109,9 +101,10 @@ export default {
         width: 100%;
 
         .checkbox {
-            padding: 10px 10px;
+            padding: 10px 5px;
             // margin: 10px;
-            width: 20%;
+            width: 22%;
+            height:130px;
             box-sizing: border-box;
             // box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
 
@@ -133,7 +126,7 @@ export default {
                 margin-top: 3px;
                 padding:1px;
                 box-sizing: border-box;
-                font-size:11px;
+                font-size:13px;
 
                 &::placeholder {
                     opacity: 0.6;
