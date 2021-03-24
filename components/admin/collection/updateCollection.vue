@@ -4,7 +4,7 @@
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add' }} Collection </h2>
     <!-- collection id -->
-    <InputBox v-if="editMode" label="Collection ID" v-model="doc._id" disabled/>
+    <InputBox v-if="editMode" label="Collection ID" v-model="doc._id" disabled :internal="true"/>
     <!-- collection name -->
     <InputBox v-model="doc.name" label="Collection Name" />
     <!-- slug -->

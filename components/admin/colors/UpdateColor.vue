@@ -3,15 +3,15 @@
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Color </h2>
     <!-- fabric id -->
-    <InputBox v-if="editMode" label="Color ID" v-model="doc._id" disabled/>
+    <InputBox v-if="editMode" label="Color ID" v-model="doc._id" disabled :internal="true"/>
     <!-- bounipun color code -->
-    <InputBox label="Bounipun Color Code" v-model="doc.code" />
+    <InputBox label="Bounipun Color Code" v-model="doc.code" :internal="true"/>
     <!-- color name -->
     <InputBox label="Color Name" v-model="doc.name" />
     <!-- category -->
     <SelectBox :options="colorCategories" v-model="doc.category" label="Type of Category" />
     <!-- description -->
-    <TextBox v-model="doc.description" label="Description" />
+    <TextBox v-model="doc.description" label="Description" :internal="true"/>
     <!-- set color image -->
     <UploadImage ref="imageUploader" :multipleUpload="false" label="Set Color Image" @updated="imageListUpdated" />
     <!-- publish toggle -->

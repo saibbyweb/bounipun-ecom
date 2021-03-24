@@ -1,6 +1,9 @@
 <template>
 <div class="select-box">
+     <div style="display:flex; align-items:center; width:50%;">
+           <div v-if="internal" class="internal"></div>
     <label v-if="label !== undefined" class="label"> {{ label }} </label>
+     </div>
     <select class="select shadow" :value="value" @change="$emit('input', $event.target.value)">
         <option v-for="(option, index) in options" :key="index" :value="option.value"> {{ option.name }} </option>
     </select>
@@ -12,7 +15,11 @@ export default {
     props: {
         value: String,
         label: String,
-        options: Array
+        options: Array,
+        internal: {
+            type: Boolean,
+            default: false
+        },
     }
 }
 </script>
@@ -30,6 +37,13 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+        .internal {
+        height: 10px;
+        width: 10px;
+        background-color: rgb(22, 144, 220);
+    }
+
     .label {
         font-family: $font_2_bold;
         color: $gray;

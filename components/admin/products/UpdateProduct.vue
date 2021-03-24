@@ -10,7 +10,7 @@
     </a>
     </div>
     <!-- product id -->
-    <InputBox v-if="editMode" label="Product ID" v-model="doc._id" disabled />
+    <InputBox v-if="editMode" label="Product ID" v-model="doc._id" disabled :internal="true" />
     <!-- bounipun style id -->
     <InputBox label="Bounipun Style ID" v-model="doc.styleId" />
     <!-- product name -->
@@ -20,7 +20,7 @@
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
     <!-- type of product -->
-    <SelectBox :options="types" v-model="doc.type" label="Select Collection" />
+    <SelectBox :options="types" v-model="doc.type" label="Select Product Type" :internal="true"/>
     <!-- collections -->
     <SelectBox :options="collections" v-model="doc.bounipun_collection" label="Select Collection" />
 

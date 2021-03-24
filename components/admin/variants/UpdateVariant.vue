@@ -3,16 +3,16 @@
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Variant </h2>
     <!-- fabric id -->
-    <InputBox v-if="editMode" label="Variant ID" v-model="doc._id" disabled/>
+    <InputBox v-if="editMode" label="Variant ID" v-model="doc._id" disabled :internal="true" />
     <!-- fabric name -->
     <InputBox label="Variant Name" v-model="doc.name" />
     <!-- category -->
-    <SelectBox :options="variantCategories" v-model="doc.category" label="Type of Variant" />
+    <SelectBox :options="variantCategories" v-model="doc.category" label="Type of Variant" :internal="true"/>
 
      <!-- code -->
-    <InputBox  v-model="doc.code" label="Bounipun Code" />
+    <InputBox  v-model="doc.code" label="Bounipun Code" :internal="true"/>
     <!-- description -->
-    <TextBox v-model="doc.description" label="Description" />
+    <TextBox v-model="doc.description" label="Description" :internal="true"/>
 
     <!-- info #1 -->
     <InputBox  v-model="doc.info1" label="Info #1" />

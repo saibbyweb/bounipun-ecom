@@ -1,6 +1,9 @@
 <template>
 <div class="text-box">
-    <label class="label"> {{ label }} </label>
+    <div style="display:flex; align-items:center;">
+        <div v-if="internal" class="internal"></div>
+        <label class="label"> {{ label }} </label>
+    </div>
     <textarea class="textarea-box" @input="$emit('input', $event.target.value)" :value="value"> </textarea>
 </div>
 </template>
@@ -9,7 +12,11 @@
 export default {
     props: {
         label: String,
-        value: String
+        value: String,
+        internal: {
+            type: Boolean,
+            default: false
+        },
     }
 }
 </script>
@@ -21,6 +28,12 @@ export default {
     box-sizing: border-box;
     padding: 2%;
     width: 100%;
+
+    .internal {
+        height: 10px;
+        width: 10px;
+        background-color: rgb(22, 144, 220);
+    }
 
     .label {
         font-family: $font_2_bold;

@@ -3,15 +3,15 @@
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Fabric </h2>
     <!-- fabric id -->
-    <InputBox v-if="editMode" label="fabric ID" v-model="doc._id" disbaled />
+    <InputBox v-if="editMode" label="fabric ID" v-model="doc._id" disbaled :internal="true"/>
         <!-- code -->
-    <InputBox label="Code" v-model="doc.code" />
+    <InputBox label="Code" v-model="doc.code" :internal="true"/>
     <!-- fabric name -->
     <InputBox label="fabric Name" v-model="doc.name" />
     <!-- info name -->
     <InputBox label="Info #1" v-model="doc.info1" />
     <!-- description -->
-    <TextBox v-model="doc.description" label="Description" />
+    <TextBox v-model="doc.description" label="Description" :internal="true"/>
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
     <!-- update button -->
