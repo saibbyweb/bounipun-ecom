@@ -8,7 +8,7 @@
 
     <!-- list of products -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="list" :model="model" :headings="headings" custom_css="10% 10% 20% 20% 10% 10% 10% 10%" @documentFetched="documentFetched" />
+        <List :list="list" :model="model" :headings="headings" custom_css="10% 10% 30% 20% 10% 10% 10%" @documentFetched="documentFetched" />
     </div>
 
     <!-- update products form -->
@@ -40,7 +40,7 @@ export default {
             }],
             selectedFilter: 'all',
             list: [],
-            headings: ['_id', 'StyleID', 'Name', 'Slug', 'Description', 'Type', 'Collection', 'Status'],
+            headings: ['_id', 'StyleID', 'Name', 'Slug', 'Type', 'Collection', 'Status'],
             collections: [],
             variants: [],
             fabrics: []
@@ -184,7 +184,6 @@ export default {
                 styleId,
                 name,
                 slug,
-                description,
                 type,
                 bounipun_collection,
                 status
@@ -197,7 +196,6 @@ export default {
                     styleId,
                     name,
                     slug,
-                    description,
                     type,
                     bounipun_collection: foundCollection.name,
                     status

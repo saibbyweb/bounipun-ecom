@@ -25,36 +25,68 @@ router.post('/getDocument', async (req, res) => {
     const { model, _id, requestedBy } = req.body;
     const collection = db.model(model);
     let document: any = await collection.findOne({ _id });
-    
-    if(requestedBy === 'customer') {
-        switch(model) {
-            /* products */
-            case 'products':
-                document =  await document
-                .populate('bounipun_collection', 'name description')
-                .populate('variants._id', 'name info1 info2 code')
-                .populate('variants.fabrics._id', 'name code info1')
-                .execPopulate();
-                
-                break;
-            default:
-            break;
-        }
-    }
 
-    if(requestedBy === 'admin') {
-        console.log('requested by admin',model);
-        switch(model) {
+    if (requestedBy === 'customer') {
+        switch (model) {
             /* products */
             case 'products':
                 document = await document
-                .populate('colors._id','name')
-                .execPopulate();
+                    .populate('bounipun_collection', 'name description')
+                    .populate('variants._id', 'name info1 info2 code')
+                    .populate('variants.fabrics._id', 'name code info1')
+                    .populate('colors._id', 'name category')
+                    .execPopulate();
+
+                /* if bounipun colors, get grouped color data */
+                // if (document.colorSource === 'bounipun-colors') {
+                //     /* get color categories */
+                //     const colorCategories = await db.model('color_categories').find();
+                //     /* grouped data array */
+                //     let groupedData = {};
+                //     colorCategories.forEach((category: any) => {
+                //         /* find all colors under this category */
+                //         const colors = document.colors.filter(color => {
+                //             // console.log(color._id.category.toString() === category._id.toString())
+                  
+                //             return color._id.category.toString() === category._id.toString()
+                //         });
+                //         groupedData[category.name] = colors;
+                //     });
+
+                   
+                //     console.log(document)
+                  
+                // }
 
                 /* update color name for color list */
                 document.colors.forEach(color => {
                     color.name = color._id !== null ? color._id.name : color.name;
-                    
+                    color._id = color._id === null ? null : color._id._id;
+                });
+                
+
+
+                break;
+            default:
+                break;
+        }
+    }
+
+    if (requestedBy === 'admin') {
+        console.log('requested by admin', model);
+        switch (model) {
+            /* products */
+            case 'products':
+                document = await document
+                    .populate('colors._id', 'name')
+                    .execPopulate();
+
+                /* */
+
+                /* update color name for color list */
+                document.colors.forEach(color => {
+                    color.name = color._id !== null ? color._id.name : color.name;
+
                     color._id = color._id === null ? null : color._id._id;
                 });
 
@@ -63,8 +95,8 @@ router.post('/getDocument', async (req, res) => {
                 break;
         }
     }
-
-    // console.log(document);
+    console.log(document);
+  
     res.send(document);
 });
 
@@ -73,18 +105,18 @@ router.post('/fetchCollection', async (req, res) => {
     const { model, requestedBy } = req.body;
     // console.log('Collection fetch requested: ', model);
     const collection = db.model(model)
-    let documents: any  = collection.find();
+    let documents: any = collection.find();
 
     /* check request source */
     if (requestedBy === 'admin') {
         switch (model) {
             case 'colors':
-                documents = await documents.populate('category','name');
+                documents = await documents.populate('category', 'name');
                 /* get color categories */
                 const colorCategories = await db.model('color_categories').find();
                 /* grouped data array */
                 let groupedData = {};
-                colorCategories.forEach((category:any) => {
+                colorCategories.forEach((category: any) => {
                     /* find all colors under this category */
                     const colors = documents.filter(color => {
                         return color.category._id.toString() === category._id.toString()
@@ -98,7 +130,7 @@ router.post('/fetchCollection', async (req, res) => {
                 break;
         }
     }
-    
+
     /* wait for promise to resolve */
     documents = await documents;
 
@@ -112,7 +144,7 @@ router.post('/updateDocument', async (req, res) => {
     const { model, details, editMode } = req.body;
     const collection = db.model(model);
 
-    let result : any;
+    let result: any;
 
     if (editMode) {
         result = await collection.findOneAndUpdate({ _id: details._id }, details, { upsert: true, returnOriginal: false });
@@ -128,11 +160,11 @@ router.post('/updateDocument', async (req, res) => {
 });
 
 /* delete document */
-router.post('/deleteDocument', async(req, res) => {
+router.post('/deleteDocument', async (req, res) => {
     const { model, _id } = req.body;
     const collection = db.model(model);
-    console.log(_id,model);
-    const result = await collection.findByIdAndDelete({_id});
+    console.log(_id, model);
+    const result = await collection.findByIdAndDelete({ _id });
     console.log(result);
     res.send(result);
 })
