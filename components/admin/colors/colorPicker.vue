@@ -45,6 +45,7 @@ export default {
                         return {
                             _id: color._id,
                             name: color.name,
+                            code: color.code,
                             image: process.env.baseAWSURL + color.image
                         }
                     })
@@ -75,7 +76,8 @@ export default {
             /* selected color */
             const selected = {
                 _id: color._id,
-                name: color.name
+                name: color.name,
+                code: color.code
             };
 
             selectedColors.push(selected);
@@ -93,7 +95,8 @@ export default {
             this.selectedColors = list.map(color => {
                 return {
                     _id: color._id,
-                    name: color.name
+                    name: color.name,
+                    code: color.code
                 }
             });
             console.log('list populated');

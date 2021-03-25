@@ -34,7 +34,7 @@ router.post('/getDocument', async (req, res) => {
                     .populate('bounipun_collection', 'name description')
                     .populate('variants._id', 'name info1 info2 code description')
                     .populate('variants.fabrics._id', 'name code info1 description')
-                    .populate('colors._id', 'name category')
+                    .populate('colors._id', 'name category image')
            
                     
 
@@ -60,8 +60,10 @@ router.post('/getDocument', async (req, res) => {
 
                 /* update color name for color list */
                 document.colors.forEach(color => {
-                    color.name = color._id !== null ? color._id.name : color.name;
-                    color._id = color._id === null ? null : color._id._id;
+                    const bounipunColor = color._id !== null;
+                    color.name = bounipunColor ? color._id.name : color.name;
+                    color.image = bounipunColor ? color._id.image : "";
+                    color._id = bounipunColor ? color._id._id : null;
                 });
                 
                 
@@ -77,15 +79,16 @@ router.post('/getDocument', async (req, res) => {
             /* products */
             case 'products':
                 document = await document
-                    .populate('colors._id', 'name')
+                    .populate('colors._id', 'name code image')
 
                 /* */
 
                 /* update color name for color list */
                 document.colors.forEach(color => {
-                    color.name = color._id !== null ? color._id.name : color.name;
-
-                    color._id = color._id === null ? null : color._id._id;
+                    const bounipunColor = color._id !== null;
+                    color.name = bounipunColor ? color._id.name : color.name;
+                    color.code = bounipunColor ? color._id.code : color.code;
+                    color._id = bounipunColor ? color._id._id : null;
                 });
 
                 break;

@@ -64,7 +64,7 @@
                 <div class="color-boxes">
                     <!-- color box (loop) -->
                     <div class="box-container center-col" v-for="(color, colorIndex) in value" :key="colorIndex" @click="setActiveColor(colorIndex, color._id)">
-                        <div class="box" :style="getMainImageCSS(color.images)" :class="{active: isActiveBounipunColor(color._id)}">
+                        <div class="box" :style="getMainImageCSS(color)" :class="{active: isActiveBounipunColor(color._id)}">
                         </div>
                         <span class="name"> {{ color.name }} </span>
                     </div>
@@ -76,7 +76,7 @@
         <div v-if="!bounipunColors" class="colors">
             <div class="color-boxes">
                 <div v-for="(color, index) in product.colors" :key="index" class="box-container center-col" @click="setActiveColor(index)">
-                    <div class="box" :style="getMainImageCSS(color.images)" :class="{active: activeColorIndex === index}">
+                    <div class="box" :style="getMainImageCSS(color)" :class="{active: activeColorIndex === index}">
                     </div>
                     <span class="name"> {{ color.name }} </span>
                 </div>
@@ -288,15 +288,28 @@ export default {
         },
         setImages() {
             this.product.colors.forEach(color => {
-                const images = color.images.map(image => process.env.baseAWSURL + image.path);
+                let images = color.images.map(image => process.env.baseAWSURL + image.path);
+
+                if(images.length === 0 && color._id !== null) {
+                    console.log('No image found')
+                    images = [];
+                    images.push(process.env.baseAWSURL + color.image);
+                }
+
                 this.images.push(images);
             })
         },
-        getMainImageCSS(images) {
-            if (images.length === 0)
-                return;
+        getMainImageCSS(color) {
+            const images = color.images;
+
+            if (images.length === 0) {
+                return {
+                    backgroundImage: `url(${process.env.baseAWSURL}${color.image})`
+                };
+            }
+
             let mainImage = images.find(image => image.main === true);
-            mainImage = mainImage === undefined ? images[0] : mainImage;;
+            mainImage = mainImage === undefined ? images[0] : mainImage;
             const mainImagePath = process.env.baseAWSURL + mainImage.path;
             const mainImageCSS = {
                 backgroundImage: `url(${mainImagePath})`

@@ -2,19 +2,19 @@
 <div class="contents">
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Product </h2>
-    
+
     <div class="center">
-    <a v-if="editMode" :href="`/products?_id=${doc._id}`" target="_blank"> 
-    <span style="background:#333; text-align:center; color:white; font-size: 12px; padding:2px 4px; border-radius:2px;"> Preview Product ➚
-    </span>
-    </a>
+        <a v-if="editMode" :href="`/products?_id=${doc._id}`" target="_blank">
+            <span style="background:#333; text-align:center; color:white; font-size: 12px; padding:2px 4px; border-radius:2px;"> Preview Product ➚
+            </span>
+        </a>
     </div>
     <!-- product id -->
     <InputBox v-if="editMode" label="Product ID" v-model="doc._id" disabled :internal="true" />
     <!-- bounipun style id -->
     <InputBox label="Bounipun Style ID" v-model="doc.styleId" />
     <!-- bounipun print number -->
-    <InputBox label="Bounipun Print No." v-model="doc.printNo" :internal="true"/>
+    <InputBox label="Bounipun Print No." v-model="doc.printNo" :internal="true" />
     <!-- product name -->
     <InputBox label="Product Name" v-model="doc.name" />
     <!-- slug -->
@@ -22,7 +22,7 @@
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
     <!-- type of product -->
-    <SelectBox :options="types" v-model="doc.type" label="Select Product Type" :internal="true"/>
+    <SelectBox :options="types" v-model="doc.type" label="Select Product Type" :internal="true" />
     <!-- collections -->
     <SelectBox :options="collections" v-model="doc.bounipun_collection" label="Select Collection" />
     <!-- color source -->
@@ -31,19 +31,24 @@
     <ColorPicker ref="colorPicker" v-show="doc.colorSource === 'bounipun-colors'" @colorAdded="addNewColor" @colorRemoved="colorDeselected" />
     <!-- add colors -->
     <div v-if="doc.colorSource !== ''" class="colors" style="width:100%; position:relative;">
-        <div style="position:relative;" v-for="(color, index) in doc.colors" :key="color.key">
+        <div class="color-box" v-for="(color, index) in doc.colors" :key="color.key">
             <!-- color selector (if color source is bounipun) -->
-            <!-- color name -->
-            <InputBox label="New Color Name" v-model="color.name" :disabled="bounipunColors"/>
+            <div style="display:flex;">
+                <!-- color name -->
+                <InputBox label="Color Name" v-model="color.name" :disabled="bounipunColors" />
+                <!-- color name -->
+                <InputBox label="Color Code" v-model="color.code" :disabled="bounipunColors" />
+            </div>
+
             <!-- color images -->
             <UploadImage ref="imageUploader" label="Upload Images" @updated="imageListUpdated($event, index)" />
             <!-- remove color -->
             <button class="action delete" style="font-size:9px; position: absolute; bottom:0; right:0;" @click="removeColor(index, true)"> Remove Color </button>
             <!-- disclaimer box -->
             <InputBox v-if="doc.colorSource === 'custom'" label="Disclaimer" v-model="color.disclaimer" />
-            <hr width="100%" style="opacity: 0.3" />
+            <!-- <hr width="100%" style="opacity: 0.3" /> -->
         </div>
-        <button v-if="doc.colorSource !== 'bounipun-colors'" class="action" style="font-size:9px; position: absolute; bottom: -30px;  right:10px;" @click="addNewColor({_id: null, name:''})"> Add Color </button>
+        <button v-if="doc.colorSource !== 'bounipun-colors'" class="action" style="font-size:9px; position: absolute; bottom: -30px;  right:10px;" @click="addNewColor({_id: null, name:'', code: ''})"> Add Color </button>
     </div>
 
     <!-- variations (checkboxes) -->
@@ -71,7 +76,9 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from "uuid";
+import {
+    v4 as uuidv4
+} from "uuid";
 
 export default {
     props: {
@@ -157,7 +164,6 @@ export default {
         /* populateVariant */
         populateVariants(variants) {
             // console.log(variants);
-    
 
             variants.forEach(variant => {
                 let match = this.variants.find(({
@@ -177,6 +183,7 @@ export default {
             this.doc.colors.push({
                 _id: color._id,
                 name: color.name,
+                code: color.code,
                 images: [],
                 disclaimer: "",
                 key: uuidv4()
@@ -185,17 +192,17 @@ export default {
         colorDeselected(color) {
             /* find key of the deselected color */
             const foundIndex = this.doc.colors.findIndex(col => col._id === color._id);
-            console.log(color, foundIndex,'DESELECTED');
+            console.log(color, foundIndex, 'DESELECTED');
             /* remove color */
             this.removeColor(foundIndex);
         },
         /* remove color */
-        removeColor(key, direct=false) {
+        removeColor(key, direct = false) {
             // if (this.doc.colors.length === 1)
             //     return;
             const tobeRemoved = this.doc.colors[key];
             this.doc.colors.splice(key, 1);
-            if(this.bounipunColors && direct)
+            if (this.bounipunColors && direct)
                 this.$refs.colorPicker.deselectColor(tobeRemoved);
 
         },
@@ -305,3 +312,16 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.colors {
+    .color-box {
+        position: relative;
+        margin: 14px 0px;
+        padding: 5px;
+        border-radius: 3px;
+        box-shadow: 1px 1px 15px #e6e6e6;
+        overflow: hidden;
+    }
+}
+</style>
