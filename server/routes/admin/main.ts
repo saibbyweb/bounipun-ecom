@@ -24,48 +24,45 @@ router.post('/uploadImage', uploader.single('productImage'), async (req: any, re
 router.post('/getDocument', async (req, res) => {
     const { model, _id, requestedBy } = req.body;
     const collection = db.model(model);
-    let document: any = await collection.findOne({ _id });
+    let document: any = collection.findOne({ _id }).lean()
 
     if (requestedBy === 'customer') {
         switch (model) {
             /* products */
             case 'products':
-                document = await document
+                document =  await document
                     .populate('bounipun_collection', 'name description')
                     .populate('variants._id', 'name info1 info2 code')
                     .populate('variants.fabrics._id', 'name code info1')
                     .populate('colors._id', 'name category')
-                    .execPopulate();
+           
+                    
 
                 /* if bounipun colors, get grouped color data */
-                // if (document.colorSource === 'bounipun-colors') {
-                //     /* get color categories */
-                //     const colorCategories = await db.model('color_categories').find();
-                //     /* grouped data array */
-                //     let groupedData = {};
-                //     colorCategories.forEach((category: any) => {
-                //         /* find all colors under this category */
-                //         const colors = document.colors.filter(color => {
-                //             // console.log(color._id.category.toString() === category._id.toString())
+                if (document.colorSource === 'bounipun-colors') {
+                    /* get color categories */
+                    const colorCategories = await db.model('color_categories').find();
+                    /* grouped data array */
+                    let groupedData = {};
+                    colorCategories.forEach((category: any) => {
+                        /* find all colors under this category */
+                        const colors = document.colors.filter(color => {
+                            // console.log(color._id.category.toString() === category._id.toString())
                   
-                //             return color._id.category.toString() === category._id.toString()
-                //         });
-                //         groupedData[category.name] = colors;
-                //     });
+                            return color._id.category.toString() === category._id.toString()
+                        });
+                        groupedData[category.name] = colors;
+                    });
 
-                   
-                //     console.log(document)
-                  
-                // }
+                    /* add color data to document */
+                    document.colorData = groupedData;
+                }
 
                 /* update color name for color list */
                 document.colors.forEach(color => {
                     color.name = color._id !== null ? color._id.name : color.name;
                     color._id = color._id === null ? null : color._id._id;
                 });
-                
-
-
                 break;
             default:
                 break;
@@ -79,7 +76,6 @@ router.post('/getDocument', async (req, res) => {
             case 'products':
                 document = await document
                     .populate('colors._id', 'name')
-                    .execPopulate();
 
                 /* */
 
@@ -95,8 +91,8 @@ router.post('/getDocument', async (req, res) => {
                 break;
         }
     }
+    document = await document;
     console.log(document);
-  
     res.send(document);
 });
 
@@ -136,7 +132,7 @@ router.post('/fetchCollection', async (req, res) => {
 
     console.log('sending DEFAULT RESPONSE');
     res.send(documents);
-})
+});
 
 /* update api */
 router.post('/updateDocument', async (req, res) => {

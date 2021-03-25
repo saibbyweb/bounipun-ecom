@@ -53,44 +53,29 @@
             </div>
         </div>
 
-        <!-- colors -->
-        <!-- <div class="colors">
-            <h4 class="section-heading"> Colors ({{ product.colors.length }}) </h4> -->
-        <!-- sub color heading -->
-        <!-- <h5 class="category-heading"> Calm </h5>
-            <div class="color-boxes"> -->
-        <!-- fruit pink -->
-        <!-- <div class="box-container center-col">
-                    <div class="box" style="background-color: #FCCBCB;">
-                    </div>
-                    <span class="name"> Fruit Pink </span>
-                </div> -->
-        <!-- american gray -->
-        <!-- <div class="box-container center-col">
-                    <div class="box active" style="background-color: #E2E2E2;">
-                    </div>
-                    <span class="name"> American Gray </span>
-                </div>
-            </div> -->
+        <!-- bounipun colors  -->
+        <div v-if="bounipunColors" class="colors">
+            <h4 class="section-heading"> Colors ({{ product.colors.length }}) </h4>
 
-        <!-- sub color heading -->
-        <!-- <h5 class="category-heading"> Welcoming </h5>
-            <div class="color-boxes"> -->
-        <!-- american gray -->
-        <!-- <div class="box-container center-col">
-                    <div class="box" style="background-color: #91CC9F;">
+            <!-- color category -->
+            <div class="color-category" v-for="(value, name, index) in product.colorData" :key="index">
+                <!-- sub color heading -->
+                <h5 class="category-heading"> {{ name }} </h5>
+                <div class="color-boxes">
+                    <!-- color box (loop) -->
+                    <div class="box-container center-col" v-for="(color, colorIndex) in value" :key="colorIndex" @click="setActiveColor(colorIndex, color._id)">
+                        <div class="box" :style="getMainImageCSS(color.images)" :class="{active: activeColorIndex === index}">
+                        </div>
+                        <span class="name"> {{ color.name }} </span>
                     </div>
-                    <span class="name"> Mint Green </span>
                 </div>
             </div>
-             -->
+        </div>
 
-        <!-- bounipun colors  -->
-
-        <!-- dynamic  -->
-        <div class="colors">
+        <!-- custom colors -->
+        <div v-if="!bounipunColors" class="colors">
             <div class="color-boxes">
-                <div v-for="(color, index) in product.colors" :key="index" class="box-container center-col" @click="setActiveColor(index)" >
+                <div v-for="(color, index) in product.colors" :key="index" class="box-container center-col" @click="setActiveColor(index)">
                     <div class="box" :style="getMainImageCSS(color.images)" :class="{active: activeColorIndex === index}">
                     </div>
                     <span class="name"> {{ color.name }} </span>
@@ -108,7 +93,7 @@
             </h4>
             <!-- variants container -->
             <div class="variants-container">
-                <div @click="setActiveVariant(index)" v-for="(variant, index) in variants" :key="index" class="variant center-col" >
+                <div @click="setActiveVariant(index)" v-for="(variant, index) in variants" :key="index" class="variant center-col">
                     <!-- image -->
                     <img class="illustration" :class="{active: activeVariantIndex === index}" src="/demo_images/variants/shawl.png" />
                     <!-- variant name -->
@@ -158,7 +143,7 @@
         </div>
 
         <!-- related products -->
-        <div class="related-products">
+        <!-- <div class="related-products">
             <h4 class="section-heading"> Related Products </h4>
             <div class="scrollable-list">
                 <div class="list">
@@ -173,7 +158,7 @@
                     <product-card product="kara_3" :variants="{stole: true}" />
                 </div>
             </div>
-        </div>
+        </div> -->
 
         <!-- <inner-image-zoom class="product-image" :src="images[0]" :zoomSrc="images[0]" /> -->
 
@@ -217,6 +202,11 @@ export default {
             stockLimit: 5
         }
     },
+    computed: {
+        bounipunColors() {
+            return this.product.colorSource === 'bounipun-colors';
+        },
+    },
     methods: {
         async fetchProduct(slug) {
             const result = await this.$fetchDocument('products', slug, 'customer');
@@ -254,8 +244,13 @@ export default {
             this.activeFabricIndex = 0;
             this.activeVariantIndex = index;
         },
-        setActiveColor(index) {
-            this.activeColorIndex = index;
+        setActiveColor(index, colorId = false) {
+            let activeIndex = index;
+            if (colorId) {
+                /* find index from actual color array */
+                activeIndex = this.product.colors.findIndex(color => color._id === colorId);
+            }
+            this.activeColorIndex = activeIndex;
             this.$refs.slideshow.setActiveImage(0);
         },
         setImages() {
@@ -265,7 +260,7 @@ export default {
             })
         },
         getMainImageCSS(images) {
-            if(images.length === 0)
+            if (images.length === 0)
                 return;
             let mainImage = images.find(image => image.main === true);
             mainImage = mainImage === undefined ? images[0] : mainImage;;
@@ -375,7 +370,7 @@ export default {
     /* quantity and size */
     .quantity-and-size {
         margin-top: 10px;
-        
+
         display: flex;
 
         .quantity-picker {
@@ -462,7 +457,6 @@ export default {
     /* colors */
     .colors {
         margin-top: 20px;
-        
 
         .category-heading {
             font-family: $font_1_semibold;
@@ -476,6 +470,7 @@ export default {
         .color-boxes {
             display: flex;
             flex-wrap: wrap;
+
             .box-container {
                 margin: 5px;
 
