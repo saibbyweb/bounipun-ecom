@@ -23,33 +23,24 @@
     <SelectBox :options="types" v-model="doc.type" label="Select Product Type" :internal="true"/>
     <!-- collections -->
     <SelectBox :options="collections" v-model="doc.bounipun_collection" label="Select Collection" />
-
     <!-- color source -->
     <SelectBox :options="colorSourceTypes" v-model="doc.colorSource" label="Select Color Source" />
-    
     <!-- bounipun color picker -->
     <ColorPicker ref="colorPicker" v-show="doc.colorSource === 'bounipun-colors'" @colorAdded="addNewColor" @colorRemoved="colorDeselected" />
-
     <!-- add colors -->
     <div v-if="doc.colorSource !== ''" class="colors" style="width:100%; position:relative;">
-
         <div style="position:relative;" v-for="(color, index) in doc.colors" :key="color.key">
             <!-- color selector (if color source is bounipun) -->
-
             <!-- color name -->
             <InputBox label="New Color Name" v-model="color.name" :disabled="bounipunColors"/>
-
             <!-- color images -->
             <UploadImage ref="imageUploader" label="Upload Images" @updated="imageListUpdated($event, index)" />
             <!-- remove color -->
             <button class="action delete" style="font-size:9px; position: absolute; bottom:0; right:0;" @click="removeColor(index, true)"> Remove Color </button>
-
             <!-- disclaimer box -->
             <InputBox v-if="doc.colorSource === 'custom'" label="Disclaimer" v-model="color.disclaimer" />
-
             <hr width="100%" style="opacity: 0.3" />
         </div>
-
         <button v-if="doc.colorSource !== 'bounipun-colors'" class="action" style="font-size:9px; position: absolute; bottom: -30px;  right:10px;" @click="addNewColor({_id: null, name:''})"> Add Color </button>
     </div>
 

@@ -12,7 +12,7 @@
      <!-- code -->
     <InputBox  v-model="doc.code" label="Bounipun Code" :internal="true"/>
     <!-- description -->
-    <TextBox v-model="doc.description" label="Description" :internal="true"/>
+    <TextBox v-model="doc.description" label="Description" />
 
     <!-- info #1 -->
     <InputBox  v-model="doc.info1" label="Info #1" />

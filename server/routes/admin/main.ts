@@ -32,8 +32,8 @@ router.post('/getDocument', async (req, res) => {
             case 'products':
                 document =  await document
                     .populate('bounipun_collection', 'name description')
-                    .populate('variants._id', 'name info1 info2 code')
-                    .populate('variants.fabrics._id', 'name code info1')
+                    .populate('variants._id', 'name info1 info2 code description')
+                    .populate('variants.fabrics._id', 'name code info1 description')
                     .populate('colors._id', 'name category')
            
                     
@@ -63,6 +63,8 @@ router.post('/getDocument', async (req, res) => {
                     color.name = color._id !== null ? color._id.name : color.name;
                     color._id = color._id === null ? null : color._id._id;
                 });
+                
+                
                 break;
             default:
                 break;

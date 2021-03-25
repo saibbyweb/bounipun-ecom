@@ -11,7 +11,7 @@
     <!-- info name -->
     <InputBox label="Info #1" v-model="doc.info1" />
     <!-- description -->
-    <TextBox v-model="doc.description" label="Description" :internal="true"/>
+    <TextBox v-model="doc.description" label="Description" />
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
     <!-- update button -->

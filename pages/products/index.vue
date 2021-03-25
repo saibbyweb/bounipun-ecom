@@ -64,7 +64,7 @@
                 <div class="color-boxes">
                     <!-- color box (loop) -->
                     <div class="box-container center-col" v-for="(color, colorIndex) in value" :key="colorIndex" @click="setActiveColor(colorIndex, color._id)">
-                        <div class="box" :style="getMainImageCSS(color.images)" :class="{active: activeColorIndex === index}">
+                        <div class="box" :style="getMainImageCSS(color.images)" :class="{active: isActiveBounipunColor(color._id)}">
                         </div>
                         <span class="name"> {{ color.name }} </span>
                     </div>
@@ -112,31 +112,47 @@
 
             <!-- fabrics available -->
             <div class="fabrics-container">
-
-                <!-- fabric 1 -->
+                <!-- fabric -->
                 <div @click="activeFabricIndex = index" v-for="(fabric, index) in variants[activeVariantIndex].fabrics" :key="index" class="fabric center-col" :class="{active: activeFabricIndex === index}">
                     <span class="name"> {{ fabric.name }} </span>
                     <span class="info"> {{ fabric.info1 }} </span>
                     <span class="price"> ${{ fabric.price }} </span>
                 </div>
+
             </div>
         </div>
 
         <!-- accordions -->
         <div class="accordions">
             <Accordion heading="Description">
+                <!-- design specific -->
                 <p> Design Specific Details</p>
-                <p> {{ product.description }} </p>
-                <br>
-                <p> Fabric Specific Details </p>
-                <br>
+                <ul>
+                    <li v-for="(point, index) in productDescription" :key="index">
+                        <span> {{ point }} </span>
+                    </li>
+                </ul>
+
+                <!-- variant -->
                 <p> Variant Specific Details</p>
-                <br>
+                <ul>
+                    <li v-for="(point, index) in variantDescription" :key="index">
+                        <span> {{ point }} </span>
+                    </li>
+                </ul>
+
+                <!-- fabric -->
+                <p> Fabric Specific Details</p>
+                <ul>
+                    <li v-for="(point, index) in fabricDescription" :key="index">
+                        <span> {{ point }} </span>
+                    </li>
+                </ul>
             </Accordion>
 
             <!-- about collection -->
             <Accordion :heading="`About ${product.bounipun_collection.name}`">
-                <p> {{ product.bounipun_collection.description }} </p>
+                <span> {{ product.bounipun_collection.description }} </span>
             </Accordion>
 
             <Accordion heading="Shipping & Returns" />
@@ -206,6 +222,17 @@ export default {
         bounipunColors() {
             return this.product.colorSource === 'bounipun-colors';
         },
+        productDescription() {
+            return this.product.description.split('\n');
+        },
+        variantDescription() {
+            if (this.variants.length === 0)
+                return []
+            return this.variants[this.activeVariantIndex].description.split('\n')
+        },
+        fabricDescription() {
+            return this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex].description.split('\n')
+        }
     },
     methods: {
         async fetchProduct(slug) {
@@ -228,12 +255,14 @@ export default {
                     info1: variant._id.info1,
                     info2: variant._id.info2,
                     code: variant._id.code,
+                    description: variant._id.description,
                     fabrics: variant.fabrics.map(fabric => {
                         return {
                             name: fabric._id.name,
                             price: fabric.price,
                             code: fabric._id.code,
                             info1: fabric._id.info1,
+                            description: fabric._id.description
                         }
                     })
                 }
@@ -252,6 +281,10 @@ export default {
             }
             this.activeColorIndex = activeIndex;
             this.$refs.slideshow.setActiveImage(0);
+        },
+        isActiveBounipunColor(colorId) {
+            const colorIndex = this.product.colors.findIndex(color => color._id === colorId);
+            return this.activeColorIndex === colorIndex;
         },
         setImages() {
             this.product.colors.forEach(color => {
@@ -556,6 +589,7 @@ export default {
 
                 span {
                     color: white;
+                    text-align: center;
                 }
 
                 &.active {
@@ -586,6 +620,19 @@ export default {
     /* description */
     .accordions {
         margin-top: 20px;
+
+        ul {
+            margin: 4px;
+        }
+
+        p {
+            font-size: 13px;
+            margin: 10px 0;
+        }
+
+        span {
+            font-size: 12px;
+        }
     }
 }
 </style>
