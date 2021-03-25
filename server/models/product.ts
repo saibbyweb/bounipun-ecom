@@ -3,6 +3,7 @@ import { mongoose, ObjectId } from "@helpers/essentials"
 /* schema */
 const schema = new mongoose.Schema({
     styleId: String,
+    printNo: String,
     name: String,
     slug: String,
     description: String,

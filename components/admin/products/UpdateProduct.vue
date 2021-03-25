@@ -13,6 +13,8 @@
     <InputBox v-if="editMode" label="Product ID" v-model="doc._id" disabled :internal="true" />
     <!-- bounipun style id -->
     <InputBox label="Bounipun Style ID" v-model="doc.styleId" />
+    <!-- bounipun print number -->
+    <InputBox label="Bounipun Print No." v-model="doc.printNo" :internal="true"/>
     <!-- product name -->
     <InputBox label="Product Name" v-model="doc.name" />
     <!-- slug -->
@@ -109,6 +111,7 @@ export default {
             doc: {
                 _id: "",
                 styleId: "",
+                printNo: "",
                 name: "",
                 slug: "",
                 description: "",
@@ -250,6 +253,7 @@ export default {
             const {
                 _id,
                 styleId,
+                printNo,
                 name,
                 slug,
                 description,
@@ -263,6 +267,7 @@ export default {
             this.doc = {
                 _id,
                 styleId,
+                printNo,
                 name,
                 slug,
                 description,
@@ -284,6 +289,7 @@ export default {
             this.populateForm({
                 _id: "",
                 styleId: "",
+                printNo: "",
                 name: "",
                 slug: "",
                 description: "",
