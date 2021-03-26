@@ -241,8 +241,20 @@ export default {
                 alert('Couldnt fetch product, check url');
                 return;
             }
+            
+            /* if color data */
+            if (result.doc.colorData) {
+                let colorData = result.doc.colorData;
+                const colorCategories = Object.keys(colorData);
 
-            console.log(result);
+                colorCategories.forEach(category => {
+                    let colors = colorData[category];
+                    colors = colors.sort((a, b) => {
+                        return b.images.length - a.images.length
+                    });
+                });
+            }
+
             this.product = result.doc;
             this.productFetched = true;
             this.setImages();
@@ -290,7 +302,7 @@ export default {
             this.product.colors.forEach(color => {
                 let images = color.images.map(image => process.env.baseAWSURL + image.path);
 
-                if(images.length === 0 && color._id !== null) {
+                if (images.length === 0 && color._id !== null) {
                     console.log('No image found')
                     images = [];
                     images.push(process.env.baseAWSURL + color.image);
