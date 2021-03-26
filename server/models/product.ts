@@ -15,18 +15,18 @@ const schema = new mongoose.Schema({
     },
     colorSource: { type: String, enum: ['bounipun-colors', 'custom'] },
     /* colors */
-    colors: [{ 
-        _id: { type: ObjectId, ref: 'colors' }, 
-        name: { type: String , default: '' }, 
+    colors: [{
+        _id: { type: ObjectId, ref: 'colors' },
+        name: { type: String, default: '' },
         images: [{ _id: ObjectId, path: String, mainImage: Boolean }],
         disclaimer: { type: String, default: '' },
-        code: { type: String , default: '' }, 
+        code: { type: String, default: '' },
     }],
     /* variants */
     variants: [{
-        _id: { type: ObjectId, ref: 'variants'},
-        fabrics:[{
-            _id: { type: ObjectId, ref: 'fabrics'},
+        _id: { type: ObjectId, ref: 'variants' },
+        fabrics: [{
+            _id: { type: ObjectId, ref: 'fabrics' },
             price: Number
         }]
     }],
@@ -39,6 +39,11 @@ const schema = new mongoose.Schema({
 const model = mongoose.model('products', schema);
 /* helper methods */
 export const methods = {
-    register: () => { console.log('registered') },
+    register() { 
+        console.log('registered') 
+    },
+    async updateProduct(doc, editMode) {
+        
+    }
 }
 export default { model, methods };

@@ -1,6 +1,7 @@
 import { server, mongoose } from "@helpers/essentials";
+import admin from "@helpers/admin"
 import { uploader, methods as imageHelper } from "@models/imageUpload"
-import { colorCategory, register } from "@models";
+import { register } from "@models";
 register();
 
 const db = mongoose.connection;
@@ -143,8 +144,18 @@ router.post('/fetchCollection', async (req, res) => {
 router.post('/updateDocument', async (req, res) => {
     /* extracting query details */
     const { model, details, editMode } = req.body;
-    const collection = db.model(model);
 
+    /* check if special update is required */
+    const specialUpdate = await admin.specialUpdate(model, details, editMode);
+    
+    /* if special update processed */
+    if(specialUpdate.updated) {
+        res.send({updated: true});
+        return;
+    }
+
+    /* get collection  */
+    const collection = db.model(model);
     let result: any;
 
     if (editMode) {
@@ -155,7 +166,7 @@ router.post('/updateDocument', async (req, res) => {
         result = await new collection(details).save();
     }
 
-    console.log(result);
+    // console.log(result);
 
     res.send(result);
 });
