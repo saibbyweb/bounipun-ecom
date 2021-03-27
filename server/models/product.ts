@@ -30,6 +30,7 @@ const schema = new mongoose.Schema({
             price: Number
         }]
     }],
+    directPrice: { type: String, default: 0 },
     status: Boolean
 }, {
     timestamps: true

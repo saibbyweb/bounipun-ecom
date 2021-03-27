@@ -27,7 +27,7 @@
     <div class="pad-10">
         <div class="main-details">
             <h3> {{ product.name }} </h3>
-            <p> Bounipun {{ product.bounipun_collection.name }} </p>
+            <p v-if="!thirdPartyProduct"> Bounipun {{ product.bounipun_collection.name }} </p>
             <p> {{ product.styleId }} </p>
         </div>
         <!-- quantity picker and size chart-->
@@ -42,8 +42,13 @@
         <!-- price and add to cart -->
         <div class="price-and-actions">
             <div class="price">
-                <h5> $ {{variants[activeVariantIndex].fabrics[activeFabricIndex].price }}.00 </h5>
+                <!-- dynamic price -->
+                <h5 v-if="!thirdPartyProduct"> $ {{variants[activeVariantIndex].fabrics[activeFabricIndex].price }}.00 </h5>
+
+                <!-- direct price -->
+                <h5 v-if="thirdPartyProduct"> $ {{ product.directPrice }} </h5>
                 <p> Taxes and Shipping Included </p>
+
             </div>
 
             <!-- add to cart -->
@@ -87,7 +92,7 @@
         <div class="divider"> </div>
 
         <!-- dynamic variant populate -->
-        <div class="variants-available">
+        <div v-if="!thirdPartyProduct" class="variants-available">
             <h4 class="section-heading">
                 Variants Available
             </h4>
@@ -107,7 +112,7 @@
         </div>
 
         <!-- dynamic fabric -->
-        <div class="fabrics-available">
+        <div v-if="!thirdPartyProduct" class="fabrics-available">
             <h4 class="section-heading"> Fabric </h4>
 
             <!-- fabrics available -->
@@ -125,25 +130,25 @@
         <!-- accordions -->
         <div class="accordions">
             <Accordion heading="Description">
+
+                <!-- variant -->
+                <!-- <p> Variant Specific Details</p> -->
+                <ul v-if="!thirdPartyProduct" >
+                    <li v-for="(point, index) in variantDescription" :key="index">
+                        <span> {{ point }} </span>
+                    </li>
+                </ul>
+
                 <!-- design specific -->
-                <p> Design Specific Details</p>
+                <!-- <p> Design Specific Details</p> -->
                 <ul>
                     <li v-for="(point, index) in productDescription" :key="index">
                         <span> {{ point }} </span>
                     </li>
                 </ul>
 
-                <!-- variant -->
-                <p> Variant Specific Details</p>
-                <ul>
-                    <li v-for="(point, index) in variantDescription" :key="index">
-                        <span> {{ point }} </span>
-                    </li>
-                </ul>
-
                 <!-- fabric -->
-                <p> Fabric Specific Details</p>
-                <ul>
+                <ul v-if="!thirdPartyProduct" >
                     <li v-for="(point, index) in fabricDescription" :key="index">
                         <span> {{ point }} </span>
                     </li>
@@ -151,7 +156,7 @@
             </Accordion>
 
             <!-- about collection -->
-            <Accordion :heading="`About ${product.bounipun_collection.name}`">
+            <Accordion v-if="!thirdPartyProduct" :heading="`About ${product.bounipun_collection.name}`">
                 <span> {{ product.bounipun_collection.description }} </span>
             </Accordion>
 
@@ -232,6 +237,9 @@ export default {
         },
         fabricDescription() {
             return this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex].description.split('\n')
+        },
+        thirdPartyProduct() {
+            return this.product.type === 'third-party'
         }
     },
     methods: {
@@ -241,7 +249,7 @@ export default {
                 alert('Couldnt fetch product, check url');
                 return;
             }
-            
+
             /* if color data */
             if (result.doc.colorData) {
                 let colorData = result.doc.colorData;

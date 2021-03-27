@@ -190,6 +190,8 @@ export default {
             }) => {
                 /* resolve category name */
                 const foundCollection = this.collections.find(col => col.value === bounipun_collection);
+                
+                console.log(foundCollection, '-found collection');
 
                 return {
                     _id,
@@ -197,7 +199,8 @@ export default {
                     name,
                     slug,
                     type,
-                    bounipun_collection: foundCollection.name,
+                    bounipun_collection: foundCollection !== undefined ? foundCollection.name : "Third Paty",
+                    // bounipun_collection: "--",
                     status
                 }
             });

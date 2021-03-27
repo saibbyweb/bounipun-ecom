@@ -24,9 +24,9 @@
     <!-- type of product -->
     <SelectBox :options="types" v-model="doc.type" label="Select Product Type" :internal="true" />
     <!-- collections -->
-    <SelectBox :options="collections" v-model="doc.bounipun_collection" label="Select Collection" />
+    <SelectBox v-if="!thirdPartyProduct" :options="collections" v-model="doc.bounipun_collection" label="Select Collection" />
     <!-- color source -->
-    <SelectBox :options="colorSourceTypes" v-model="doc.colorSource" label="Select Color Source" />
+    <SelectBox v-if="!thirdPartyProduct" :options="colorSourceTypes" v-model="doc.colorSource" label="Select Color Source" />
     <!-- bounipun color picker -->
     <ColorPicker ref="colorPicker" v-show="doc.colorSource === 'bounipun-colors'" @colorAdded="addNewColor" @colorRemoved="colorDeselected" />
     <!-- add colors -->
@@ -52,10 +52,15 @@
     </div>
 
     <!-- variations (checkboxes) -->
-    <c-boxes :options="variants" label="Variants" />
+    <c-boxes v-if="!thirdPartyProduct" :options="variants" label="Variants" />
 
     <!-- fabric selector -->
-    <fabric-selector :ref="'fabricSelector'+variant._id" :label="variant.name" v-for="(variant) in selectedVariantsWithFabricOptions" :key="variant._id" :variant="variant" @fabricSelectionUpdated="fabricSelectionUpdated" />
+    <div v-if="!thirdPartyProduct">
+        <fabric-selector :ref="'fabricSelector'+variant._id" :label="variant.name" v-for="(variant) in selectedVariantsWithFabricOptions" :key="variant._id" :variant="variant" @fabricSelectionUpdated="fabricSelectionUpdated" />
+    </div>
+
+    <!-- direct price -->
+    <InputBox v-if="thirdPartyProduct" label="Direct Price" v-model="doc.directPrice" />
 
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
@@ -90,6 +95,14 @@ export default {
     watch: {
         selectedVariantsWithFabricOptions(newVal) {
             // console.log('changed', newVal);
+        },
+        doc: {
+            handler(newVal) {
+                if(newVal.type === 'third-party') {
+                    this.doc.colorSource = 'custom';
+                }
+            },
+            deep: true
         }
     },
     computed: {
@@ -110,6 +123,9 @@ export default {
                     // fabrics: this.fabrics
                 }
             })
+        },
+        thirdPartyProduct() {
+            return this.doc.type === 'third-party'
         }
     },
     data() {
@@ -123,16 +139,17 @@ export default {
                 slug: "",
                 description: "",
                 type: "",
-                bounipun_collection: "",
+                bounipun_collection: null,
                 /* new types */
                 colorSource: "",
                 variants: [],
                 colors: [],
+                directPrice: "",
                 status: false,
             },
             types: [{
                     name: 'Select Type',
-                    value: ''
+                    value: null
                 },
                 {
                     name: 'Made to Order',
@@ -141,6 +158,10 @@ export default {
                 {
                     name: 'Ready to Ship',
                     value: 'ready-to-ship'
+                },
+                {
+                    name: 'Third-Party',
+                    value: 'third-party'
                 }
             ],
             colorSourceTypes: [{
@@ -269,6 +290,7 @@ export default {
                 colorSource,
                 variants,
                 colors,
+                directPrice,
                 status
             } = details;
             this.doc = {
@@ -283,6 +305,7 @@ export default {
                 colorSource,
                 variants,
                 colors,
+                directPrice,
                 status
             };
             this.editMode = true;
@@ -301,10 +324,11 @@ export default {
                 slug: "",
                 description: "",
                 type: "",
-                bounipun_collection: "",
+                bounipun_collection: null,
                 colorSource: "",
                 variants: [],
                 colors: [],
+                directPrice: "",
                 status: false
             });
             this.editMode = false;
