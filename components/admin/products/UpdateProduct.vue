@@ -17,8 +17,8 @@
     <InputBox label="Bounipun Print No." v-model="doc.printNo" :internal="true" />
     <!-- product name -->
     <InputBox label="Product Name" v-model="doc.name" />
-    <!-- slug -->
-    <InputBox label="Slug" v-model="doc.slug" />
+    <!-- alias -->
+    <InputBox label="Alias" v-model="doc.alias" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
     <!-- type of product -->
@@ -136,6 +136,7 @@ export default {
                 styleId: "",
                 printNo: "",
                 name: "",
+                alias: "",
                 slug: "",
                 description: "",
                 type: "",
@@ -283,6 +284,7 @@ export default {
                 styleId,
                 printNo,
                 name,
+                alias,
                 slug,
                 description,
                 type,
@@ -298,6 +300,7 @@ export default {
                 styleId,
                 printNo,
                 name,
+                alias,
                 slug,
                 description,
                 type,
@@ -321,6 +324,7 @@ export default {
                 styleId: "",
                 printNo: "",
                 name: "",
+                alias: "",
                 slug: "",
                 description: "",
                 type: "",
