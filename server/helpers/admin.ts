@@ -1,4 +1,4 @@
-import { product } from "@models"
+import { product, collection } from "@models"
 
 export default {
     async specialUpdate(model, details, editMode) {
@@ -7,7 +7,9 @@ export default {
             case 'products':
                 await product.methods.updateProduct(details, editMode);
                 break;
-
+            case 'collections':
+                await collection.methods.updateCollection(details, editMode);
+                break;
             default:
                 break;
         }

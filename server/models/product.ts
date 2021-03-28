@@ -49,11 +49,11 @@ export const methods = {
     },
     async updateProduct(details, editMode) {
         /* product and collection models */
-        const products = db.model('products');
+        const products = model;
         const collections = db.model('collections');
         let parent : any = { slug: "third-party" }
 
-        /* if alias not provide, creat one  */
+        /* if alias not provide, create one  */
         if (details.alias === "")
             details.alias = slugify(details.name, { lower: true });
         
@@ -82,6 +82,22 @@ export const methods = {
 
         console.log(details.alias, '-- FINAL ALIAS');
         console.log(details.slug, '-- FINAL SLUG');
+
+    },
+    async updateSlugs(collectionId, collectionSlug) {
+        const products = model;
+        let matchedProducts: any = await products.find({bounipun_collection: collectionId});
+        
+        /* if no matched products found */
+        if(matchedProducts === null)
+            return;
+            
+        /* update slugs for all matched products */
+        for (const product of matchedProducts) {
+            const updated:any = await products.findOneAndUpdate({ _id: product._id }, { slug: collectionSlug + "/" + product.alias }, {returnOriginal: false});
+            
+            console.log(updated.slug);
+        }
 
     }
 }
