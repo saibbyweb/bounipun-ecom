@@ -51,36 +51,38 @@ export const methods = {
         /* product and collection models */
         const products = db.model('products');
         const collections = db.model('collections');
+        let parent : any = { slug: "third-party" }
 
-        /* if edit mode, check if alias already exists */
+        /* if alias not provide, creat one  */
         if (details.alias === "")
             details.alias = slugify(details.name, { lower: true });
         
         /* fetch collection slug (if not third party) */
-        const collection : any = await collections.findOne({_id: details.bounipun_collection }).select('slug');
-        console.log(collection.slug, '--collection slug fetched')
+        if(details.type !== 'third-party')
+            parent = await collections.findOne({_id: details.bounipun_collection }).select('slug');
+        
+        /* new product slug */
+        details.slug = parent.slug + "/" + details.alias;
 
         /* verify slug automicity */
-        let filter: any = { alias: details.alias };
+        let filter: any = { slug: details.slug };
 
         /* if edit mode, skip the existing product */
         if (editMode)
             filter._id = { $ne: details._id };
 
         /* alias */
-        const aliasFound = await products.findOne(filter);
+        const slugFound = await products.findOne(filter);
 
-        /* if alias already exists */
-        if (aliasFound !== null) {
+        /* if slug already exists, update alias and slug */
+        if (slugFound !== null) {
             details.alias = `${details.alias}-${Date.now()}`
+            details.slug = parent.slug + "/" + details.alias;
         }
 
         console.log(details.alias, '-- FINAL ALIAS');
+        console.log(details.slug, '-- FINAL SLUG');
 
-        /* fetch collection alias */
-
-
-        /*  */
     }
 }
 export default { model, methods };
