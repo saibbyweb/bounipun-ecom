@@ -55,7 +55,7 @@ export default {
         padding: 10px;
 
         .search {
-            width: 40%;
+            width: 25%;
             padding: 10px 15px;
             border: none;
             margin-right: 10px;

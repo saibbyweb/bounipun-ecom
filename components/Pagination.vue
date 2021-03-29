@@ -23,7 +23,10 @@ export default {
     },
     props: {
         criterion: {
-            searchTerm: String,
+            search: {
+                key: String,
+                term: String,
+            },
             filters: Object,
             sortBy: Object,
         }
@@ -32,6 +35,7 @@ export default {
         criterion: {
             handler() {
                 /* fetch results */
+                this.fetchResults();
             },
             deep: true
         }
@@ -41,10 +45,32 @@ export default {
 
         },
         sortByCriteria() {
+            let sortByCriteria = {}
+            const sortByKeys = Object.keys(this.criterion.sortBy);
+            
+            /* omit unused sort fields */
+            sortByKeys.forEach(key => {
+                const field = this.criterion.sortBy[key];
+                
+                if (field.active)
+                    sortByCriteria[key] = field.order
+            });
 
+            return sortByCriteria
         },
         filterCriteria() {
+            const filterCriteria = {
+                ...this.criterion.filters
+            };
 
+            const filterKeys = Object.keys(filterCriteria);
+
+            /* omit unused filters */
+            filterKeys.forEach(key => {
+                if (this.criterion.filters[key] === "default")
+                    delete filterCriteria[key];
+            });
+            return filterCriteria
         }
     },
     methods: {
@@ -53,7 +79,14 @@ export default {
             this.fetchResults();
         },
         async fetchResults() {
-
+            console.log('hit endpoint and fetch results');
+            const payload = {
+                search: this.criterion.search,
+                filters: this.filterCriteria,
+                sortBy: this.sortByCriteria,
+                cursor: this.cursor
+            }
+            console.log(payload)
         }
     }
 }

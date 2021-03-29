@@ -2,13 +2,15 @@
 <div class="products crud">
     <!-- filters -->
     <div :class="{updating: showForm}" class="filters center">
-        <input class="search shadow" type="text" placeholder="Search for Products" />
-        <SelectBox :options="filters" v-model="selectedFilter" />
+        <SelectBox :options="searchBy" v-model="paginationData.search.key" label="Search By"/>
+        <input v-model="paginationData.search.term" class="search shadow" type="text" placeholder="Search for Products" />
+        <SelectBox :options="productTypes" v-model="paginationData.filters.type" label="Filter By"/>
     </div>
 
     <!-- list of products -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="list" :model="model" :headings="headings" custom_css="10% 10% 30% 20% 10% 10% 10%" @documentFetched="documentFetched" />
+        <List ref="list" :list="list" :model="model" :headings="headings" custom_css="10% 10% 30% 20% 10% 10% 10%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" />
+        <Pagination :criterion="criterion" @resultsFetched="resultsFetched"/>
     </div>
 
     <!-- update products form -->
@@ -31,19 +33,48 @@ export default {
             showForm: false,
             loading: false,
             model: 'products',
-            filters: [{
+            /* product types */
+            productTypes: [{
                 name: 'All Products',
-                value: 'all'
+                value: 'default'
             }, {
-                name: "Karakul",
-                value: 'karakul'
+                name: "Made to Order",
+                value: 'made-to-order'
+            },
+            {
+                name: "Ready To Ship",
+                value: 'ready-to-ship'
+            },
+            {
+                name: 'Third Party Products',
+                value: 'third-party'
             }],
-            selectedFilter: 'all',
+            /* collections */
+            searchBy: [{name: "Product Name", value: "name"}, {name: "Style ID", value: "styleId"}],
+            /* paginationData paginationData */
+            paginationData: {
+                search: {
+                    key: "name",
+                    term: ""
+                },
+                filters: {
+                    type: 'default'
+                },
+                sortBy: {
+
+                }
+            },
             list: [],
-            headings: ['_id', 'StyleID', 'Name', 'Slug', 'Type', 'Collection', 'Status'],
+            headings: ['_id', 'StyleID', 'name', 'Slug', 'type', 'Collection', 'status'],
+            sortByFields: ['name', 'type', 'status'],
             collections: [],
             variants: [],
             fabrics: []
+        }
+    },
+    computed: {
+        criterion() {
+            return {...this.paginationData }
         }
     },
     async mounted() {
@@ -54,6 +85,10 @@ export default {
 
     },
     methods: {
+        sortToggled(sortBy) {
+            console.log(sortBy);
+            this.paginationData = {...this.paginationData, sortBy }
+        },
         async fetchFabrics() {
             const result = await this.$fetchCollection('fabrics');
             this.fabrics = result.docs.map(({
@@ -168,6 +203,9 @@ export default {
 
             }, 13);
         },
+        resultsFetched(results) {
+            console.log(results);
+        },
         async fetchList() {
             this.loading = true;
             const result = await this.$fetchCollection(this.model);
@@ -200,7 +238,6 @@ export default {
                     slug,
                     type,
                     bounipun_collection: foundCollection !== undefined ? foundCollection.name : "Third Paty",
-                    // bounipun_collection: "--",
                     status
                 }
             });

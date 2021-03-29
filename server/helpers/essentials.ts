@@ -16,7 +16,6 @@ aws.config.update({
     region: "ap-south-1"
 });
 
-
 /* environment */
 export const environment = process.env.NODE_ENV;
 

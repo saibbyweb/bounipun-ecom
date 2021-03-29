@@ -2,8 +2,11 @@
 <!-- list -->
 <div class="list">
     <!-- headings -->
-    <div class="item shadow heading" :style="adjustItem()">
-        <span v-for="(heading, index) in headings" :key="index"> {{ heading }} </span>
+    <div class="item shadow headings" :style="adjustItem()">
+        <span class="heading" v-for="(heading, index) in headings" :key="index">
+            {{ heading }}
+            <img @click="toggleSort(heading)" class="sortable" v-if="isSortable(heading)" src="/icons/light/sort.png" />
+        </span>
     </div>
     <!-- data points -->
     <div @click="select(item, index)" :class="{selected: isSelected(index)}" class="item shadow" v-for="(item, index) in list" :key="index" :style="adjustItem()">
@@ -31,12 +34,25 @@ export default {
         model: {
             type: String,
             default: ''
+        },
+        sortByFields: {
+            type: Array,
+            default: () => []
         }
+    },
+    watch: {
+        sortByFields() {
+            this.constructSortBy();
+        }
+    },
+    mounted() {
+        this.constructSortBy();
     },
     data() {
         return {
             selected: null,
-            loading: false
+            loading: false,
+            sortBy: {}
         }
     },
     computed: {
@@ -52,12 +68,39 @@ export default {
         }
     },
     methods: {
+        toggleSort(key) {
+            const field = this.sortBy[key];
+
+            const sortBy = this.sortBy;
+            Object.keys(sortBy).forEach(function (key) {
+                sortBy[key].active = false
+            });
+
+            field.active = true;
+            field.order = field.order === 1 ? -1 : 1;
+            this.$emit('sortToggled', this.sortBy);
+        },
+        constructSortBy() {
+            console.log('CONSTRUCTED')
+            /* flush old data, if any */
+            this.sortBy = {};
+            /* for each key, create a object which holds sort state */
+            this.sortByFields.forEach(field => {
+                this.sortBy[field] = {
+                    order: 1,
+                    active: false
+                }
+            })
+        },
         optimizeValue(value) {
             console.log(typeof value);
-            if(typeof value === "boolean") {
+            if (typeof value === "boolean") {
                 return value ? 'Active' : 'Inactive'
             }
             return value;
+        },
+        isSortable(field) {
+            return this.sortByFields.findIndex(key => field === key) !== -1
         },
         isSelected(index) {
             return this.selected === index
@@ -65,8 +108,8 @@ export default {
         async select(item, index) {
             this.selected = index;
             this.loading = true;
-            
-            const result = await this.$fetchDocument(this.model, item._id,'admin');
+
+            const result = await this.$fetchDocument(this.model, item._id, 'admin');
             this.loading = false;
 
             if (!result.fetched) {
@@ -117,19 +160,24 @@ export default {
 
     &.selected {
         background-color: rgb(35, 148, 92) !important;
+
         span {
-            color:white;
+            color: white;
         }
     }
 
-    &.heading {
+    &.headings {
         background-color: #492727;
 
-        span {
+        .heading {
             color: #efefef;
             font-weight: 900;
             font-family: $font_1;
             text-transform: uppercase;
+
+            .sortable {
+                width: 14px;
+            }
         }
 
         &:hover {
@@ -156,8 +204,8 @@ export default {
         font-family: $font_2;
 
         &._id {
-            font-size:8px;
-            word-wrap:break-word;
+            font-size: 8px;
+            word-wrap: break-word;
         }
 
         &.status {
