@@ -1,10 +1,9 @@
-import { server, mongoose } from "@helpers/essentials";
-import admin from "@helpers/admin"
-import { uploader, methods as imageHelper } from "@models/imageUpload"
+import { server, db } from "@helpers/essentials";
+import admin from "@helpers/admin";
+import { uploader, methods as imageHelper } from "@models/imageUpload";
 import { register } from "@models";
 register();
 
-const db = mongoose.connection;
 
 /* creating express router */
 const router = server.express.Router();

@@ -1,3 +1,4 @@
+import { db } from "@helpers/essentials"
 import { product, collection } from "@models"
 
 export default {
@@ -14,5 +15,30 @@ export default {
                 break;
         }
         return { updated: false }
+    },
+    async getPaginationResults(model, criterion) {
+        /* collection */
+        const collection = db.model(model);
+
+        /* fetch documents */
+        const documents = await collection.aggregate([{
+          $facet: {
+              documents: [
+                { $match: criterion.match },
+                { $sort: criterion.sort },
+                { $skip: criterion.skip },
+                { $limit: criterion.limit },
+              ],
+              totalMatches: [
+                { $match: criterion.match },
+                { $count: "count" }
+              ]
+          }  
+        }]);
+
+        console.log(documents);
+
+
+
     }
 }

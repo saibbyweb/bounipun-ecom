@@ -78,6 +78,9 @@ export const dbConnect = async (): Promise<any> => {
 
 };
 
+/* mongo connection */
+export const db = mongoose.connection;
+
 /* try catch promise */
 export const task = async (promise: Promise<any>): Promise<any> => {
     let response;
