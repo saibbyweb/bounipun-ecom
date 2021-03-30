@@ -4,7 +4,6 @@ import { uploader, methods as imageHelper } from "@models/imageUpload";
 import { register } from "@models";
 register();
 
-
 /* creating express router */
 const router = server.express.Router();
 
@@ -30,13 +29,13 @@ router.post('/getDocument', async (req, res) => {
         switch (model) {
             /* products */
             case 'products':
-                document =  await document
+                document = await document
                     .populate('bounipun_collection', 'name description')
                     .populate('variants._id', 'name info1 info2 code description')
                     .populate('variants.fabrics._id', 'name code info1 description')
                     .populate('colors._id', 'name category image')
-           
-                    
+
+
 
                 /* if bounipun colors, get grouped color data */
                 if (document.colorSource === 'bounipun-colors') {
@@ -48,7 +47,7 @@ router.post('/getDocument', async (req, res) => {
                         /* find all colors under this category */
                         const colors = document.colors.filter(color => {
                             // console.log(color._id.category.toString() === category._id.toString())
-                  
+
                             return color._id.category.toString() === category._id.toString()
                         });
                         groupedData[category.name] = colors;
@@ -65,8 +64,8 @@ router.post('/getDocument', async (req, res) => {
                     color.image = bounipunColor ? color._id.image : "";
                     color._id = bounipunColor ? color._id._id : null;
                 });
-                
-                
+
+
                 break;
             default:
                 break;
@@ -139,6 +138,36 @@ router.post('/fetchCollection', async (req, res) => {
     res.send(documents);
 });
 
+/* fetch paginated results */
+router.post('/fetchPaginatedResults', async (req, res) => {
+    // console.log('requested to paginate', req.body)
+    /* destructure data from request body */
+    const { model, rawCriterion, requestedBy } = req.body;
+
+    /* construct criterion from raw criterion */
+    let criterion: any = {};
+        
+    /* add filters (match) */
+    criterion.match = rawCriterion.filters;
+
+    /* add text search */
+    criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
+    
+    /* sort by fields */
+    criterion.sort = rawCriterion.sortBy;
+
+    /* calculate number of docs to be skipped */
+    criterion.skip = (rawCriterion.cursor - 1) * rawCriterion.limit;
+
+    /* set result set limit */
+    criterion.limit = rawCriterion.limit;
+
+    const paginatedResults = await admin.getPaginationResults(model, criterion);
+  
+    res.send(paginatedResults);
+
+});
+
 /* update api */
 router.post('/updateDocument', async (req, res) => {
     /* extracting query details */
@@ -146,10 +175,10 @@ router.post('/updateDocument', async (req, res) => {
 
     /* check if special update is required */
     const specialUpdate = await admin.specialUpdate(model, details, editMode);
-    
+
     /* if special update processed */
-    if(specialUpdate.updated) {
-        res.send({updated: true});
+    if (specialUpdate.updated) {
+        res.send({ updated: true });
         return;
     }
 

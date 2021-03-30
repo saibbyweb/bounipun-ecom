@@ -17,15 +17,16 @@ export default {
         return { updated: false }
     },
     async getPaginationResults(model, criterion) {
+        let paginatedResults = { docs: [], totalMatches: 0, fetched: false }
         /* collection */
         const collection = db.model(model);
 
         /* fetch documents */
-        const documents = await collection.aggregate([{
+        const results = await collection.aggregate([{
           $facet: {
               documents: [
                 { $match: criterion.match },
-                { $sort: criterion.sort },
+                { $sort: Object.keys(criterion.sort).length === 0 ? { createdAt: -1 } : criterion.sort },
                 { $skip: criterion.skip },
                 { $limit: criterion.limit },
               ],
@@ -35,10 +36,20 @@ export default {
               ]
           }  
         }]);
+        
+        /* if no results found */
+        const fetchedResults = results[0];
+        if(fetchedResults.documents.length === 0 && fetchedResults.totalMatches.length === 0) {
+            console.log('No results found');
+            return paginatedResults;
+        }
 
-        console.log(documents);
-
-
-
+        paginatedResults.docs = fetchedResults.documents;
+        paginatedResults.totalMatches = fetchedResults.totalMatches[0].count;
+        paginatedResults.fetched = true;
+        
+        // console.log(paginatedResults);
+        return paginatedResults;
+       
     }
 }

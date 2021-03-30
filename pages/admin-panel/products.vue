@@ -2,15 +2,16 @@
 <div class="products crud">
     <!-- filters -->
     <div :class="{updating: showForm}" class="filters center">
-        <SelectBox :options="searchBy" v-model="paginationData.search.key" label="Search By"/>
-        <input v-model="paginationData.search.term" class="search shadow" type="text" placeholder="Search for Products" />
-        <SelectBox :options="productTypes" v-model="paginationData.filters.type" label="Filter By"/>
+        <SelectBox :options="searchBy" v-model="rawCriterion.search.key" label="Search By"/>
+        <input v-model="rawCriterion.search.term" class="search shadow" type="text" placeholder="Search for Products" />
+        <SelectBox :options="productTypes" v-model="rawCriterion.filters.type" label="Filter By"/>
     </div>
 
     <!-- list of products -->
     <div :class="{updating: showForm}" class="list">
-        <List ref="list" :list="list" :model="model" :headings="headings" custom_css="10% 10% 30% 20% 10% 10% 10%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" />
-        <Pagination :criterion="criterion" @resultsFetched="resultsFetched"/>
+        <List ref="list" :list="list" :model="model" :headings="headings" custom_css="10% 10% 25% 20% 10% 15% 10%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" />
+
+        <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
     </div>
 
     <!-- update products form -->
@@ -51,8 +52,8 @@ export default {
             }],
             /* collections */
             searchBy: [{name: "Product Name", value: "name"}, {name: "Style ID", value: "styleId"}],
-            /* paginationData paginationData */
-            paginationData: {
+            /* rawCriterion */
+            rawCriterion: {
                 search: {
                     key: "name",
                     term: ""
@@ -62,7 +63,8 @@ export default {
                 },
                 sortBy: {
 
-                }
+                },
+                limit: 3
             },
             list: [],
             headings: ['_id', 'StyleID', 'name', 'Slug', 'type', 'Collection', 'status'],
@@ -72,22 +74,17 @@ export default {
             fabrics: []
         }
     },
-    computed: {
-        criterion() {
-            return {...this.paginationData }
-        }
-    },
     async mounted() {
         await this.fetchBounipunCollections();
         await this.fetchVariants();
         await this.fetchFabrics();
-        await this.fetchList();
+        // await this.fetchList();
 
     },
     methods: {
         sortToggled(sortBy) {
             console.log(sortBy);
-            this.paginationData = {...this.paginationData, sortBy }
+            this.rawCriterion = {...this.rawCriterion, sortBy }
         },
         async fetchFabrics() {
             const result = await this.$fetchCollection('fabrics');
@@ -203,10 +200,42 @@ export default {
 
             }, 13);
         },
-        resultsFetched(results) {
-            console.log(results);
+        resultsFetched(result) {
+            if(result.docs.length === 0) {
+                this.list = [];
+                return;
+            }
+
+            /* extract list */
+            this.list = result.docs.map(({
+                _id,
+                styleId,
+                name,
+                slug,
+                type,
+                bounipun_collection,
+                status
+            }) => {
+                /* resolve category name */
+                const foundCollection = this.collections.find(col => col.value === bounipun_collection);
+                
+                console.log(foundCollection, '-found collection');
+
+                return {
+                    _id,
+                    styleId,
+                    name,
+                    slug,
+                    type,
+                    bounipun_collection: foundCollection !== undefined ? foundCollection.name : "Third Paty",
+                    status
+                }
+            });
         },
         async fetchList() {
+            this.$refs.pagination.fetchResults();
+            return;
+
             this.loading = true;
             const result = await this.$fetchCollection(this.model);
             this.loading = false;

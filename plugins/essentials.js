@@ -44,7 +44,7 @@ export default (context, inject) => {
     let result = { fetched: false, docs: [] };
     const collectionFetch = context.$axios.$post("/fetchCollection", {
       model,
-      requestedBy: !requestedBy ? 'default' : requestedBy
+      requestedBy: !requestedBy ? "default" : requestedBy
     });
 
     /* wait for the request to complete */
@@ -69,13 +69,48 @@ export default (context, inject) => {
     result.docs = response;
     return result;
   };
+
+  /* fetch pagination results */
+  const fetchPaginatedResults = async (model, rawCriterion, requestedBy) => {
+    let result = { fetched: false, docs: [], totalMatches: 0 };
+    /* hit endpoint */
+    const docsFetch = context.$axios.$post("/fetchPaginatedResults", {
+      model,
+      rawCriterion,
+      requestedBy: !requestedBy ? "default" : requestedBy
+    });
+    /* wait for the request to complete */
+    $store.commit("admin/setLoading", true);
+    const { response, error } = await task(docsFetch);
+    $store.commit("admin/setLoading", false);
+
+    /* if error occurred */
+    if (error) {
+      console.log("Could not fetch documents");
+      return result;
+    }
+
+    /* fetch confirmed */
+    result.fetched = true;
+
+    /* if no docs found, return */
+    if (response.length === 0) {
+      return result;
+    }
+
+    result.docs = response.docs;
+    result.totalMatches = response.totalMatches;
+    
+    return result;
+  };
+
   /* fetch document api */
   const fetchDocument = async (model, _id, requestedBy) => {
     let result = { fetched: false, doc: {} };
     const documentFetch = context.$axios.$post("/getDocument", {
       model,
       _id,
-      requestedBy: !requestedBy ? 'default' : requestedBy
+      requestedBy: !requestedBy ? "default" : requestedBy
     });
 
     /* wait for request to complete */
@@ -122,6 +157,7 @@ export default (context, inject) => {
   };
 
   inject("fetchCollection", fetchCollection);
+  inject("fetchPaginatedResults", fetchPaginatedResults);
   inject("updateDocument", updateDocument);
   inject("fetchDocument", fetchDocument);
   inject("deleteDocument", deleteDocument);

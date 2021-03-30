@@ -1,9 +1,8 @@
 <template>
 <div class="sw-pagination">
-    Total pages {{ totalPages }} <br>
+    <!-- Total pages {{ totalPages }} <br> -->
     <!-- pagination bar -->
-    <div class="pagination-bar">
-
+    <div v-if="totalMatches > 0" class="pagination-bar">
         <button @click="getPage(n)" :class="n == cursor ? 'current-page page-no' : 'page-no'" :key="index" v-for="(n, index) in this.totalPages"> {{ n }} </button>
     </div>
 </div>
@@ -14,44 +13,48 @@ export default {
     data() {
         return {
             cursor: 1,
-            results: {
-                documents: [],
-                totalMatches: 0,
-                limitPerRequest: 1
-            }
+            totalMatches: 0
         }
     },
     props: {
-        criterion: {
+        model: String,
+        rawCriterion: {
             search: {
                 key: String,
                 term: String,
             },
             filters: Object,
             sortBy: Object,
+            limit: Number
         }
     },
     watch: {
-        criterion: {
+        rawCriterion: {
             handler() {
                 /* fetch results */
+                this.cursor = 1;
                 this.fetchResults();
             },
             deep: true
         }
     },
+    mounted() {
+        this.fetchResults();
+    },
     computed: {
         totalPages() {
-
+            // if(this.totalMatches === 0)
+            //     return 0;
+            return Math.ceil(this.totalMatches / this.rawCriterion.limit);
         },
         sortByCriteria() {
             let sortByCriteria = {}
-            const sortByKeys = Object.keys(this.criterion.sortBy);
-            
+            const sortByKeys = Object.keys(this.rawCriterion.sortBy);
+
             /* omit unused sort fields */
             sortByKeys.forEach(key => {
-                const field = this.criterion.sortBy[key];
-                
+                const field = this.rawCriterion.sortBy[key];
+
                 if (field.active)
                     sortByCriteria[key] = field.order
             });
@@ -60,14 +63,14 @@ export default {
         },
         filterCriteria() {
             const filterCriteria = {
-                ...this.criterion.filters
+                ...this.rawCriterion.filters
             };
 
             const filterKeys = Object.keys(filterCriteria);
 
             /* omit unused filters */
             filterKeys.forEach(key => {
-                if (this.criterion.filters[key] === "default")
+                if (this.rawCriterion.filters[key] === "default")
                     delete filterCriteria[key];
             });
             return filterCriteria
@@ -80,13 +83,27 @@ export default {
         },
         async fetchResults() {
             console.log('hit endpoint and fetch results');
-            const payload = {
-                search: this.criterion.search,
+            const rawCriterion = {
+                search: this.rawCriterion.search,
                 filters: this.filterCriteria,
                 sortBy: this.sortByCriteria,
-                cursor: this.cursor
+                cursor: this.cursor,
+                limit: this.rawCriterion.limit
             }
-            console.log(payload)
+            // console.log(payload)
+            const paginatedResults = await this.$fetchPaginatedResults(this.model, rawCriterion);
+            
+            /* set paginated results */
+            this.totalMatches = paginatedResults.totalMatches;
+            console.log(this.totalMatches, '--total matches')
+
+            /* if not results found */
+            if (!paginatedResults.fetched || paginatedResults.docs.length === 0) {
+                this.$emit('resultsFetched', paginatedResults);
+                return;
+            }
+
+            this.$emit('resultsFetched', paginatedResults)
         }
     }
 }
@@ -114,7 +131,7 @@ export default {
         }
 
         .current-page {
-            background: #f9b3b5;
+            background: $primary_dark;
             color: white;
         }
     }
