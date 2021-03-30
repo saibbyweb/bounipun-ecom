@@ -16,7 +16,7 @@
 
     <!-- update products form -->
     <div :class="{updating: showForm}" class="update">
-        <UpdateProduct v-if="showForm" ref="updateComponent" @updated="fetchList" :model="model" @close="showForm = false" :collections="collections" :variants="variants" :fabrics="fabrics" @resetVariants="resetVariants" />
+        <UpdateProduct v-if="showForm" ref="updateComponent" @updated="updateList" :model="model" @close="showForm = false" :collections="collections" :variants="variants" :fabrics="fabrics" @resetVariants="resetVariants" />
 
         <AddNewItem v-if="!showForm" label="Product" @showForm="showForm = true" />
     </div>
@@ -82,6 +82,9 @@ export default {
 
     },
     methods: {
+        updateList() {
+            this.$refs.pagination.fetchResults();
+        },
         sortToggled(sortBy) {
             console.log(sortBy);
             this.rawCriterion = {...this.rawCriterion, sortBy }
@@ -202,45 +205,6 @@ export default {
         },
         resultsFetched(result) {
             if(result.docs.length === 0) {
-                this.list = [];
-                return;
-            }
-
-            /* extract list */
-            this.list = result.docs.map(({
-                _id,
-                styleId,
-                name,
-                slug,
-                type,
-                bounipun_collection,
-                status
-            }) => {
-                /* resolve category name */
-                const foundCollection = this.collections.find(col => col.value === bounipun_collection);
-                
-                console.log(foundCollection, '-found collection');
-
-                return {
-                    _id,
-                    styleId,
-                    name,
-                    slug,
-                    type,
-                    bounipun_collection: foundCollection !== undefined ? foundCollection.name : "Third Paty",
-                    status
-                }
-            });
-        },
-        async fetchList() {
-            this.$refs.pagination.fetchResults();
-            return;
-
-            this.loading = true;
-            const result = await this.$fetchCollection(this.model);
-            this.loading = false;
-
-            if (!result.fetched || result.docs.length === 0) {
                 this.list = [];
                 return;
             }

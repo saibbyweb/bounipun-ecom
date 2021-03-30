@@ -2,17 +2,18 @@
 <div class="collection crud">
     <!-- filters -->
     <div :class="{updating: showForm}" class="filters center">
-        <input class="search shadow" type="text" placeholder="Search for collections" />
-        <SelectBox :options="filters" v-model="selectedFilter" />
+        <input v-model="rawCriterion.search.term" class="search shadow" type="text" placeholder="Search for collections" />
     </div>
     <!-- list of collections -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="list" :headings="headings" :model="model" @documentFetched="documentFetched" custom_css="10% 25% 25% 25% 15%" />
+        <List :list="list" :headings="headings" :sortByFields="sortByFields" :model="model" @documentFetched="documentFetched" @sortToggled="sortToggled" custom_css="10% 25% 25% 25% 15%" />
+
+        <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
     </div>
     <!-- update collection form -->
     <div :class="{updating: showForm}" class="update">
-        <UpdateCollection v-show="showForm" ref="updateComponent" @updated="fetchList" :model="model" @close="showForm = false"/>
-        <AddNewItem v-if="!showForm" label="collection" @showForm="showForm = true"/>
+        <UpdateCollection v-show="showForm" ref="updateComponent" @updated="updateList" :model="model" @close="showForm = false" />
+        <AddNewItem v-if="!showForm" label="collection" @showForm="showForm = true" />
     </div>
 </div>
 </template>
@@ -25,40 +26,46 @@ export default {
             showForm: false,
             loading: false,
             model: 'collections',
-            filters: [{
-                name: 'All Collections',
-                value: 'all'
-            }, {
-                name: "Karakul",
-                value: 'karakul'
-            }, {
-                name: 'Autograph',
-                value: 'autograph'
-            }, {
-                name: 'Escape',
-                value: 'escape'
-            }],
-            selectedFilter: 'all',
-            list: [
-            ],
-            headings: ['_id', 'Collection Name', 'Slug', 'Description', 'Published']
+            /* rawCriterion */
+            rawCriterion: {
+                search: {
+                    key: "name",
+                    term: ""
+                },
+                filters: {
+                    type: 'default'
+                },
+                sortBy: {
+
+                },
+                limit: 2
+            },
+            sortByFields: ['name', 'status'],
+            list: [],
+            headings: ['_id', 'name', 'Slug', 'Description', 'status']
         }
     },
     mounted() {
-        this.fetchList();
+        // this.fetchList();
     },
     methods: {
+        updateList() {
+            this.$refs.pagination.fetchResults();
+        },
+        sortToggled(sortBy) {
+            console.log(sortBy);
+            this.rawCriterion = {
+                ...this.rawCriterion,
+                sortBy
+            }
+        },
         documentFetched(doc) {
             this.showForm = true;
             this.editMode = true;
             console.log(this.$refs.updateComponent.populateForm(doc));
         },
-        async fetchList() {
-            this.loading = true;
-            const result = await this.$fetchCollection(this.model);
-            this.loading = false;
-
-            if (!result.fetched || result.docs.length === 0) {
+        resultsFetched(result) {
+            if (result.docs.length === 0) {
                 this.list = [];
                 return;
             }
