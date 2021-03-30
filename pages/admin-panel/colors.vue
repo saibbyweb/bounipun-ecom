@@ -2,16 +2,18 @@
 <div class="colors crud">
     <!-- filters -->
     <div :class="{updating: showForm}" class="filters center">
-        <input class="search shadow" type="text" placeholder="Search for Colors" />
-        <SelectBox :options="filters" v-model="selectedFilter" />
+        <SelectBox :options="searchBy" v-model="rawCriterion.search.key" label="Search By" />
+        <input v-model="rawCriterion.search.term" class="search shadow" type="text" placeholder="Search for Colors" />
     </div>
     <!-- list of fabrics -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="list" :model="model" :headings="headings" custom_css="10% 20% 20% 10% 10% 20% 10%" @documentFetched="documentFetched" />
+        <List :list="list" :model="model" :headings="headings" custom_css="10% 20% 20% 10% 10% 20% 10%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" />
+
+        <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
     </div>
     <!-- update fabrics form -->
     <div :class="{updating: showForm}" class="update">
-        <UpdateColor v-show="showForm" ref="updateComponent" @updated="fetchList" :model="model" @close="showForm = false" :colorCategories="colorCategories" />
+        <UpdateColor v-show="showForm" ref="updateComponent" @updated="updateList" :model="model" @close="showForm = false" :colorCategories="colorCategories" />
 
         <AddNewItem v-if="!showForm" label="Color" @showForm="showForm = true" />
     </div>
@@ -26,24 +28,48 @@ export default {
             showForm: false,
             loading: false,
             model: 'colors',
-            filters: [{
-                name: 'All Colors',
-                value: 'all'
+            searchBy: [{
+                name: "Color Name",
+                value: "name"
             }, {
-                name: "Karakul",
-                value: 'karakul'
+                name: "Code",
+                value: "code"
             }],
-            selectedFilter: 'all',
+            /* rawCriterion */
+            rawCriterion: {
+                search: {
+                    key: "name",
+                    term: ""
+                },
+                filters: {
+                    type: 'default'
+                },
+                sortBy: {
+
+                },
+                limit: 3
+            },
             list: [],
-            headings: ['_id', 'Color Code', 'Color Name', 'Image', 'Category', 'Description', 'Status'],
+            sortByFields: ['code', 'name', 'status'],
+            headings: ['_id', 'code', 'name', 'Image', 'Category', 'Description', 'status'],
             colorCategories: [],
         }
     },
     async mounted() {
         await this.fetchColorCategories();
-        await this.fetchList();
+        // await this.fetchList();
     },
     methods: {
+        updateList() {
+            this.$refs.pagination.fetchResults();
+        },
+        sortToggled(sortBy) {
+            console.log(sortBy);
+            this.rawCriterion = {
+                ...this.rawCriterion,
+                sortBy
+            }
+        },
         async fetchColorCategories() {
             const result = await this.$fetchCollection('color_categories');
             this.colorCategories = result.docs.map(({
@@ -78,12 +104,8 @@ export default {
             }, 1200);
 
         },
-        async fetchList() {
-            this.loading = true;
-            const result = await this.$fetchCollection(this.model);
-            this.loading = false;
-
-            if (!result.fetched || result.docs.length === 0) {
+        resultsFetched(result) {
+            if(result.docs.length === 0) {
                 this.list = [];
                 return;
             }
