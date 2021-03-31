@@ -102,4 +102,5 @@ export const methods = {
 
     }
 }
+
 export default { model, methods };
