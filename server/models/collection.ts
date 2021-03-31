@@ -7,6 +7,7 @@ const schema = new mongoose.Schema({
     name: String,
     slug: String,
     description: String,
+    edt: String,
     status: Boolean
 }, {
     timestamps: true

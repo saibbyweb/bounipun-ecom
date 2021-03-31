@@ -4,15 +4,17 @@
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add' }} Collection </h2>
     <!-- collection id -->
-    <InputBox v-if="editMode" label="Collection ID" v-model="doc._id" disabled :internal="true"/>
+    <InputBox v-if="editMode" label="Collection ID" v-model="doc._id" disabled :internal="true" />
     <!-- collection name -->
     <InputBox v-model="doc.name" label="Collection Name" />
     <!-- slug -->
     <InputBox v-model="doc.slug" label="Slug" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
+    <!-- edt -->
+    <InputBox v-model="doc.edt" label="EDT" />
     <!-- publish toggle -->
-    <Toggle v-model="doc.status" label="Status" />
+    <Toggle v-model="doc.status" label="Status" /> 
     <!-- update button -->
     <div class="center-space">
         <!-- loading bar -->
@@ -41,6 +43,7 @@ export default {
                 name: "",
                 slug: "",
                 description: "",
+                edt: "",
                 status: false
             },
             loading: false,
@@ -79,6 +82,7 @@ export default {
                 name,
                 slug,
                 description,
+                edt,
                 status
             } = details;
 
@@ -87,6 +91,7 @@ export default {
                 name,
                 slug,
                 description,
+                edt,
                 status
             };
             this.editMode = true;
@@ -101,6 +106,7 @@ export default {
                 name: "",
                 slug: "",
                 description: "",
+                edt: "",
                 status: false
             });
             this.editMode = false;

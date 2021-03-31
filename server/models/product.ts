@@ -35,6 +35,7 @@ const schema = new mongoose.Schema({
         }]
     }],
     directPrice: { type: String, default: 0 },
+    etd: String,
     status: Boolean
 }, {
     timestamps: true

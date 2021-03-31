@@ -135,7 +135,7 @@
                 <!-- <p> Variant Specific Details</p> -->
                 <ul v-if="!thirdPartyProduct" >
                     <li v-for="(point, index) in variantDescription" :key="index">
-                        <span> {{ point }} </span>
+                        <span class="desc"> {{ point }} </span>
                     </li>
                 </ul>
 
@@ -143,21 +143,21 @@
                 <!-- <p> Design Specific Details</p> -->
                 <ul>
                     <li v-for="(point, index) in productDescription" :key="index">
-                        <span> {{ point }} </span>
+                        <span class="desc"> {{ point }} </span>
                     </li>
                 </ul>
 
                 <!-- fabric -->
                 <ul v-if="!thirdPartyProduct" >
                     <li v-for="(point, index) in fabricDescription" :key="index">
-                        <span> {{ point }} </span>
+                        <span class="desc"> {{ point }} </span>
                     </li>
                 </ul>
             </Accordion>
 
             <!-- about collection -->
             <Accordion v-if="!thirdPartyProduct" :heading="`About ${product.bounipun_collection.name}`">
-                <span> {{ product.bounipun_collection.description }} </span>
+                <span class="desc"> {{ product.bounipun_collection.description }} </span>
             </Accordion>
 
             <Accordion heading="Shipping & Returns" />
@@ -656,6 +656,10 @@ export default {
 
         ul {
             margin: 4px;
+
+            li {
+                 text-align: justify;
+            }
         }
 
         p {
@@ -665,6 +669,7 @@ export default {
 
         span {
             font-size: 12px;
+       
         }
     }
 }
