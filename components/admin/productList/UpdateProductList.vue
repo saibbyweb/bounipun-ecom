@@ -3,11 +3,19 @@
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Product List </h2>
     <!-- product list id -->
-    <InputBox v-if="editMode" label="Product List ID" v-model="doc._id" disbaled :internal="true"/>
+    <InputBox v-if="editMode" label="Product List ID" v-model="doc._id" disbaled :internal="true" />
     <!-- product list name -->
     <InputBox label="Product List Name" v-model="doc.name" />
+
+    <div class="center">
+        <div class="list" v-for="(product,index) in doc.list" :key="index"> {{ product.name }}
+            <!-- <img @click="removeProduct(index)" src="@/assets/trash.svg" /> -->
+        </div>
+    </div>
+
     <!-- info name -->
-    <!-- <InputBox label="List" v-model="doc.list" /> -->
+    <autocomplete ref="autocomplete" :source="allProducts" @enter="addProduct" @selected="addProduct">
+    </autocomplete>
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
     <!-- publish toggle -->
@@ -42,11 +50,38 @@ export default {
                 description: "",
                 status: false
             },
+            allProducts: [],
             loading: false,
             updated: false
         }
     },
+    mounted() {
+        this.fetchAllProducts();
+    },
     methods: {
+        removeProduct(index) {
+            this.doc.list.splice(key, 1);
+        },
+        addProduct(data) {
+            console.log('Update product list');
+            this.doc.list.push(data.selectedObject)
+        },
+        async fetchAllProducts() {
+            const result = await this.$fetchCollection('products');
+            this.allProducts = result.docs.map(({
+                _id,
+                styleId,
+                name
+            }) => {
+                return {
+                    _id,
+                    styleId,
+                    name
+                }
+            });
+
+            console.log(this.allProducts);
+        },
         async updateDocument() {
             this.loading = true;
             const result = await this.$updateDocument(this.model, this.doc, this.editMode);

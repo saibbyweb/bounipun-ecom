@@ -79,7 +79,6 @@ export default {
         await this.fetchVariants();
         await this.fetchFabrics();
         // await this.fetchList();
-
     },
     methods: {
         updateList() {
