@@ -7,6 +7,7 @@ const schema = new mongoose.Schema({
         type: ObjectId,
         ref: 'products'
     }],
+    description: String,
     status: Boolean
 }, {
     timestamps: true

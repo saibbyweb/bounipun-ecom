@@ -58,6 +58,11 @@ export default {
                     path: '/admin-panel/colors',
                     desc: 'Manage bounipun colors'
                 },
+                 {
+                    name: 'Product Lists',
+                    path: '/admin-panel/productLists',
+                    desc: 'Manage bounipun colors'
+                },
                 // {
                 //     name: 'Coupons',
                 //     path: '/admin-panel/coupons',
