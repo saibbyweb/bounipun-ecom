@@ -7,18 +7,20 @@
     <!-- product list name -->
     <InputBox label="Product List Name" v-model="doc.name" />
 
-    <div class="list">
-        <div class="selected" v-for="(product,index) in doc.list" :key="index"> 
+
+    <!-- product autocomplete list -->
+    <client-only>
+        <autocomplete inputClass="small" ref="autocomplete" :source="allProductsExceptSelected" @enter="addProduct" @selected="addProduct">
+        </autocomplete>
+    </client-only>
+
+        <div class="list">
+        <div class="selected" v-for="(product,index) in doc.list" :key="index">
             <span> {{ product.name }} </span>
             <img @click="removeProduct(index)" src="/icons/light/trash.png" />
         </div>
     </div>
 
-    <!-- info name -->
-    <client-only>
-        <autocomplete ref="autocomplete" :source="allProductsExceptSelected" @enter="addProduct" @selected="addProduct">
-        </autocomplete>
-    </client-only>
 
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
@@ -39,6 +41,7 @@
 </div>
 </template>
 
+    
 <script>
 export default {
     props: {
@@ -134,8 +137,6 @@ export default {
                 status
             } = details;
 
-
-
             this.doc = {
                 _id,
                 name,
@@ -164,9 +165,10 @@ export default {
 }
 </script>
 
+    
 <style lang="scss" scoped>
 .list {
-    display:flex;
+    display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-wrap: wrap;
@@ -180,11 +182,11 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        width:fit-content;
+        width: fit-content;
 
         span {
-            font-size:12px;
-            color:white;
+            font-size: 12px;
+            color: white;
         }
 
         img {
@@ -194,4 +196,32 @@ export default {
         }
     }
 }
+
+.contents {
+    /deep/ .autocomplete__box {
+        padding: 10px 15px;
+        border: none;
+        -webkit-appearance: none;
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+        color: $gray;
+        font-family: $font_2_semibold;
+        letter-spacing: 1px;
+    }
+
+    /deep/ .small {}
+
+    /deep/ .autocomplete__results {
+        border:none;
+        box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
+        .autocomplete__results__item {
+            font-size: 11px;
+        }
+    }
+}
+
+// .contents {
+//     /deep/ li {
+//         font-size: 10px !important;
+//     }
+// }
 </style>

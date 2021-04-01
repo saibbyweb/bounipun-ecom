@@ -82,7 +82,7 @@ export default {
                 status
             }) => {
                 
-                const totalProducts = "0"
+                const totalProducts = list.length
 
                 return {
                     _id,
