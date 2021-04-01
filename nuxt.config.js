@@ -26,6 +26,7 @@ export default {
   plugins: [
     { src: "~/plugins/vue-hammer.js", mode: "client" },
     "@/plugins/essentials.js"
+    // { src: "@/plugins/essentials.js", mode: "client" }
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

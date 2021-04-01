@@ -91,6 +91,13 @@ router.post('/getDocument', async (req, res) => {
                 });
 
                 break;
+            case 'product_lists':
+                document = await document.populate('list._id', 'name');
+                document.list.forEach(product => {
+                    product.name = product._id.name;
+                    product._id = product._id._id;
+                });
+                break;
             default:
                 break;
         }
@@ -146,13 +153,13 @@ router.post('/fetchPaginatedResults', async (req, res) => {
 
     /* construct criterion from raw criterion */
     let criterion: any = {};
-        
+
     /* add filters (match) */
     criterion.match = rawCriterion.filters;
 
     /* add text search */
     criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
-    
+
     /* sort by fields */
     criterion.sort = rawCriterion.sortBy;
 
@@ -163,7 +170,7 @@ router.post('/fetchPaginatedResults', async (req, res) => {
     criterion.limit = rawCriterion.limit;
 
     const paginatedResults = await admin.getPaginationResults(model, criterion);
-  
+
     res.send(paginatedResults);
 
 });

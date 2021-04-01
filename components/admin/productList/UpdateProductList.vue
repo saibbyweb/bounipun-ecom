@@ -7,15 +7,19 @@
     <!-- product list name -->
     <InputBox label="Product List Name" v-model="doc.name" />
 
-    <div class="center">
-        <div class="list" v-for="(product,index) in doc.list" :key="index"> {{ product.name }}
-            <!-- <img @click="removeProduct(index)" src="@/assets/trash.svg" /> -->
+    <div class="list">
+        <div class="selected" v-for="(product,index) in doc.list" :key="index"> 
+            <span> {{ product.name }} </span>
+            <img @click="removeProduct(index)" src="/icons/light/trash.png" />
         </div>
     </div>
 
     <!-- info name -->
-    <autocomplete ref="autocomplete" :source="allProducts" @enter="addProduct" @selected="addProduct">
-    </autocomplete>
+    <client-only>
+        <autocomplete ref="autocomplete" :source="allProductsExceptSelected" @enter="addProduct" @selected="addProduct">
+        </autocomplete>
+    </client-only>
+
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
     <!-- publish toggle -->
@@ -55,15 +59,26 @@ export default {
             updated: false
         }
     },
+    computed: {
+        allProductsExceptSelected() {
+            if (this.allProducts.length === 0)
+                return [];
+
+            return this.allProducts.filter(product => {
+                /* product is not in the selected array */
+                return this.doc.list.findIndex(selected => selected._id === product._id) === -1
+            });
+        }
+    },
     mounted() {
         this.fetchAllProducts();
     },
     methods: {
         removeProduct(index) {
-            this.doc.list.splice(key, 1);
+            this.doc.list.splice(index, 1);
         },
         addProduct(data) {
-            console.log('Update product list');
+            console.log('Update product list', data);
             this.doc.list.push(data.selectedObject)
         },
         async fetchAllProducts() {
@@ -91,7 +106,10 @@ export default {
                 return;
 
             this.$emit('updated');
-            this.populateForm(result.doc);
+            // this.populateForm(result.doc);
+            /* only update the id */
+            this.doc._id = result.doc._id;
+            this.editMode = true;
             this.$flash(this);
 
         },
@@ -115,6 +133,8 @@ export default {
                 description,
                 status
             } = details;
+
+
 
             this.doc = {
                 _id,
@@ -143,3 +163,35 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.list {
+    display:flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .selected {
+        background: #d68595;
+        color: white;
+        border-radius: 20px;
+        padding: 7px;
+        margin: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width:fit-content;
+
+        span {
+            font-size:12px;
+            color:white;
+        }
+
+        img {
+            margin-left: 1vw;
+            width: 2vw;
+            cursor: pointer;
+        }
+    }
+}
+</style>
