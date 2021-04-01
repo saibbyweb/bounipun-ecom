@@ -1,25 +1,20 @@
 <template>
-<div class="product-lists crud">
+<div class="homepages crud">
     <!-- filters -->
     <div :class="{updating: showForm}" class="filters center">
-        <!-- <SelectBox :options="searchBy" v-model="rawCriterion.search.key" label="Search By"/> -->
-        <input  v-model="rawCriterion.search.term" class="search shadow" type="text" placeholder="Search for Product Lists" />
-       
+        <input v-model="rawCriterion.search.term" class="search shadow" type="text" placeholder="Search for Homepage Layouts" />
     </div>
-    <!-- list of product lists -->
+    <!-- list of homepage layouts -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="list" :model="model" :headings="headings" custom_css="10% 40% 25% 25%"
-        :sortByFields="sortByFields" 
-        @documentFetched="documentFetched"
-        @sortToggled="sortToggled" />
+        <List :list="list" :model="model" :headings="headings" custom_css="10% 60% 20% 10%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" />
 
         <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
-
     </div>
-    <!-- update fabrics form -->
+    <!-- update homepage layouts form -->
     <div :class="{updating: showForm}" class="update">
-        <UpdateProductList v-show="showForm" ref="updateComponent" @updated="updateList" :model="model" @close="showForm = false" />
-        <AddNewItem v-if="!showForm" label="Product List" @showForm="showForm = true" />
+        <UpdateHomepageLayout v-show="showForm" ref="updateComponent" @updated="updateList" :model="model" @close="showForm = false"  />
+
+        <AddNewItem v-if="!showForm" label="Homepage Layout" @showForm="showForm = true" />
     </div>
 </div>
 </template>
@@ -31,8 +26,7 @@ export default {
         return {
             showForm: false,
             loading: false,
-            model: 'product_lists',
-            // searchBy: [{name: "List Name", value: "name"}, {name: "Code", value: "code"}],
+            model: 'homepage_layouts',
             /* rawCriterion */
             rawCriterion: {
                 search: {
@@ -49,11 +43,11 @@ export default {
             },
             list: [],
             sortByFields: ['name', 'status'],
-            headings: ['_id', 'name', 'Total Products', 'status']
+            headings: ['_id', 'name', 'description', 'status'],
         }
     },
-    mounted() {
-        // this.fetchList();
+    async mounted() {
+        // await this.fetchList();
     },
     methods: {
         updateList() {
@@ -61,12 +55,18 @@ export default {
         },
         sortToggled(sortBy) {
             console.log(sortBy);
-            this.rawCriterion = {...this.rawCriterion, sortBy }
+            this.rawCriterion = {
+                ...this.rawCriterion,
+                sortBy
+            }
         },
         documentFetched(doc) {
             this.showForm = true;
             this.editMode = true;
-            console.log(this.$refs.updateComponent.populateForm(doc));
+            this.$refs.updateComponent.populateForm(doc);
+
+            /* update images */
+
         },
         resultsFetched(result) {
             if(result.docs.length === 0) {
@@ -78,20 +78,16 @@ export default {
             this.list = result.docs.map(({
                 _id,
                 name,
-                list,
+                description,
                 status
             }) => {
-                
-                const totalProducts = list.length;
-
                 return {
                     _id,
                     name,
-                    totalProducts,
+                    description,
                     status
                 }
             });
-
         }
     }
 }

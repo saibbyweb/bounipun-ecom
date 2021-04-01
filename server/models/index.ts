@@ -7,6 +7,7 @@ import variantCategories from "./variantCategories";
 import variants from "./variants"
 import product from "./product"
 import productLists from "./productLists";
+import homepageLayouts from "./homepageLayouts";
 
 
 const register = function () {
@@ -18,6 +19,7 @@ const register = function () {
     variants.methods.register();
     product.methods.register();
     productLists.methods.register();
+    homepageLayouts.methods.register();
 }
 
-export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, register };
+export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, register };
