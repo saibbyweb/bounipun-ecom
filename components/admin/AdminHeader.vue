@@ -63,11 +63,11 @@ export default {
                     path: '/admin-panel/productLists',
                     desc: 'Manage bounipun colors'
                 },
-                // {
-                //     name: 'Coupons',
-                //     path: '/admin-panel/coupons',
-                //     desc: 'Manage list and details of various fabrics'
-                // },
+                {
+                    name: 'Homepage Layouts',
+                    path: '/admin-panel/homepageLayouts',
+                    desc: 'Manage Homepage Layouts'
+                },
             ]
         }
     }

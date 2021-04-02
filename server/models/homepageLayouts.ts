@@ -4,7 +4,7 @@ import { mongoose, ObjectId } from "@helpers/essentials"
 const schema = new mongoose.Schema({
     name: String,
     slideshow: Array,
-    homepageProducts: [{
+    productSection: [{
         heading: String,
         tagline: String,
         list: { type: ObjectId, ref: 'product_list' }
