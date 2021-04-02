@@ -4,13 +4,15 @@ import { mongoose, ObjectId } from "@helpers/essentials"
 const schema = new mongoose.Schema({
     name: String,
     slideshow: [{ _id: ObjectId, mainImage: Boolean, path: String }],
+    /* product sections */
     productSections: [{
         heading: String,
         tagline: String,
         list: { type: ObjectId, ref: 'product_list' }
     }],
-    sections: [
-        { heading: String, tagline: String, image: String }
+    /* alternate sections */
+    alternateSections: [
+        { heading: String, paragraph: String, image: String }
     ],
     description: String,
     status: Boolean

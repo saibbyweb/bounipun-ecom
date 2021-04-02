@@ -20,6 +20,10 @@
 </template>
 
 <script>
+import {
+    v4 as uuidv4
+} from "uuid";
+
 export default {
     layout: 'admin',
     data() {
@@ -63,12 +67,14 @@ export default {
         documentFetched(doc) {
             this.showForm = true;
             this.editMode = true;
-            setTimeout(() => this.populateForm(doc), 1000);    
+             /* add unique key to alternate sections */
+            doc.alternateSections.forEach(section => section.key = uuidv4())
+            this.$refs.updateComponent.populateForm(doc);
+            setTimeout(() => this.populateForm(doc), 1200);    
         },
         populateForm(doc) {
             const updateComponent = this.$refs.updateComponent;
-            updateComponent.populateForm(doc);
-
+            
             /* update images (slideshow and section images) */
             if (doc.slideshow.length === 0) {
                 return;
@@ -76,6 +82,25 @@ export default {
 
             /* assign slideshow images */
             updateComponent.$refs.imageUploader.assignImages(doc.slideshow);
+
+            /* assign alternate section images */
+            let i=0;
+            doc.alternateSections.forEach(section => {
+
+                if(section.image === "") {
+                    i++;
+                    return;
+                }
+              
+                /* assign image individually */
+                updateComponent.$refs.alternateImageUploader[i].assignImages([{
+                    _id: '',
+                    mainImage:false,
+                    path: section.image
+                }]);
+
+                i++;
+            })
         },
         resultsFetched(result) {
             if (result.docs.length === 0) {

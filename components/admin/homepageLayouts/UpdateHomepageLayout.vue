@@ -8,10 +8,11 @@
     <InputBox label="Layout Name" v-model="doc.name" />
     <!-- slideshow images -->
     <UploadImage ref="imageUploader" :multipleUpload="true" label="Set Slideshow Images" @updated="slideshowListUpdated" />
+    
     <!-- product sections -->
     <div class="product-sections">
         <label class="label"> Set Product Sections: </label>
-        <!-- loop through sections -->
+        <!-- loop through product sections -->
         <div class="section shadow" v-for="(section, index) in doc.productSections" :key="index">
             <!-- heading -->
             <InputBox label="Heading" v-model="section.heading" />
@@ -25,6 +26,29 @@
         <!-- add product section button -->
         <div class="center">
             <button class="shadow add-section" @click="addNewProductSection"> + Add Product Section </button>
+        </div>
+    </div>
+
+    <!-- alternate sections -->
+    <div class="alternate-sections">
+         <label class="label"> Set Alternate Sections: </label>
+         <!-- loop through alternate sections -->
+         <div class="section shadow" v-for="(section, index) in doc.alternateSections" :key="section.key">
+             <!-- heading -->
+             <InputBox label="Heading" v-model="section.heading" />
+             <!-- paragraph -->
+             <TextBox label="paragraph" v-model="section.paragraph" />
+             <!-- section image -->
+            <UploadImage ref="alternateImageUploader" :multipleUpload="false" label="Set Background Image" @updated="alternateImageListUpdated($event, index)" />
+
+             <!-- remove product section -->
+            <button class="action delete" style="font-size:9px; position: absolute; bottom:0; right:0;" @click="removeAlternateSection(index)"> Remove Alternate Section </button>
+
+         </div>
+
+        <!-- add alternate section button -->
+        <div class="center">
+            <button class="shadow add-section" @click="addNewAlternateSection"> + Add Alternate Section </button>
         </div>
     </div>
 
@@ -51,6 +75,10 @@
 </template>
 
 <script>
+import {
+    v4 as uuidv4
+} from "uuid";
+
 export default {
     props: {
         model: String,
@@ -63,6 +91,7 @@ export default {
                 name: "",
                 slideshow: [],
                 productSections: [],
+                alternateSections: [],
                 description: "",
                 status: false
             },
@@ -75,6 +104,9 @@ export default {
         this.fetchAllProductLists();
     },
     methods: {
+        alternateImageListUpdated(list, index) {
+            this.doc.alternateSections[index].image = list.length > 0 ? list[0].path : ""
+        },
         removeProductSection(key) {
             this.doc.productSections.splice(key, 1);
         },
@@ -82,8 +114,19 @@ export default {
             this.doc.productSections.push({
                 heading: "",
                 tagline: "",
-                list: ""
+                list: null
             })
+        },
+        addNewAlternateSection() {
+            this.doc.alternateSections.push({
+                heading: "",
+                paragraph: "",
+                image: "",
+                key: uuidv4()
+            })
+        },
+        removeAlternateSection(key) {
+            this.doc.alternateSections.splice(key, 1);
         },
         async fetchAllProductLists() {
             const result = await this.$fetchCollection('product_lists');
@@ -98,14 +141,14 @@ export default {
             });
             this.allProductLists.unshift({
                 name: 'Select Product List',
-                value: ""
+                value: null
             });
         },
         slideshowListUpdated(list) {
             this.doc.slideshow = list;
         },
         async updateDocument(model, details, editMode) {
-            console.log(this.doc);
+          
             this.loading = true;
             const result = await this.$updateDocument(this.model, this.doc, this.editMode);
             this.loading = false;
@@ -134,12 +177,18 @@ export default {
             const {
                 _id,
                 name,
+                slideshow,
+                productSections,
+                alternateSections,
                 description,
                 status
             } = details;
             this.doc = {
                 _id,
                 name,
+                slideshow,
+                productSections,
+                alternateSections,
                 description,
                 status
             };
@@ -155,6 +204,9 @@ export default {
             this.populateForm({
                 _id: "",
                 name: "",
+                slideshow: [],
+                productSections: [],
+                alternateSections: [],
                 description: "",
                 status: false
             });
