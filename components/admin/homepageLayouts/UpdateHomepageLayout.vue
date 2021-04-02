@@ -8,20 +8,26 @@
     <InputBox label="Layout Name" v-model="doc.name" />
     <!-- slideshow images -->
     <UploadImage ref="imageUploader" :multipleUpload="true" label="Set Slideshow Images" @updated="slideshowListUpdated" />
-    <!-- product lists -->
-    <div class="product-lists">
-        <!-- loop through lists -->
-        <div v-for="(list, index) in doc.lists" :key="index">
-            <!-- product list heading -->
-            <InputBox label="List Heading" v-model="list.heading" />
+    <!-- product sections -->
+    <div class="product-sections">
+        <label class="label"> Set Product Sections: </label>
+        <!-- loop through sections -->
+        <div class="section shadow" v-for="(section, index) in doc.productSections" :key="index">
+            <!-- heading -->
+            <InputBox label="Heading" v-model="section.heading" />
             <!-- tagline -->
-            <InputBox label="Tagline" v-model="list.tagline" />
-            <!-- products -->
-            <SelectBox :options="allProductLists" v-model="list.list" label="Select Product List" />
+            <InputBox label="Tagline" v-model="section.tagline" />
+            <!-- product list -->
+            <SelectBox :options="allProductLists" v-model="section.list" label="Select Product List" />
+            <!-- remove product section -->
+            <button class="action delete" style="font-size:9px; position: absolute; bottom:0; right:0;" @click="removeProductSection(index)"> Remove Product Section </button>
         </div>
-        <!-- add list button -->
-        <button class="action" @click="addNewList"> Add New List </button>
+        <!-- add product section button -->
+        <div class="center">
+            <button class="shadow add-section" @click="addNewProductSection"> + Add Product Section </button>
+        </div>
     </div>
+
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
     <!-- set color image -->
@@ -56,7 +62,7 @@ export default {
                 _id: "",
                 name: "",
                 slideshow: [],
-                lists: [],
+                productSections: [],
                 description: "",
                 status: false
             },
@@ -69,8 +75,11 @@ export default {
         this.fetchAllProductLists();
     },
     methods: {
-        addNewList() {
-            this.doc.lists.push({
+        removeProductSection(key) {
+            this.doc.productSections.splice(key, 1);
+        },
+        addNewProductSection() {
+            this.doc.productSections.push({
                 heading: "",
                 tagline: "",
                 list: ""
@@ -93,11 +102,10 @@ export default {
             });
         },
         slideshowListUpdated(list) {
-            // console.log(list, index);
             this.doc.slideshow = list;
-
         },
         async updateDocument(model, details, editMode) {
+            console.log(this.doc);
             this.loading = true;
             const result = await this.$updateDocument(this.model, this.doc, this.editMode);
             this.loading = false;
@@ -155,3 +163,30 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.section {
+    position: relative;
+    ;
+    margin: 10px;
+    padding: 5px 5px 30px 5px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.label {
+    font-family: $font_2_bold;
+    color: $gray;
+    text-transform: uppercase;
+    font-size: 10px;
+    padding: 2%;
+    margin-left: 5px;
+    font-weight: 900;
+}
+
+.add-section {
+    background-color: rgb(132, 178, 132);
+    color: white;
+    font-size: 11px;
+}
+</style>

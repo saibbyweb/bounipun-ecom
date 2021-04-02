@@ -3,8 +3,8 @@ import { mongoose, ObjectId } from "@helpers/essentials"
 /* schema */
 const schema = new mongoose.Schema({
     name: String,
-    slideshow: Array,
-    productSection: [{
+    slideshow: [{ _id: ObjectId, mainImage: Boolean, path: String }],
+    productSections: [{
         heading: String,
         tagline: String,
         list: { type: ObjectId, ref: 'product_list' }

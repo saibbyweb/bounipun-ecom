@@ -230,7 +230,6 @@ export default {
             this.doc.colors.splice(key, 1);
             if (this.bounipunColors && direct)
                 this.$refs.colorPicker.deselectColor(tobeRemoved);
-
         },
         /* fabric selection */
         fabricSelectionUpdated(variant) {
@@ -266,7 +265,9 @@ export default {
                 return;
 
             this.$emit('updated');
-            this.populateForm(result.doc);
+            // this.populateForm(result.doc);
+            this.doc._id = result.doc._id;
+            this.editMode = true;
             this.$flash(this);
 
         },

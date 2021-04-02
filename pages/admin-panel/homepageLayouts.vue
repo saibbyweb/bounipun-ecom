@@ -12,7 +12,7 @@
     </div>
     <!-- update homepage layouts form -->
     <div :class="{updating: showForm}" class="update">
-        <UpdateHomepageLayout v-show="showForm" ref="updateComponent" @updated="updateList" :model="model" @close="showForm = false"  />
+        <UpdateHomepageLayout v-show="showForm" ref="updateComponent" @updated="updateList" :model="model" @close="showForm = false" />
 
         <AddNewItem v-if="!showForm" label="Homepage Layout" @showForm="showForm = true" />
     </div>
@@ -63,13 +63,22 @@ export default {
         documentFetched(doc) {
             this.showForm = true;
             this.editMode = true;
-            this.$refs.updateComponent.populateForm(doc);
+            setTimeout(() => this.populateForm(doc), 1000);    
+        },
+        populateForm(doc) {
+            const updateComponent = this.$refs.updateComponent;
+            updateComponent.populateForm(doc);
 
-            /* update images */
+            /* update images (slideshow and section images) */
+            if (doc.slideshow.length === 0) {
+                return;
+            }
 
+            /* assign slideshow images */
+            updateComponent.$refs.imageUploader.assignImages(doc.slideshow);
         },
         resultsFetched(result) {
-            if(result.docs.length === 0) {
+            if (result.docs.length === 0) {
                 this.list = [];
                 return;
             }

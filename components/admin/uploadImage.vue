@@ -53,17 +53,19 @@ export default {
             uploadImageAPI: '/uploadImage'
         }
     },
-    watch: {
-        uploaded(newVal) {
-            if(newVal.length > 0)
-                this.assignImages();
-        }
-    },
+    // watch: {
+    //     uploaded(newVal) {
+    //         console.log("IS THIS THE CULPRIT");
+    //         if(newVal.length > 0)
+    //             this.assignImages();
+    //     }
+    // },
     methods: {
         clearFileSelection() {
             this.images = [];
         },
         assignImages(list) {
+            console.log("ASSIGN IMAGES WAS CALLED");
             if(!list.length > 0)
                return;
                
@@ -87,7 +89,7 @@ export default {
                     /* upload ID */
                     _id: image._id,
                     /* path to uploaded image */
-                    path: baseAWSURL + image.path
+                    path: image.path
                 }
 
                this.images.push(imageObject);
