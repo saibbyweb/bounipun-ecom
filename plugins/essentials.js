@@ -149,6 +149,11 @@ export default (context, inject) => {
     return result;
   };
 
+  /* get image path */
+  const getImagePath = (path) => {
+    return process.env.baseAWSURL + path
+  }
+
   /* delete document api */
   const deleteDocument = async (model, _id) => {
     let result = { deleted: false, doc: {} };
@@ -184,5 +189,6 @@ export default (context, inject) => {
   inject("fetchDocument", fetchDocument);
   inject("deleteDocument", deleteDocument);
   inject("findDocument", findDocument);
+  inject("getImagePath", getImagePath);
   inject("flash", flash);
 };
