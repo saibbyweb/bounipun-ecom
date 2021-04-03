@@ -1,7 +1,7 @@
 <template>
 <div class="homepage">
     <!-- <div class="hero"> </div> -->
-    <slideshow size="cover" />
+    <slideshow size="cover" :images="slideshowImages" />
     <!-- new arrivals -->
     <home-section-heading heading="New Arrivals" tagline="checkout the latest from the house of bounipun" />
     <div class="scrollable-list">
@@ -71,15 +71,27 @@
 export default {
     data() {
         return {
-            abc: 'xyz'
+            layout: {},
+            slideshowImages: []
         }
     },
     mounted() {
-
+        this.fetchHomepageLayout();
     },
     methods: {
         async fetchHomepageLayout() {
-            
+            const layout = await this.$findDocument('homepage_layouts', {status: true });
+            if(!layout.fetched) {
+                console.log('Layout not fetched');
+                return;
+            }
+
+            this.layout = layout.doc;
+            console.log(this.layout);
+            this.setSlideshow(this.layout.slideshow)
+        },
+        setSlideshow(images) {
+         this.slideshowImages = images.map(image => process.env.baseAWSURL + image.path);   
         }
     }
 }

@@ -183,5 +183,6 @@ export default (context, inject) => {
   inject("updateDocument", updateDocument);
   inject("fetchDocument", fetchDocument);
   inject("deleteDocument", deleteDocument);
+  inject("findDocument", findDocument);
   inject("flash", flash);
 };
