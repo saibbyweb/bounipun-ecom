@@ -11,18 +11,15 @@
                 <home-section-heading :heading="section.productSection.heading" :tagline="section.productSection.tagline" />
                 <div class="scrollable-list">
                     <div class="list">
-                        <!-- <featured-product-card :details="{name: 'Khatamband Cashmere'}" product="auto_2" />
-                        <featured-product-card :details="{name: 'Kani Shawl'}" product="auto_5" />
-                        <featured-product-card :details="{name: 'Kani Shawl'}" product="kara_1" />
-                        <featured-product-card :details="{name: 'Kani Shawl'}" product="kara_3" />
-                        <featured-product-card :details="{name: 'Khatamband Cashmere'}" product="kara_5" /> -->
+                        <!-- featured product card -->
+                        <featured-product-card v-for="(product, index) in section.productSection.list.list" :details="{ name: product._id.name }" :key="index" :product="product._id" />
+
                     </div>
                 </div>
             </div>
 
             <!-- alternate section -->
             <div v-if="section.alternateSection" class="alternate-section">
-             
                 <div class="mood-setter">
                     <img :src="$getImagePath(section.alternateSection.image)" />
                     <div class="box">
@@ -32,61 +29,6 @@
                 </div>
             </div>
 
-        </div>
-    </div>
-
-    <!-- new arrivals -->
-    <home-section-heading heading="New Arrivals" tagline="checkout the latest from the house of bounipun" />
-    <div class="scrollable-list">
-        <div class="list">
-            <featured-product-card :details="{name: 'Khatamband Cashmere'}" product="auto_2" />
-            <featured-product-card :details="{name: 'Kani Shawl'}" product="auto_5" />
-            <featured-product-card :details="{name: 'Kani Shawl'}" product="kara_1" />
-            <featured-product-card :details="{name: 'Kani Shawl'}" product="kara_3" />
-            <featured-product-card :details="{name: 'Khatamband Cashmere'}" product="kara_5" />
-        </div>
-    </div>
-
-    <!-- mood setter 1 -->
-    <div class="mood-setter">
-        <img src="/demo_images/mood1.png" />
-        <div class="box">
-            <h3 @click="$router.push('/collection')" class="heading"> Mood Setter - 1 </h3>
-            <p class="desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-        </div>
-    </div>
-
-    <!-- best sellers -->
-    <home-section-heading heading="Best Sellers" tagline="hottest selling items on bounipun" />
-    <div class="scrollable-list">
-        <div class="list">
-            <featured-product-card :details="{name: 'Pashmina'}" product="auto_1" />
-            <featured-product-card :details="{name: 'Pashmina'}" product="auto_3" />
-            <featured-product-card :details="{name: 'Kani Shawl'}" product="auto_4" />
-            <featured-product-card :details="{name: 'Pashmina'}" product="auto_6" />
-            <featured-product-card :details="{name: 'Pashmina'}" product="kara_2" />
-            <featured-product-card :details="{name: 'Pashmina'}" product="kara_4" />
-        </div>
-    </div>
-
-    <!-- mood setter 2 -->
-    <div class="mood-setter">
-        <img src="/demo_images/mood2.png" />
-        <div class="box">
-            <h3 @click="$router.push('/search-results')" class="heading"> Mood Setter - 2 </h3>
-            <p class="desc"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-        </div>
-    </div>
-
-    <!-- featured designs -->
-    <home-section-heading heading="Featured Designs" tagline="shop from the handpicked bounipun collection" />
-    <div class="scrollable-list">
-        <div class="list">
-            <featured-product-card :details="{name: 'Khatamband Cashmere'}" product="auto_2" />
-            <featured-product-card :details="{name: 'Pashmina'}" product="auto_1" />
-            <featured-product-card :details="{name: 'Kani Shawl'}" product="auto_5" />
-            <featured-product-card :details="{name: 'Pashmina'}" product="auto_3" />
-            <featured-product-card :details="{name: 'Kani Shawl'}" product="kara_3" />
         </div>
     </div>
 
@@ -103,7 +45,9 @@
 </template>
 
 <script>
+import featuredProductCard from '../components/featuredProductCard.vue';
 export default {
+  components: { featuredProductCard },
     data() {
         return {
             layout: {},
@@ -128,6 +72,7 @@ export default {
             }
 
             this.layout = layout.doc;
+            console.log(this.layout);
             this.setSlideshow(this.layout.slideshow);
 
             const totalProductSections = this.layout.productSections.length;
@@ -137,6 +82,7 @@ export default {
             let sections = [];
             const maxSections = totalProductSections > totalAlternateSections ? totalProductSections : totalAlternateSections;
 
+            
             for (i = 0; i < maxSections; i++) {
                 let section = {};
                 section.productSection = this.layout.productSections[i] !== undefined ? this.layout.productSections[i] : false;

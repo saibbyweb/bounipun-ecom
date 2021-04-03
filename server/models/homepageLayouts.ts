@@ -8,7 +8,7 @@ const schema = new mongoose.Schema({
     productSections: [{
         heading: String,
         tagline: String,
-        list: { type: ObjectId, ref: 'product_list' }
+        list: { type: ObjectId, ref: 'product_lists' }
     }],
     /* alternate sections */
     alternateSections: [

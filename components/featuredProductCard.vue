@@ -30,17 +30,19 @@ export default {
             default: 'product1.png'
         },
         product: {
-            type: String,
-            default: 'auto_1'
+            type: Object,
+            default: { notProvided: true }
         }
     },
     computed: {
-        imagePath() {
-            const param = this.product;
-            const prod = param.split("_");
-            const collection = prod[0];
-            const prodId = prod[1];
-            return `/demo_images/products/${collection}/${collection}_prod${prodId}_1.png`;
+        imagePath() { 
+            if(this.product.notProvided)
+                return 'abc';
+
+            const images = this.product.colors[0].images;
+            /* fetch main image */
+            // return 'abc';
+            return process.env.baseAWSURL + images[0].path;
         }
     }
 };

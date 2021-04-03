@@ -317,7 +317,7 @@ export default {
                 }
 
                 this.images.push(images);
-            })
+            });
         },
         getMainImageCSS(color) {
             const images = color.images;

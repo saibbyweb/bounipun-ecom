@@ -9,22 +9,34 @@ router.post('/findDocument', async (req, res) => {
     const collection = db.model(model);
     let documentFetch: any = collection.findOne(filters).lean();
 
-    const {response: document, error } = await task(documentFetch);
+    /* act according to collection */
+    switch (model) {
+        case 'homepage_layouts':
+            // await document
+            documentFetch.populate({ path: 'productSections.list', populate: { path: 'list._id' } });
+            break;
+        default:
+            break;
+    }
+
+    const { response: document, error } = await task(documentFetch);
 
     // console.log(document);
 
     /* if error occurred or document not found */
-    if(error || document === null) {
+    if (error || document === null) {
         const msg = error ? 'Couldnt fetch' : 'Couldnt find';
         console.log(msg);
         return {};
     }
-        
+
+
+
     res.send(document);
 
 });
 
-router.get('/yes', async(req,res) => {
+router.get('/yes', async (req, res) => {
     res.send('yes bosso');
 })
 
