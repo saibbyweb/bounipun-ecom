@@ -100,7 +100,7 @@ export default (context, inject) => {
 
     result.docs = response.docs;
     result.totalMatches = response.totalMatches;
-    
+
     return result;
   };
 
@@ -117,6 +117,28 @@ export default (context, inject) => {
     $store.commit("admin/setLoading", true);
     const { response, error } = await task(documentFetch);
     $store.commit("admin/setLoading", false);
+
+    if (error) {
+      return result;
+    }
+
+    result.fetched = true;
+    result.doc = response;
+    return result;
+  };
+
+  /* FIND DOCUMENT / CUSTOMER ONLY */
+  const findDocument = async (model, filters) => {
+    let result = { fetched: false, doc: {} };
+    const documentFetch = context.$axios.$post("/findDocument", {
+      model,
+      filters
+    });
+
+    /* wait for request to complete */
+    // $store.commit("admin/setLoading", true);
+    const { response, error } = await task(documentFetch);
+    // $store.commit("admin/setLoading", false);
 
     if (error) {
       return result;

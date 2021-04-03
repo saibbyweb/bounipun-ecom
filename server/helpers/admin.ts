@@ -1,5 +1,5 @@
 import { db } from "@helpers/essentials"
-import { product, collection } from "@models"
+import { product, collection, homepageLayouts } from "@models"
 
 export default {
     async specialUpdate(model, details, editMode) {
@@ -10,6 +10,9 @@ export default {
                 break;
             case 'collections':
                 await collection.methods.updateCollection(details, editMode);
+                break;
+            case 'homepage_layouts':
+                await homepageLayouts.methods.updateLayouts(details, editMode);
                 break;
             default:
                 break;
