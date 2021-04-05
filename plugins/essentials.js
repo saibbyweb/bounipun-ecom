@@ -127,10 +127,11 @@ export default (context, inject) => {
     return result;
   };
 
-  /* FIND DOCUMENT / CUSTOMER ONLY */
-  const findDocument = async (model, filters) => {
-    let result = { fetched: false, doc: {} };
-    const documentFetch = context.$axios.$post("/findDocument", {
+  /* fetch DOCUMENT(s) / CUSTOMER ONLY */
+  const fetch = async (model, filters, multiple = false) => {
+    let result = { fetched: false };
+    const endpoint = multiple ? "/findDocuments" : "/findDocument";
+    const documentFetch = context.$axios.$post(endpoint, {
       model,
       filters
     });
@@ -145,14 +146,15 @@ export default (context, inject) => {
     }
 
     result.fetched = true;
-    result.doc = response;
+    if (multiple) result.docs = response;
+    else result.doc = response;
     return result;
   };
 
   /* get image path */
-  const getImagePath = (path) => {
-    return process.env.baseAWSURL + path
-  }
+  const getImagePath = path => {
+    return process.env.baseAWSURL + path;
+  };
 
   /* delete document api */
   const deleteDocument = async (model, _id) => {
@@ -188,7 +190,7 @@ export default (context, inject) => {
   inject("updateDocument", updateDocument);
   inject("fetchDocument", fetchDocument);
   inject("deleteDocument", deleteDocument);
-  inject("findDocument", findDocument);
+  inject("fetch", fetch);
   inject("getImagePath", getImagePath);
   inject("flash", flash);
 };

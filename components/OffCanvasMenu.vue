@@ -8,16 +8,18 @@
 
     <!-- menu items -->
     <button class="clear item"> Collections </button>
-    <button class="clear item"> Categories </button>
+    <!-- active collection list -->
+    <button class="clear item sub-item" v-for="(collection, index) in collections" :key="index"> {{ collection.name }} </button>
+    <!-- <button class="clear item"> Categories </button> -->
     <button class="clear item"> The Bounipun Lab </button>
     <button class="clear item"> Story </button>
 
     <!-- acc items -->
-    <button @click="$router.push('/my-account')" class="clear item"> My Account </button>
-    <button @click="$router.push('/my-account/orders')" class="clear item acc"> Orders </button>
-    <button @click="$router.push('/my-account/address-book')" class="clear item acc"> Address Book </button>
-    <button @click="$router.push('/my-account/profile-details')" class="clear item acc"> Profile Details </button>
-    <button @click="$router.push('/my-account/gift-cards')" class="clear item acc"> Gift Cards </button>
+    <button @click="navigate('/my-account')" class="clear item"> My Account </button>
+    <button @click="navigate('/my-account/orders')" class="clear item acc"> Orders </button>
+    <button @click="navigate('/my-account/address-book')" class="clear item acc"> Address Book </button>
+    <button @click="navigate('/my-account/profile-details')" class="clear item acc"> Profile Details </button>
+    <button @click="navigate('/my-account/gift-cards')" class="clear item acc"> Gift Cards </button>
 
     <br>
     <!-- links -->
@@ -29,6 +31,35 @@
 
 </div>
 </template>
+
+<script>
+export default {
+    data() {
+        return {
+            collections: []
+        }
+    },
+    mounted() {
+        this.fetchCollections();
+    },
+    methods: {
+        navigate(route) {
+            this.$router.push(route);
+            this.$emit('closeMenu');
+        },
+        async fetchCollections() {
+            const collections = await this.$fetch('collections', {
+                status: true
+            }, true);
+            /* if collections not fetched */
+            if (!collections.fetched)
+                return;
+
+            this.collections = collections.docs;
+        }
+    }
+}
+</script>
 
 <style lang="scss" scoped>
 .off-canvas-menu {
@@ -76,6 +107,10 @@
         &.acc {
             font-size: 10px;
             padding-left: 5%;
+        }
+
+        &.sub-item {
+            font-size: 11px;
         }
     }
 

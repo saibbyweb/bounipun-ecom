@@ -10,7 +10,7 @@
         <!-- product name -->
         <div class="product-name center-col">
             <span class="name"> {{ details.name }} </span>
-            <span class="collection"> Bounipun Adore </span>
+            <span class="collection"> Bounipun {{ details.collection }} </span>
         </div>
     </div>
 
