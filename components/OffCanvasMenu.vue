@@ -9,7 +9,7 @@
     <!-- menu items -->
     <button class="clear item"> Collections </button>
     <!-- active collection list -->
-    <button class="clear item sub-item" v-for="(collection, index) in collections" :key="index"> {{ collection.name }} </button>
+    <button @click="navigate(collection, 'collection')" class="clear item sub-item" v-for="(collection, index) in collections" :key="index"> {{ collection.name }} </button>
     <!-- <button class="clear item"> Categories </button> -->
     <button class="clear item"> The Bounipun Lab </button>
     <button class="clear item"> Story </button>
@@ -32,6 +32,7 @@
 </div>
 </template>
 
+    
 <script>
 export default {
     data() {
@@ -43,12 +44,18 @@ export default {
         this.fetchCollections();
     },
     methods: {
-        navigate(route) {
-            this.$router.push(route);
+        navigate(route, type) {
             this.$emit('closeMenu');
+            if (type === 'collection') {
+                // const slug = '/collections?slug=' + route.slug
+                // this.$router.push(slug, { collectionId: route._id });
+                this.$router.push({name: 'Collections', query: { slug: route.slug }, params: { collectionId: route._id } });
+                return;
+            }
+            this.$router.push(route);
         },
         async fetchCollections() {
-            const collections = await this.$fetch('collections', {
+            const collections = await this.$fetchData('collections', {
                 status: true
             }, true);
             /* if collections not fetched */
@@ -61,6 +68,7 @@ export default {
 }
 </script>
 
+    
 <style lang="scss" scoped>
 .off-canvas-menu {
     position: fixed;

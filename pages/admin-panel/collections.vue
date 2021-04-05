@@ -38,7 +38,7 @@ export default {
                 sortBy: {
 
                 },
-                limit: 2
+                limit: 6
             },
             sortByFields: ['name', 'status'],
             list: [],

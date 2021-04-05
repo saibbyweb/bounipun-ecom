@@ -60,7 +60,7 @@ export default {
     },
     methods: {
         async fetchHomepageLayout() {
-            const layout = await this.$fetch('homepage_layouts', {
+            const layout = await this.$fetchData('homepage_layouts', {
                 status: true
             });
             if (!layout.fetched) {

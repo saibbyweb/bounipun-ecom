@@ -1,5 +1,5 @@
 <template>
-<div @click="$router.push('/products/'+product)" class="featured-product-card">
+<div @click="$router.push('/products?_id='+product._id)" class="featured-product-card">
     <!-- main image container -->
     <div class="main-image-container center">
         <img class="main-image" :src="imagePath" />

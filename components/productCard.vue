@@ -1,5 +1,5 @@
 <template>
-<div @click="$router.push('/products/'+product)" class="product-card">
+<div @click="$router.push('/products?_id='+product._id)" class="product-card">
     <!-- main image container -->
     <div class="main-image-container center">
         <img class="main-image" :src="imagePath" />
@@ -9,17 +9,15 @@
     <div class="text-details center">
         <!-- product name -->
         <div class="product-name center-col">
-            <span class="name"> {{ details.name }} </span>
-            <span class="collection"> {{ details.collection }} </span>
-            <span class="price"> {{ details.price }} </span>
+            <span class="name"> {{ product.name }} </span>
+            <span class="collection"> {{ collectionName }} </span>
+            <span class="price"> $ {{ lowestVariantPrice }} </span>
         </div>
     </div>
 
     <!-- variants available -->
     <div class="variants-available center">
-        <div v-if="variants.shawl !== undefined" class="variant"> Shawl </div>
-        <div v-if="variants.stole !== undefined" class="variant"> Stole </div>
-        <div v-if="variants.square !== undefined" class="variant"> Square </div>
+        <div v-for="(variant, index) in variantsAvailable" :key="index" class="variant"> {{ variant }} </div>
     </div>
 
     <!-- shop now button -->
@@ -50,26 +48,57 @@ export default {
                 }
             }
         },
+        // product: {
+        //     type: String,
+        //     default: 'auto_1'
+        // },
         product: {
-            type: String,
-            default: 'auto_1'
+            type: Object,
+            default: {
+                notProvided: true
+            }
         },
         image: {
             type: String,
             default: 'product1.png'
         },
-        inWishlist: { type: Boolean, default: false }
+        inWishlist: {
+            type: Boolean,
+            default: false
+        }
     },
     computed: {
         imagePath() {
-            // return `/demo_images/${this.image}`
-            const param = this.product;
-            const prod = param.split("_");
-            const collection = prod[0];
-            const prodId = prod[1];
-            return `/demo_images/products/${collection}/${collection}_prod${prodId}_1.png`;
+            if (this.product.notProvided)
+                return 'abc';
+
+            const images = this.product.colors[0].images;
+            /* fetch main image */
+            // return 'abc';
+            return process.env.baseAWSURL + images[0].path;
+        },
+        variantsAvailable() {
+            return this.product.variants.map(variant => variant._id.name);
+        },
+        collectionName() {
+            return this.product.bounipun_collection.name;
+        },
+        lowestVariantPrice() {
+            if (this.product.type === 'third-party')
+                return this.product.directPrice;
+
+            let allPrices = [];
+            this.product.variants.forEach(variant => {
+                variant.fabrics.forEach(fabric => {
+                    // console.log(fabric.price);
+                    allPrices.push(fabric.price)
+                });
+            });
+
+            return Math.min(...allPrices);
         }
-    }
+    },
+
 };
 </script>
 

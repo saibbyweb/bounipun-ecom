@@ -54,6 +54,12 @@ router.post('/findDocuments', async (req, res) => {
 
     /* act according to collection */
     switch (model) {
+        case 'products':
+            documentFetch
+            .populate('variants._id')
+            .populate('bounipun_collection');
+            break;
+
         default:
             break;
     }
@@ -68,7 +74,7 @@ router.post('/findDocuments', async (req, res) => {
         console.log(msg);
         return {};
     }
-    
+
     res.send(document);
 
 });

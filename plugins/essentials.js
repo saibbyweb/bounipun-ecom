@@ -128,7 +128,7 @@ export default (context, inject) => {
   };
 
   /* fetch DOCUMENT(s) / CUSTOMER ONLY */
-  const fetch = async (model, filters, multiple = false) => {
+  const fetchData = async (model, filters, multiple = false) => {
     let result = { fetched: false };
     const endpoint = multiple ? "/findDocuments" : "/findDocument";
     const documentFetch = context.$axios.$post(endpoint, {
@@ -190,7 +190,7 @@ export default (context, inject) => {
   inject("updateDocument", updateDocument);
   inject("fetchDocument", fetchDocument);
   inject("deleteDocument", deleteDocument);
-  inject("fetch", fetch);
+  inject("fetchData", fetchData);
   inject("getImagePath", getImagePath);
   inject("flash", flash);
 };

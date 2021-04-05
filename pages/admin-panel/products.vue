@@ -64,7 +64,7 @@ export default {
                 sortBy: {
 
                 },
-                limit: 3
+                limit: 6
             },
             list: [],
             headings: ['_id', 'StyleID', 'name', 'Slug', 'type', 'Collection', 'status'],

@@ -584,6 +584,7 @@ export default {
                     filter: grayscale(100%);
                     height: 60%;
                     margin-bottom: 3px;
+                    transition: all 0.3s ease-in-out;
 
                     &.active {
                         filter: none;
@@ -619,6 +620,7 @@ export default {
                 padding: 5px 0px;
                 width: 43%;
                 margin: 10px;
+                transition: all 0.2s cubic-bezier(0.215, 0.610, 0.355, 1);
 
                 span {
                     color: white;

@@ -40,6 +40,12 @@ export default {
             darkMode: this.$route.name === 'products-collection' ? true : false
         }
     },
+    watch: {
+        $route(to, from) {
+            console.log(to.name)
+            this.darkMode = to.name !== 'index'
+        }
+    },
     methods: {
         handleScroll() {
             if (this.$route.name !== 'index') {
