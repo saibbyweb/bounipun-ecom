@@ -42,7 +42,7 @@ export default {
             },
             sortByFields: ['name', 'status'],
             list: [],
-            headings: ['_id', 'name', 'Slug', 'edt', 'status']
+            headings: ['_id', 'name', 'Slug', 'Estimated Time of Delivery', 'status']
         }
     },
     mounted() {

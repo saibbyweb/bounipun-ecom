@@ -44,7 +44,7 @@ export default {
                 sortBy: {
 
                 },
-                limit: 2
+                limit: 10
             },
             list: [],
             sortByFields: ['name', 'status'],
