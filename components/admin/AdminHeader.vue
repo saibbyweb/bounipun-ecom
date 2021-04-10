@@ -68,6 +68,11 @@ export default {
                     path: '/admin-panel/homepageLayouts',
                     desc: 'Manage Homepage Layouts'
                 },
+                {
+                    name: 'Sales',
+                    path: '/admin-panel/sales',
+                    desc: 'Manage Homepage Layouts'
+                },
             ]
         }
     }

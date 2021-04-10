@@ -93,8 +93,7 @@ export default {
             }) => {
                 return {
                     _id,
-                    styleId,
-                    name
+                    name: `${styleId} - (${name})`
                 }
             });
 
