@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
     name: String,
     slug: String,
     description: String,
-    edt: String,
+    edt: Number,
     status: Boolean
 }, {
     timestamps: true

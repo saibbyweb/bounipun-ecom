@@ -169,7 +169,7 @@ router.post('/fetchPaginatedResults', async (req, res) => {
     /* set result set limit */
     criterion.limit = rawCriterion.limit;
 
-    const paginatedResults = await admin.getPaginationResults(model, criterion);
+    let paginatedResults: any = await admin.getPaginationResults(model, criterion);
 
     res.send(paginatedResults);
 

@@ -79,12 +79,13 @@ export default {
                 edt,
                 status
             }) => {
+
                 return {
                     _id,
                     name,
                     slug,
                     // description,
-                    edt,
+                    edt: edt + " weeks",
                     status
                 }
             });

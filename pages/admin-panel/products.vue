@@ -10,7 +10,6 @@
     <!-- list of products -->
     <div :class="{updating: showForm}" class="list">
         <List ref="list" :list="list" :model="model" :headings="headings" custom_css="10% 10% 25% 20% 10% 15% 10%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" />
-
         <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
     </div>
 
@@ -67,8 +66,8 @@ export default {
                 limit: 6
             },
             list: [],
-            headings: ['_id', 'StyleID', 'name', 'Slug', 'type', 'Collection', 'status'],
-            sortByFields: ['name', 'type', 'status'],
+            headings: ['_id', 'styleId', 'name', 'Slug', 'type', 'Collection', 'status'],
+            sortByFields: ['name', 'styleId', 'type', 'status'],
             collections: [],
             variants: [],
             fabrics: []
@@ -141,6 +140,18 @@ export default {
                 name: 'Select Collection',
                 value: ""
             });
+
+            /* update collection name in list */
+            if(this.list.length === 0)
+                return;
+
+            this.list = this.list.map(item => {
+                const foundCollection =  this.collections.find(col => col.value === item.bounipun_collection);
+                const bounipun_collection = foundCollection !== undefined ? foundCollection.name : "Third Party"
+                item.bounipun_collection = item.type !== "third-party" ? bounipun_collection : "N/A"
+                return item;
+            });
+            console.log('LIST UPDATED')
         },
         documentFetched(doc) {
             console.log(doc, 'product fetched')
@@ -219,9 +230,12 @@ export default {
                 status
             }) => {
                 /* resolve category name */
-                const foundCollection = this.collections.find(col => col.value === bounipun_collection);
+                if(this.collections.length !== 0) {
+                    const foundCollection = this.collections.find(col => col.value === bounipun_collection);
+                    bounipun_collection = foundCollection !== undefined ? foundCollection.name : "NOT AVAILABLE"
+                }
                 
-                console.log(foundCollection, '-found collection');
+                // console.log(foundCollection, '-found collection');
 
                 return {
                     _id,
@@ -229,7 +243,8 @@ export default {
                     name,
                     slug,
                     type,
-                    bounipun_collection: foundCollection !== undefined ? foundCollection.name : "Third Paty",
+                    // bounipun_collection: foundCollection !== undefined ? foundCollection.name : "Third Party",
+                    bounipun_collection: type !== "third-party" ? bounipun_collection : "N/A",
                     status
                 }
             });

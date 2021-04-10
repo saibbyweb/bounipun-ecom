@@ -4,6 +4,7 @@ import { mongoose, ObjectId } from "@helpers/essentials"
 const schema = new mongoose.Schema({
     code: String,
     name: String,
+    baseColorName: String,
     category: {
         type: ObjectId,
         ref: 'color_categories'

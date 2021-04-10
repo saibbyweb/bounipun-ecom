@@ -12,7 +12,7 @@
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
     <!-- edt -->
-    <InputBox v-model="doc.edt" label="Estimated Time of Delivery" :internal="true" />
+    <InputBox v-model="doc.edt" label="Estimated Time of Delivery (in weeks)" type="number" :internal="true" />
 <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" /> 
     <!-- update button -->

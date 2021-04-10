@@ -11,6 +11,7 @@
                 <img v-if="isSelected(color._id)" class="selected" src="/icons/green_check.png" />
                 <div style="height:40px; width:40px;" :style="{backgroundImage: `url(${color.image})`}" class="shadow box" :class="{active: isSelected(color._id)}"> </div>
                 <span class="color-name"> {{ color.name }} </span>
+                <span class="color-name"> {{ color.code }} </span>
             </div>
         </div>
         <hr align="left" />

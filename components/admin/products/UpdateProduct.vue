@@ -9,6 +9,7 @@
             </span>
         </a>
     </div>
+
     <!-- product id -->
     <InputBox v-if="editMode" label="Product ID" v-model="doc._id" disabled :internal="true" />
     <!-- bounipun style id -->
@@ -63,7 +64,7 @@
     <InputBox v-if="thirdPartyProduct" label="Direct Price" v-model="doc.directPrice" />
 
     <!-- estimated delivery time -->
-    <InputBox label="Estimated Delivery Time" v-model="doc.etd" />
+    <InputBox label="Estimated Delivery Time (in weeks)" v-model="doc.etd" type="number" />
 
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />

@@ -6,7 +6,8 @@
             <!-- fabric selector -->
             <input class="check-input" type="checkbox" :value="option.value" v-model="option.checked" />
             <label class="label"> {{ option.name }} </label>
-            <span style="margin: 0;font-size: 8px; font-style: italic; text-align:center; color: #333;"> {{ option.info1 }} </span>
+            <!-- <span style="margin: 0;font-size: 8px; font-style: italic; text-align:center; color: #333;"> {{ option.info1 }} </span> -->
+             <span style="margin-top: 10px;font-size: 8px; font-style: italic; text-align:center; color: #333;"> {{ option.code }} </span>
             <!-- fabric price holder -->
             <input class="price shadow" v-if="option.checked" type="text" v-model="option.price" placeholder="Price"/>
         </div>
