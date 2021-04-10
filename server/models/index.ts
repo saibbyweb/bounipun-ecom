@@ -8,8 +8,8 @@ import variants from "./variants"
 import product from "./product"
 import productLists from "./productLists";
 import homepageLayouts from "./homepageLayouts";
-import sales from "./sales";
-
+import sales from "./sale";
+import coupon from "./coupon"
 
 const register = function () {
     fabric.methods.register();
@@ -22,6 +22,7 @@ const register = function () {
     productLists.methods.register();
     homepageLayouts.methods.register();
     sales.methods.register();
+    coupon.methods.register();
 }
 
-export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, register };
+export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, register };

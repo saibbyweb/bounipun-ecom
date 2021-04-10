@@ -73,6 +73,11 @@ export default {
                     path: '/admin-panel/sales',
                     desc: 'Manage Homepage Layouts'
                 },
+                {
+                    name: 'Coupons',
+                    path: '/admin-panel/coupons',
+                    desc: 'Manage Homepage Layouts'
+                },
             ]
         }
     }

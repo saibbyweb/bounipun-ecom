@@ -1,17 +1,18 @@
 <template>
 <div class="coupons crud">
     <!-- filters -->
-    <div class="filters center">
-        <input class="search shadow" type="text" placeholder="Search for Coupons" />
-        <SelectBox :options="filters" v-model="selectedFilter" />
+    <div :class="{updating: showForm}" class="filters center">
+        <input v-model="rawCriterion.search.term" class="search shadow" type="text" placeholder="Search for Coupons" />
     </div>
     <!-- list of coupons -->
-    <div class="list">
-        <List :list="coupons" :headings="headings" custom_css="35% 25% 10% 10% 20%" />
+    <div :class="{updating: showForm}" class="list">
+        <List :list="list" :model="model" :headings="headings" custom_css="10% 60% 20% 10%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" />
+        <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
     </div>
-    <!-- update coupons form -->
-    <div class="update">
-        <UpdateCoupon />
+    <!-- update coupon form -->
+    <div :class="{updating: showForm}" class="update">
+        <UpdateCoupon v-show="showForm" ref="updateComponent" @updated="updateList" :model="model" @close="showForm = false" />
+        <AddNewItem v-if="!showForm" label="Coupon" @showForm="showForm = true" />
     </div>
 </div>
 </template>
@@ -21,25 +22,68 @@ export default {
     layout: 'admin',
     data() {
         return {
-            filters: [{
-                name: 'All Coupons',
-                value: 'all'
-            }, {
-                name: "Percentage Based",
-                value: 'percentage'
-            }, {
-                name: 'Value Based',
-                value: 'value'
-            }],
-            selectedFilter: 'all',
-            coupons: [{
-                code: 'BOUNIPUN200',
-                type: 'Percent',
-                value: 20,
-                validity: 6,
-                status: 'Live'
-            }],
-            headings: ['Coupon Code', 'Type', 'Value', 'Validity', 'Active']
+            showForm: false,
+            loading: false,
+            model: 'coupons',
+            /* rawCriterion */
+            rawCriterion: {
+                search: {
+                    key: "code",
+                    term: ""
+                },
+                filters: {
+                    type: 'default'
+                },
+                sortBy: {
+
+                },
+                limit: 10
+            },
+            list: [],
+            sortByFields: ['code', 'status'],
+            headings: ['_id', 'code', 'description', 'status'],
+        }
+    },
+    async mounted() {
+        // await this.fetchList();
+    },
+    methods: {
+        updateList() {
+            this.$refs.pagination.fetchResults();
+        },
+        sortToggled(sortBy) {
+            console.log(sortBy);
+            this.rawCriterion = {
+                ...this.rawCriterion,
+                sortBy
+            }
+        },
+        documentFetched(doc) {
+            this.showForm = true;
+            this.editMode = true;
+            this.$refs.updateComponent.populateForm(doc);
+        },
+  
+        resultsFetched(result) {
+            if (result.docs.length === 0) {
+                this.list = [];
+                return;
+            }
+
+            /* extract list */
+            this.list = result.docs.map(({
+                _id,
+                code,
+                description,
+                status
+            }) => {
+                return {
+                    _id,
+                    code,
+                    description,
+                    status
+                }
+            });
         }
     }
 }

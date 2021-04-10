@@ -9,7 +9,7 @@
     <!-- product list -->
     <SelectBox :options="allProductLists" v-model="doc.list" label="Select Product List" />
     <!-- discount percentage -->
-    <InputBox label="Discount Percentage" v-model="doc.discountPercentage" />
+    <InputBox label="Discount Percentage" v-model="doc.discountPercentage" type="number" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
     <!-- publish toggle -->
@@ -70,7 +70,7 @@ export default {
                 value: null
             });
         },
-        async updateDocument(model, details, editMode) {
+        async updateDocument() {
 
             this.loading = true;
             const result = await this.$updateDocument(this.model, this.doc, this.editMode);
@@ -82,7 +82,6 @@ export default {
             this.$emit('updated');
             this.populateForm(result.doc);
             this.$flash(this);
-
         },
         async deleteDocument() {
             this.loading = true;
@@ -109,7 +108,7 @@ export default {
                 _id,
                 name,
                 list,
-                discountPercentage,
+                discountPercentage: discountPercentage.toString(),
                 description,
                 status
             };
