@@ -36,8 +36,9 @@ export default {
     },
     computed: {
         imagePath() { 
-            if(this.product.notProvided)
+            if(this.product.notProvided || this.product.colors.length === 0)
                 return 'abc';
+            
 
             const images = this.product.colors[0].images;
             /* fetch main image */

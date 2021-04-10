@@ -27,7 +27,9 @@
     <div class="pad-10">
         <div class="main-details">
             <h3> {{ product.name }} </h3>
+             <p v-if="!thirdPartyProduct"> {{ variants[activeVariantIndex].name }} </p>
             <p v-if="!thirdPartyProduct"> Bounipun {{ product.bounipun_collection.name }} </p>
+
             <p> {{ product.styleId }} </p>
         </div>
         <!-- quantity picker and size chart-->

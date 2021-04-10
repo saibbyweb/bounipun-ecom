@@ -22,7 +22,7 @@
             <div v-if="section.alternateSection" class="alternate-section">
                 <div class="mood-setter">
                     <img :src="$getImagePath(section.alternateSection.image)" />
-                    <div class="box">
+                    <div v-if="section.alternateSection.heading !== ''" class="box">
                         <h3 @click="$router.push('/collection')" class="heading"> {{ section.alternateSection.heading }} </h3>
                         <p class="desc"> {{ section.alternateSection.paragraph }} </p>
                     </div>
