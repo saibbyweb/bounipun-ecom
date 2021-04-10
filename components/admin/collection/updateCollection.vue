@@ -13,7 +13,9 @@
     <TextBox v-model="doc.description" label="Description" />
     <!-- edt -->
     <InputBox v-model="doc.edt" label="Estimated Time of Delivery (in weeks)" type="number" :internal="true" />
-<!-- publish toggle -->
+     <!-- set color image -->
+    <UploadImage ref="imageUploader" :multipleUpload="false" label="Set Collection Header Image" @updated="imageListUpdated" />
+    <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" /> 
     <!-- update button -->
     <div class="center-space">
@@ -44,6 +46,7 @@ export default {
                 slug: "",
                 description: "",
                 edt: "",
+                image: "",
                 status: false
             },
             loading: false,
@@ -51,6 +54,9 @@ export default {
         }
     },
     methods: {
+        imageListUpdated(list) {
+            this.doc.image = list.length > 0 ? list[0].path : "";
+        },
         async updateDocument(model, details, editMode) {
             this.loading = true;
             const result = await this.$updateDocument(this.model, this.doc, this.editMode);
@@ -83,6 +89,7 @@ export default {
                 slug,
                 description,
                 edt,
+                image,
                 status
             } = details;
 
@@ -92,6 +99,7 @@ export default {
                 slug,
                 description,
                 edt,
+                image,
                 status
             };
             this.editMode = true;
@@ -101,12 +109,14 @@ export default {
             this.$emit('close');
         },
         resetForm() {
+            this.$refs.imageUploader.clearFileSelection();
             this.populateForm({
                 _id: "",
                 name: "",
                 slug: "",
                 description: "",
                 edt: "",
+                image: "",
                 status: false
             });
             this.editMode = false;

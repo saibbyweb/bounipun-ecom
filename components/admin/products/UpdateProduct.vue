@@ -12,22 +12,23 @@
 
     <!-- product id -->
     <InputBox v-if="editMode" label="Product ID" v-model="doc._id" disabled :internal="true" />
+    <!-- type of product -->
+    <SelectBox :options="types" v-model="doc.type" label="Select Product Type" :internal="true" />
+    <!-- collections -->
+    <SelectBox v-if="!thirdPartyProduct" :options="collections" v-model="doc.bounipun_collection" label="Select Collection" />
     <!-- bounipun style id -->
     <InputBox label="Bounipun Style ID" v-model="doc.styleId" />
     <!-- bounipun print number -->
-    <InputBox label="Bounipun Print No." v-model="doc.printNo" :internal="true" />
+    <InputBox v-if="underAutograph" label="Bounipun Print No." v-model="doc.printNo" :internal="true" />
     <!-- product name -->
     <InputBox label="Product Name" v-model="doc.name" />
     <!-- alias -->
     <InputBox label="Alias" v-model="doc.alias" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
-    <!-- type of product -->
-    <SelectBox :options="types" v-model="doc.type" label="Select Product Type" :internal="true" />
-    <!-- collections -->
-    <SelectBox v-if="!thirdPartyProduct" :options="collections" v-model="doc.bounipun_collection" label="Select Collection" />
+
     <!-- color source -->
-    <SelectBox v-if="!thirdPartyProduct" :options="colorSourceTypes" v-model="doc.colorSource" label="Select Color Source" />
+    <SelectBox v-if="!thirdPartyProduct" :options="colorSources" v-model="doc.colorSource" label="Select Color Source" />
     <!-- bounipun color picker -->
     <ColorPicker ref="colorPicker" v-show="doc.colorSource === 'bounipun-colors'" @colorAdded="addNewColor" @colorRemoved="colorDeselected" />
     <!-- add colors -->
@@ -102,16 +103,31 @@ export default {
         },
         doc: {
             handler(newVal) {
-                if(newVal.type === 'third-party') {
+                if (newVal.type === 'third-party') {
                     this.doc.colorSource = 'custom';
                 }
             },
             deep: true
+        },
+        /* update colors array according to collection selection */
+        underEscape(newVal, oldVal) {
+            if(!oldVal && !newVal)
+                console.log('do nothin');
+            else {
+                this.doc.colorSource = '';
+                this.doc.colors = []
+            }
         }
     },
     computed: {
         bounipunColors() {
             return this.doc.colorSource === 'bounipun-colors';
+        },
+        colorSources() {
+            /* show color sources according to collection selection */
+            if(!this.underEscape)
+                return this.colorSourceTypes.filter(source => source.value !== 'bounipun-colors' )
+            else return this.colorSourceTypes.filter(source => source.value !== 'custom' )
         },
         selectedVariants() {
             return this.variants.filter(variant => variant.checked)
@@ -130,6 +146,13 @@ export default {
         },
         thirdPartyProduct() {
             return this.doc.type === 'third-party'
+        },
+        underAutograph() {
+            /* TODO: should first fetch the _id of the autograph doc in collections and then compare */
+            return this.doc.bounipun_collection === '60523a3648d11650a841b82a' && this.doc.type !== "third-party"
+        },
+        underEscape() {
+            return this.doc.bounipun_collection === '60522ab3be493200150ff835' && this.doc.type !== "third-party"
         }
     },
     data() {
@@ -158,15 +181,11 @@ export default {
                     value: null
                 },
                 {
-                    name: 'Made to Order',
-                    value: 'made-to-order'
+                    name: 'Under Bounipun',
+                    value: 'under-bounipun'
                 },
                 {
-                    name: 'Ready to Ship',
-                    value: 'ready-to-ship'
-                },
-                {
-                    name: 'Third-Party',
+                    name: 'Third Party',
                     value: 'third-party'
                 }
             ],
@@ -188,10 +207,10 @@ export default {
         }
     },
     methods: {
+
         /* populateVariant */
         populateVariants(variants) {
-            // console.log(variants);
-
+        console.log(this.$refs.collections,'collections')
             variants.forEach(variant => {
                 let match = this.variants.find(({
                     _id

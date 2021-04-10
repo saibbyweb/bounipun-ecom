@@ -62,7 +62,20 @@ export default {
         documentFetched(doc) {
             this.showForm = true;
             this.editMode = true;
-            console.log(this.$refs.updateComponent.populateForm(doc));
+            this.$refs.updateComponent.populateForm(doc);
+
+            if (doc.image === "" || doc.image === undefined)
+                return;
+
+            /* assign images */
+            setTimeout(() => {
+                this.$refs.updateComponent.$refs.imageUploader.assignImages([{
+                    _id: '',
+                    mainImage: false,
+                    path: doc.image
+                }]);
+            }, 1200);
+
         },
         resultsFetched(result) {
             if (result.docs.length === 0) {

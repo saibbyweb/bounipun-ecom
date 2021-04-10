@@ -19,8 +19,14 @@
 
     <!-- info #2 -->
     <InputBox v-model="doc.info2" label="Info #2" />
+
+    <!-- set color image -->
+    <UploadImage ref="imageUploader" :multipleUpload="false" label="Set Variant Image" @updated="imageListUpdated" />
+
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
+
+    
 
     <!-- update button -->
     <div class="center-space">
@@ -54,6 +60,7 @@ export default {
                 description: "",
                 info1: "",
                 info2: "",
+                image: "",
                 status: false
             },
             loading: false,
@@ -61,6 +68,9 @@ export default {
         }
     },
     methods: {
+         imageListUpdated(list) {
+            this.doc.image = list.length > 0 ? list[0].path : "";
+        },
         async updateDocument(model, details, editMode) {
             if(this.doc.category === "")
                 return;
@@ -98,6 +108,7 @@ export default {
                 description,
                 info1,
                 info2,
+                image,
                 status
             } = details;
             this.doc = {
@@ -108,6 +119,7 @@ export default {
                 description,
                 info1,
                 info2,
+                image,
                 status
             };
             this.editMode = true;
@@ -117,6 +129,8 @@ export default {
             this.$emit('close');
         },
         resetForm() {
+            this.$refs.imageUploader.clearFileSelection();
+            
             this.populateForm({
                 _id: "",
                 name: "",
@@ -125,6 +139,7 @@ export default {
                 description: "",
                 info1: "",
                 info2: "",
+                image: "",
                 status: false
             });
             this.editMode = false;

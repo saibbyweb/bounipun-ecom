@@ -8,6 +8,7 @@ const schema = new mongoose.Schema({
     slug: String,
     description: String,
     edt: Number,
+    image: String,
     status: Boolean
 }, {
     timestamps: true

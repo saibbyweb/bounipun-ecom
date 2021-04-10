@@ -7,10 +7,7 @@
     </div>
     <!-- list of fabrics -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="list" :model="model" :headings="headings" custom_css="10% 40% 20% 20% 10%"
-        :sortByFields="sortByFields"
-        @documentFetched="documentFetched"
-        @sortToggled="sortToggled" />
+        <List :list="list" :model="model" :headings="headings" custom_css="10% 40% 20% 20% 10%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" />
 
         <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
     </div>
@@ -81,15 +78,37 @@ export default {
             this.variantCategories.unshift({
                 name: 'Select Variant',
                 value: ""
+            });
+
+            if(this.list.length === 0)
+                return;
+
+            /* assign category names */
+            this.list = this.list.map(item => {
+                const foundCategory = this.variantCategories.find(col => col.value === item.category);
+                item.category = foundCategory.name;
+                return item;
             })
         },
         documentFetched(doc) {
             this.showForm = true;
             this.editMode = true;
-            console.log(this.$refs.updateComponent.populateForm(doc));
+            this.$refs.updateComponent.populateForm(doc);
+
+            if (doc.image === "" || doc.image === undefined)
+                return;
+
+            /* assign images */
+            setTimeout(() => {
+                this.$refs.updateComponent.$refs.imageUploader.assignImages([{
+                    _id: '',
+                    mainImage: false,
+                    path: doc.image
+                }]);
+            }, 1200);
         },
         async resultsFetched(result) {
-            if(result.docs.length === 0) {
+            if (result.docs.length === 0) {
                 this.list = [];
                 return;
             }
@@ -103,11 +122,15 @@ export default {
                 status
             }) => {
                 /* resolve category name */
-                const foundCategory = this.variantCategories.find(cat => cat.value === category)
+                if (this.variantCategories.length !== 0) {
+                    const foundCategory = this.variantCategories.find(cat => cat.value === category);
+                    category = foundCategory.name
+                }
+
                 return {
                     _id,
                     name,
-                    category: foundCategory.name,
+                    category,
                     code,
                     status
                 }
