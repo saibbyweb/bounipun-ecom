@@ -12,7 +12,7 @@
 
     <!-- links -->
     <div class="shop-actions">
-        <img class="action-icon" :src="getIconPath('search.png')" @click="$router.push('/search')" />
+        <img class="action-icon" :src="getIconPath('search.png')" @click="$emit('showSearch')" />
         <img class="action-icon" :src="getIconPath('heart.png')" @click="$router.push('/wishlist')" />
         <img class="action-icon bag" :src="getIconPath('bag.png')" @click="$router.push('/cart')" />
     </div>

@@ -15,7 +15,7 @@
     <!-- validity range -->
     <label class="label"> Validity Range </label>
     <client-only>
-    <v-datepicker color="purple" is-range v-model="doc.validityRange" />
+    <v-datepicker color="blue" is-range v-model="doc.validityRange" />
     </client-only>
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />

@@ -31,7 +31,9 @@ export default {
 .crud {
     display: grid;
     grid-template-columns: 65% 35%;
-    grid-template-rows: 10% auto;
+    // grid-template-columns: auto;
+    grid-template-rows: auto auto;
+    align-content: baseline;
     min-height: 90vh;
 
     @media(max-width: 768px) {

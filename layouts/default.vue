@@ -1,7 +1,8 @@
 <template>
   <div>
-    <BounipunHeader @showMenu="menuOpen = true" />
+    <BounipunHeader @showMenu="menuOpen = true" @showSearch="searchOpen = true" />
     <OffCanvasMenu :class="{'visible': menuOpen }" @closeMenu="menuOpen = false"/>
+    <Search :class="{'visible': searchOpen }" @closeSearch="searchOpen = false" />
     <Nuxt />
     <BounipunFooter />
   </div>
@@ -13,7 +14,7 @@ export default {
   },
   data() {
     return {
-      showSearch: false,
+      searchOpen: false,
       menuOpen: false
     }
   }
