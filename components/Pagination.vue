@@ -26,6 +26,10 @@ export default {
             filters: Object,
             sortBy: Object,
             limit: Number
+        },
+        requestedBy: {
+            type: String,
+            default: "default"
         }
     },
     watch: {
@@ -91,7 +95,7 @@ export default {
                 limit: this.rawCriterion.limit
             }
             // console.log(payload)
-            const paginatedResults = await this.$fetchPaginatedResults(this.model, rawCriterion);
+            const paginatedResults = await this.$fetchPaginatedResults(this.model, rawCriterion, this.requestedBy);
             
             /* set paginated results */
             this.totalMatches = paginatedResults.totalMatches;

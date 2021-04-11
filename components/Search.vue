@@ -28,6 +28,9 @@ export default {
             previousVal: ""
         }
     },
+    mounted() {
+        this.$refs.searchBox.focus();
+    },
     methods: {
         searchProducts() {
             this.$refs.searchBox.blur();
@@ -42,7 +45,8 @@ export default {
             }
 
             this.previousVal = this.searchTerm;
-            this.$router.push('/search/' + this.searchTerm);
+            this.$router.push('/search-results?searchTerm=' + this.searchTerm);
+            this.$emit('closeSearch')
         }
     }
 }

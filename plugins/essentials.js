@@ -81,8 +81,10 @@ export default (context, inject) => {
     });
     /* wait for the request to complete */
     $store.commit("admin/setLoading", true);
+    $store.commit("customer/setLoading", true);
     const { response, error } = await task(docsFetch);
     $store.commit("admin/setLoading", false);
+    $store.commit("customer/setLoading", false);
 
     /* if error occurred */
     if (error) {

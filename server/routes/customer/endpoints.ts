@@ -1,4 +1,6 @@
 import { server, db, task } from "@helpers/essentials";
+import admin from "@helpers/admin";
+
 /* creating express router */
 const router = server.express.Router();
 
@@ -79,9 +81,34 @@ router.post('/findDocuments', async (req, res) => {
 
 });
 
-router.get('/yes', async (req, res) => {
-    res.send('yes bosso');
-})
+/* search products */
+router.post('/searchProducts', async (req, res) => {
+    /* destructure data from request body */
+    const { model, rawCriterion } = req.body;
+
+    /* construct criterion from raw criterion */
+    let criterion: any = {};
+
+    /* add filters (match) */
+    criterion.match = rawCriterion.filters;
+
+    /* add text search */
+    criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
+    // criterion.match['colors.name'] = { $regex: rawCriterion.search.term, $options: "i" };
+
+    /* sort by fields */
+    criterion.sort = rawCriterion.sortBy;
+
+    /* calculate number of docs to be skipped */
+    criterion.skip = (rawCriterion.cursor - 1) * rawCriterion.limit;
+
+    /* set result set limit */
+    criterion.limit = rawCriterion.limit;
+
+    let paginatedResults: any = await admin.getPaginationResults(model, criterion);
+
+    res.send(paginatedResults);
+});
 
 
 

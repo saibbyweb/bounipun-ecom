@@ -147,7 +147,6 @@ router.post('/fetchCollection', async (req, res) => {
 
 /* fetch paginated results */
 router.post('/fetchPaginatedResults', async (req, res) => {
-    // console.log('requested to paginate', req.body)
     /* destructure data from request body */
     const { model, rawCriterion, requestedBy } = req.body;
 
@@ -158,7 +157,17 @@ router.post('/fetchPaginatedResults', async (req, res) => {
     criterion.match = rawCriterion.filters;
 
     /* add text search */
-    criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
+    // criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
+    if (model === "products" && requestedBy === "customer") {
+        criterion.match = {
+            $or: [
+                { name: { $regex: rawCriterion.search.term, $options: "i" } },
+                { 'colors.name': { $regex: rawCriterion.search.term, $options: "i" } }]
+        }
+    }
+    else
+        criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
+
 
     /* sort by fields */
     criterion.sort = rawCriterion.sortBy;
@@ -172,7 +181,6 @@ router.post('/fetchPaginatedResults', async (req, res) => {
     let paginatedResults: any = await admin.getPaginationResults(model, criterion);
 
     res.send(paginatedResults);
-
 });
 
 /* update api */

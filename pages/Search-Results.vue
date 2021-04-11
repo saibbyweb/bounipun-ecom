@@ -1,14 +1,11 @@
 <template>
 <div class="page center-col">
-    <p> Showing results for <i> "shawls" </i> </p>
+    <p> Showing results for <i> "{{ $route.query.searchTerm }}" </i> </p>
     <div class="search-results">
-
-        <!-- <product-card :details="{name: 'Khatamband Cashmere',
-                collection: 'Bounipun Karakul',
-                price: 'INR 20000'}" product="auto_3" :variants="{shawl: true, stole: true}"/> -->
+        <product-card v-for="(product, index) in products" :key="index" :product="product" />
     </div>
 
-    <Pagination ref="pagination" model="products" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
+    <Pagination ref="pagination" model="products" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" requestedBy="customer"/>
 </div>
 </template>
 
@@ -19,13 +16,19 @@ export default {
             return this.$route.query.searchTerm;
         }
     },
+    watch: {
+        $route(to, from) {
+            // console.log(from.params.searchTerm, to.params.searchTerm);
+            this.rawCriterion.search.term = to.query.searchTerm;
+        }
+    },
     data() {
         return {
             /* rawCriterion */
             rawCriterion: {
                 search: {
                     key: "name",
-                    term: ""
+                    term: this.$route.query.searchTerm ? this.$route.query.searchTerm : "rose"
                 },
                 filters: {
                     type: 'default'
@@ -35,6 +38,7 @@ export default {
                 },
                 limit: 6
             },
+            products: []
         }
     },
     methods: {
@@ -45,8 +49,14 @@ export default {
                 sortBy
             }
         },
-        resultsFetched(results) {
-            console.log('results', results)
+        resultsFetched(result) {
+            if (result.docs.length === 0) {
+                this.products = [];
+                return;
+            }
+
+            /* extract list */
+            this.products = result.docs;
         }
     }
 }
