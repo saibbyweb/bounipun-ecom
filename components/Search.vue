@@ -1,21 +1,21 @@
 <template>
-<div class="search page">
+<div class="search">
     <button class="clear cancel-search" @click="$emit('closeSearch')"> Cancel Search <img class="icon" src="/icons/dark/close.png"> </button>
     <!-- <br> -->
     <!-- search box -->
     <input ref="searchBox" class="search-box" type="text" placeholder="What are you looking for?" @keyup.enter="searchProducts" v-model="searchTerm" />
 
-    <div class="trending">
+    <!-- <div class="trending">
         <h3 class="heading"> Trending </h3>
         <button class="clear"> <img class="icon" src="/icons/dark/search.png"> SHAWLS </button>
         <button class="clear"> <img class="icon" src="/icons/dark/search.png"> STOLES </button>
         <button class="clear"> <img class="icon" src="/icons/dark/search.png"> SQUARES </button>
-    </div>
+    </div> -->
 
     <!-- results -->
-    <div class="search-results">
-        
-    </div>
+    <!-- <div class="search-results">
+
+    </div> -->
 
 </div>
 </template>
@@ -62,9 +62,10 @@ export default {
 .search {
     opacity: 0;
     position: fixed;
+    padding:10% 6% 6% 6%;
     top: 0;
     left: 0;
-    background: white;
+    background: rgba(255, 255, 255, 0.97);
     width: 100vw;
     height: 100vh;
     transition: all 0.4s ease-in-out;
@@ -79,10 +80,12 @@ export default {
     }
 
     .cancel-search {
-        align-self: flex-end;
         font-size: 10px;
         padding: 3% 0;
         color: $dark_gray;
+        position: absolute;
+        right:0;
+        top:1%;
     }
 
     .search-box {
@@ -90,6 +93,7 @@ export default {
         background: #656565;
         color: white;
         border: none;
+        margin-top:10px;
         padding: 3% 6%;
         box-sizing: border-box;
         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
