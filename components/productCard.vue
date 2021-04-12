@@ -16,8 +16,10 @@
     </div>
 
     <!-- variants available -->
-    <div v-if="product.type !== 'third-party'" class="variants-available center">
-        <div v-for="(variant, index) in variantsAvailable" :key="index" class="variant"> {{ variant }} </div>
+    <div v-if="!searchView">
+        <div v-if="product.type !== 'third-party'" class="variants-available center">
+            <div v-for="(variant, index) in variantsAvailable" :key="index" class="variant"> {{ variant }} </div>
+        </div>
     </div>
 
     <!-- shop now button -->
@@ -30,6 +32,10 @@
 <script>
 export default {
     props: {
+        searchView: {
+            type: Boolean,
+            default: false
+        },
         details: {
             type: Object,
             default: () => {
@@ -68,10 +74,9 @@ export default {
         }
     },
     computed: {
-        imagePath() { 
-            if(this.product.notProvided || this.product.colors.length === 0)
+        imagePath() {
+            if (this.product.notProvided || this.product.colors.length === 0)
                 return '/default-image.png';
-            
 
             const images = this.product.colors[0].images;
             /* fetch main image */

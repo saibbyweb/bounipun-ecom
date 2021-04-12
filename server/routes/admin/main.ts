@@ -163,7 +163,10 @@ router.post('/fetchPaginatedResults', async (req, res) => {
         criterion.match = {
             $or: [
                 { name: { $regex: rawCriterion.search.term, $options: "i" } },
-                { 'colors.name': { $regex: rawCriterion.search.term, $options: "i" } }]
+                { 'colors.name': { $regex: rawCriterion.search.term, $options: "i" } },
+                { 'colors.baseColor': { $regex: rawCriterion.search.term, $options: "i" } },
+                { meta : { $regex: rawCriterion.search.term, $options: "i" } }
+            ]
         }
     }
     else

@@ -11,7 +11,7 @@
     </div>
     
     <!-- if collection locked -->
-    <div class="locked">
+    <div v-if="collectionLocked" class="locked">
         <h2 class="heading" v-if="collectionLocked"> 🔒 This collection is locked </h2>
         <br>
         <button class="action"> Request Access </button>
@@ -55,7 +55,8 @@ export default {
 
             /* fetch product under this collection  */
             const products = await this.$fetchData('products', {
-                bounipun_collection: collection.doc._id
+                bounipun_collection: collection.doc._id,
+                type: 'under-bounipun'
             }, true);
 
             if (!products.fetched) {
