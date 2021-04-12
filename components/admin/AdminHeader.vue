@@ -48,6 +48,11 @@ export default {
                     path: '/admin-panel/fabrics',
                     desc: 'Manage list and details of various fabrics'
                 },
+                                {
+                    name: 'Base Colors',
+                    path: '/admin-panel/baseColors',
+                    desc: 'Manage bounipun colors'
+                },
                 {
                     name: 'Colors Categories',
                     path: '/admin-panel/colorCategories',

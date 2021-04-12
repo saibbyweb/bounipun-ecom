@@ -10,6 +10,7 @@ import productLists from "./productLists";
 import homepageLayouts from "./homepageLayouts";
 import sales from "./sale";
 import coupon from "./coupon"
+import baseColor from "./baseColors"
 
 const register = function () {
     fabric.methods.register();
@@ -23,6 +24,7 @@ const register = function () {
     homepageLayouts.methods.register();
     sales.methods.register();
     coupon.methods.register();
+    baseColor.methods.register();
 }
 
-export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, register };
+export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, register };

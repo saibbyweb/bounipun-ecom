@@ -6,6 +6,7 @@ export default {
         console.log('special update called', model, editMode)
         switch (model) {
             case 'products':
+                /* do the meta calculation here */
                 await product.methods.updateProduct(details, editMode);
                 break;
             case 'collections':

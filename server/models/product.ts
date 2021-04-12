@@ -11,8 +11,9 @@ const schema = new mongoose.Schema({
     alias: String,
     slug: String,
     description: String,
+    /* under bounipun or third-party */
     type: String,
-    /* collection */
+    /* bounipun collection */
     bounipun_collection: {
         type: ObjectId,
         ref: 'collections'
@@ -25,6 +26,8 @@ const schema = new mongoose.Schema({
         images: [{ _id: ObjectId, path: String, mainImage: Boolean }],
         disclaimer: { type: String, default: '' },
         code: { type: String, default: '' },
+        /* base color - meta  */
+        baseColor: { type: String, default: '' },
     }],
     /* variants */
     variants: [{
@@ -35,6 +38,9 @@ const schema = new mongoose.Schema({
         }]
     }],
     directPrice: { type: String, default: 0 },
+    /* meta */
+    meta: String,
+    /* estimated time of delivery */
     etd: Number,
     status: Boolean
 }, {
