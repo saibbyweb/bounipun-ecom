@@ -1,7 +1,7 @@
-import { mongoose, ObjectId } from "@helpers/essentials"
+import { mongoose, ObjectId, db } from "@helpers/essentials"
 import slugify from "slugify";
 
-const db = mongoose.connection;
+// const db = mongoose.connection;
 
 /* schema */
 const schema = new mongoose.Schema({
@@ -85,6 +85,19 @@ export const methods = {
         if (slugFound !== null) {
             details.alias = `${details.alias}-${Date.now()}`
             details.slug = parent.slug + "/" + details.alias;
+        }
+
+        /* if product is under bounipun, add meta data to the product (variant names ) */
+        if(details.type !== 'third-party') {
+            let keywords = [];
+            /* fetch variant names */
+            for(const variant of details.variants) {
+                const variantDoc: any = await db.model('variants').findOne({_id: variant._id}).select('name');
+                /* add variant name to keywords array */
+                keywords.push(variantDoc.name);
+            }
+            console.log(keywords);
+            details.meta = keywords.join();
         }
 
         console.log(details.alias, '-- FINAL ALIAS');
