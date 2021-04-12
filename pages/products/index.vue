@@ -102,7 +102,7 @@
             <div class="variants-container">
                 <div @click="setActiveVariant(index)" v-for="(variant, index) in variants" :key="index" class="variant center-col">
                     <!-- image -->
-                    <img class="illustration" :class="{active: activeVariantIndex === index}" src="/demo_images/variants/shawl.png" />
+                    <img class="illustration" :class="{active: activeVariantIndex === index}" :src="getVariantImage(variant.image)" />
                     <!-- variant name -->
                     <span class="name"> {{ variant.name }} </span>
                     <!-- info 1 -->
@@ -245,6 +245,11 @@ export default {
         }
     },
     methods: {
+        getVariantImage(image) {
+            if(image === undefined)
+                return '/demo_images/variants/shawl.png';
+            return this.$getImagePath(image);
+        },
         async fetchProduct(slug) {
             const result = await this.$fetchDocument('products', slug, 'customer');
             if (!result.fetched) {
@@ -278,6 +283,7 @@ export default {
                     info2: variant._id.info2,
                     code: variant._id.code,
                     description: variant._id.description,
+                    image: variant._id.image,
                     fabrics: variant.fabrics.map(fabric => {
                         return {
                             name: fabric._id.name,
@@ -584,9 +590,10 @@ export default {
 
                 .illustration {
                     filter: grayscale(100%);
-                    height: 60%;
+                    // height: 60%;
                     margin-bottom: 3px;
                     transition: all 0.3s ease-in-out;
+                    width:12vw;
 
                     &.active {
                         filter: none;

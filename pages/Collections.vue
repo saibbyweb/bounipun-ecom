@@ -1,7 +1,7 @@
 <template>
 <div class="center-col page -wh">
 
-    <div class="c-header center">
+    <div class="c-header center" :style="{ backgroundImage: `url(${getCollectionImage(collection.image)})`}">
         <h2 class="heading"> {{ collection.name }} </h2>
     </div>
 
@@ -52,6 +52,10 @@ export default {
             
             this.products = products.docs;
             console.log(this.products);
+        },
+        getCollectionImage(image) {
+            if(image === undefined) return "/default-image.png";
+            return this.$getImagePath(image);
         }
     }
 }
@@ -60,7 +64,8 @@ export default {
 <style lang="scss" scoped>
 .c-header {
     height: 40vw;
-    background: url("/demo_images/collection-header.png");
+    // background: url("/demo_images/collection-header.png");
+    background-size: cover;
     width: 100%;
 
     .heading {

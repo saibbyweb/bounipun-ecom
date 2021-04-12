@@ -37,7 +37,7 @@ export default {
     computed: {
         imagePath() { 
             if(this.product.notProvided || this.product.colors.length === 0)
-                return 'abc';
+                return '/default-image.png';
             
 
             const images = this.product.colors[0].images;
