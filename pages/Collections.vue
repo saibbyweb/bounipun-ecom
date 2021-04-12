@@ -5,9 +5,16 @@
         <h2 class="heading"> {{ collection.name }} </h2>
     </div>
 
-    <div class="page collection-items">
+    <div v-if="!collectionLocked" class="page collection-items">
         <product-card v-for="(product, index) in products" :key="index" :product="product" />
         <h3 v-if="products.length === 0"> No Products found for {{ collection.name }} </h3>
+    </div>
+    
+    <!-- if collection locked -->
+    <div class="locked">
+        <h2 class="heading" v-if="collectionLocked"> 🔒 This collection is locked </h2>
+        <br>
+        <button class="action"> Request Access </button>
     </div>
 </div>
 </template>
@@ -24,6 +31,11 @@ export default {
         $route(to, from) {
             console.log(to);
             this.fetchCollectionProducts(to.query.slug);
+        }
+    },
+    computed: {
+        collectionLocked() {
+            return this.collection.lock === undefined ? false : this.collection.lock
         }
     },
     mounted() {
@@ -79,5 +91,14 @@ export default {
 .collection-items {
     display: flex;
     flex-wrap: wrap;
+}
+.locked {
+    padding:10%;
+
+    .heading {
+        font-family: $font_2_bold;
+        text-transform: uppercase;
+        text-align: center;
+    }
 }
 </style>

@@ -15,6 +15,8 @@
     <InputBox v-model="doc.edt" label="Estimated Time of Delivery (in weeks)" type="number" :internal="true" />
      <!-- set color image -->
     <UploadImage ref="imageUploader" :multipleUpload="false" label="Set Collection Header Image" @updated="imageListUpdated" />
+       <!-- publish toggle -->
+    <Toggle v-model="doc.lock" label="🔒Lock" /> 
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" /> 
     <!-- update button -->
@@ -47,6 +49,7 @@ export default {
                 description: "",
                 edt: "",
                 image: "",
+                lock: false,
                 status: false
             },
             loading: false,
@@ -90,6 +93,7 @@ export default {
                 description,
                 edt,
                 image,
+                lock,
                 status
             } = details;
 
@@ -100,6 +104,7 @@ export default {
                 description,
                 edt,
                 image,
+                lock,
                 status
             };
             this.editMode = true;
@@ -117,6 +122,7 @@ export default {
                 description: "",
                 edt: "",
                 image: "",
+                lock: false,
                 status: false
             });
             this.editMode = false;

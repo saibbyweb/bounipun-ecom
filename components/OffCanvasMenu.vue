@@ -9,7 +9,10 @@
     <!-- menu items -->
     <button class="clear item"> Collections </button>
     <!-- active collection list -->
-    <button @click="navigate(collection, 'collection')" class="clear item sub-item" v-for="(collection, index) in collections" :key="index"> {{ collection.name }} </button>
+    <button @click="navigate(collection, 'collection')" class="clear item sub-item" v-for="(collection, index) in collections" :key="index"> 
+        {{ collection.lock ? '🔒' : "" }}
+        {{ collection.name }} 
+    </button>
     <!-- <button class="clear item"> Categories </button> -->
     <button class="clear item"> The Bounipun Lab </button>
     <button class="clear item"> Story </button>

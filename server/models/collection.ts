@@ -9,6 +9,7 @@ const schema = new mongoose.Schema({
     description: String,
     edt: Number,
     image: String,
+    lock: { type: Boolean, default: false },
     status: Boolean
 }, {
     timestamps: true
