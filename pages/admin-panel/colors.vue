@@ -47,11 +47,11 @@ export default {
                 sortBy: {
 
                 },
-                limit: 3
+                limit: 10
             },
             list: [],
             sortByFields: ['code', 'name', 'status'],
-            headings: ['_id', 'code', 'name', 'Image', 'Category', 'Description', 'status'],
+            headings: ['_id', 'code', 'name', 'Base Color', 'Category', 'Description', 'status'],
             colorCategories: [],
         }
     },
@@ -115,7 +115,7 @@ export default {
                 _id,
                 code,
                 name,
-                image,
+                baseColor,
                 category,
                 description,
                 status
@@ -126,7 +126,7 @@ export default {
                     _id,
                     code,
                     name,
-                    image,
+                    baseColor,
                     category: foundCategory ? foundCategory.name : "Not available",
                     description,
                     status

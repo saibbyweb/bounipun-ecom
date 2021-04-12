@@ -78,7 +78,7 @@ router.post('/getDocument', async (req, res) => {
             /* products */
             case 'products':
                 document = await document
-                    .populate('colors._id', 'name code image')
+                    .populate('colors._id', 'name code baseColor image')
 
                 /* */
 
@@ -87,6 +87,7 @@ router.post('/getDocument', async (req, res) => {
                     const bounipunColor = color._id !== null;
                     color.name = bounipunColor ? color._id.name : color.name;
                     color.code = bounipunColor ? color._id.code : color.code;
+                    color.baseColor = bounipunColor ? color._id.baseColor : color.baseColor
                     color._id = bounipunColor ? color._id._id : null;
                 });
 

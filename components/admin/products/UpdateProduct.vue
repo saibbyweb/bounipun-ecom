@@ -28,7 +28,11 @@
     <TextBox v-model="doc.description" label="Description" />
 
     <!-- color source -->
-    <SelectBox v-if="!thirdPartyProduct" :options="colorSources" v-model="doc.colorSource" label="Select Color Source" />
+    <!-- <SelectBox v-if="!thirdPartyProduct" :options="colorSources" v-model="doc.colorSource" label="Select Color Source" /> -->
+
+        <!-- alias -->
+    <InputBox v-if="!thirdPartyProduct" label="Color Source" v-model="doc.colorSource" :disabled="true" />
+
     <!-- bounipun color picker -->
     <ColorPicker ref="colorPicker" v-show="doc.colorSource === 'bounipun-colors'" @colorAdded="addNewColor" @colorRemoved="colorDeselected" />
     <!-- add colors -->
@@ -40,6 +44,8 @@
                 <InputBox label="Color Name" v-model="color.name" :disabled="bounipunColors" />
                 <!-- color name -->
                 <InputBox label="Color Code" v-model="color.code" :disabled="bounipunColors" />
+                <!-- select base color -->
+                <SelectBox :options="baseColors" v-model="color.baseColor" label="Base Color" :disabled="bounipunColors" />
             </div>
 
             <!-- color images -->
@@ -106,16 +112,26 @@ export default {
                 if (newVal.type === 'third-party') {
                     this.doc.colorSource = 'custom';
                 }
+
+                /* if not under escape */
+                if(!this.underEscape)
+                    this.doc.colorSource = 'custom'
             },
             deep: true
         },
         /* update colors array according to collection selection */
         underEscape(newVal, oldVal) {
-            if(!oldVal && !newVal)
-                console.log('do nothin');
-            else {
-                this.doc.colorSource = '';
-                this.doc.colors = []
+            // if(!oldVal && !newVal) {
+            //     console.log('do nothin');
+            //     this.doc.colorSource = 'custom';
+            // }
+            if(newVal) {
+                this.doc.colorSource = 'bounipun-colors';
+                // this.doc.colorSource = '';
+                // this.doc.colors = []
+            }
+            else if(!newVal) {
+                this.doc.colorSource = 'custom';
             }
         }
     },
@@ -202,12 +218,35 @@ export default {
                     value: 'custom'
                 },
             ],
+            baseColors: [],
             loading: false,
             updated: false
         }
     },
+    mounted() {
+        this.fetchBaseColors();
+    },
     methods: {
+        async fetchBaseColors() {
+            const result = await this.$fetchCollection('base_colors');
+            if(!result.fetched || result.docs.length === 0) {
+                return;
+            }
+            
+            /* base colors array */
+            this.baseColors = result.docs.map(color => {
+                return {
+                    name: color.name.toUpperCase(),
+                    value: color.name
+                }
+            });
 
+            this.baseColors.unshift({
+                name: "Select Base",
+                value: ""
+            });
+            
+        },
         /* populateVariant */
         populateVariants(variants) {
         console.log(this.$refs.collections,'collections')
@@ -335,7 +374,7 @@ export default {
                 variants,
                 colors,
                 directPrice,
-                etd,
+                etd: etd.toString(),
                 status
             };
             this.editMode = true;

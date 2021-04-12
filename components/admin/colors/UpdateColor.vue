@@ -9,7 +9,8 @@
     <!-- color name -->
     <InputBox label="Color Name" v-model="doc.name" />
     <!-- base color name -->
-    <InputBox label="Base Color Name" v-model="doc.baseColorName" />
+    <!-- <InputBox label="Base Color Name" v-model="doc.baseColorName" /> -->
+    <SelectBox :options="baseColors" v-model="doc.baseColor" label="Base Color" />
     <!-- category -->
     <SelectBox :options="colorCategories" v-model="doc.category" label="Type of Category" />
     <!-- description -->
@@ -47,17 +48,41 @@ export default {
                 _id: "",
                 code: "",
                 name: "",
-                baseColorName: "",
+                baseColor: "",
                 image: "",
                 category: "",
                 description: "",
                 status: false
             },
+            baseColors: [],
             loading: false,
             updated: false
         }
     },
+    mounted() {
+        this.fetchBaseColors();
+    },
     methods: {
+        async fetchBaseColors() {
+            const result = await this.$fetchCollection('base_colors');
+            if(!result.fetched || result.docs.length === 0) {
+                return;
+            }
+            
+            /* base colors array */
+            this.baseColors = result.docs.map(color => {
+                return {
+                    name: color.name.toUpperCase(),
+                    value: color.name
+                }
+            });
+
+            this.baseColors.unshift({
+                name: "Select Base Color",
+                value: ""
+            });
+            
+        },
         imageListUpdated(list) {
             this.doc.image = list.length > 0 ? list[0].path : "";
         },
@@ -91,7 +116,7 @@ export default {
                 _id,
                 code,
                 name,
-                baseColorName,
+                baseColor,
                 image,
                 category,
                 description,
@@ -101,7 +126,7 @@ export default {
                 _id,
                 code,
                 name,
-                baseColorName,
+                baseColor,
                 image,
                 category,
                 description,
@@ -120,7 +145,7 @@ export default {
                 _id: "",
                 code: "",
                 name: "",
-                baseColorName: "",
+                baseColor: "",
                 image: "",
                 category: "",
                 description: "",

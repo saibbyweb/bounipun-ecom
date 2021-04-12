@@ -13,9 +13,7 @@
     </div>
     <!-- update base color form -->
     <div :class="{updating: showForm}" class="update">
-
         <UpdateBaseColor v-show="showForm" ref="updateComponent" @updated="updateList" :model="model" @close="showForm = false" />
-
         <AddNewItem v-if="!showForm" label="Base Color" @showForm="showForm = true" />
     </div>
 </div>
