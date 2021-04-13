@@ -13,7 +13,6 @@
                     <div class="list">
                         <!-- featured product card -->
                         <featured-product-card v-for="(product, index) in section.productSection.list.list" :details="{ name: product._id.name, collection: product._id.bounipun_collection.name }" :key="index" :product="product._id" />
-
                     </div>
                 </div>
             </div>

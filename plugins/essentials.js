@@ -75,6 +75,7 @@ export default (context, inject) => {
     let result = { fetched: false, docs: [], totalMatches: 0 };
     /* hit endpoint */
     const docsFetch = context.$axios.$post("/fetchPaginatedResults", {
+    // const docsFetch = context.$axios.$post("/searchProducts", {
       model,
       rawCriterion,
       requestedBy: !requestedBy ? "default" : requestedBy

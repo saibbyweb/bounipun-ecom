@@ -167,7 +167,7 @@ router.post('/fetchPaginatedResults', async (req, res) => {
                 { 'colors.name': { $regex: rawCriterion.search.term, $options: "i" } },
                 { 'colors.baseColor': { $regex: rawCriterion.search.term, $options: "i" } },
                 { meta: { $regex: rawCriterion.search.term, $options: "i" } }
-            ], ...admin.setObjectIds(rawCriterion.filters, ['bounipun_collection'])
+            ], ...admin.setObjectIds(rawCriterion.filters, ['bounipun_collection','variants._id'])
         }
     }
     else

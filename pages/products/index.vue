@@ -66,6 +66,7 @@
 
             <!-- color category -->
             <div class="color-category" v-for="(value, name, index) in product.colorData" :key="index">
+                <div v-if="value.length !== 0">
                 <!-- sub color heading -->
                 <h5 class="category-heading"> {{ name }} </h5>
                 <div class="color-boxes">
@@ -76,6 +77,8 @@
                         <span class="name"> {{ color.name }} </span>
                     </div>
                 </div>
+                </div>
+
             </div>
         </div>
 

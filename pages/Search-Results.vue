@@ -5,31 +5,37 @@
     <!-- offcanvas filters -->
     <div class="offcanvas-filters" :class="{visible: filtersOpen}">
         <h3> Filters </h3>
+        <!-- product type options -->
         <Accordion heading="Product Type" :expanded="true">
-            <!-- product type options -->
-            <label class="label">
-                <input type="radio" name="product-type" value="under-bounipun" v-model="rawCriterion.filters.type" />
-                Under Bounipun </label>
-            <br>
-            <label class="label">
-                <input type="radio" name="product-type" value="third-party" v-model="rawCriterion.filters.type" />
-                Third Party </label>
-        </Accordion>
+            <div class="option" v-for="(type, index) in filterData.types" :key="index">
+                <label class="label">
+                    <input type="checkbox" name="type" :value="type.value" v-model="type.checked" />
+                    {{ type.name }}</label>
+            </div>
 
+        </Accordion>
+        <!-- variant options -->
+        <Accordion heading="Variants" :expanded="true">
+            <div class="option" v-for="(variant, index) in filterData.variants" :key="index">
+                <label class="label">
+                    <input type="checkbox" name="variants" :value="variant.value" v-model="variant.checked" />
+                    {{ variant.name }}</label>
+            </div>
+        </Accordion>
+        <!-- collection options -->
         <Accordion heading="Collection" :expanded="true">
-            <!-- collection options -->
             <div class="option" v-for="(collection, index) in filterData.collections" :key="index">
                 <label class="label">
-                    <input type="radio" name="collection" :value="collection._id" v-model="rawCriterion.filters.bounipun_collection" />
+                    <input type="checkbox" name="collection" :value="collection.value" v-model="collection.checked" />
                     {{ collection.name }}</label>
             </div>
         </Accordion>
 
-        <Accordion heading="Collection" :expanded="true">
-            <!-- base color options -->
+        <!-- base color options -->
+        <Accordion heading="Base Color" :expanded="true">
             <div class="option" v-for="(color, index) in filterData.baseColors" :key="index">
                 <label class="label">
-                    <input type="radio" name="baseColor" :value="color.name" v-model="rawCriterion.filters.baseColor" />
+                    <input type="checkbox" name="baseColor" :value="color.value" v-model="color.checked" />
                     {{ color.name }} </label>
             </div>
         </Accordion>
@@ -53,7 +59,8 @@
         <product-card v-for="(product, index) in products" :key="index" :product="product" :searchView="true" />
     </div>
 
-    <Pagination ref="pagination" model="products" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" requestedBy="customer" />
+    <!-- <Pagination ref="pagination" model="products" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" requestedBy="customer" /> -->
+
 </div>
 </template>
 
@@ -68,7 +75,14 @@ export default {
         $route(to, from) {
             // console.log(from.params.searchTerm, to.params.searchTerm);
             this.rawCriterion.search.term = to.query.searchTerm;
-        }
+        },
+        /* re-fetch results if raw criterion changed */
+        filterData: {
+            handler() {
+                this.fetchResults();
+            },
+            deep: true
+        },
     },
     data() {
         return {
@@ -79,9 +93,11 @@ export default {
                     term: this.$route.query.searchTerm ? this.$route.query.searchTerm : "rose"
                 },
                 filters: {
-                    type: 'default',
-                    bounipun_collection: 'default',
-                    baseColor: 'default'
+                    //     type: 'default',
+                    //     bounipun_collection: 'default',
+                    //     baseColor: 'default',
+                    //     'variants._id': 'default',
+                    //     'colors.baseColor': 'default'
                 },
                 sortBy: {
 
@@ -90,12 +106,27 @@ export default {
             },
             filtersOpen: false,
             filterData: {
+                types: [{
+                        name: "Under Bounipun",
+                        value: "under-bounipun",
+                        checked: false
+                    },
+                    {
+                        name: "Third Party",
+                        value: "third-party",
+                        checked: false
+                    }
+                ],
                 collections: [],
                 variants: [],
                 baseColors: []
             },
             sortOpen: false,
-            products: []
+            products: [],
+            /* pagination config */
+            cursor: 1,
+            totalMatches: 0,
+            limit: 10
         }
     },
     mounted() {
@@ -108,6 +139,61 @@ export default {
                 ...this.rawCriterion,
                 sortBy
             }
+        },
+        getCheckedOnes(options) {
+            let checkedOptions = [];
+            let allOptions = {
+                ...options
+            };
+
+            const keys = Object.keys(allOptions);
+
+            /* omit unused filters */
+            keys.forEach(key => {
+                if (allOptions[key].checked === true)
+                    checkedOptions.push(allOptions[key].value);
+            });
+
+            return checkedOptions;
+        },
+        async fetchResults() {
+            /* keep only the checked ones from (type, variants, collection, base color) */
+            let filters = {}
+            filters.type = this.getCheckedOnes(this.filterData.types);
+            filters.bounipun_collection = this.getCheckedOnes(this.filterData.collections);
+            filters['variants._id'] = this.getCheckedOnes(this.filterData.variants);
+            filters['colors.baseColor'] = this.getCheckedOnes(this.filterData.baseColors);
+
+            /* append filters to raw criterion */
+            this.rawCriterion.filters = filters;
+
+            /* post raw criterion to the server */
+            const fetchPaginatedResults = this.$axios.$post('/searchProducts', {
+                rawCriterion: this.rawCriterion
+            });
+
+            /* wait for request to resolve */
+            const {
+                response,
+                error
+            } = await this.$task(fetchPaginatedResults);
+
+            /* if error occurred */
+            if (error) {
+                console.log("Could not fetch documents");
+                return;
+            }
+
+            /* if no matches found, return */
+            if (response.docs.length === 0) {
+                console.log('No matches found');
+                return;
+            }
+
+            console.log(response.docs);
+            console.log(response.totalMatches,'--matches found');
+
+
         },
         resultsFetched(result) {
             if (result.docs.length === 0) {
@@ -136,8 +222,21 @@ export default {
             }
 
             console.log(response);
-            this.filterData.collections = response.collections;
-            this.filterData.baseColors = response.baseColors;
+            this.filterData.collections = response.collections.map(collection => ({
+                ...collection,
+                value: collection._id,
+                checked: false
+            }))
+            this.filterData.baseColors = response.baseColors.map(color => ({
+                ...color,
+                value: color.name,
+                checked: false
+            }))
+            this.filterData.variants = response.variants.map(variant => ({
+                ...variant,
+                value: variant._id,
+                checked: false
+            }))
 
         }
     }

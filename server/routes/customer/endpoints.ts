@@ -114,17 +114,25 @@ router.get('/getSearchFilters', async(req, res) => {
 /* search products */
 router.post('/searchProducts', async (req, res) => {
     /* destructure data from request body */
-    const { model, rawCriterion } = req.body;
+    const { rawCriterion } = req.body;
+
+    console.log(rawCriterion);
+
+    res.send({docs: [], totalMatches: 0});
+    return;
 
     /* construct criterion from raw criterion */
     let criterion: any = {};
 
     /* add filters (match) */
-    criterion.match = rawCriterion.filters;
-
-    /* add text search */
-    criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
-    // criterion.match['colors.name'] = { $regex: rawCriterion.search.term, $options: "i" };
+    criterion.match = {
+        $or: [
+            { name: { $regex: rawCriterion.search.term, $options: "i" } },
+            { 'colors.name': { $regex: rawCriterion.search.term, $options: "i" } },
+            { 'colors.baseColor': { $regex: rawCriterion.search.term, $options: "i" } },
+            { meta: { $regex: rawCriterion.search.term, $options: "i" } }
+        ], ...admin.setObjectIds(rawCriterion.filters, ['bounipun_collection','variants._id'])
+    }
 
     /* sort by fields */
     criterion.sort = rawCriterion.sortBy;
@@ -135,7 +143,7 @@ router.post('/searchProducts', async (req, res) => {
     /* set result set limit */
     criterion.limit = rawCriterion.limit;
 
-    let paginatedResults: any = await admin.getPaginationResults(model, criterion);
+    let paginatedResults: any = await admin.getPaginationResults('products', criterion);
 
     res.send(paginatedResults);
 });
