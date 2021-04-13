@@ -118,21 +118,43 @@ router.post('/searchProducts', async (req, res) => {
 
     console.log(rawCriterion);
 
-    res.send({docs: [], totalMatches: 0});
-    return;
-
     /* construct criterion from raw criterion */
     let criterion: any = {};
 
-    /* add filters (match) */
+    /* construct filter criteria */
+    let filters = {}
+    /* cast to object id required */
+    let castRequired = ['bounipun_collection', 'variants._id'];
+    
+    /* omit unused filters */
+    Object.keys(rawCriterion.filters).forEach(key => {
+        let value = rawCriterion.filters[key];
+        if(value.length !== 0) {
+            value = castRequired.includes(key) ? admin.getObjectId_ied(value) : value;
+            filters[key] = { $in: value }
+        }
+    })
+
+    console.log(filters);
+
     criterion.match = {
         $or: [
             { name: { $regex: rawCriterion.search.term, $options: "i" } },
             { 'colors.name': { $regex: rawCriterion.search.term, $options: "i" } },
             { 'colors.baseColor': { $regex: rawCriterion.search.term, $options: "i" } },
             { meta: { $regex: rawCriterion.search.term, $options: "i" } }
-        ], ...admin.setObjectIds(rawCriterion.filters, ['bounipun_collection','variants._id'])
+        ],...filters
     }
+
+    /* add filters (match) */
+    // criterion.match = {
+    //     $or: [
+    //         { name: { $regex: rawCriterion.search.term, $options: "i" } },
+    //         { 'colors.name': { $regex: rawCriterion.search.term, $options: "i" } },
+    //         { 'colors.baseColor': { $regex: rawCriterion.search.term, $options: "i" } },
+    //         { meta: { $regex: rawCriterion.search.term, $options: "i" } }
+    //     ], ...admin.setObjectIds(rawCriterion.filters, ['bounipun_collection','variants._id'])
+    // }
 
     /* sort by fields */
     criterion.sort = rawCriterion.sortBy;

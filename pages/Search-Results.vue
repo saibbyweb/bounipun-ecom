@@ -59,7 +59,10 @@
         <product-card v-for="(product, index) in products" :key="index" :product="product" :searchView="true" />
     </div>
 
-    <!-- <Pagination ref="pagination" model="products" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" requestedBy="customer" /> -->
+    <!-- pagination bar -->
+    <div v-if="totalMatches > 0" class="pagination-bar">
+        <button @click="getPage(n)" :class="n == rawCriterion.cursor ? 'current-page page-no' : 'page-no'" :key="index" v-for="(n, index) in this.totalPages"> {{ n }} </button>
+    </div>
 
 </div>
 </template>
@@ -69,12 +72,16 @@ export default {
     computed: {
         searchTerm() {
             return this.$route.query.searchTerm;
-        }
+        },
+        totalPages() {
+            return Math.ceil(this.totalMatches / this.rawCriterion.limit);
+        },
     },
     watch: {
         $route(to, from) {
             // console.log(from.params.searchTerm, to.params.searchTerm);
             this.rawCriterion.search.term = to.query.searchTerm;
+            this.fetchResults();
         },
         /* re-fetch results if raw criterion changed */
         filterData: {
@@ -102,7 +109,8 @@ export default {
                 sortBy: {
 
                 },
-                limit: 6
+                limit: 6,
+                cursor: 1
             },
             filtersOpen: false,
             filterData: {
@@ -124,7 +132,7 @@ export default {
             sortOpen: false,
             products: [],
             /* pagination config */
-            cursor: 1,
+            //     cursor: 1,
             totalMatches: 0,
             limit: 10
         }
@@ -133,6 +141,10 @@ export default {
         this.fetchFilterData();
     },
     methods: {
+        getPage(number) {
+            this.rawCriterion.cursor = number;
+            this.fetchResults();
+        },
         sortToggled(sortBy) {
             console.log(sortBy);
             this.rawCriterion = {
@@ -187,12 +199,15 @@ export default {
             /* if no matches found, return */
             if (response.docs.length === 0) {
                 console.log('No matches found');
+                this.products = [];
+                this.totalMatches = 0;
                 return;
             }
 
-            console.log(response.docs);
-            console.log(response.totalMatches,'--matches found');
-
+            this.products = response.docs;
+            this.totalMatches = response.totalMatches;
+            //     console.log(response.docs);
+            console.log(response.totalMatches, '--matches found');
 
         },
         resultsFetched(result) {
@@ -296,5 +311,25 @@ export default {
 .search-results {
     display: flex;
     flex-wrap: wrap;
+}
+
+.pagination-bar {
+    display: flex;
+    flex-wrap: wrap;
+
+    .page-no {
+        cursor: pointer;
+        border-radius: 4px;
+        background: #EBECF0;
+        box-shadow: -6px 6px 16px #cfd0d3,
+            6px -6px 16px #ffffff;
+        padding: 20px;
+        margin: 4px;
+    }
+
+    .current-page {
+        background: $primary_dark;
+        color: white;
+    }
 }
 </style>

@@ -33,11 +33,13 @@ export default {
         // console.log(withObjectIds);
         return withObjectIds;
     },
+    getObjectId_ied(values) {
+        return values.map(value => new mongoose.Types.ObjectId(value))
+    },
     async getPaginationResults(model, criterion) {
         let paginatedResults = { docs: [], totalMatches: 0, fetched: false }
         /* collection */
         const collection = db.model(model);
-
         /* fetch documents */
         const results = await collection.aggregate([{
           $facet: {
