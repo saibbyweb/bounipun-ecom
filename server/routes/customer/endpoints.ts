@@ -137,6 +137,9 @@ router.post('/searchProducts', async (req, res) => {
 
     console.log(filters);
 
+    /* gold */
+    rawCriterion.search.term = admin.convertSearchTermToRegEx(rawCriterion.search.term)
+
     criterion.match = {
         $or: [
             { name: { $regex: rawCriterion.search.term, $options: "i" } },
@@ -145,17 +148,7 @@ router.post('/searchProducts', async (req, res) => {
             { meta: { $regex: rawCriterion.search.term, $options: "i" } }
         ],...filters
     }
-
-    /* add filters (match) */
-    // criterion.match = {
-    //     $or: [
-    //         { name: { $regex: rawCriterion.search.term, $options: "i" } },
-    //         { 'colors.name': { $regex: rawCriterion.search.term, $options: "i" } },
-    //         { 'colors.baseColor': { $regex: rawCriterion.search.term, $options: "i" } },
-    //         { meta: { $regex: rawCriterion.search.term, $options: "i" } }
-    //     ], ...admin.setObjectIds(rawCriterion.filters, ['bounipun_collection','variants._id'])
-    // }
-
+    
     /* sort by fields */
     criterion.sort = rawCriterion.sortBy;
 

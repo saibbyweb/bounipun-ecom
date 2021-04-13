@@ -81,11 +81,13 @@ export default {
         $route(to, from) {
             // console.log(from.params.searchTerm, to.params.searchTerm);
             this.rawCriterion.search.term = to.query.searchTerm;
+            this.rawCriterion.cursor = 1;
             this.fetchResults();
         },
         /* re-fetch results if raw criterion changed */
         filterData: {
             handler() {
+                this.rawCriterion.cursor = 1;
                 this.fetchResults();
             },
             deep: true
@@ -109,7 +111,7 @@ export default {
                 sortBy: {
 
                 },
-                limit: 6,
+                limit: 2,
                 cursor: 1
             },
             filtersOpen: false,

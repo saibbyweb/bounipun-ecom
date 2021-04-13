@@ -38,6 +38,7 @@ const schema = new mongoose.Schema({
         }]
     }],
     directPrice: { type: String, default: 0 },
+    priceRange: { startsAt: Number, endsAt: Number },
     /* meta */
     meta: String,
     /* estimated time of delivery */
@@ -96,10 +97,32 @@ export const methods = {
                 /* add variant name to keywords array */
                 keywords.push(variantDoc.name);
             }
-            console.log(keywords);
+            /* add meta to product details */
             details.meta = keywords.join();
+
+            /* add lowest and highest variant price */
+            let allPrices = [];
+            details.variants.forEach(variant => {
+                variant.fabrics.forEach(fabric => {
+                    // console.log(fabric.price);
+                    allPrices.push(fabric.price)
+                });
+            });
+
+            details.priceRange = {
+                startsAt: Math.min(...allPrices),
+                endsAt: Math.max(...allPrices)
+            }
+        }
+        else {
+            details.priceRange = {
+                startsAt: details.directPrice,
+                endsAt: details.directPrice
+            }
         }
 
+        /* add lowest and highest price */
+        console.log(details.priceRange)
         console.log(details.alias, '-- FINAL ALIAS');
         console.log(details.slug, '-- FINAL SLUG');
 
