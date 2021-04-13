@@ -40,6 +40,15 @@
             </div>
         </Accordion>
 
+        <!-- price range options -->
+        <Accordion heading="Price Range" :expanded="true">
+            <div class="option" v-for="(range, index) in filterData.priceRanges" :key="index">
+                <label class="label">
+                    <input type="radio" name="priceRange" :value="range.value" v-model="filterData.selectedPriceRange" />
+                    {{ range.name }} </label>
+            </div>
+        </Accordion>
+
         <button @click="filtersOpen = false"> close </button>
     </div>
 
@@ -101,17 +110,9 @@ export default {
                     key: "name",
                     term: this.$route.query.searchTerm ? this.$route.query.searchTerm : "rose"
                 },
-                filters: {
-                    //     type: 'default',
-                    //     bounipun_collection: 'default',
-                    //     baseColor: 'default',
-                    //     'variants._id': 'default',
-                    //     'colors.baseColor': 'default'
-                },
-                sortBy: {
-
-                },
-                limit: 2,
+                filters: {},
+                sortBy: {},
+                limit: 4,
                 cursor: 1
             },
             filtersOpen: false,
@@ -127,6 +128,31 @@ export default {
                         checked: false
                     }
                 ],
+                priceRanges: [{
+                        name: "Under $99",
+                        value: '<99',
+                    },
+                    {
+                        name: "Under $199",
+                        value: '<199',
+                    }, {
+                        name: "Under $299",
+                        value: '<299',
+                    },
+                    {
+                        name: "Under $399",
+                        value: '<399',
+                    },
+                    {
+                        name: "Under $499",
+                        value: '<499',
+                    },
+                    {
+                        name: "Under $599",
+                        value: '<599',
+                    }
+                ],
+                selectedPriceRange: '',
                 collections: [],
                 variants: [],
                 baseColors: []
@@ -180,6 +206,8 @@ export default {
 
             /* append filters to raw criterion */
             this.rawCriterion.filters = filters;
+            /* append selected price range to filters */
+            this.rawCriterion.selectedPriceRange = this.filterData.selectedPriceRange;
 
             /* post raw criterion to the server */
             const fetchPaginatedResults = this.$axios.$post('/searchProducts', {
@@ -284,6 +312,7 @@ export default {
     margin-left: -70vw;
     transition: all 0.4s ease-in-out;
     z-index: 3;
+    overflow-y: scroll;
 
     &.visible {
         margin-left: 0vw;

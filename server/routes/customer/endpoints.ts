@@ -133,9 +133,19 @@ router.post('/searchProducts', async (req, res) => {
             value = castRequired.includes(key) ? admin.getObjectId_ied(value) : value;
             filters[key] = { $in: value }
         }
-    })
+    });
 
-    console.log(filters);
+    /* add price range filter if provided */
+    if(rawCriterion.selectedPriceRange !== '') {
+        console.log('Price Range provided');
+        const value = rawCriterion.selectedPriceRange.substring(1);
+        if(rawCriterion.selectedPriceRange.startsWith('<'))
+            filters['priceRange.startsAt'] = { $lte : parseInt(value) }
+        else
+        filters['priceRange.startsAt'] = { $gte : parseInt(value) }
+    }
+
+    // console.log(filters);
 
     /* gold */
     rawCriterion.search.term = admin.convertSearchTermToRegEx(rawCriterion.search.term)
@@ -148,7 +158,7 @@ router.post('/searchProducts', async (req, res) => {
             { meta: { $regex: rawCriterion.search.term, $options: "i" } }
         ],...filters
     }
-    
+
     /* sort by fields */
     criterion.sort = rawCriterion.sortBy;
 
