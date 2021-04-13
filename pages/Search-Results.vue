@@ -3,58 +3,86 @@
     <p> Showing results for <i> "{{ $route.query.searchTerm }}" </i> </p>
 
     <!-- offcanvas filters -->
-    <div class="offcanvas-filters" :class="{visible: filtersOpen}">
-        <h3> Filters </h3>
-        <!-- product type options -->
-        <Accordion heading="Product Type" :expanded="true">
-            <div class="option" v-for="(type, index) in filterData.types" :key="index">
-                <label class="label">
-                    <input type="checkbox" name="type" :value="type.value" v-model="type.checked" />
-                    {{ type.name }}</label>
+    <div class="offcanvas-filters shadow" :class="{visible: filtersOpen}">
+        <div style="position: relative;">
+            <br> <br>
+            <div style="display:flex; align-items:center; justify-content: space-between;">
+                <h3> Filters </h3>
+                <span style="font-size:12px;" @click="clearAllFilters"> Clear Selection </span>
             </div>
+            <br>
+            <!-- product type options -->
+            <Accordion heading="Product Type" :expanded="true">
+                <div class="option" v-for="(type, index) in filterData.types" :key="index">
+                    <label class="label">
+                        <input type="checkbox" name="type" :value="type.value" v-model="type.checked" />
+                        {{ type.name }}</label>
+                </div>
 
-        </Accordion>
-        <!-- variant options -->
-        <Accordion heading="Variants" :expanded="true">
-            <div class="option" v-for="(variant, index) in filterData.variants" :key="index">
-                <label class="label">
-                    <input type="checkbox" name="variants" :value="variant.value" v-model="variant.checked" />
-                    {{ variant.name }}</label>
-            </div>
-        </Accordion>
-        <!-- collection options -->
-        <Accordion heading="Collection" :expanded="true">
-            <div class="option" v-for="(collection, index) in filterData.collections" :key="index">
-                <label class="label">
-                    <input type="checkbox" name="collection" :value="collection.value" v-model="collection.checked" />
-                    {{ collection.name }}</label>
-            </div>
-        </Accordion>
+            </Accordion>
+            <!-- variant options -->
+            <Accordion heading="Variants" :expanded="true">
+                <div class="option" v-for="(variant, index) in filterData.variants" :key="index">
+                    <label class="label">
+                        <input type="checkbox" name="variants" :value="variant.value" v-model="variant.checked" />
+                        {{ variant.name }}</label>
+                </div>
+            </Accordion>
+            <!-- collection options -->
+            <Accordion heading="Collection" :expanded="true">
+                <div class="option" v-for="(collection, index) in filterData.collections" :key="index">
+                    <label class="label">
+                        <input type="checkbox" name="collection" :value="collection.value" v-model="collection.checked" />
+                        {{ collection.name }}</label>
+                </div>
+            </Accordion>
 
-        <!-- base color options -->
-        <Accordion heading="Base Color" :expanded="true">
-            <div class="option" v-for="(color, index) in filterData.baseColors" :key="index">
-                <label class="label">
-                    <input type="checkbox" name="baseColor" :value="color.value" v-model="color.checked" />
-                    {{ color.name }} </label>
-            </div>
-        </Accordion>
+            <!-- base color options -->
+            <Accordion heading="Base Color" :expanded="true">
+                <div class="option" v-for="(color, index) in filterData.baseColors" :key="index">
+                    <label class="label">
+                        <input type="checkbox" name="baseColor" :value="color.value" v-model="color.checked" />
+                        {{ color.name }} </label>
+                </div>
+            </Accordion>
 
-        <!-- price range options -->
-        <Accordion heading="Price Range" :expanded="true">
-            <div class="option" v-for="(range, index) in filterData.priceRanges" :key="index">
-                <label class="label">
-                    <input type="radio" name="priceRange" :value="range.value" v-model="filterData.selectedPriceRange" />
-                    {{ range.name }} </label>
-            </div>
-        </Accordion>
+            <!-- price range options -->
+            <Accordion heading="Price Range" :expanded="true">
+                <div class="option" v-for="(range, index) in filterData.priceRanges" :key="index">
+                    <label class="label">
+                        <input type="radio" name="priceRange" :value="range.value" v-model="filterData.selectedPriceRange" />
+                        {{ range.name }} </label>
+                </div>
+            </Accordion>
 
-        <button @click="filtersOpen = false"> close </button>
+            <img @click="filtersOpen = false" class="close" src="/icons/dark/close.png">
+        </div>
     </div>
 
     <!-- offcanvas sort -->
-    <div class="offcanvas-sort" :class="{visible: sortOpen}">
-        <button @click="sortOpen = false"> close </button>
+    <div class="offcanvas-sort shadow" :class="{visible: sortOpen}">
+        <div style="position: relative;">
+            <br> <br>
+            <div style="display:flex; align-items:center; justify-content: space-between;">
+                <h3> Sort </h3>
+                <span style="font-size:12px;" @click="clearSort"> Clear Sort </span>
+            </div>
+            <br>
+            <!-- price (high to low) -->
+            <div>
+                <label class="label">
+                    <input type="radio" name="priceSort" value="-1" v-model="sortData.priceRange" />
+                    Price (High - Low) </label></div>
+
+            <!-- price (low to high) -->
+            <div>
+                <label class="label">
+                    <input type="radio" name="priceSort" value="1" v-model="sortData.priceRange" />
+                    Price (Low - High) </label> </div>
+            <!-- close sort layout -->
+            <img @click="sortOpen = false" class="close" src="/icons/dark/close.png">
+        </div>
+
     </div>
 
     <!-- filter and sort -->
@@ -91,6 +119,7 @@ export default {
             // console.log(from.params.searchTerm, to.params.searchTerm);
             this.rawCriterion.search.term = to.query.searchTerm;
             this.rawCriterion.cursor = 1;
+            this.clearAllFilters();
             this.fetchResults();
         },
         /* re-fetch results if raw criterion changed */
@@ -101,6 +130,13 @@ export default {
             },
             deep: true
         },
+        sortData: {
+            handler() {
+                this.rawCriterion.cursor = 1;
+                this.fetchResults();
+            },
+            deep: true
+        }
     },
     data() {
         return {
@@ -157,6 +193,9 @@ export default {
                 variants: [],
                 baseColors: []
             },
+            sortData: {
+                priceRange: ''
+            },
             sortOpen: false,
             products: [],
             /* pagination config */
@@ -196,6 +235,20 @@ export default {
 
             return checkedOptions;
         },
+        /* clear all filters */
+        clearAllFilters() {
+            /* uncheck all filters */
+            const filterKeys = ['types', 'collections', 'variants', 'baseColors'];
+            filterKeys.forEach(filterKey => {
+                this.filterData[filterKey].forEach(option => option.checked = false);
+            })
+            /* reset selected price range */
+            this.filterData.selectedPriceRange = ''
+            this.clearSort();
+        },
+        clearSort() {
+            this.sortData.priceRange = '';
+        },
         async fetchResults() {
             /* keep only the checked ones from (type, variants, collection, base color) */
             let filters = {}
@@ -208,6 +261,15 @@ export default {
             this.rawCriterion.filters = filters;
             /* append selected price range to filters */
             this.rawCriterion.selectedPriceRange = this.filterData.selectedPriceRange;
+
+            /* append sort by data */
+            if (this.sortData.priceRange !== '') {
+                this.rawCriterion.sortBy = {
+                    'priceRange.startsAt': parseInt(this.sortData.priceRange)
+                }
+            }
+            else
+                this.rawCriterion.sortBy = {}
 
             /* post raw criterion to the server */
             const fetchPaginatedResults = this.$axios.$post('/searchProducts', {
@@ -306,10 +368,10 @@ export default {
     padding: 5%;
     top: 0;
     left: 0;
-    background: rgb(255, 255, 255);
-    width: 70vw;
+    background: #fffffff2;
+    width: 60vw;
     height: 100vh;
-    margin-left: -70vw;
+    margin-left: -60vw;
     transition: all 0.4s ease-in-out;
     z-index: 3;
     overflow-y: scroll;
@@ -320,6 +382,14 @@ export default {
 
     .label {
         font-family: $font_2;
+        text-transform: capitalize;
+    }
+
+    .close {
+        position: absolute;
+        top: 0;
+        right: 3%;
+        width: 7%;
     }
 }
 
@@ -327,15 +397,27 @@ export default {
     position: fixed;
     top: 0;
     right: 0;
-    background: rgb(61, 137, 56);
-    width: 70vw;
+    padding: 5%;
+    background: #fffffff2;
+    width: 60vw;
     height: 100vh;
-    margin-right: -70vw;
+    margin-right: -60vw;
     transition: all 0.4s ease-in-out;
     z-index: 3;
 
     &.visible {
         margin-right: 0vw;
+    }
+
+    .label {
+        font-family: $font_2;
+    }
+
+    .close {
+        position: absolute;
+        top: 0;
+        right: 3%;
+        width: 7%;
     }
 }
 
