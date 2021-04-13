@@ -81,6 +81,36 @@ router.post('/findDocuments', async (req, res) => {
 
 });
 
+/* get product search filters */
+router.get('/getSearchFilters', async(req, res) => {
+    let response = {
+        fetched: false,
+        collections: [],
+        variants: [],
+        baseColors: []
+    }
+
+    /* fetch all collections (active and unlocked) */
+    let dataFetch = [];
+    dataFetch.push(db.model('collections').find({ status: true, lock: false }).select('name'))
+    dataFetch.push(db.model('variants').find({ status: true }).select('name'))
+    dataFetch.push(db.model('base_colors').find({ status: true }).select('name'))
+    
+    const { response: resolvedData, error } = await task(Promise.all(dataFetch));
+    
+    /* if error occurred */
+    if(error) {
+        res.send(response);
+        return;
+    }
+
+    response.collections = resolvedData[0];
+    response.variants = resolvedData[1];
+    response.baseColors = resolvedData[2];
+    response.fetched = true;
+    res.send(response);
+})
+
 /* search products */
 router.post('/searchProducts', async (req, res) => {
     /* destructure data from request body */

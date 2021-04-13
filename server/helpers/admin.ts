@@ -1,4 +1,4 @@
-import { db } from "@helpers/essentials"
+import { db, ObjectId, mongoose } from "@helpers/essentials"
 import { product, collection, homepageLayouts } from "@models"
 
 export default {
@@ -19,6 +19,19 @@ export default {
                 break;
         }
         return { updated: false }
+    },
+    setObjectIds(obj, fields) {
+        /* save all orginal keys */
+        const allFields = Object.keys(obj);
+        /* object to be sent back with objectId casted */
+        let withObjectIds = {};
+        /* loop through all fields, attach object id to the ones needed  */
+        for(const field of allFields) {
+            console.log(field);
+            withObjectIds[field] = fields.includes(field) ? new mongoose.Types.ObjectId(obj[field]) : obj[field];
+        }
+        // console.log(withObjectIds);
+        return withObjectIds;
     },
     async getPaginationResults(model, criterion) {
         let paginatedResults = { docs: [], totalMatches: 0, fetched: false }

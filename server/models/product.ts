@@ -119,6 +119,14 @@ export const methods = {
             console.log(updated.slug);
         }
 
+    },
+    async getFilterData() {
+        
+    },
+    async getPaginatedSearchResults() {
+        /* fetch all collections (active and unlocked) */
+        /* fetch all variants (active) */
+        /* fetch all base colors */
     }
 }
 

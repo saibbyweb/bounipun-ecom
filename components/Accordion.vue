@@ -21,25 +21,38 @@ export default {
         heading: {
             type: String,
             default: 'Heading 1'
+        },
+        expanded: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
         return {
-            active: false,
-            maxHeight: '0px'
+            active: false
+        }
+    },
+    mounted() {
+        if(this.expanded && this.$refs.content !== undefined) {
+            this.active = true;
+        }
+    },
+    computed: {
+        maxHeight() {
+            return this.active ? this.$refs.content.scrollHeight + 'px' : '0px';
         }
     },
     methods: {
         toggle() {
             this.active = !this.active;
-            this.maxHeight = this.active ? this.$refs.content.scrollHeight + 'px' : '0px';
+            // this.maxHeight = this.active ? this.$refs.content.scrollHeight + 'px' : '0px';
         },
         open() {
             this.active = true;
             this.updateHeight();
         },
         updateHeight() {
-            this.maxHeight = this.$refs.content.scrollHeight + 'px';
+            // this.maxHeight = this.$refs.content.scrollHeight + 'px';
         }
     }
 }

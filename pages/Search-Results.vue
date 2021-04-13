@@ -4,6 +4,36 @@
 
     <!-- offcanvas filters -->
     <div class="offcanvas-filters" :class="{visible: filtersOpen}">
+        <h3> Filters </h3>
+        <Accordion heading="Product Type" :expanded="true">
+            <!-- product type options -->
+            <label class="label">
+                <input type="radio" name="product-type" value="under-bounipun" v-model="rawCriterion.filters.type" />
+                Under Bounipun </label>
+            <br>
+            <label class="label">
+                <input type="radio" name="product-type" value="third-party" v-model="rawCriterion.filters.type" />
+                Third Party </label>
+        </Accordion>
+
+        <Accordion heading="Collection" :expanded="true">
+            <!-- collection options -->
+            <div class="option" v-for="(collection, index) in filterData.collections" :key="index">
+                <label class="label">
+                    <input type="radio" name="collection" :value="collection._id" v-model="rawCriterion.filters.bounipun_collection" />
+                    {{ collection.name }}</label>
+            </div>
+        </Accordion>
+
+        <Accordion heading="Collection" :expanded="true">
+            <!-- base color options -->
+            <div class="option" v-for="(color, index) in filterData.baseColors" :key="index">
+                <label class="label">
+                    <input type="radio" name="baseColor" :value="color.name" v-model="rawCriterion.filters.baseColor" />
+                    {{ color.name }} </label>
+            </div>
+        </Accordion>
+
         <button @click="filtersOpen = false"> close </button>
     </div>
 
@@ -49,7 +79,9 @@ export default {
                     term: this.$route.query.searchTerm ? this.$route.query.searchTerm : "rose"
                 },
                 filters: {
-                    type: 'default'
+                    type: 'default',
+                    bounipun_collection: 'default',
+                    baseColor: 'default'
                 },
                 sortBy: {
 
@@ -57,9 +89,17 @@ export default {
                 limit: 6
             },
             filtersOpen: false,
+            filterData: {
+                collections: [],
+                variants: [],
+                baseColors: []
+            },
             sortOpen: false,
             products: []
         }
+    },
+    mounted() {
+        this.fetchFilterData();
     },
     methods: {
         sortToggled(sortBy) {
@@ -77,6 +117,28 @@ export default {
 
             /* extract list */
             this.products = result.docs;
+        },
+        async fetchFilterData() {
+            /* fetch type of products */
+            /* fetch collections */
+            /* fetch variants */
+            /* fetch base colors */
+            const filtersFetch = this.$axios.$get('/getSearchFilters');
+            /* wait for request to complete */
+            const {
+                response,
+                error
+            } = await this.$task(filtersFetch);
+            /* if error occurred */
+            if (error || response.fetched === false) {
+                console.log('could not fetch search filters')
+                return;
+            }
+
+            console.log(response);
+            this.filterData.collections = response.collections;
+            this.filterData.baseColors = response.baseColors;
+
         }
     }
 }
@@ -97,9 +159,10 @@ export default {
 
 .offcanvas-filters {
     position: fixed;
+    padding: 5%;
     top: 0;
     left: 0;
-    background: rgb(113, 54, 54);
+    background: rgb(255, 255, 255);
     width: 70vw;
     height: 100vh;
     margin-left: -70vw;
@@ -108,6 +171,10 @@ export default {
 
     &.visible {
         margin-left: 0vw;
+    }
+
+    .label {
+        font-family: $font_2;
     }
 }
 

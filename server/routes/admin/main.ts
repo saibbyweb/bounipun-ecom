@@ -156,6 +156,7 @@ router.post('/fetchPaginatedResults', async (req, res) => {
 
     /* add filters (match) */
     criterion.match = rawCriterion.filters;
+   
 
     /* add text search */
     // criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
@@ -165,8 +166,8 @@ router.post('/fetchPaginatedResults', async (req, res) => {
                 { name: { $regex: rawCriterion.search.term, $options: "i" } },
                 { 'colors.name': { $regex: rawCriterion.search.term, $options: "i" } },
                 { 'colors.baseColor': { $regex: rawCriterion.search.term, $options: "i" } },
-                { meta : { $regex: rawCriterion.search.term, $options: "i" } }
-            ]
+                { meta: { $regex: rawCriterion.search.term, $options: "i" } }
+            ], ...admin.setObjectIds(rawCriterion.filters, ['bounipun_collection'])
         }
     }
     else
