@@ -6,7 +6,7 @@
     </div>
     <!-- list of collections -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="list" :headings="headings" :sortByFields="sortByFields" :model="model" @documentFetched="documentFetched" @sortToggled="sortToggled" custom_css="10% 25% 25% 25% 15%" />
+        <List :list="list" :headings="headings" :sortByFields="sortByFields" :model="model" @documentFetched="documentFetched" @sortToggled="sortToggled" custom_css="10% 25% 25% 15% 10% 15%" />
 
         <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
     </div>
@@ -42,7 +42,7 @@ export default {
             },
             sortByFields: ['name', 'status'],
             list: [],
-            headings: ['_id', 'name', 'Slug', 'Estimated Time of Delivery', 'status']
+            headings: ['_id', 'name', 'Slug', 'Estimated Time of Delivery','Order', 'status']
         }
     },
     mounted() {
@@ -90,6 +90,7 @@ export default {
                 slug,
                 // description,
                 edt,
+                order,
                 status
             }) => {
 
@@ -99,6 +100,7 @@ export default {
                     slug,
                     // description,
                     edt: edt + " weeks",
+                    order,
                     status
                 }
             });

@@ -1,17 +1,30 @@
 <template>
 <!-- list -->
 <div class="list">
+    <button class="action" @click="dragEnabled = !dragEnabled"> Toggle Drag </button>
     <!-- headings -->
     <div class="item shadow headings" :style="adjustItem()">
         <span class="heading" v-for="(heading, index) in headings" :key="index">
             {{ heading }}
             <img @click="toggleSort(heading)" class="sortable" v-if="isSortable(heading)" src="/icons/light/sort.png" />
         </span>
+
     </div>
+
+    <Draggable v-model="localList" ghost-class="ghost" @end="onDragEnd" :sort="model === 'collections' && dragEnabled">
+        <transition-group type="transition" name="flip-list">
+            <div @click="select(item, index)" :class="{selected: isSelected(index), dragEnabled}" class="item shadow" v-for="(item, index) in localList" :key="item._id" :style="adjustItem()">
+                <span :class="setClasses(propIndex, value)" v-for="(value, propIndex) in Object.values(item)" :key="propIndex"> {{ optimizeValue(value) }} </span>
+            </div>
+        </transition-group>
+    </Draggable>
+
     <!-- data points -->
-    <div @click="select(item, index)" :class="{selected: isSelected(index)}" class="item shadow" v-for="(item, index) in list" :key="index" :style="adjustItem()">
+    <!-- <div @click="select(item, index)" :class="{selected: isSelected(index)}" class="item shadow" v-for="(item, index) in list" :key="index" :style="adjustItem()">
+
         <span :class="setClasses(propIndex, value)" v-for="(value, propIndex) in Object.values(item)" :key="propIndex"> {{ optimizeValue(value) }} </span>
-    </div>
+
+    </div> -->
 </div>
 </template>
 
@@ -43,6 +56,13 @@ export default {
     watch: {
         sortByFields() {
             this.constructSortBy();
+        },
+        dragEnabled() {
+            /* clear all filters and sort (no pagination mode) */
+            this.selected = null;
+        },
+        list(newVal) {
+            this.localList = newVal;
         }
     },
     mounted() {
@@ -52,7 +72,9 @@ export default {
         return {
             selected: null,
             loading: false,
-            sortBy: {}
+            sortBy: {},
+            dragEnabled: false,
+            localList: []
         }
     },
     computed: {
@@ -68,6 +90,13 @@ export default {
         }
     },
     methods: {
+        onDragEnd($event) {
+            const oldIndex = $event.oldIndex;
+            const newIndex = $event.newIndex;
+            console.log(oldIndex, newIndex);
+            /* get the order of the whole array */
+            /* set the order accordingly */
+        },
         toggleSort(key) {
             const field = this.sortBy[key];
 
@@ -106,6 +135,9 @@ export default {
             return this.selected === index
         },
         async select(item, index) {
+            if(this.dragEnabled)
+                return;
+            
             this.selected = index;
             this.loading = true;
 
@@ -150,6 +182,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.item-drag {
+    opacity: 0;
+}
+
+.flip-list-move {
+    transition: all 0.5s ease-in-out;
+}
+
+.ghost {
+   opacity: 0;
+}
+
 .item {
     margin: 10px 0;
     display: grid;
@@ -192,6 +236,16 @@ export default {
 
         span {
             color: white;
+        }
+
+    }
+
+    &.dragEnabled:hover {
+        background-color: rgb(255, 255, 255);
+        transform: translateX(0px);
+
+        span {
+            color: #333333;
         }
     }
 

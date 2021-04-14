@@ -102,7 +102,7 @@ export default {
                 name,
                 slug,
                 description,
-                edt,
+                edt: edt.toString(),
                 image,
                 lock,
                 status

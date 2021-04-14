@@ -7,6 +7,7 @@ import VueEllipseProgress from 'vue-ellipse-progress';
 import Autocomplete from 'vuejs-auto-complete'
 import VCalendar from "v-calendar";
 import VDatepicker from "v-calendar/lib/components/date-picker.umd"
+import Draggable from 'vuedraggable'
 
 Vue.use(VueHammer);
 Vue.use(VueEllipseProgress);
@@ -18,3 +19,4 @@ Vue.use(VCalendar, {
   });
   
 Vue.component("v-datepicker", VDatepicker);
+Vue.component("Draggable", Draggable);

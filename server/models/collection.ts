@@ -10,6 +10,7 @@ const schema = new mongoose.Schema({
     edt: Number,
     image: String,
     lock: { type: Boolean, default: false },
+    order: Number,
     status: Boolean
 }, {
     timestamps: true
@@ -19,7 +20,17 @@ const schema = new mongoose.Schema({
 const model = mongoose.model('collections', schema);
 /* helper methods */
 export const methods = {
-    register: () => { console.log('registered') },
+     register: async () => { 
+        console.log('registered')
+        const allDocs = await model.find();
+        
+        let i = 0;
+        for(const doc of allDocs) {
+            await model.findOneAndUpdate({ _id: doc._id }, { order: i });
+            i++;
+        }
+    
+    },
     async updateCollection(details, editMode) {
         const collections = model;
         /* if slug not provide, creat one  */
