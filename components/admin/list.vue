@@ -1,7 +1,8 @@
 <template>
 <!-- list -->
 <div class="list">
-    <button class="action" @click="dragEnabled = !dragEnabled"> Toggle Drag </button>
+    <button v-if="model === 'collections'" class="action shadow" @click="dragEnabled = !dragEnabled"> Toggle Drag </button>
+    <span v-if="dragEnabled"> You can now drag the items and adjust the order. </span>
     <!-- headings -->
     <div class="item shadow headings" :style="adjustItem()">
         <span class="heading" v-for="(heading, index) in headings" :key="index">
@@ -57,9 +58,13 @@ export default {
         sortByFields() {
             this.constructSortBy();
         },
-        dragEnabled() {
+        dragEnabled(newVal) {
             /* clear all filters and sort (no pagination mode) */
             this.selected = null;
+            this.sortBy['order'].order = -1;
+            this.toggleSort('order');
+            this.$emit('clearFilters', newVal);
+            this.sortDisabled = newVal;
         },
         list(newVal) {
             this.localList = newVal;
@@ -74,6 +79,7 @@ export default {
             loading: false,
             sortBy: {},
             dragEnabled: false,
+            disableSort: false,
             localList: []
         }
     },
@@ -90,19 +96,36 @@ export default {
         }
     },
     methods: {
-        onDragEnd($event) {
-            const oldIndex = $event.oldIndex;
-            const newIndex = $event.newIndex;
-            console.log(oldIndex, newIndex);
+        async onDragEnd($event) {
+            if(!this.dragEnabled)
+                return;
             /* get the order of the whole array */
+            let newList = this.localList.map((item, index) => ({_id: item._id, newOrder: index }))
             /* set the order accordingly */
+            const updateCollectionOrder = this.$axios.$post('/updateCollectionOrder', { newList });
+            /* wait for request to resolve */
+            this.$store.commit('customer/setLoading', true);
+            const { response, error } = await this.$task(updateCollectionOrder);
+            this.$store.commit('customer/setLoading', false);
+
+            if(error) {
+                console.log('could not update order');
+                return;
+            }
+            
+            /* refresh list */
+            this.$emit('refetchList');
+
         },
         toggleSort(key) {
+            if(this.sortDisabled)
+                return;
+            
             const field = this.sortBy[key];
 
             const sortBy = this.sortBy;
             Object.keys(sortBy).forEach(function (key) {
-                sortBy[key].active = false
+                sortBy[key].active = false;
             });
 
             field.active = true;
@@ -122,7 +145,6 @@ export default {
             })
         },
         optimizeValue(value) {
-            console.log(typeof value);
             if (typeof value === "boolean") {
                 return value ? 'Active' : 'Inactive'
             }

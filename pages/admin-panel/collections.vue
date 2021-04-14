@@ -2,18 +2,18 @@
 <div class="collection crud">
     <!-- filters -->
     <div :class="{updating: showForm}" class="filters center">
-        <input v-model="rawCriterion.search.term" class="search shadow" type="text" placeholder="Search for collections" />
+        <input v-model="rawCriterion.search.term" class="search shadow" type="text" placeholder="Search for collections" :disabled="dragEnabled" />
     </div>
     <!-- list of collections -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="list" :headings="headings" :sortByFields="sortByFields" :model="model" @documentFetched="documentFetched" @sortToggled="sortToggled" custom_css="10% 25% 25% 15% 10% 15%" />
+        <List :list="list" :headings="headings" :sortByFields="sortByFields" :model="model" @documentFetched="documentFetched" @sortToggled="sortToggled" custom_css="10% 25% 25% 15% 10% 15%" @clearFilters="clearFilters" @refetchList="updateList()" />
 
         <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
     </div>
     <!-- update collection form -->
     <div :class="{updating: showForm}" class="update">
         <UpdateCollection v-show="showForm" ref="updateComponent" @updated="updateList" :model="model" @close="showForm = false" />
-        <AddNewItem v-if="!showForm" label="collection" @showForm="showForm = true" />
+        <AddNewItem v-if="!showForm && !dragEnabled" label="collection" @showForm="showForm = true" />
     </div>
 </div>
 </template>
@@ -38,22 +38,32 @@ export default {
                 sortBy: {
 
                 },
-                limit: 6
+                limit: 50
             },
-            sortByFields: ['name', 'status'],
+            sortByFields: ['name', 'order', 'status'],
             list: [],
-            headings: ['_id', 'name', 'Slug', 'Estimated Time of Delivery','Order', 'status']
+            headings: ['_id', 'name', 'Slug', 'Estimated Time of Delivery','order', 'status'],
+            dragEnabled: false
         }
     },
     mounted() {
         // this.fetchList();
     },
     methods: {
+        clearFilters(dragEnabled) {
+            this.dragEnabled = dragEnabled;
+
+            this.rawCriterion.filters = {
+                type: 'default'
+            }
+            
+            this.rawCriterion.search.term = "";
+        },
         updateList() {
             this.$refs.pagination.fetchResults();
         },
         sortToggled(sortBy) {
-            console.log(sortBy);
+            // console.log(sortBy);
             this.rawCriterion = {
                 ...this.rawCriterion,
                 sortBy

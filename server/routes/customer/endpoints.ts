@@ -173,6 +173,16 @@ router.post('/searchProducts', async (req, res) => {
     res.send(paginatedResults);
 });
 
-
+/* update collection order */
+router.post('/updateCollectionOrder', async(req, res) => {
+    const { newList } = req.body;
+    console.log(newList);
+    /* update order one by one */
+    for(const item of newList) {
+        // console.log(item);
+        await db.model('collections').findOneAndUpdate({ _id: item._id }, { order: item.newOrder })
+    }
+    res.send('up');
+});
 
 export default router;

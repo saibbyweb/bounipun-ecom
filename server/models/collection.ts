@@ -5,9 +5,9 @@ import { product } from "@models"
 /* schema */
 const schema = new mongoose.Schema({
     name: String,
-    slug: String,
-    description: String,
-    edt: Number,
+    slug: {type: String, default: ''},
+    description: {type: String, default: ''},
+    edt: { type: Number, default: 1 },
     image: String,
     lock: { type: Boolean, default: false },
     order: Number,
@@ -55,6 +55,13 @@ export const methods = {
         /* update all products under this collection */
         if(editMode)
             await product.methods.updateSlugs(details._id, details.slug);
+        
+        /* find the last highest order and assign it to the new collection */
+        if(!editMode) {
+            const highestOrderElement : any = await collections.findOne().sort('-order').select('order');
+            console.log(highestOrderElement);
+            details.order = highestOrderElement.order + 1;
+        }
     }
 }
 export default { model, methods };
