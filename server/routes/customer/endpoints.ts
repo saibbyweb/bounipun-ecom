@@ -61,6 +61,12 @@ router.post('/findDocuments', async (req, res) => {
             .populate('variants._id')
             .populate('bounipun_collection');
             break;
+        
+        case 'collections':
+            console.log('hey col')
+            documentFetch.sort('order');
+            break;
+
 
         default:
             break;
