@@ -12,7 +12,7 @@
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
     <!-- edt -->
-    <InputBox v-model="doc.edt" label="Estimated Time of Delivery (in weeks)" type="number" :internal="true" />
+    <InputBox v-model="doc.edt" label="Estimated Time of Delivery (IN WEEKS)" type="number" :internal="true" />
      <!-- set color image -->
     <UploadImage ref="imageUploader" :multipleUpload="false" label="Set Collection Header Image" @updated="imageListUpdated" />
        <!-- publish toggle -->

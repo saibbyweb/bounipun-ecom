@@ -11,7 +11,7 @@
     <!-- coupon type -->
     <InputBox label="Value" v-model="doc.value" type="number" />
     <!-- coupon validity -->
-    <InputBox label="Validity" v-model="doc.validity" type="number" />
+    <InputBox label="Validity (Total number of allowed uses)" v-model="doc.validity" type="number" />
     <!-- validity range -->
     <label class="label"> Validity Range </label>
     <client-only>

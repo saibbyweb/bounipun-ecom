@@ -13,6 +13,8 @@ const schema = new mongoose.Schema({
     description: String,
     /* under bounipun or third-party */
     type: String,
+    /* availability type */
+    availablityType: String,
     /* bounipun collection */
     bounipun_collection: {
         type: ObjectId,

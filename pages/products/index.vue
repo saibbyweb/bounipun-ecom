@@ -45,10 +45,10 @@
         <div class="price-and-actions">
             <div class="price">
                 <!-- dynamic price -->
-                <h5 v-if="!thirdPartyProduct"> $ {{variants[activeVariantIndex].fabrics[activeFabricIndex].price }}.00 </h5>
+                <h5 v-if="!thirdPartyProduct"> INR {{variants[activeVariantIndex].fabrics[activeFabricIndex].price }}.00 </h5>
 
                 <!-- direct price -->
-                <h5 v-if="thirdPartyProduct"> $ {{ product.directPrice }} </h5>
+                <h5 v-if="thirdPartyProduct"> INR {{ product.directPrice }} </h5>
                 <p> Taxes and Shipping Included </p>
 
             </div>
@@ -126,7 +126,7 @@
                 <div @click="activeFabricIndex = index" v-for="(fabric, index) in variants[activeVariantIndex].fabrics" :key="index" class="fabric center-col" :class="{active: activeFabricIndex === index}">
                     <span class="name"> {{ fabric.name }} </span>
                     <span class="info"> {{ fabric.info1 }} </span>
-                    <span class="price"> ${{ fabric.price }} </span>
+                    <span class="price"> INR {{ fabric.price }} </span>
                 </div>
 
             </div>

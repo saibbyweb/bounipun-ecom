@@ -12,14 +12,14 @@
             </div>
             <br>
             <!-- product type options -->
-            <Accordion heading="Product Type" :expanded="true">
+            <!-- <Accordion heading="Product Type" :expanded="true">
                 <div class="option" v-for="(type, index) in filterData.types" :key="index">
                     <label class="label">
                         <input type="checkbox" name="type" :value="type.value" v-model="type.checked" />
                         {{ type.name }}</label>
                 </div>
 
-            </Accordion>
+            </Accordion> -->
             <!-- variant options -->
             <Accordion heading="Variants" :expanded="true">
                 <div class="option" v-for="(variant, index) in filterData.variants" :key="index">
@@ -165,27 +165,27 @@ export default {
                     }
                 ],
                 priceRanges: [{
-                        name: "Under $99",
-                        value: '<99',
+                        name: "Under ₹ 9999",
+                        value: '<9999',
                     },
                     {
-                        name: "Under $199",
-                        value: '<199',
+                        name: "Under ₹ 14999",
+                        value: '<14999',
                     }, {
-                        name: "Under $299",
-                        value: '<299',
+                        name: "Under ₹ 19999",
+                        value: '<19999',
                     },
                     {
-                        name: "Under $399",
-                        value: '<399',
+                        name: "Under ₹ 24999",
+                        value: '<24999',
                     },
                     {
-                        name: "Under $499",
-                        value: '<499',
+                        name: "Under ₹ 29999",
+                        value: '<29999',
                     },
                     {
-                        name: "Under $599",
-                        value: '<599',
+                        name: "Under ₹ 34999",
+                        value: '<34999',
                     }
                 ],
                 selectedPriceRange: '',
@@ -272,6 +272,7 @@ export default {
                 this.rawCriterion.sortBy = {}
 
             /* post raw criterion to the server */
+            this.$store.commit('customer/setLoading', true);
             const fetchPaginatedResults = this.$axios.$post('/searchProducts', {
                 rawCriterion: this.rawCriterion
             });
@@ -281,6 +282,7 @@ export default {
                 response,
                 error
             } = await this.$task(fetchPaginatedResults);
+            this.$store.commit('customer/setLoading', false);
 
             /* if error occurred */
             if (error) {

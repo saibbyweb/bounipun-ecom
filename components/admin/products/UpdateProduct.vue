@@ -14,6 +14,8 @@
     <InputBox v-if="editMode" label="Product ID" v-model="doc._id" disabled :internal="true" />
     <!-- type of product -->
     <SelectBox :options="types" v-model="doc.type" label="Select Product Type" :internal="true" />
+    <!-- availablity type -->
+    <SelectBox :options="availablityTypes" v-model="doc.availablityType" label="Select Availablity Type" :internal="true" />
     <!-- collections -->
     <SelectBox v-if="!thirdPartyProduct" :options="collections" v-model="doc.bounipun_collection" label="Select Collection" />
     <!-- bounipun style id -->
@@ -30,7 +32,7 @@
     <!-- color source -->
     <!-- <SelectBox v-if="!thirdPartyProduct" :options="colorSources" v-model="doc.colorSource" label="Select Color Source" /> -->
 
-        <!-- alias -->
+    <!-- alias -->
     <InputBox v-if="!thirdPartyProduct" label="Color Source" v-model="doc.colorSource" :disabled="true" />
 
     <!-- bounipun color picker -->
@@ -114,7 +116,7 @@ export default {
                 }
 
                 /* if not under escape */
-                if(!this.underEscape)
+                if (!this.underEscape)
                     this.doc.colorSource = 'custom'
             },
             deep: true
@@ -125,12 +127,11 @@ export default {
             //     console.log('do nothin');
             //     this.doc.colorSource = 'custom';
             // }
-            if(newVal) {
+            if (newVal) {
                 this.doc.colorSource = 'bounipun-colors';
                 // this.doc.colorSource = '';
                 // this.doc.colors = []
-            }
-            else if(!newVal) {
+            } else if (!newVal) {
                 this.doc.colorSource = 'custom';
             }
         }
@@ -141,9 +142,9 @@ export default {
         },
         colorSources() {
             /* show color sources according to collection selection */
-            if(!this.underEscape)
-                return this.colorSourceTypes.filter(source => source.value !== 'bounipun-colors' )
-            else return this.colorSourceTypes.filter(source => source.value !== 'custom' )
+            if (!this.underEscape)
+                return this.colorSourceTypes.filter(source => source.value !== 'bounipun-colors')
+            else return this.colorSourceTypes.filter(source => source.value !== 'custom')
         },
         selectedVariants() {
             return this.variants.filter(variant => variant.checked)
@@ -183,6 +184,7 @@ export default {
                 slug: "",
                 description: "",
                 type: "",
+                availablityType: "",
                 bounipun_collection: null,
                 /* new types */
                 colorSource: "",
@@ -203,6 +205,19 @@ export default {
                 {
                     name: 'Third Party',
                     value: 'third-party'
+                }
+            ],
+            availablityTypes: [{
+                    name: 'Select Availablity Type',
+                    value: ''
+                },
+                {
+                    name: 'Made To Order',
+                    value: 'made-to-order'
+                },
+                {
+                    name: 'Ready To Ship',
+                    value: 'ready-to-ship'
                 }
             ],
             colorSourceTypes: [{
@@ -229,10 +244,10 @@ export default {
     methods: {
         async fetchBaseColors() {
             const result = await this.$fetchCollection('base_colors');
-            if(!result.fetched || result.docs.length === 0) {
+            if (!result.fetched || result.docs.length === 0) {
                 return;
             }
-            
+
             /* base colors array */
             this.baseColors = result.docs.map(color => {
                 return {
@@ -245,11 +260,11 @@ export default {
                 name: "Select Base",
                 value: ""
             });
-            
+
         },
         /* populateVariant */
         populateVariants(variants) {
-        console.log(this.$refs.collections,'collections')
+            console.log(this.$refs.collections, 'collections')
             variants.forEach(variant => {
                 let match = this.variants.find(({
                     _id
@@ -352,6 +367,7 @@ export default {
                 slug,
                 description,
                 type,
+                availablityType,
                 bounipun_collection,
                 colorSource,
                 variants,
@@ -369,6 +385,7 @@ export default {
                 slug,
                 description,
                 type,
+                availablityType,
                 bounipun_collection,
                 colorSource,
                 variants,
@@ -394,6 +411,7 @@ export default {
                 slug: "",
                 description: "",
                 type: "",
+                availablityType: "",
                 bounipun_collection: null,
                 colorSource: "",
                 variants: [],

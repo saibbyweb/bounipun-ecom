@@ -11,7 +11,7 @@
         <div class="product-name center-col">
             <span class="name"> {{ product.name }} </span>
             <span class="collection"> {{ collectionName }} </span>
-            <span class="price"> $ {{ lowestVariantPrice }} </span>
+            <span class="price"> INR {{ lowestVariantPrice }} - INR {{ highestVariantPirce }} </span>
         </div>
     </div>
 
@@ -89,7 +89,7 @@ export default {
         collectionName() {
             return this.product.bounipun_collection.name;
         },
-        lowestVariantPrice() {
+        lowestVariantPricex() {
             if (this.product.type === 'third-party')
                 return this.product.directPrice;
 
@@ -102,6 +102,12 @@ export default {
             });
 
             return Math.min(...allPrices);
+        },
+        lowestVariantPrice() {
+            return this.product.priceRange.startsAt;
+        },
+        highestVariantPirce() {
+            return this.product.priceRange.endsAt;
         }
     },
 
