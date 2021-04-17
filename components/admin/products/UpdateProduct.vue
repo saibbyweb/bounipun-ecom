@@ -276,6 +276,7 @@ export default {
         imageListUpdated(list, index) {
             // console.log(list, index);
             this.doc.colors[index].images = list;
+            console.log(list, 'image list updated');
         },
         /* add new color */
         addNewColor(color) {

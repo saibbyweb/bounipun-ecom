@@ -93,8 +93,12 @@ router.post('/getDocument', async (req, res) => {
 
                 break;
             case 'product_lists':
+                
                 document = await document.populate('list._id', 'name styleId');
+                // console.log(document);
                 document.list.forEach(product => {
+                    if(product._id === null)
+                        return;
                     product.name = `${product._id.styleId} - (${product._id.name})`;
                     product._id = product._id._id;
                 });

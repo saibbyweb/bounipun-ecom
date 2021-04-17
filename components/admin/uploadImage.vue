@@ -190,7 +190,7 @@ export default {
                     if (i !== key)
                         this.images[i].mainImage = false;
                 }
-                return;
+                // return;
             }
 
             /* if value set to true */

@@ -42,8 +42,12 @@ export default {
 
             const images = this.product.colors[0].images;
             /* fetch main image */
+            const mainImage = images.find(image => image.mainImage === true);
+
+            const thumbnail = mainImage !== undefined ? mainImage.path : images[0].path
+
             // return 'abc';
-            return process.env.baseAWSURL + images[0].path;
+            return process.env.baseAWSURL + thumbnail;
         }
     }
 };
