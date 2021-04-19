@@ -172,7 +172,7 @@ export default {
             /*  remove deselected variant from doc.variants */
             if(deselectedVariantId !== null) {
                 let foundIndex = this.doc.variants.findIndex(variant => variant._id === deselectedVariantId);
-                
+
                 if(foundIndex !== -1)
                     this.doc.variants.splice(foundIndex, 1);
             }
@@ -438,7 +438,7 @@ export default {
                 variants,
                 colors,
                 directPrice,
-                etd: etd.toString(),
+                etd: etd === null ? "" : etd.toString(),
                 status
             };
             this.editMode = true;

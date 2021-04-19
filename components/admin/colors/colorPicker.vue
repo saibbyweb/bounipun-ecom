@@ -3,18 +3,21 @@
     <h2 class="heading" @click="fetchColors"> Bounipun Colors </h2>
     <!-- populate colors -->
     <div class="color-data" v-for="(category, index) in allColors" :key="index">
-        <!-- category name -->
-        <span class="category-name"> {{ category.name }} </span>
-        <!-- color list -->
-        <div class="color-list">
-            <div @click="toggleSelect(color)" v-for="color in category.colors" :key="color._id" class="color-box center-col">
-                <img v-if="isSelected(color._id)" class="selected" src="/icons/green_check.png" />
-                <div style="height:40px; width:40px;" :style="{backgroundImage: `url(${color.image})`}" class="shadow box" :class="{active: isSelected(color._id)}"> </div>
-                <span class="color-name"> {{ color.name }} </span>
-                <span class="color-name"> {{ color.code }} </span>
+        <Accordion :heading="category.name">
+            <!-- category name -->
+            <!-- <span class="category-name"> {{ category.name }} </span> -->
+            <!-- color list -->
+            <div class="color-list">
+                <div @click="toggleSelect(color)" v-for="color in category.colors" :key="color._id" class="color-box center-col">
+                    <img v-if="isSelected(color._id)" class="selected" src="/icons/green_check.png" />
+                    <div style="height:40px; width:40px;" :style="{backgroundImage: `url(${color.image})`}" class="shadow box" :class="{active: isSelected(color._id)}"> </div>
+                    <span class="color-name"> {{ color.name }} </span>
+                    <span class="color-code"> {{ color.code }} </span>
+                </div>
             </div>
-        </div>
-        <hr align="left" />
+
+        </Accordion>
+        <!-- <hr align="left" /> -->
     </div>
 </div>
 </template>
@@ -120,12 +123,14 @@ export default {
 
         .color-list {
             display: flex;
+            flex-wrap: wrap;
 
             .color-box {
-                margin: 5px;
+                margin: 3px;
                 cursor: pointer;
                 transition: all 0.2s ease-in-out;
                 position: relative;
+                width: 22%;
 
                 * {
                     transition: all 0.2s ease-in-out;
@@ -156,6 +161,15 @@ export default {
 
                 .color-name {
                     margin-top: 3px;
+                    font-size: 10px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    max-width: 100%;
+                }
+
+                .color-code {
+                    font-weight: 900;
                     font-size: 10px;
                 }
             }
