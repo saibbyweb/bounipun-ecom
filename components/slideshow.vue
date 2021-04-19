@@ -8,6 +8,11 @@
         </div>
     </div>
 
+    <!-- custom text -->
+    <div class="center">
+        <span class="custom-text">  {{ customText }} </span>
+    </div>
+
     <!-- indicator dots -->
     <div class="dots">
         <div :class="[{active: isActive(index)},'dot']" :key="index" v-for="(image, index) in images"> </div>
@@ -51,6 +56,10 @@ export default {
         size: {
             type: String,
             default: 'contain'
+        },
+        customText: {
+            type: String,
+            default: ''
         }
     },
     data() {
@@ -144,6 +153,16 @@ export default {
             }
         }
 
+    }
+
+    /* custom text */
+    .custom-text {
+        text-align: center;
+        font-size: 12px;
+        padding:0 15px;
+        color: $primary_dark;
+        opacity: 0.7;
+        font-family: $font_2;
     }
 
     #thumbnails-container {

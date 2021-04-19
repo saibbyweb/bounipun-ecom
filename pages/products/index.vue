@@ -2,7 +2,7 @@
 <div v-if="productFetched" class="product-page">
     <div class="product-images">
         <!-- product image slideshow container with thumbnails  -->
-        <slideshow ref="slideshow" :images="images[activeColorIndex]" :slideshowOptions="{thumbnails: true}" />
+        <slideshow ref="slideshow" :images="images[activeColorIndex]" :slideshowOptions="{thumbnails: true}" :customText="product.colors[activeColorIndex].disclaimer" />
 
         <span class="collection-vertical"> Bounipun Escape </span>
 
