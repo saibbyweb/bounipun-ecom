@@ -16,7 +16,7 @@
      <!-- set color image -->
     <UploadImage ref="imageUploader" :multipleUpload="false" label="Set Collection Header Image" @updated="imageListUpdated" />
        <!-- publish toggle -->
-    <Toggle v-model="doc.lock" label="🔒Lock" /> 
+    <Toggle v-model="doc.lock" label="🔒 Lock" />
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" /> 
     <!-- update button -->

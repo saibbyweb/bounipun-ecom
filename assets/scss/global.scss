@@ -220,5 +220,14 @@ p, span {
 *::-webkit-scrollbar {
   display: none;
 }
-
+ p {
+   &.error {
+    background-color: #d52d2d;
+    color: white;
+    font-size: 10px;
+    width: fit-content;
+    padding: 5px;
+    border-radius: 4px;
+   }
+ }
 

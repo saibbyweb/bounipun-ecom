@@ -63,7 +63,7 @@ export default {
                 sortBy: {
 
                 },
-                limit: 6
+                limit: 20
             },
             list: [],
             headings: ['_id', 'styleId', 'name', 'Slug', 'type', 'Collection', 'status'],

@@ -87,7 +87,11 @@
         <!-- update document -->
         <button @click="updateDocument" class="action" :disabled="loading"> {{ editMode ? "Apply Changes" : "Add Product" }} </button>
         <!-- delete document -->
-        <button v-if="editMode" @click="deleteDocument" class="action delete" :disabled="loading"> Delete </button>
+        <button v-if="editMode" @click="deleteDocument" class="action delete" :disabled="loading"> Delete </button> 
+    </div>
+    <br>
+    <div class="center">
+    <p v-if="error.status" class="error"> {{ error.msg }} </p>
     </div>
 
 </div>
@@ -147,7 +151,33 @@ export default {
             else return this.colorSourceTypes.filter(source => source.value !== 'custom')
         },
         selectedVariants() {
-            return this.variants.filter(variant => variant.checked)
+            const selectedVariants = this.variants.filter(variant => variant.checked);
+
+            /* update doc.variants accordingly */
+            console.log(this.doc.variants.length, selectedVariants.length)
+
+            /* if there's any variant which is not in the selected variants,, remove it */
+            let deselectedVariantId = null;
+            this.doc.variants.forEach(variant => {
+                /* check if its in the selected list */
+                let foundVariant = selectedVariants.find(sVariant => sVariant._id === variant._id);
+
+                /* if found */
+                if(foundVariant === undefined) {
+                    deselectedVariantId = variant._id
+                    return;
+                }
+            });
+
+            /*  remove deselected variant from doc.variants */
+            if(deselectedVariantId !== null) {
+                let foundIndex = this.doc.variants.findIndex(variant => variant._id === deselectedVariantId);
+                
+                if(foundIndex !== -1)
+                    this.doc.variants.splice(foundIndex, 1);
+            }
+
+            return selectedVariants;
         },
         selectedVariantsWithFabricOptions() {
             return this.selectedVariants.map(variant => {
@@ -235,7 +265,11 @@ export default {
             ],
             baseColors: [],
             loading: false,
-            updated: false
+            updated: false,
+            error: {
+                status: false,
+                msg: ""
+            }
         }
     },
     mounted() {
@@ -313,6 +347,8 @@ export default {
                 fabrics: variant.fabrics
             };
 
+            console.log(details);
+
             /* check if variant already exists in the array */
             let foundIndex = this.doc.variants.findIndex(element => element._id === variant._id);
 
@@ -321,14 +357,24 @@ export default {
                 this.doc.variants.push(details);
             else
                 this.doc.variants[foundIndex] = details;
+            
+            console.log(foundIndex !== -1)
 
             this.doc.variants = this.doc.variants.filter(variant => variant.fabrics.length !== 0)
 
-            // console.log(this.doc.variants);
+            console.log(this.doc.variants);
         },
         async updateDocument() {
             console.log('PRODUCT TO BE UPDATED!:');
-            console.log(this.doc);
+            
+            // const variantionsCheck = this.doc.variants.length === this.selectedVariants.length;
+
+            // if(!variantionsCheck) {
+            //     this.error.msg = "Please re-verify variants and fabric selection";
+            //     this.error.status = true;
+            //     return;
+            // }
+
             // return;
             // return;
 
