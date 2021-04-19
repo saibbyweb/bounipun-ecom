@@ -2,7 +2,7 @@
 <div class="center-col page -wh">
 
     <div class="c-header center" :style="{ backgroundImage: `url(${getCollectionImage(collection.image)})`}">
-        <h2 class="heading"> {{ collection.name }} </h2>
+        <h2 v-if="collection.image === ''" class="heading"> {{ collection.name }} </h2>
     </div>
 
     <div v-if="!collectionLocked" class="page collection-items">
@@ -82,7 +82,7 @@ export default {
     width: 100%;
 
     .heading {
-        color: rgba(255, 255, 255, 0.819);
+        color: $primary_dark;
         text-transform: uppercase;
         font-family: $font_1_bold;
         font-size: 10vw;
