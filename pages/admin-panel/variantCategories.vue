@@ -40,7 +40,7 @@ export default {
                 sortBy: {
 
                 },
-                limit: 2
+                limit: 20
             },
             sortByFields: ['name', 'status'],
             headings: ['_id', 'name', 'Description', 'status']

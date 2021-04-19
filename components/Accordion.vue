@@ -3,7 +3,7 @@
     <!-- <button @click="toggle()" :class="[{'active': active},'accordion']"> {{ heading }}</button> -->
 
     <div @click="toggle()" :class="[{'active': active},'accordion']">
-        <span class="title"> {{ heading }}</span>
+        <span class="title"> {{ heading }} </span>
         <span class="switch"> + </span>
     </div>
 
@@ -70,10 +70,12 @@ export default {
             color: $dark_gray;
             letter-spacing: 1.5px;
             font-size: 11px;
+            cursor: pointer;
         }
 
         .switch {
             padding: 0 10px;
+            cursor: pointer;
         }
     }
 
