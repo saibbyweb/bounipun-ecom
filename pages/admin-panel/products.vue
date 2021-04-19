@@ -5,6 +5,8 @@
         <SelectBox :options="searchBy" v-model="rawCriterion.search.key" label="Search By"/>
         <input v-model="rawCriterion.search.term" class="search shadow" type="text" placeholder="Search for Products" />
         <SelectBox :options="productTypes" v-model="rawCriterion.filters.type" label="Filter By"/>
+        <!-- collections filter -->
+        <SelectBox :options="collections" v-model="rawCriterion.filters.bounipun_collection" label="Collection" />
     </div>
 
     <!-- list of products -->
@@ -38,15 +40,11 @@ export default {
                 name: 'All Products',
                 value: 'default'
             }, {
-                name: "Made to Order",
-                value: 'made-to-order'
+                name: "Under Bounipun",
+                value: 'under-bounipun'
             },
             {
-                name: "Ready To Ship",
-                value: 'ready-to-ship'
-            },
-            {
-                name: 'Third Party Products',
+                name: 'Third Party',
                 value: 'third-party'
             }],
             /* collections */
@@ -58,7 +56,8 @@ export default {
                     term: ""
                 },
                 filters: {
-                    type: 'default'
+                    type: 'default',
+                    bounipun_collection: 'default'
                 },
                 sortBy: {
 
@@ -138,7 +137,7 @@ export default {
             });
             this.collections.unshift({
                 name: 'Select Collection',
-                value: ""
+                value: "default"
             });
 
             /* update collection name in list */
