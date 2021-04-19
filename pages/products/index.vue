@@ -279,12 +279,13 @@ export default {
             this.setVariants();
         },
         setVariants() {
-            this.variants = this.product.variants.map(variant => {
+            const variants = this.product.variants.map(variant => {
                 return {
                     name: variant._id.name,
                     info1: variant._id.info1,
                     info2: variant._id.info2,
                     code: variant._id.code,
+                    order: variant._id.order,
                     description: variant._id.description,
                     image: variant._id.image,
                     fabrics: variant.fabrics.map(fabric => {
@@ -298,6 +299,10 @@ export default {
                     })
                 }
             });
+            
+            this.variants = variants.sort((a,b) => a.order - b.order);
+
+
             console.log(this.variants);
         },
         setActiveVariant(index) {

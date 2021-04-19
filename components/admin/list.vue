@@ -1,7 +1,7 @@
 <template>
 <!-- list -->
 <div class="list">
-    <button v-if="model === 'collections'" class="action shadow" @click="dragEnabled = !dragEnabled"> Toggle Drag </button>
+    <button v-if="isDraggable" class="action shadow" @click="dragEnabled = !dragEnabled"> Toggle Drag </button>
     <span v-if="dragEnabled"> You can now drag the items and adjust the order. </span>
     <!-- headings -->
     <div class="item shadow headings" :style="adjustItem()">
@@ -12,7 +12,7 @@
 
     </div>
 
-    <Draggable v-model="localList" ghost-class="ghost" @end="onDragEnd" :sort="model === 'collections' && dragEnabled">
+    <Draggable v-model="localList" ghost-class="ghost" @end="onDragEnd" :sort="isDraggable && dragEnabled">
         <transition-group type="transition" name="flip-list">
             <div @click="select(item, index)" :class="{selected: isSelected(index), dragEnabled}" class="item shadow" v-for="(item, index) in localList" :key="item._id" :style="adjustItem()">
                 <span :class="setClasses(propIndex, value)" v-for="(value, propIndex) in Object.values(item)" :key="propIndex"> {{ optimizeValue(value) }} </span>
@@ -52,6 +52,10 @@ export default {
         sortByFields: {
             type: Array,
             default: () => []
+        },
+        isDraggable: {
+            type: Boolean, 
+            default: false
         }
     },
     watch: {
@@ -80,7 +84,8 @@ export default {
             sortBy: {},
             dragEnabled: false,
             disableSort: false,
-            localList: []
+            localList: [],
+            dragUpdateEndpoint: '/updateOrder'
         }
     },
     computed: {
@@ -99,13 +104,14 @@ export default {
         async onDragEnd($event) {
             if(!this.dragEnabled)
                 return;
+
             /* get the order of the whole array */
             let newList = this.localList.map((item, index) => ({_id: item._id, newOrder: index }))
             /* set the order accordingly */
-            const updateCollectionOrder = this.$axios.$post('/updateCollectionOrder', { newList });
+            const updateOrder = this.$axios.$post(this.dragUpdateEndpoint, { model: this.model, newList });
             /* wait for request to resolve */
             this.$store.commit('customer/setLoading', true);
-            const { response, error } = await this.$task(updateCollectionOrder);
+            const { response, error } = await this.$task(updateOrder);
             this.$store.commit('customer/setLoading', false);
 
             if(error) {

@@ -6,7 +6,7 @@
     </div>
     <!-- list of collections -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="list" :headings="headings" :sortByFields="sortByFields" :model="model" @documentFetched="documentFetched" @sortToggled="sortToggled" custom_css="10% 25% 25% 15% 10% 15%" @clearFilters="clearFilters" @refetchList="updateList()" />
+        <List :list="list" :headings="headings" :sortByFields="sortByFields" :model="model" @documentFetched="documentFetched" @sortToggled="sortToggled" custom_css="10% 25% 25% 15% 10% 15%" @clearFilters="clearFilters" @refetchList="updateList()" :isDraggable="true"/>
 
         <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
     </div>

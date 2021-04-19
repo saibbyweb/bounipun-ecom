@@ -7,7 +7,7 @@
     </div>
     <!-- list of fabrics -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="list" :model="model" :headings="headings" custom_css="10% 40% 20% 20% 10%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" />
+        <List :list="list" :model="model" :headings="headings" custom_css="10% 30% 20% 20% 10% 10%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" @clearFilters="clearFilters" @refetchList="updateList()" :isDraggable="true" />
 
         <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
     </div>
@@ -44,9 +44,10 @@ export default {
                 limit: 20
             },
             list: [],
-            sortByFields: ['name', 'status'],
-            headings: ['_id', 'name', 'Category', 'Code', 'status'],
+            sortByFields: ['name', 'order','status'],
+            headings: ['_id', 'name', 'Category', 'Code', 'order','status'],
             variantCategories: [],
+            dragEnabled: false
         }
     },
     async mounted() {
@@ -54,6 +55,15 @@ export default {
         // await this.fetchList();
     },
     methods: {
+        clearFilters(dragEnabled) {
+            this.dragEnabled = dragEnabled;
+
+            this.rawCriterion.filters = {
+                type: 'default'
+            }
+
+            this.rawCriterion.search.term = "";
+        },
         updateList() {
             this.$refs.pagination.fetchResults();
         },
@@ -80,7 +90,7 @@ export default {
                 value: ""
             });
 
-            if(this.list.length === 0)
+            if (this.list.length === 0)
                 return;
 
             /* assign category names */
@@ -119,6 +129,7 @@ export default {
                 name,
                 category,
                 code,
+                order,
                 status
             }) => {
                 /* resolve category name */
@@ -132,6 +143,7 @@ export default {
                     name,
                     category,
                     code,
+                    order,
                     status
                 }
 

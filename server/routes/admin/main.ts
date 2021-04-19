@@ -2,6 +2,7 @@ import { server, db } from "@helpers/essentials";
 import admin from "@helpers/admin";
 import { uploader, methods as imageHelper } from "@models/imageUpload";
 import { register } from "@models";
+import { modelNames } from "mongoose";
 register();
 
 /* creating express router */
@@ -31,7 +32,7 @@ router.post('/getDocument', async (req, res) => {
             case 'products':
                 document = await document
                     .populate('bounipun_collection', 'name description')
-                    .populate('variants._id', 'name info1 info2 code description image')
+                    .populate('variants._id', 'name info1 info2 code description image order')
                     .populate('variants.fabrics._id', 'name code info1 description')
                     .populate('colors._id', 'name category image')
 
@@ -240,5 +241,18 @@ router.get('/test', async (req, res) => {
     // images.forEach(image => console.log(image));
     res.send('bro');
 })
+
+/* update order */
+router.post('/updateOrder', async(req, res) => {
+
+    const { model, newList } = req.body;
+    console.log(newList);
+    /* update order one by one */
+    for(const item of newList) {
+        // console.log(item);
+        await db.model(model).findOneAndUpdate({ _id: item._id }, { order: item.newOrder })
+    }
+    res.send('up');
+});
 
 export default router;
