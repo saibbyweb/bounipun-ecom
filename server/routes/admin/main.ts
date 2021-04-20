@@ -47,8 +47,6 @@ router.post('/getDocument', async (req, res) => {
                     colorCategories.forEach((category: any) => {
                         /* find all colors under this category */
                         const colors = document.colors.filter(color => {
-                            // console.log(color._id.category.toString() === category._id.toString())
-
                             return color._id.category.toString() === category._id.toString()
                         });
                         groupedData[category.name] = colors;

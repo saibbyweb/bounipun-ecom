@@ -59,7 +59,8 @@ router.post('/findDocuments', async (req, res) => {
         case 'products':
             documentFetch
             .populate('variants._id')
-            .populate('bounipun_collection');
+            .populate('bounipun_collection')
+            .populate('colors._id');
             break;
         
         case 'collections':

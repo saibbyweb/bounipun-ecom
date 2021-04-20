@@ -12,11 +12,23 @@
 
     <!-- if colllection is escape -->
     <div v-if="!collectionLocked && collection.name === 'Escape'">
-        <div v-for="(product, index) in products" :key="index" class="collection-items">
-            
-            <product-card v-for="(color, cIndex) in product.colors" :key="cIndex" :product="adjustProduct(product, cIndex)" :activeColor="cIndex" />
+
+        <!-- color categories -->
+        <div class="color-categories" v-for="(value, name, index) in escapeProduct" :key="index">
+            <div v-if="value.length !== 0">
+                <!-- sub color heading -->
+
+                <h5 class="category-heading"> {{ name }} </h5>
+
+                <div class="collection-items">
+
+                    <product-card v-for="(color, cIndex) in value" :key="cIndex" :product="adjustProduct(products[0], color.actualIndex)" :activeColor="color.actualIndex" />
+
+                </div>
+            </div>
 
         </div>
+
     </div>
 
     <!-- if collection locked -->
@@ -29,6 +41,9 @@
 </template>
 
 <script>
+import {
+    Document
+} from 'mongoose';
 import productCard from "../components/productCard.vue"
 
 export default {
@@ -38,7 +53,9 @@ export default {
     data() {
         return {
             products: [],
-            collection: {}
+            collection: {},
+            colorCategories: [],
+            escapeProduct: []
         }
     },
     watch: {
@@ -58,9 +75,23 @@ export default {
     },
     methods: {
         adjustProduct(product, cIndex) {
-            let adjustedProduct = {...product};
+            let adjustedProduct = {
+                ...product
+            };
             adjustedProduct.name = adjustedProduct.colors[cIndex].name;
-            return {...adjustedProduct};
+            return {
+                ...adjustedProduct
+            };
+        },
+        async fetchColorCategories() {
+            const colorCategories = await this.$fetchData('color_categories', {}, true);
+            /* wait for the request to resolve */
+            if (!colorCategories.fetched) {
+                console.log('could not fetch color categories');
+                return;
+            }
+            this.colorCategories = colorCategories.docs;
+
         },
         async fetchCollectionProducts(collectionSlug) {
             /* fetch collection id */
@@ -71,6 +102,10 @@ export default {
                 return;
 
             this.collection = collection.doc;
+
+            /* fetch color categories, if collection is escape */
+            if (this.collection.name === 'Escape')
+                await this.fetchColorCategories();
 
             /* fetch product under this collection  */
             const products = await this.$fetchData('products', {
@@ -83,7 +118,28 @@ export default {
             }
 
             this.products = products.docs;
-            console.log(this.products);
+
+            /* sort products if collection is escape */
+            if (this.collection.name === 'Escape') {
+                this.sortEscape(this.products);
+            }
+        },
+        sortEscape(products) {
+
+            const product = products[0];
+            let groupedData = {};
+            this.colorCategories.forEach(catgeory => {
+                /* find all colors under this category */
+                const colors = product.colors.filter(color => {
+                    /* attach actual index */
+                    color.actualIndex = product.colors.findIndex(col => col._id === color._id);
+                    return color._id.category === catgeory._id
+                });
+                /* save colors */
+                groupedData[catgeory.name] = colors;
+            });
+
+            this.escapeProduct = groupedData;
         },
         getCollectionImage(image) {
             if (image === undefined) return "/default-image.png";
@@ -123,5 +179,19 @@ export default {
         text-transform: uppercase;
         text-align: center;
     }
+}
+
+.color-categories {
+    margin-top: 20px;
+
+    .category-heading {
+
+        font-weight: 900;
+        font-family: $font_2;
+        font-size: 25px;
+        padding-left: 10%;
+        color: $primary_dark;
+    }
+
 }
 </style>

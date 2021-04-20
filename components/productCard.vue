@@ -128,10 +128,14 @@ export default {
                 return ['/default-image.png'];
 
             let mainImages = [];
-            
+
             /* if active color provided */
-            if(this.activeColor !== -1) {
+            if (this.activeColor !== -1) {
                 const mImages = this.product.colors[this.activeColor].images;
+                /* if no images, uploaded */
+                if (mImages.length === 0) {
+                    return ['/default-image.png'];
+                }
                 return mImages.map(image => process.env.baseAWSURL + image.path)
             }
 
@@ -152,10 +156,15 @@ export default {
     methods: {
         navigateToProductPage() {
             // this.$router.push('/products?_id='+this.product._id)
-            let query = { _id: this.product._id }
-            if(this.activeColor !== -1)
+            let query = {
+                _id: this.product._id
+            }
+            if (this.activeColor !== -1)
                 query.activeColor = this.activeColor;
-            this.$router.push({path: '/products', query });
+            this.$router.push({
+                path: '/products',
+                query
+            });
         }
     }
 };
