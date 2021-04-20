@@ -14,7 +14,7 @@
     </div>
 
     <!-- indicator dots -->
-    <div v-if="dots" class="dots">
+    <div v-if="dots" class="dots" :style="{width: slideWidth}">
         <div :class="[{active: isActive(index)},'dot']" :key="index" v-for="(image, index) in images"> </div>
     </div>
 
@@ -226,7 +226,7 @@ export default {
 
     /* indicator dots */
     .dots {
-        width: 100vw;
+        // width: 100vw;
         height: 20px;
         display: flex;
         justify-content: center;

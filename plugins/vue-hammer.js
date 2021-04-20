@@ -8,6 +8,10 @@ import Autocomplete from 'vuejs-auto-complete'
 import VCalendar from "v-calendar";
 import VDatepicker from "v-calendar/lib/components/date-picker.umd"
 import Draggable from 'vuedraggable'
+import Verte from 'verte';
+import 'verte/dist/verte.css';
+// register component globally
+
 
 Vue.use(VueHammer);
 Vue.use(VueEllipseProgress);
@@ -20,3 +24,4 @@ Vue.use(VCalendar, {
   
 Vue.component("v-datepicker", VDatepicker);
 Vue.component("Draggable", Draggable);
+Vue.component('verte', Verte);

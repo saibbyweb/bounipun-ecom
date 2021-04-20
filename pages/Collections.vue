@@ -5,7 +5,7 @@
         <h2 v-if="collection.image === ''" class="heading"> {{ collection.name }} </h2>
     </div>
 
-    <div v-if="!collectionLocked" class="page collection-items">
+    <div v-if="!collectionLocked" class="collection-items">
         <product-card v-for="(product, index) in products" :key="index" :product="product" />
         <h3 v-if="products.length === 0"> No Products found for {{ collection.name }} </h3>
     </div>
@@ -92,6 +92,7 @@ export default {
 .collection-items {
     display: flex;
     flex-wrap: wrap;
+    margin-top:10vw;
 }
 .locked {
     padding:10%;

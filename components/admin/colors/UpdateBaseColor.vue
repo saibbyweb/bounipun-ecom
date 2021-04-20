@@ -3,11 +3,24 @@
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Base Color </h2>
     <!-- fabric id -->
-    <InputBox v-if="editMode" label="Base Color ID" v-model="doc._id" disabled :internal="true"/>
+    <InputBox v-if="editMode" label="Base Color ID" v-model="doc._id" disabled :internal="true" />
     <!-- fabric name -->
     <InputBox label="Base Color Name" v-model="doc.name" />
+    <br>
+    <!-- color picker -->
+    <client-only>
+        <div class="center" style="position:relative;">
+            <verte model="hex" @input="colorPicked" style="position:absolute; right: 5%; top:50%;" menuPosition="right" />
+            <!-- fabric name -->
+            <InputBox label="HEX Color" v-model="pickedColor" />
+
+            
+        </div>
+    </client-only>
+
     <!-- description -->
-    <TextBox v-model="doc.description" label="Description" :internal="true"/>
+    <TextBox v-model="doc.description" label="Description" :internal="true" />
+
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
 
@@ -40,11 +53,15 @@ export default {
                 description: "",
                 status: false
             },
+            pickedColor: "",
             loading: false,
             updated: false
         }
     },
     methods: {
+        colorPicked(event) {
+            this.pickedColor = event;
+        },
         async updateDocument(model, details, editMode) {
             this.loading = true;
             const result = await this.$updateDocument(this.model, this.doc, this.editMode);

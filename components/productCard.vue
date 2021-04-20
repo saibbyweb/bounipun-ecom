@@ -3,7 +3,7 @@
     <!-- main image container -->
     <div class="main-image-container center">
         <!-- <img class="main-image" :src="imagePath" /> -->
-        <slideshow ref="slideshow" :images="slideshowImages" extraClass="search-slideshow" :dots="false" :slideWidth="43" :slideHeight="40" />
+        <slideshow ref="slideshow" :images="slideshowImages" extraClass="search-slideshow" :dots="true" :slideWidth="48" :slideHeight="40" />
 
     </div>
 
@@ -134,7 +134,7 @@ export default {
     padding: 1vw;
 
     @media (max-width: $breakpoint-tablet) {
-        width: 43vw;
+        width: 48vw;
         height: 100vw;
     }
 
@@ -190,6 +190,7 @@ export default {
         height: 5%;
 
         .shop-now {
+            font-size:12px;
             text-transform: uppercase;
             font-family: $font_1;
         }
