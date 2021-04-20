@@ -2,7 +2,9 @@
 <div @click="$router.push('/products?_id='+product._id)" class="product-card">
     <!-- main image container -->
     <div class="main-image-container center">
-        <img class="main-image" :src="imagePath" />
+        <!-- <img class="main-image" :src="imagePath" /> -->
+        <slideshow ref="slideshow" :images="slideshowImages" extraClass="search-slideshow" :dots="false" :slideWidth="43" :slideHeight="40" />
+
     </div>
 
     <!-- text details -->
@@ -108,6 +110,16 @@ export default {
         },
         highestVariantPirce() {
             return this.product.priceRange.endsAt;
+        },
+        slideshowImages() {
+            if (this.product.notProvided || this.product.colors.length === 0)
+                return ['/default-image.png'];
+
+            const images = this.product.colors[0].images;
+            /* fetch main image */
+            // return 'abc';
+            return images.map(image => process.env.baseAWSURL + image.path)
+            // return process.env.baseAWSURL + images[0].path;
         }
     },
 
@@ -184,4 +196,9 @@ export default {
     }
 
 }
+
+// .search-slideshow {
+//     width: 20vw !important;
+//     height: 20vw !important;
+// }
 </style>

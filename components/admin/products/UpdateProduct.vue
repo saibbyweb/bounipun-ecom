@@ -55,7 +55,7 @@
             <!-- remove color -->
             <button class="action delete" style="font-size:9px; position: absolute; bottom:0; right:0;" @click="removeColor(index, true)"> Remove Color </button>
             <!-- disclaimer box -->
-            <InputBox v-if="doc.colorSource === 'custom'" label="Disclaimer" v-model="color.disclaimer" />
+            <InputBox label="Disclaimer" v-model="color.disclaimer" />
             <!-- <hr width="100%" style="opacity: 0.3" /> -->
         </div>
         <button v-if="doc.colorSource !== 'bounipun-colors'" class="action" style="font-size:9px; position: absolute; bottom: -30px;  right:10px;" @click="addNewColor({_id: null, name:'', code: ''})"> Add Color </button>

@@ -1,5 +1,5 @@
 <template>
-<div class="slideshow-container">
+<div class="slideshow-container" :style="{width: slideWidth + 'vw'}">
     <div class="slideshow">
         <!-- slideshow images -->
         <div v-hammer:swipe="onSwipe" class="slides-container" :style="'margin-left: ' + slideMargin + 'vw'">
@@ -9,19 +9,19 @@
     </div>
 
     <!-- custom text -->
-    <div class="center">
+    <div v-if="customText !== ''" class="center">
         <span class="custom-text">  {{ customText }} </span>
     </div>
 
     <!-- indicator dots -->
-    <div class="dots">
+    <div v-if="dots" class="dots">
         <div :class="[{active: isActive(index)},'dot']" :key="index" v-for="(image, index) in images"> </div>
     </div>
 
     <!-- thumbnails -->
-    <div ref="thumbnails" id="thumbnails-container" class="scrollable-list">
+    <div v-if="slideshowOptions.thumbnails" ref="thumbnails" id="thumbnails-container" class="scrollable-list">
         <div class="list">
-            <div v-if="slideshowOptions.thumbnails" class="thumbnails">
+            <div class="thumbnails">
                 <div @click="setActiveImage(index)" :class="[{active: isActive(index)},'thumbnail']" :key="index" v-for="(image, index) in images" :style="getBackgroundImage(image)"> </div>
             </div>
         </div>
@@ -60,6 +60,23 @@ export default {
         customText: {
             type: String,
             default: ''
+        },
+        extraClass: {
+            type: String,
+            default: ''
+        },
+        dots: {
+            type: Boolean, 
+            default: true
+        },
+        slideWidth: {
+            type: Number,
+            default: 100
+
+        },
+        slideHeight: {
+            type: Number,
+            default: 100
         }
     },
     data() {
@@ -80,7 +97,9 @@ export default {
         getBackgroundImage(image, size) {
             return {
                 backgroundImage: `url('${image}')`,
-                backgroundSize: this.size
+                backgroundSize: this.size,
+                width: this.slideWidth + 'vw',
+                height: this.slideHeight + 'vw'
             }
         },
         isActive(index) {
@@ -96,20 +115,27 @@ export default {
                 case 2:
                     console.log('swiped left')
 
-                    if (this.slideMargin === threshold * -100)
+                    /* stop at the last slide */
+                    if (this.slideMargin === threshold * (-1 * this.slideWidth))
                         return;
-                    this.slideMargin -= 100;
+
+                    this.slideMargin -= this.slideWidth;
                     this.activeIndex += 1;
                     break;
                     /* swiped right */
                 case 4:
                     console.log('swiped right')
+                    /* stop at the first slide */
                     if (this.slideMargin === 0)
                         return;
-                    this.slideMargin += 100;
+
+
+                    this.slideMargin += this.slideWidth;
                     this.activeIndex -= 1;
                     break;
             }
+
+            /* move thumbnails accordingly */
             TweenLite.to(this.$refs.thumbnails, 0.3, {
                 scrollLeft: this.activeIndex * 40
             });
@@ -120,6 +146,7 @@ export default {
 
 <style lang="scss" scoped>
 .slideshow-container {
+    overflow: hidden;
     .slideshow {
         display: flex;
         overflow-x: auto;
@@ -139,10 +166,12 @@ export default {
             width: fit-content;
             margin-left: 0;
             transition: all 0.4s ease-in-out;
-
+            
             .product-image {
-                height: 120vw;
-                width: 100vw;
+                
+                // height:120vw;
+                // width: 100vw;
+
                 overflow: hidden;
                 background-position: center;
                 background-repeat: no-repeat;
@@ -151,6 +180,8 @@ export default {
                     height: 90vw;
                 }
             }
+
+
         }
 
     }
