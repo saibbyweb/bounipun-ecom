@@ -4,14 +4,21 @@
     <div class="c-header center" :style="{ backgroundImage: `url(${getCollectionImage(collection.image)})`}">
         <h2 v-if="collection.image === ''" class="heading"> {{ collection.name }} </h2>
     </div>
-
-    <div v-if="!collectionLocked" class="collection-items">
+    <!-- if collections is not escape -->
+    <div v-if="!collectionLocked && collection.name !== 'Escape'" class="collection-items">
         <product-card v-for="(product, index) in products" :key="index" :product="product" />
         <h3 v-if="products.length === 0"> No Products found for {{ collection.name }} </h3>
-
-        
     </div>
-    
+
+    <!-- if colllection is escape -->
+    <div v-if="!collectionLocked && collection.name === 'Escape'">
+        <div v-for="(product, index) in products" :key="index" class="collection-items">
+            
+            <product-card v-for="(color, cIndex) in product.colors" :key="cIndex" :product="adjustProduct(product, cIndex)" :activeColor="cIndex" />
+
+        </div>
+    </div>
+
     <!-- if collection locked -->
     <div v-if="collectionLocked" class="locked">
         <h2 class="heading" v-if="collectionLocked"> 🔒 This collection is locked </h2>
@@ -22,7 +29,12 @@
 </template>
 
 <script>
+import productCard from "../components/productCard.vue"
+
 export default {
+    components: {
+        productCard
+    },
     data() {
         return {
             products: [],
@@ -45,6 +57,11 @@ export default {
         this.fetchCollectionProducts(this.$route.query.slug);
     },
     methods: {
+        adjustProduct(product, cIndex) {
+            let adjustedProduct = {...product};
+            adjustedProduct.name = adjustedProduct.colors[cIndex].name;
+            return {...adjustedProduct};
+        },
         async fetchCollectionProducts(collectionSlug) {
             /* fetch collection id */
             const collection = await this.$fetchData('collections', {
@@ -52,7 +69,7 @@ export default {
             });
             if (!collection.fetched)
                 return;
-            
+
             this.collection = collection.doc;
 
             /* fetch product under this collection  */
@@ -64,12 +81,12 @@ export default {
             if (!products.fetched) {
                 return;
             }
-            
+
             this.products = products.docs;
             console.log(this.products);
         },
         getCollectionImage(image) {
-            if(image === undefined) return "/default-image.png";
+            if (image === undefined) return "/default-image.png";
             return this.$getImagePath(image);
         }
     }
@@ -94,10 +111,12 @@ export default {
 .collection-items {
     display: flex;
     flex-wrap: wrap;
-    margin-top:10vw;
+    margin-top: 10vw;
+    justify-content: center;
 }
+
 .locked {
-    padding:10%;
+    padding: 10%;
 
     .heading {
         font-family: $font_2_bold;

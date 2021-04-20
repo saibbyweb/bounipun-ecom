@@ -73,6 +73,10 @@ export default {
         inWishlist: {
             type: Boolean,
             default: false
+        },
+        activeColor: {
+            type: Number,
+            default: 0
         }
     },
     computed: {
@@ -124,6 +128,12 @@ export default {
                 return ['/default-image.png'];
 
             let mainImages = [];
+            
+            /* if active color provided */
+            if(this.collectionName === 'Escape') {
+                const mImages = this.product.colors[this.activeColor].images;
+                return mImages.map(image => process.env.baseAWSURL + image.path)
+            }
 
             /* find main color */
             const mainColor = this.product.colors.find(color => color.mainColor === true);
