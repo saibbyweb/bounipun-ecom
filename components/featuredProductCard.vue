@@ -38,13 +38,23 @@ export default {
         imagePath() { 
             if(this.product.notProvided || this.product.colors.length === 0)
                 return '/default-image.png';
+
             
+            let mainImages = "";
 
-            const images = this.product.colors[0].images;
+            /* find main color */
+            const mainColor = this.product.colors.find(color => color.mainColor === true);
+
+            /* if main color found */
+            if (mainColor !== undefined) {
+                mainImages = mainColor.images;
+            } else
+                mainImages = this.product.colors[0].images;
+
             /* fetch main image */
-            const mainImage = images.find(image => image.mainImage === true);
+            const mainImage = mainImages.find(image => image.mainImage === true);
 
-            const thumbnail = mainImage !== undefined ? mainImage.path : images[0].path
+            const thumbnail = mainImage !== undefined ? mainImage.path : mainImages[0].path
 
             // return 'abc';
             return process.env.baseAWSURL + thumbnail;

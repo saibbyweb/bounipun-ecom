@@ -39,23 +39,31 @@
     <ColorPicker ref="colorPicker" v-show="doc.colorSource === 'bounipun-colors'" @colorAdded="addNewColor" @colorRemoved="colorDeselected" />
     <!-- add colors -->
     <div v-if="doc.colorSource !== ''" class="colors" style="width:100%; position:relative;">
-        <div class="color-box" v-for="(color, index) in doc.colors" :key="color.key">
+        <div class="color-box" :class="{'main-color': color.mainColor}" v-for="(color, index) in doc.colors" :key="color.key">
+
             <!-- color selector (if color source is bounipun) -->
-            <div style="display:flex;">
+            <div class="center color-details-1">
                 <!-- color name -->
-                <InputBox label="Color Name" v-model="color.name" :disabled="bounipunColors" />
+                <InputBox label="Color Name" v-model="color.name" :disabled="bounipunColors" class="name" />
                 <!-- color name -->
-                <InputBox label="Color Code" v-model="color.code" :disabled="bounipunColors" />
+                <InputBox label="Code" v-model="color.code" :disabled="bounipunColors" class="code" />
                 <!-- select base color -->
-                <SelectBox :options="baseColors" v-model="color.baseColor" label="Base Color" :disabled="bounipunColors" />
+                <SelectBox :options="baseColors" v-model="color.baseColor" label="Base Color" :disabled="bounipunColors" class="base-color" />
             </div>
 
             <!-- color images -->
             <UploadImage ref="imageUploader" label="Upload Images" @updated="imageListUpdated($event, index)" />
             <!-- remove color -->
-            <button class="action delete" style="font-size:9px; position: absolute; bottom:0; right:0;" @click="removeColor(index, true)"> Remove Color </button>
-            <!-- disclaimer box -->
-            <InputBox label="Disclaimer" v-model="color.disclaimer" />
+            <button class="action delete" style="font-size:9px; position: absolute; top:0; right:0;" @click="removeColor(index, true)"> Remove Color </button>
+
+            <!-- set as main -->
+              <button class="action" style="background-color: #3863ad;font-size:10px; padding:5px; position: absolute; top:0; left:0;" @click="setMainColor(index)"> Set as Main </button>
+            
+            <div class="center">
+                <!-- disclaimer box -->
+                <InputBox label="Disclaimer" v-model="color.disclaimer" />
+
+            </div>
             <!-- <hr width="100%" style="opacity: 0.3" /> -->
         </div>
         <button v-if="doc.colorSource !== 'bounipun-colors'" class="action" style="font-size:9px; position: absolute; bottom: -30px;  right:10px;" @click="addNewColor({_id: null, name:'', code: ''})"> Add Color </button>
@@ -87,11 +95,11 @@
         <!-- update document -->
         <button @click="updateDocument" class="action" :disabled="loading"> {{ editMode ? "Apply Changes" : "Add Product" }} </button>
         <!-- delete document -->
-        <button v-if="editMode" @click="deleteDocument" class="action delete" :disabled="loading"> Delete </button> 
+        <button v-if="editMode" @click="deleteDocument" class="action delete" :disabled="loading"> Delete </button>
     </div>
     <br>
     <div class="center">
-    <p v-if="error.status" class="error"> {{ error.msg }} </p>
+        <p v-if="error.status" class="error"> {{ error.msg }} </p>
     </div>
 
 </div>
@@ -163,17 +171,17 @@ export default {
                 let foundVariant = selectedVariants.find(sVariant => sVariant._id === variant._id);
 
                 /* if found */
-                if(foundVariant === undefined) {
+                if (foundVariant === undefined) {
                     deselectedVariantId = variant._id
                     return;
                 }
             });
 
             /*  remove deselected variant from doc.variants */
-            if(deselectedVariantId !== null) {
+            if (deselectedVariantId !== null) {
                 let foundIndex = this.doc.variants.findIndex(variant => variant._id === deselectedVariantId);
 
-                if(foundIndex !== -1)
+                if (foundIndex !== -1)
                     this.doc.variants.splice(foundIndex, 1);
             }
 
@@ -276,6 +284,21 @@ export default {
         this.fetchBaseColors();
     },
     methods: {
+        setMainColor(index) {
+            /* if value set to true, turn all other main image flags off */
+
+            for (let i = 0; i < this.doc.colors.length; i++) {
+                this.doc.colors[i].mainColor = false;
+            }
+            
+            setTimeout(() => {
+            this.doc.colors[index].mainColor = true
+            this.$forceUpdate();
+            }, 100);
+
+            
+
+        },
         async fetchBaseColors() {
             const result = await this.$fetchCollection('base_colors');
             if (!result.fetched || result.docs.length === 0) {
@@ -321,6 +344,7 @@ export default {
                 code: color.code,
                 images: [],
                 disclaimer: "",
+                mainColor: false,
                 key: uuidv4()
             });
         },
@@ -357,7 +381,7 @@ export default {
                 this.doc.variants.push(details);
             else
                 this.doc.variants[foundIndex] = details;
-            
+
             console.log(foundIndex !== -1)
 
             this.doc.variants = this.doc.variants.filter(variant => variant.fabrics.length !== 0)
@@ -366,7 +390,8 @@ export default {
         },
         async updateDocument() {
             console.log('PRODUCT TO BE UPDATED!:');
-            
+            console.log(this.doc.colors);
+
             // const variantionsCheck = this.doc.variants.length === this.selectedVariants.length;
 
             // if(!variantionsCheck) {
@@ -478,10 +503,28 @@ export default {
     .color-box {
         position: relative;
         margin: 14px 0px;
-        padding: 5px;
+        padding: 25px 5px 5px 5px;
         border-radius: 3px;
         box-shadow: 1px 1px 15px #e6e6e6;
         overflow: hidden;
+
+        &.main-color {
+            background-color: #2582252e;
+        }
+
+        .color-details-1 {
+            width: 100%;
+
+            .name {
+                width: 44%;
+            }
+
+            .code {
+                width: 20%;
+            }
+
+            .base-color {}
+        }
     }
 }
 </style>

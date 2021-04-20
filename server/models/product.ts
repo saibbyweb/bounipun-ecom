@@ -30,6 +30,7 @@ const schema = new mongoose.Schema({
         code: { type: String, default: '' },
         /* base color - meta  */
         baseColor: { type: String, default: '' },
+        mainColor: { type: Boolean, default: false }
     }],
     /* variants */
     variants: [{

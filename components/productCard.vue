@@ -80,10 +80,18 @@ export default {
             if (this.product.notProvided || this.product.colors.length === 0)
                 return '/default-image.png';
 
-            const images = this.product.colors[0].images;
-            /* fetch main image */
-            // return 'abc';
-            return process.env.baseAWSURL + images[0].path;
+            let mainImage = "";
+
+            /* find main color */
+            const mainColor = this.product.colors.find(color => color.mainColor === true);
+
+            /* if main color undefined */
+            if (mainColor !== undefined) {
+                mainImage = mainColor.images[0].path;
+            } else
+                mainImage = this.product.colors[0].images;
+
+            return process.env.baseAWSURL + mainImage;
         },
         variantsAvailable() {
             return this.product.variants.map(variant => variant._id.name);
@@ -115,11 +123,20 @@ export default {
             if (this.product.notProvided || this.product.colors.length === 0)
                 return ['/default-image.png'];
 
-            const images = this.product.colors[0].images;
+            let mainImages = [];
+
+            /* find main color */
+            const mainColor = this.product.colors.find(color => color.mainColor === true);
+
+            /* if main color undefined */
+            if (mainColor !== undefined) {
+                mainImages = mainColor.images;
+            } else
+                mainImages = this.product.colors[0].images;
+
             /* fetch main image */
-            // return 'abc';
-            return images.map(image => process.env.baseAWSURL + image.path)
-            // return process.env.baseAWSURL + images[0].path;
+            return mainImages.map(image => process.env.baseAWSURL + image.path)
+
         }
     },
 
@@ -190,7 +207,7 @@ export default {
         height: 5%;
 
         .shop-now {
-            font-size:12px;
+            font-size: 12px;
             text-transform: uppercase;
             font-family: $font_1;
         }

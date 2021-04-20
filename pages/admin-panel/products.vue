@@ -170,7 +170,10 @@ export default {
                 return;
 
             /* add unique key to all colors */
-            doc.colors.forEach(color => color.key = uuidv4())
+            doc.colors.forEach(color => {
+                color.key = uuidv4()
+                // color.mainColor = false;
+            })
 
             /* if color source is bounipun colors */
             if (doc.colorSource === 'bounipun-colors') {
