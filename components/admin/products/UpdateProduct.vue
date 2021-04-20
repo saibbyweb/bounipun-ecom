@@ -523,7 +523,7 @@ export default {
                 width: 20%;
             }
 
-            .base-color {}
+           
         }
     }
 }

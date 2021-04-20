@@ -22,7 +22,7 @@
     <div v-if="slideshowOptions.thumbnails" ref="thumbnails" id="thumbnails-container" class="scrollable-list">
         <div class="list">
             <div class="thumbnails">
-                <div @click="setActiveImage(index)" :class="[{active: isActive(index)},'thumbnail']" :key="index" v-for="(image, index) in images" :style="getBackgroundImage(image)"> </div>
+                <div @click="setActiveImage(index)" :class="[{active: isActive(index)},'thumbnail']" :key="index" v-for="(image, index) in images" :style="getThumbBackground(image)"> </div>
             </div>
         </div>
     </div>
@@ -100,6 +100,12 @@ export default {
                 backgroundSize: this.size,
                 width: this.slideWidth + 'vw',
                 height: this.slideHeight + 'vw'
+            }
+        },
+        getThumbBackground(image) {
+            return {
+                backgroundImage: `url('${image}')`,
+                backgroundSize: this.size,
             }
         },
         isActive(index) {

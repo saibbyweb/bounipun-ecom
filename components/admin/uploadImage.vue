@@ -256,9 +256,7 @@ export default {
         cursor: pointer;
         position: relative;
 
-        &.uploading {
-            // filter: grayscale(100%);
-        }
+
 
         &:hover {
             .actions {

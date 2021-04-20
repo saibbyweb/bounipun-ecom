@@ -2,7 +2,7 @@
 <div v-if="productFetched" class="product-page">
     <div class="product-images">
         <!-- product image slideshow container with thumbnails  -->
-        <slideshow ref="slideshow" :images="images[activeColorIndex]" :slideshowOptions="{thumbnails: true}" :customText="product.colors[activeColorIndex].disclaimer" />
+        <slideshow ref="slideshow" :images="images[activeColorIndex]" :slideshowOptions="{thumbnails: true}" :customText="product.colors[activeColorIndex].disclaimer" :slideHeight="120" />
 
         <span class="collection-vertical"> Bounipun Escape </span>
 
@@ -275,8 +275,17 @@ export default {
 
             this.product = result.doc;
             this.productFetched = true;
+
+            /* fetch main color */
+            const mainColorIndex = this.product.colors.findIndex(color => color.mainColor === true);
+
+            if(mainColorIndex !== -1)
+                this.activeColorIndex = mainColorIndex;
+
             this.setImages();
             this.setVariants();
+
+
         },
         setVariants() {
             const variants = this.product.variants.map(variant => {

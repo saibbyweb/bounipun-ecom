@@ -8,6 +8,8 @@
     <div v-if="!collectionLocked" class="collection-items">
         <product-card v-for="(product, index) in products" :key="index" :product="product" />
         <h3 v-if="products.length === 0"> No Products found for {{ collection.name }} </h3>
+
+        
     </div>
     
     <!-- if collection locked -->
