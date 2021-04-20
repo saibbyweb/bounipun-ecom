@@ -10,9 +10,9 @@
     <!-- color picker -->
     <client-only>
         <div class="center" style="position:relative;">
-            <verte model="hex" @input="colorPicked" style="position:absolute; right: 5%; top:50%;" menuPosition="right" />
+            <verte model="hex" @input="colorPicked" style="position:absolute; right: 5%; top:50%;" menuPosition="right" :value="doc.hex" />
             <!-- fabric name -->
-            <InputBox label="HEX Color" v-model="pickedColor" />
+            <InputBox label="HEX Color" v-model="doc.hex" />
 
             
         </div>
@@ -50,6 +50,7 @@ export default {
             doc: {
                 _id: "",
                 name: "",
+                hex: "",
                 description: "",
                 status: false
             },
@@ -60,7 +61,7 @@ export default {
     },
     methods: {
         colorPicked(event) {
-            this.pickedColor = event;
+            this.doc.hex = event;
         },
         async updateDocument(model, details, editMode) {
             this.loading = true;
@@ -86,12 +87,14 @@ export default {
             const {
                 _id,
                 name,
+                hex,
                 description,
                 status
             } = details;
             this.doc = {
                 _id,
                 name,
+                hex,
                 description,
                 status
             };
@@ -105,6 +108,7 @@ export default {
             this.populateForm({
                 _id: "",
                 name: "",
+                hex: "",
                 description: "",
                 status: false
             });

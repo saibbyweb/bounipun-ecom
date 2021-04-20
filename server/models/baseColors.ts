@@ -3,6 +3,7 @@ import { mongoose } from "@helpers/essentials"
 /* schema */
 const schema = new mongoose.Schema({
     name: String,
+    hex: String,
     description: String,
     status: Boolean
 }, {
