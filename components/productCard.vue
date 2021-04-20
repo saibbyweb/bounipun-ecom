@@ -1,5 +1,5 @@
 <template>
-<div @click="$router.push('/products?_id='+product._id)" class="product-card">
+<div @click="navigateToProductPage" class="product-card">
     <!-- main image container -->
     <div class="main-image-container center">
         <!-- <img class="main-image" :src="imagePath" /> -->
@@ -76,7 +76,7 @@ export default {
         },
         activeColor: {
             type: Number,
-            default: 0
+            default: -1
         }
     },
     computed: {
@@ -130,7 +130,7 @@ export default {
             let mainImages = [];
             
             /* if active color provided */
-            if(this.collectionName === 'Escape') {
+            if(this.activeColor !== -1) {
                 const mImages = this.product.colors[this.activeColor].images;
                 return mImages.map(image => process.env.baseAWSURL + image.path)
             }
@@ -149,7 +149,15 @@ export default {
 
         }
     },
-
+    methods: {
+        navigateToProductPage() {
+            // this.$router.push('/products?_id='+this.product._id)
+            let query = { _id: this.product._id }
+            if(this.activeColor !== -1)
+                query.activeColor = this.activeColor;
+            this.$router.push({path: '/products', query });
+        }
+    }
 };
 </script>
 

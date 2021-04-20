@@ -276,15 +276,20 @@ export default {
             this.product = result.doc;
             this.productFetched = true;
 
+             this.setImages();
+            this.setVariants();
+
+            /* if main color provided via query param */
+            if(this.$route.query.activeColor) {
+                this.activeColorIndex = parseInt(this.$route.query.activeColor);
+                return;
+            }
+
             /* fetch main color */
             const mainColorIndex = this.product.colors.findIndex(color => color.mainColor === true);
 
             if(mainColorIndex !== -1)
                 this.activeColorIndex = mainColorIndex;
-
-            this.setImages();
-            this.setVariants();
-
 
         },
         setVariants() {
