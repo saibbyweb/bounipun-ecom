@@ -68,6 +68,10 @@ router.post('/findDocuments', async (req, res) => {
             documentFetch.sort('order');
             break;
 
+        case 'color_categories':
+            documentFetch.sort('order');
+            break;
+
 
         default:
             break;

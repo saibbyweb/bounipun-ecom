@@ -6,7 +6,7 @@
     </div>
     <!-- list of fabrics -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="list" :model="model" :headings="headings" custom_css="10% 40% 25% 25%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" />
+        <List :list="list" :model="model" :headings="headings" custom_css="10% 30% 25% 10% 25%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" @clearFilters="clearFilters" @refetchList="updateList()" :isDraggable="true" />
 
         <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
 
@@ -44,14 +44,24 @@ export default {
                 limit: 20
             },
             list: [],
-            sortByFields: ['name', 'status'],
-            headings: ['_id', 'name', 'Description', 'status']
+            sortByFields: ['name', 'order', 'status'],
+            headings: ['_id', 'name', 'Description', 'order', 'status'],
+            dragEnabled: false
         }
     },
     mounted() {
         // this.fetchList();
     },
     methods: {
+        clearFilters(dragEnabled) {
+            this.dragEnabled = dragEnabled;
+
+            this.rawCriterion.filters = {
+                type: 'default'
+            }
+
+            this.rawCriterion.search.term = "";
+        },
         updateList() {
             this.$refs.pagination.fetchResults();
         },
@@ -68,7 +78,7 @@ export default {
             console.log(this.$refs.updateComponent.populateForm(doc));
         },
         resultsFetched(result) {
-            if(result.docs.length === 0) {
+            if (result.docs.length === 0) {
                 this.list = [];
                 return;
             }
@@ -78,12 +88,14 @@ export default {
                 _id,
                 name,
                 description,
+                order,
                 status
             }) => {
                 return {
                     _id,
                     name,
                     description,
+                    order,
                     status
                 }
             });
