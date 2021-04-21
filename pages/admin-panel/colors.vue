@@ -4,6 +4,8 @@
     <div :class="{updating: showForm}" class="filters center">
         <SelectBox :options="searchBy" v-model="rawCriterion.search.key" label="Search By" />
         <input v-model="rawCriterion.search.term" class="search shadow" type="text" placeholder="Search for Colors" />
+        <!-- color categories filter -->
+        <SelectBox :options="colorCategories" v-model="rawCriterion.filters.category" label="Color Category" />
     </div>
     <!-- list of fabrics -->
     <div :class="{updating: showForm}" class="list">
@@ -42,7 +44,8 @@ export default {
                     term: ""
                 },
                 filters: {
-                    type: 'default'
+                    type: 'default',
+                    category: 'default'
                 },
                 sortBy: {
 
@@ -83,7 +86,7 @@ export default {
             });
             this.colorCategories.unshift({
                 name: 'Select Category',
-                value: ""
+                value: "default"
             })
         },
         documentFetched(doc) {

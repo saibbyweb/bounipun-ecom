@@ -177,6 +177,9 @@ router.post('/fetchPaginatedResults', async (req, res) => {
         const objectided = admin.setObjectIds(rawCriterion.filters,['bounipun_collection']);
         criterion.match = {...objectided}
     }
+    else if(model === "colors" && requestedBy === "default") {
+        criterion.match = {...admin.setObjectIds(rawCriterion.filters,['category'])}
+    }
     else
         criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
 
