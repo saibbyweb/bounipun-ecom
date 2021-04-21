@@ -82,7 +82,7 @@
     <InputBox v-if="thirdPartyProduct" label="Direct Price" v-model="doc.directPrice" />
 
     <!-- estimated delivery time -->
-    <InputBox label="Estimated Delivery Time (in weeks)" v-model="doc.etd" type="number" />
+    <!-- <InputBox label="Estimated Delivery Time (in weeks)" v-model="doc.etd" type="number" /> -->
 
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
@@ -230,7 +230,7 @@ export default {
                 variants: [],
                 colors: [],
                 directPrice: "",
-                etd: "",
+                // etd: "",
                 status: false,
             },
             types: [{
@@ -446,7 +446,7 @@ export default {
                 variants,
                 colors,
                 directPrice,
-                etd,
+                // etd,
                 status
             } = details;
             this.doc = {
@@ -464,7 +464,7 @@ export default {
                 variants,
                 colors,
                 directPrice,
-                etd: etd === null ? "" : etd.toString(),
+                // etd: etd === null ? "" : etd.toString(),
                 status
             };
             this.editMode = true;
@@ -490,7 +490,7 @@ export default {
                 variants: [],
                 colors: [],
                 directPrice: "",
-                etd: "",
+                // etd: "",
                 status: false
             });
             this.editMode = false;

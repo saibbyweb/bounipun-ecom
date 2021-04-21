@@ -108,7 +108,7 @@ router.post('/getDocument', async (req, res) => {
     }
     document = await document;
     console.log(document);
-    res.send(document);
+    res.json(document);
 });
 
 /* fetch collection */

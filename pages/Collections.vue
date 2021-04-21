@@ -98,7 +98,8 @@ export default {
         async fetchCollectionProducts(collectionSlug) {
             /* fetch collection id */
             const collection = await this.$fetchData('collections', {
-                slug: collectionSlug
+                slug: collectionSlug,
+                status: true
             });
             if (!collection.fetched)
                 return;

@@ -11,7 +11,7 @@
         </span>
 
     </div>
-
+    <client-only>
     <Draggable v-model="localList" ghost-class="ghost" @end="onDragEnd" :sort="isDraggable && dragEnabled">
         <transition-group type="transition" name="flip-list">
             <div @click="select(item, index)" :class="{selected: isSelected(index), dragEnabled}" class="item shadow" v-for="(item, index) in localList" :key="item._id" :style="adjustItem()">
@@ -19,6 +19,7 @@
             </div>
         </transition-group>
     </Draggable>
+    </client-only>
 
     <!-- data points -->
     <!-- <div @click="select(item, index)" :class="{selected: isSelected(index)}" class="item shadow" v-for="(item, index) in list" :key="index" :style="adjustItem()">

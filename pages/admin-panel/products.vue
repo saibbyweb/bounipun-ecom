@@ -2,9 +2,9 @@
 <div class="products crud">
     <!-- filters -->
     <div :class="{updating: showForm}" class="filters center">
-        <SelectBox :options="searchBy" v-model="rawCriterion.search.key" label="Search By"/>
+        <SelectBox :options="searchBy" v-model="rawCriterion.search.key" label="Search By" />
         <input v-model="rawCriterion.search.term" class="search shadow" type="text" placeholder="Search for Products" />
-        <SelectBox :options="productTypes" v-model="rawCriterion.filters.type" label="Filter By"/>
+        <SelectBox :options="productTypes" v-model="rawCriterion.filters.type" label="Filter By" />
         <!-- collections filter -->
         <SelectBox :options="collections" v-model="rawCriterion.filters.bounipun_collection" label="Collection" />
     </div>
@@ -37,18 +37,25 @@ export default {
             model: 'products',
             /* product types */
             productTypes: [{
-                name: 'All Products',
-                value: 'default'
-            }, {
-                name: "Under Bounipun",
-                value: 'under-bounipun'
-            },
-            {
-                name: 'Third Party',
-                value: 'third-party'
-            }],
+                    name: 'All Products',
+                    value: 'default'
+                }, {
+                    name: "Under Bounipun",
+                    value: 'under-bounipun'
+                },
+                {
+                    name: 'Third Party',
+                    value: 'third-party'
+                }
+            ],
             /* collections */
-            searchBy: [{name: "Product Name", value: "name"}, {name: "Style ID", value: "styleId"}],
+            searchBy: [{
+                name: "Product Name",
+                value: "name"
+            }, {
+                name: "Style ID",
+                value: "styleId"
+            }],
             /* rawCriterion */
             rawCriterion: {
                 search: {
@@ -84,7 +91,10 @@ export default {
         },
         sortToggled(sortBy) {
             console.log(sortBy);
-            this.rawCriterion = {...this.rawCriterion, sortBy }
+            this.rawCriterion = {
+                ...this.rawCriterion,
+                sortBy
+            }
         },
         async fetchFabrics() {
             const result = await this.$fetchCollection('fabrics');
@@ -141,11 +151,11 @@ export default {
             });
 
             /* update collection name in list */
-            if(this.list.length === 0)
+            if (this.list.length === 0)
                 return;
 
             this.list = this.list.map(item => {
-                const foundCollection =  this.collections.find(col => col.value === item.bounipun_collection);
+                const foundCollection = this.collections.find(col => col.value === item.bounipun_collection);
                 const bounipun_collection = foundCollection !== undefined ? foundCollection.name : "Third Party"
                 item.bounipun_collection = item.type !== "third-party" ? bounipun_collection : "N/A"
                 return item;
@@ -153,9 +163,6 @@ export default {
             console.log('LIST UPDATED')
         },
         documentFetched(doc) {
-            console.log(doc, 'product fetched')
-
-
             this.showForm = true;
             this.editMode = true;
             setTimeout(() => this.populateForm(doc), 1500);
@@ -165,19 +172,19 @@ export default {
         populateForm(doc) {
             const updateComponent = this.$refs.updateComponent;
             updateComponent.populateForm(doc);
+            
+            /* if colors are present */
+            if (doc.colors.length !== 0) {
+                /* add unique key to all colors */
+                doc.colors.forEach(color => {
+                    color.key = uuidv4()
+                    // color.mainColor = false;
+                })
 
-            if (doc.colors.length === 0)
-                return;
-
-            /* add unique key to all colors */
-            doc.colors.forEach(color => {
-                color.key = uuidv4()
-                // color.mainColor = false;
-            })
-
-            /* if color source is bounipun colors */
-            if (doc.colorSource === 'bounipun-colors') {
-                updateComponent.$refs.colorPicker.populateColorSelection(doc.colors);
+                /* if color source is bounipun colors */
+                if (doc.colorSource === 'bounipun-colors') {
+                    updateComponent.$refs.colorPicker.populateColorSelection(doc.colors);
+                }
             }
 
             /* assign images */
@@ -197,6 +204,7 @@ export default {
             if (doc.variants.length === 0)
                 return;
             /* populate variants */
+
             updateComponent.populateVariants(doc.variants);
 
             /* populate fabrics */
@@ -216,7 +224,7 @@ export default {
             }, 13);
         },
         resultsFetched(result) {
-            if(result.docs.length === 0) {
+            if (result.docs.length === 0) {
                 this.list = [];
                 return;
             }
@@ -232,11 +240,11 @@ export default {
                 status
             }) => {
                 /* resolve category name */
-                if(this.collections.length !== 0) {
+                if (this.collections.length !== 0) {
                     const foundCollection = this.collections.find(col => col.value === bounipun_collection);
                     bounipun_collection = foundCollection !== undefined ? foundCollection.name : "NOT AVAILABLE"
                 }
-                
+
                 // console.log(foundCollection, '-found collection');
 
                 return {
