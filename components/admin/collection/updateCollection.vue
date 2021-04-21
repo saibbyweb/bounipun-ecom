@@ -3,6 +3,15 @@
     <!-- abort update process -->
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add' }} Collection </h2>
+
+    <!-- preview link -->
+    <div class="center">
+        <a v-if="editMode" :href="`/collections?slug=${doc.slug}`" target="_blank">
+            <span style="background:#333; text-align:center; color:white; font-size: 12px; padding:2px 4px; border-radius:2px;"> Preview Collection ➚
+            </span>
+        </a>
+    </div>
+
     <!-- collection id -->
     <InputBox v-if="editMode" label="Collection ID" v-model="doc._id" disabled :internal="true" />
     <!-- collection name -->

@@ -7,7 +7,7 @@
     <!-- fabric name -->
     <InputBox label="Color Category Name" v-model="doc.name" />
     <!-- description -->
-    <TextBox v-model="doc.description" label="Description" :internal="true"/>
+    <TextBox v-model="doc.description" label="Description" />
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
 

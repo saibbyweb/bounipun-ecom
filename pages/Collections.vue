@@ -17,12 +17,14 @@
         <div class="color-categories" v-for="(value, name, index) in escapeProduct" :key="index">
             <div v-if="value.length !== 0">
                 <!-- sub color heading -->
+                <h5 class="category-heading"> {{ value.name }} </h5>
 
-                <h5 class="category-heading"> {{ name }} </h5>
+                <!-- color category description -->
+                <p class="category-description"> {{ value.description }} </p>
 
                 <div class="collection-items">
 
-                    <product-card v-for="(color, cIndex) in value" :key="cIndex" :product="adjustProduct(products[0], color.actualIndex)" :activeColor="color.actualIndex" />
+                    <product-card v-for="(color, cIndex) in value.colors" :key="cIndex" :product="adjustProduct(products[0], color.actualIndex)" :activeColor="color.actualIndex" />
 
                 </div>
             </div>
@@ -127,16 +129,17 @@ export default {
         sortEscape(products) {
 
             const product = products[0];
-            let groupedData = {};
-            this.colorCategories.forEach(catgeory => {
+            let groupedData = [];
+            this.colorCategories.forEach(category => {
                 /* find all colors under this category */
                 const colors = product.colors.filter(color => {
                     /* attach actual index */
                     color.actualIndex = product.colors.findIndex(col => col._id === color._id);
-                    return color._id.category === catgeory._id
+                    return color._id.category === category._id
                 });
                 /* save colors */
-                groupedData[catgeory.name] = colors;
+                // groupedData[catgeory.name] = colors;
+                groupedData.push({name: category.name, description: category.description, colors })
             });
 
             this.escapeProduct = groupedData;
@@ -191,6 +194,10 @@ export default {
         font-size: 25px;
         padding-left: 10%;
         color: $primary_dark;
+    }
+
+    .category-description {
+        padding-left: 10%;
     }
 
 }

@@ -62,7 +62,7 @@
 
         <!-- bounipun colors  -->
         <div v-if="bounipunColors" class="colors">
-            <h4 class="section-heading"> Colors ({{ product.colors.length }}) </h4>
+            <h4 class="section-heading"> Select Available Color: ({{ product.colors.length }}) </h4>
 
             <!-- color category -->
             <div class="color-category" v-for="(value, name, index) in product.colorData" :key="index">
@@ -84,6 +84,8 @@
 
         <!-- custom colors -->
         <div v-if="!bounipunColors" class="colors">
+            <h4 class="section-heading"> Select Available Color ({{ product.colors.length }}) : </h4>
+
             <div class="color-boxes">
                 <div v-for="(color, index) in product.colors" :key="index" class="box-container center-col" @click="setActiveColor(index)">
                     <div class="box" :style="getMainImageCSS(color)" :class="{active: activeColorIndex === index}">
@@ -99,7 +101,7 @@
         <!-- dynamic variant populate -->
         <div v-if="!thirdPartyProduct" class="variants-available">
             <h4 class="section-heading">
-                Variants Available
+                Select Available Variant:
             </h4>
             <!-- variants container -->
             <div class="variants-container">
@@ -118,7 +120,7 @@
 
         <!-- dynamic fabric -->
         <div v-if="!thirdPartyProduct" class="fabrics-available">
-            <h4 class="section-heading"> Fabric </h4>
+            <h4 class="section-heading"> Select Available Fabric: </h4>
 
             <!-- fabrics available -->
             <div class="fabrics-container">
@@ -134,7 +136,7 @@
 
         <!-- accordions -->
         <div class="accordions">
-            <Accordion heading="Description">
+            <Accordion heading="Detailed Features">
 
                 <!-- variant -->
                 <!-- <p> Variant Specific Details</p> -->
@@ -689,6 +691,7 @@ export default {
 
         ul {
             margin: 4px;
+            padding-left:15px;
 
             li {
                  text-align: justify;

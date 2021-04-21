@@ -159,6 +159,9 @@ router.post('/fetchPaginatedResults', async (req, res) => {
 
     /* add filters (match) */
     criterion.match = rawCriterion.filters;
+
+    /* text search match */
+    const textSearch = { name: { $regex: rawCriterion.search.term, $options: "i" } }
    
 
     /* add text search */
@@ -175,10 +178,10 @@ router.post('/fetchPaginatedResults', async (req, res) => {
     }
     else if(model === "products" && requestedBy === "default") {
         const objectided = admin.setObjectIds(rawCriterion.filters,['bounipun_collection']);
-        criterion.match = {...objectided}
+        criterion.match = {...textSearch, ...objectided}
     }
     else if(model === "colors" && requestedBy === "default") {
-        criterion.match = {...admin.setObjectIds(rawCriterion.filters,['category'])}
+        criterion.match = {...textSearch, ...admin.setObjectIds(rawCriterion.filters,['category'])}
     }
     else
         criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
