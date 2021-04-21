@@ -21,6 +21,11 @@ export default {
             searchOpen: false,
             menuOpen: false
         }
+    },
+    methods: {
+        doThis() {
+            console.log('yo bro');
+        }
     }
 }
 </script>
