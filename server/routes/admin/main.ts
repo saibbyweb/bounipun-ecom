@@ -40,17 +40,20 @@ router.post('/getDocument', async (req, res) => {
 
                 /* if bounipun colors, get grouped color data */
                 if (document.colorSource === 'bounipun-colors') {
+                    
                     /* get color categories */
-                    const colorCategories = await db.model('color_categories').find();
+                    const colorCategories = await db.model('color_categories').find().sort('order');
                     /* grouped data array */
-                    let groupedData = {};
-                    colorCategories.forEach((category: any) => {
+                    let groupedData = [];
+                    colorCategories.forEach((category : any) => {
                         /* find all colors under this category */
                         const colors = document.colors.filter(color => {
                             return color._id.category.toString() === category._id.toString()
                         });
-                        groupedData[category.name] = colors;
+                        /* save colors */
+                        groupedData.push({name: category.name, description: category.description, colors })
                     });
+
 
                     /* add color data to document */
                     document.colorData = groupedData;
@@ -125,6 +128,7 @@ router.post('/fetchCollection', async (req, res) => {
                 documents = await documents.populate('category', 'name');
                 /* get color categories */
                 const colorCategories = await db.model('color_categories').find();
+
                 /* grouped data array */
                 let groupedData = {};
                 colorCategories.forEach((category: any) => {
@@ -134,6 +138,7 @@ router.post('/fetchCollection', async (req, res) => {
                     });
                     groupedData[category.name] = colors;
                 });
+
                 res.send(groupedData);
                 return;
                 break;

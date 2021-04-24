@@ -68,15 +68,19 @@
             <div class="color-category" v-for="(value, name, index) in product.colorData" :key="index">
                 <div v-if="value.length !== 0">
                     <!-- sub color heading -->
-                    <h5 class="category-heading"> {{ name }} </h5>
-                    <div class="color-boxes">
-                        <!-- color box (loop) -->
-                        <div class="box-container center-col" v-for="(color, colorIndex) in value" :key="colorIndex" @click="setActiveColor(colorIndex, color._id)">
-                            <div class="box" :style="getMainImageCSS(color)" :class="{active: isActiveBounipunColor(color._id)}">
+                    <Accordion :heading="value.name" :expanded="ifActiveColorInCategory(value.colors)">
+                        <div class="color-boxes">
+                            <!-- color box (loop) -->
+                            <div class="box-container center-col" v-for="(color, colorIndex) in value.colors" :key="colorIndex" @click="setActiveColor(colorIndex, color._id)">
+                                <div class="box" :style="getMainImageCSS(color)" :class="{active: isActiveBounipunColor(color._id)}">
+                                </div>
+                                <span class="name"> {{ color.name }} </span>
                             </div>
-                            <span class="name"> {{ color.name }} </span>
                         </div>
-                    </div>
+                    </Accordion>
+
+                    <!-- <h5 class="category-heading"> {{ value.name }} </h5> -->
+
                 </div>
 
             </div>
@@ -84,7 +88,7 @@
 
         <!-- custom colors -->
         <div v-if="!bounipunColors" class="colors">
-            <h4 class="section-heading"> Select Available Color ({{ product.colors.length }}) : </h4>
+            <h4 class="section-heading"> Select Color ({{ product.colors.length }}) : </h4>
 
             <div class="color-boxes">
                 <div v-for="(color, index) in product.colors" :key="index" class="box-container center-col" @click="setActiveColor(index)">
@@ -96,12 +100,12 @@
         </div>
 
         <!-- divider -->
-        <div class="divider"> </div>
+        <div v-if="!bounipunColors" class="divider"> </div>
 
         <!-- dynamic variant populate -->
         <div v-if="!thirdPartyProduct" class="variants-available">
             <h4 class="section-heading">
-                Select Available Variant:
+                Select Variant:
             </h4>
             <!-- variants container -->
             <div class="variants-container">
@@ -118,9 +122,12 @@
             </div>
         </div>
 
+        <!-- divider -->
+        <div class="divider"> </div>
+
         <!-- dynamic fabric -->
         <div v-if="!thirdPartyProduct" class="fabrics-available">
-            <h4 class="section-heading"> Select Available Fabric: </h4>
+            <h4 class="section-heading"> Select Fabric: </h4>
 
             <!-- fabrics available -->
             <div class="fabrics-container">
@@ -203,6 +210,7 @@
 <script>
 import 'vue-inner-image-zoom/lib/vue-inner-image-zoom.css';
 import InnerImageZoom from 'vue-inner-image-zoom';
+import colorsVue from '../admin-panel/colors.vue';
 
 export default {
     components: {
@@ -252,13 +260,18 @@ export default {
             return this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex].description.split('\n')
         },
         fabricWriteUp() {
-              return this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex].writeUp;
+            return this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex].writeUp;
         },
         thirdPartyProduct() {
             return this.product.type === 'third-party'
         }
     },
     methods: {
+        ifActiveColorInCategory(colors) {
+            const foundIndex = colors.findIndex(col => col.actualIndex == this.$route.query.activeColor);
+            console.log(foundIndex);
+            return foundIndex !== -1
+        },
         setVariantColorToActiveFabric(index) {
             if (this.activeFabricIndex === index)
                 return {
@@ -279,15 +292,24 @@ export default {
 
             /* if color data */
             if (result.doc.colorData) {
-                let colorData = result.doc.colorData;
-                const colorCategories = Object.keys(colorData);
+                let colorCategories = result.doc.colorData;
+                // const colorCategories = Object.keys(colorData);
 
                 colorCategories.forEach(category => {
-                    let colors = colorData[category];
+                    let colors = category.colors;
                     colors = colors.sort((a, b) => {
                         return b.images.length - a.images.length
                     });
+                    
+                    /* attach actual index */
+                    colors.forEach(color => {
+                        color.actualIndex = result.doc.colors.findIndex(col => col._id === color._id);
+                    });
                 });
+
+
+
+
             }
 
             this.product = result.doc;

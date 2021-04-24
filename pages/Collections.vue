@@ -139,7 +139,6 @@ export default {
                     return color._id.category === category._id
                 });
                 /* save colors */
-                // groupedData[catgeory.name] = colors;
                 groupedData.push({name: category.name, description: category.description, colors })
             });
 
