@@ -2,7 +2,7 @@
 <div class="contents">
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Product </h2>
-    
+
     <!-- preview link -->
     <div class="center">
         <a v-if="editMode" :href="`/products?_id=${doc._id}`" target="_blank">
@@ -58,8 +58,11 @@
             <button class="action delete" style="font-size:9px; position: absolute; top:0; right:0;" @click="removeColor(index, true)"> Remove Color </button>
 
             <!-- set as main -->
-              <button class="action" style="background-color: #3863ad;font-size:10px; padding:5px; position: absolute; top:0; left:0;" @click="setMainColor(index)"> Set as Main </button>
-            
+            <!-- <button class="action" style="background-color: #3863ad;font-size:10px; padding:5px; position: absolute; top:0; left:0;" @click="setMainColor(index)"> Set as Main </button> -->
+
+            <!-- check box -->
+            <img @click="setMainColor(index)" :class="{'active-color' : isActiveColor(index)}" class="set-main" src="/icons/green_check.png" />
+
             <div class="center">
                 <!-- disclaimer box -->
                 <InputBox label="Disclaimer" v-model="color.disclaimer" />
@@ -291,14 +294,15 @@ export default {
             for (let i = 0; i < this.doc.colors.length; i++) {
                 this.doc.colors[i].mainColor = false;
             }
-            
+
             setTimeout(() => {
-            this.doc.colors[index].mainColor = true
-            this.$forceUpdate();
+                this.doc.colors[index].mainColor = true
+                this.$forceUpdate();
             }, 100);
 
-            
-
+        },
+        isActiveColor(index) {
+            return this.doc.colors[index].mainColor;
         },
         async fetchBaseColors() {
             const result = await this.$fetchCollection('base_colors');
@@ -507,7 +511,8 @@ export default {
         padding: 25px 5px 5px 5px;
         border-radius: 3px;
         box-shadow: 1px 1px 15px #e6e6e6;
-        overflow: hidden;
+        transition: all 0.2s ease-in-out;
+        // overflow: hidden;
 
         &.main-color {
             background-color: #2582252e;
@@ -524,7 +529,24 @@ export default {
                 width: 20%;
             }
 
-           
+        }
+
+        .set-main {
+            font-size: 10px;
+            padding: 5px;
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 9%;
+            filter: grayscale(100%);
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            opacity: 0.7;
+        }
+
+        .active-color {
+             filter: grayscale(0%);
+             width: 11%;
         }
     }
 }
