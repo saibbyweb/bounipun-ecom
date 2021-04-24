@@ -3,15 +3,17 @@
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Fabric </h2>
     <!-- fabric id -->
-    <InputBox v-if="editMode" label="fabric ID" v-model="doc._id" disbaled :internal="true"/>
-        <!-- code -->
-    <InputBox label="Code" v-model="doc.code" :internal="true"/>
+    <InputBox v-if="editMode" label="fabric ID" v-model="doc._id" disbaled :internal="true" />
+    <!-- code -->
+    <InputBox label="Code" v-model="doc.code" :internal="true" />
     <!-- fabric name -->
     <InputBox label="fabric Name" v-model="doc.name" />
     <!-- info name -->
     <InputBox label="Info #1" v-model="doc.info1" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
+    <!-- write up -->
+    <TextBox v-model="doc.writeUp" label="Write Up" />
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
     <!-- update button -->
@@ -43,6 +45,7 @@ export default {
                 code: "",
                 info1: "",
                 description: "",
+                writeUp: "",
                 status: false
             },
             loading: false,
@@ -82,6 +85,7 @@ export default {
                 code,
                 info1,
                 description,
+                writeUp,
                 status
             } = details;
 
@@ -91,6 +95,7 @@ export default {
                 code,
                 info1,
                 description,
+                writeUp,
                 status
             };
 
@@ -107,6 +112,7 @@ export default {
                 code: "",
                 info1: "",
                 description: "",
+                writeUp: "",
                 status: false
             });
             this.editMode = false;

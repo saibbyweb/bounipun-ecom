@@ -27,7 +27,7 @@
     <div class="pad-10">
         <div class="main-details">
             <h3> {{ product.name }} </h3>
-             <p v-if="!thirdPartyProduct"> {{ variants[activeVariantIndex].name }} </p>
+            <p v-if="!thirdPartyProduct"> {{ variants[activeVariantIndex].name }} </p>
             <p v-if="!thirdPartyProduct"> Bounipun {{ product.bounipun_collection.name }} </p>
 
             <p> {{ product.styleId }} </p>
@@ -67,16 +67,16 @@
             <!-- color category -->
             <div class="color-category" v-for="(value, name, index) in product.colorData" :key="index">
                 <div v-if="value.length !== 0">
-                <!-- sub color heading -->
-                <h5 class="category-heading"> {{ name }} </h5>
-                <div class="color-boxes">
-                    <!-- color box (loop) -->
-                    <div class="box-container center-col" v-for="(color, colorIndex) in value" :key="colorIndex" @click="setActiveColor(colorIndex, color._id)">
-                        <div class="box" :style="getMainImageCSS(color)" :class="{active: isActiveBounipunColor(color._id)}">
+                    <!-- sub color heading -->
+                    <h5 class="category-heading"> {{ name }} </h5>
+                    <div class="color-boxes">
+                        <!-- color box (loop) -->
+                        <div class="box-container center-col" v-for="(color, colorIndex) in value" :key="colorIndex" @click="setActiveColor(colorIndex, color._id)">
+                            <div class="box" :style="getMainImageCSS(color)" :class="{active: isActiveBounipunColor(color._id)}">
+                            </div>
+                            <span class="name"> {{ color.name }} </span>
                         </div>
-                        <span class="name"> {{ color.name }} </span>
                     </div>
-                </div>
                 </div>
 
             </div>
@@ -125,7 +125,7 @@
             <!-- fabrics available -->
             <div class="fabrics-container">
                 <!-- fabric -->
-                <div @click="activeFabricIndex = index" v-for="(fabric, index) in variants[activeVariantIndex].fabrics" :key="index" class="fabric center-col" :class="{active: activeFabricIndex === index}">
+                <div @click="activeFabricIndex = index" v-for="(fabric, index) in variants[activeVariantIndex].fabrics" :key="index" class="fabric center-col" :style="setVariantColorToActiveFabric(index)">
                     <span class="name"> {{ fabric.name }} </span>
                     <span class="info"> {{ fabric.info1 }} </span>
                     <span class="price"> INR {{ fabric.price }} </span>
@@ -136,11 +136,12 @@
 
         <!-- accordions -->
         <div class="accordions">
+            <!-- detailed features -->
             <Accordion heading="Detailed Features">
 
                 <!-- variant -->
                 <!-- <p> Variant Specific Details</p> -->
-                <ul v-if="!thirdPartyProduct" >
+                <ul v-if="!thirdPartyProduct">
                     <li v-for="(point, index) in variantDescription" :key="index">
                         <span class="desc"> {{ point }} </span>
                     </li>
@@ -155,11 +156,16 @@
                 </ul>
 
                 <!-- fabric -->
-                <ul v-if="!thirdPartyProduct" >
+                <ul v-if="!thirdPartyProduct">
                     <li v-for="(point, index) in fabricDescription" :key="index">
                         <span class="desc"> {{ point }} </span>
                     </li>
                 </ul>
+            </Accordion>
+
+            <!-- about fabric -->
+            <Accordion v-if="!thirdPartyProduct" heading="About Fabric">
+                <span class="desc"> {{ fabricWriteUp }} </span>
             </Accordion>
 
             <!-- about collection -->
@@ -245,13 +251,22 @@ export default {
         fabricDescription() {
             return this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex].description.split('\n')
         },
+        fabricWriteUp() {
+              return this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex].writeUp;
+        },
         thirdPartyProduct() {
             return this.product.type === 'third-party'
         }
     },
     methods: {
+        setVariantColorToActiveFabric(index) {
+            if (this.activeFabricIndex === index)
+                return {
+                    backgroundColor: this.variants[this.activeVariantIndex].hex
+                }
+        },
         getVariantImage(image) {
-            if(image === undefined)
+            if (image === undefined)
                 return '/demo_images/variants/shawl.png';
             return this.$getImagePath(image);
         },
@@ -278,11 +293,11 @@ export default {
             this.product = result.doc;
             this.productFetched = true;
 
-             this.setImages();
+            this.setImages();
             this.setVariants();
 
             /* if main color provided via query param */
-            if(this.$route.query.activeColor) {
+            if (this.$route.query.activeColor) {
                 this.activeColorIndex = parseInt(this.$route.query.activeColor);
                 return;
             }
@@ -290,7 +305,7 @@ export default {
             /* fetch main color */
             const mainColorIndex = this.product.colors.findIndex(color => color.mainColor === true);
 
-            if(mainColorIndex !== -1)
+            if (mainColorIndex !== -1)
                 this.activeColorIndex = mainColorIndex;
 
         },
@@ -302,6 +317,7 @@ export default {
                     info2: variant._id.info2,
                     code: variant._id.code,
                     order: variant._id.order,
+                    hex: variant._id.hex,
                     description: variant._id.description,
                     image: variant._id.image,
                     fabrics: variant.fabrics.map(fabric => {
@@ -310,14 +326,14 @@ export default {
                             price: fabric.price,
                             code: fabric._id.code,
                             info1: fabric._id.info1,
-                            description: fabric._id.description
+                            description: fabric._id.description,
+                            writeUp: fabric._id.writeUp
                         }
                     })
                 }
             });
-            
-            this.variants = variants.sort((a,b) => a.order - b.order);
 
+            this.variants = variants.sort((a, b) => a.order - b.order);
 
             console.log(this.variants);
         },
@@ -617,7 +633,7 @@ export default {
                     // height: 60%;
                     margin-bottom: 3px;
                     transition: all 0.3s ease-in-out;
-                    width:12vw;
+                    width: 12vw;
 
                     &.active {
                         filter: none;
@@ -691,10 +707,10 @@ export default {
 
         ul {
             margin: 4px;
-            padding-left:15px;
+            padding-left: 15px;
 
             li {
-                 text-align: justify;
+                text-align: justify;
             }
         }
 
@@ -705,7 +721,7 @@ export default {
 
         span {
             font-size: 12px;
-       
+
         }
     }
 }

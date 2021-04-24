@@ -12,6 +12,7 @@ const schema = new mongoose.Schema({
     info1: { type: String, default: '' },
     info2: { type: String, default: '' },
     image: String,
+    hex: String,
     order: Number,
     status: Boolean
 }, {

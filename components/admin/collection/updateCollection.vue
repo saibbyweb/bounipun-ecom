@@ -6,7 +6,7 @@
 
     <!-- preview link -->
     <div class="center">
-        <a v-if="editMode" :href="`/collections?slug=${doc.slug}`" target="_blank">
+        <a v-if="editMode" :href="`/Collections?slug=${doc.slug}`" target="_blank">
             <span style="background:#333; text-align:center; color:white; font-size: 12px; padding:2px 4px; border-radius:2px;"> Preview Collection ➚
             </span>
         </a>
