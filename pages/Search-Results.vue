@@ -113,6 +113,20 @@ export default {
         totalPages() {
             return Math.ceil(this.totalMatches / this.rawCriterion.limit);
         },
+        searchTermRegex() {
+            const result = this.rawCriterion.search.term.split(' ');
+            let exp = ``;
+
+            let i = 0;
+            for (const word of result) {
+                exp += word;
+                if (i < result.length - 1)
+                    exp += '|'
+                i++;
+            }
+
+            return new RegExp(exp,'i');
+        }
     },
     watch: {
         $route(to, from) {
@@ -259,7 +273,6 @@ export default {
             /* send base colors once */
             this.rawCriterion.colors = this.getCheckedOnes(this.filterData.baseColors);
 
-
             /* append filters to raw criterion */
             this.rawCriterion.filters = filters;
             /* append selected price range to filters */
@@ -270,8 +283,7 @@ export default {
                 this.rawCriterion.sortBy = {
                     'priceRange.startsAt': parseInt(this.sortData.priceRange)
                 }
-            }
-            else
+            } else
                 this.rawCriterion.sortBy = {}
 
             /* post raw criterion to the server */
@@ -304,8 +316,7 @@ export default {
             this.products = response.docs;
 
             /* process color segregation */
-            // this.processColorSegregation(response.docs);
-
+            this.processColorSegregation(response.docs);
 
             this.totalMatches = response.totalMatches;
             //     console.log(response.docs);
@@ -314,6 +325,14 @@ export default {
         },
         processColorSegregation(matchedProducts) {
             /* figure out (guess) the number of color matches in the product */
+            let segregated = [];
+
+            matchedProducts.forEach(product => {
+                const matchedColors = this.findMatchedColors(product);
+                segregated = [...segregated, ...matchedColors]
+            });
+
+            console.log(segregated, segregated.length);
 
             /* figure out the color index of matched colors */
             /* generate new array where each matched color is treated as a product */
@@ -322,19 +341,45 @@ export default {
         },
         findMatchedColors(product) {
             /* product name or base colors matches the color filter (if provided) */
+            
+            let matchedColors = [];
 
             /* what are the color filter */
-            product.colors.filter(color => {
+            product.colors.forEach(color => {
                 /* color.name ~~ search term */
-                /* color.baseName ~~ search term */
+                /* color.baseColor ~~ search term */
                 /* color.additionalColor1 ~~ search term */
                 /* color.additionalColor2 ~~ search term */
-                /* color.baseName is $in [colorFilters] */
+                // console.log(product.name, color.name, color.baseColor);
+                const colorNameMatch = this.searchTermRegex.test(color.name)
+                const baseColorMatch = this.searchTermRegex.test(color.baseColor)
+                const additionalColor1Match = this.searchTermRegex.test(color.additionalColor1)
+                const additionalColor2Match = this.searchTermRegex.test(color.additionalColor2)
+                
+                /* overall text match */
+                const textMatch = colorNameMatch || baseColorMatch || additionalColor1Match || additionalColor2Match;
+
+                /* color.baseColor is $in [colorFilters] */
+                const baseColorFilterMatch = this.rawCriterion.colors.findIndex(col => col === color.baseColor)
                 /* color.additionalColor1 is $in [colorFilters] */
+                const additionalColor1FilterMatch = this.rawCriterion.colors.findIndex(col => col === color.additionalColor1)
                 /* color.additionalColor2 is $in [colorFilters] */
+                const additionalColor2FilterMatch = this.rawCriterion.colors.findIndex(col => col === color.additionalColor2)
+                
+                /* overall filter match */
+                const filterMatch = baseColorFilterMatch !== -1 || additionalColor1FilterMatch !== -1 || additionalColor2FilterMatch !== -1;
+
+                if(textMatch || filterMatch)
+                    matchedColors.push(color);
 
                 /* which ever color matches this criteria, capture the index and treat it as individual product */
+                /* also if collection is escape, replace product name with color name */
             });
+
+            /* if no color matched, return as it is */
+            console.log(product.name, matchedColors.length);
+
+            return matchedColors;
         },
         resultsFetched(result) {
             if (result.docs.length === 0) {
