@@ -4,7 +4,7 @@
            <div v-if="internal" class="internal"></div>
     <label v-if="label !== undefined" class="label"> {{ label }} </label>
      </div>
-    <select class="select shadow" :value="value" @change="$emit('input', $event.target.value)" :disabled="disabled">
+    <select :class="{slim}" class="select shadow" :value="value" @change="$emit('input', $event.target.value)" :disabled="disabled">
         <option v-for="(option, index) in options" :key="index" :value="option.value"> {{ option.name }} </option>
     </select>
 </div>
@@ -24,6 +24,10 @@ export default {
             type: Boolean,
             default: false
         },
+        slim: {
+            type: Boolean,
+            default: false
+        }
     }
 }
 </script>
@@ -66,6 +70,10 @@ export default {
         margin: 3px;
         font-size: 11px;
         color: $dark_gray;
+
+        &.slim {
+            padding: 5px 0px;
+        }
     }
 }
 </style>

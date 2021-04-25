@@ -43,13 +43,21 @@
         <div class="color-box" :class="{'main-color': color.mainColor}" v-for="(color, index) in doc.colors" :key="color.key">
 
             <!-- color selector (if color source is bounipun) -->
-            <div class="center color-details-1">
+            <div class="color-details-1">
                 <!-- color name -->
                 <InputBox label="Color Name" v-model="color.name" :disabled="bounipunColors" class="name" />
                 <!-- color name -->
                 <InputBox label="Code" v-model="color.code" :disabled="bounipunColors" class="code" />
+
+                <div class="center color-bases">
                 <!-- select base color -->
-                <SelectBox :options="baseColors" v-model="color.baseColor" label="Base Color" :disabled="bounipunColors" class="base-color" />
+                <SelectBox :options="baseColors" v-model="color.baseColor" label="Base Color" :disabled="bounipunColors" class="base-color" :slim="true"/>
+                <!-- select additional color 1 -->
+                <SelectBox :options="baseColors" v-model="color.additionalColor1" label="CLR #1" :disabled="bounipunColors" class="base-color"  :slim="true"/>
+                <!-- select additional color 2 -->
+                <SelectBox :options="baseColors" v-model="color.additionalColor2" label="ClR #2" :disabled="bounipunColors" class="base-color"  :slim="true"/>
+                </div>
+
             </div>
 
             <!-- color images -->
@@ -319,7 +327,7 @@ export default {
             });
 
             this.baseColors.unshift({
-                name: "Select Base",
+                name: "Select Color",
                 value: ""
             });
 
@@ -519,6 +527,9 @@ export default {
         }
 
         .color-details-1 {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
             width: 100%;
 
             .name {
@@ -527,6 +538,10 @@ export default {
 
             .code {
                 width: 20%;
+            }
+
+            .color-bases {
+                padding: 10px 0px;
             }
 
         }
@@ -545,8 +560,8 @@ export default {
         }
 
         .active-color {
-             filter: grayscale(0%);
-             width: 11%;
+            filter: grayscale(0%);
+            width: 11%;
         }
     }
 }
