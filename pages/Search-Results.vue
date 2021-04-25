@@ -93,7 +93,7 @@
     </div>
 
     <div class="search-results">
-        <product-card v-for="(product, index) in products" :key="index" :product="product" :searchView="true" />
+        <product-card v-for="(product, index) in products" :key="index" :product="product.color" :searchView="true" :activeColor="product.actualIndex"/>
     </div>
 
     <!-- pagination bar -->
@@ -313,12 +313,12 @@ export default {
                 return;
             }
 
-            this.products = response.docs;
+            // this.products = response.docs;
 
             /* process color segregation */
             this.processColorSegregation(response.docs);
 
-            this.totalMatches = response.totalMatches;
+            // this.totalMatches = response.totalMatches;
             //     console.log(response.docs);
             console.log(response.totalMatches, '--matches found');
 
@@ -333,7 +333,9 @@ export default {
             });
 
             console.log(segregated, segregated.length);
-
+            
+            this.products = segregated;
+            this.totalMatches = segregated.length;
             /* figure out the color index of matched colors */
             /* generate new array where each matched color is treated as a product */
             /* send back the new product array */
@@ -341,11 +343,13 @@ export default {
         },
         findMatchedColors(product) {
             /* product name or base colors matches the color filter (if provided) */
+            // const product = {...bounipunProduct};
             
             let matchedColors = [];
+            
 
             /* what are the color filter */
-            product.colors.forEach(color => {
+            product.colors.forEach((color, index) => {
                 /* color.name ~~ search term */
                 /* color.baseColor ~~ search term */
                 /* color.additionalColor1 ~~ search term */
@@ -369,8 +373,14 @@ export default {
                 /* overall filter match */
                 const filterMatch = baseColorFilterMatch !== -1 || additionalColor1FilterMatch !== -1 || additionalColor2FilterMatch !== -1;
 
-                if(textMatch || filterMatch)
-                    matchedColors.push(color);
+                if(textMatch || filterMatch) {
+                    const colorProduct = {...product};
+
+                    if(product.bounipun_collection === "60522ab3be493200150ff835")
+                        colorProduct.name = color.name;
+
+                    matchedColors.push({color: colorProduct, actualIndex: index });
+                }
 
                 /* which ever color matches this criteria, capture the index and treat it as individual product */
                 /* also if collection is escape, replace product name with color name */
@@ -378,6 +388,8 @@ export default {
 
             /* if no color matched, return as it is */
             console.log(product.name, matchedColors.length);
+            if(matchedColors.length === 0)
+                matchedColors = [{color: product, actualIndex: -1}]
 
             return matchedColors;
         },
