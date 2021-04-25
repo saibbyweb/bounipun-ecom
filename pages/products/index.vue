@@ -6,6 +6,9 @@
 
         <span class="collection-vertical"> Bounipun Escape </span>
 
+        <!-- back button -->
+        <img @click="$router.go(-1)" class="back-button" src="/icons/dark/arrow-left.png" />
+
         <!-- wishlist icon -->
         <img @click="addedToWishlist = !addedToWishlist" :class="[{'added': addedToWishlist },'wishlist']" :src="addedToWishlist ? '/icons/dark/wishlist-filled.png' : '/icons/dark/wishlist.png'" />
 
@@ -26,7 +29,8 @@
     <!-- product text details (product name, collection, base price -->
     <div class="pad-10">
         <div class="main-details">
-            <h3> {{ product.name }} </h3>
+            <h3 v-if="!bounipunColors"> {{ product.name }} </h3>
+            <h3 v-if="bounipunColors"> {{ product.colors[activeColorIndex].name }}</h3>
             <p v-if="!thirdPartyProduct"> {{ variants[activeVariantIndex].name }} </p>
             <p v-if="!thirdPartyProduct"> Bounipun {{ product.bounipun_collection.name }} </p>
 
@@ -62,7 +66,7 @@
 
         <!-- bounipun colors  -->
         <div v-if="bounipunColors" class="colors">
-            <h4 class="section-heading"> Select Available Color: ({{ product.colors.length }}) </h4>
+            <h4 class="section-heading"> Select Color: ({{ product.colors.length }}) </h4>
 
             <!-- color category -->
             <div class="color-category" v-for="(value, name, index) in product.colorData" :key="index">
@@ -107,6 +111,9 @@
             <h4 class="section-heading">
                 Select Variant:
             </h4>
+            <p class="section-paragraph"> 
+                Design may vary according to variant selection.
+            </p>
             <!-- variants container -->
             <div class="variants-container">
                 <div @click="setActiveVariant(index)" v-for="(variant, index) in variants" :key="index" class="variant center-col">
@@ -300,15 +307,12 @@ export default {
                     colors = colors.sort((a, b) => {
                         return b.images.length - a.images.length
                     });
-                    
+
                     /* attach actual index */
                     colors.forEach(color => {
                         color.actualIndex = result.doc.colors.findIndex(col => col._id === color._id);
                     });
                 });
-
-
-
 
             }
 
@@ -440,6 +444,15 @@ export default {
             &.added {
                 transform: scale(1.2);
             }
+        }
+
+        /* back button */
+        .back-button {
+             position: absolute;
+            width: 25px;
+            top: 10%;
+            left: 10%;
+            transition: transform 0.3s ease-in-out;
         }
 
         .share-icons {
@@ -643,10 +656,25 @@ export default {
     .variants-available {
         margin-top: 20px;
 
+        .section-heading {
+            margin-bottom: 5px;
+        }
+
+        .section-paragraph {
+                font-size: 11px;
+                padding: 0px;
+                margin: 0px;
+                margin-bottom: 20px;
+                color: $gray;
+                font-family: $font_2;
+            }
+
         .variants-container {
 
             display: flex;
             justify-content: space-around;
+
+
 
             .variant {
 
