@@ -58,11 +58,11 @@ router.post('/findDocuments', async (req, res) => {
     switch (model) {
         case 'products':
             documentFetch
-            .populate('variants._id')
-            .populate('bounipun_collection')
-            .populate('colors._id');
+                .populate('variants._id')
+                .populate('bounipun_collection')
+                .populate('colors._id');
             break;
-        
+
         case 'collections':
             console.log('hey col')
             documentFetch.sort('order');
@@ -93,7 +93,7 @@ router.post('/findDocuments', async (req, res) => {
 });
 
 /* get product search filters */
-router.get('/getSearchFilters', async(req, res) => {
+router.get('/getSearchFilters', async (req, res) => {
     let response = {
         fetched: false,
         collections: [],
@@ -106,11 +106,11 @@ router.get('/getSearchFilters', async(req, res) => {
     dataFetch.push(db.model('collections').find({ status: true, lock: false }).select('name'))
     dataFetch.push(db.model('variants').find({ status: true }).select('name'))
     dataFetch.push(db.model('base_colors').find({ status: true }).select('name'))
-    
+
     const { response: resolvedData, error } = await task(Promise.all(dataFetch));
-    
+
     /* if error occurred */
-    if(error) {
+    if (error) {
         res.send(response);
         return;
     }
@@ -136,38 +136,53 @@ router.post('/searchProducts', async (req, res) => {
     let filters = {}
     /* cast to object id required */
     let castRequired = ['bounipun_collection', 'variants._id'];
-    
+
     /* omit unused filters */
     Object.keys(rawCriterion.filters).forEach(key => {
         let value = rawCriterion.filters[key];
-        if(value.length !== 0) {
+        if (value.length !== 0) {
             value = castRequired.includes(key) ? admin.getObjectId_ied(value) : value;
             filters[key] = { $in: value }
         }
     });
 
     /* add price range filter if provided */
-    if(rawCriterion.selectedPriceRange !== '') {
+    if (rawCriterion.selectedPriceRange !== '') {
         console.log('Price Range provided');
         const value = rawCriterion.selectedPriceRange.substring(1);
-        if(rawCriterion.selectedPriceRange.startsWith('<'))
-            filters['priceRange.startsAt'] = { $lte : parseInt(value) }
+        if (rawCriterion.selectedPriceRange.startsWith('<'))
+            filters['priceRange.startsAt'] = { $lte: parseInt(value) }
         else
-        filters['priceRange.startsAt'] = { $gte : parseInt(value) }
+            filters['priceRange.startsAt'] = { $gte: parseInt(value) }
     }
 
-    // console.log(filters);
+    /* construct color filter is provided */
+    if (rawCriterion.colors.length !== 0) {
+        const colorFilter = {
+            $or: [
+                { 'colors.baseColor': { $in: rawCriterion.colors } },
+                { 'colors.additionalColor1': { $in: rawCriterion.colors } },
+                { 'colors.additionalColor2': { $in: rawCriterion.colors } },
+            ]
+        }
+        filters = { ...colorFilter, ...filters }
+    }
+
+    console.log(JSON.stringify(filters));
 
     /* gold */
     rawCriterion.search.term = admin.convertSearchTermToRegEx(rawCriterion.search.term)
-
+    
+    /* text match + filters */
     criterion.match = {
         $or: [
             { name: { $regex: rawCriterion.search.term, $options: "i" } },
             { 'colors.name': { $regex: rawCriterion.search.term, $options: "i" } },
             { 'colors.baseColor': { $regex: rawCriterion.search.term, $options: "i" } },
+            { 'colors.additionalColor1': { $regex: rawCriterion.search.term, $options: "i" } },
+            { 'colors.additionalColor2': { $regex: rawCriterion.search.term, $options: "i" } },
             { meta: { $regex: rawCriterion.search.term, $options: "i" } }
-        ],...filters
+        ], ...filters
     }
 
     /* sort by fields */

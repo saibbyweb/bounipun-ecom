@@ -1,6 +1,6 @@
 <template>
-<div class="page center-col">
-    <p> Showing results for <i> "{{ $route.query.searchTerm }}" </i> </p>
+<div class="page -broad center-col" style="padding-top:10%;">
+    <p> Showing {{ totalMatches }} results for <i> "{{ $route.query.searchTerm }}" </i> </p>
 
     <!-- offcanvas filters -->
     <div class="offcanvas-filters shadow" :class="{visible: filtersOpen}">
@@ -148,7 +148,7 @@ export default {
                 },
                 filters: {},
                 sortBy: {},
-                limit: 4,
+                limit: 10,
                 cursor: 1
             },
             filtersOpen: false,
@@ -201,7 +201,7 @@ export default {
             /* pagination config */
             //     cursor: 1,
             totalMatches: 0,
-            limit: 10
+            // limit: 10
         }
     },
     mounted() {
@@ -255,7 +255,12 @@ export default {
             filters.type = this.getCheckedOnes(this.filterData.types);
             filters.bounipun_collection = this.getCheckedOnes(this.filterData.collections);
             filters['variants._id'] = this.getCheckedOnes(this.filterData.variants);
-            filters['colors.baseColor'] = this.getCheckedOnes(this.filterData.baseColors);
+            // filters['colors.baseColor'] = this.getCheckedOnes(this.filterData.baseColors);
+            // filters['colors.additionalColor1'] = this.getCheckedOnes(this.filterData.baseColors);
+
+            /* send colors */
+            this.rawCriterion.colors = this.getCheckedOnes(this.filterData.baseColors);
+
 
             /* append filters to raw criterion */
             this.rawCriterion.filters = filters;
