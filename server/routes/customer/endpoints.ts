@@ -194,6 +194,8 @@ router.post('/searchProducts', async (req, res) => {
     /* set result set limit */
     criterion.limit = rawCriterion.limit;
 
+    /* identify the color which matched */
+
     let paginatedResults: any = await admin.getPaginationResults('products', criterion);
 
     res.send(paginatedResults);

@@ -250,15 +250,13 @@ export default {
             this.sortData.priceRange = '';
         },
         async fetchResults() {
-            /* keep only the checked ones from (type, variants, collection, base color) */
+            /* keep only the checked ones from (type, variants, collection) */
             let filters = {}
             filters.type = this.getCheckedOnes(this.filterData.types);
             filters.bounipun_collection = this.getCheckedOnes(this.filterData.collections);
             filters['variants._id'] = this.getCheckedOnes(this.filterData.variants);
-            // filters['colors.baseColor'] = this.getCheckedOnes(this.filterData.baseColors);
-            // filters['colors.additionalColor1'] = this.getCheckedOnes(this.filterData.baseColors);
 
-            /* send colors */
+            /* send base colors once */
             this.rawCriterion.colors = this.getCheckedOnes(this.filterData.baseColors);
 
 
@@ -304,10 +302,39 @@ export default {
             }
 
             this.products = response.docs;
+
+            /* process color segregation */
+            // this.processColorSegregation(response.docs);
+
+
             this.totalMatches = response.totalMatches;
             //     console.log(response.docs);
             console.log(response.totalMatches, '--matches found');
 
+        },
+        processColorSegregation(matchedProducts) {
+            /* figure out (guess) the number of color matches in the product */
+
+            /* figure out the color index of matched colors */
+            /* generate new array where each matched color is treated as a product */
+            /* send back the new product array */
+            /* update total matches */
+        },
+        findMatchedColors(product) {
+            /* product name or base colors matches the color filter (if provided) */
+
+            /* what are the color filter */
+            product.colors.filter(color => {
+                /* color.name ~~ search term */
+                /* color.baseName ~~ search term */
+                /* color.additionalColor1 ~~ search term */
+                /* color.additionalColor2 ~~ search term */
+                /* color.baseName is $in [colorFilters] */
+                /* color.additionalColor1 is $in [colorFilters] */
+                /* color.additionalColor2 is $in [colorFilters] */
+
+                /* which ever color matches this criteria, capture the index and treat it as individual product */
+            });
         },
         resultsFetched(result) {
             if (result.docs.length === 0) {
