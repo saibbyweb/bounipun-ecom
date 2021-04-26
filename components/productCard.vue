@@ -3,7 +3,7 @@
     <!-- main image container -->
     <div class="main-image-container center">
         <!-- <img class="main-image" :src="imagePath" /> -->
-        <slideshow ref="slideshow" :images="slideshowImages" extraClass="search-slideshow" :dots="true" :slideWidth="48" :slideHeight="40" />
+        <slideshow ref="slideshow" :images="slideshowImages" extraClass="search-slideshow" :dots="true" :slideWidth="48" :slideHeight="60" :size="'180%'"/>
 
     </div>
 
@@ -18,16 +18,16 @@
     </div>
 
     <!-- variants available -->
-    <div v-if="!searchView">
+    <div>
         <div v-if="product.type !== 'third-party'" class="variants-available center">
             <div v-for="(variant, index) in variantsAvailable" :key="index" class="variant"> {{ variant }} </div>
         </div>
     </div>
 
     <!-- shop now button -->
-    <div class="center actions">
+    <!-- <div v-if="searchView" class="center actions">
         <button class="clear shop-now"> {{ inWishlist ? 'Move to Cart' : 'Shop Now' }} </button>
-    </div>
+    </div> -->
 </div>
 </template>
 
@@ -98,6 +98,8 @@ export default {
             return process.env.baseAWSURL + mainImage;
         },
         variantsAvailable() {
+            if(this.product.variantNames)
+                return this.product.variantNames;
             return this.product.variants.map(variant => variant._id.name);
         },
         collectionName() {
@@ -185,7 +187,7 @@ export default {
     /* main image container */
     .main-image-container {
         width: 100%;
-        height: 60%;
+        height: 70%;
         overflow: hidden;
 
         .main-image {

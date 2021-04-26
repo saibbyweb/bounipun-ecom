@@ -1,5 +1,6 @@
 import { server, db, task } from "@helpers/essentials";
 import admin from "@helpers/admin";
+import customer from "@helpers/customer";
 
 /* creating express router */
 const router = server.express.Router();
@@ -196,7 +197,7 @@ router.post('/searchProducts', async (req, res) => {
 
     /* identify the color which matched */
 
-    let paginatedResults: any = await admin.getPaginationResults('products', criterion);
+    let paginatedResults: any = await customer.getPaginationResults('products', criterion);
 
     res.send(paginatedResults);
 });

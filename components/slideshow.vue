@@ -99,7 +99,8 @@ export default {
                 backgroundImage: `url('${image}')`,
                 backgroundSize: this.size,
                 width: this.slideWidth + 'vw',
-                height: this.slideHeight + 'vw'
+                height: this.slideHeight + 'vw',
+                backgroundPosition: 'top center'
             }
         },
         getThumbBackground(image) {

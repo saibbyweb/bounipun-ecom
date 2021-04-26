@@ -191,13 +191,16 @@ export default {
 
         font-weight: 900;
         font-family: $font_2;
-        font-size: 25px;
+        font-size: 18px;
+        color: $dark_gray;
         padding-left: 10%;
         color: $primary_dark;
     }
 
     .category-description {
         padding-left: 10%;
+        font-size: 13px;
+        color: $gray;
     }
 
 }
