@@ -28,9 +28,9 @@
 
     <!-- product text details (product name, collection, base price -->
     <div class="pad-10">
-        <div class="main-details">
-            <h3 v-if="!bounipunColors"> {{ product.name }} </h3>
-            <h3 v-if="bounipunColors"> {{ product.colors[activeColorIndex].name }}</h3>
+
+        <div ref="mainDetails" class="main-details" :class="{'sticky shadow': sticky}">
+            <h3> {{ bounipunColors ? product.colors[activeColorIndex].name : product.name }} </h3>
             <p v-if="!thirdPartyProduct"> {{ variants[activeVariantIndex].name }} </p>
             <p v-if="!thirdPartyProduct"> Bounipun {{ product.bounipun_collection.name }} </p>
 
@@ -48,13 +48,8 @@
         <!-- price and add to cart -->
         <div class="price-and-actions">
             <div class="price">
-                <!-- dynamic price -->
-                <h5 v-if="!thirdPartyProduct"> INR {{variants[activeVariantIndex].fabrics[activeFabricIndex].price }}.00 </h5>
-
-                <!-- direct price -->
-                <h5 v-if="thirdPartyProduct"> INR {{ product.directPrice }} </h5>
+                <h5> INR {{ thirdPartyProduct ? product.directPrice : variants[activeVariantIndex].fabrics[activeFabricIndex].price }} </h5>
                 <p> Taxes and Shipping Included </p>
-
             </div>
 
             <!-- add to cart -->
@@ -111,7 +106,7 @@
             <h4 class="section-heading">
                 Select Variant:
             </h4>
-            <p class="section-paragraph"> 
+            <p class="section-paragraph">
                 Design may vary according to variant selection.
             </p>
             <!-- variants container -->
@@ -220,6 +215,20 @@ import InnerImageZoom from 'vue-inner-image-zoom';
 import colorsVue from '../admin-panel/colors.vue';
 
 export default {
+    created() {
+        if (process.client) {
+            window.addEventListener('scroll', this.handleScroll);
+        }
+        if (this.$route.name !== 'index') {
+            this.darkMode = true;
+            return;
+        }
+    },
+    destroyed() {
+        if (process.client) {
+            window.removeEventListener('scroll', this.handleScroll);
+        }
+    },
     components: {
         'inner-image-zoom': InnerImageZoom
     },
@@ -227,6 +236,9 @@ export default {
         // const slug = this.$route.params.slug;
         const slug = this.$route.query._id;
         this.fetchProduct(slug);
+        setTimeout(() => {
+            this.scrollPosition = this.$refs.mainDetails.getBoundingClientRect().top;
+        },500)
     },
     data() {
         return {
@@ -248,7 +260,9 @@ export default {
             activeVariantIndex: 0,
             activeFabricIndex: 0,
             productFetched: false,
-            stockLimit: 5
+            stockLimit: 5,
+            scrollPosition: 0,
+            sticky: false
         }
     },
     computed: {
@@ -274,6 +288,22 @@ export default {
         }
     },
     methods: {
+        handleScroll(event) {
+            console.log('scroll', window.scrollY, this.scrollPosition);
+            const reachedTop = this.$refs.mainDetails.getBoundingClientRect().top <= 80;
+            if(window.scrollY >= this.scrollPosition - 90)
+                this.sticky = true;
+            else
+                this.sticky = false;
+    
+            // let el = event.srcElement;
+            // if (!this.reachedBottom) {
+            //     if (el.scrollTop >= (el.scrollHeight - el.clientHeight) - 100) {
+            //         // this.reachedBottom = true;
+            //         console.log('attach sticky class');
+            //     }
+            // }
+        },
         ifActiveColorInCategory(colors) {
             const foundIndex = colors.findIndex(col => col.actualIndex == this.$route.query.activeColor);
             console.log(foundIndex);
@@ -448,13 +478,13 @@ export default {
 
         /* back button */
         .back-button {
-             position: absolute;
+            position: absolute;
             width: 27px;
             top: 10%;
             left: 10%;
             transition: transform 0.3s ease-in-out;
-            background-color:white;
-            padding:3px;
+            background-color: white;
+            padding: 3px;
 
         }
 
@@ -516,6 +546,15 @@ export default {
             text-transform: uppercase;
             color: $gray;
             font-size: 12px;
+        }
+
+        &.sticky {
+            position: fixed;
+            top: 10%;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            padding: 6%;
         }
     }
 
@@ -664,20 +703,18 @@ export default {
         }
 
         .section-paragraph {
-                font-size: 11px;
-                padding: 0px;
-                margin: 0px;
-                margin-bottom: 20px;
-                color: $gray;
-                font-family: $font_2;
-            }
+            font-size: 11px;
+            padding: 0px;
+            margin: 0px;
+            margin-bottom: 20px;
+            color: $gray;
+            font-family: $font_2;
+        }
 
         .variants-container {
 
             display: flex;
             justify-content: space-around;
-
-
 
             .variant {
 
