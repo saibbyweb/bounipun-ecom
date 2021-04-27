@@ -2,7 +2,7 @@
 <div v-if="productFetched" class="product-page">
     <div class="product-images">
         <!-- product image slideshow container with thumbnails  -->
-        <slideshow ref="slideshow" :images="images[activeColorIndex]" :slideshowOptions="{thumbnails: true}" :customText="product.colors[activeColorIndex].disclaimer" :slideHeight="120" />
+        <slideshow ref="slideshow" :images="images[activeColorIndex]" :slideshowOptions="{thumbnails: true}" :customText="product.colors[activeColorIndex].disclaimer" :slideHeight="120" :size="'120%'" />
 
         <span class="collection-vertical"> Bounipun Escape </span>
 
@@ -449,16 +449,19 @@ export default {
         /* back button */
         .back-button {
              position: absolute;
-            width: 25px;
+            width: 27px;
             top: 10%;
             left: 10%;
             transition: transform 0.3s ease-in-out;
+            background-color:white;
+            padding:3px;
+
         }
 
         .share-icons {
             position: absolute;
             right: 10%;
-            bottom: 20%;
+            bottom: -10%;
             display: flex;
             flex-direction: column-reverse;
 

@@ -106,7 +106,7 @@ export default {
         getThumbBackground(image) {
             return {
                 backgroundImage: `url('${image}')`,
-                backgroundSize: this.size,
+                backgroundSize: 'contain',
             }
         },
         isActive(index) {
@@ -197,8 +197,8 @@ export default {
     .custom-text {
         text-align: center;
         font-size: 12px;
-        padding:0 15px;
-        color: $primary_dark;
+        padding:7px 15px;
+        color: $gray;
         opacity: 0.7;
         font-family: $font_2;
     }
@@ -239,7 +239,7 @@ export default {
         justify-content: center;
         align-items: flex-start;
         box-sizing: border-box;
-        margin: 15px 0;
+        margin: 5px 0 0 0;
 
         .dot {
             height: 7px;

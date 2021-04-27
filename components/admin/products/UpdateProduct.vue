@@ -50,12 +50,12 @@
                 <InputBox label="Code" v-model="color.code" :disabled="bounipunColors" class="code" />
 
                 <div class="center color-bases">
-                <!-- select base color -->
-                <SelectBox :options="baseColors" v-model="color.baseColor" label="Base Color" :disabled="bounipunColors" class="base-color" :slim="true"/>
-                <!-- select additional color 1 -->
-                <SelectBox :options="baseColors" v-model="color.additionalColor1" label="CLR #1" :disabled="bounipunColors" class="base-color"  :slim="true"/>
-                <!-- select additional color 2 -->
-                <SelectBox :options="baseColors" v-model="color.additionalColor2" label="ClR #2" :disabled="bounipunColors" class="base-color"  :slim="true"/>
+                    <!-- select base color -->
+                    <SelectBox :options="baseColors" v-model="color.baseColor" label="Base Color" :disabled="bounipunColors" class="base-color" :slim="true" />
+                    <!-- select additional color 1 -->
+                    <SelectBox :options="baseColors" v-model="color.additionalColor1" label="CLR #1" :disabled="bounipunColors" class="base-color" :slim="true" />
+                    <!-- select additional color 2 -->
+                    <SelectBox :options="baseColors" v-model="color.additionalColor2" label="ClR #2" :disabled="bounipunColors" class="base-color" :slim="true" />
                 </div>
 
             </div>
@@ -69,7 +69,10 @@
             <!-- <button class="action" style="background-color: #3863ad;font-size:10px; padding:5px; position: absolute; top:0; left:0;" @click="setMainColor(index)"> Set as Main </button> -->
 
             <!-- check box -->
-            <img @click="setMainColor(index)" :class="{'active-color' : isActiveColor(index)}" class="set-main" src="/icons/green_check.png" />
+            <div class="set-main">
+                <img @click="setMainColor(index)" :class="{'active-color' : isActiveColor(index)}" src="/icons/green_check.png" />
+                <span> Main Color </span>
+            </div>
 
             <div class="center">
                 <!-- disclaimer box -->
@@ -547,22 +550,38 @@ export default {
         }
 
         .set-main {
+            display:flex;
+            align-items: center;
             font-size: 10px;
             padding: 5px;
             position: absolute;
-            top: -10px;
-            left: -10px;
-            width: 9%;
-            filter: grayscale(100%);
+            top: -5%;
+            left: -5%;
+            width: 35%;
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
+            
             opacity: 0.7;
+            
+
+            img {
+                transition: all 0.2s ease-in-out;
+                width:25%;
+                filter: grayscale(100%);
+                &.active-color {
+                    filter: grayscale(0%);
+                    width: 30%;
+                }
+            }
+
+            span {
+                font-size:12px;
+                background-color:#2582252e;
+                padding:3px 6px;
+                border-radius: 4px;
+                
+            }
         }
 
-        .active-color {
-            filter: grayscale(0%);
-            width: 11%;
-        }
     }
 }
 </style>
