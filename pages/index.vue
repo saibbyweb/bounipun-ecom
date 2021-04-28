@@ -1,7 +1,7 @@
 <template>
 <div class="homepage">
     <!-- slideshow -->
-    <slideshow size="cover" :images="slideshowImages" :slideHeight="120" />
+    <slideshow size="cover" :images="slideshowImages" :slideHeight="'120vw'" />
 
     <!-- product section and alternate section -->
     <div class="sections">

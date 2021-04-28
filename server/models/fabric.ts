@@ -8,6 +8,7 @@ const schema = new mongoose.Schema({
     info1: { type: String, default: '' },
     description: String,
     writeUp: String,
+    order: Number,
     status: Boolean
 }, {
     timestamps: true

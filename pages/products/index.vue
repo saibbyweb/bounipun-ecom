@@ -33,7 +33,7 @@
         <div ref="details" class="details" :class="{'sticky shadow': sticky}">
 
             <div class="section-1">
-                <div  class="main-details">
+                <div class="main-details">
                     <h3> {{ bounipunColors ? product.colors[activeColorIndex].name : product.name }} </h3>
                     <p v-if="!thirdPartyProduct"> {{ variants[activeVariantIndex].name }} </p>
                     <p v-if="!thirdPartyProduct"> Bounipun {{ product.bounipun_collection.name }} </p>
@@ -395,6 +395,23 @@ export default {
         },
         setVariants() {
             const variants = this.product.variants.map(variant => {
+                
+                /* map fabric details */
+                let fabrics = variant.fabrics.map(fabric => {
+                    return {
+                        name: fabric._id.name,
+                        price: fabric.price,
+                        code: fabric._id.code,
+                        info1: fabric._id.info1,
+                        description: fabric._id.description,
+                        writeUp: fabric._id.writeUp,
+                        order: fabric._id.order
+                    }
+                });
+                
+                /* sort fabrics according to order */
+                fabrics.sort((a,b) => a.order - b.order);
+
                 return {
                     name: variant._id.name,
                     info1: variant._id.info1,
@@ -404,16 +421,8 @@ export default {
                     hex: variant._id.hex,
                     description: variant._id.description,
                     image: variant._id.image,
-                    fabrics: variant.fabrics.map(fabric => {
-                        return {
-                            name: fabric._id.name,
-                            price: fabric.price,
-                            code: fabric._id.code,
-                            info1: fabric._id.info1,
-                            description: fabric._id.description,
-                            writeUp: fabric._id.writeUp
-                        }
-                    })
+                    fabrics
+
                 }
             });
 
@@ -519,17 +528,18 @@ export default {
         .share-icons {
             position: absolute;
             right: 5%;
-            bottom: 20%;
+            bottom: 30%;
             display: flex;
             flex-direction: column-reverse;
 
             .toggle {
-                width: 30px;
+                width: 23px;
                 padding: 5px;
+                box-sizing: content-box;
                 transform: rotate(0deg) scale(1);
                 transition: transform 0.4s ease-in-out;
                 cursor: pointer;
-                background-color:white;
+                background-color: white;
 
                 &:hover {
                     transform: rotate(30deg);
