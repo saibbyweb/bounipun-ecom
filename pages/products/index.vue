@@ -116,7 +116,7 @@
                 Select Variant:
             </h4>
             <p class="section-paragraph">
-                Design may vary according to variant selection.
+               {{ variantNote }}
             </p>
             <!-- variants container -->
             <div class="variants-container">
@@ -293,6 +293,9 @@ export default {
         },
         fabricWriteUp() {
             return this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex].writeUp;
+        },
+        variantNote() {
+            return this.product.bounipun_collection.variantNote;
         },
         thirdPartyProduct() {
             return this.product.type === 'third-party'

@@ -8,7 +8,7 @@
     </div>
     <!-- list of fabrics -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="list" :model="model" :headings="headings" custom_css="10% 30% 25% 10% 25%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" @clearFilters="clearFilters" @refetchList="updateList()" :isDraggable="true" />
+        <List :list="list" :model="model" :headings="headings" custom_css="10% 30% 20% 10% 15% 15%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" @clearFilters="clearFilters" @refetchList="updateList()" :isDraggable="true" />
 
         <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
 
@@ -52,7 +52,7 @@ export default {
             },
             list: [],
             sortByFields: ['name', 'order', 'status'],
-            headings: ['_id', 'name', 'Code', 'order', 'status'],
+            headings: ['_id', 'name', 'Code', 'order', 'category','status'],
             dragEnabled: false
         }
     },
@@ -90,6 +90,12 @@ export default {
                 return;
             }
 
+            let categories = {
+                SQ: "Square",
+                ST: "Stole",
+                SH: "Shawl"
+            }
+
             /* extract list */
             this.list = result.docs.map(({
                 _id,
@@ -103,6 +109,7 @@ export default {
                     name,
                     code,
                     order,
+                    category: categories[code.substring(0,2)],
                     status
                 }
             });

@@ -7,6 +7,7 @@ const schema = new mongoose.Schema({
     name: String,
     slug: {type: String, default: ''},
     description: {type: String, default: ''},
+    variantNote: { type: String, default: ''},
     edt: { type: Number, default: 1 },
     image: String,
     lock: { type: Boolean, default: false },
