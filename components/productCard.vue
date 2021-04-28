@@ -3,7 +3,7 @@
     <!-- main image container -->
     <div class="main-image-container center">
         <!-- <img class="main-image" :src="imagePath" /> -->
-        <slideshow ref="slideshow" :images="slideshowImages" extraClass="search-slideshow" :dots="true" :slideWidth="48" :slideHeight="60" :size="'180%'"/>
+        <slideshow ref="slideshow" :images="slideshowImages" extraClass="search-slideshow" :dots="true" :slideWidth="48" :slideHeight="'60vw'" :size="'180%'"/>
 
     </div>
 

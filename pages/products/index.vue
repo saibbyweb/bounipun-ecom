@@ -1,8 +1,8 @@
 <template>
 <div v-if="productFetched" class="product-page">
-    <div class="product-images">
+    <div ref="productImages" class="product-images">
         <!-- product image slideshow container with thumbnails  -->
-        <slideshow ref="slideshow" :images="images[activeColorIndex]" :slideshowOptions="{thumbnails: true}" :customText="product.colors[activeColorIndex].disclaimer" :slideHeight="120" :size="'120%'" />
+        <slideshow ref="slideshow" :images="images[activeColorIndex]" :slideshowOptions="{thumbnails: true}" :customText="product.colors[activeColorIndex].disclaimer" :slideHeight="'60vh'" :size="'cover'" />
 
         <span class="collection-vertical"> Bounipun Escape </span>
 
@@ -22,41 +22,50 @@
                 <img src="/icons/dark/social/whatsapp.png" />
             </div>
         </div>
+
     </div>
 
     <!-- absolute elements like wishlist heart, collection text, share icon -->
 
     <!-- product text details (product name, collection, base price -->
-    <div class="pad-10">
+    <div class="product-details">
 
-        <div ref="mainDetails" class="main-details" :class="{'sticky shadow': sticky}">
-            <h3> {{ bounipunColors ? product.colors[activeColorIndex].name : product.name }} </h3>
-            <p v-if="!thirdPartyProduct"> {{ variants[activeVariantIndex].name }} </p>
-            <p v-if="!thirdPartyProduct"> Bounipun {{ product.bounipun_collection.name }} </p>
+        <div ref="details" class="details" :class="{'sticky shadow': sticky}">
 
-            <p> {{ product.styleId }} </p>
-        </div>
-        <!-- quantity picker and size chart-->
-        <div class="quantity-and-size">
-            <div class="quantity-picker">
-                <button @click="quantity > 1 && quantity--"> - </button>
-                <button class="qty"> {{ quantity }} </button>
-                <button @click="quantity < stockLimit && quantity++"> + </button>
+            <div class="section-1">
+                <div  class="main-details">
+                    <h3> {{ bounipunColors ? product.colors[activeColorIndex].name : product.name }} </h3>
+                    <p v-if="!thirdPartyProduct"> {{ variants[activeVariantIndex].name }} </p>
+                    <p v-if="!thirdPartyProduct"> Bounipun {{ product.bounipun_collection.name }} </p>
+
+                    <p> {{ product.styleId }} </p>
+                </div>
+                <!-- quantity picker and size chart-->
+                <div class="quantity-and-size">
+                    <div class="quantity-picker">
+                        <button @click="quantity > 1 && quantity--"> - </button>
+                        <button class="qty"> {{ quantity }} </button>
+                        <button @click="quantity < stockLimit && quantity++"> + </button>
+                    </div>
+                    <!-- <button class="clear"> Size Chart </button> -->
+                </div>
+
             </div>
-            <!-- <button class="clear"> Size Chart </button> -->
-        </div>
-        <!-- price and add to cart -->
-        <div class="price-and-actions">
-            <div class="price">
-                <h5> INR {{ thirdPartyProduct ? product.directPrice : variants[activeVariantIndex].fabrics[activeFabricIndex].price }} </h5>
-                <p> Taxes and Shipping Included </p>
+            <!-- price and add to cart -->
+            <div class="price-and-actions">
+
+                <div class="price">
+                    <h5> INR {{ thirdPartyProduct ? product.directPrice : variants[activeVariantIndex].fabrics[activeFabricIndex].price }} </h5>
+                    <p> Taxes and Shipping Included </p>
+                </div>
+
+                <!-- add to cart -->
+                <div class="add-to-cart">
+                    <button> Place in Bag </button>
+                    <button class="arrow"> > </button>
+                </div>
             </div>
 
-            <!-- add to cart -->
-            <div class="add-to-cart">
-                <button> Place in Bag </button>
-                <button class="arrow"> > </button>
-            </div>
         </div>
 
         <!-- bounipun colors  -->
@@ -187,21 +196,21 @@
 
         <!-- related products -->
         <!-- <div class="related-products">
-            <h4 class="section-heading"> Related Products </h4>
-            <div class="scrollable-list">
-                <div class="list">
-                    <product-card :details="{name: 'Khatamband Cashmere',
-                collection: 'Bounipun Karakul',
-                price: 'INR 20000'}" product="auto_2" :variants="{shawl: true, stole: true}" />
+                <h4 class="section-heading"> Related Products </h4>
+                <div class="scrollable-list">
+                    <div class="list">
+                        <product-card :details="{name: 'Khatamband Cashmere',
+                    collection: 'Bounipun Karakul',
+                    price: 'INR 20000'}" product="auto_2" :variants="{shawl: true, stole: true}" />
 
-                    <product-card :details="{name: 'Kani Shawl',
-                collection: 'Bounipun Adore',
-                price: 'INR 15000'}" product="auto_5" :variants="{square: true, stole: true}" />
+                        <product-card :details="{name: 'Kani Shawl',
+                    collection: 'Bounipun Adore',
+                    price: 'INR 15000'}" product="auto_5" :variants="{square: true, stole: true}" />
 
-                    <product-card product="kara_3" :variants="{stole: true}" />
+                        <product-card product="kara_3" :variants="{stole: true}" />
+                    </div>
                 </div>
-            </div>
-        </div> -->
+            </div> -->
 
         <!-- <inner-image-zoom class="product-image" :src="images[0]" :zoomSrc="images[0]" /> -->
 
@@ -237,8 +246,10 @@ export default {
         const slug = this.$route.query._id;
         this.fetchProduct(slug);
         setTimeout(() => {
-            this.scrollPosition = this.$refs.mainDetails.getBoundingClientRect().top;
-        },500)
+            this.scrollPosition = this.$refs.details.getBoundingClientRect().bottom;
+            console.log(this.scrollPosition, 'scroll position');
+        }, 300)
+
     },
     data() {
         return {
@@ -289,13 +300,30 @@ export default {
     },
     methods: {
         handleScroll(event) {
-            console.log('scroll', window.scrollY, this.scrollPosition);
-            const reachedTop = this.$refs.mainDetails.getBoundingClientRect().top <= 80;
-            if(window.scrollY >= this.scrollPosition - 90)
-                this.sticky = true;
-            else
-                this.sticky = false;
-    
+            // const productImages = this.$refs.productImages;
+            // const details = this.$refs.details;
+            // console.log(productImages.clientHeight + details.clientHeight);
+            const scrolled = screen.height + window.scrollY;
+
+            // console.log(scrolled);
+            // // console.log();
+            // // console.log(details.getBoundingClientRect().bottom)
+
+            // // console.log(screen.height + window.scrollY);
+            this.sticky = window.scrollY > 15
+            return;
+
+            // console.log('scroll', window.scrollY, this.scrollPosition);
+
+            // // const reachedTop = this.$refs.mainDetails.getBoundingClientRect().top <= 80;
+
+            // if (scrolled >= this.scrollPosition ) {
+            //     this.sticky = true;
+            //     console.log('attach sticky')
+            // }
+            // else
+            //     this.sticky = false;
+
             // let el = event.srcElement;
             // if (!this.reachedBottom) {
             //     if (el.scrollTop >= (el.scrollHeight - el.clientHeight) - 100) {
@@ -468,7 +496,7 @@ export default {
             position: absolute;
             width: 20px;
             top: 10%;
-            right: 10%;
+            right: 5%;
             transition: transform 0.3s ease-in-out;
 
             &.added {
@@ -481,7 +509,7 @@ export default {
             position: absolute;
             width: 27px;
             top: 10%;
-            left: 10%;
+            left: 5%;
             transition: transform 0.3s ease-in-out;
             background-color: white;
             padding: 3px;
@@ -490,19 +518,22 @@ export default {
 
         .share-icons {
             position: absolute;
-            right: 10%;
-            bottom: -10%;
+            right: 5%;
+            bottom: 20%;
             display: flex;
             flex-direction: column-reverse;
 
             .toggle {
-                width: 20px;
+                width: 30px;
+                padding: 5px;
                 transform: rotate(0deg) scale(1);
                 transition: transform 0.4s ease-in-out;
                 cursor: pointer;
+                background-color:white;
 
                 &:hover {
-                    transform: rotate(30deg) scale(1.1);
+                    transform: rotate(30deg);
+                    // border-radius:10%;
                 }
             }
 
@@ -531,288 +562,308 @@ export default {
                 opacity: 0.95;
             }
         }
+
     }
 
-    /* main text details */
-    .main-details {
-        h3 {
-            font-family: $font_1_bold;
-            text-transform: uppercase;
-            font-size: 17px;
-        }
+    .product-details {
+        padding: 3% 6%;
 
-        p {
-            font-family: $font_2;
-            text-transform: uppercase;
-            color: $gray;
-            font-size: 12px;
-        }
-
-        &.sticky {
-            position: fixed;
-            top: 10%;
-            left: 0;
-            width: 100%;
-            background-color: white;
-            padding: 6%;
-        }
-    }
-
-    /* quantity and size */
-    .quantity-and-size {
-        margin-top: 10px;
-
-        display: flex;
-
-        .quantity-picker {
+        /* sticky details */
+        .details {
             display: flex;
-            justify-content: space-around;
-            border: 1px solid #919191;
-            width: 80px;
+            justify-content: space-between;
+            position: relative;
+            transition: span 0.3s ease-in-out;
 
-            button {
-                background: transparent;
-                font-family: $font_1_bold;
-                text-align: center;
-                padding: 0px;
-                font-size: 10px;
+            &.sticky {
 
-                &:first-child {
-                    border-right: 1px solid #919191;
-                    padding: 0 5px;
-                }
-
-                &:nth-child(3) {
-                    border-left: 1px solid #919191;
-                    padding: 0 5px;
-                }
-
-                &.qty {
-                    width: 50%;
-                    padding: 0 15px;
-                }
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background-color: white;
+                padding: 3% 6%;
+                z-index: 2;
             }
+
         }
-    }
 
-    /* price and add to cart */
-    .price-and-actions {
-        margin-top: 10px;
-        display: flex;
-        justify-content: space-between;
-
-        .price {
-            h5 {
+        /* main text details */
+        .main-details {
+            h3 {
                 font-family: $font_1_bold;
+                text-transform: uppercase;
                 font-size: 17px;
             }
 
             p {
                 font-family: $font_2;
-                font-size: 10px;
-            }
-        }
-
-        .add-to-cart {
-            display: flex;
-
-            button {
-                background: $primary_dark;
-                color: white;
-                padding: 4px 4px 4px 8px;
                 text-transform: uppercase;
-                margin: 0px;
-                font-family: $font_1_bold;
-                font-size: 14px;
-
-                &.arrow {
-                    font-family: $font_1;
-                    font-size: 20px;
-                    padding: 4px 8px 4px 4px;
-                }
+                color: $gray;
+                font-size: 12px;
             }
 
         }
-    }
 
-    /* section heading (colors, variants available, fabrics) */
-    .section-heading {
-        text-transform: uppercase;
-        color: $dark_gray;
-        letter-spacing: 1.1px;
-        font-family: $font_2;
-        margin-bottom: 20px;
-        font-size: 14px;
-    }
-
-    /* colors */
-    .colors {
-        margin-top: 20px;
-
-        .category-heading {
-            font-family: $font_1_semibold;
-            font-size: 10px;
-            margin-left: 10px;
-            color: $gray;
-            // text-transform: uppercase;
-
-        }
-
-        .color-boxes {
-            display: flex;
-            flex-wrap: wrap;
-
-            .box-container {
-                margin: 5px;
-
-                .box {
-                    height: 20vw;
-                    width: 20vw;
-                    background-size: contain;
-                    background-position: center;
-
-                    &.active {
-                        border: 1px solid #bfbfbf;
-                    }
-                }
-
-                .name {
-                    margin-top: 5px;
-                    font-size: 8px;
-                    letter-spacing: 0.4px;
-                }
-            }
-
-        }
-    }
-
-    /* divider */
-    .divider {
-        margin-top: 10px;
-        width: 100%;
-        height: 1px;
-        background-color: $primary_dark;
-    }
-
-    /* variants available */
-    .variants-available {
-        margin-top: 20px;
-
-        .section-heading {
-            margin-bottom: 5px;
-        }
-
-        .section-paragraph {
-            font-size: 11px;
-            padding: 0px;
-            margin: 0px;
-            margin-bottom: 20px;
-            color: $gray;
-            font-family: $font_2;
-        }
-
-        .variants-container {
+        /* quantity and size */
+        .quantity-and-size {
+            margin-top: 10px;
 
             display: flex;
-            justify-content: space-around;
 
-            .variant {
+            .quantity-picker {
+                display: flex;
+                justify-content: space-around;
+                border: 1px solid #919191;
+                width: 80px;
 
-                .illustration {
-                    filter: grayscale(100%);
-                    // height: 60%;
-                    margin-bottom: 3px;
-                    transition: all 0.3s ease-in-out;
-                    width: 12vw;
-
-                    &.active {
-                        filter: none;
-                    }
-                }
-
-                .name {
-                    font-family: $font_2_semibold;
-                    color: $dark_gray;
-                    font-size: 11px;
-                }
-
-                .info {
-                    font-family: $font_2;
-                    font-size: 9px;
-                    color: $gray;
-                }
-            }
-        }
-    }
-
-    /* fabrics available */
-    .fabrics-available {
-        margin-top: 20px;
-
-        .fabrics-container {
-            display: flex;
-            justify-content: flex-start;
-            flex-wrap: wrap;
-
-            .fabric {
-                background-color: #33333376;
-                padding: 5px 0px;
-                width: 43%;
-                margin: 10px;
-                transition: all 0.2s cubic-bezier(0.215, 0.610, 0.355, 1);
-
-                span {
-                    color: white;
+                button {
+                    background: transparent;
+                    font-family: $font_1_bold;
                     text-align: center;
-                }
-
-                &.active {
-                    box-shadow: 1px 1px 5px hsla(0, 0%, 0%, 0.16);
-                    background: $primary_dark;
-                }
-
-                // width: 30%;
-                .name {
+                    padding: 0px;
                     font-size: 10px;
-                    letter-spacing: 1px;
-                }
 
-                .info {
-                    font-size: 9px;
-                    letter-spacing: 1px;
-                }
+                    &:first-child {
+                        border-right: 1px solid #919191;
+                        padding: 0 5px;
+                    }
 
-                .price {
-                    font-size: 11px;
-                    letter-spacing: 1px;
+                    &:nth-child(3) {
+                        border-left: 1px solid #919191;
+                        padding: 0 5px;
+                    }
+
+                    &.qty {
+                        width: 50%;
+                        padding: 0 15px;
+                    }
                 }
             }
         }
 
-    }
+        /* price and add to cart */
+        .price-and-actions {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
 
-    /* description */
-    .accordions {
-        margin-top: 20px;
+            .price {
+                h5 {
+                    font-family: $font_1_bold;
+                    font-size: 17px;
+                }
 
-        ul {
-            margin: 4px;
-            padding-left: 15px;
+                p {
+                    font-family: $font_2;
+                    font-size: 10px;
+                }
+            }
 
-            li {
-                text-align: justify;
+            .add-to-cart {
+                display: flex;
+
+                button {
+                    background: $primary_dark;
+                    color: white;
+                    padding: 4px 4px 4px 8px;
+                    text-transform: uppercase;
+                    margin: 0px;
+                    font-family: $font_1_bold;
+                    font-size: 14px;
+
+                    &.arrow {
+                        font-family: $font_1;
+                        font-size: 20px;
+                        padding: 4px 8px 4px 4px;
+                    }
+                }
+
             }
         }
 
-        p {
-            font-size: 13px;
-            margin: 10px 0;
+        /* section heading (colors, variants available, fabrics) */
+        .section-heading {
+            text-transform: uppercase;
+            color: $dark_gray;
+            letter-spacing: 1.1px;
+            font-family: $font_2;
+            margin-bottom: 20px;
+            font-size: 14px;
         }
 
-        span {
-            font-size: 12px;
+        /* colors */
+        .colors {
+            margin-top: 20px;
 
+            .category-heading {
+                font-family: $font_1_semibold;
+                font-size: 10px;
+                margin-left: 10px;
+                color: $gray;
+                // text-transform: uppercase;
+
+            }
+
+            .color-boxes {
+                display: flex;
+                flex-wrap: wrap;
+
+                .box-container {
+                    margin: 5px;
+
+                    .box {
+                        height: 20vw;
+                        width: 20vw;
+                        background-size: contain;
+                        background-position: center;
+
+                        &.active {
+                            border: 1px solid #bfbfbf;
+                        }
+                    }
+
+                    .name {
+                        margin-top: 5px;
+                        font-size: 8px;
+                        letter-spacing: 0.4px;
+                    }
+                }
+
+            }
+        }
+
+        /* divider */
+        .divider {
+            margin-top: 10px;
+            width: 100%;
+            height: 1px;
+            background-color: $primary_dark;
+        }
+
+        /* variants available */
+        .variants-available {
+            margin-top: 20px;
+
+            .section-heading {
+                margin-bottom: 5px;
+            }
+
+            .section-paragraph {
+                font-size: 11px;
+                padding: 0px;
+                margin: 0px;
+                margin-bottom: 20px;
+                color: $gray;
+                font-family: $font_2;
+            }
+
+            .variants-container {
+
+                display: flex;
+                justify-content: space-around;
+
+                .variant {
+
+                    .illustration {
+                        filter: grayscale(100%);
+                        // height: 60%;
+                        margin-bottom: 3px;
+                        transition: all 0.3s ease-in-out;
+                        width: 12vw;
+
+                        &.active {
+                            filter: none;
+                        }
+                    }
+
+                    .name {
+                        font-family: $font_2_semibold;
+                        color: $dark_gray;
+                        font-size: 11px;
+                    }
+
+                    .info {
+                        font-family: $font_2;
+                        font-size: 9px;
+                        color: $gray;
+                    }
+                }
+            }
+        }
+
+        /* fabrics available */
+        .fabrics-available {
+            margin-top: 20px;
+
+            .fabrics-container {
+                display: flex;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+
+                .fabric {
+                    background-color: #33333376;
+                    padding: 5px 0px;
+                    width: 43%;
+                    margin: 10px;
+                    transition: all 0.2s cubic-bezier(0.215, 0.610, 0.355, 1);
+
+                    span {
+                        color: white;
+                        text-align: center;
+                    }
+
+                    &.active {
+                        box-shadow: 1px 1px 5px hsla(0, 0%, 0%, 0.16);
+                        background: $primary_dark;
+                    }
+
+                    // width: 30%;
+                    .name {
+                        font-size: 10px;
+                        letter-spacing: 1px;
+                    }
+
+                    .info {
+                        font-size: 9px;
+                        letter-spacing: 1px;
+                    }
+
+                    .price {
+                        font-size: 11px;
+                        letter-spacing: 1px;
+                    }
+                }
+            }
+
+        }
+
+        /* description */
+        .accordions {
+            margin-top: 20px;
+
+            ul {
+                margin: 4px;
+                padding-left: 15px;
+
+                li {
+                    text-align: justify;
+                }
+            }
+
+            p {
+                font-size: 13px;
+                margin: 10px 0;
+            }
+
+            span {
+                font-size: 12px;
+
+            }
         }
     }
+
 }
 </style>

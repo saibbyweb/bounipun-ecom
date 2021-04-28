@@ -75,8 +75,8 @@ export default {
 
         },
         slideHeight: {
-            type: Number,
-            default: 100
+            type: String,
+            default: '100vw'
         }
     },
     data() {
@@ -99,7 +99,7 @@ export default {
                 backgroundImage: `url('${image}')`,
                 backgroundSize: this.size,
                 width: this.slideWidth + 'vw',
-                height: this.slideHeight + 'vw',
+                height: this.slideHeight,
                 backgroundPosition: 'top center'
             }
         },
@@ -214,8 +214,8 @@ export default {
         display: flex;
 
         .thumbnail {
-            width: 20vw;
-            height: 20vw;
+            width: 19vw;
+            height: 19vw;
             background-repeat: no-repeat;
             background-position: center;
             background-size: contain;
