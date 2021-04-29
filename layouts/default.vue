@@ -14,8 +14,10 @@
 <script>
 export default {
     mounted() {
+        /* load persisted state */
+        this.$store.commit('customer/loadPersistedState');
+        /* listen for all mutations */
         this.unsubscribe = this.$store.subscribe((mutation, state) => {
-            
             if(mutation.type === "customer/setLoading")
                 return;
             

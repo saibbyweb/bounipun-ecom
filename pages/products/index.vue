@@ -2,7 +2,7 @@
 <div v-if="productFetched" class="product-page">
     <div ref="productImages" class="product-images">
         <!-- product image slideshow container with thumbnails  -->
-        <slideshow ref="slideshow" :images="images[activeColorIndex]" :slideshowOptions="{thumbnails: true}" :customText="product.colors[activeColorIndex].disclaimer" :slideHeight="'60vh'" :size="'cover'" />
+        <slideshow ref="slideshow" :images="images[activeColorIndex]" :slideshowOptions="{thumbnails: true}" :customText="activeDisclaimerText" :slideHeight="'60vh'" :size="'cover'" />
 
         <span class="collection-vertical"> Bounipun Escape </span>
 
@@ -61,7 +61,7 @@
 
                 <!-- add to cart -->
                 <div class="add-to-cart">
-                    <button> Place in Bag </button>
+                    <button @click="addToCart"> Place in Bag </button>
                     <button class="arrow"> > </button>
                 </div>
             </div>
@@ -69,7 +69,7 @@
         </div>
 
         <!-- bounipun colors  -->
-        <div v-if="bounipunColors" class="colors">
+        <div v-if="bounipunColors && multiPriced" class="colors">
             <h4 class="section-heading"> Select Color: ({{ product.colors.length }}) </h4>
 
             <!-- color category -->
@@ -95,7 +95,7 @@
         </div>
 
         <!-- custom colors -->
-        <div v-if="!bounipunColors" class="colors">
+        <div v-if="!bounipunColors && multiPriced" class="colors">
             <h4 class="section-heading"> Select Color ({{ product.colors.length }}) : </h4>
 
             <div class="color-boxes">
@@ -108,15 +108,15 @@
         </div>
 
         <!-- divider -->
-        <div v-if="!bounipunColors" class="divider"> </div>
+        <div v-if="!bounipunColors && multiPriced" class="divider"> </div>
 
         <!-- dynamic variant populate -->
-        <div v-if="!thirdPartyProduct" class="variants-available">
+        <div v-if="!thirdPartyProduct && multiPriced" class="variants-available">
             <h4 class="section-heading">
                 Select Variant:
             </h4>
             <p class="section-paragraph">
-               {{ variantNote }}
+                {{ variantNote }}
             </p>
             <!-- variants container -->
             <div class="variants-container">
@@ -137,7 +137,7 @@
         <div class="divider"> </div>
 
         <!-- dynamic fabric -->
-        <div v-if="!thirdPartyProduct" class="fabrics-available">
+        <div v-if="!thirdPartyProduct && multiPriced" class="fabrics-available">
             <h4 class="section-heading"> Select Fabric: </h4>
 
             <!-- fabrics available -->
@@ -299,6 +299,16 @@ export default {
         },
         thirdPartyProduct() {
             return this.product.type === 'third-party'
+        },
+        multiPriced() {
+            return this.product.type === "third-party" ?
+                false :
+                this.product.availabilityType === 'made-to-order' ? true : false;
+        },
+        activeDisclaimerText() {
+            if (this.product.colors.length === 0)
+                return '';
+            return this.product.colors[this.activeColorIndex].disclaimer
         }
     },
     methods: {
@@ -334,6 +344,27 @@ export default {
             //         console.log('attach sticky class');
             //     }
             // }
+        },
+        addToCart() {
+            /* type, availability, product id, color code, variant id, fabric id */
+            // console.log(this.product);
+            let product = {
+                _id: this.product._id,
+                type: this.product.type,
+                availabilityType: this.product.availabilityType,
+                colorCode: this.product.colors[this.activeColorIndex].code,
+            }
+            
+            /* add extra params if */
+            if (this.multiPriced) {
+                product = {
+                    ...product,
+                    variantId: this.variants[this.activeVariantIndex]._id,
+                    fabricId: this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex]._id
+                }
+            }
+
+            console.log(product);
         },
         ifActiveColorInCategory(colors) {
             const foundIndex = colors.findIndex(col => col.actualIndex == this.$route.query.activeColor);
@@ -398,10 +429,11 @@ export default {
         },
         setVariants() {
             const variants = this.product.variants.map(variant => {
-                
+
                 /* map fabric details */
                 let fabrics = variant.fabrics.map(fabric => {
                     return {
+                        _id: fabric._id._id,
                         name: fabric._id.name,
                         price: fabric.price,
                         code: fabric._id.code,
@@ -411,11 +443,12 @@ export default {
                         order: fabric._id.order
                     }
                 });
-                
+
                 /* sort fabrics according to order */
-                fabrics.sort((a,b) => a.order - b.order);
+                fabrics.sort((a, b) => a.order - b.order);
 
                 return {
+                    _id: variant._id._id,
                     name: variant._id.name,
                     info1: variant._id.info1,
                     info2: variant._id.info2,

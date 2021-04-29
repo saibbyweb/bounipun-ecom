@@ -10,21 +10,36 @@ const findProduct = (cart, product) => {
   if (cart.length === 0) return false;
 
   let foundIndex = cart.findIndex(pro => {
-    /* color, variant, fabric should match */
-    return (pro._id === product._id &&
-      pro.color === product.colorId &&
-      pro.variantId === product.variantId &&
-      pro.fabricId === product.fabricId)
+    /* common params to match */
+    let paramsMatched = pro._id === product._id && pro.colorCode === product.colorCode;
+
+    /* figure out the type of product */
+    const multiPriced = product.type === "third-party" 
+    ? false 
+    : product.availabilityType === 'made-to-order' ? true : false;
+    
+    /* add params, if product is multipriced */
+    if(multiPriced) {
+        paramsMatched = paramsToMatch && pro.variantId === product.variantId && pro.fabricId === product.fabricId
+    }
+    return paramsMatched;
   });
 
   return foundIndex !== -1 ? { foundProduct: cart[foundIndex], foundIndex } : false;
 };
 
 export const mutations = {
-  loadPersistedState(state) {},
+    /* load state from local storage */
+  loadPersistedState(state) {
+      const persistedState = window.localStorage.getItem('persistedState');
+      if(persistedState) {
+          Object.assign(state, JSON.parse(persistedState))
+      }
+  },
   setLoading(state, value) {
     state.loading = value;
   },
+  /* authorize user (customer) */
   setAuthorization(state, value) {
     state.authorized = value;
   },

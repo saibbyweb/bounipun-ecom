@@ -15,8 +15,8 @@
     <InputBox v-if="editMode" label="Product ID" v-model="doc._id" disabled :internal="true" />
     <!-- type of product -->
     <SelectBox :options="types" v-model="doc.type" label="Select Product Type" :internal="true" />
-    <!-- availablity type -->
-    <SelectBox :options="availablityTypes" v-model="doc.availablityType" label="Select Availablity Type" :internal="true" />
+    <!-- availability type -->
+    <SelectBox :options="availabilityTypes" v-model="doc.availabilityType" label="Select Availablity Type" :internal="true" />
     <!-- collections -->
     <SelectBox v-if="!thirdPartyProduct" :options="collections" v-model="doc.bounipun_collection" label="Select Collection" />
     <!-- bounipun style id -->
@@ -237,7 +237,7 @@ export default {
                 slug: "",
                 description: "",
                 type: "",
-                availablityType: "",
+                availabilityType: "",
                 bounipun_collection: null,
                 /* new types */
                 colorSource: "",
@@ -260,7 +260,7 @@ export default {
                     value: 'third-party'
                 }
             ],
-            availablityTypes: [{
+            availabilityTypes: [{
                     name: 'Select Availablity Type',
                     value: ''
                 },
@@ -455,7 +455,7 @@ export default {
                 slug,
                 description,
                 type,
-                availablityType,
+                availabilityType,
                 bounipun_collection,
                 colorSource,
                 variants,
@@ -473,7 +473,7 @@ export default {
                 slug,
                 description,
                 type,
-                availablityType,
+                availabilityType,
                 bounipun_collection,
                 colorSource,
                 variants,
@@ -499,7 +499,7 @@ export default {
                 slug: "",
                 description: "",
                 type: "",
-                availablityType: "",
+                availabilityType: "",
                 bounipun_collection: null,
                 colorSource: "",
                 variants: [],
