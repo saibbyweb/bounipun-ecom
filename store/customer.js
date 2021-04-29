@@ -20,7 +20,7 @@ const findProduct = (cart, product) => {
     
     /* add params, if product is multipriced */
     if(multiPriced) {
-        paramsMatched = paramsToMatch && pro.variantId === product.variantId && pro.fabricId === product.fabricId
+        paramsMatched = paramsMatched && pro.variantId === product.variantId && pro.fabricId === product.fabricId
     }
     return paramsMatched;
   });

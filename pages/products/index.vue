@@ -353,6 +353,7 @@ export default {
                 type: this.product.type,
                 availabilityType: this.product.availabilityType,
                 colorCode: this.product.colors[this.activeColorIndex].code,
+                quantity: this.quantity
             }
             
             /* add extra params if */
@@ -365,6 +366,7 @@ export default {
             }
 
             console.log(product);
+            this.$store.commit('customer/addToCart', product);
         },
         ifActiveColorInCategory(colors) {
             const foundIndex = colors.findIndex(col => col.actualIndex == this.$route.query.activeColor);
