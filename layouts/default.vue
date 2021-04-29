@@ -14,12 +14,21 @@
 <script>
 export default {
     mounted() {
-        // this.$axios.$get('/upload').then(data => console.log(data))
+        this.unsubscribe = this.$store.subscribe((mutation, state) => {
+            
+            if(mutation.type === "customer/setLoading")
+                return;
+            
+            console.log(mutation);
+            /* save state in local storage */
+            window.localStorage.setItem('persistedState', JSON.stringify(state.customer));
+        });
     },
     data() {
         return {
             searchOpen: false,
-            menuOpen: false
+            menuOpen: false,
+            unsubscribe: null
         }
     },
     methods: {
