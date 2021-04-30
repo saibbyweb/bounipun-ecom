@@ -8,8 +8,8 @@
         <!-- cart item -->
         <div class="cart-item" v-for="(item, index) in cartDetails" :key="index">
             <!-- main image -->
-            <div class="image-container" >
-                <img :src="item.mainImage" />
+            <div class="image-container" :style="`background-image: url(${item.mainImage})`">
+                <!-- <img :src="item.mainImage" /> -->
             </div>
 
             <!-- details and quantity -->
@@ -70,7 +70,10 @@ export default {
         }
     },
     mounted() {
-        this.fetchCartDetails();
+        if (!this.$store.state.customer.persistedStateLoaded)
+            setTimeout(() => this.fetchCartDetails(), 300);
+        else
+            this.fetchCartDetails();
     },
     computed: {
         cartEmpty: function () {
@@ -81,9 +84,12 @@ export default {
         }
     },
     methods: {
-        quantityUpdated(product,$event) {
-           const newQuantity = $event.target.value;
-           this.$store.commit('customer/updateQuantity', { product, newQuantity })
+        quantityUpdated(product, $event) {
+            const newQuantity = $event.target.value;
+            this.$store.commit('customer/updateQuantity', {
+                product,
+                newQuantity
+            })
         },
         removeFromCart(product) {
             this.$store.commit('customer/removeFromCart', product);
@@ -212,6 +218,9 @@ export default {
         /* cart item thumbnail/image */
         .image-container {
             width: 35%;
+            height: 90%;
+            background-size: cover;
+            background-position: center;
 
             img {
                 width: 100%;

@@ -1,4 +1,5 @@
 export const state = () => ({
+  persistedStateLoaded: false,
   loading: false,
   authorized: false,
   cart: []
@@ -35,6 +36,7 @@ export const mutations = {
       if(persistedState) {
           Object.assign(state, JSON.parse(persistedState))
       }
+      state.persistedStateLoaded = true;
   },
   setLoading(state, value) {
     state.loading = value;
