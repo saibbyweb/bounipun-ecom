@@ -12,9 +12,20 @@
 
     <!-- links -->
     <div class="shop-actions">
-        <img class="action-icon" :src="getIconPath('search.png')" @click="$emit('showSearch')" />
-        <img class="action-icon" :src="getIconPath('heart.png')" @click="$router.push('/wishlist')" />
-        <img class="action-icon bag" :src="getIconPath('bag.png')" @click="$router.push('/cart')" />
+        <div class="action-icon">
+        <img class="" :src="getIconPath('search.png')" @click="$emit('showSearch')" />
+        </div>
+
+        <div class="action-icon">
+        <img class="" :src="getIconPath('heart.png')" @click="$router.push('/wishlist')" />
+        </div>
+
+        <div class="action-icon">
+        <!-- cart count -->
+        <span class="cart-count"> {{ this.$store.state.customer.cart.length }} </span>
+        <img class="bag" :src="getIconPath('bag.png')" @click="$router.push('/cart')" />
+        </div>
+
     </div>
 </div>
 </template>
@@ -119,6 +130,23 @@ export default {
     .action-icon {
         width: 1.7vw;
         margin: 4%;
+        position: relative;
+
+        .cart-count {
+            background: #c54343;
+    color: white;
+    padding: 3px;
+    border-radius: 61%;
+    font-size: 10px;
+    position: absolute;
+    right: -60%;
+    top: -35%;
+    font-family: 'SF-Pro';
+        }
+
+        img {
+            width:100%;
+        }
 
         @media (max-width: $breakpoint-tablet) {
             width: 4vw;

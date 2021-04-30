@@ -83,3 +83,9 @@ export const mutations = {
     state.cart = []
   }
 };
+
+export const getters = {
+    alreadyInCart: (state) => (product) => {
+        return findProduct(state.cart, product);
+    }
+}

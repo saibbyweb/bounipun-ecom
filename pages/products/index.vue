@@ -61,7 +61,7 @@
 
                 <!-- add to cart -->
                 <div class="add-to-cart">
-                    <button @click="addToCart"> Place in Bag </button>
+                    <button @click="addToCart"> {{ alreadyInCart ? 'View Bag' : 'Place in Bag' }} </button>
                     <button class="arrow"> > </button>
                 </div>
             </div>
@@ -69,7 +69,7 @@
         </div>
 
         <!-- bounipun colors  -->
-        <div v-if="bounipunColors && multiPriced" class="colors">
+        <div v-if="bounipunColors" class="colors">
             <h4 class="section-heading"> Select Color: ({{ product.colors.length }}) </h4>
 
             <!-- color category -->
@@ -95,7 +95,7 @@
         </div>
 
         <!-- custom colors -->
-        <div v-if="!bounipunColors && multiPriced" class="colors">
+        <div v-if="!bounipunColors" class="colors">
             <h4 class="section-heading"> Select Color ({{ product.colors.length }}) : </h4>
 
             <div class="color-boxes">
@@ -309,45 +309,9 @@ export default {
             if (this.product.colors.length === 0)
                 return '';
             return this.product.colors[this.activeColorIndex].disclaimer
-        }
-    },
-    methods: {
-        handleScroll(event) {
-            // const productImages = this.$refs.productImages;
-            // const details = this.$refs.details;
-            // console.log(productImages.clientHeight + details.clientHeight);
-            const scrolled = screen.height + window.scrollY;
-
-            // console.log(scrolled);
-            // // console.log();
-            // // console.log(details.getBoundingClientRect().bottom)
-
-            // // console.log(screen.height + window.scrollY);
-            this.sticky = window.scrollY > 15
-            return;
-
-            // console.log('scroll', window.scrollY, this.scrollPosition);
-
-            // // const reachedTop = this.$refs.mainDetails.getBoundingClientRect().top <= 80;
-
-            // if (scrolled >= this.scrollPosition ) {
-            //     this.sticky = true;
-            //     console.log('attach sticky')
-            // }
-            // else
-            //     this.sticky = false;
-
-            // let el = event.srcElement;
-            // if (!this.reachedBottom) {
-            //     if (el.scrollTop >= (el.scrollHeight - el.clientHeight) - 100) {
-            //         // this.reachedBottom = true;
-            //         console.log('attach sticky class');
-            //     }
-            // }
         },
-        addToCart() {
+        cartProduct() {
             /* type, availability, product id, color code, variant id, fabric id */
-            // console.log(this.product);
             let product = {
                 _id: this.product._id,
                 type: this.product.type,
@@ -355,7 +319,7 @@ export default {
                 colorCode: this.product.colors[this.activeColorIndex].code,
                 quantity: this.quantity
             }
-            
+
             /* add extra params if */
             if (this.multiPriced) {
                 product = {
@@ -365,8 +329,27 @@ export default {
                 }
             }
 
-            console.log(product);
-            this.$store.commit('customer/addToCart', product);
+            return product;
+        },
+        alreadyInCart() {
+            return this.$store.getters['customer/alreadyInCart'](this.cartProduct) === false ? false : true
+        }
+    },
+    methods: {
+        handleScroll(event) {
+            // console.log(this.$store.getters['customer/alreadyInCart'], );
+            const scrolled = screen.height + window.scrollY;
+            this.sticky = window.scrollY > 15
+            return;
+        },
+        addToCart() {
+            /* if already added, move to cart page */
+            if(this.alreadyInCart) {
+                console.log('Aleady addeds, move to cart page')
+                return;
+            }
+            this.$store.commit('customer/addToCart', this.cartProduct);
+            this.$forceUpdate();
         },
         ifActiveColorInCategory(colors) {
             const foundIndex = colors.findIndex(col => col.actualIndex == this.$route.query.activeColor);
