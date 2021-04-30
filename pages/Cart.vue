@@ -36,7 +36,7 @@
 
             </div>
             <!-- remove item -->
-            <img class="remove-item" src="/icons/dark/remove-cart-item.png" />
+            <img @click="removeFromCart(item.product)" class="remove-item" src="/icons/dark/remove-cart-item.png" />
             <!-- total product price -->
             <p class="total-product-price"> INR {{ item.quantity * item.price }} </p>
         </div>
@@ -84,6 +84,10 @@ export default {
         quantityUpdated(product,$event) {
            const newQuantity = $event.target.value;
            this.$store.commit('customer/updateQuantity', { product, newQuantity })
+        },
+        removeFromCart(product) {
+            this.$store.commit('customer/removeFromCart', product);
+            this.fetchCartDetails();
         },
         async fetchCartDetails() {
             /* gather the list of (unique) product ids */

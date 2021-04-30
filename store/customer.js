@@ -71,7 +71,7 @@ export const mutations = {
         console.log(search.foundProduct);
     }
   },
-  removeFromCart(state, cart) {
+  removeFromCart(state, product) {
     /*  check if item is already present or not */
     let search = findProduct(state.cart, product);
     /* if yes, remove product from cart array */
