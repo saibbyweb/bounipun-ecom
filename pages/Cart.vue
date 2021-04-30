@@ -9,7 +9,7 @@
         <div class="cart-item" v-for="(item, index) in cartDetails" :key="index">
             <!-- main image -->
             <div class="image-container">
-                <img :src="imagePath(item.product)" />
+                <!-- <img :src="imagePath(item.product)" /> -->
             </div>
 
             <!-- details and quantity -->
@@ -63,24 +63,11 @@ import sumBy from "lodash/sumBy";
 export default {
     data() {
         return {
-            cartDetails: [{
-                name: "Khatamband Cashmere",
-                product: 'auto_2',
-                variant: 'Shawl',
-                fabric: '100% Cashmere / Feather Weight',
-                collection: 'Escape',
-                quantity: 1,
-                price: 299
-            }, {
-                name: "Red Velvet",
-                product: 'auto_5',
-                variant: 'Stole',
-                fabric: 'Wool 80% / Silk 20% / Luxe Weight',
-                collection: 'Autograph',
-                quantity: 1,
-                price: 399
-            }]
+            cartDetails: [],
         }
+    },
+    mounted() {
+        this.fetchCartDetails();
     },
     computed: {
         cartEmpty: function () {
@@ -91,6 +78,82 @@ export default {
         }
     },
     methods: {
+        async fetchCartDetails() {
+            /* gather the list of (unique) product ids */
+            const listOfProductIds = this.$store.getters['customer/getCartProductIds'];
+
+            /* if cart empty */
+            if (listOfProductIds === false) {
+                console.log('cart empty');
+                return;
+            }
+            /* fetch product details for all ids */
+            const cartFetch = this.$axios.$post('/fetchCartDetails', {
+                listOfProductIds
+            });
+            const {
+                response,
+                error
+            } = await this.$task(cartFetch);
+
+            /* if error occurred */
+            if (error) {
+                console.log('could not fetch cart items');
+                return;
+            }
+
+            console.log(response);
+
+            /* construct cart details array by mapping product data to cart items */
+            const cartDetails = this.$store.state.customer.cart.map((product) => {
+
+                /* cart item */
+                let cartItem = {};
+
+                /* find  product details for item */
+                const details = response.cartDetails.find(pro => pro._id === product._id);
+                
+                /* add details and quantity to cart item */
+                cartItem = { 
+                    /* if collection is escape, treat color name as product name */
+                    name: details.name,
+                    quantity: product.quantity,
+                    /* collection name */
+                    collection: details.type !== "third-party" ? details.bounipun_collection.name : '',
+                    fabric: "",
+                    variant: "",
+                    /* add color name & main image */
+                    details, 
+                };
+            
+                /* check if product is multipriced */
+                const multiPriced = details.type === "third-party" ?
+                    false :
+                    details.availabilityType === 'made-to-order' ? true : false;
+                
+                /* multi priced */
+                if (multiPriced) {
+                    /* find variant index */                    
+                    const variant = details.variants.find(variant => variant._id._id === product.variantId);
+                    /* find fabric */
+                    const fabric = variant.fabrics.find(fabric => fabric._id._id === product.fabricId);
+
+                    /* update cart item */
+                    cartItem = {...cartItem, variant: variant._id.name, fabric: fabric._id.name, price: fabric.price }
+                }
+
+                /* if third-party or ready-to-ship, use direct price instead */
+                if(details.type === "third-party" || details.availabilityType === "ready-to-ship") {
+                    cartItem.price = details.directPrice;
+                }
+
+
+                console.log(cartItem)
+                return cartItem;
+            });
+
+            this.cartDetails= cartDetails;
+        },
         imagePath(param) {
             const prod = param.split("_");
             const collection = prod[0];

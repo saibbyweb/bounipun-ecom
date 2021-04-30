@@ -13,17 +13,17 @@
     <!-- links -->
     <div class="shop-actions">
         <div class="action-icon">
-        <img class="" :src="getIconPath('search.png')" @click="$emit('showSearch')" />
+            <img class="" :src="getIconPath('search.png')" @click="$emit('showSearch')" />
         </div>
 
         <div class="action-icon">
-        <img class="" :src="getIconPath('heart.png')" @click="$router.push('/wishlist')" />
+            <img class="" :src="getIconPath('heart.png')" @click="$router.push('/wishlist')" />
         </div>
 
         <div class="action-icon">
-        <!-- cart count -->
-        <span class="cart-count"> {{ this.$store.state.customer.cart.length }} </span>
-        <img class="bag" :src="getIconPath('bag.png')" @click="$router.push('/cart')" />
+            <!-- cart count -->
+            <span class="cart-count"> {{ this.$store.state.customer.cart.length }} </span>
+            <img class="bag" :src="getIconPath('bag.png')" @click="$router.push('/cart')" />
         </div>
 
     </div>
@@ -134,18 +134,18 @@ export default {
 
         .cart-count {
             background: #c54343;
-    color: white;
-    padding: 3px;
-    border-radius: 61%;
-    font-size: 10px;
-    position: absolute;
-    right: -60%;
-    top: -35%;
-    font-family: 'SF-Pro';
+            color: white;
+            padding: 3px;
+            border-radius: 61%;
+            font-size: 10px;
+            position: absolute;
+            right: -60%;
+            top: -35%;
+            font-family: 'SF-Pro';
         }
 
         img {
-            width:100%;
+            width: 100%;
         }
 
         @media (max-width: $breakpoint-tablet) {

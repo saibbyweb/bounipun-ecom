@@ -87,5 +87,10 @@ export const mutations = {
 export const getters = {
     alreadyInCart: (state) => (product) => {
         return findProduct(state.cart, product);
+    },
+    getCartProductIds(state) {
+        if(state.cart.length === 0)
+            return false;
+        return [...new Set(state.cart.map(product => product._id))]
     }
 }

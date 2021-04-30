@@ -202,6 +202,37 @@ router.post('/searchProducts', async (req, res) => {
     res.send(paginatedResults);
 });
 
+/* fetch cart items */
+router.post('/fetchCartDetails', async(req, res) => {
+    let response = { resolved: false, cartDetails: [], variants: [], fabrics: []}
+    const { listOfProductIds } = req.body;
+    
+    if(listOfProductIds.length === 0) {
+        res.send(response);
+        return;
+    }
+    
+    /* fetch product details from ids */
+    const productDetailsFetch : any = db.model('products')
+    .find({_id: { $in: listOfProductIds }})
+    .populate('bounipun_collection','name')
+    .populate('variants._id','name')
+    .populate('variants.fabrics._id', 'name')
+    .lean()
+    const { response: details, error } = await task(productDetailsFetch);
+
+    /* if error occurred */
+    if(error) {
+        res.send(response);
+        return;
+    }
+    
+    response.cartDetails = details;
+
+    res.send(response);
+
+});
+
 
 
 export default router;
