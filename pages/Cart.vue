@@ -8,14 +8,16 @@
         <!-- cart item -->
         <div class="cart-item" v-for="(item, index) in cartDetails" :key="index">
             <!-- main image -->
-            <div class="image-container">
-                <!-- <img :src="imagePath(item.product)" /> -->
+            <div class="image-container" >
+                <img :src="item.mainImage" />
             </div>
 
             <!-- details and quantity -->
             <div class="details-and-quantity">
                 <!-- name -->
                 <span class="name"> {{ item.name }} </span>
+                <!-- color name -->
+                <span class="color-name"> {{ item.colorName }} </span>
                 <!-- collection -->
                 <span class="collection"> {{ item.collection }} </span>
                 <!-- variant -->
@@ -23,11 +25,11 @@
                 <!-- fabric -->
                 <span class="fabric"> {{ item.fabric }} </span>
                 <!-- price -->
-                <span class="price"> $ {{ item.price }} </span>
+                <span class="price"> INR {{ item.price }} </span>
                 <!-- quantity selector -->
                 <div class="quantity-input" style="display: flex;">
                     <span> Quantity: </span>
-                    <select v-model="item.quantity">
+                    <select v-model="item.quantity" @change="quantityUpdated(item.product, $event)">
                         <option v-for="n in 6" :key="n"> {{ n }} </option>
                     </select>
                 </div>
@@ -36,14 +38,14 @@
             <!-- remove item -->
             <img class="remove-item" src="/icons/dark/remove-cart-item.png" />
             <!-- total product price -->
-            <p class="total-product-price"> $ {{ item.quantity * item.price }} </p>
+            <p class="total-product-price"> INR {{ item.quantity * item.price }} </p>
         </div>
     </div>
 
     <!-- sub total -->
     <div class="sub-total">
         <span class="label"> Sub Total ( {{ cartDetails.length }} Items ) : </span>
-        <span class="value"> $ {{ subTotal }} </span>
+        <span class="value"> INR {{ subTotal }} </span>
     </div>
 
     <!-- proceed to address page-->
@@ -59,6 +61,7 @@
 
 <script>
 import sumBy from "lodash/sumBy";
+import colorPickerVue from '../components/admin/colors/colorPicker.vue';
 
 export default {
     data() {
@@ -78,6 +81,10 @@ export default {
         }
     },
     methods: {
+        quantityUpdated(product,$event) {
+           const newQuantity = $event.target.value;
+           this.$store.commit('customer/updateQuantity', { product, newQuantity })
+        },
         async fetchCartDetails() {
             /* gather the list of (unique) product ids */
             const listOfProductIds = this.$store.getters['customer/getCartProductIds'];
@@ -87,10 +94,12 @@ export default {
                 console.log('cart empty');
                 return;
             }
+
             /* fetch product details for all ids */
             const cartFetch = this.$axios.$post('/fetchCartDetails', {
                 listOfProductIds
             });
+
             const {
                 response,
                 error
@@ -102,7 +111,7 @@ export default {
                 return;
             }
 
-            console.log(response);
+            // console.log(response);
 
             /* construct cart details array by mapping product data to cart items */
             const cartDetails = this.$store.state.customer.cart.map((product) => {
@@ -112,9 +121,13 @@ export default {
 
                 /* find  product details for item */
                 const details = response.cartDetails.find(pro => pro._id === product._id);
-                
+
+                /* get color name and main image */
+                const color = details.colors.find(color => color.code === product.colorCode);
+
                 /* add details and quantity to cart item */
-                cartItem = { 
+                cartItem = {
+                    product,
                     /* if collection is escape, treat color name as product name */
                     name: details.name,
                     quantity: product.quantity,
@@ -123,42 +136,59 @@ export default {
                     fabric: "",
                     variant: "",
                     /* add color name & main image */
-                    details, 
-                };
-            
+                    colorName: color.name,
+                    mainImage: this.mainImagePath(color),
+                    // details,
+                }
+
                 /* check if product is multipriced */
                 const multiPriced = details.type === "third-party" ?
                     false :
                     details.availabilityType === 'made-to-order' ? true : false;
-                
+
                 /* multi priced */
                 if (multiPriced) {
-                    /* find variant index */                    
+                    /* find variant index */
                     const variant = details.variants.find(variant => variant._id._id === product.variantId);
                     /* find fabric */
                     const fabric = variant.fabrics.find(fabric => fabric._id._id === product.fabricId);
 
                     /* update cart item */
-                    cartItem = {...cartItem, variant: variant._id.name, fabric: fabric._id.name, price: fabric.price }
+                    cartItem = {
+                        ...cartItem,
+                        variant: variant._id.name,
+                        fabric: fabric._id.name,
+                        price: fabric.price
+                    }
                 }
 
                 /* if third-party or ready-to-ship, use direct price instead */
-                if(details.type === "third-party" || details.availabilityType === "ready-to-ship") {
+                if (details.type === "third-party" || details.availabilityType === "ready-to-ship") {
                     cartItem.price = details.directPrice;
                 }
-
 
                 console.log(cartItem)
                 return cartItem;
             });
 
-            this.cartDetails= cartDetails;
+            this.cartDetails = cartDetails;
         },
-        imagePath(param) {
-            const prod = param.split("_");
-            const collection = prod[0];
-            const prodId = prod[1];
-            return `/demo_images/products/${collection}/${collection}_prod${prodId}_1.png`;
+        mainImagePath(color) {
+            if (color.images.length === 0)
+                return '/default-image.png';
+
+            let mainImage = "";
+
+            /* find main image */
+            const foundImage = color.images.find(image => image.mainImage === true);
+
+            /* if main image found */
+            if (foundImage !== undefined)
+                mainImage = foundImage.path;
+            else
+                mainImage = color.images[0].path;
+
+            return process.env.baseAWSURL + mainImage;
         }
     }
 }
@@ -169,9 +199,11 @@ export default {
 
     .cart-item {
         display: flex;
+        align-items: center;
         box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
         margin: 20px;
         position: relative;
+        height: 45vw;
 
         /* cart item thumbnail/image */
         .image-container {
@@ -218,8 +250,6 @@ export default {
                 display: flex;
                 align-items: center;
                 margin-top: 5px;
-
-                span {}
 
                 select {
                     border: none;

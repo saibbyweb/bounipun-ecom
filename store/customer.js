@@ -62,12 +62,14 @@ export const mutations = {
     }
     else state.cart.push(product);
   },
-  updateQuantity(state, product) {
+  updateQuantity(state, item) {
     /*  check if item is already present or not */
-    let search = findProduct(state.cart, product);
+    let search = findProduct(state.cart, item.product);
     /* if yes, directly overwrite the qty */
-    if (search.foundProduct) 
-        search.foundProduct = product.newQuantity;
+    if (search.foundProduct) {
+        search.foundProduct.quantity = parseInt(item.newQuantity);
+        console.log(search.foundProduct);
+    }
   },
   removeFromCart(state, cart) {
     /*  check if item is already present or not */
