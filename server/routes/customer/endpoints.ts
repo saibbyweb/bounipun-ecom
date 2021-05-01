@@ -157,7 +157,7 @@ router.post('/searchProducts', async (req, res) => {
             filters['priceRange.startsAt'] = { $gte: parseInt(value) }
     }
 
-    /* construct color filter is provided */
+    /* construct color filter if provided */
     if (rawCriterion.colors.length !== 0) {
         const colorFilter = {
             $or: [
@@ -171,6 +171,8 @@ router.post('/searchProducts', async (req, res) => {
 
     console.log(JSON.stringify(filters));
 
+    /* add generic filters (product and color should be active) */
+    filters = {...filters, status: true, 'colors.status': true }
     /* gold */
     rawCriterion.search.term = admin.convertSearchTermToRegEx(rawCriterion.search.term)
     
