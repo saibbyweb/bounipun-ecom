@@ -12,6 +12,7 @@ const schema = new mongoose.Schema({
     image: String,
     lock: { type: Boolean, default: false },
     order: Number,
+    activeOrderLimit: { type: Number, default: 50 },
     status: Boolean
 }, {
     timestamps: true

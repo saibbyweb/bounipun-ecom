@@ -29,6 +29,12 @@
             <span v-if="image.mainImage" class="main-image"> Main Image </span>
 
         </div>
+        <!-- if no image uploaded -->
+        <div v-if="images.length === 0" class="not-uploaded">
+            <img src="/icons/light/upload-cloud.svg" />
+            <span> No Image(s) uploaded yet </span>
+        </div>
+
     </div>
 </div>
 </template>
@@ -66,9 +72,9 @@ export default {
         },
         assignImages(list) {
             console.log("ASSIGN IMAGES WAS CALLED");
-            if(!list.length > 0)
-               return;
-               
+            if (!list.length > 0)
+                return;
+
             this.images = [];
             const baseAWSURL = "https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/";
             list.forEach((image) => {
@@ -92,7 +98,7 @@ export default {
                     path: image.path
                 }
 
-               this.images.push(imageObject);
+                this.images.push(imageObject);
             });
         },
         addFiles() {
@@ -256,8 +262,6 @@ export default {
         cursor: pointer;
         position: relative;
 
-
-
         &:hover {
             .actions {
                 display: flex;
@@ -305,6 +309,23 @@ export default {
             color: white;
             font-size: 9px;
             text-align: center;
+        }
+    }
+
+    .not-uploaded {
+        background-color: #d49292;
+        display: flex;
+        padding: 3px 10px;
+        border-radius: 5px;
+        justify-content: space-between;
+        align-items: center;
+        margin-top:7px;
+        img {
+            padding-right:10px;
+        }
+        span {
+            color:white;
+            font-size:13px;
         }
     }
 }

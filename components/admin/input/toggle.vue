@@ -2,7 +2,7 @@
 <div class="input-box">
     <label class="label"> {{ label }} </label>
 
-    <div class="switch-box center" @click="toggleState" :class="{'on': value}">
+    <div class="switch-box center" @click="toggleState" :class="{'on': value}" :style="{width}">
         <div class="toggle center" :class="{'on': value}">
             <div class="circle"> </div>
         </div>
@@ -28,6 +28,10 @@ export default {
         disabled: {
             type: Boolean,
             default: false
+        },
+        width: {
+            type: String,
+            default: '120px'
         }
     },
     data() {
@@ -60,7 +64,7 @@ export default {
         position: relative;
         background: rgb(190, 79, 79);
         border-radius: 3px;
-        width: 120px;
+        // width: 120px;
         cursor: pointer;
         padding: 5px;
 

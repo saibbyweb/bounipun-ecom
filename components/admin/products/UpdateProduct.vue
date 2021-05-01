@@ -65,21 +65,18 @@
             <!-- remove color -->
             <button class="action delete" style="font-size:9px; position: absolute; top:0; right:0;" @click="removeColor(index, true)"> Remove Color </button>
 
-            <!-- set as main -->
-            <!-- <button class="action" style="background-color: #3863ad;font-size:10px; padding:5px; position: absolute; top:0; left:0;" @click="setMainColor(index)"> Set as Main </button> -->
-
             <!-- check box -->
             <div class="set-main">
                 <img @click="setMainColor(index)" :class="{'active-color' : isActiveColor(index)}" src="/icons/green_check.png" />
                 <span> Main Color </span>
             </div>
 
-            <div class="center">
+            <div class="center-col" style="align-items:flex-end; width: 100%">
                 <!-- disclaimer box -->
                 <InputBox label="Disclaimer" v-model="color.disclaimer" />
-
+                <!-- publish toggle for color -->
+                <Toggle v-model="color.status" label="Status" activeText="Live" inactiveText="Hidden" width="100px" />
             </div>
-            <!-- <hr width="100%" style="opacity: 0.3" /> -->
         </div>
         <button v-if="doc.colorSource !== 'bounipun-colors'" class="action" style="font-size:9px; position: absolute; bottom: -30px;  right:10px;" @click="addNewColor({_id: null, name:'', code: ''})"> Add Color </button>
     </div>
@@ -361,6 +358,7 @@ export default {
                 images: [],
                 disclaimer: "",
                 mainColor: false,
+                status: false,
                 key: uuidv4()
             });
         },
@@ -550,7 +548,7 @@ export default {
         }
 
         .set-main {
-            display:flex;
+            display: flex;
             align-items: center;
             font-size: 10px;
             padding: 5px;
@@ -559,14 +557,14 @@ export default {
             left: -5%;
             width: 35%;
             cursor: pointer;
-            
+
             opacity: 0.7;
-            
 
             img {
                 transition: all 0.2s ease-in-out;
-                width:25%;
+                width: 25%;
                 filter: grayscale(100%);
+
                 &.active-color {
                     filter: grayscale(0%);
                     width: 30%;
@@ -574,11 +572,11 @@ export default {
             }
 
             span {
-                font-size:12px;
-                background-color:#2582252e;
-                padding:3px 6px;
+                font-size: 12px;
+                background-color: #2582252e;
+                padding: 3px 6px;
                 border-radius: 4px;
-                
+
             }
         }
 

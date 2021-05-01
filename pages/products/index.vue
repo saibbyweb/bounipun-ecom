@@ -378,9 +378,18 @@ export default {
             return this.$getImagePath(image);
         },
         async fetchProduct(slug) {
-            const result = await this.$fetchDocument('products', slug, 'customer');
+            const result = await this.$fetchDocument('products', slug , 'customer');
+            // const result = await this.$fetchData('products', {_id: slug, 'colors.status': false });
             if (!result.fetched) {
                 alert('Couldnt fetch product, check url');
+                return;
+            }
+
+            /* filter out inactive colors */
+            result.doc.colors = result.doc.colors.filter(color => color.status === true);
+
+            if(result.doc.colors.length === 0) {
+                console.log('No Active Color Found');
                 return;
             }
 

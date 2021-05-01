@@ -20,8 +20,10 @@
     <InputBox v-model="doc.slug" label="Slug" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
-       <!-- description -->
+    <!-- description -->
     <TextBox v-model="doc.variantNote" label="Variant Note" />
+    <!-- active order limit -->
+    <InputBox v-model.number="doc.activeOrderLimit" label="Active Order Limit" type="number" :internal="true" />
     <!-- edt -->
     <InputBox v-model="doc.edt" label="Estimated Time of Delivery (IN WEEKS)" type="number" :internal="true" />
      <!-- set color image -->
@@ -59,6 +61,7 @@ export default {
                 slug: "",
                 description: "",
                 variantNote: "",
+                activeOrderLimit: "",
                 edt: "",
                 image: "",
                 lock: false,
@@ -105,6 +108,7 @@ export default {
                 description,
                 variantNote,
                 edt,
+                activeOrderLimit,
                 image,
                 lock,
                 status
@@ -116,6 +120,7 @@ export default {
                 slug,
                 description,
                 variantNote,
+                activeOrderLimit,
                 edt: edt !== null ? edt.toString() : "",
                 image,
                 lock,
