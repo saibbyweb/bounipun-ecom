@@ -75,7 +75,7 @@
                 <!-- disclaimer box -->
                 <InputBox label="Disclaimer" v-model="color.disclaimer" />
                 <!-- publish toggle for color -->
-                <Toggle v-model="color.status" label="Status" activeText="Live" inactiveText="Hidden" width="100px" />
+                <Toggle v-model="color.status" label="Status" activeText="Live" inactiveText="Hidden" width="100px" :disabled="isActiveColor(index)" />
             </div>
         </div>
         <button v-if="doc.colorSource !== 'bounipun-colors'" class="action" style="font-size:9px; position: absolute; bottom: -30px;  right:10px;" @click="addNewColor({_id: null, name:'', code: ''})"> Add Color </button>
@@ -305,6 +305,7 @@ export default {
 
             setTimeout(() => {
                 this.doc.colors[index].mainColor = true
+                this.doc.colors[index].status = true;
                 this.$forceUpdate();
             }, 100);
 

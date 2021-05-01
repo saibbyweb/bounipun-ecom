@@ -172,12 +172,14 @@ router.post('/searchProducts', async (req, res) => {
     console.log(JSON.stringify(filters));
 
     /* add generic filters (product and color should be active) */
-    filters = {...filters, status: true, 'colors.status': true }
+    // filters = {...filters, status: true, 'colors.status': true }
     /* gold */
     rawCriterion.search.term = admin.convertSearchTermToRegEx(rawCriterion.search.term)
     
     /* text match + filters */
     criterion.match = {
+        status: true,
+        'colors.status': true,
         $or: [
             { name: { $regex: rawCriterion.search.term, $options: "i" } },
             { 'colors.name': { $regex: rawCriterion.search.term, $options: "i" } },

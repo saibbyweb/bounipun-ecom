@@ -2,7 +2,7 @@
 <div class="input-box">
     <label class="label"> {{ label }} </label>
 
-    <div class="switch-box center" @click="toggleState" :class="{'on': value}" :style="{width}">
+    <div class="switch-box center" @click="toggleState" :class="{'on': value}" :style="{width, pointerEvents: disabled ? 'none' : ''}">
         <div class="toggle center" :class="{'on': value}">
             <div class="circle"> </div>
         </div>

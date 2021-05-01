@@ -113,7 +113,8 @@ export default {
             /* fetch product under this collection  */
             const products = await this.$fetchData('products', {
                 bounipun_collection: collection.doc._id,
-                type: 'under-bounipun'
+                type: 'under-bounipun',
+                status: true
             }, true);
 
             if (!products.fetched) {
@@ -132,6 +133,9 @@ export default {
             const product = products[0];
             let groupedData = [];
             this.colorCategories.forEach(category => {
+                /* remove inactive colors */
+                product.colors = product.colors.filter(color => color.status === true);
+
                 /* find all colors under this category */
                 const colors = product.colors.filter(color => {
                     /* attach actual index */

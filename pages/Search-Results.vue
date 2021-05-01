@@ -350,11 +350,6 @@ export default {
 
             /* what are the color filter */
             product.colors.forEach((color, index) => {
-                /* color.name ~~ search term */
-                /* color.baseColor ~~ search term */
-                /* color.additionalColor1 ~~ search term */
-                /* color.additionalColor2 ~~ search term */
-                // console.log(product.name, color.name, color.baseColor);
                 const colorNameMatch = this.searchTermRegex.test(color.name)
                 const baseColorMatch = this.searchTermRegex.test(color.baseColor)
                 const additionalColor1Match = this.searchTermRegex.test(color.additionalColor1)
@@ -372,8 +367,9 @@ export default {
                 
                 /* overall filter match */
                 const filterMatch = baseColorFilterMatch !== -1 || additionalColor1FilterMatch !== -1 || additionalColor2FilterMatch !== -1;
-
-                if(textMatch || filterMatch) {
+                
+                /* make sure the color is active */
+                if((textMatch || filterMatch) && color.active === true) {
                     const colorProduct = {...product};
 
                     if(product.bounipun_collection === "60522ab3be493200150ff835")
