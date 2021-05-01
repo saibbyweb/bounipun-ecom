@@ -158,6 +158,7 @@ export default {
     // background: url("/demo_images/collection-header.png");
     background-size: cover;
     width: 100%;
+ 
 
     .heading {
         color: $primary_dark;

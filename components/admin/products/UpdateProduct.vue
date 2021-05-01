@@ -28,7 +28,7 @@
     <!-- alias -->
     <InputBox label="Alias" v-model="doc.alias" />
     <!-- description -->
-    <TextBox v-model="doc.description" label="Description" />
+    <TextBox v-model="doc.description" label="Design Description" />
 
     <!-- color source -->
     <!-- <SelectBox v-if="!thirdPartyProduct" :options="colorSources" v-model="doc.colorSource" label="Select Color Source" /> -->

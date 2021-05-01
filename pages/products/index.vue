@@ -7,14 +7,20 @@
         <span class="collection-vertical"> Bounipun Escape </span>
 
         <!-- back button -->
-        <img @click="$router.go(-1)" class="back-button" src="/icons/dark/arrow-left.png" />
+        <div class="back-button">
+            <img @click="$router.go(-1)" src="/icons/dark/arrow-left.png" />
+        </div>
 
         <!-- wishlist icon -->
         <img @click="addedToWishlist = !addedToWishlist" :class="[{'added': addedToWishlist },'wishlist']" :src="addedToWishlist ? '/icons/dark/wishlist-filled.png' : '/icons/dark/wishlist.png'" />
 
         <!-- share icon -->
         <div class="share-icons">
-            <img class="toggle" src="/icons/dark/share.png" />
+
+            <div class="toggle">
+                <img src="/icons/dark/share.png" />
+            </div>
+
             <div class="social">
                 <img src="/icons/dark/social/facebook.png" />
                 <img src="/icons/dark/social/pinterest.png" />
@@ -183,7 +189,11 @@
 
             <!-- about fabric -->
             <Accordion v-if="!thirdPartyProduct" heading="About Fabric">
-                <span class="desc"> {{ fabricWriteUp }} </span>
+                <ul>
+                    <li v-for="(point, index) in fabricWriteUp" :key="index">
+                        <span class="desc"> {{ point }} </span>
+                    </li>
+                </ul>
             </Accordion>
 
             <!-- about collection -->
@@ -292,7 +302,7 @@ export default {
             return this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex].description.split('\n')
         },
         fabricWriteUp() {
-            return this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex].writeUp;
+            return this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex].writeUp.split('\n')
         },
         variantNote() {
             return this.product.bounipun_collection.variantNote;
@@ -344,7 +354,7 @@ export default {
         },
         addToCart() {
             /* if already added, move to cart page */
-            if(this.alreadyInCart) {
+            if (this.alreadyInCart) {
                 console.log('Aleady addeds, move to cart page')
                 return;
             }
@@ -537,34 +547,58 @@ export default {
         /* back button */
         .back-button {
             position: absolute;
-            width: 27px;
-            top: 10%;
-            left: 5%;
+            width: 16%;
+            height: 40px;
+            bottom: 30%;
+            left: 0%;
             transition: transform 0.3s ease-in-out;
             background-color: white;
             padding: 3px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0.7;
+
+            img {
+                width: 27px;
+                // display:none;
+            }
 
         }
 
         .share-icons {
             position: absolute;
-            right: 5%;
+            right: 0%;
             bottom: 30%;
             display: flex;
+            width: 16%;
             flex-direction: column-reverse;
 
             .toggle {
-                width: 23px;
-                padding: 5px;
+                width: 100%;
+                height: 40px;
                 box-sizing: content-box;
                 transform: rotate(0deg) scale(1);
-                transition: transform 0.4s ease-in-out;
                 cursor: pointer;
                 background-color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                opacity: 0.7;
+
+                img {
+                    width: 24px;
+                    transition: transform 0.4s ease-in-out;
+
+                }
 
                 &:hover {
-                    transform: rotate(30deg);
-                    // border-radius:10%;
+
+                    img {
+                        transform: rotate(10deg);
+
+                    }
+
                 }
             }
 
@@ -804,9 +838,11 @@ export default {
                         margin-bottom: 3px;
                         transition: all 0.3s ease-in-out;
                         width: 12vw;
+                        opacity: 0.6;
 
                         &.active {
                             filter: none;
+                            opacity: 1;
                         }
                     }
 
@@ -874,13 +910,13 @@ export default {
         /* description */
         .accordions {
             margin-top: 20px;
-
+            text-align: justify;
             ul {
                 margin: 4px;
                 padding-left: 15px;
 
                 li {
-                    text-align: justify;
+                    
                 }
             }
 

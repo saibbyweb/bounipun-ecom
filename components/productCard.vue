@@ -3,7 +3,7 @@
     <!-- main image container -->
     <div class="main-image-container center">
         <!-- <img class="main-image" :src="imagePath" /> -->
-        <slideshow ref="slideshow" :images="slideshowImages" extraClass="search-slideshow" :dots="true" :slideWidth="48" :slideHeight="'60vw'" :size="'180%'"/>
+        <slideshow ref="slideshow" :images="slideshowImages" extraClass="search-slideshow" :dots="true" :slideWidth="48" :slideHeight="'88vw'" :size="'180%'" />
 
     </div>
 
@@ -98,7 +98,7 @@ export default {
             return process.env.baseAWSURL + mainImage;
         },
         variantsAvailable() {
-            if(this.product.variantNames)
+            if (this.product.variantNames)
                 return this.product.variantNames;
             return this.product.variants.map(variant => variant._id.name);
         },
@@ -178,16 +178,26 @@ export default {
     height: 36vw;
     overflow: hidden;
     padding: 1vw;
+    border-top: 1px solid rgb(219, 219, 219);
+    &:nth-child(odd) {
+        border-right: 1px solid rgb(219, 219, 219);
+
+    }
+
+    &:nth-child(even) {
+        // border-right: 1px solid rgb(219, 219, 219);
+        // border-bottom: 1px solid rgb(219, 219, 219);
+    }
 
     @media (max-width: $breakpoint-tablet) {
         width: 48vw;
-        height: 100vw;
+        height: 125vw;
     }
 
     /* main image container */
     .main-image-container {
         width: 100%;
-        height: 70%;
+        height: 75%;
         overflow: hidden;
 
         .main-image {
@@ -198,7 +208,7 @@ export default {
     /* text-details */
     .text-details {
         width: 100%;
-        height: 20%;
+        height: 15%;
         padding-bottom: 2px;
 
         .product-name {
