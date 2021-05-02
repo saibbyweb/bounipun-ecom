@@ -1,11 +1,9 @@
 <template>
 <!-- delivery address field -->
-
     <div class="delivery-input">
         <input class="field" type="text" :value="value" @input="$emit('input', $event.target.value)"/>
         <label class="label"> {{ label }} </label>
     </div>
-
 </template>
 
 <script>
@@ -29,15 +27,19 @@ export default {
         padding-left: 2%;
         transform: translateY(0%);
         color: #183437;
-        transition: all 0.4s ease;
+        transition: all 0.2s ease;
+        text-transform: uppercase;
+        margin-bottom:3px;
+        letter-spacing: 0.2px;
     }
 
     .field {
         border: none;
         border-radius: 0;
-        border-bottom: 1px solid $gray;
+        // border-bottom: 1px solid $gray;
         width: 100%;
         padding: 2%;
+        background-color: #e7e7e7;
 
         &:focus {
             border-bottom: 2px solid $dark_gray;
@@ -46,8 +48,9 @@ export default {
     }
 
     .field:focus~.label {
-        color: $dark_gray;
-        transform: translateY(-20%);
+        color: #593e10;
+        font-weight: 900;
+        transform: translateY(-23%);
     }
 
 }

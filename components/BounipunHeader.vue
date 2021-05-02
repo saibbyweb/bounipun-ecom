@@ -22,7 +22,7 @@
 
         <div class="action-icon">
             <!-- cart count -->
-            <span class="cart-count"> {{ this.$store.state.customer.cart.length }} </span>
+            <span v-if="cartCount !== 0" class="cart-count"> {{ cartCount }} </span>
             <img class="bag" :src="getIconPath('bag.png')" @click="$router.push('/cart')" />
         </div>
 
@@ -49,6 +49,11 @@ export default {
     data() {
         return {
             darkMode: this.$route.name === 'products-collection' ? true : false
+        }
+    },
+    computed: {
+        cartCount() {
+            return this.$store.state.customer.cart.length
         }
     },
     watch: {
