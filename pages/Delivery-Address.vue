@@ -13,20 +13,25 @@
             <div @click="showCountrySelect = true" class="selected-country" :class="{focused: showCountrySelect}">
                 <img :src="selectedCountry.flag" />
                 <span> {{ selectedCountry.name }} </span>
-                <span> ({{ selectedCountry.dialCode }}) </span>
+                <span style="margin-left: 4px;"> ({{ selectedCountry.dialCode }}) </span>
             </div>
+
             <!-- list of countries -->
             <div v-if="showCountrySelect" class="country-list">
+
                 <!-- search -->
                 <div class="search">
                     <input type="text" class="field" placeholder="Enter Country Name" v-model.trim="countrySearchTerm" autocomplete="new-password" />
                 </div>
+
                 <!-- country list -->
+
                 <div class="item" v-for="(country, index) in matchedCountries" :key="country.isoCode" @click="selectCountry(index)">
                     <img :src="country.flag" />
                     <span> {{ country.name }} </span>
-                    <span> ({{ country.dialCode }}) </span>
+                    <span style="margin-left: 4px;"> ({{ country.dialCode }}) </span>
                 </div>
+
             </div>
         </div>
 
@@ -37,12 +42,13 @@
 
     <!-- proceed to checkout -->
     <div class="pad-10">
-        <button class="action"> Continue to Checkout </button>
+        <button @click="$router.push('/checkout')" class="action"> Continue to Checkout </button>
     </div>
 </div>
 </template>
 
 <script>
+import countryData from "@/helpers/countryCodes.js";
 export default {
     data() {
         return {
@@ -69,12 +75,15 @@ export default {
         }
     },
     async mounted() {
-        this.countryCodes = await this.$axios.$get('https://gist.githubusercontent.com/kcak11/4a2f22fb8422342b3b3daa7a1965f4e4/raw/95677f414c98b0289b75436c1e10d9c1755c62f0/countries.json');
+        // this.countryCodes = await this.$axios.$get('https://gist.githubusercontent.com/kcak11/4a2f22fb8422342b3b3daa7a1965f4e4/raw/95677f414c98b0289b75436c1e10d9c1755c62f0/countries.json');
+
+        this.countryCodes = countryData;
     },
     methods: {
         selectCountry(index) {
             this.selectedCountryIndex = index;
             this.showCountrySelect = false;
+            this.formData.countryCode.value = this.matchedCountries[this.selectedCountryIndex].dialCode;
         },
         createFormData() {
             /* form fields */
@@ -113,7 +122,7 @@ export default {
 <style lang="scss" scoped>
 .delivery-address {
     // margin: 4%;
-    padding: 0%;
+    padding: 10% 0;
     // box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
     display: flex;
     flex-direction: column;
@@ -126,7 +135,8 @@ export default {
         color: $dark_gray;
         text-transform: uppercase;
         align-self: flex-start;
-        margin-left: 5%;
+        margin:5%;
+        margin-right:0;
     }
 
     .country-select {
@@ -145,8 +155,8 @@ export default {
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            padding:2%;
-            width:100%;
+            padding: 2%;
+            width: 100%;
 
             &.focused {
                 border-bottom: 2px solid $dark_gray;
@@ -168,8 +178,20 @@ export default {
             background-color: #e7e7e7e2;
             z-index: 1;
             border: 2px solid $dark_gray;
-            border-top:none;
+            border-top: none;
             width: 100%;
+
+            /* search */
+            .search {
+
+                .field {
+                    width: 100%;
+                    border: none;
+                    padding: 10px;
+                    border-bottom: 1px solid #e7e7e7;
+                    font-size: 14px;
+                }
+            }
 
             .item {
                 border-bottom: 2px solid #e7e7e7;
@@ -183,19 +205,13 @@ export default {
                     width: 7%;
                     margin-right: 10px;
                 }
-            }
 
-            /* search */
-            .search {
-
-                .field {
-                    width: 100%;
-                    border: none;
-                    padding: 10px;
-                    border-bottom: 1px solid #e7e7e7;
-                    font-size: 14px;
+                span {
+                    font-family: $font_2;
                 }
+
             }
+
         }
     }
 }
