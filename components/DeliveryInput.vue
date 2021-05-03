@@ -1,16 +1,28 @@
 <template>
 <!-- delivery address field -->
-    <div class="delivery-input">
-        <input class="field" type="text" :value="value" @input="$emit('input', $event.target.value)"/>
-        <label class="label"> {{ label }} </label>
-    </div>
+<div class="delivery-input">
+    <input class="field" type="text" :value="value" @input="$emit('input', $event.target.value)" autocomplete="new-password" :class="{error: error.status}" />
+    <label class="label" :class="{error: error.status}"> {{ label }} </label>
+</div>
 </template>
 
 <script>
 export default {
     props: {
         label: String,
-        value: String
+        value: String,
+        error: {
+            status: Boolean,
+            msg: String
+        },
+    },
+    data() {
+        return {
+            abc: []
+        }
+    },
+    methods: {
+
     }
 }
 </script>
@@ -29,8 +41,12 @@ export default {
         color: #183437;
         transition: all 0.2s ease;
         text-transform: uppercase;
-        margin-bottom:3px;
+        margin-bottom: 3px;
         letter-spacing: 0.2px;
+
+        &.error {
+            color: #bf3d3d;
+        }
     }
 
     .field {
@@ -40,9 +56,15 @@ export default {
         width: 100%;
         padding: 2%;
         background-color: #e7e7e7;
+        border-bottom: 2px solid #e7e7e7;
+        transition: all 0.2s ease-in-out;
 
         &:focus {
             border-bottom: 2px solid $dark_gray;
+        }
+
+        &.error {
+            border-bottom: 2px solid #bf3d3d;
         }
 
     }
