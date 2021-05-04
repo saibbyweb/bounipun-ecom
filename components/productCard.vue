@@ -178,9 +178,9 @@ export default {
     height: 36vw;
     overflow: hidden;
     padding: 1vw;
-    border-top: 1px solid rgb(219, 219, 219);
+    // border-top: 1px solid rgb(219, 219, 219);
     &:nth-child(odd) {
-        border-right: 1px solid rgb(219, 219, 219);
+        // border-right: 1px solid rgb(219, 219, 219);
 
     }
 

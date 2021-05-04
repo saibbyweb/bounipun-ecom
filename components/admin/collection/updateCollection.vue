@@ -1,5 +1,5 @@
 <template>
-<div class="update-collection">
+<div class="contents">
     <!-- abort update process -->
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add' }} Collection </h2>

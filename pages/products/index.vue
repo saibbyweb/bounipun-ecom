@@ -41,7 +41,8 @@
             <div class="section-1">
                 <div class="main-details">
                     <h3> {{ bounipunColors ? product.colors[activeColorIndex].name : product.name }} </h3>
-                    <p v-if="!thirdPartyProduct"> {{ variants[activeVariantIndex].name }} </p>
+                    <p v-if="!thirdPartyProduct"> {{ variants[activeVariantIndex].name }} 
+                        {{ preferredGender }} </p>
                     <p v-if="!thirdPartyProduct"> Bounipun {{ product.bounipun_collection.name }} </p>
                     <!-- fabric -->
                     <p v-if="!thirdPartyProduct"> {{ selectedFabric.name }}  ({{ selectedFabric.info1 }})</p>
@@ -288,6 +289,12 @@ export default {
         }
     },
     computed: {
+        preferredGender() {
+            if(this.product.gender === undefined)
+                return "";
+            
+            return `( ${this.product.gender.replaceAll('-',' ')} )`;
+        },
         bounipunColors() {
             return this.product.colorSource === 'bounipun-colors';
         },

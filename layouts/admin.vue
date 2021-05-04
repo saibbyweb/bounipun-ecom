@@ -120,6 +120,8 @@ export default {
         position: relative;
         height: 100%;
         overflow-y: scroll;
+        padding: 10px;
+        padding-bottom:40px;
         
 
         &.updating {
@@ -153,7 +155,7 @@ export default {
             }
         }
 
-        padding: 10px;
+  
 
         .heading {
             text-transform: uppercase;

@@ -6,7 +6,6 @@
     <InputBox v-if="editMode" label="Base Color ID" v-model="doc._id" disabled :internal="true" />
     <!-- fabric name -->
     <InputBox label="Base Color Name" v-model="doc.name" />
-    <br>
     <!-- color picker -->
     <client-only>
         <div class="center" style="position:relative;">
