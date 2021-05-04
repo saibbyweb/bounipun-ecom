@@ -1,5 +1,9 @@
 <template>
 <div @click="navigateToProductPage" class="product-card">
+
+    <!-- wishlist icon -->
+    <img @click.stop="toggleWishlist" :class="[{'added': addedToWishlist },'wishlist']" :src="addedToWishlist ? '/icons/dark/wishlist-filled.png' : '/icons/dark/wishlist.png'" />
+
     <!-- main image container -->
     <div class="main-image-container center">
         <!-- <img class="main-image" :src="imagePath" /> -->
@@ -24,10 +28,6 @@
         </div>
     </div>
 
-    <!-- shop now button -->
-    <!-- <div v-if="searchView" class="center actions">
-        <button class="clear shop-now"> {{ inWishlist ? 'Move to Cart' : 'Shop Now' }} </button>
-    </div> -->
 </div>
 </template>
 
@@ -155,7 +155,15 @@ export default {
 
         }
     },
+    data() {
+        return {
+            addedToWishlist: false
+        }
+    },
     methods: {
+        toggleWishlist() {
+            this.addedToWishlist = !this.addedToWishlist
+        },
         navigateToProductPage() {
             // this.$router.push('/products?_id='+this.product._id)
             let query = {
@@ -178,6 +186,20 @@ export default {
     height: 36vw;
     overflow: hidden;
     padding: 1vw;
+    position: relative;
+
+    .wishlist {
+        position: absolute;
+        width: 18px;
+        top: 10%;
+        right: 10%;
+        transition: transform 0.3s ease-in-out;
+
+        &.added {
+            transform: scale(1.2);
+        }
+    }
+
     // border-top: 1px solid rgb(219, 219, 219);
     &:nth-child(odd) {
         // border-right: 1px solid rgb(219, 219, 219);

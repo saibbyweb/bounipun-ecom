@@ -4,7 +4,7 @@
 
     <div @click="toggle()" :class="[{'active': active},'accordion']">
         <span class="title"> {{ heading }} </span>
-        <span class="switch"> + </span>
+        <span class="switch"> {{ active ? "-" : "+" }} </span>
     </div>
 
     <div ref="content" class="content" :style="{maxHeight}">
