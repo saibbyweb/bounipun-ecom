@@ -342,6 +342,7 @@ export default {
             /* update total matches */
         },
         findMatchedColors(product) {
+            console.log(product,'matched');
             /* product name or base colors matches the color filter (if provided) */
             // const product = {...bounipunProduct};
             
@@ -369,7 +370,8 @@ export default {
                 const filterMatch = baseColorFilterMatch !== -1 || additionalColor1FilterMatch !== -1 || additionalColor2FilterMatch !== -1;
                 
                 /* make sure the color is active */
-                if((textMatch || filterMatch) && color.active === true) {
+              
+                if((textMatch || filterMatch) && color.status === true) {
                     const colorProduct = {...product};
 
                     if(product.bounipun_collection === "60522ab3be493200150ff835")

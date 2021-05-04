@@ -5,6 +5,7 @@ const schema = new mongoose.Schema({
     name: String,
     hex: String,
     description: String,
+    order: Number,
     status: Boolean
 }, {
     timestamps: true

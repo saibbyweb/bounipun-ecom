@@ -106,8 +106,7 @@ router.get('/getSearchFilters', async (req, res) => {
     let dataFetch = [];
     dataFetch.push(db.model('collections').find({ status: true, lock: false }).select('name'))
     dataFetch.push(db.model('variants').find({ status: true }).select('name'))
-    dataFetch.push(db.model('base_colors').find({ status: true }).select('name'))
-
+    dataFetch.push(db.model('base_colors').find({ status: true }).sort('order').select('name'))
     const { response: resolvedData, error } = await task(Promise.all(dataFetch));
 
     /* if error occurred */
