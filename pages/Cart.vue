@@ -30,7 +30,7 @@
                 <div class="quantity-input" style="display: flex;">
                     <span> Quantity: </span>
                     <select v-model="item.quantity" @change="quantityUpdated(item.product, $event)">
-                        <option v-for="n in 6" :key="n"> {{ n }} </option>
+                        <option v-for="n in 3" :key="n"> {{ n }} </option>
                     </select>
                 </div>
 
@@ -167,7 +167,7 @@ export default {
                     cartItem = {
                         ...cartItem,
                         variant: variant._id.name,
-                        fabric: fabric._id.name,
+                        fabric: `${fabric._id.name} (${fabric._id.info1})`,
                         price: fabric.price
                     }
                 }

@@ -220,7 +220,7 @@ router.post('/fetchCartDetails', async(req, res) => {
     .find({_id: { $in: listOfProductIds }})
     .populate('bounipun_collection','name')
     .populate('variants._id','name')
-    .populate('variants.fabrics._id', 'name')
+    .populate('variants.fabrics._id', 'name info1')
     .lean()
     const { response: details, error } = await task(productDetailsFetch);
 

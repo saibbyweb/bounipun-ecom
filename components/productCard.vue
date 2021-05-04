@@ -208,7 +208,7 @@ export default {
     /* text-details */
     .text-details {
         width: 100%;
-        height: 15%;
+        height: 13%;
         padding-bottom: 2px;
 
         .product-name {
@@ -231,7 +231,7 @@ export default {
     }
 
     .variants-available {
-        height: 10%;
+        height: 12%;
 
         .variant {
             color: $primary_dark;
@@ -253,9 +253,4 @@ export default {
     }
 
 }
-
-// .search-slideshow {
-//     width: 20vw !important;
-//     height: 20vw !important;
-// }
 </style>

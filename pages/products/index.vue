@@ -43,7 +43,8 @@
                     <h3> {{ bounipunColors ? product.colors[activeColorIndex].name : product.name }} </h3>
                     <p v-if="!thirdPartyProduct"> {{ variants[activeVariantIndex].name }} </p>
                     <p v-if="!thirdPartyProduct"> Bounipun {{ product.bounipun_collection.name }} </p>
-
+                    <!-- fabric -->
+                    <p v-if="!thirdPartyProduct"> {{ selectedFabric.name }}  ({{ selectedFabric.info1 }})</p>
                     <p> {{ product.styleId }} </p>
                 </div>
                 <!-- quantity picker and size chart-->
@@ -304,6 +305,9 @@ export default {
         fabricWriteUp() {
             return this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex].writeUp.split('\n')
         },
+        selectedFabric() {
+            return this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex];
+        },
         variantNote() {
             return this.product.bounipun_collection.variantNote;
         },
@@ -378,7 +382,7 @@ export default {
             return this.$getImagePath(image);
         },
         async fetchProduct(slug) {
-            const result = await this.$fetchDocument('products', slug , 'customer');
+            const result = await this.$fetchDocument('products', slug, 'customer');
             // const result = await this.$fetchData('products', {_id: slug, 'colors.status': false });
             if (!result.fetched) {
                 alert('Couldnt fetch product, check url');
@@ -388,7 +392,7 @@ export default {
             /* filter out inactive colors */
             result.doc.colors = result.doc.colors.filter(color => color.status === true);
 
-            if(result.doc.colors.length === 0) {
+            if (result.doc.colors.length === 0) {
                 console.log('No Active Color Found');
                 return;
             }
@@ -847,7 +851,7 @@ export default {
                         margin-bottom: 3px;
                         transition: all 0.3s ease-in-out;
                         width: 12vw;
-                        opacity: 0.6;
+                        opacity: 0.5;
 
                         &.active {
                             filter: none;
@@ -920,13 +924,12 @@ export default {
         .accordions {
             margin-top: 20px;
             text-align: justify;
+
             ul {
                 margin: 4px;
                 padding-left: 15px;
 
-                li {
-                    
-                }
+                li {}
             }
 
             p {
