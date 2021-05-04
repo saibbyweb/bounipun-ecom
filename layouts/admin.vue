@@ -32,9 +32,10 @@ export default {
     display: grid;
     grid-template-columns: 65% 35%;
     // grid-template-columns: auto;
-    grid-template-rows: auto auto;
+    grid-template-rows: 10% 90%;
     align-content: baseline;
-    min-height: 90vh;
+    height: 90vh;
+    overflow: hidden;
 
     @media(max-width: 768px) {
         grid-template-columns: 100%;
@@ -67,7 +68,7 @@ export default {
     .list {
         grid-area: 2 / 1 / 2 / 2;
         transition: all 0.3s ease-in-out;
-
+        overflow-y:scroll;
         &.updating {
             opacity: 0.5;
             pointer-events: none;
@@ -85,6 +86,8 @@ export default {
         grid-area: 2 / 2 / 2 / 3;
         transition: all 0.3s ease-in-out;
         position: relative;
+        height: 100%;
+        overflow-y:scroll;
 
         &.updating {
             box-shadow: -1px 0 15px rgba(0, 0, 0, 0.16);
@@ -96,6 +99,16 @@ export default {
 
         .contents {
             position: relative;
+
+            .center-space {
+                position:fixed;
+                bottom:0;
+                right:0;
+                background-color:white;
+                box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
+                width:35%;
+                padding:1%;
+            }
         }
 
         padding: 10px;

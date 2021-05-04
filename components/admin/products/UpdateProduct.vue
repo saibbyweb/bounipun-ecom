@@ -15,6 +15,8 @@
     <InputBox v-if="editMode" label="Product ID" v-model="doc._id" disabled :internal="true" />
     <!-- type of product -->
     <SelectBox :options="types" v-model="doc.type" label="Select Product Type" :internal="true" />
+    <!-- gender -->
+    <SelectBox :options="genders" v-model="doc.gender" label="Select Preferred Gender" />
     <!-- availability type -->
     <SelectBox :options="availabilityTypes" v-model="doc.availabilityType" label="Select Availablity Type" :internal="true" />
     <!-- collections -->
@@ -229,6 +231,7 @@ export default {
                 _id: "",
                 styleId: "",
                 printNo: "",
+                gender: "",
                 name: "",
                 alias: "",
                 slug: "",
@@ -281,6 +284,27 @@ export default {
                 {
                     name: 'Custom',
                     value: 'custom'
+                },
+            ],
+            genders: [{
+                    name: 'Select Preferred Gender',
+                    value: ''
+                },
+                {
+                    name: 'For Her',
+                    value: 'for-her'
+                },
+                {
+                    name: 'For Him',
+                    value: 'for-him'
+                },
+                {
+                    name: 'For Him & Her',
+                    value: 'for-him-and-her'
+                },
+                {
+                    name: 'N/A',
+                    value: 'na'
                 },
             ],
             baseColors: [],
@@ -449,6 +473,7 @@ export default {
                 _id,
                 styleId,
                 printNo,
+                gender,
                 name,
                 alias,
                 slug,
@@ -467,6 +492,7 @@ export default {
                 _id,
                 styleId,
                 printNo,
+                gender,
                 name,
                 alias,
                 slug,
@@ -493,6 +519,7 @@ export default {
                 _id: "",
                 styleId: "",
                 printNo: "",
+                gender: "",
                 name: "",
                 alias: "",
                 slug: "",

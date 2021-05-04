@@ -11,6 +11,7 @@ const schema = new mongoose.Schema({
     alias: String,
     slug: String,
     description: String,
+    gender: String,
     /* under bounipun or third-party */
     type: String,
     /* availability type */
