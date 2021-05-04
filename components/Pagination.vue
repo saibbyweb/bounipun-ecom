@@ -3,7 +3,10 @@
     <!-- Total pages {{ totalPages }} <br> -->
     <!-- pagination bar -->
     <div v-if="totalMatches > 0" class="pagination-bar">
+        <span class="total-matches"> Total matches: {{ totalMatches }} </span>
+        <div v-if="totalPages > 1">
         <button @click="getPage(n)" :class="n == cursor ? 'current-page page-no' : 'page-no'" :key="index" v-for="(n, index) in this.totalPages"> {{ n }} </button>
+        </div>
     </div>
 </div>
 </template>
@@ -123,20 +126,20 @@ export default {
     .pagination-bar {
         display: flex;
         flex-wrap: wrap;
+        align-items: center;
 
         .page-no {
             cursor: pointer;
-            border-radius: 4px;
-            background: #EBECF0;
-            box-shadow: -6px 6px 16px #cfd0d3,
-                6px -6px 16px #ffffff;
-            padding: 20px;
-            margin: 4px;
+            // border-radius: 50%;
+            background: $dark_gray;
+            color:white;
+            padding: 3px 14px;
+            margin: 6px 4px;
         }
 
         .current-page {
-            background: $primary_dark;
-            color: white;
+            background: white;
+            color: $dark_gray;
         }
     }
 }

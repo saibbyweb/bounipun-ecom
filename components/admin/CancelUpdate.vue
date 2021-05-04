@@ -15,6 +15,7 @@
         transition: all 0.3s ease-in-out;
         width: 35px;
         cursor: pointer;
+        filter: invert(1);
     }
     span {
         font-size: 10px;
