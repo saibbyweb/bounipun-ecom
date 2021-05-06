@@ -12,7 +12,15 @@
     </div>
 
     <!-- text details -->
-    <div class="text-details center">
+    <div class="text-details center-col">
+        <!-- product colors [boxes] -->
+
+        <!-- product colors [images] -->
+        <div v-if="baseColorImages.length > 0" class="base-color-boxes">
+            <div @click.stop="setActiveColor(baseColorImages[index].actualIndex)" class="color-image" v-for="(n, index) in 3" :key="index" :style="`background-image: url(${getBaseColorPath(index)})`">
+
+            </div>
+        </div>
         <!-- product name -->
         <div class="product-name center-col">
             <span class="name"> {{ product.name }} </span>
@@ -27,6 +35,8 @@
             <div v-for="(variant, index) in variantsAvailable" :key="index" class="variant"> {{ variant }} </div>
         </div>
     </div>
+
+    <!-- colors available -->
 
 </div>
 </template>
@@ -56,10 +66,6 @@ export default {
                 }
             }
         },
-        // product: {
-        //     type: String,
-        //     default: 'auto_1'
-        // },
         product: {
             type: Object,
             default: {
@@ -98,9 +104,64 @@ export default {
             return process.env.baseAWSURL + mainImage;
         },
         variantsAvailable() {
+            /* TODO: what is this? */
             if (this.product.variantNames)
                 return this.product.variantNames;
             return this.product.variants.map(variant => variant._id.name);
+        },
+        baseColorsBoxes() {
+            if (!this.product.colors)
+                return;
+            let baseColorList = this.product.colors.map(({
+                baseColor,
+                additionalColor1,
+                additionalColor2
+            }) => {
+                return [baseColor, additionalColor1, additionalColor2];
+            });
+
+            /* save active color details */
+            const activeColor = baseColorList[this.activeColorIndex];
+
+            /* get all colors except the active one */
+            let filteredColors = baseColorList.filter((_, index) => index !== this.activeColorIndex)
+
+            return [activeColor, ...filteredColors];
+        },
+        baseColorImages() {
+            if (!this.product.colors)
+                return [{
+                    path: "",
+                    actualIndex: -1
+                }];
+
+            /* base color list */
+            let baseColorList = this.product.colors.map((color, index) => {
+
+                const images = color.images;
+
+                if (images.length === 0 || images === undefined) {
+                    console.log('NO IMAGES PROVIDED')
+                    /* if escape, show the chip (NO_WAY) */
+                    return {
+                        path: "",
+                        actualIndex: index
+                    };
+                }
+
+                return {
+                    path: process.env.baseAWSURL + images[images.length - 1].path,
+                    actualIndex: index
+                }
+            });
+
+            /* save active color details */
+            const activeColor = baseColorList[this.activeColorIndex];
+
+            /* get all colors except the active one */
+            let filteredColors = baseColorList.filter((_, index) => index !== this.activeColorIndex)
+
+            return [activeColor, ...filteredColors];
         },
         collectionName() {
             return this.product.bounipun_collection.name;
@@ -132,8 +193,8 @@ export default {
             let mainImages = [];
 
             /* if active color provided */
-            if (this.activeColor !== -1) {
-                const mImages = this.product.colors[this.activeColor].images;
+            if (this.activeColorIndex !== -1) {
+                const mImages = this.product.colors[this.activeColorIndex].images;
                 /* if no images, uploaded */
                 if (mImages.length === 0) {
                     return ['/default-image.png'];
@@ -153,11 +214,20 @@ export default {
             /* fetch main image */
             return mainImages.map(image => process.env.baseAWSURL + image.path)
 
+        },
+    },
+    mounted() {
+        this.activeColorIndex = this.activeColor;
+    },
+    watch: {
+        activeColor(val) {
+            this.activeColorIndex = val;
         }
     },
     data() {
         return {
-            addedToWishlist: false
+            addedToWishlist: false,
+            activeColorIndex: -1
         }
     },
     methods: {
@@ -169,12 +239,27 @@ export default {
             let query = {
                 _id: this.product._id
             }
-            if (this.activeColor !== -1)
-                query.activeColor = this.activeColor;
+            if (this.activeColorIndex !== -1)
+                query.activeColor = this.activeColorIndex;
             this.$router.push({
                 path: '/products',
                 query
             });
+        },
+        getBaseColorPath(index) {
+            if (this.baseColorImages[index] !== undefined) {
+                console.log(index, '--DEFINED');
+                return this.baseColorImages[index].path;
+            } else {
+                console.log(index, '--undefined');
+                return "";
+            }
+        },
+        setActiveColor(actualIndex) {
+            /* mutate the active color */
+            console.log(actualIndex);
+            this.activeColorIndex = actualIndex;
+            /* reset slider index */
         }
     }
 };
@@ -233,11 +318,30 @@ export default {
         height: 13%;
         padding-bottom: 2px;
 
+        .base-color-boxes {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+
+            .color-image {
+                width: 35px;
+                height: 35px;
+                background-size: contain;
+                margin: 5px;
+            }
+        }
+
         .product-name {
             font-size: 12px;
             text-transform: uppercase;
             font-weight: 900;
             text-align: center;
+
+            .name {
+                font-size: 15px;
+                font-family: $font_2;
+            }
         }
 
         .collection {
@@ -250,6 +354,7 @@ export default {
             font-size: 13px;
             font-weight: 900;
         }
+
     }
 
     .variants-available {

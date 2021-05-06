@@ -82,7 +82,6 @@
             <!-- close sort layout -->
             <img @click="sortOpen = false" class="close" src="/icons/dark/close.png">
         </div>
-
     </div>
 
     <!-- filter and sort -->
@@ -93,7 +92,7 @@
     </div>
 
     <div class="search-results">
-        <product-card v-for="(product, index) in products" :key="index" :product="product.color" :searchView="true" :activeColor="product.actualIndex"/>
+        <product-card v-for="(product, index) in products" :key="index" :product="product.color" :searchView="true" :activeColor="product.actualIndex" />
     </div>
 
     <!-- pagination bar -->
@@ -215,6 +214,7 @@ export default {
             /* pagination config */
             //     cursor: 1,
             totalMatches: 0,
+            baseColors: []
             // limit: 10
         }
     },
@@ -347,10 +347,13 @@ export default {
             // const product = {...bounipunProduct};
             
             let matchedColors = [];
+
+            product.colors = product.colors.filter(color => color.status === true)
             
 
             /* what are the color filter */
             product.colors.forEach((color, index) => {
+                console.log(color.name, index);
                 const colorNameMatch = this.searchTermRegex.test(color.name)
                 const baseColorMatch = this.searchTermRegex.test(color.baseColor)
                 const additionalColor1Match = this.searchTermRegex.test(color.additionalColor1)
@@ -373,7 +376,7 @@ export default {
               
                 if((textMatch || filterMatch) && color.status === true) {
                     const colorProduct = {...product};
-
+                    /* TODO: escape collection id should be global */
                     if(product.bounipun_collection === "60522ab3be493200150ff835")
                         colorProduct.name = color.name;
 
@@ -417,12 +420,15 @@ export default {
                 return;
             }
 
-            console.log(response);
             this.filterData.collections = response.collections.map(collection => ({
                 ...collection,
                 value: collection._id,
                 checked: false
-            }))
+            }));
+
+            /* set base colors (for product cards)*/
+            this.baseColors = response.baseColors;
+
             this.filterData.baseColors = response.baseColors.map(color => ({
                 ...color,
                 value: color.name,

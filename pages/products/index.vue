@@ -41,11 +41,11 @@
             <div class="section-1">
                 <div class="main-details">
                     <h3> {{ bounipunColors ? product.colors[activeColorIndex].name : product.name }} </h3>
-                    <p v-if="!thirdPartyProduct"> {{ variants[activeVariantIndex].name }} 
+                    <p v-if="!thirdPartyProduct"> {{ variants[activeVariantIndex].name }}
                         {{ preferredGender }} </p>
                     <p v-if="!thirdPartyProduct"> Bounipun {{ product.bounipun_collection.name }} </p>
                     <!-- fabric -->
-                    <p v-if="!thirdPartyProduct"> {{ selectedFabric.name }}  ({{ selectedFabric.info1 }})</p>
+                    <p v-if="!thirdPartyProduct"> {{ selectedFabric.name }} ({{ selectedFabric.info1 }})</p>
                     <p> {{ product.styleId }} </p>
                 </div>
                 <!-- quantity picker and size chart-->
@@ -290,9 +290,9 @@ export default {
     },
     computed: {
         preferredGender() {
-            if(this.product.gender === undefined)
+            if (this.product.gender === undefined)
                 return "";
-            
+
             return `( ${this.product.gender.replaceAll('-',' ')} )`;
         },
         bounipunColors() {
@@ -411,14 +411,16 @@ export default {
 
                 colorCategories.forEach(category => {
                     let colors = category.colors;
-                    colors = colors.sort((a, b) => {
-                        return b.images.length - a.images.length
-                    });
 
                     /* attach actual index */
                     colors.forEach(color => {
                         color.actualIndex = result.doc.colors.findIndex(col => col._id === color._id);
                     });
+
+                    colors = colors.sort((a, b) => {
+                        return b.images.length - a.images.length
+                    });
+
                 });
 
             }
@@ -432,6 +434,7 @@ export default {
             /* if main color provided via query param */
             if (this.$route.query.activeColor) {
                 this.activeColorIndex = parseInt(this.$route.query.activeColor);
+                console.log('ACTIVE COLOR SET FROM QUERY PARAM')
                 return;
             }
 
