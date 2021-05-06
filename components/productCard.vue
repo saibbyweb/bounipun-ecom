@@ -7,20 +7,25 @@
     <!-- main image container -->
     <div class="main-image-container center">
         <!-- <img class="main-image" :src="imagePath" /> -->
-        <slideshow ref="slideshow" :images="slideshowImages" extraClass="search-slideshow" :dots="true" :slideWidth="48" :slideHeight="'88vw'" :size="'180%'" />
+        <slideshow ref="slideshow" :images="slideshowImages" extraClass="search-slideshow" :dots="true" :slideWidth="48" slideHeight="370px" :size="'180%'" />
+
+    </div>
+
+    <!-- product colors [images] -->
+    <div class="center-col color-previews">
+        <div class="base-color-boxes">
+            <div @click.stop="setActiveBaseColor(index)" class="color-image shadow" v-for="(preview, index) in baseColorImagesPreview.previews" :key="index" :style="`background-image: url(${getBaseColorPath(index)})`">
+            </div>
+        </div>
+        <!-- additional colors -->
+        <span class="additional-colors">
+          {{ baseColorImagesPreview.additional > 0 ? `+ ${baseColorImagesPreview.additional} color(s)` : '&nbsp;' }}
+         </span>
 
     </div>
 
     <!-- text details -->
-    <div class="text-details center-col">
-        <!-- product colors [boxes] -->
-
-        <!-- product colors [images] -->
-        <div v-if="baseColorImages.length > 0" class="base-color-boxes">
-            <div @click.stop="setActiveColor(baseColorImages[index].actualIndex)" class="color-image" v-for="(n, index) in 3" :key="index" :style="`background-image: url(${getBaseColorPath(index)})`">
-
-            </div>
-        </div>
+    <div class="text-details">
         <!-- product name -->
         <div class="product-name center-col">
             <span class="name"> {{ product.name }} </span>
@@ -35,8 +40,6 @@
             <div v-for="(variant, index) in variantsAvailable" :key="index" class="variant"> {{ variant }} </div>
         </div>
     </div>
-
-    <!-- colors available -->
 
 </div>
 </template>
@@ -155,6 +158,8 @@ export default {
                 }
             });
 
+            return baseColorList;
+
             /* save active color details */
             const activeColor = baseColorList[this.activeColorIndex];
 
@@ -162,6 +167,29 @@ export default {
             let filteredColors = baseColorList.filter((_, index) => index !== this.activeColorIndex)
 
             return [activeColor, ...filteredColors];
+        },
+        baseColorImagesPreview() {
+            /* { previews, additional colors length } */
+            let previews = [];
+            let additional = 0;
+
+            /* base color images length */
+            const baseColorsLength = this.baseColorImages.length;
+
+            /* set preview images & calculate additional colors */
+            if (baseColorsLength >= 3) {
+                for (let i = 0; i < 3; i++)
+                    previews.push(this.baseColorImages[i]);
+                additional = baseColorsLength - 3;
+            } else {
+                previews = this.baseColorImages;
+                additional = 0;
+            }
+
+            return {
+                previews,
+                additional
+            }
         },
         collectionName() {
             return this.product.bounipun_collection.name;
@@ -255,11 +283,13 @@ export default {
                 return "";
             }
         },
-        setActiveColor(actualIndex) {
+        setActiveBaseColor(index) {
+            const actualIndex = this.baseColorImages[index].actualIndex
             /* mutate the active color */
             console.log(actualIndex);
             this.activeColorIndex = actualIndex;
             /* reset slider index */
+            this.$refs.slideshow.setActiveImage(0);
         }
     }
 };
@@ -285,9 +315,10 @@ export default {
         }
     }
 
-    // border-top: 1px solid rgb(219, 219, 219);
+    border-top: 1px solid rgb(219, 219, 219);
+
     &:nth-child(odd) {
-        // border-right: 1px solid rgb(219, 219, 219);
+        border-right: 1px solid rgb(219, 219, 219);
 
     }
 
@@ -298,13 +329,13 @@ export default {
 
     @media (max-width: $breakpoint-tablet) {
         width: 48vw;
-        height: 125vw;
+        height: 550px;
     }
 
     /* main image container */
     .main-image-container {
         width: 100%;
-        height: 75%;
+        height: 70%;
         overflow: hidden;
 
         .main-image {
@@ -312,25 +343,36 @@ export default {
         }
     }
 
-    /* text-details */
-    .text-details {
-        width: 100%;
-        height: 13%;
-        padding-bottom: 2px;
-
+    .color-previews {
+        height:14.5%;
         .base-color-boxes {
             display: flex;
             justify-content: center;
             align-items: center;
             width: 100%;
+            margin-bottom: 5px;
 
             .color-image {
                 width: 35px;
                 height: 35px;
                 background-size: contain;
                 margin: 5px;
+                transition: all 0.3s ease-in-out;
             }
         }
+
+        .additional-colors {
+            font-size: 10px;
+            color: $gray;
+        }
+
+    }
+
+    /* text-details */
+    .text-details {
+        width: 100%;
+        height: 8%;
+        padding-bottom: 2px;
 
         .product-name {
             font-size: 12px;
@@ -339,8 +381,9 @@ export default {
             text-align: center;
 
             .name {
-                font-size: 15px;
+                font-size: 14px;
                 font-family: $font_2;
+                font-weight: 900;
             }
         }
 
@@ -353,12 +396,13 @@ export default {
         .price {
             font-size: 13px;
             font-weight: 900;
+            color: $gray;
         }
 
     }
 
     .variants-available {
-        height: 12%;
+        height: 7.5%;
 
         .variant {
             color: $primary_dark;
