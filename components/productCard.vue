@@ -7,14 +7,14 @@
     <!-- main image container -->
     <div class="main-image-container center">
         <!-- <img class="main-image" :src="imagePath" /> -->
-        <slideshow ref="slideshow" :images="slideshowImages" extraClass="search-slideshow" :dots="true" :slideWidth="48" slideHeight="370px" :size="'180%'" />
+        <slideshow ref="slideshow" :images="slideshowImages" extraClass="search-slideshow" :dots="true" :slideWidth="48" slideHeight="315px" :size="'180%'" />
 
     </div>
 
     <!-- product colors [images] -->
     <div class="center-col color-previews">
         <div class="base-color-boxes">
-            <div @click.stop="setActiveBaseColor(index)" class="color-image shadow" v-for="(preview, index) in baseColorImagesPreview.previews" :key="index" :style="`background-image: url(${getBaseColorPath(index)})`">
+            <div @click.stop="setActiveBaseColor(index)" class="color-image shadow" v-for="(preview, index) in baseColorImagesPreview.previews" :key="index" :style="`background-image: url(${getBaseColorPath(index)})`" :class="{active: isActiveBaseColor(index)}">
             </div>
         </div>
         <!-- additional colors -->
@@ -192,6 +192,8 @@ export default {
             }
         },
         collectionName() {
+            if(typeof this.product.bounipun_collection === "string")
+                return this.product.bounipun_collection;
             return this.product.bounipun_collection.name;
         },
         lowestVariantPricex() {
@@ -290,6 +292,10 @@ export default {
             this.activeColorIndex = actualIndex;
             /* reset slider index */
             this.$refs.slideshow.setActiveImage(0);
+        },
+        isActiveBaseColor(index) {
+             const actualIndex = this.baseColorImages[index].actualIndex;
+             return actualIndex === this.activeColorIndex;
         }
     }
 };
@@ -315,10 +321,10 @@ export default {
         }
     }
 
-    border-top: 1px solid rgb(219, 219, 219);
+    // border-top: 1px solid rgb(219, 219, 219);
 
     &:nth-child(odd) {
-        border-right: 1px solid rgb(219, 219, 219);
+        // border-right: 1px solid rgb(219, 219, 219);
 
     }
 
@@ -329,13 +335,13 @@ export default {
 
     @media (max-width: $breakpoint-tablet) {
         width: 48vw;
-        height: 550px;
+        height: 480px;
     }
 
     /* main image container */
     .main-image-container {
         width: 100%;
-        height: 70%;
+        height: 67%;
         overflow: hidden;
 
         .main-image {
@@ -344,7 +350,7 @@ export default {
     }
 
     .color-previews {
-        height:14.5%;
+        height:16%;
         .base-color-boxes {
             display: flex;
             justify-content: center;
@@ -358,6 +364,10 @@ export default {
                 background-size: contain;
                 margin: 5px;
                 transition: all 0.3s ease-in-out;
+
+                &.active {
+                    border: 1px solid #cccccc;
+                }
             }
         }
 
@@ -371,7 +381,7 @@ export default {
     /* text-details */
     .text-details {
         width: 100%;
-        height: 8%;
+        height:12%;
         padding-bottom: 2px;
 
         .product-name {
@@ -381,7 +391,7 @@ export default {
             text-align: center;
 
             .name {
-                font-size: 14px;
+                font-size: 12px;
                 font-family: $font_2;
                 font-weight: 900;
             }
@@ -402,7 +412,7 @@ export default {
     }
 
     .variants-available {
-        height: 7.5%;
+        height: 5%;
 
         .variant {
             color: $primary_dark;

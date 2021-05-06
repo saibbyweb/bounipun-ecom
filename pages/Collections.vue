@@ -120,6 +120,14 @@ export default {
             if (!products.fetched) {
                 return;
             }
+            
+            /* filter out inactive colors */
+            products.docs.forEach(product => {
+                product.colors = product.colors.filter(color => color.status === true);
+            });
+            
+            /* filter out products with no active colors */
+            products.docs = products.docs.filter(product => product.colors.length > 0)
 
             this.products = products.docs;
 
@@ -143,7 +151,11 @@ export default {
                     return color._id.category === category._id
                 });
                 /* save colors */
-                groupedData.push({name: category.name, description: category.description, colors })
+                groupedData.push({
+                    name: category.name,
+                    description: category.description,
+                    colors
+                })
             });
 
             this.escapeProduct = groupedData;
@@ -162,7 +174,6 @@ export default {
     // background: url("/demo_images/collection-header.png");
     background-size: cover;
     width: 100%;
- 
 
     .heading {
         color: $primary_dark;

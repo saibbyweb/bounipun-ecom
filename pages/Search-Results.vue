@@ -315,6 +315,13 @@ export default {
 
             // this.products = response.docs;
 
+            /* attach collection name */
+            response.docs.forEach(product => {
+                const foundCollection = this.filterData.collections.find(collection => collection.value === product.bounipun_collection);
+                if(foundCollection !== undefined)
+                    product.bounipun_collection = foundCollection.name;
+            })
+
             /* process color segregation */
             this.processColorSegregation(response.docs);
 
@@ -399,6 +406,11 @@ export default {
                 this.products = [];
                 return;
             }
+            
+            /* filter out hidden colors */
+            // result.docs.forEach(product => {
+            //     product.colors = product.colors.filter(color => color.status === true);
+            // });
 
             /* extract list */
             this.products = result.docs;
