@@ -3,17 +3,12 @@
     <div class="delivery-address">
         <!-- country region -->
         <h2 class="title"> Country/Region </h2>
-        <!-- <select class="field">
-            <option v-for="(country,index) in countryCodes" :key="index">
-                {{ country.name }}
-            </option>
-        </select> -->
-
+        <!-- country selection -->
         <div v-if="countryCodes.length !== 0" class="country-select">
             <div @click="showCountrySelect = true" class="selected-country" :class="{focused: showCountrySelect}">
                 <img :src="selectedCountry.flag" />
                 <span> {{ selectedCountry.name }} </span>
-                <span style="margin-left: 4px;"> ({{ selectedCountry.dialCode }}) </span>
+                <span v-if="selectedCountry !== ''" style="margin-left: 4px;"> ({{ selectedCountry.dialCode }}) </span>
             </div>
 
             <!-- list of countries -->
@@ -25,11 +20,15 @@
                 </div>
 
                 <!-- country list -->
-
                 <div class="item" v-for="(country, index) in matchedCountries" :key="country.isoCode" @click="selectCountry(index)">
                     <img :src="country.flag" />
                     <span> {{ country.name }} </span>
                     <span style="margin-left: 4px;"> ({{ country.dialCode }}) </span>
+                </div>
+
+                <!-- no results found -->
+                <div v-if="matchedCountries.length === 0" class="no-results">
+                    <span> No results found </span>
                 </div>
 
             </div>
@@ -37,7 +36,7 @@
 
         <h2 class="title"> Shipping Address </h2>
         <!-- delivery input fields -->
-        <DeliveryInput v-for="(field, key, index) in formData" :key="index" v-model="field.value" :error="field.error" :label="field.label" @input="field.error = false" />
+        <DeliveryInput v-for="(field, key, index) in formData" :key="index" v-model="field.value" :error="field.error" :label="field.label" @input="field.error = false" :isMobileNumber="key === 'mobileNumber'" :countryCode="selectedCountryCode" />
     </div>
 
     <!-- proceed to checkout -->
@@ -53,8 +52,8 @@ export default {
     data() {
         return {
             formData: this.createFormData(),
-            countryCodes: [],
-            selectedCountryIndex: 0,
+            countryCodes: countryData,
+            selectedCountryIndex: 98,
             countrySearchTerm: "",
             showCountrySelect: false
         }
@@ -62,12 +61,19 @@ export default {
     computed: {
         selectedCountry() {
             if (this.matchedCountries.length === 0)
-                return this.countryCodes[0];
+                return ""
             return this.matchedCountries[this.selectedCountryIndex];
+        },
+        selectedCountryCode() {
+            if (this.matchedCountries.length === 0)
+                return "";
+            return this.matchedCountries[this.selectedCountryIndex].dialCode
         },
         matchedCountries() {
             if (this.countrySearchTerm === "")
                 return this.countryCodes;
+
+            this.selectedCountryIndex = 0;
 
             return this.countryCodes.filter(country => {
                 return country.name.toUpperCase().startsWith(this.countrySearchTerm.toUpperCase());
@@ -77,20 +83,20 @@ export default {
     async mounted() {
         // this.countryCodes = await this.$axios.$get('https://gist.githubusercontent.com/kcak11/4a2f22fb8422342b3b3daa7a1965f4e4/raw/95677f414c98b0289b75436c1e10d9c1755c62f0/countries.json');
 
-        this.countryCodes = countryData;
+        // this.countryCodes = countryData;
     },
     methods: {
         selectCountry(index) {
             this.selectedCountryIndex = index;
             this.showCountrySelect = false;
-            this.formData.countryCode.value = this.matchedCountries[this.selectedCountryIndex].dialCode;
+            // this.formData.countryCode.value = this.matchedCountries[this.selectedCountryIndex].dialCode;
         },
         createFormData() {
             /* form fields */
             const fields = {
                 'firstName': 'First Name',
                 'surName': 'Sur Name',
-                'countryCode': 'Country Code',
+                // 'countryCode': 'Country Code',
                 'mobileNumber': 'Mobile Number',
                 'email': 'Email',
                 'addressLine1': 'Address Line #1',
@@ -130,13 +136,13 @@ export default {
     justify-content: center;
 
     .title {
-        font-size: 24px;
-        font-family: $font_2;
+        font-size: 22px;
+        font-family: $font_1;
         color: $dark_gray;
         text-transform: uppercase;
         align-self: flex-start;
-        margin:5%;
-        margin-right:0;
+        margin: 7% 5%;
+        margin-right: 0;
     }
 
     .country-select {
@@ -151,12 +157,20 @@ export default {
 
         .selected-country {
             background-color: #e7e7e7;
+            // background-color: $dark_gray;
+            // border-bottom: 2px solid $dark_gray;
             border-bottom: 2px solid #e7e7e7;
             display: flex;
             justify-content: flex-start;
             align-items: center;
             padding: 2%;
             width: 100%;
+
+            span {
+                font-size:14px;
+                font-family: $font_2;
+                // color:white;
+            }
 
             &.focused {
                 border-bottom: 2px solid $dark_gray;
@@ -210,6 +224,17 @@ export default {
                     font-family: $font_2;
                 }
 
+            }
+
+            .no-results {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                span {
+                    margin-top:10px;
+                    font-size: 14px;
+                }
             }
 
         }

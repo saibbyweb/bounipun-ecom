@@ -3,6 +3,7 @@
     <div class="page-header center">
         <h2 class="title"> Shopping Bag </h2>
     </div>
+    
     <!-- cart items -->
     <div class="cart-items">
         <!-- cart item -->

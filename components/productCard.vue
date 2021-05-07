@@ -28,7 +28,7 @@
     <div class="text-details">
         <!-- product name -->
         <div class="product-name center-col">
-            <span class="name"> {{ product.name }} </span>
+            <span class="name"> {{ collectionName === "Escape" ? product.colors[activeColorIndex] !== undefined ?  product.colors[activeColorIndex].name : product.name : product.name }} </span>
             <span class="collection"> {{ collectionName }} </span>
             <span class="price"> INR {{ lowestVariantPrice }} - INR {{ highestVariantPirce }} </span>
         </div>
@@ -278,10 +278,10 @@ export default {
         },
         getBaseColorPath(index) {
             if (this.baseColorImages[index] !== undefined) {
-                console.log(index, '--DEFINED');
+               
                 return this.baseColorImages[index].path;
             } else {
-                console.log(index, '--undefined');
+               
                 return "";
             }
         },

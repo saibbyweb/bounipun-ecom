@@ -360,7 +360,7 @@ export default {
 
             /* what are the color filter */
             product.colors.forEach((color, index) => {
-                console.log(color.name, index);
+                // console.log(color.name, index);
                 const colorNameMatch = this.searchTermRegex.test(color.name)
                 const baseColorMatch = this.searchTermRegex.test(color.baseColor)
                 const additionalColor1Match = this.searchTermRegex.test(color.additionalColor1)
@@ -383,9 +383,12 @@ export default {
               
                 if((textMatch || filterMatch) && color.status === true) {
                     const colorProduct = {...product};
+                    console.log('COLOR MATCHED',color.name, product.bounipun_collection)
                     /* TODO: escape collection id should be global */
-                    if(product.bounipun_collection === "60522ab3be493200150ff835")
+                    if(product.bounipun_collection.toUpperCase() === "ESCAPE") {
+                        console.log('ESCAPE COLOR FOUND')
                         colorProduct.name = color.name;
+                    }
 
                     matchedColors.push({color: colorProduct, actualIndex: index });
                 }
