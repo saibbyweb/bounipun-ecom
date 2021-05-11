@@ -31,21 +31,26 @@
 
     </div>
 
-    <!-- absolute elements like wishlist heart, collection text, share icon -->
-
     <!-- product text details (product name, collection, base price -->
     <div class="product-details">
 
-        <div ref="details" class="details" :class="{'sticky shadow': sticky}">
+        <div ref="details" class="details" :class="{'sticky': sticky}">
+            
+            <!-- header -->
+            <div class="header">
+                <span class="collection" v-if="!thirdPartyProduct"> Bounipun {{ collectionName }} </span>
+                <span class="gender"> {{ preferredGender }} </span>
+            </div>
+
+            <div class="og-details">
 
             <div class="section-1">
                 <div class="main-details">
                     <h3> {{ bounipunColors ? product.colors[activeColorIndex].name : product.name }} </h3>
-                    <p v-if="!thirdPartyProduct"> {{ variants[activeVariantIndex].name }}
-                        {{ preferredGender }} </p>
-                    <p v-if="!thirdPartyProduct"> Bounipun {{ product.bounipun_collection.name }} </p>
-                    <!-- fabric -->
-                    <p v-if="!thirdPartyProduct"> {{ selectedFabric.name }} ({{ selectedFabric.info1 }})</p>
+                    <p v-if="!thirdPartyProduct" class="variant"> {{ variants[activeVariantIndex].name }} </p>
+                     <!-- fabric -->
+                    <p v-if="!thirdPartyProduct"> {{ selectedFabric.name }}</p>
+                    <p v-if="!thirdPartyProduct"> {{ selectedFabric.info1 }} </p>
                     <p> {{ product.styleId }} </p>
                 </div>
                 <!-- quantity picker and size chart-->
@@ -74,7 +79,11 @@
                 </div>
             </div>
 
+            </div>
+
         </div>
+
+        <div class="other-details">
 
         <!-- bounipun colors  -->
         <div v-if="bounipunColors" class="colors">
@@ -206,6 +215,8 @@
             <Accordion heading="Shipping & Returns" />
         </div>
 
+        </div>
+
         <!-- related products -->
         <!-- <div class="related-products">
                 <h4 class="section-heading"> Related Products </h4>
@@ -283,17 +294,21 @@ export default {
             activeVariantIndex: 0,
             activeFabricIndex: 0,
             productFetched: false,
-            stockLimit: 5,
+            stockLimit: 3,
             scrollPosition: 0,
             sticky: false
         }
     },
     computed: {
+        collectionName() {
+            if(!this.product.thirdParty)
+                return this.product.bounipun_collection.name;
+        },
         preferredGender() {
             if (this.product.gender === undefined)
                 return "";
 
-            return `( ${this.product.gender.replaceAll('-',' ')} )`;
+            return `${this.product.gender.replaceAll('-',' ')}`;
         },
         bounipunColors() {
             return this.product.colorSource === 'bounipun-colors';
@@ -654,15 +669,12 @@ export default {
     }
 
     .product-details {
-        padding: 3% 6%;
+     
 
         /* sticky details */
         .details {
-            display: flex;
-            justify-content: space-between;
-            position: relative;
-            transition: span 0.3s ease-in-out;
-
+            
+        margin-top:10px;
             &.sticky {
 
                 position: fixed;
@@ -670,288 +682,336 @@ export default {
                 left: 0;
                 width: 100%;
                 background-color: white;
-                padding: 3% 6%;
+                transition: span 0.3s ease-in-out;
                 z-index: 2;
+                box-shadow: 0px -4px 23px -13px rgba(38,38,38,0.24)
             }
 
         }
+        
+        .header {
+            width:100%;
+            background-color: $dark_gray;
+            // height:20px;
+            display:flex;
+            justify-content: space-between;
+            align-items: center;
+            padding:2% 4%;
+            span {
+                color:white;
 
-        /* main text details */
-        .main-details {
-            h3 {
-                font-family: $font_1_bold;
-                text-transform: uppercase;
-                font-size: 17px;
-            }
+                &.collection {
+                    text-transform: uppercase;
+                    font-size:13px;
+                    font-family: $font_2;
+                }
 
-            p {
-                font-family: $font_2;
-                text-transform: uppercase;
-                color: $gray;
-                font-size: 12px;
-            }
-
-        }
-
-        /* quantity and size */
-        .quantity-and-size {
-            margin-top: 10px;
-
-            display: flex;
-
-            .quantity-picker {
-                display: flex;
-                justify-content: space-around;
-                border: 1px solid #919191;
-                width: 80px;
-
-                button {
-                    background: transparent;
-                    font-family: $font_1_bold;
-                    text-align: center;
-                    padding: 0px;
-                    font-size: 10px;
-
-                    &:first-child {
-                        border-right: 1px solid #919191;
-                        padding: 0 5px;
-                    }
-
-                    &:nth-child(3) {
-                        border-left: 1px solid #919191;
-                        padding: 0 5px;
-                    }
-
-                    &.qty {
-                        width: 50%;
-                        padding: 0 15px;
-                    }
+                &.gender {
+                    font-size: 12px;
+                    // font-style:  italic;
                 }
             }
         }
 
-        /* price and add to cart */
-        .price-and-actions {
-            margin-top: 10px;
+        .og-details {
+            padding: 2% 4%;
+            width:100%;
             display: flex;
-            flex-direction: column;
             justify-content: space-between;
             position: relative;
+            /* section 1 */
+            .section-1 {
+                // width:65%;
+            /* main text details */
+                .main-details {
+                    h3 {
+                        font-family: $font_1_bold;
+                        text-transform: uppercase;
+                        font-size: 17px;
+                    }
 
-            .price {
-                h5 {
-                    font-family: $font_1_bold;
-                    font-size: 17px;
+                    p {
+                        font-family: $font_2;
+                        text-transform: uppercase;
+                        color: $gray;
+                        font-size: 10px;
+                        &.variant {
+                            font-weight: 900;
+                            color: $dark_gray;
+                            font-size:12px;
+                        }
+                    }
+
+                }
+
+                /* quantity and size */
+                .quantity-and-size {
+                    margin-top: 10px;
+
+                    display: flex;
+
+                    .quantity-picker {
+                        display: flex;
+                        justify-content: space-around;
+                        border: 1px solid #919191;
+                        width: 80px;
+
+                        button {
+                            background: transparent;
+                            font-family: $font_1_bold;
+                            text-align: center;
+                            padding: 0px;
+                            font-size: 10px;
+
+                            &:first-child {
+                                border-right: 1px solid #919191;
+                                padding: 0 5px;
+                            }
+
+                            &:nth-child(3) {
+                                border-left: 1px solid #919191;
+                                padding: 0 5px;
+                            }
+
+                            &.qty {
+                                width: 50%;
+                                padding: 0 15px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            /* price and add to cart */
+            .price-and-actions {
+                // width:35%;
+                // margin-top: 10px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+                position: relative;
+
+                .price {
+                    h5 {
+                        font-family: $font_1_bold;
+                        font-size: 17px;
+                    }
+
+                    p {
+                        font-family: $font_2;
+                        font-size: 10px;
+                    }
+                }
+
+                .add-to-cart {
+                    display: flex;
+
+                    button {
+                        background: $primary_dark;
+                        color: white;
+                        padding: 4px 4px 4px 8px;
+                        text-transform: uppercase;
+                        margin: 0px;
+                        font-family: $font_1_bold;
+                        font-size: 14px;
+
+                        &.arrow {
+                            font-family: $font_1;
+                            font-size: 20px;
+                            padding: 4px 8px 4px 4px;
+                        }
+                    }
+
+                }
+            }
+        }
+    
+        /* sticky details -- END HERE */
+
+
+        .other-details {
+            padding: 3% 4%;
+            /* section heading (colors, variants available, fabrics) */
+            .section-heading {
+                text-transform: uppercase;
+                color: $dark_gray;
+                letter-spacing: 1.1px;
+                font-family: $font_2;
+                margin-bottom: 20px;
+                font-size: 14px;
+            }
+
+            /* colors */
+            .colors {
+                margin-top: 20px;
+
+                .category-heading {
+                    font-family: $font_1_semibold;
+                    font-size: 10px;
+                    margin-left: 10px;
+                    color: $gray;
+                    // text-transform: uppercase;
+
+                }
+
+                .color-boxes {
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    .box-container {
+                        margin: 5px;
+
+                        .box {
+                            height: 20vw;
+                            width: 20vw;
+                            background-size: contain;
+                            background-position: center;
+
+                            &.active {
+                                border: 1px solid #bfbfbf;
+                            }
+                        }
+
+                        .name {
+                            margin-top: 5px;
+                            font-size: 8px;
+                            letter-spacing: 0.4px;
+                        }
+                    }
+
+                }
+            }
+
+            /* divider */
+            .divider {
+                margin-top: 10px;
+                width: 100%;
+                height: 1px;
+                background-color: $primary_dark;
+            }
+
+            /* variants available */
+            .variants-available {
+                margin-top: 20px;
+
+                .section-heading {
+                    margin-bottom: 5px;
+                }
+
+                .section-paragraph {
+                    font-size: 11px;
+                    padding: 0px;
+                    margin: 0px;
+                    margin-bottom: 20px;
+                    color: $gray;
+                    font-family: $font_2;
+                }
+
+                .variants-container {
+
+                    display: flex;
+                    justify-content: space-around;
+
+                    .variant {
+
+                        .illustration {
+                            filter: grayscale(100%);
+                            // height: 60%;
+                            margin-bottom: 3px;
+                            transition: all 0.3s ease-in-out;
+                            width: 12vw;
+                            opacity: 0.5;
+
+                            &.active {
+                                filter: none;
+                                opacity: 1;
+                            }
+                        }
+
+                        .name {
+                            font-family: $font_2_semibold;
+                            color: $dark_gray;
+                            font-size: 11px;
+                        }
+
+                        .info {
+                            font-family: $font_2;
+                            font-size: 9px;
+                            color: $gray;
+                        }
+                    }
+                }
+            }
+
+            /* fabrics available */
+            .fabrics-available {
+                margin-top: 20px;
+
+                .fabrics-container {
+                    display: flex;
+                    justify-content: flex-start;
+                    flex-wrap: wrap;
+
+                    .fabric {
+                        background-color: #33333376;
+                        padding: 5px 0px;
+                        width: 47%;
+                        margin: 5px;
+                        transition: all 0.2s cubic-bezier(0.215, 0.610, 0.355, 1);
+
+                        span {
+                            color: white;
+                            text-align: center;
+                        }
+
+                        &.active {
+                            box-shadow: 1px 1px 5px hsla(0, 0%, 0%, 0.16);
+                            background: $primary_dark;
+                        }
+
+                        // width: 30%;
+                        .name {
+                            font-size: 10px;
+                            letter-spacing: 1px;
+                        }
+
+                        .info {
+                            font-size: 9px;
+                            letter-spacing: 1px;
+                        }
+
+                        .price {
+                            font-size: 11px;
+                            letter-spacing: 1px;
+                        }
+                    }
+                }
+
+            }
+
+            /* description */
+            .accordions {
+                margin-top: 20px;
+                text-align: justify;
+
+                ul {
+                    margin: 4px;
+                    padding-left: 15px;
+
+                    li {}
                 }
 
                 p {
-                    font-family: $font_2;
-                    font-size: 10px;
-                }
-            }
-
-            .add-to-cart {
-                display: flex;
-
-                button {
-                    background: $primary_dark;
-                    color: white;
-                    padding: 4px 4px 4px 8px;
-                    text-transform: uppercase;
-                    margin: 0px;
-                    font-family: $font_1_bold;
-                    font-size: 14px;
-
-                    &.arrow {
-                        font-family: $font_1;
-                        font-size: 20px;
-                        padding: 4px 8px 4px 4px;
-                    }
+                    font-size: 13px;
+                    margin: 10px 0;
                 }
 
-            }
-        }
+                span {
+                    font-size: 12px;
 
-        /* section heading (colors, variants available, fabrics) */
-        .section-heading {
-            text-transform: uppercase;
-            color: $dark_gray;
-            letter-spacing: 1.1px;
-            font-family: $font_2;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-
-        /* colors */
-        .colors {
-            margin-top: 20px;
-
-            .category-heading {
-                font-family: $font_1_semibold;
-                font-size: 10px;
-                margin-left: 10px;
-                color: $gray;
-                // text-transform: uppercase;
-
-            }
-
-            .color-boxes {
-                display: flex;
-                flex-wrap: wrap;
-
-                .box-container {
-                    margin: 5px;
-
-                    .box {
-                        height: 20vw;
-                        width: 20vw;
-                        background-size: contain;
-                        background-position: center;
-
-                        &.active {
-                            border: 1px solid #bfbfbf;
-                        }
-                    }
-
-                    .name {
-                        margin-top: 5px;
-                        font-size: 8px;
-                        letter-spacing: 0.4px;
-                    }
-                }
-
-            }
-        }
-
-        /* divider */
-        .divider {
-            margin-top: 10px;
-            width: 100%;
-            height: 1px;
-            background-color: $primary_dark;
-        }
-
-        /* variants available */
-        .variants-available {
-            margin-top: 20px;
-
-            .section-heading {
-                margin-bottom: 5px;
-            }
-
-            .section-paragraph {
-                font-size: 11px;
-                padding: 0px;
-                margin: 0px;
-                margin-bottom: 20px;
-                color: $gray;
-                font-family: $font_2;
-            }
-
-            .variants-container {
-
-                display: flex;
-                justify-content: space-around;
-
-                .variant {
-
-                    .illustration {
-                        filter: grayscale(100%);
-                        // height: 60%;
-                        margin-bottom: 3px;
-                        transition: all 0.3s ease-in-out;
-                        width: 12vw;
-                        opacity: 0.5;
-
-                        &.active {
-                            filter: none;
-                            opacity: 1;
-                        }
-                    }
-
-                    .name {
-                        font-family: $font_2_semibold;
-                        color: $dark_gray;
-                        font-size: 11px;
-                    }
-
-                    .info {
-                        font-family: $font_2;
-                        font-size: 9px;
-                        color: $gray;
-                    }
                 }
             }
-        }
-
-        /* fabrics available */
-        .fabrics-available {
-            margin-top: 20px;
-
-            .fabrics-container {
-                display: flex;
-                justify-content: flex-start;
-                flex-wrap: wrap;
-
-                .fabric {
-                    background-color: #33333376;
-                    padding: 5px 0px;
-                    width: 43%;
-                    margin: 10px;
-                    transition: all 0.2s cubic-bezier(0.215, 0.610, 0.355, 1);
-
-                    span {
-                        color: white;
-                        text-align: center;
-                    }
-
-                    &.active {
-                        box-shadow: 1px 1px 5px hsla(0, 0%, 0%, 0.16);
-                        background: $primary_dark;
-                    }
-
-                    // width: 30%;
-                    .name {
-                        font-size: 10px;
-                        letter-spacing: 1px;
-                    }
-
-                    .info {
-                        font-size: 9px;
-                        letter-spacing: 1px;
-                    }
-
-                    .price {
-                        font-size: 11px;
-                        letter-spacing: 1px;
-                    }
-                }
-            }
-
-        }
-
-        /* description */
-        .accordions {
-            margin-top: 20px;
-            text-align: justify;
-
-            ul {
-                margin: 4px;
-                padding-left: 15px;
-
-                li {}
-            }
-
-            p {
-                font-size: 13px;
-                margin: 10px 0;
-            }
-
-            span {
-                font-size: 12px;
-
-            }
-        }
+           }
     }
 
 }
