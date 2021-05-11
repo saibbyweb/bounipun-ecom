@@ -26,9 +26,9 @@ export default {
                             variantNames: "$variantData.name"
                         }
                     },
-                    {
-                        $unset: ["variantData"]
-                    },
+                    // {
+                    //     $unset: ["variantData"]
+                    // },
                 ],
                 totalMatches: [
                     { $match: criterion.match },

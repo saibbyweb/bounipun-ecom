@@ -108,6 +108,12 @@ export default {
         },
         variantsAvailable() {
             /* TODO: what is this? */
+            if(this.product.variantData) {
+                this.product.variantData.sort((a,b) => a.order - b.order)
+                return this.product.variantData.map(variant => variant.name)
+            }
+
+
             if (this.product.variantNames)
                 return this.product.variantNames;
             return this.product.variants.map(variant => variant._id.name);
@@ -420,6 +426,10 @@ export default {
             margin: 0 2px;
             padding: 2px 5px;
             font-size: 10px;
+            width:25%;
+            display:flex;
+            justify-content: center;
+            align-items: center;
         }
     }
 
