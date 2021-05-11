@@ -271,7 +271,7 @@ export default {
             this.addedToWishlist = !this.addedToWishlist
         },
         navigateToProductPage() {
-            // this.$router.push('/products?_id='+this.product._id)
+
             let query = {
                 _id: this.product._id
             }

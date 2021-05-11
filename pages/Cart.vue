@@ -7,7 +7,7 @@
     <!-- cart items -->
     <div class="cart-items">
         <!-- cart item -->
-        <div class="cart-item" v-for="(item, index) in cartDetails" :key="index">
+        <div @click="$router.push('/products?_id='+item._id)" class="cart-item" v-for="(item, index) in cartDetails" :key="index">
             <!-- main image -->
             <div class="image-container" :style="`background-image: url(${item.mainImage})`">
                 <!-- <img :src="item.mainImage" /> -->
@@ -25,6 +25,8 @@
                 <span class="variant"> {{ item.variant }} </span>
                 <!-- fabric -->
                 <span class="fabric"> {{ item.fabric }} </span>
+                <!-- fabric info 1-->
+                <span class="fabric"> {{ item.fabricInfo1 }} </span>
                 <!-- price -->
                 <span class="price"> INR {{ item.price }} </span>
                 <!-- quantity selector -->
@@ -138,13 +140,15 @@ export default {
 
                 /* add details and quantity to cart item */
                 cartItem = {
+                    _id: product._id,
                     product,
                     /* if collection is escape, treat color name as product name */
                     name: details.name,
                     quantity: product.quantity,
                     /* collection name */
-                    collection: details.type !== "third-party" ? details.bounipun_collection.name : '',
+                    collection: details.type !== "third-party" ? 'Bounipun ' + details.bounipun_collection.name : '',
                     fabric: "",
+                    fabricInfo1: "",
                     variant: "",
                     /* add color name & main image */
                     colorName: color.name,
@@ -168,7 +172,8 @@ export default {
                     cartItem = {
                         ...cartItem,
                         variant: variant._id.name,
-                        fabric: `${fabric._id.name} (${fabric._id.info1})`,
+                        fabric: fabric._id.name,
+                        fabricInfo1: fabric._id.info1,
                         price: fabric.price
                     }
                 }
@@ -238,12 +243,13 @@ export default {
             span {
                 color: $gray;
                 font-size: 11px;
+                display: inline-block;
 
                 &.name {
                     color: $dark_gray;
-                    font-family: $font_2;
+                    font-family: $font_1_bold;
                     text-transform: uppercase;
-                    font-size: 12px;
+                    font-size: 13px;
                 }
 
                 &.collection {
@@ -256,6 +262,10 @@ export default {
                     color: $dark_gray;
                     font-family: $font_1;
                     font-size: 12px;
+                }
+                &.variant {
+                    font-weight: 900;
+                    color: $dark_gray;
                 }
             }
 

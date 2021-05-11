@@ -375,13 +375,14 @@ export default {
         handleScroll(event) {
             // console.log(this.$store.getters['customer/alreadyInCart'], );
             const scrolled = screen.height + window.scrollY;
-            this.sticky = window.scrollY > 15
+            this.sticky = window.scrollY > 25
             return;
         },
         addToCart() {
             /* if already added, move to cart page */
             if (this.alreadyInCart) {
                 console.log('Aleady addeds, move to cart page')
+                this.$router.push('/cart');
                 return;
             }
             this.$store.commit('customer/addToCart', this.cartProduct);
@@ -445,7 +446,8 @@ export default {
 
             this.setImages();
             this.setVariants();
-
+            
+            /* TODO, figure out index from color code here */
             /* if main color provided via query param */
             if (this.$route.query.activeColor) {
                 this.activeColorIndex = parseInt(this.$route.query.activeColor);
@@ -805,7 +807,7 @@ export default {
 
                 .add-to-cart {
                     display: flex;
-
+                    width:100%;
                     button {
                         background: $primary_dark;
                         color: white;
@@ -814,8 +816,10 @@ export default {
                         margin: 0px;
                         font-family: $font_1_bold;
                         font-size: 14px;
+                        width:80%;
 
                         &.arrow {
+                            width:20%;
                             font-family: $font_1;
                             font-size: 20px;
                             padding: 4px 8px 4px 4px;
