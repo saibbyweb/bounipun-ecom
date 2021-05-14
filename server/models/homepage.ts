@@ -13,9 +13,7 @@ const schema = new mongoose.Schema({
     collectionBlocks: [{
         bounipun_collection: { type: ObjectId, ref: 'collections' },
         slideshow: [{ _id: ObjectId, mainImage: Boolean, path: String }],
-        textBlock: {
-            text1: String, text2: String, text3: String
-        },
+        text1: String, text2: String, text3: String,
         buttonText: String,
         visible: Boolean
     }],
@@ -23,7 +21,8 @@ const schema = new mongoose.Schema({
     productListsBlock: [{
         productList: { type: ObjectId, ref: 'product_lists' },
         image: String,
-        textBlock: { text1: String, text2: String },
+        text1: String, 
+        text2: String,
         buttonText: String,
         visible: Boolean
     }],
@@ -44,7 +43,7 @@ const schema = new mongoose.Schema({
     /* press */
     press: {
         logo: String,
-        images: [{ path: String, mainImage: Boolean }],
+        imageList: [{ path: String, mainImage: Boolean }],
         visible: Boolean
     },
     /* instagram */
