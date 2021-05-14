@@ -48,7 +48,7 @@ export default {
                     path: '/admin-panel/fabrics',
                     desc: 'Manage list and details of various fabrics'
                 },
-                                {
+                {
                     name: 'Base Colors',
                     path: '/admin-panel/baseColors',
                     desc: 'Manage bounipun colors'
@@ -63,7 +63,7 @@ export default {
                     path: '/admin-panel/colors',
                     desc: 'Manage bounipun colors'
                 },
-                 {
+                {
                     name: 'Product Lists',
                     path: '/admin-panel/productLists',
                     desc: 'Manage bounipun colors'
@@ -71,6 +71,11 @@ export default {
                 {
                     name: 'Homepage Layouts',
                     path: '/admin-panel/homepageLayouts',
+                    desc: 'Manage Homepage Layouts'
+                },
+                {
+                    name: '[NEW] Homepage',
+                    path: '/admin-panel/homepage',
                     desc: 'Manage Homepage Layouts'
                 },
                 {

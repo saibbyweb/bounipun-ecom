@@ -2,9 +2,9 @@
 <div class="contents">
     <CancelUpdate @close="closeForm" />
     <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Homepage Layout </h2>
-    <!-- fabric id -->
+    <!-- homepage layout id -->
     <InputBox v-if="editMode" label="Homepage Layout ID" v-model="doc._id" disabled :internal="true" />
-    <!-- color name -->
+    <!-- homepage layout name -->
     <InputBox label="Layout Name" v-model="doc.name" />
     <!-- slideshow images -->
     <UploadImage ref="imageUploader" :multipleUpload="true" label="Set Slideshow Images" @updated="slideshowListUpdated" />
