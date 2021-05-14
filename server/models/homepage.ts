@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
     mainSlideshow: [{ _id: ObjectId, mainImage: Boolean, path: String }],
     /* text block 1 */
     mainTextBlock: {
-        text1: String, text2: String, text3: String
+        text1: String, text2: String, text3: String, visible: Boolean
     },
     /* in house collection blocks */
     collectionBlocks: [{
@@ -15,19 +15,42 @@ const schema = new mongoose.Schema({
         slideshow: [{ _id: ObjectId, mainImage: Boolean, path: String }],
         textBlock: {
             text1: String, text2: String, text3: String
-        }
+        },
+        buttonText: String,
+        visible: Boolean
     }],
     /* product lists block */
     productListsBlock: [{
         productList: { type: ObjectId, ref: 'product_lists' },
-        coverImage: String,
-        textBlock: { text1: String, text2: String }
+        image: String,
+        textBlock: { text1: String, text2: String },
+        buttonText: String,
+        visible: Boolean
     }],
+    /* bounipun lab */
     bounipunLab: {
         heading: String,
         paragraph: String,
         image: String,
         buttonText: String,
+        visible: Boolean
+    },
+    /* quote */
+    quote: {
+        heading: String,
+        paragraph: String,
+        visible: Boolean
+    },
+    /* press */
+    press: {
+        logo: String,
+        images: [{ path: String, mainImage: Boolean }],
+        visible: Boolean
+    },
+    /* instagram */
+    instagram: {
+        text: String,
+        visible: Boolean
     },
     description: String,
     status: Boolean
@@ -36,7 +59,7 @@ const schema = new mongoose.Schema({
 });
 
 /* model */
-const model = mongoose.model('homepage_layouts', schema);
+const model = mongoose.model('homepages', schema);
 
 /* helper methods */
 export const methods = {
