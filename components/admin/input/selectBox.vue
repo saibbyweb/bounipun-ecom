@@ -46,7 +46,7 @@ export default {
     justify-content: space-between;
     align-items: center;
 
-        .internal {
+    .internal {
         height: 10px;
         width: 10px;
         background-color: rgb(22, 144, 220);
@@ -57,7 +57,7 @@ export default {
         color: $gray;
         text-transform: uppercase;
         font-size: 10px;
-        padding: 1%;
+        padding: 2%;
         margin-left: 5px;
         font-weight: 900;
     }

@@ -9,58 +9,87 @@
     <!-- homepage name -->
     <InputBox label="Homepage Name" v-model="doc.name" />
     <!-- main slideshow -->
-    <div class="main-slideshow">
-        <label class="Main Slideshow" />
+    <div class="main-slideshow section">
+        <label class="head"> Main Slideshow </label>
         <!-- slideshow images -->
-        <UploadImage ref="imageUploader" :multipleUpload="true" label="Set Slideshow Images" @updated="imageListUpdated('mainSlideshow')" />
+        <UploadImage ref="imageUploader" :multipleUpload="true" label="Set Slideshow Images:" @updated="imageListUpdated($event,'mainSlideshow')" />
         <!-- visiblity toggle -->
         <Toggle v-model="doc.mainSlideshow.visible" label="Visiblity" activeText="Live" inactiveText="Hidden" width="100px" />
     </div>
-
     <!-- collections block -->
-    <div class="collection-blocks">
-        <label class="label"> Set Collection Block: </label>
+    <div class="collection-blocks section">
+        <label class="head"> Collection Blocks: </label>
+
         <!-- loop through all blocks-->
-        <div class="block shadow" v-for="(block,index) in doc.collectionBlocks" :key="block.key">
+        <div class="block" v-for="(block,index) in doc.collectionBlocks" :key="block.key" >
+            <!-- block heading -->
+            <div class="block-heading"> 
+                <span> Collection Block #{{ index + 1}} </span>
+                <!-- remove collection block -->
+                <button class="action delete" style="font-size:9px;" @click="removeBlock('collectionBlocks',index)"> Delete </button>
+            </div>
             <!-- select bounipun collection -->
             <SelectBox :options="allCollections" v-model="block.bounipun_collection" label="Select Bounipun Collection" />
             <!-- collection slideshow images -->
-            <UploadImage ref="imageUploader_collection" :multipleUpload="true" label="Set Collection Images" @updated="imageListUpdated('collectionBlock', index)" />
+            <UploadImage ref="imageUploader_collection" :multipleUpload="true" label="Set Collection Images" @updated="imageListUpdated($event,'collectionBlock', index)" />
             <!-- text 1 -->
             <InputBox label="Text 1" v-model="block.text1" />
             <!-- text 2 -->
             <TextBox v-model="block.text2" label="Text 2" />
             <!-- text 3 -->
             <InputBox label="Text 3" v-model="block.text3" />
-            <!-- button text -->
-            <InputBox label="Button Text" v-model="block.buttonText" />
-            <!-- visiblity toggle -->
-            <Toggle v-model="block.visible" label="Visiblity" activeText="Live" inactiveText="Hidden" width="100px" />
+            <!-- button text + visibility toggle-->
+            <div class="center">
+                <!-- button text -->
+                <InputBox label="Button Text" v-model="block.buttonText" />
+                <!-- visiblity toggle -->
+                <Toggle v-model="block.visible" label="Visiblity" activeText="Live" inactiveText="Hidden" width="100px" />
+
+            </div>
         </div>
 
+        <!-- add collection block -->
+        <div class="center">
+            <button class="add-block" @click="addCollectionBlock"> + New Collection Section </button>
+        </div>
     </div>
     <!-- product list block -->
-    <div class="product-list-blocks">
-        <label class="label"> Set Product List Blocks: </label>
+    <div class="product-list-blocks section">
+        <label class="head"> Product List Blocks: </label>
+
         <!-- loop through all blocks-->
-        <div class="block shadow" v-for="(block, index) in doc.productListsBlocks" :key="block.key">
+        <div class="block"  v-for="(block, index) in doc.productListBlocks" :key="block.key">
+            <!-- block heading -->
+            <div class="block-heading"> 
+                <span> Product List Block #{{ index + 1}} </span>
+                <!-- remove product list block -->
+                <button class="action delete" style="font-size:9px;" @click="removeBlock('productListBlocks',index)"> Delete </button>
+            </div>
+
             <!-- select product list -->
             <SelectBox :options="allProductList" v-model="block.productList" label="Select Product List" />
             <!-- set product list image -->
-            <UploadImage ref="imageUploader_productList" :multipleUpload="false" label="Set Product List Image" @updated="imageListUpdated('productListBlock', index)" />
+            <UploadImage ref="imageUploader_productList" :multipleUpload="false" label="Set Product List Image" @updated="imageListUpdated($event,'productListBlock', index)" />
             <!-- text 1 -->
             <InputBox label="Text 1" v-model="block.text1" />
             <!-- text 2 -->
             <TextBox v-model="block.text2" label="Text 2" />
-            <!-- button text -->
-            <InputBox label="Text 1" v-model="block.buttonText" />
-            <!-- visiblity toggle -->
-            <Toggle v-model="block.visible" label="Visiblity" activeText="Live" inactiveText="Hidden" width="100px" />
+            <!-- button text + visibility toggle -->
+            <div class="center">
+                <!-- button text -->
+                <InputBox label="Button Text" v-model="block.buttonText" />
+                <!-- visiblity toggle -->
+                <Toggle v-model="block.visible" label="Visiblity" activeText="Live" inactiveText="Hidden" width="100px" />
+            </div>
+        </div>
+        <!-- add product list block -->
+        <div class="center">
+            <button class="add-block" @click="addProductListBlock"> + New Product List Block </button>
         </div>
     </div>
     <!-- bounipun lab -->
-    <div class="bounipun-lab">
-        <label class="label"> Bounipun Lab: </label>
+    <div class="bounipun-lab section">
+        <label class="head"> Bounipun Lab: </label>
         <!-- heading -->
         <InputBox label="Heading" v-model="doc.bounipunLab.heading" />
         <!-- paragraph -->
@@ -68,13 +97,13 @@
         <!-- button text -->
         <InputBox label="Button Text" v-model="doc.bounipunLab.buttonText" />
         <!-- bounipun lab image -->
-        <UploadImage ref="imageUploader_bounipunLab" :multipleUpload="false" label="Set Bounipun Lab Image" @updated="imageListUpdated('bounipunLab')" />
+        <UploadImage ref="imageUploader_bounipunLab" :multipleUpload="false" label="Set Bounipun Lab Image" @updated="imageListUpdated($event,'bounipunLab')" />
         <!-- visiblity toggle -->
         <Toggle v-model="doc.bounipunLab.visible" label="Visiblity" activeText="Live" inactiveText="Hidden" width="100px" />
     </div>
     <!-- quote -->
-    <div class="quote">
-        <label class="label"> Quote: </label>
+    <div class="quote section">
+        <label class="head"> Quote: </label>
         <!-- heading -->
         <InputBox label="Heading" v-model="doc.quote.heading" />
         <!-- paragraph -->
@@ -83,18 +112,18 @@
         <Toggle v-model="doc.quote.visible" label="Visiblity" activeText="Live" inactiveText="Hidden" width="100px" />
     </div>
     <!-- press -->
-    <div class="press">
-        <label class="label"> Press: </label>
+    <div class="press section">
+        <label class="head"> Press: </label>
         <!-- press logo -->
-        <UploadImage ref="imageUploader_logo" :multipleUpload="false" label="Set Logo" @updated="imageListUpdated" />
+        <UploadImage ref="imageUploader_logo" :multipleUpload="false" label="Set Logo" @updated="imageListUpdated($event,'pressLogo')" />
         <!-- image list -->
-        <UploadImage ref="imageUploader_pressImageList" :multipleUpload="true" label="Set Press Image List" @updated="imageListUpdated('press')" />
+        <UploadImage ref="imageUploader_pressImageList" :multipleUpload="true" label="Set Press Image List" @updated="imageListUpdated($event,'press')" />
         <!-- visiblity toggle -->
         <Toggle v-model="doc.press.visible" label="Visiblity" activeText="Live" inactiveText="Hidden" width="100px" />
     </div>
     <!-- instagram -->
-    <div class="instagram">
-        <label class="label"> Instagram: </label>
+    <div class="instagram section">
+        <label class="head"> Instagram: </label>
         <!-- visiblity toggle -->
         <Toggle v-model="doc.instagram.visible" label="Visiblity" activeText="Live" inactiveText="Hidden" width="100px" />
     </div>
@@ -111,188 +140,249 @@ import {
 } from "uuid";
 
 const baseDocument = {
-        _id: "",
-        name: "",
-        mainSlideshow: [{
-            slides: {
-                _id: "",
-                mainImage: false,
-                path: ""
-            },
-            visible: false
-        }],
-        mainTextBlock: {
-            text1: "",
-            text2: "",
-            text3: "",
-            visible: false
+    _id: "",
+    name: "",
+    mainSlideshow: [{
+        slides: {
+            _id: "",
+            mainImage: false,
+            path: ""
         },
-        collectionBlocks: [{
-            bounipun_collection: "",
-            slideshow: [{
-                _id: "",
-                mainImage: false,
-                path: ""
-            }],
-            text1: "",
-            text2: "",
-            text3: "",
-            buttonText: "",
-            visible: false,
-            key: uuidv4()
-        }],
-        productListsBlocks: [{
-            productList: "",
-            image: "",
-            text1: "",
-            text2: "",
-            buttonText: "",
-            visible: false,
-            key: uuidv4()
-        }],
-        bounipunLab: {
-            heading: "",
-            paragraph: "",
-            image: "",
-            buttonText: "",
-            visible: false
-        },
-        quote: {
-            heading: "",
-            paragraph: "",
-            visible: false
-        },
-        press: {
-            logo: "",
-            imageList: [{
-                path: "",
-                mainImage: false
-            }],
-            visible: false
-        },
-        instagram: {
-            text: "",
-            visible: false
-        },
-        description: "",
-        status: false
+        visible: false
+    }],
+    mainTextBlock: {
+        text1: "",
+        text2: "",
+        text3: "",
+        visible: false
     },
+    collectionBlocks: [{
+        bounipun_collection: "",
+        slideshow: [{
+            _id: "",
+            mainImage: false,
+            path: ""
+        }],
+        text1: "",
+        text2: "",
+        text3: "",
+        buttonText: "",
+        visible: false,
+        key: uuidv4()
+    }],
+    productListBlocks: [{
+        productList: "",
+        image: "",
+        text1: "",
+        text2: "",
+        buttonText: "",
+        visible: false,
+        key: uuidv4()
+    }],
+    bounipunLab: {
+        heading: "",
+        paragraph: "",
+        image: "",
+        buttonText: "",
+        visible: false
+    },
+    quote: {
+        heading: "",
+        paragraph: "",
+        visible: false
+    },
+    press: {
+        logo: "",
+        imageList: [{
+            path: "",
+            mainImage: false
+        }],
+        visible: false
+    },
+    instagram: {
+        text: "",
+        visible: false
+    },
+    description: "",
+    status: false
+}
 
-    export default {
-        /* close form */
-        /* slideshow list updated (x6) */
-        /* add unique key to every block */
-        /* fetch allCollections  */
-        props: {
-            model: String
-        },
-        data() {
-            return {
-                editMode: false,
-                doc: baseDocument,
-                allCollections: [],
-                allProductLists: [],
-                loading: false,
-                updated: false
-            }
-        },
-        mounted() {
-            this.fetchAllCollections();
-            this.fetchAllProductLists();
-        },
-        methods: {
-            imageListUpdated(property, index) {
-                switch (property) {
+export default {
+    /* close form */
+    /* slideshow list updated (x6) */
+    /* add unique key to every block */
+    /* fetch allCollections  */
+    props: {
+        model: String
+    },
+    data() {
+        return {
+            editMode: false,
+            doc: baseDocument,
+            allCollections: [],
+            allProductLists: [],
+            loading: false,
+            updated: false
+        }
+    },
+    mounted() {
+        this.fetchAllCollections();
+        this.fetchAllProductLists();
+    },
+    methods: {
+        /* set image list */
+        imageListUpdated(list, property, index) {
+            switch (property) {
+                /* multiple */
+                case 'mainSlideshow':
+                    this.doc.mainSlideshow.slides = list;
+                    break;
+                    /* multiple [indexed] */
+                case 'collectionBlock':
+                    this.doc.collectionBlocks[index].slideshow = list;
+                    break;
+                    /* single [indexed] */
+                case 'productListBlock':
+                    this.doc.productListBlocks[index].image = list.length > 0 ? list[0].path : ""
+                    break;
+                    /* single */
+                case 'bounipunLab':
+                    this.doc.bounipunLab.image = list.length > 0 ? list[0].path : "";
+                    break;
+                    /* single */
+                case 'pressLogo':
+                    this.doc.press.logo = list.length > 0 ? list[0].path : ""
+                    break;
                     /* multiple */
-                    case 'mainSlideshow':
-                        break;
-                        /* multiple */
-                    case 'collectionBlock':
-                        break;
-                    case 'productListBlock':
-                        break;
-                    case 'bounipunLab':
-                        break;
-                        /* multiple */
-                    case 'press':
-                        break;
-                }
-            },
-            async fetchAllCollections() {
-                const result = await this.$fetchCollection('collections');
-                this.allProductLists = result.docs.map(({
-                    _id,
-                    name
-                }) => {
-                    return {
-                        name,
-                        value: _id
-                    }
-                });
-                this.allCollections.unshift({
-                    name: 'Select Bounipun Collection',
-                    value: ''
-                });
-            },
-            async fetchAllProductLists() {
-                const result = await this.$fetchCollection('product_lists');
-                this.allProductLists = result.docs.map(({
-                    _id,
-                    name
-                }) => {
-                    return {
-                        name,
-                        value: _id
-                    }
-                });
-                this.allProductLists.unshift({
-                    name: 'Select Product List',
-                    value: ''
-                });
-            },
-            /* add collection block */
-            addCollectionBlock() {
-                this.doc.collectionBlocks.push({
-                    bounipun_collection: "",
-                    slideshow: [{
-                        _id: "",
-                        mainImage: false,
-                        path: ""
-                    }],
-                    text1: "",
-                    text2: "",
-                    text3: "",
-                    buttonText: "",
-                    visible: false,
-                    key: uuidv4()
-                })
-            },
-            /* add product list block */
-            addProductListBlock() {
-                this.doc.productListsBlocks.push({
-                    productList: "",
-                    image: "",
-                    text1: "",
-                    text2: "",
-                    buttonText: "",
-                    visible: false,
-                    key: uuidv4()
-                })
-            },
-            /* remove collection or product list block */
-            removeBlock(property, key) {
-                this.doc[property].splice(key, 1);
-            },
-            closeForm() {
-                this.resetForm();
-                this.$emit('close')
-            },
-            resetForm() {
-                this.doc = baseDocument;
+                case 'press':
+                    this.doc.press.imageList = list;
+                    break;
             }
+        },
+        async fetchAllCollections() {
+            const result = await this.$fetchCollection('collections');
+            this.allProductLists = result.docs.map(({
+                _id,
+                name
+            }) => {
+                return {
+                    name,
+                    value: _id
+                }
+            });
+            this.allCollections.unshift({
+                name: 'Select Bounipun Collection',
+                value: ''
+            });
+        },
+        async fetchAllProductLists() {
+            const result = await this.$fetchCollection('product_lists');
+            this.allProductLists = result.docs.map(({
+                _id,
+                name
+            }) => {
+                return {
+                    name,
+                    value: _id
+                }
+            });
+            this.allProductLists.unshift({
+                name: 'Select Product List',
+                value: ''
+            });
+        },
+        /* add collection block */
+        addCollectionBlock() {
+            this.doc.collectionBlocks.push({
+                bounipun_collection: "",
+                slideshow: [{
+                    _id: "",
+                    mainImage: false,
+                    path: ""
+                }],
+                text1: "",
+                text2: "",
+                text3: "",
+                buttonText: "",
+                visible: false,
+                key: uuidv4()
+            })
+        },
+        /* add product list block */
+        addProductListBlock() {
+            this.doc.productListBlocks.push({
+                productList: "",
+                image: "",
+                text1: "",
+                text2: "",
+                buttonText: "",
+                visible: false,
+                key: uuidv4()
+            })
+        },
+        /* remove collection or product list block */
+        removeBlock(property, key) {
+            if (this.doc[property].length < 2)
+                return;
+            this.doc[property].splice(key, 1);
+        },
+        closeForm() {
+            this.resetForm();
+            this.$emit('close')
+        },
+        resetForm() {
+            this.doc = baseDocument;
         }
     }
+}
 </script>
 
 <style lang="scss">
+.section {
+    margin-top: 10px;
+    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
+    width: 100%;
+    .head {
+        background-color: $dark_gray;
+        color: white;
+        width: 100%;
+        display: block;
+        font-size: 13px;
+        padding: 3px;
+        text-align: center;
+    }
+
+    .block {
+        // box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
+        
+        .block-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width:100%;
+            background-color: rgb(195, 195, 195);
+            border: 1px solid rgb(207, 207, 207);
+            color:white;
+            font-size: 11px;
+            padding:1%;
+            padding-right: 5%;
+            margin-bottom: 10px;
+
+            span {
+                // background-color: rgb(65, 152, 149);
+                color: $dark_gray;
+                padding:1% 3%;
+                margin-right:10px;
+                font-size: 12px;
+        
+            }
+        }
+    }
+
+    .add-block {
+        background-color: rgb(24, 105, 24);
+        color: white;
+        margin:10px 0;
+    }
+}
 </style>

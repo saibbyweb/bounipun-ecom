@@ -30,7 +30,7 @@
 
         </div>
         <!-- if no image uploaded -->
-        <div v-if="images.length === 0" class="not-uploaded">
+        <div v-if="images.length === 0" class="not-uploaded" style="margin-left:10px;">
             <img src="/icons/light/upload-cloud.svg" />
             <span> No Image(s) uploaded yet </span>
         </div>

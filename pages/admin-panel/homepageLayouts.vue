@@ -12,7 +12,7 @@
     </div>
     <!-- update homepage layouts form -->
     <div :class="{updating: showForm}" class="update">
-        <UpdateHomepage v-show="showForm" ref="updateComponent" @updated="updateList" :model="model" @close="showForm = false" />
+        <UpdateHomepageLayout v-show="showForm" ref="updateComponent" @updated="updateList" :model="model" @close="showForm = false" />
 
         <AddNewItem v-if="!showForm" label="Homepage Layout" @showForm="showForm = true" />
     </div>
