@@ -12,7 +12,7 @@
     <div class="main-slideshow section">
         <label class="head"> Main Slideshow </label>
         <!-- slideshow images -->
-        <UploadImage ref="imageUploader" :multipleUpload="true" label="Set Slideshow Images:" @updated="imageListUpdated($event,'mainSlideshow')" />
+        <UploadImage ref="mainSlideshow" :multipleUpload="true" label="Set Slideshow Images:" @updated="imageListUpdated($event,'mainSlideshow')" />
         <!-- visiblity toggle -->
         <Toggle v-model="doc.mainSlideshow.visible" label="Visiblity" activeText="Live" inactiveText="Hidden" width="100px" />
     </div>
@@ -21,9 +21,9 @@
         <label class="head"> Collection Blocks: </label>
 
         <!-- loop through all blocks-->
-        <div class="block" v-for="(block,index) in doc.collectionBlocks" :key="block.key" >
+        <div class="block" v-for="(block,index) in doc.collectionBlocks" :key="block.key">
             <!-- block heading -->
-            <div class="block-heading"> 
+            <div class="block-heading">
                 <span> Collection Block #{{ index + 1}} </span>
                 <!-- remove collection block -->
                 <button class="action delete" style="font-size:9px;" @click="removeBlock('collectionBlocks',index)"> Delete </button>
@@ -58,16 +58,16 @@
         <label class="head"> Product List Blocks: </label>
 
         <!-- loop through all blocks-->
-        <div class="block"  v-for="(block, index) in doc.productListBlocks" :key="block.key">
+        <div class="block" v-for="(block, index) in doc.productListBlocks" :key="block.key">
             <!-- block heading -->
-            <div class="block-heading"> 
+            <div class="block-heading">
                 <span> Product List Block #{{ index + 1}} </span>
                 <!-- remove product list block -->
                 <button class="action delete" style="font-size:9px;" @click="removeBlock('productListBlocks',index)"> Delete </button>
             </div>
 
             <!-- select product list -->
-            <SelectBox :options="allProductList" v-model="block.productList" label="Select Product List" />
+            <SelectBox :options="allProductLists" v-model="block.productList" label="Select Product List" />
             <!-- set product list image -->
             <UploadImage ref="imageUploader_productList" :multipleUpload="false" label="Set Product List Image" @updated="imageListUpdated($event,'productListBlock', index)" />
             <!-- text 1 -->
@@ -131,6 +131,17 @@
     <TextBox v-model="doc.description" label="Description" :internal="true" />
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
+    <!-- update button -->
+    <div class="center-space">
+        <!-- loading bar -->
+        <img v-if="loading" class="loading" src="/loading.gif" />
+        <!-- action complete gif -->
+        <img v-if="updated" class="action-complete" src="/complete.gif" />
+        <!-- update document -->
+        <button @click="updateDocument" class="action" :disabled="loading"> {{ editMode ? "Edit" : "Add" }} Homepage </button>
+        <!-- delete document -->
+        <button v-if="editMode" @click="deleteDocument" class="action delete" :disabled="loading"> Delete </button>
+    </div>
 </div>
 </template>
 
@@ -142,14 +153,16 @@ import {
 const baseDocument = {
     _id: "",
     name: "",
-    mainSlideshow: [{
-        slides: {
-            _id: "",
-            mainImage: false,
-            path: ""
-        },
+    mainSlideshow: {
+        slides: [
+            // {
+            // _id: "",
+            // mainImage: false,
+            // path: ""
+            // }
+        ],
         visible: false
-    }],
+    },
     mainTextBlock: {
         text1: "",
         text2: "",
@@ -158,11 +171,13 @@ const baseDocument = {
     },
     collectionBlocks: [{
         bounipun_collection: "",
-        slideshow: [{
-            _id: "",
-            mainImage: false,
-            path: ""
-        }],
+        slideshow: [
+            // {
+            // _id: "",
+            // mainImage: false,
+            // path: ""
+            // }
+        ],
         text1: "",
         text2: "",
         text3: "",
@@ -193,10 +208,12 @@ const baseDocument = {
     },
     press: {
         logo: "",
-        imageList: [{
-            path: "",
-            mainImage: false
-        }],
+        imageList: [
+            //     {
+            //     path: "",
+            //     mainImage: false
+            // }
+        ],
         visible: false
     },
     instagram: {
@@ -261,7 +278,7 @@ export default {
         },
         async fetchAllCollections() {
             const result = await this.$fetchCollection('collections');
-            this.allProductLists = result.docs.map(({
+            this.allCollections = result.docs.map(({
                 _id,
                 name
             }) => {
@@ -332,7 +349,66 @@ export default {
         },
         resetForm() {
             this.doc = baseDocument;
-        }
+        },
+        async updateDocument() {
+            console.log(this.doc);
+            // return;
+
+            this.loading = true;
+            const result = await this.$updateDocument(this.model, this.doc, this.editMode);
+            this.loading = false;
+
+            if (!result.updated)
+                return;
+
+            this.$emit('updated');
+            // this.populateForm(result.doc);
+            this.$flash(this);
+
+        },
+        populateForm(details) {
+            const {
+                _id,
+                name,
+                mainSlideshow,
+                mainTextBlock,
+                collectionBlocks,
+                productListBlocks,
+                bounipunLab,
+                quote,
+                press,
+                instagram,
+                description,
+                status
+            } = details;
+            this.doc = {
+                _id,
+                name,
+                mainSlideshow,
+                mainTextBlock,
+                collectionBlocks,
+                productListBlocks,
+                bounipunLab,
+                quote,
+                press,
+                instagram,
+                description,
+                status
+            };
+            this.editMode = true;
+        },
+        async deleteDocument() {
+            this.loading = true;
+            const result = await this.$deleteDocument(this.model, this.doc._id);
+            this.loading = false;
+
+            if (!result.deleted)
+                return;
+
+            this.$emit('updated');
+            this.resetForm();
+            this.$flash(this);
+        },
     }
 }
 </script>
@@ -342,6 +418,7 @@ export default {
     margin-top: 10px;
     box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
     width: 100%;
+
     .head {
         background-color: $dark_gray;
         color: white;
@@ -354,27 +431,27 @@ export default {
 
     .block {
         // box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
-        
+
         .block-heading {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            width:100%;
+            width: 100%;
             background-color: rgb(195, 195, 195);
             border: 1px solid rgb(207, 207, 207);
-            color:white;
+            color: white;
             font-size: 11px;
-            padding:1%;
+            padding: 1%;
             padding-right: 5%;
             margin-bottom: 10px;
 
             span {
                 // background-color: rgb(65, 152, 149);
                 color: $dark_gray;
-                padding:1% 3%;
-                margin-right:10px;
+                padding: 1% 3%;
+                margin-right: 10px;
                 font-size: 12px;
-        
+
             }
         }
     }
@@ -382,7 +459,7 @@ export default {
     .add-block {
         background-color: rgb(24, 105, 24);
         color: white;
-        margin:10px 0;
+        margin: 10px 0;
     }
 }
 </style>

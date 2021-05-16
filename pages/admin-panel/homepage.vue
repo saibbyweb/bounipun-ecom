@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { v4 as uuidv4 } from "uuid";
+
 export default {
     layout: 'admin',
     data() {
@@ -60,12 +62,25 @@ export default {
         documentFetched(doc) {
             this.showForm = true;
             this.editMode = true;
-            /* add unique key to alternate sections */
+            /* add unique key to collection blocks and product list blocks sections */
+            console.log(doc);
+            // return;
+
+            doc.collectionBlocks.forEach(block => block.key = uuidv4());
+            doc.productListBlocks.forEach(block => block.key = uuidv4());
+
             this.$refs.updateComponent.populateForm(doc);
             setTimeout(() => this.populateForm(doc), 1200);
         },
         populateForm(doc) {
-            /* do some magic here */
+            /*  */
+            const updateComponent = this.$refs.updateComponent;
+
+            /* assign mainslide show images */
+            if(doc.mainSlideshow.slides.length > 0) {
+                updateComponent.$refs.mainSlideshow.assignImages(doc.mainSlideshow.slides);
+            }
+            
         },
         resultsFetched(result) {
             if (result.docs.length === 0) {

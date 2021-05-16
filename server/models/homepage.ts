@@ -17,8 +17,8 @@ const schema = new mongoose.Schema({
         buttonText: String,
         visible: Boolean
     }],
-    /* product lists block */
-    productListsBlock: [{
+    /* product list block */
+    productListBlock: [{
         productList: { type: ObjectId, ref: 'product_lists' },
         image: String,
         text1: String, 
@@ -43,7 +43,7 @@ const schema = new mongoose.Schema({
     /* press */
     press: {
         logo: String,
-        imageList: [{ path: String, mainImage: Boolean }],
+        imageList: [{ _id: ObjectId, path: String, mainImage: Boolean }],
         visible: Boolean
     },
     /* instagram */
