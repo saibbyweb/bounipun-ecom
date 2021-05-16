@@ -80,7 +80,9 @@ export default {
             const {
                 mainSlideshow,
                 collectionBlocks,
-                productListBlocks
+                productListBlocks,
+                bounipunLab,
+                press
             } = doc;
 
             /* assign mainslide show images */
@@ -105,6 +107,31 @@ export default {
                     }]
                     updateComponent.$refs.imageUploader_productList[i].assignImages(singleImageList)
                 }
+            }
+
+            /* assign bounipun lab image */
+            if(bounipunLab.image !== "") {
+                const singleImageList = [{
+                    _id: "",
+                    mainImage: false,
+                    path: bounipunLab.image
+                }]
+                updateComponent.$refs.imageUploader_bounipunLab.assignImages(singleImageList);
+            }
+
+            /* assign press logo */
+            if(press.logo !== "") {
+                  const singleImageList = [{
+                    _id: "",
+                    mainImage: false,
+                    path: press.logo
+                }]
+                updateComponent.$refs.imageUploader_pressLogo.assignImages(singleImageList);
+            }
+
+            /* assign press image list */
+            if(press.imageList.length > 0) {
+                updateComponent.$refs.imageUploader_pressImageList.assignImages(press.imageList);
             }
 
         },

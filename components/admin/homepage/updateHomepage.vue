@@ -115,7 +115,7 @@
     <div class="press section">
         <label class="head"> Press: </label>
         <!-- press logo -->
-        <UploadImage ref="imageUploader_logo" :multipleUpload="false" label="Set Logo" @updated="imageListUpdated($event,'pressLogo')" />
+        <UploadImage ref="imageUploader_pressLogo" :multipleUpload="false" label="Set Logo" @updated="imageListUpdated($event,'pressLogo')" />
         <!-- image list -->
         <UploadImage ref="imageUploader_pressImageList" :multipleUpload="true" label="Set Press Image List" @updated="imageListUpdated($event,'press')" />
         <!-- visiblity toggle -->
