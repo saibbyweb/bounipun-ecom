@@ -7,7 +7,7 @@
     <!-- list of homepage layouts -->
     <div :class="{updating: showForm}" class="list">
         <List :list="list" :model="model" :headings="headings" custom_css="10% 60% 20% 10%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" />
-    
+
         <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
     </div>
     <!-- update homepage layouts form -->
@@ -20,7 +20,9 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from "uuid";
+import {
+    v4 as uuidv4
+} from "uuid";
 
 export default {
     layout: 'admin',
@@ -75,12 +77,36 @@ export default {
         populateForm(doc) {
             /*  */
             const updateComponent = this.$refs.updateComponent;
+            const {
+                mainSlideshow,
+                collectionBlocks,
+                productListBlocks
+            } = doc;
 
             /* assign mainslide show images */
-            if(doc.mainSlideshow.slides.length > 0) {
+            if (mainSlideshow.slides.length > 0) {
                 updateComponent.$refs.mainSlideshow.assignImages(doc.mainSlideshow.slides);
             }
-            
+
+            /* assign images for collection blocks */
+            if (collectionBlocks.length > 0) {
+                for (let i = 0; i < collectionBlocks.length; i++) {
+                    updateComponent.$refs.imageUploader_collection[i].assignImages(collectionBlocks[i].slideshow)
+                }
+            }
+
+            /* assign images for product list blocks */
+            if (productListBlocks.length > 0) {
+                for (let i = 0; i < productListBlocks.length; i++) {
+                    const singleImageList = [{
+                        _id: '',
+                        mainImage: false,
+                        path: productListBlocks[i].image
+                    }]
+                    updateComponent.$refs.imageUploader_productList[i].assignImages(singleImageList)
+                }
+            }
+
         },
         resultsFetched(result) {
             if (result.docs.length === 0) {

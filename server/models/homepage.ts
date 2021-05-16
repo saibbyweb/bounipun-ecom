@@ -18,7 +18,7 @@ const schema = new mongoose.Schema({
         visible: Boolean
     }],
     /* product list block */
-    productListBlock: [{
+    productListBlocks: [{
         productList: { type: ObjectId, ref: 'product_lists' },
         image: String,
         text1: String, 
