@@ -39,6 +39,33 @@
 
         </div>
     </div>
+    <!-- bounipun lab -->
+    <div class="bounipun-lab center-col" v-if="layout.bounipunLab.visible">
+        <div class="cover" :style="`background-image: url(${$getImagePath(layout.bounipunLab.image)})`">
+            <div class="cta center">
+                <button class="action"> {{ layout.bounipunLab.buttonText }} </button>
+            </div>
+        </div>
+        <h2 class="head"> {{ layout.bounipunLab.heading }} </h2>
+        <p class="paragraph"> {{ layout.bounipunLab.paragraph }} </p>
+    </div>
+    <!-- quote -->
+    <div class="quote center-col" v-if="layout.quote.visible">
+        <h2 class="head"> {{ layout.quote.heading }} </h2>
+        <p class="paragraph"> {{ layout.quote.paragraph }} </p>
+    </div>
+
+    <!-- press -->
+    <div class="press" v-if="layout.press.visible">
+        <!-- logo -->
+        <div class="logo" :style="`background-image: url(${$getImagePath(layout.press.logo)})`"> </div>
+        <!-- image list -->
+        <div class="image-list">
+            <div class="image-box" v-for="(image, index) in layout.press.imageList" :key="index" :style="`background-image: url(${$getImagePath(image.path)})`">
+            </div>
+        </div>
+
+    </div>
 </div>
 </template>
 
@@ -99,6 +126,28 @@ export default {
 <style lang="scss">
 .homepage {
 
+    .press {
+        display: flex;
+        width:100%;
+        height:25vw;
+
+        .logo {
+            width:20%;
+            height:100%;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .image-list {
+            width:80%;
+            height:100%;
+            display:flex;
+            .image-box {
+                width:25%;
+            }
+        }
+    }
+
     /* main text block */
     .main-text-block {
         .text1 {}
@@ -108,22 +157,23 @@ export default {
         .text3 {}
     }
 
-    .blocks {
-        .block {
-            .cover {
-                position: relative;
+    /* cover */
+    .cover {
+        position: relative;
 
-                .cta {
-                    position: absolute;
-                    bottom: 10%;
-                    width: 100%;
+        .cta {
+            position: absolute;
+            bottom: 10%;
+            width: 100%;
 
-                    .action {
-                        width: 50%;
-                    }
-                }
+            .action {
+                width: 50%;
             }
         }
+    }
+
+    .blocks {
+        .block {}
     }
 
     /*  */
@@ -139,6 +189,15 @@ export default {
             }
         }
 
+    }
+
+    .bounipun-lab {
+        .cover {
+            width: 100vw;
+            height: 100vw;
+            background-size: cover;
+            background-position: center;
+        }
     }
 }
 </style>
