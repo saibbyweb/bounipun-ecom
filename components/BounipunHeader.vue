@@ -7,7 +7,7 @@
 
     <!-- logo -->
     <div class="logo center" @click="$router.push('/')">
-        <img src="/icons/light/logo.png" @click="darkMode = !darkMode" />
+        <img src="/icons/light/logo.png" />
     </div>
 
     <!-- links -->
@@ -33,22 +33,23 @@
 <script>
 export default {
     created() {
-        if (process.client) {
-            window.addEventListener('scroll', this.handleScroll);
-        }
-        if (this.$route.name !== 'index') {
-            this.darkMode = true;
-            return;
-        }
+        // if (process.client) {
+        //     window.addEventListener('scroll', this.handleScroll);
+        // }
+        // if (this.$route.name !== 'index') {
+        //     this.darkMode = true;
+        //     return;
+        // }
     },
     destroyed() {
-        if (process.client) {
-            window.removeEventListener('scroll', this.handleScroll);
-        }
+        // if (process.client) {
+        //     window.removeEventListener('scroll', this.handleScroll);
+        // }
     },
     data() {
         return {
-            darkMode: this.$route.name === 'products-collection' ? true : false
+            // darkMode: this.$route.name === 'products-collection' ? true : false
+            darkMode: true
         }
     },
     computed: {
@@ -59,20 +60,20 @@ export default {
     watch: {
         $route(to, from) {
             console.log(to.name)
-            this.darkMode = to.name !== 'index'
+            // this.darkMode = to.name !== 'index'
         }
     },
     methods: {
         handleScroll() {
-            if (this.$route.name !== 'index') {
-                this.darkMode = true;
-                return;
-            }
+            // if (this.$route.name !== 'index') {
+            //     this.darkMode = true;
+            //     return;
+            // }
 
-            if (window.scrollY > 200)
-                this.darkMode = true;
-            else
-                this.darkMode = false;
+            // if (window.scrollY > 200)
+            //     this.darkMode = true;
+            // else
+            //     this.darkMode = false;
         },
         getIconPath(icon) {
             const directory = '/icons/light/';

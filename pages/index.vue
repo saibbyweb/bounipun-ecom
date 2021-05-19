@@ -1,56 +1,84 @@
 <template>
-<div class="homepage">
-    <!-- slideshow -->
-    <slideshow size="cover" :images="slideshowImages" :slideHeight="'120vw'" />
+<div class="homepage" v-if="layout !== null">
+    <!-- slidehshow -->
+    <slideshow v-if="layout.mainSlideshow.visible" size="cover" :images="fetchSlideshow(layout.mainSlideshow.slides)" :slideHeight="'120vw'" />
+    <!-- main text block -->
+    <div v-if="layout.mainTextBlock.visible" class="main-text-block flex center-col pad">
+        <h2 class="text-1"> {{ layout.mainTextBlock.text1 }} </h2>
+        <p class="text-2"> {{ layout.mainTextBlock.text2 }} </p>
+        <p class="text-3"> {{ layout.mainTextBlock.text3 }} </p>
+    </div>
+    <!-- collection blocks -->
+    <div class="collection-blocks blocks section">
+        <div class="block flex center-col" v-for="(block, index) in layout.collectionBlocks" :key="index">
 
-    <!-- product section and alternate section -->
-    <div class="sections">
-        <div class="section" v-for="(section, index) in sections" :key="index">
-            <!-- products section -->
-            <div v-if="section.productSection" class="products-section">
-                <home-section-heading :heading="section.productSection.heading" :tagline="section.productSection.tagline" />
-                <div class="scrollable-list">
-                    <div class="list">
-                        <!-- featured product card -->
-                        <featured-product-card v-for="(product, index) in section.productSection.list.list" :details="{ name: product._id.name, collection: product._id.bounipun_collection.name }" :key="index" :product="product._id" />
-                    </div>
+            <div class="cover">
+                <slideshow size="cover" :images="fetchSlideshow(block.slideshow)" :slideHeight="'120vw'" :dots="false" />
+                <div class="cta center">
+                    <button class="action"> {{ block.buttonText }} </button>
                 </div>
             </div>
-
-            <!-- alternate section -->
-            <div v-if="section.alternateSection" class="alternate-section">
-                <div class="mood-setter">
-                    <img :src="$getImagePath(section.alternateSection.image)" />
-                    <div v-if="section.alternateSection.heading !== ''" class="box">
-                        <h3 @click="$router.push('/collection')" class="heading"> {{ section.alternateSection.heading }} </h3>
-                        <p class="desc"> {{ section.alternateSection.paragraph }} </p>
-                    </div>
-                </div>
+            <div class="pad center-col">
+                <h2 class="text-1"> {{ block.text1 }} </h2>
+                <p class="text-2"> {{ block.text2 }} </p>
+                <p class="text-3"> {{ block.text3 }} </p>
             </div>
 
         </div>
     </div>
-
-    <!-- stamps/keywords  -->
-    <!-- account bounipun -->
-    <div class="my-account center-col">
-        <h2 class="heading"> My Bounipun Account </h2>
-        <p class="desc"> Go Ahead and become a Bounipun member to improve your shopping experience </p>
-
-        <button class="action" @click="$router.push('/login')"> Sign In </button>
+    <!-- product list block -->
+    <div class="product-blocks blocks section">
+        <div class="block flex center-col" v-for="(block, index) in layout.productListBlocks" :key="index">
+            <!-- product list block cover image -->
+            <div class="cover" :style="`background-image: url(${$getImagePath(block.image)})`">
+                <div class="cta center">
+                    <button class="action"> {{ block.buttonText }} </button>
+                </div>
+            </div>
+            <div class="pad center-col">
+                <h2 class="text-1"> {{ block.text1 }} </h2>
+                <p class="text-2"> {{ block.text2 }} </p>
+            </div>
+        </div>
+    </div>
+    <!-- bounipun lab -->
+    <div class="bounipun-lab center-col" v-if="layout.bounipunLab.visible">
+        <div class="cover" :style="`background-image: url(${$getImagePath(layout.bounipunLab.image)})`">
+            <div class="cta center">
+                <button class="action"> {{ layout.bounipunLab.buttonText }} </button>
+            </div>
+        </div>
+        <div class="pad center-col">
+            <h2 class="head text-1"> {{ layout.bounipunLab.heading }} </h2>
+            <p class="paragraph text-2"> {{ layout.bounipunLab.paragraph }} </p>
+        </div>
+    </div>
+    <!-- quote -->
+    <div class="quote center-col pad" v-if="layout.quote.visible">
+        <h2 class="head text-1"> {{ layout.quote.heading }} </h2>
+        <p class="paragraph text-2"> {{ layout.quote.paragraph }} </p>
     </div>
 
+    <!-- press -->
+    <div class="press" v-if="layout.press.visible">
+        <!-- logo -->
+        <div class="logo" :style="`background-image: url(${$getImagePath(layout.press.logo)})`"> </div>
+        <!-- image list -->
+        <div class="image-list">
+            <div class="image-box" v-for="(image, index) in layout.press.imageList" :key="index" :style="`background-image: url(${$getImagePath(image.path)})`">
+            </div>
+        </div>
+
+    </div>
 </div>
 </template>
 
 <script>
-import featuredProductCard from '../components/featuredProductCard.vue';
 export default {
-  components: { featuredProductCard },
     data() {
         return {
-            layout: {},
-            slideshowImages: [],
+            layout: null,
+            mainSlideshowImages: [],
             sections: []
         }
     },
@@ -59,7 +87,7 @@ export default {
     },
     methods: {
         async fetchHomepageLayout() {
-            const layout = await this.$fetchData('homepage_layouts', {
+            const layout = await this.$fetchData('homepages', {
                 status: true
             });
             if (!layout.fetched) {
@@ -69,20 +97,20 @@ export default {
 
             this.layout = layout.doc;
             console.log(this.layout);
-            this.setSlideshow(this.layout.slideshow);
 
-            const totalProductSections = this.layout.productSections.length;
-            const totalAlternateSections = this.layout.alternateSections.length;
+            this.setSlideshow(this.layout.mainSlideshow.slides);
+
+            const totalCollectionBlocks = this.layout.collectionBlocks.length;
+            const totalProductListBlocks = this.layout.productListBlocks.length;
 
             let i = 0;
             let sections = [];
-            const maxSections = totalProductSections > totalAlternateSections ? totalProductSections : totalAlternateSections;
+            const maxSections = totalCollectionBlocks > totalProductListBlocks ? totalCollectionBlocks : totalProductListBlocks;
 
-            
             for (i = 0; i < maxSections; i++) {
                 let section = {};
-                section.productSection = this.layout.productSections[i] !== undefined ? this.layout.productSections[i] : false;
-                section.alternateSection = this.layout.alternateSections[i] !== undefined ? this.layout.alternateSections[i] : false;
+                section.collectionBlock = this.layout.collectionBlocks[i] !== undefined ? this.layout.collectionBlocks[i] : false;
+                section.productListBlock = this.layout.productListBlocks[i] !== undefined ? this.layout.productListBlocks[i] : false;
                 sections.push(section);
             }
 
@@ -90,75 +118,110 @@ export default {
             console.log(sections);
         },
         setSlideshow(images) {
-            this.slideshowImages = images.map(image => process.env.baseAWSURL + image.path);
+            this.mainSlideshowImages = images.map(image => process.env.baseAWSURL + image.path);
+        },
+        fetchSlideshow(images) {
+            return images.map(image => process.env.baseAWSURL + image.path);
         }
     }
 }
 </script>
 
-<style lang="scss" scoped>
-.hero {
-    height: 60vh;
-    width: 100vw;
-    background: url('/hero/1.jpg');
-    background-size: contain;
-    background-repeat: no-repeat;
-}
+<style lang="scss">
+.homepage {
+    margin-top: 10vh;
 
-.my-account {
-    padding: 10%;
-
-    .heading {
-        text-transform: uppercase;
-        font-family: $font_1;
-        text-align: center;
+    .pad {
+        padding: 5%;
     }
 
-    .desc {
-        font-size: 10px;
-        text-align: center;
-        padding: 10px;
-        margin-bottom: 10%;
-    }
-
-    .action {
-        width: 50%;
-    }
-}
-
-/* mood setter - #TODO: make a separate COMPONENT  */
-.mood-setter {
-    width: 100%;
-    height: 100vw;
-    overflow: hidden;
-    position: relative;
-    margin-top: 20px;
-
-    img {
-        top: 0;
-        left: 0;
+    .press {
+        display: flex;
         width: 100%;
-        position: absolute;
-    }
+        height: 25vw;
 
-    .box {
-        top: 17%;
-        left: 45%;
-        width: 43%;
-        background: white;
-        padding: 10% 5%;
-        position: absolute;
-
-        .heading {
-            font-family: $font_1_semibold;
-            font-size: 15px;
-            padding-bottom: 5%;
+        .logo {
+            width: 20%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
         }
 
-        .desc {
-            font-size: 11px;
+        .image-list {
+            width: 80%;
+            height: 100%;
+            display: flex;
+
+            .image-box {
+                width: 25%;
+            }
         }
     }
 
+    .text-1 {
+        font-family: $font_2_bold;
+        margin-bottom: 10px;
+        font-size: 22px;
+        text-transform: uppercase;
+    }
+
+    .text-2 {
+        font-size: 14px;
+        text-align: justify;
+        margin-bottom: 5px;
+    }
+
+    .text-3 {}
+
+    /* main text block */
+    .main-text-block {
+        text-align: center;
+
+    }
+
+    /* cover */
+    .cover {
+        position: relative;
+
+        .cta {
+            position: absolute;
+            bottom: 10%;
+            width: 100%;
+
+            .action {
+                width: 50%;
+            }
+        }
+    }
+
+    .blocks {
+        .block {
+            .text-1 {}
+        }
+    }
+
+    /*  */
+    .collection-blocks {}
+
+    .product-blocks {
+        .block {
+            .cover {
+                width: 100vw;
+                height: 100vw;
+                background-size: cover;
+                background-position: center;
+            }
+        }
+
+    }
+
+    .bounipun-lab {
+        .cover {
+            width: 100vw;
+            height: 100vw;
+            background-size: cover;
+            background-position: center;
+        }
+    }
 }
 </style>

@@ -22,7 +22,7 @@
         <!-- text 1 -->
         <InputBox v-model="doc.mainTextBlock.text1" label="Main Text 1" />
         <!-- text 2 -->
-        <InputBox v-model="doc.mainTextBlock.text2" label="Main Text 2" />
+        <TextBox v-model="doc.mainTextBlock.text2" label="Main Text 2" />
         <!-- text 3 -->
         <InputBox v-model="doc.mainTextBlock.text3" label="Main Text 3" />
         <!-- visiblity toggle -->
@@ -105,7 +105,7 @@
         <!-- heading -->
         <InputBox label="Heading" v-model="doc.bounipunLab.heading" />
         <!-- paragraph -->
-        <InputBox label="Paragraph" v-model="doc.bounipunLab.paragraph" />
+        <TextBox label="Paragraph" v-model="doc.bounipunLab.paragraph" />
         <!-- button text -->
         <InputBox label="Button Text" v-model="doc.bounipunLab.buttonText" />
         <!-- bounipun lab image -->
