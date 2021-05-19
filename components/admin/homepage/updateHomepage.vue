@@ -16,6 +16,18 @@
         <!-- visiblity toggle -->
         <Toggle v-model="doc.mainSlideshow.visible" label="Visiblity" activeText="Live" inactiveText="Hidden" width="100px" />
     </div>
+    <!-- main text block -->
+    <div class="main-text-block section">
+        <label class="head"> Main Text Block </label>
+        <!-- text 1 -->
+        <InputBox v-model="doc.mainTextBlock.text1" label="Main Text 1" />
+        <!-- text 2 -->
+        <InputBox v-model="doc.mainTextBlock.text2" label="Main Text 2" />
+        <!-- text 3 -->
+        <InputBox v-model="doc.mainTextBlock.text3" label="Main Text 3" />
+        <!-- visiblity toggle -->
+        <Toggle v-model="doc.mainTextBlock.visible" label="Visiblity" activeText="Live" inactiveText="Hidden" width="100px" />
+    </div>
     <!-- collections block -->
     <div class="collection-blocks section">
         <label class="head"> Collection Blocks: </label>
