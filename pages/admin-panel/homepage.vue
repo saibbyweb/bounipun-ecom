@@ -100,12 +100,7 @@ export default {
             /* assign images for product list blocks */
             if (productListBlocks.length > 0) {
                 for (let i = 0; i < productListBlocks.length; i++) {
-                    const singleImageList = [{
-                        _id: '',
-                        mainImage: false,
-                        path: productListBlocks[i].image
-                    }]
-                    updateComponent.$refs.imageUploader_productList[i].assignImages(singleImageList)
+                updateComponent.$refs.imageUploader_productList[i].assignImages(productListBlocks[i].imageList)
                 }
             }
 

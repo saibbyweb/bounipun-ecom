@@ -30,7 +30,10 @@
     <div class="product-blocks blocks section">
         <div class="block flex center-col" v-for="(block, index) in layout.productListBlocks" :key="index">
             <!-- product list block cover image -->
-            <div class="cover" :style="`background-image: url(${$getImagePath(block.image)})`">
+            <div class="cover">
+            <slideshow size="cover" :images="fetchSlideshow(block.imageList)" :slideHeight="'120vw'" :dots="false" />
+
+
                 <div class="cta center">
                     <button class="action"> {{ block.buttonText }} </button>
                 </div>
@@ -44,6 +47,7 @@
     <!-- bounipun lab -->
     <div class="bounipun-lab center-col" v-if="layout.bounipunLab.visible">
         <div class="cover" :style="`background-image: url(${$getImagePath(layout.bounipunLab.image)})`">
+
             <div class="cta center">
                 <button class="action"> {{ layout.bounipunLab.buttonText }} </button>
             </div>
@@ -52,6 +56,8 @@
             <h2 class="head text-1"> {{ layout.bounipunLab.heading }} </h2>
             <p class="paragraph text-2"> {{ layout.bounipunLab.paragraph }} </p>
         </div>
+
+
     </div>
     <!-- quote -->
     <div class="quote center-col pad" v-if="layout.quote.visible">
@@ -198,21 +204,6 @@ export default {
         .block {
             .text-1 {}
         }
-    }
-
-    /*  */
-    .collection-blocks {}
-
-    .product-blocks {
-        .block {
-            .cover {
-                width: 100vw;
-                height: 100vw;
-                background-size: cover;
-                background-position: center;
-            }
-        }
-
     }
 
     .bounipun-lab {

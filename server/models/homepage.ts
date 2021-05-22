@@ -20,7 +20,7 @@ const schema = new mongoose.Schema({
     /* product list block */
     productListBlocks: [{
         productList: { type: ObjectId, ref: 'product_lists' },
-        image: String,
+        imageList: [{ _id: ObjectId, mainImage: Boolean, path: String }],
         text1: String, 
         text2: String,
         buttonText: String,

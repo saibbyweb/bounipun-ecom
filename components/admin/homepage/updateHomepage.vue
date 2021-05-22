@@ -81,7 +81,7 @@
             <!-- select product list -->
             <SelectBox :options="allProductLists" v-model="block.productList" label="Select Product List" />
             <!-- set product list image -->
-            <UploadImage ref="imageUploader_productList" :multipleUpload="false" label="Set Product List Image" @updated="imageListUpdated($event,'productListBlock', index)" />
+            <UploadImage ref="imageUploader_productList" label="Set Product List Image" @updated="imageListUpdated($event,'productListBlock', index)" />
             <!-- text 1 -->
             <InputBox label="Text 1" v-model="block.text1" />
             <!-- text 2 -->
@@ -199,7 +199,13 @@ const baseDocument = {
     }],
     productListBlocks: [{
         productList: "",
-        image: "",
+        imageList: [
+            // {
+            // _id: "",
+            // mainImage: false,
+            // path: ""
+            // }
+        ],
         text1: "",
         text2: "",
         buttonText: "",
@@ -272,7 +278,7 @@ export default {
                     break;
                     /* single [indexed] */
                 case 'productListBlock':
-                    this.doc.productListBlocks[index].image = list.length > 0 ? list[0].path : ""
+                    this.doc.productListBlocks[index].imageList = list;
                     break;
                     /* single */
                 case 'bounipunLab':
@@ -341,7 +347,11 @@ export default {
         addProductListBlock() {
             this.doc.productListBlocks.push({
                 productList: "",
-                image: "",
+                imageList: [{
+                    _id: "",
+                    mainImage: false,
+                    path: ""
+                }],
                 text1: "",
                 text2: "",
                 buttonText: "",
