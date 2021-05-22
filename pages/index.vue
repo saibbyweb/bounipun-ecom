@@ -185,7 +185,7 @@ export default {
 
         .cta {
             position: absolute;
-            bottom: 10%;
+            bottom: 5%;
             width: 100%;
 
             .action {

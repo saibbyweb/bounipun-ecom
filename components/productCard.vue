@@ -314,6 +314,7 @@ export default {
     height: 36vw;
     overflow: hidden;
     padding: 1vw;
+    margin:5px 0;
     position: relative;
 
     .wishlist {

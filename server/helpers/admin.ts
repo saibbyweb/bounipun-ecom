@@ -55,20 +55,22 @@ export default {
         /* collection */
         const collection = db.model(model);
         /* fetch documents */
-        const results = await collection.aggregate([{
-            $facet: {
-                documents: [
-                    { $match: criterion.match },
-                    { $sort: Object.keys(criterion.sort).length === 0 ? { createdAt: -1 } : criterion.sort },
-                    { $skip: criterion.skip },
-                    { $limit: criterion.limit },
-                ],
-                totalMatches: [
-                    { $match: criterion.match },
-                    { $count: "count" }
-                ]
-            }
-        }]);
+        const results = await collection.aggregate(
+            [{
+                $facet: {
+                    documents: [
+                        { $match: criterion.match },
+                        { $sort: Object.keys(criterion.sort).length === 0 ? { order: 1 } : criterion.sort },
+                        { $skip: criterion.skip },
+                        { $limit: criterion.limit },
+                    ],
+                    totalMatches: [
+                        { $match: criterion.match },
+                        { $count: "count" }
+                    ]
+                }
+            }]
+        ).collation({ locale:"en_US", numericOrdering: true });
 
         /* if no results found */
         const fetchedResults = results[0];

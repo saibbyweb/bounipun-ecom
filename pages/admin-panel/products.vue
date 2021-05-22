@@ -156,6 +156,7 @@ export default {
 
             this.list = this.list.map(item => {
                 const foundCollection = this.collections.find(col => col.value === item.bounipun_collection);
+                
                 const bounipun_collection = foundCollection !== undefined ? foundCollection.name : "Third Party"
                 item.bounipun_collection = item.type !== "third-party" ? bounipun_collection : "N/A"
                 return item;

@@ -9,7 +9,7 @@
     </div>
     <!-- list of fabrics -->
     <div :class="{updating: showForm}" class="list">
-        <List :list="list" :model="model" :headings="headings" custom_css="10% 20% 20% 10% 10% 20% 10%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" />
+        <List :list="list" :model="model" :headings="headings" custom_css="10% 20% 20% 20% 20% 10%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" />
 
         <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
     </div>
@@ -48,13 +48,13 @@ export default {
                     category: 'default'
                 },
                 sortBy: {
-
+                    code: { active: true, order: 1}
                 },
                 limit: 50
             },
             list: [],
-            sortByFields: ['code', 'name', 'status'],
-            headings: ['_id', 'code', 'name', 'Base Color', 'Category', 'Description', 'status'],
+            sortByFields: ['name', 'status'],
+            headings: ['_id', 'code', 'name', 'Base Color', 'Category', 'status'],
             colorCategories: [],
         }
     },
@@ -87,6 +87,18 @@ export default {
             this.colorCategories.unshift({
                 name: 'Select Category',
                 value: "default"
+            });
+
+            if(this.list.length === 0) {
+                return;
+            }
+
+            /* update color category name in list */
+            this.list = this.list.map(item => {
+                const foundCategory = this.colorCategories.find(cat => cat.value === item.category)
+                const foundCategoryName = foundCategory !== undefined ? foundCategory.name : 'N/A';
+                item.category = foundCategoryName;
+                return item;
             })
         },
         documentFetched(doc) {
@@ -120,7 +132,7 @@ export default {
                 name,
                 baseColor,
                 category,
-                description,
+                // description,
                 status
             }) => {
                 /* resolve category name */
@@ -131,7 +143,7 @@ export default {
                     name,
                     baseColor,
                     category: foundCategory ? foundCategory.name : "Not available",
-                    description,
+                    // description,
                     status
                 }
             });
