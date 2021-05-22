@@ -7,6 +7,7 @@ const schema = new mongoose.Schema({
     code: { type: String, default: '' },
     info1: { type: String, default: '' },
     description: String,
+    detailsAndCare: String,
     writeUp: String,
     order: Number,
     status: Boolean

@@ -33,7 +33,7 @@ router.post('/getDocument', async (req, res) => {
                 document = await document
                     .populate('bounipun_collection', 'name description variantNote')
                     .populate('variants._id')
-                    .populate('variants.fabrics._id', 'name code info1 description writeUp order')
+                    .populate('variants.fabrics._id')
                     .populate('colors._id', 'name category image')
 
 

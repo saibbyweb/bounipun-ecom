@@ -12,6 +12,8 @@
     <InputBox label="Info #1" v-model="doc.info1" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
+    <!-- details and care -->
+    <TextBox v-model="doc.detailsAndCare" label="Details And Care" />
     <!-- write up -->
     <TextBox v-model="doc.writeUp" label="Write Up" />
     <!-- publish toggle -->
@@ -45,6 +47,7 @@ export default {
                 code: "",
                 info1: "",
                 description: "",
+                detailsAndCare: "",
                 writeUp: "",
                 status: false
             },
@@ -85,6 +88,7 @@ export default {
                 code,
                 info1,
                 description,
+                detailsAndCare,
                 writeUp,
                 status
             } = details;
@@ -95,6 +99,7 @@ export default {
                 code,
                 info1,
                 description,
+                detailsAndCare,
                 writeUp,
                 status
             };
@@ -112,6 +117,7 @@ export default {
                 code: "",
                 info1: "",
                 description: "",
+                detailsAndCare: "",
                 writeUp: "",
                 status: false
             });
