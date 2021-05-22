@@ -84,15 +84,15 @@
     </div>
 
     <!-- variations (checkboxes) -->
-    <c-boxes v-if="!thirdPartyProduct" :options="variants" label="Variants" />
+    <c-boxes v-if="!thirdPartyProduct && !readyToShip" :options="variants" label="Variants" />
 
     <!-- fabric selector -->
-    <div v-if="!thirdPartyProduct">
+    <div v-if="!thirdPartyProduct && !readyToShip">
         <fabric-selector :ref="'fabricSelector'+variant._id" :label="variant.name" v-for="(variant) in selectedVariantsWithFabricOptions" :key="variant._id" :variant="variant" @fabricSelectionUpdated="fabricSelectionUpdated" />
     </div>
 
     <!-- direct price -->
-    <InputBox v-if="thirdPartyProduct" label="Direct Price" v-model="doc.directPrice" />
+    <InputBox v-if="thirdPartyProduct || readyToShip" label="Direct Price" v-model="doc.directPrice" />
 
     <!-- estimated delivery time -->
     <!-- <InputBox label="Estimated Delivery Time (in weeks)" v-model="doc.etd" type="number" /> -->
@@ -215,6 +215,9 @@ export default {
         },
         thirdPartyProduct() {
             return this.doc.type === 'third-party'
+        },
+        readyToShip() {
+            return this.doc.availabilityType === 'ready-to-ship';
         },
         underAutograph() {
             /* TODO: should first fetch the _id of the autograph doc in collections and then compare */

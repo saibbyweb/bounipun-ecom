@@ -47,7 +47,7 @@
 
     <!-- sub total -->
     <div class="sub-total">
-        <span class="label"> Sub Total ( {{ cartDetails.length }} Item(s) ) : </span>
+        <span class="label"> Sub Total - {{ cartDetails.length }} Item(s) : </span>
         <span class="value"> INR {{ subTotal }} </span>
     </div>
 
