@@ -31,8 +31,7 @@
         <div class="block flex center-col" v-for="(block, index) in layout.productListBlocks" :key="index">
             <!-- product list block cover image -->
             <div class="cover">
-            <slideshow size="cover" :images="fetchSlideshow(block.imageList)" :slideHeight="'120vw'" :dots="false" />
-
+                <slideshow size="cover" :images="fetchSlideshow(block.imageList)" :slideHeight="'120vw'" :dots="false" />
 
                 <div class="cta center">
                     <button class="action"> {{ block.buttonText }} </button>
@@ -57,21 +56,30 @@
             <p class="paragraph text-2"> {{ layout.bounipunLab.paragraph }} </p>
         </div>
 
-
     </div>
     <!-- quote -->
-    <div class="quote center-col pad" v-if="layout.quote.visible">
-        <h2 class="head text-1"> {{ layout.quote.heading }} </h2>
-        <p class="paragraph text-2"> {{ layout.quote.paragraph }} </p>
+    <div class="quote pad" v-if="layout.quote.visible">
+        <!-- logo -->
+        <div class="logo" :style="`background-image: url(${$getImagePath(layout.quote.logo)})`"> </div>
+        <div class="text">
+            <h2 class="head text-1"> {{ layout.quote.heading }} </h2>
+            <p class="paragraph text-2"> {{ layout.quote.paragraph }} </p>
+        </div>
     </div>
 
     <!-- press -->
     <div class="press" v-if="layout.press.visible">
-        <!-- logo -->
-        <div class="logo" :style="`background-image: url(${$getImagePath(layout.press.logo)})`"> </div>
-        <!-- image list -->
-        <div class="image-list">
-            <div class="image-box" v-for="(image, index) in layout.press.imageList" :key="index" :style="`background-image: url(${$getImagePath(image.path)})`">
+        <div class="scrollable-list">
+            <div class="list">
+                <!-- logo -->
+                <div class="logo" :style="`background-image: url(${$getImagePath(layout.press.logo)})`"> </div>
+
+                <!-- image list -->
+                <div class="image-list">
+                    <div class="image-box" v-for="(image, index) in layout.press.imageList" :key="index" :style="`background-image: url(${$getImagePath(image.path)})`">
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -141,25 +149,57 @@ export default {
         padding: 5%;
     }
 
+    .quote {
+        display: flex;
+        width: 100%;
+        height: 50vw;
+        justify-content: space-between;
+
+        .logo {
+            width: 40vw;
+            height: 100%;
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .text {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .head {
+                text-align:center;
+            }
+        }
+
+    }
+
     .press {
         display: flex;
         width: 100%;
-        height: 25vw;
+        height: 40vw;
 
         .logo {
-            width: 20%;
+            width: 40vw;
             height: 100%;
-            background-size: cover;
+            background-size: contain;
             background-position: center;
+            background-repeat: no-repeat;
         }
 
         .image-list {
-            width: 80%;
+            // width: 70%;
             height: 100%;
             display: flex;
 
             .image-box {
-                width: 25%;
+                width: 25vw;
+                height: 100%;
+                background-size: contain;
+                background-position: center;
+                background-repeat: no-repeat;
             }
         }
     }

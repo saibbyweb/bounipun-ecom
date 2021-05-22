@@ -116,6 +116,8 @@
     <!-- quote -->
     <div class="quote section">
         <label class="head"> Quote: </label>
+        <UploadImage ref="imageUploader_quote" :multipleUpload="false" label="Set Quote Logo Image" @updated="imageListUpdated($event,'quote')" />
+
         <!-- heading -->
         <InputBox label="Heading" v-model="doc.quote.heading" />
         <!-- paragraph -->
@@ -220,6 +222,7 @@ const baseDocument = {
         visible: false
     },
     quote: {
+        logo: "",
         heading: "",
         paragraph: "",
         visible: false
@@ -283,6 +286,10 @@ export default {
                     /* single */
                 case 'bounipunLab':
                     this.doc.bounipunLab.image = list.length > 0 ? list[0].path : "";
+                    break;
+                    /* single */
+                case 'quote':
+                    this.doc.quote.logo = list.length > 0 ? list[0].path : "";
                     break;
                     /* single */
                 case 'pressLogo':

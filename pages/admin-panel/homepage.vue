@@ -82,6 +82,7 @@ export default {
                 collectionBlocks,
                 productListBlocks,
                 bounipunLab,
+                quote,
                 press
             } = doc;
 
@@ -100,12 +101,12 @@ export default {
             /* assign images for product list blocks */
             if (productListBlocks.length > 0) {
                 for (let i = 0; i < productListBlocks.length; i++) {
-                updateComponent.$refs.imageUploader_productList[i].assignImages(productListBlocks[i].imageList)
+                    updateComponent.$refs.imageUploader_productList[i].assignImages(productListBlocks[i].imageList)
                 }
             }
 
             /* assign bounipun lab image */
-            if(bounipunLab.image !== "") {
+            if (bounipunLab.image !== "") {
                 const singleImageList = [{
                     _id: "",
                     mainImage: false,
@@ -114,9 +115,19 @@ export default {
                 updateComponent.$refs.imageUploader_bounipunLab.assignImages(singleImageList);
             }
 
+            /* assign quote logo */
+            if (quote.logo !== "") {
+                const singleImageList = [{
+                    _id: "",
+                    mainImage: false,
+                    path: quote.logo
+                }]
+                updateComponent.$refs.imageUploader_quote.assignImages(singleImageList);
+            }
+
             /* assign press logo */
-            if(press.logo !== "") {
-                  const singleImageList = [{
+            if (press.logo !== "") {
+                const singleImageList = [{
                     _id: "",
                     mainImage: false,
                     path: press.logo
@@ -125,7 +136,7 @@ export default {
             }
 
             /* assign press image list */
-            if(press.imageList.length > 0) {
+            if (press.imageList.length > 0) {
                 updateComponent.$refs.imageUploader_pressImageList.assignImages(press.imageList);
             }
 

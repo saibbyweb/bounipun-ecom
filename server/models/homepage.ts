@@ -36,6 +36,7 @@ const schema = new mongoose.Schema({
     },
     /* quote */
     quote: {
+        logo: String,
         heading: String,
         paragraph: String,
         visible: Boolean
