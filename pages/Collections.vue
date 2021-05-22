@@ -63,6 +63,10 @@ export default {
     watch: {
         $route(to, from) {
             console.log(to);
+            this.products = [];
+            this.escapeProduct = [];
+            this.colorCategories = [];
+            this.collection = {};
             this.fetchCollectionProducts(to.query.slug);
         }
     },
@@ -80,6 +84,11 @@ export default {
             let adjustedProduct = {
                 ...product
             };
+
+            // if(adjustedProduct.colors[cIndex] !== undefined) {
+            //     return;
+            // }
+
             adjustedProduct.name = adjustedProduct.colors[cIndex].name;
             return {
                 ...adjustedProduct
@@ -120,12 +129,12 @@ export default {
             if (!products.fetched) {
                 return;
             }
-            
+
             /* filter out inactive colors */
             products.docs.forEach(product => {
                 product.colors = product.colors.filter(color => color.status === true);
             });
-            
+
             /* filter out products with no active colors */
             products.docs = products.docs.filter(product => product.colors.length > 0)
 

@@ -12,7 +12,7 @@
     </div>
 
     <!-- product colors [images] -->
-    <div class="center-col color-previews">
+    <div class="center-col color-previews" v-if="!(collectionName === 'Escape' && $route.name === 'Collections')">
         <div class="base-color-boxes">
             <div @click.stop="setActiveBaseColor(index)" class="color-image shadow" v-for="(preview, index) in baseColorImagesPreview.previews" :key="index" :style="`background-image: url(${getBaseColorPath(index)})`" :class="{active: isActiveBaseColor(index)}">
             </div>
@@ -254,6 +254,7 @@ export default {
     },
     mounted() {
         this.activeColorIndex = this.activeColor;
+        // console.log(this.$route);
     },
     watch: {
         activeColor(val) {
@@ -389,6 +390,7 @@ export default {
         width: 100%;
         height:12%;
         padding-bottom: 2px;
+        padding-top:3px;
 
         .product-name {
             font-size: 12px;
