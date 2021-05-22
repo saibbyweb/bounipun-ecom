@@ -307,8 +307,11 @@ export default {
         preferredGender() {
             if (this.product.gender === undefined)
                 return "";
+            if(this.product.gender === "for-him-and-her")
+                return "him | her"
 
             return `${this.product.gender.replaceAll('-',' ')}`;
+
         },
         bounipunColors() {
             return this.product.colorSource === 'bounipun-colors';
@@ -959,8 +962,8 @@ export default {
                     .fabric {
                         background-color: #33333376;
                         padding: 5px 0px;
-                        width: 47%;
-                        margin: 5px;
+                        width: 49%;
+                        margin: 0.5%;
                         transition: all 0.2s cubic-bezier(0.215, 0.610, 0.355, 1);
 
                         span {

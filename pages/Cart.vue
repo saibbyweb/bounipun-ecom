@@ -47,7 +47,7 @@
 
     <!-- sub total -->
     <div class="sub-total">
-        <span class="label"> Sub Total ( {{ cartDetails.length }} Items ) : </span>
+        <span class="label"> Sub Total ( {{ cartDetails.length }} Item(s) ) : </span>
         <span class="value"> INR {{ subTotal }} </span>
     </div>
 
@@ -124,7 +124,6 @@ export default {
                 return;
             }
 
-            // console.log(response);
 
             /* construct cart details array by mapping product data to cart items */
             const cartDetails = this.$store.state.customer.cart.map((product) => {
@@ -134,9 +133,25 @@ export default {
 
                 /* find  product details for item */
                 const details = response.cartDetails.find(pro => pro._id === product._id);
+                
+                /* if product id didnt match */
+                if(details === undefined) {
+                    /* remove from cache */
+                    this.$store.commit('customer/removeFromCart', product);
+                    return false;
+                }
+
+                console.log(details,'CART ITEM FOUND')
 
                 /* get color name and main image */
                 const color = details.colors.find(color => color.code === product.colorCode);
+                
+                /* if color code didnt match */
+                if(color === undefined) {
+                    /* remove from cache */
+                    this.$store.commit('customer/removeFromCart', product);
+                    return false;
+                }
 
                 /* add details and quantity to cart item */
                 cartItem = {
@@ -187,7 +202,8 @@ export default {
                 return cartItem;
             });
 
-            this.cartDetails = cartDetails;
+            /* remove un-matched entried (remove from cache as well) */
+            this.cartDetails = cartDetails.filter(item => item !== false);
         },
         mainImagePath(color) {
             if (color.images.length === 0)

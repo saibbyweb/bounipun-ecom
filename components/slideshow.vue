@@ -1,21 +1,23 @@
 <template>
 <div class="slideshow-container" :style="{width: slideWidth + 'vw'}">
-    <div class="slideshow">
-        <!-- slideshow images -->
-        <div v-hammer:swipe="onSwipe" class="slides-container" :style="'margin-left: ' + slideMargin + 'vw'">
-            <div class="product-image" :key="index" v-for="(image, index) in images" :style="getBackgroundImage(image)"> </div>
+    <div class="till-dots">
+        <div class="slideshow">
+            <!-- slideshow images -->
+            <div v-hammer:swipe="onSwipe" class="slides-container" :style="'margin-left: ' + slideMargin + 'vw'">
+                <div class="product-image" :key="index" v-for="(image, index) in images" :style="getBackgroundImage(image)"> </div>
 
+            </div>
+        </div>
+
+        <!-- indicator dots -->
+        <div v-if="dots" class="dots" :style="{width: slideWidth}">
+            <div :class="[{active: isActive(index)},'dot']" :key="index" v-for="(image, index) in images"> </div>
         </div>
     </div>
 
     <!-- custom text -->
     <div v-if="customText !== ''" class="center">
-        <span class="custom-text">  {{ customText }} </span>
-    </div>
-
-    <!-- indicator dots -->
-    <div v-if="dots" class="dots" :style="{width: slideWidth}">
-        <div :class="[{active: isActive(index)},'dot']" :key="index" v-for="(image, index) in images"> </div>
+        <span class="custom-text"> {{ customText }} </span>
     </div>
 
     <!-- thumbnails -->
@@ -66,7 +68,7 @@ export default {
             default: ''
         },
         dots: {
-            type: Boolean, 
+            type: Boolean,
             default: true
         },
         slideWidth: {
@@ -136,7 +138,6 @@ export default {
                     if (this.slideMargin === 0)
                         return;
 
-
                     this.slideMargin += this.slideWidth;
                     this.activeIndex -= 1;
                     break;
@@ -154,6 +155,7 @@ export default {
 <style lang="scss" scoped>
 .slideshow-container {
     overflow: hidden;
+
     .slideshow {
         display: flex;
         overflow-x: auto;
@@ -173,9 +175,9 @@ export default {
             width: fit-content;
             margin-left: 0;
             transition: all 0.4s ease-in-out;
-            
+
             .product-image {
-                
+
                 // height:120vw;
                 // width: 100vw;
 
@@ -188,7 +190,6 @@ export default {
                 }
             }
 
-
         }
 
     }
@@ -197,7 +198,7 @@ export default {
     .custom-text {
         text-align: center;
         font-size: 12px;
-        padding:7px 15px;
+        padding: 7px 15px;
         color: $gray;
         opacity: 0.7;
         font-family: $font_2;
@@ -231,25 +232,34 @@ export default {
         }
     }
 
+    .till-dots {
+        position: relative;
+    }
+
     /* indicator dots */
     .dots {
         // width: 100vw;
         height: 20px;
         display: flex;
         justify-content: center;
-        align-items: flex-start;
+        align-items: center;
         box-sizing: border-box;
-        margin: 5px 0 0 0;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
 
         .dot {
             height: 7px;
             width: 7px;
             border-radius: 50%;
-            background-color: #969696;
+            background-color: #ffffff;
             margin: 0 5px 5px 5px;
+            border: 1px solid rgb(106, 106, 106);
+
 
             &.active {
-                background-color: #2b2b2b;
+                background-color: $dark_gray;
             }
         }
     }
