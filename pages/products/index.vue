@@ -999,7 +999,7 @@ export default {
 
                         // width: 30%;
                         .name {
-                            font-size: 10px;
+                            font-size: 9.5px;
                             letter-spacing: 1px;
                         }
 

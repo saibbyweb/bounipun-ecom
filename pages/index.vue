@@ -231,11 +231,11 @@ export default {
 
         .cta {
             position: absolute;
-            bottom: 5%;
+            bottom: 2%;
             width: 100%;
 
             .action {
-                width: 50%;
+                width: 36%;
             }
         }
     }

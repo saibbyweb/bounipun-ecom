@@ -83,19 +83,22 @@
                     <button v-if="doc.availabilityType === 'made-to-order'" class="action" style="font-size:10px; width:70%;background-color: orange;" @click="toggleRTSPanel(color)"> {{ color.showRTSPanel ? 'Hide' : 'Show'}} RTS PANEL </button>
                 </div>
                 <!-- ready to ship picker -->
-                 <div v-if="color.showRTSPanel" class="ready-to-ship-marker" style="width:100%; border:1px dashed orange;">
-
-             
-                            <!-- select variant -->
-                            <SelectBox :options="variants" v-model="color.rtsVariant" label="Select Variant:" />
-                            <!-- select fabric -->
-                            <SelectBox :options="getRTSFabrics(color.rtsVariant)" v-model="color.rtsFabric" label="Select Fabric:" />
-                            <!-- add new RTS entry -->
-                            <div class="center">
-                            <button class="action" style="font-size:12px; margin:10px 0px;"> Add New RTS Entry </button>
-                            </div>
-
+                <div v-if="color.showRTSPanel" class="ready-to-ship-marker" style="width:100%; border:1px dashed orange;">
+                    <!-- select variant -->
+                    <SelectBox :options="variants" v-model="color.rtsVariant" label="Select Variant:" />
+                    <!-- select fabric -->
+                    <SelectBox :options="getRTSFabrics(color.rtsVariant)" v-model="color.rtsFabric" label="Select Fabric:" />
+                    <div class="center">
+                        <!-- stock -->
+                        <InputBox label="Stock" v-model="color.rtsStock" /> 
+                        <!-- direct price -->
+                        <InputBox label="Direct Price" v-model="color.rtsDirectPrice" />
+                    </div> 
+                    <!-- add new RTS entry -->
+                    <div class="center">
+                        <button class="action" style="font-size:12px; margin:10px 0px;"> Add New RTS Entry </button>
                     </div>
+                </div>
             </div>
         </div>
         <button v-if="doc.colorSource !== 'bounipun-colors'" class="action" style="font-size:9px; position: absolute; bottom: -30px;  right:10px;" @click="addNewColor({_id: null, name:'', code: ''})"> Add Color </button>
@@ -344,14 +347,17 @@ export default {
         getRTSFabrics(variantId) {
             /* fetch variant code */
             const selectedVariant = this.variants.find((variant) => variant.value === variantId);
-            if(selectedVariant === undefined)
-                return {name: 'Select Variant First', value: ''};
+            if (selectedVariant === undefined)
+                return {
+                    name: 'Select Variant First',
+                    value: ''
+                };
 
             const filteredFabrics = this.fabrics.filter(fabric => {
-                return fabric.code.startsWith(selectedVariant.code) 
+                return fabric.code.startsWith(selectedVariant.code)
             });
 
-            return filteredFabrics.map(fab => { 
+            return filteredFabrics.map(fab => {
                 fab.name = `${fab.code}`;
                 return fab
             })
