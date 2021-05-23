@@ -7,7 +7,7 @@ const schema = new mongoose.Schema({
     mainSlideshow: { slides : [{ _id: ObjectId, mainImage: Boolean, path: String }], visible: Boolean },
     /* text block 1 */
     mainTextBlock: {
-        text1: String, text2: String, text3: String, visible: Boolean
+        text1: String, text2: String, text3: String, author: String, visible: Boolean
     },
     /* in house collection blocks */
     collectionBlocks: [{
@@ -39,6 +39,7 @@ const schema = new mongoose.Schema({
         logo: String,
         heading: String,
         paragraph: String,
+        author: String,
         visible: Boolean
     },
     /* press */

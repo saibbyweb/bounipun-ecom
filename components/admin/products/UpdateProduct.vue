@@ -90,9 +90,9 @@
                     <SelectBox :options="getRTSFabrics(color.rtsVariant)" v-model="color.rtsFabric" label="Select Fabric:" />
                     <div class="center">
                         <!-- stock -->
-                        <InputBox label="Stock" v-model="color.rtsStock" /> 
+                        <InputBox label="Stock:" v-model="color.rtsStock" /> 
                         <!-- direct price -->
-                        <InputBox label="Direct Price" v-model="color.rtsDirectPrice" />
+                        <InputBox label="Direct Price:" v-model="color.rtsDirectPrice" />
                     </div> 
                     <!-- add new RTS entry -->
                     <div class="center">

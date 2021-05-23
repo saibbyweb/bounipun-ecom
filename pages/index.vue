@@ -11,9 +11,9 @@
     <!-- collection blocks -->
     <div class="collection-blocks blocks section">
         <div class="block flex center-col" v-for="(block, index) in layout.collectionBlocks" :key="index">
-
+            <div v-if="block.visible">
             <div class="cover">
-                <slideshow size="cover" :images="fetchSlideshow(block.slideshow)" :slideHeight="'120vw'" :dots="false" />
+                <slideshow size="cover" :images="fetchSlideshow(block.slideshow)" :slideHeight="'120vw'" :dots="true" />
                 <div class="cta center">
                     <button class="action"> {{ block.buttonText }} </button>
                 </div>
@@ -23,23 +23,26 @@
                 <p class="text-2"> {{ block.text2 }} </p>
                 <p class="text-3"> {{ block.text3 }} </p>
             </div>
+            </div>
 
         </div>
     </div>
     <!-- product list block -->
     <div class="product-blocks blocks section">
         <div class="block flex center-col" v-for="(block, index) in layout.productListBlocks" :key="index">
-            <!-- product list block cover image -->
-            <div class="cover">
-                <slideshow size="cover" :images="fetchSlideshow(block.imageList)" :slideHeight="'120vw'" :dots="false" />
+            <div v-if="block.visible">
+                <!-- product list block cover image -->
+                <div class="cover">
+                    <slideshow size="cover" :images="fetchSlideshow(block.imageList)" :slideHeight="'120vw'" :dots="true" />
 
-                <div class="cta center">
-                    <button class="action"> {{ block.buttonText }} </button>
+                    <div class="cta center">
+                        <button class="action"> {{ block.buttonText }} </button>
+                    </div>
                 </div>
-            </div>
-            <div class="pad center-col">
-                <h2 class="text-1"> {{ block.text1 }} </h2>
-                <p class="text-2"> {{ block.text2 }} </p>
+                <div class="pad center-col">
+                    <h2 class="text-1"> {{ block.text1 }} </h2>
+                    <p class="text-2"> {{ block.text2 }} </p>
+                </div>
             </div>
         </div>
     </div>
@@ -58,10 +61,10 @@
 
     </div>
     <!-- quote -->
-    <div class="quote pad" v-if="layout.quote.visible">
+    <div class="quote" v-if="layout.quote.visible">
         <!-- logo -->
         <div class="logo" :style="`background-image: url(${$getImagePath(layout.quote.logo)})`"> </div>
-        <div class="text">
+        <div class="text pad">
             <h2 class="head text-1"> {{ layout.quote.heading }} </h2>
             <p class="paragraph text-2"> {{ layout.quote.paragraph }} </p>
         </div>
@@ -152,19 +155,20 @@ export default {
     .quote {
         display: flex;
         width: 100%;
-        height: 50vw;
+        height: 40vw;
         justify-content: space-between;
+        padding: 5px;
 
         .logo {
             width: 40vw;
-            height: 100%;
+            height: 40vw;
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
         }
 
         .text {
-            width: 70%;
+            width: 60%;
             display: flex;
             flex-direction: column;
             justify-content: center;

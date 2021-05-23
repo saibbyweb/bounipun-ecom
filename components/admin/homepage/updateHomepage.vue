@@ -25,6 +25,8 @@
         <TextBox v-model="doc.mainTextBlock.text2" label="Main Text 2" />
         <!-- text 3 -->
         <InputBox v-model="doc.mainTextBlock.text3" label="Main Text 3" />
+        <!-- author -->
+        <InputBox v-model="doc.mainTextBlock.author" label="Author" />
         <!-- visiblity toggle -->
         <Toggle v-model="doc.mainTextBlock.visible" label="Visiblity" activeText="Live" inactiveText="Hidden" width="100px" />
     </div>
@@ -122,6 +124,8 @@
         <InputBox label="Heading" v-model="doc.quote.heading" />
         <!-- paragraph -->
         <InputBox label="Paragraph" v-model="doc.quote.paragraph" />
+        <!-- author -->
+        <InputBox label="Author" v-model="doc.quote.author" />
         <!-- visiblity toggle -->
         <Toggle v-model="doc.quote.visible" label="Visiblity" activeText="Live" inactiveText="Hidden" width="100px" />
     </div>
@@ -181,6 +185,7 @@ const baseDocument = {
         text1: "",
         text2: "",
         text3: "",
+        author: "",
         visible: false
     },
     collectionBlocks: [{
@@ -225,6 +230,7 @@ const baseDocument = {
         logo: "",
         heading: "",
         paragraph: "",
+        author: "",
         visible: false
     },
     press: {
