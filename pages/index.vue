@@ -209,7 +209,7 @@ export default {
     }
 
     .text-1 {
-        font-family: $font_2_bold;
+        font-family: $font_3_bold;
         margin-bottom: 10px;
         font-size: 22px;
         text-transform: uppercase;
@@ -219,9 +219,12 @@ export default {
         font-size: 14px;
         text-align: justify;
         margin-bottom: 5px;
+        font-family: $font_2;
     }
 
-    .text-3 {}
+    .text-3 {
+        font-family: $font_4;
+    }
 
     /* main text block */
     .main-text-block {

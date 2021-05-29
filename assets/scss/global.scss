@@ -12,6 +12,12 @@ $font_2: "SF-Pro";
 $font_2_semibold: "SF-Pro SemiBold";
 $font_2_bold: "SF-Pro Bold";
 
+$font_3: "Garamond";
+$font_3_bold: "Garamond-Bold";
+
+$font_4: "Charmonman";
+$font_4_bold: "Charmonman-Bold";
+
 @font-face {
 font-family: "SF-Pro";
 font-style: normal;
@@ -59,6 +65,33 @@ font-weight: 900;
 font-display: swap;
 src: url("~assets/fonts/Poppins-Bold.ttf") format("truetype");
 }
+
+/* garamond */
+@font-face {
+  font-family: "Garamond";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("~assets/fonts/Garamond/EBGaramond-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Garamond-Bold";
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url("~assets/fonts/Garamond/EBGaramond-Bold.ttf") format("truetype");
+}
+
+/* charmonman */
+@font-face {
+  font-family: "Charmonman";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("~assets/fonts/Charmonman/Charmonman-Regular.ttf") format("truetype");
+}
+
 
 body {
 margin: 0 !important;
