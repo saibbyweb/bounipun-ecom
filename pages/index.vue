@@ -7,6 +7,8 @@
         <h2 class="text-1"> {{ layout.mainTextBlock.text1 }} </h2>
         <p class="text-2"> {{ layout.mainTextBlock.text2 }} </p>
         <p class="text-3"> {{ layout.mainTextBlock.text3 }} </p>
+        <p class="author"> {{ layout.mainTextBlock.author }} </p>
+        
     </div>
     <!-- collection blocks -->
     <div class="collection-blocks blocks section">
@@ -173,6 +175,12 @@ export default {
             flex-direction: column;
             justify-content: center;
 
+            .text-2 {
+                font-family: $font_4;
+                line-height: 30px;
+                font-size: 18px;
+            }
+
             .head {
                 text-align:center;
             }
@@ -211,7 +219,7 @@ export default {
     .text-1 {
         font-family: $font_3_bold;
         margin-bottom: 10px;
-        font-size: 22px;
+        font-size: 26px;
         text-transform: uppercase;
     }
 
@@ -219,17 +227,21 @@ export default {
         font-size: 14px;
         text-align: justify;
         margin-bottom: 5px;
-        font-family: $font_2;
+        font-family: $font_1;
     }
 
     .text-3 {
         font-family: $font_4;
+        font-size:19px;
     }
 
     /* main text block */
     .main-text-block {
         text-align: center;
-
+        .author {
+            font-family: $font_2;
+            font-size: 13px;
+        }
     }
 
     /* cover */

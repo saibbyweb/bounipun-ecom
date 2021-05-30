@@ -29,12 +29,12 @@
                 <span class="fabric"> {{ item.fabricInfo1 }} </span>
                 <!-- price -->
                 <span class="price"> INR {{ item.price }} </span>
-                <!-- quantity selector -->
-                <div class="quantity-input" style="display: flex;">
-                    <span> Quantity: </span>
-                    <select v-model="item.quantity" @change="quantityUpdated(item.product, $event)">
-                        <option v-for="n in 3" :key="n"> {{ n }} </option>
-                    </select>
+
+                <!-- quantity picker -->
+                <div class="quantity-picker">
+                    <button @click.stop="updateQuantity(item, 'decrease')"> - </button>
+                    <button class="qty"> {{ item.quantity }} </button>
+                    <button @click.stop="updateQuantity(item, 'increase')"> + </button>
                 </div>
 
             </div>
@@ -65,7 +65,6 @@
 <script>
 import sumBy from "lodash/sumBy";
 import colorPickerVue from '../components/admin/colors/colorPicker.vue';
-
 export default {
     data() {
         return {
@@ -87,8 +86,18 @@ export default {
         }
     },
     methods: {
-        quantityUpdated(product, $event) {
-            const newQuantity = $event.target.value;
+        updateQuantity(item, operation) {
+            switch(operation) {
+                case 'decrease':
+                    if(item.quantity > 1) item.quantity--
+                    break;
+                case 'increase':
+                    if(item.quantity < 3)  item.quantity++
+                    break;
+            }
+            this.quantityUpdated(item.product, item.quantity);
+        },
+        quantityUpdated(product, newQuantity) {
             this.$store.commit('customer/updateQuantity', {
                 product,
                 newQuantity
@@ -101,36 +110,28 @@ export default {
         async fetchCartDetails() {
             /* gather the list of (unique) product ids */
             const listOfProductIds = this.$store.getters['customer/getCartProductIds'];
-
             /* if cart empty */
             if (listOfProductIds === false) {
                 console.log('cart empty');
                 return;
             }
-
             /* fetch product details for all ids */
             const cartFetch = this.$axios.$post('/fetchCartDetails', {
                 listOfProductIds
             });
-
             const {
                 response,
                 error
             } = await this.$task(cartFetch);
-
             /* if error occurred */
             if (error) {
                 console.log('could not fetch cart items');
                 return;
             }
-
-
             /* construct cart details array by mapping product data to cart items */
             const cartDetails = this.$store.state.customer.cart.map((product) => {
-
                 /* cart item */
                 let cartItem = {};
-
                 /* find  product details for item */
                 const details = response.cartDetails.find(pro => pro._id === product._id);
                 
@@ -140,9 +141,7 @@ export default {
                     this.$store.commit('customer/removeFromCart', product);
                     return false;
                 }
-
                 console.log(details,'CART ITEM FOUND')
-
                 /* get color name and main image */
                 const color = details.colors.find(color => color.code === product.colorCode);
                 
@@ -152,7 +151,6 @@ export default {
                     this.$store.commit('customer/removeFromCart', product);
                     return false;
                 }
-
                 /* add details and quantity to cart item */
                 cartItem = {
                     _id: product._id,
@@ -170,19 +168,16 @@ export default {
                     mainImage: this.mainImagePath(color),
                     // details,
                 }
-
                 /* check if product is multipriced */
                 const multiPriced = details.type === "third-party" ?
                     false :
                     details.availabilityType === 'made-to-order' ? true : false;
-
                 /* multi priced */
                 if (multiPriced) {
                     /* find variant index */
                     const variant = details.variants.find(variant => variant._id._id === product.variantId);
                     /* find fabric */
                     const fabric = variant.fabrics.find(fabric => fabric._id._id === product.fabricId);
-
                     /* update cart item */
                     cartItem = {
                         ...cartItem,
@@ -192,34 +187,27 @@ export default {
                         price: fabric.price
                     }
                 }
-
                 /* if third-party or ready-to-ship, use direct price instead */
                 if (details.type === "third-party" || details.availabilityType === "ready-to-ship") {
                     cartItem.price = details.directPrice;
                 }
-
                 console.log(cartItem)
                 return cartItem;
             });
-
             /* remove un-matched entried (remove from cache as well) */
             this.cartDetails = cartDetails.filter(item => item !== false);
         },
         mainImagePath(color) {
             if (color.images.length === 0)
                 return '/default-image.png';
-
             let mainImage = "";
-
             /* find main image */
             const foundImage = color.images.find(image => image.mainImage === true);
-
             /* if main image found */
             if (foundImage !== undefined)
                 mainImage = foundImage.path;
             else
                 mainImage = color.images[0].path;
-
             return process.env.baseAWSURL + mainImage;
         }
     }
@@ -228,7 +216,6 @@ export default {
 
 <style lang="scss" scoped>
 .cart-items {
-
     .cart-item {
         display: flex;
         align-items: center;
@@ -236,44 +223,38 @@ export default {
         margin: 20px;
         position: relative;
         height: 45vw;
-
         /* cart item thumbnail/image */
         .image-container {
             width: 35%;
             height: 90%;
             background-size: cover;
             background-position: center;
-
+            background-repeat: no-repeat;
             img {
                 width: 100%;
             }
         }
-
         /* cart item details and quantity input */
         .details-and-quantity {
             width: 65%;
             display: flex;
             flex-direction: column;
             justify-content: center;
-
             span {
                 color: $gray;
                 font-size: 11px;
                 display: inline-block;
-
                 &.name {
                     color: $dark_gray;
                     font-family: $font_1_bold;
                     text-transform: uppercase;
                     font-size: 13px;
                 }
-
                 &.collection {
                     font-family: $font_2;
                     font-size: 11px;
                     margin-bottom: 4px;
                 }
-
                 &.price {
                     color: $dark_gray;
                     font-family: $font_1;
@@ -285,21 +266,37 @@ export default {
                 }
             }
 
-            .quantity-input {
-                font-size: 9px;
-                display: flex;
-                align-items: center;
-                margin-top: 5px;
+            .quantity-picker {
+                margin-top:7px;
+                        display: flex;
+                        justify-content: space-around;
+                        border: 1px solid #919191;
+                        width: 80px;
 
-                select {
-                    border: none;
-                    font-size: 11px;
-                    background: transparent;
-                }
+                        button {
+                            background: transparent;
+                            font-family: $font_1_bold;
+                            text-align: center;
+                            padding: 0px;
+                            font-size: 10px;
+
+                            &:first-child {
+                                border-right: 1px solid #919191;
+                                padding: 0 5px;
+                            }
+
+                            &:nth-child(3) {
+                                border-left: 1px solid #919191;
+                                padding: 0 5px;
+                            }
+
+                            &.qty {
+                                width: 50%;
+                                padding: 0 15px;
+                            }
+                        }
             }
-
         }
-
         /* remove icon */
         .remove-item {
             position: absolute;
@@ -307,7 +304,6 @@ export default {
             top: 10%;
             width: 6%;
         }
-
         /* total product price */
         .total-product-price {
             font-family: $font_1_bold;
@@ -318,26 +314,22 @@ export default {
         }
     }
 }
-
 .sub-total {
     display: flex;
     box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
     margin: 10%;
     justify-content: center;
     align-items: center;
-
     span {
         font-family: $font_1_bold;
         font-size: 12px;
         padding: 10px;
         margin: 0 3px;
-
         &.label {
             color: $gray;
             font-family: $font_1;
             text-transform: uppercase;
         }
-
         &.value {
             color: $dark_gray;
             font-size: 17px;
