@@ -1,5 +1,5 @@
 <template>
-<div @click="navigateToProductPage" class="product-card">
+<div @click="navigateToProductPage" class="product-card" :class="{escape: (collectionName === 'Escape' && $route.name === 'Collections')}">
 
     <!-- wishlist icon -->
     <img @click.stop="toggleWishlist" :class="[{'added': addedToWishlist },'wishlist']" :src="addedToWishlist ? '/icons/dark/wishlist-filled.png' : '/icons/dark/wishlist.png'" />
@@ -19,8 +19,8 @@
         </div>
         <!-- additional colors -->
         <span class="additional-colors">
-          {{ baseColorImagesPreview.additional > 0 ? `+ ${baseColorImagesPreview.additional} color(s)` : '&nbsp;' }}
-         </span>
+            {{ baseColorImagesPreview.additional > 0 ? `+ ${baseColorImagesPreview.additional} color(s)` : '&nbsp;' }}
+        </span>
 
     </div>
 
@@ -108,11 +108,10 @@ export default {
         },
         variantsAvailable() {
             /* TODO: what is this? */
-            if(this.product.variantData) {
-                this.product.variantData.sort((a,b) => a.order - b.order)
+            if (this.product.variantData) {
+                this.product.variantData.sort((a, b) => a.order - b.order)
                 return this.product.variantData.map(variant => variant.name)
             }
-
 
             if (this.product.variantNames)
                 return this.product.variantNames;
@@ -198,7 +197,7 @@ export default {
             }
         },
         collectionName() {
-            if(typeof this.product.bounipun_collection === "string")
+            if (typeof this.product.bounipun_collection === "string")
                 return this.product.bounipun_collection;
             return this.product.bounipun_collection.name;
         },
@@ -285,10 +284,10 @@ export default {
         },
         getBaseColorPath(index) {
             if (this.baseColorImages[index] !== undefined) {
-               
+
                 return this.baseColorImages[index].path;
             } else {
-               
+
                 return "";
             }
         },
@@ -301,8 +300,8 @@ export default {
             this.$refs.slideshow.setActiveImage(0);
         },
         isActiveBaseColor(index) {
-             const actualIndex = this.baseColorImages[index].actualIndex;
-             return actualIndex === this.activeColorIndex;
+            const actualIndex = this.baseColorImages[index].actualIndex;
+            return actualIndex === this.activeColorIndex;
         }
     }
 };
@@ -314,7 +313,7 @@ export default {
     height: 36vw;
     overflow: hidden;
     padding: 1vw;
-    margin:5px 0;
+    margin: 5px 0;
     position: relative;
 
     .wishlist {
@@ -344,6 +343,18 @@ export default {
     @media (max-width: $breakpoint-tablet) {
         width: 48vw;
         height: 480px;
+
+        &.escape {
+            height: 440px;
+
+            .main-image-container {
+                height: 70%;
+            }
+
+            .text-details {
+                height: 16%;
+            }
+        }
     }
 
     /* main image container */
@@ -358,7 +369,8 @@ export default {
     }
 
     .color-previews {
-        height:16%;
+        height: 16%;
+
         .base-color-boxes {
             display: flex;
             justify-content: center;
@@ -389,9 +401,9 @@ export default {
     /* text-details */
     .text-details {
         width: 100%;
-        height:12%;
+        height: 12%;
         padding-bottom: 2px;
-        padding-top:3px;
+        padding-top: 3px;
 
         .product-name {
             font-size: 12px;
@@ -401,7 +413,7 @@ export default {
 
             .name {
                 font-size: 12px;
-                font-family: $font_2;
+                font-family: $font_2_semibold;
                 font-weight: 900;
             }
         }
@@ -429,8 +441,8 @@ export default {
             margin: 0 2px;
             padding: 2px 5px;
             font-size: 10px;
-            width:25%;
-            display:flex;
+            width: 25%;
+            display: flex;
             justify-content: center;
             align-items: center;
         }

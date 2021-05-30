@@ -86,9 +86,9 @@
 
     <!-- filter and sort -->
     <div class="filters-and-sort">
-        <button class="action" @click="filtersOpen = true"> Filters </button>
+        <button class="action" @click="filtersOpen = true"> Filters ▼ </button>
 
-        <button class="action" @click="sortOpen = true"> Sort </button>
+        <button class="action" @click="sortOpen = true"> Sort ▼</button>
     </div>
 
     <div class="search-results">
@@ -465,11 +465,24 @@ export default {
     margin-top: 10px;
     display: flex;
     justify-content: space-around;
-    width: 100%;
+    width: 95%;
 
     .action {
-        width: 20%;
-        font-size: 10px;
+        width: 50%;
+        font-size: 13px;
+        color: $dark_gray;
+        background-color: white;
+        border: 1px solid #a8a8a8;
+
+        &:hover {
+
+        }
+            
+        &:first-child {
+            border-right: none;
+        }
+   
+        font-family: $font_2_bold;
     }
 }
 
