@@ -11,8 +11,7 @@
         <p class="text-2"> {{ collection.mainTextBlock.text2 }} </p>
         <p class="text-3"> {{ collection.mainTextBlock.text3 }} </p>
     </div>
-
-
+    
     <!-- if collections is not escape -->
     <div v-if="!collectionLocked && collection.name !== 'Escape'" class="collection-items">
         <product-card v-for="(product, index) in products" :key="index" :product="product" />

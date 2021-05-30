@@ -250,9 +250,9 @@ export default {
         width: 100%;
 
         .dot {
-            height: 7px;
-            width: 7px;
-            border-radius: 50%;
+            height: 4px;
+            width: 13px;
+            // border-radius: 50%;
             background-color: #ffffff;
             margin: 0 5px 5px 5px;
             border: 1px solid rgb(106, 106, 106);
