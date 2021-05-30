@@ -72,7 +72,7 @@
     </div>
 
     <!-- press -->
-    <div class="press" v-if="layout.press.visible">
+    <div class="press" v-if="layout.press.visible" @click="$router.push('/press')">
         <div class="scrollable-list">
             <div class="list">
                 <!-- logo -->
