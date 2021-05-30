@@ -26,6 +26,9 @@ router.post('/findDocument', async (req, res) => {
                 }
             });
             break;
+        case 'homepages':
+            documentFetch.populate('collectionBlocks.bounipun_collection','name slug');
+            break;
         default:
             break;
     }

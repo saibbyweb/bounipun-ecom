@@ -16,7 +16,7 @@
             <div class="cover">
                 <slideshow size="cover" :images="fetchSlideshow(block.slideshow)" :slideHeight="'120vw'" :dots="true" />
                 <div class="cta center">
-                    <button class="action"> {{ block.buttonText }} </button>
+                    <button class="action" @click="navigateToCollection(block.bounipun_collection)"> {{ block.buttonText }} </button>
                 </div>
             </div>
             <div class="pad center-col">
@@ -134,6 +134,9 @@ export default {
 
             this.sections = sections;
             console.log(sections);
+        },
+        navigateToCollection(bounipun_collection) {
+            this.$router.push('/Collections?slug='+bounipun_collection.slug)
         },
         setSlideshow(images) {
             this.mainSlideshowImages = images.map(image => process.env.baseAWSURL + image.path);
