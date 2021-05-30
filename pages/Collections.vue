@@ -1,9 +1,18 @@
 <template>
 <div class="center-col page -wh">
-
+    <!-- collection header -->
     <div class="c-header center" :style="{ backgroundImage: `url(${getCollectionImage(collection.image)})`}">
         <h2 v-if="collection.image === ''" class="heading"> {{ collection.name }} </h2>
     </div>
+
+        <!-- main text block -->
+    <div v-if="collection.mainTextBlock !== undefined && collection.mainTextBlock.visible" class="main-text-block center-col pad">
+        <h2 class="text-1"> {{ collection.mainTextBlock.text1 }} </h2>
+        <p class="text-2"> {{ collection.mainTextBlock.text2 }} </p>
+        <p class="text-3"> {{ collection.mainTextBlock.text3 }} </p>
+    </div>
+
+
     <!-- if collections is not escape -->
     <div v-if="!collectionLocked && collection.name !== 'Escape'" class="collection-items">
         <product-card v-for="(product, index) in products" :key="index" :product="product" />
@@ -189,6 +198,30 @@ export default {
         text-transform: uppercase;
         font-family: $font_1_bold;
         font-size: 10vw;
+    }
+}
+
+.main-text-block {
+    margin-top:20px;
+    padding: 5%;
+
+    .text-1 {
+        font-family: $font_3_bold;
+        margin-bottom: 10px;
+        font-size: 26px;
+        text-transform: uppercase;
+    }
+
+    .text-2 {
+        font-size: 14px;
+        text-align: justify;
+        margin-bottom: 5px;
+        font-family: $font_1;
+    }
+
+    .text-3 {
+        font-family: $font_4;
+        font-size: 19px;
     }
 }
 

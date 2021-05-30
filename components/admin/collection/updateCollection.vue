@@ -26,12 +26,24 @@
     <InputBox v-model.number="doc.activeOrderLimit" label="Active Order Limit" type="number" :internal="true" />
     <!-- edt -->
     <InputBox v-model="doc.edt" label="Estimated Time of Delivery (IN WEEKS)" type="number" :internal="true" />
-     <!-- set color image -->
+    <!-- set color image -->
     <UploadImage ref="imageUploader" :multipleUpload="false" label="Set Collection Header Image" @updated="imageListUpdated" />
-       <!-- publish toggle -->
+    <!-- main text block -->
+    <div class="main-text-block section">
+        <label class="label"> Main Text Block </label>
+        <!-- text 1 -->
+        <InputBox v-model="doc.mainTextBlock.text1" label="Main Text 1" />
+        <!-- text 2 -->
+        <TextBox v-model="doc.mainTextBlock.text2" label="Main Text 2" />
+        <!-- text 3 -->
+        <InputBox v-model="doc.mainTextBlock.text3" label="Main Text 3" />
+        <!-- visiblity toggle -->
+        <Toggle v-model="doc.mainTextBlock.visible" label="Visiblity" activeText="Live" inactiveText="Hidden" width="100px" />
+    </div>
+    <!-- publish toggle -->
     <Toggle v-model="doc.lock" label="🔒 Lock" />
     <!-- publish toggle -->
-    <Toggle v-model="doc.status" label="Status" /> 
+    <Toggle v-model="doc.status" label="Status" />
     <!-- update button -->
     <div class="center-space">
         <!-- loading bar -->
@@ -48,6 +60,14 @@
 </template>
 
 <script>
+/* base text block */
+const baseTextBlock = () => ({
+    text1: "",
+    text2: "",
+    text3: "",
+    visible: false
+});
+
 export default {
     props: {
         model: String
@@ -64,6 +84,7 @@ export default {
                 activeOrderLimit: "",
                 edt: "",
                 image: "",
+                mainTextBlock: baseTextBlock(),
                 lock: false,
                 status: false
             },
@@ -110,6 +131,7 @@ export default {
                 edt,
                 activeOrderLimit,
                 image,
+                mainTextBlock,
                 lock,
                 status
             } = details;
@@ -123,6 +145,7 @@ export default {
                 activeOrderLimit,
                 edt: edt !== null ? edt.toString() : "",
                 image,
+                mainTextBlock: mainTextBlock === undefined ? baseTextBlock() : mainTextBlock,
                 lock,
                 status
             };
@@ -142,6 +165,7 @@ export default {
                 variantNote: "",
                 edt: "",
                 image: "",
+                mainTextBlock: baseTextBlock(),
                 lock: false,
                 status: false
             });

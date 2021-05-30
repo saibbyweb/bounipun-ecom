@@ -6,6 +6,9 @@ import { product } from "@models"
 const schema = new mongoose.Schema({
     name: String,
     slug: {type: String, default: ''},
+    mainTextBlock: {
+        text1: String, text2: String, text3: String, visible: Boolean
+    },
     description: {type: String, default: ''},
     variantNote: { type: String, default: ''},
     edt: { type: Number, default: 1 },

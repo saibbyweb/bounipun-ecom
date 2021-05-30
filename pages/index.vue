@@ -8,7 +8,6 @@
         <p class="text-2"> {{ layout.mainTextBlock.text2 }} </p>
         <p class="text-3"> {{ layout.mainTextBlock.text3 }} </p>
         <p class="author"> {{ layout.mainTextBlock.author }} </p>
-        
     </div>
     <!-- collection blocks -->
     <div class="collection-blocks blocks section">
