@@ -7,6 +7,9 @@
         <SelectBox :options="productTypes" v-model="rawCriterion.filters.type" label="Filter By" />
         <!-- collections filter -->
         <SelectBox :options="collections" v-model="rawCriterion.filters.bounipun_collection" label="Collection" />
+        <!-- availability type -->
+        <SelectBox :options="availabilityTypes" v-model="rawCriterion.filters.availabilityType" label="Availability" />
+
     </div>
 
     <!-- list of products -->
@@ -56,6 +59,16 @@ export default {
                 name: "Style ID",
                 value: "styleId"
             }],
+            availabilityTypes: [{
+                name: 'Select Type',
+                value: 'default'
+            }, {
+                name: 'Ready To Ship',
+                value: 'ready-to-ship'
+            }, {
+                name: 'Made To Order',
+                value: 'made-to-order'
+            }],
             /* rawCriterion */
             rawCriterion: {
                 search: {
@@ -64,7 +77,8 @@ export default {
                 },
                 filters: {
                     type: 'default',
-                    bounipun_collection: 'default'
+                    bounipun_collection: 'default',
+                    availabilityType: 'default'
                 },
                 sortBy: {
 
@@ -156,7 +170,7 @@ export default {
 
             this.list = this.list.map(item => {
                 const foundCollection = this.collections.find(col => col.value === item.bounipun_collection);
-                
+
                 const bounipun_collection = foundCollection !== undefined ? foundCollection.name : "Third Party"
                 item.bounipun_collection = item.type !== "third-party" ? bounipun_collection : "N/A"
                 return item;
@@ -173,7 +187,7 @@ export default {
         populateForm(doc) {
             const updateComponent = this.$refs.updateComponent;
             updateComponent.populateForm(doc);
-            
+
             /* if colors are present */
             if (doc.colors.length !== 0) {
                 /* add unique key to all colors */
