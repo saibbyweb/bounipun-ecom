@@ -30,7 +30,8 @@
         <div class="product-name center-col">
             <span class="name"> {{ collectionName === "Escape" ? product.colors[activeColorIndex] !== undefined ?  product.colors[activeColorIndex].name : product.name : product.name }} </span>
             <span class="collection"> {{ collectionName }} </span>
-            <span class="price"> INR {{ lowestVariantPrice }} - INR {{ highestVariantPirce }} </span>
+            <span v-if="!readyToShip" class="price"> INR {{ lowestVariantPrice }} - INR {{ highestVariantPirce }} </span>
+            <span v-if="readyToShip" class="price"> INR {{ product.directPrice }} </span>
         </div>
     </div>
 
@@ -250,6 +251,9 @@ export default {
             return mainImages.map(image => process.env.baseAWSURL + image.path)
 
         },
+        readyToShip() {
+            return this.product.availabilityType === 'ready-to-ship'
+        }
     },
     mounted() {
         this.activeColorIndex = this.activeColor;

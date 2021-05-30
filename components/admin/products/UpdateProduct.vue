@@ -90,13 +90,13 @@
                     <SelectBox :options="getRTSFabrics(color.rtsVariant)" v-model="color.rtsFabric" label="Select Fabric:" />
                     <div class="center">
                         <!-- stock -->
-                        <InputBox label="Stock:" v-model="color.rtsStock" /> 
+                        <InputBox label="Stock:" v-model="color.rtsStock" />
                         <!-- direct price -->
                         <InputBox label="Direct Price:" v-model="color.rtsDirectPrice" />
-                    </div> 
+                    </div>
                     <!-- add new RTS entry -->
                     <div class="center">
-                        <button class="action" style="font-size:12px; margin:10px 0px;"> Add New RTS Entry </button>
+                        <button @click="addNewRTSEntry(color)" class="action" style="font-size:12px; margin:10px 0px;"> Add New RTS Entry </button>
                     </div>
                 </div>
             </div>
@@ -114,6 +114,9 @@
 
     <!-- direct price -->
     <InputBox v-if="thirdPartyProduct || readyToShip" label="Direct Price" v-model="doc.directPrice" />
+
+    <!-- direct price -->
+    <InputBox v-if="thirdPartyProduct || readyToShip" label="Stock" v-model="doc.stock" />
 
     <!-- estimated delivery time -->
     <!-- <InputBox label="Estimated Delivery Time (in weeks)" v-model="doc.etd" type="number" /> -->
@@ -268,6 +271,7 @@ export default {
                 variants: [],
                 colors: [],
                 directPrice: "",
+                stock: "",
                 // etd: "",
                 status: false,
             },
@@ -344,6 +348,51 @@ export default {
         this.fetchBaseColors();
     },
     methods: {
+        async addNewRTSEntry(color) {
+            const selectedVariant = this.variants.find((variant) => variant.value === color.rtsVariant);
+            if(selectedVariant === undefined)
+                return;
+            const selectedFabric = this.fabrics.find((fabric) => fabric.value === color.rtsFabric);
+            if(selectedFabric === undefined)
+                return;
+            
+            /* constructed style id */
+            const constructedStyleId = this.doc.styleId + '/' + selectedVariant.code + '/' + selectedFabric.code;
+            /* rts product */
+            const rtsProduct = {
+                alias: '',
+                availabilityType: 'ready-to-ship',
+                bounipun_collection: this.doc.bounipun_collection,
+                /* need to check for escape */
+                colorSource: 'custom',
+                colors: [color],
+                description: this.doc.description,
+                directPrice: color.rtsDirectPrice,
+                stock: color.rtsStock,
+                gender: this.doc.gender,
+                name: `${this.doc.name} - ${color.name}`,
+                printNo: this.doc.printNo,
+                slug: '',
+                status: true,
+                styleId: constructedStyleId,
+                type: 'under-bounipun',
+                variants: [],
+                _id: ''
+            }
+
+            this.loading = true;
+            const result = await this.$updateDocument(this.model, rtsProduct, false);
+            this.loading = false;
+
+            if (!result.updated)
+                return;
+
+            this.$emit('updated');
+            // color.showRTSPanel = false;
+            color.rtsDirectPrice = "ADDED"
+            color.rtsStock = "ADDED"
+
+        },
         getRTSFabrics(variantId) {
             /* fetch variant code */
             const selectedVariant = this.variants.find((variant) => variant.value === variantId);
@@ -475,7 +524,7 @@ export default {
         },
         async updateDocument() {
             console.log('PRODUCT TO BE UPDATED!:');
-            console.log(this.doc.colors);
+            console.log(this.doc);
 
             // const variantionsCheck = this.doc.variants.length === this.selectedVariants.length;
 
@@ -531,6 +580,7 @@ export default {
                 variants,
                 colors,
                 directPrice,
+                stock,
                 // etd,
                 status
             } = details;
@@ -550,6 +600,7 @@ export default {
                 variants,
                 colors,
                 directPrice,
+                stock: stock === undefined ? "" : stock,
                 // etd: etd === null ? "" : etd.toString(),
                 status
             };
@@ -577,6 +628,7 @@ export default {
                 variants: [],
                 colors: [],
                 directPrice: "",
+                stock: "",
                 // etd: "",
                 status: false
             });

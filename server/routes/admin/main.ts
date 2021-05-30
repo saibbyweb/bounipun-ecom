@@ -174,7 +174,7 @@ router.post('/fetchPaginatedResults', async (req, res) => {
     if (model === "products" && requestedBy === "customer") {
         criterion.match = {
             $or: [
-                { name: { $regex: rawCriterion.search.term, $options: "i" } },
+                { name : { $regex: rawCriterion.search.term, $options: "i" } },
                 { 'colors.name': { $regex: rawCriterion.search.term, $options: "i" } },
                 { 'colors.baseColor': { $regex: rawCriterion.search.term, $options: "i" } },
                 { meta: { $regex: rawCriterion.search.term, $options: "i" } }
@@ -183,7 +183,10 @@ router.post('/fetchPaginatedResults', async (req, res) => {
     }
     else if(model === "products" && requestedBy === "default") {
         const objectided = admin.setObjectIds(rawCriterion.filters,['bounipun_collection']);
-        criterion.match = {...textSearch, ...objectided}
+        // criterion.match = {...textSearch, ...objectided}
+        criterion.match = {...objectided}
+        criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
+
     }
     else if(model === "colors" && requestedBy === "default") {
         criterion.match = {...textSearch, ...admin.setObjectIds(rawCriterion.filters,['category'])}

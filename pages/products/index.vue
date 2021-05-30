@@ -32,6 +32,7 @@
     </div>
 
     <!-- product text details (product name, collection, base price -->
+    <div v-if="true">
     <div class="product-details">
 
         <div ref="details" class="details" :class="{'sticky': sticky}">
@@ -47,10 +48,10 @@
                 <div class="section-1">
                     <div class="main-details">
                         <h3> {{ bounipunColors ? product.colors[activeColorIndex].name : product.name }} </h3>
-                        <p v-if="!thirdPartyProduct" class="variant"> {{ variants[activeVariantIndex].name }} </p>
+                        <p v-if="!thirdPartyProduct && !readyToShip" class="variant"> {{ variants[activeVariantIndex].name }} </p>
                         <!-- fabric -->
-                        <p v-if="!thirdPartyProduct"> {{ selectedFabric.name }}</p>
-                        <p v-if="!thirdPartyProduct"> {{ selectedFabric.info1 }} </p>
+                        <p v-if="!thirdPartyProduct && !readyToShip"> {{ selectedFabric.name }}</p>
+                        <p v-if="!thirdPartyProduct && !readyToShip"> {{ selectedFabric.info1 }} </p>
                         <p> {{ product.styleId }} </p>
                     </div>
                     <!-- quantity picker and size chart-->
@@ -68,7 +69,7 @@
                 <div class="price-and-actions">
 
                     <div class="price">
-                        <h5> INR {{ thirdPartyProduct ? product.directPrice : variants[activeVariantIndex].fabrics[activeFabricIndex].price }} </h5>
+                        <h5> INR {{ thirdPartyProduct || readyToShip ? product.directPrice : variants[activeVariantIndex].fabrics[activeFabricIndex].price }} </h5>
                         <p> Taxes and Shipping Included </p>
                     </div>
 
@@ -128,7 +129,8 @@
             <div v-if="!bounipunColors && multiPriced" class="divider"> </div>
 
             <!-- dynamic variant populate -->
-            <div v-if="!thirdPartyProduct && multiPriced" class="variants-available">
+        
+            <div v-if="!thirdPartyProduct && multiPriced && !readyToShip" class="variants-available">
                 <h4 class="section-heading">
                     Select Variant:
                 </h4>
@@ -149,12 +151,13 @@
                     </div>
                 </div>
             </div>
+         
 
             <!-- divider -->
             <div class="divider"> </div>
 
             <!-- dynamic fabric -->
-            <div v-if="!thirdPartyProduct && multiPriced" class="fabrics-available">
+            <div v-if="!thirdPartyProduct && multiPriced && !readyToShip" class="fabrics-available">
                 <h4 class="section-heading"> Select Fabric: </h4>
 
                 <!-- fabrics available -->
@@ -168,6 +171,7 @@
 
                 </div>
             </div>
+
 
             <!-- accordions -->
             <div class="accordions">
@@ -199,7 +203,7 @@
                 </Accordion>
 
                 <!-- about fabric -->
-                <Accordion v-if="!thirdPartyProduct" heading="About Fabric">
+                <Accordion v-if="!thirdPartyProduct && !readyToShip" heading="About Fabric">
                     <ul>
                         <li v-for="(point, index) in fabricWriteUp" :key="index">
                             <span class="desc"> {{ point }} </span>
@@ -208,7 +212,7 @@
                 </Accordion>
 
                 <!-- details and care -->
-                <Accordion v-if="!thirdPartyProduct" heading="Details And Care">
+                <Accordion v-if="!thirdPartyProduct && !readyToShip" heading="Details And Care">
                     <ul>
                         <li v-for="(point, index) in detailsAndCare" :key="index">
                             <span class="desc"> {{ point }} </span>
@@ -246,6 +250,7 @@
 
         <!-- <inner-image-zoom class="product-image" :src="images[0]" :zoomSrc="images[0]" /> -->
 
+    </div>
     </div>
 </div>
 </template>
@@ -322,6 +327,9 @@ export default {
             return `${this.product.gender.replaceAll('-',' ')}`;
 
         },
+        readyToShip() {
+            return this.product.availabilityType === 'ready-to-ship'
+        },
         bounipunColors() {
             return this.product.colorSource === 'bounipun-colors';
         },
@@ -334,12 +342,18 @@ export default {
             return this.variants[this.activeVariantIndex].description.split('\n')
         },
         fabricDescription() {
+            if (this.variants.length === 0)
+                return []
             return this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex].description.split('\n')
         },
         fabricWriteUp() {
+            if (this.variants.length === 0)
+                return []
             return this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex].writeUp.split('\n')
         },
         detailsAndCare() {
+            if (this.variants.length === 0)
+                return ""
             const detailsAndCare = this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex].detailsAndCare;
             if(detailsAndCare === undefined)
                 return "";
@@ -745,7 +759,7 @@ export default {
             /* section 1 */
             .section-1 {
 
-                // width:65%;
+                width:61%;
                 /* main text details */
                 .main-details {
                     h3 {
@@ -831,6 +845,7 @@ export default {
                 .add-to-cart {
                     display: flex;
                     width: 100%;
+                    margin-top: 5px;
 
                     button {
                         background: $primary_dark;

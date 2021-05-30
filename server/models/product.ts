@@ -44,7 +44,10 @@ const schema = new mongoose.Schema({
             price: Number
         }]
     }],
-    directPrice: { type: String, default: 0 },
+    directPrice: { type: String, default: '0' },
+    stock : {
+        type: String, default: ''
+    },
     priceRange: { startsAt: Number, endsAt: Number },
     /* meta */
     meta: String,
