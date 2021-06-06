@@ -19,51 +19,51 @@ $font_4: "Charmonman";
 $font_4_bold: "Charmonman-Bold";
 
 @font-face {
-font-family: "SF-Pro";
-font-style: normal;
-font-weight: 400;
-font-display: swap;
-src: url("~assets/fonts/SFProText-Regular.ttf") format("truetype");
+  font-family: "SF-Pro";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("~assets/fonts/SFProText-Regular.ttf") format("truetype");
 }
 
 @font-face {
-font-family: "SF-Pro SemiBold";
-font-style: normal;
-font-weight: 700;
-font-display: swap;
-src: url("~assets/fonts/SFProText-Semibold.ttf") format("truetype");
+  font-family: "SF-Pro SemiBold";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("~assets/fonts/SFProText-Semibold.ttf") format("truetype");
 }
 /* sf pro bold */
 @font-face {
-font-family: "SF-Pro Bold";
-font-style: normal;
-font-weight: 900;
-font-display: swap;
-src: url("~assets/fonts/SFProText-Bold.ttf") format("truetype");
+  font-family: "SF-Pro Bold";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("~assets/fonts/SFProText-Bold.ttf") format("truetype");
 }
 
 @font-face {
-font-family: "Poppins";
-font-style: normal;
-font-weight: 400;
-font-display: swap;
-src: url("~assets/fonts/Poppins-Regular.ttf") format("truetype");
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("~assets/fonts/Poppins-Regular.ttf") format("truetype");
 }
 
 @font-face {
-font-family: "Poppins SemiBold";
-font-style: normal;
-font-weight: 700;
-font-display: swap;
-src: url("~assets/fonts/Poppins-SemiBold.ttf") format("truetype");
+  font-family: "Poppins SemiBold";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("~assets/fonts/Poppins-SemiBold.ttf") format("truetype");
 }
 
 @font-face {
-font-family: "Poppins Bold";
-font-style: normal;
-font-weight: 900;
-font-display: swap;
-src: url("~assets/fonts/Poppins-Bold.ttf") format("truetype");
+  font-family: "Poppins Bold";
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url("~assets/fonts/Poppins-Bold.ttf") format("truetype");
 }
 
 /* garamond */
@@ -92,60 +92,58 @@ src: url("~assets/fonts/Poppins-Bold.ttf") format("truetype");
   src: url("~assets/fonts/Charmonman/Charmonman-Regular.ttf") format("truetype");
 }
 
-
 body {
-margin: 0 !important;
-padding: 0;
+  margin: 0 !important;
+  padding: 0;
 }
 
 * {
-font-family: $font_1;
-outline: none;
--webkit-tap-highlight-color: rgba(0, 0, 0, 0);
--webkit-tap-highlight-color: transparent;
-box-sizing: border-box;
+  font-family: $font_1;
+  outline: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
 
 .pad-10 {
-padding:6%;
+  padding: 6%;
 }
 
 button {
-cursor: pointer;
-border: none;
-padding: 1% 3%;
+  cursor: pointer;
+  border: none;
+  padding: 1% 3%;
 
-.icon {
-  width: 7%;
-}
-
-&.action {
-  background-color: $primary_dark;
-  color: white;
-  font-family: $font_1_semibold;
-  font-size: 16px;
-  text-transform: uppercase;
-  transition: all 0.2s ease-in-out;
-  @media (max-width: $breakpoint-tablet) {
-    padding: 2% 5%;
-    width: 100%;
+  .icon {
+    width: 7%;
   }
 
-  &.delete {
-    background-color: rgb(157, 36, 36);
-    font-size: 10px;
+  &.action {
+    background-color: $primary_dark;
+    color: white;
+    font-family: $font_1_semibold;
+    font-size: 16px;
+    text-transform: uppercase;
+    transition: all 0.2s ease-in-out;
+    @media (max-width: $breakpoint-tablet) {
+      padding: 2% 5%;
+      width: 100%;
+    }
 
-    &:hover {
-      background-color: rgb(224, 16, 16);
+    &.delete {
+      background-color: rgb(157, 36, 36);
+      font-size: 10px;
+
+      &:hover {
+        background-color: rgb(224, 16, 16);
+      }
     }
   }
-}
 
-&.clear {
-  background: transparent;
-  padding: 2% 5%;
-}
-
+  &.clear {
+    background: transparent;
+    padding: 2% 5%;
+  }
 }
 
 h1,
@@ -154,86 +152,86 @@ h3,
 h4,
 h5,
 h6,
-p, span {
-margin: 0;
-padding: 0;
-color: $primary_dark;
+p,
+span {
+  margin: 0;
+  padding: 0;
+  color: $primary_dark;
 }
 
 .page {
-padding: 5%;
-margin-top: 8vh;
+  padding: 5%;
+  margin-top: 8vh;
 
-@media (max-width: $breakpoint-tablet) {
-  padding: 7%;
-  margin-top: 10vh;
-}
-
-&.-wh {
-  padding: 0 0 5% 0;
-}
-
-&.side-pad {
-  padding: 2%;
-}
-
-&.-broad {
   @media (max-width: $breakpoint-tablet) {
+    padding: 7%;
+    margin-top: 10vh;
+  }
+
+  &.-wh {
+    padding: 0 0 5% 0;
+  }
+
+  &.side-pad {
     padding: 2%;
   }
-}
 
-
-.page-header {
-  // background: $primary_dark;
-  width: 100%;
-  height: 8vh;
-  margin-bottom: 20px;
-
-  @media (max-width: $breakpoint-tablet) {
-    height: 10vw;
+  &.-broad {
+    @media (max-width: $breakpoint-tablet) {
+      padding: 2%;
+    }
   }
 
-  .title {
-    color: $primary_dark;
-    font-family: $font_2_semibold;
-    text-transform: uppercase;
-    font-size: 1.4vw;
+  .page-header {
+    // background: $primary_dark;
+    width: 100%;
+    height: 8vh;
+    margin-bottom: 20px;
+
     @media (max-width: $breakpoint-tablet) {
-      font-size: 5.4vw;
+      height: 10vw;
+    }
+
+    .title {
+      color: $primary_dark;
+      font-family: $font_2_semibold;
+      text-transform: uppercase;
+      font-size: 1.4vw;
+      @media (max-width: $breakpoint-tablet) {
+        font-size: 5.4vw;
+      }
+    }
+  }
+
+  .side-pad {
+    padding: 0% 5%;
+
+    @media (max-width: $breakpoint-tablet) {
+      padding: 0 10%;
     }
   }
 }
 
-.side-pad {
-  padding: 0% 5%;
-
-  @media (max-width: $breakpoint-tablet) {
-    padding: 0 10%;
-  }
-}
-}
-
 .center {
-display: flex;
-justify-content: center;
-align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .center-col {
-display: flex;
-justify-content: center;
-align-items: center;
-flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 
 .center-space {
-display:flex;
-justify-content: space-around;
-align-items: center;
-// position: absolute;
-// bottom:0;
-// left:0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  // position: absolute;
+  // bottom:0;
+  // left:0;
 }
 
 .contents {
@@ -241,46 +239,52 @@ align-items: center;
 }
 
 .white {
-color: white;
+  color: white;
 }
 
 .scrollable-list {
-display: flex;
-overflow-x: auto;
-padding: 5px;
+  display: flex;
+  overflow-x: auto;
+  padding: 5px;
 
-@media screen and (min-width: 768px) {
+  @media screen and (min-width: 768px) {
     justify-content: center;
-}
+  }
 
-&::-webkit-scrollbar {
+  &::-webkit-scrollbar {
     display: none;
-}
+  }
 
-.list {
+  .list {
     display: flex;
     width: fit-content;
-}
-}
-
-.shadow {
-box-shadow: 1px 1px 15px rgba(0,0,0,0.16);
-}
-.action-complete {
-margin-top:10px;
-width: 50px;
-}
-*::-webkit-scrollbar {
-display: none;
-}
-p {
-  &.error {
-  background-color: #d52d2d;
-  color: white;
-  font-size: 10px;
-  width: fit-content;
-  padding: 5px;
-  border-radius: 4px;
   }
 }
 
+.shadow {
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
+}
+.action-complete {
+  margin-top: 10px;
+  width: 50px;
+}
+*::-webkit-scrollbar {
+  display: none;
+}
+p {
+  &.msg {
+    color: white;
+    font-size: 10px;
+    width: fit-content;
+    padding: 5px;
+    border-radius: 4px;
+    margin: 10px 0;
+    &.error {
+      background-color: #a93737;
+    }
+
+    &.success {
+      background-color: #319a67;
+    }
+  }
+}

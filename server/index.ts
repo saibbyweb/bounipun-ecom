@@ -1,12 +1,14 @@
 import { server, port, environment, dbConnect } from "@helpers/essentials";
 import mainRoutes from "@routes/admin/main";
-import customerRoutes from "@routes/customer/endpoints";
+// import customerRoutes from "@routes/customer/endpoints";
+import customerRoutes from "@routes/customer"
 
 const { app } = server;
 server.enableCorsIfNeeded();
 server.applyStaticMiddleware('/frontend');
 app.use('/', mainRoutes);
-app.use('/', customerRoutes);
+app.use('/', customerRoutes.endpoints);
+app.use('/',customerRoutes.user);
 
 /* connect to mongodb */
 dbConnect();

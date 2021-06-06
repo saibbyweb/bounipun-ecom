@@ -58,7 +58,7 @@ export const methods = {
         // console.log(await this.verifyMsg91Otp('9906697711', '5551'));
     },
     /* send msg91 otp */
-    sendMsg91Otp: async phoneNumber => {
+    sendMsg91Otp: async (phoneNumber) => {
         let otpSent = false;
         let pushOTPUrl = `https://api.msg91.com/api/v5/otp?authkey=315805A0StIk1DFmc5f61c460P1&template_id=${templateId}&mobile=${phoneNumber}&invisible=1`;
 

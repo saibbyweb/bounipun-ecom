@@ -75,7 +75,7 @@ export default (context, inject) => {
     let result = { fetched: false, docs: [], totalMatches: 0 };
     /* hit endpoint */
     const docsFetch = context.$axios.$post("/fetchPaginatedResults", {
-    // const docsFetch = context.$axios.$post("/searchProducts", {
+      // const docsFetch = context.$axios.$post("/searchProducts", {
       model,
       rawCriterion,
       requestedBy: !requestedBy ? "default" : requestedBy
@@ -127,7 +127,7 @@ export default (context, inject) => {
 
     result.fetched = true;
     result.doc = response;
-    setTimeout(() => console.log(result.doc, '-FROM ESSENTIALS'),2000);
+    setTimeout(() => console.log(result.doc, "-FROM ESSENTIALS"), 2000);
     // console.log(result.doc, '-FROM ESSENTIALS');
 
     return result;
@@ -191,6 +191,23 @@ export default (context, inject) => {
     setTimeout(() => (self.updated = false), 1300);
   };
 
+  /* request */
+  const httpPostRequest = async (endpoint, payload) => {
+    const request = context.$axios.$post(endpoint, payload);
+    /* wait for request to complete */
+    const { response, error } = await task(request);
+    /* if error occurred */
+    if (error || response.resolved === false) {
+      if(response.resolved === false) {
+        console.log(`%c Could not resolve: ${endpoint} with payload: ${JSON.stringify(payload)}`, 'color: red');
+        // console.log(payload);
+      }
+      return false
+    }
+    /* if request resolved */
+    return response;
+  };
+
   inject("fetchCollection", fetchCollection);
   inject("fetchPaginatedResults", fetchPaginatedResults);
   inject("updateDocument", updateDocument);
@@ -199,4 +216,5 @@ export default (context, inject) => {
   inject("fetchData", fetchData);
   inject("getImagePath", getImagePath);
   inject("flash", flash);
+  inject("post", httpPostRequest);
 };

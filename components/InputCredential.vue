@@ -1,7 +1,7 @@
 <template>
     <div class="input-credential">
         <label class="label"> {{ label }} </label>
-        <input class="input-box" :type="type" :value="value" @input="$emit('input', $event.target.value)" :disabled="disabled"/> 
+        <input class="input-box" :type="type" :value="value" @input="emitInput" :disabled="disabled"/> 
     </div>
 </template>
 
@@ -11,11 +11,19 @@ export default {
         label: String,
         value: String,
         type: { type: String, default: 'text'},
-        disabled: { type: Boolean, default:  false }
+        disabled: { type: Boolean, default:  false },
+        clearError: { type: Boolean, default: true }
     },
     data() {
         return {
             // value: ""
+        }
+    },
+    methods: {
+        emitInput($event) {
+            this.$emit('input', $event.target.value)
+            if(this.clearError && this.$parent.error !== undefined)
+                this.$parent.error.status = false;
         }
     }
 }

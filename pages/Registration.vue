@@ -1,11 +1,25 @@
 <template>
 <div class="page center-col">
     <h3 class="heading"> Create new account </h3>
-    <InputCredential label="Name" />
-    <InputCredential label="Phone Number" :disabled="otpSent" />
-    <InputCredential label="One Time Password" v-if="otpSent" />
-    <p class="desc otp-sent" v-if="otpSent"> A one time password has been sent to your mobile number. </p>
-    <button class="action" @click="otpSent = true"> {{ otpSent ? 'Register' : 'Continue'}} </button>
+    <!-- first name -->
+    <InputCredential label="First Name" v-model="firstName" :disabled="otpSent"/>
+    <!-- surname -->
+    <InputCredential label="Sur Name" v-model="surName" :disabled="otpSent"/>
+    <!-- TODO: country selector should be independent component -->
+    <!-- phone number -->
+    <InputCredential type="number" label="Phone Number" v-model="phoneNumber" :disabled="otpSent" />
+    <!-- otp -->
+    <InputCredential label="One Time Password" v-model="otp" v-if="otpSent" />
+
+    <!-- form error -->
+    <p v-if="error.status" class="msg error"> {{ error.message }} </p>
+
+    <!-- otp sent message -->
+    <p class="msg success" v-if="otpSent"> A one time password has been sent to your mobile number. </p>
+    <!-- send otp -->
+    <button v-if="!otpSent" class="action" @click="sendOtp()"> Continue </button>
+    <!-- register -->
+    <button v-if="otpSent" class="action"> Register </button>
 
     <h3 id="already" class="heading"> Already Have An Account? </h3>
     <p class="desc"> Access your order history, personal information and receive our digital communications </p>
@@ -17,7 +31,46 @@
 export default {
     data() {
         return {
-            otpSent: false
+            otpSent: false,
+            firstName: '',
+            surName: '',
+            dialCode: '+91',
+            purpose: 'registration',
+            phoneNumber: '',
+            otp: '',
+            error: {
+                status: false,
+                message: 'Could not sent otp'
+            }
+        }
+    },
+    methods: {
+        validatePhoneNumber() {
+            if(this.phoneNumber.length !== 10) {
+                this.error.message = "Kindly enter a valid 10 digit mobile number";
+                this.error.status = true;
+                return false;
+            }
+        },
+        async sendOtp() {
+            /* validate form or atleast phone number */
+            if(!this.validatePhoneNumber())
+                return;
+
+            const response = await this.$post('/sendOtp', {
+                dialCode: this.dialCode,
+                phoneNumber: this.phoneNumber,
+                purpose: this.purpose
+            });
+            
+            /* if req not resolved */
+            if(response === false) {
+                return;
+            }
+            
+            /* map otp sent response */
+            this.otpSent = response.otpSent === true;
+        
         }
     }
 }

@@ -50,7 +50,6 @@ router.post('/findDocument', async (req, res) => {
 
 });
 
-
 /* get document with any filter */
 router.post('/findDocuments', async (req, res) => {
     const { model, filters } = req.body;
