@@ -6,11 +6,42 @@ const templateId = "6037f99d7ea3595ee966782c";
 
 /* schema */
 const schema = new mongoose.Schema({
-    name: String,
+    /* first name */
+    firstName: String,
+    /* sur name */
+    surName: String,
+    /* email */
     email: String,
+    /* phone number */
     phoneNumber: String,
-    countryCode: String,
-    profession: String
+    /* country dial code */
+    countryDialCode: String,
+    /* country iso code */
+    countryIsoCode: String,
+    /* registered on */
+    registeredOn: String,
+    /* profession */
+    profession: String,
+    /* usergroup */
+    usergroup: String,
+    /* address book */
+    addressBook: [{
+        firstName: String,
+        surName: String,
+        phoneNumber:String,
+        email: String,
+        countryDialCode: String,
+        countryIsoCode: String,
+        addressLine1: String,
+        addressLine2: String,
+        city: String,
+        pincode: String
+    }],
+    /* status */
+    status: {
+        type: Boolean,
+        default: true
+    }
 }, {
     timestamps: true
 });
