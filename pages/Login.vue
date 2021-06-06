@@ -20,6 +20,14 @@ export default {
         return {
             otpSent: false
         }
+    },
+    methods: {
+        sendOtp() {
+
+        },
+        verifyOtpAndLogin() {
+            
+        }
     }
 }
 </script>

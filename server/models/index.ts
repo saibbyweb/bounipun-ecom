@@ -12,6 +12,7 @@ import sales from "./sale";
 import coupon from "./coupon"
 import baseColor from "./baseColors"
 import homepage from "./homepage";
+import user from "./user";
 
 const register = function () {
     fabric.methods.register();
@@ -27,6 +28,7 @@ const register = function () {
     coupon.methods.register();
     baseColor.methods.register();
     homepage.methods.register();
+    user.methods.registerModel();
 }
 
-export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage, register };
+export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage,user, register };
