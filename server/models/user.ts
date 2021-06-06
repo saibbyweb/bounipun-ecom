@@ -23,6 +23,8 @@ const model = mongoose.model('users', schema);
 export const methods = {
     async registerModel() {
         console.log(`registered model: ${modelName}`);
+        // console.log(await this.sendMsg91Otp('9906697711'));
+        // console.log(await this.verifyMsg91Otp('9906697711', '5551'));
     },
     /* send msg91 otp */
     sendMsg91Otp: async phoneNumber => {
@@ -41,7 +43,16 @@ export const methods = {
         /* if otp sent */
         if (response.data.type === "success") otpSent = true;
         return otpSent;
-    }
+    },
+    /* verify otp */
+    verifyMsg91Otp: async (phoneNumber, otp) => {
+        /* verify otp API */
+        const verifyOtpUrl = `https://api.msg91.com/api/v5/otp/verify?mobile=${phoneNumber}&otp=${otp}&authkey=315805AMJ8DdeeF5f117bf9P1`;
+        /* wait for the request to resolve */
+        const { response, error } = await task(axios.get(verifyOtpUrl));
+        // console.log(response.data);
+        return !error && response.data.type === "success" ? true : false;
+    },
 }
 
 export default { model, methods }
