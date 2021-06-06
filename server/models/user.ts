@@ -1,5 +1,7 @@
 import { mongoose, task } from "@helpers/essentials";
 import axios from "axios";
+import bcrypt from "bcrypt"
+import { model as session } from "./session"
 
 /* msg91 template id */
 const templateId = "6037f99d7ea3595ee966782c";
@@ -91,15 +93,22 @@ export const methods = {
         return response;
     },
     /* register user */
-    registerUser: async(profile) => {
-        const {response: newUser, error } = await task(new model({...profile}).save() as any);
+    registerUser: async (profile) => {
+        const { response: newUser, error } = await task(new model({ ...profile }).save() as any);
         return !error ? newUser : false;
     },
-    loginUser: async() => {
+    registerSession: async (userId) => {
+        userId = userId.toString();
+        /* generate session token */
+        const token = await bcrypt.hash(userId, 10);
+        /* save session token in db */
+        const { response: newSession, error } = await task(new session({
+            token,
+            userId
+        }).save());
 
+        return !error ? newSession : false;
     }
 }
-
-model.find().then(docs => console.log(docs));
 
 export default { model, methods }

@@ -99,6 +99,15 @@ export default {
             }
 
             console.log(response);
+        },
+        async loginUser() {
+            const loginAttempt = {
+                message: '',
+                status: false,
+                token: ""
+            }
+
+            
         }
     }
 }
