@@ -19,7 +19,7 @@
     <!-- send otp -->
     <button v-if="!otpSent" class="action" @click="sendOtp()"> Continue </button>
     <!-- register -->
-    <button v-if="otpSent" class="action"> Register </button>
+    <button v-if="otpSent" class="action" @click="register()"> Register </button>
 
     <h3 id="already" class="heading"> Already Have An Account? </h3>
     <p class="desc"> Access your order history, personal information and receive our digital communications </p>
@@ -34,7 +34,7 @@ export default {
             otpSent: false,
             firstName: '',
             surName: '',
-            dialCode: '+91',
+            countryDialCode: '+91',
             countryIsoCode: 'IN',
             purpose: 'registration',
             phoneNumber: '',
@@ -47,25 +47,29 @@ export default {
     },
     methods: {
         validatePhoneNumber() {
+            console.log('validate called')
             if(this.phoneNumber.length !== 10) {
                 this.error.message = "Kindly enter a valid 10 digit mobile number";
                 this.error.status = true;
+                console.log('hey there')
                 return false;
             }
+            return true;
         },
         async sendOtp() {
             /* validate form or atleast phone number */
             if(!this.validatePhoneNumber())
                 return;
 
-            const response = await this.$post('/sendOtp', {
-                countryDialCode: this.dialCode,
+            const { response, resolved }  = await this.$post('/sendOtp', {
+                countryDialCode: this.countryDialCode,
                 phoneNumber: this.phoneNumber,
                 purpose: this.purpose
             });
             
             /* if req not resolved */
-            if(response === false) {
+            if(resolved === false) {
+                console.log('send otp not resolved')
                 return;
             }
             
@@ -73,8 +77,28 @@ export default {
             this.otpSent = response.otpSent === true;
         
         },
-        register() {
+        async register() {
+            console.log('register called');
+            /* clear error */
+            this.error.status = false;
 
+            const { response, resolved } = await this.$post('/registerCustomer', {
+                countryDialCode: this.countryDialCode,
+                countryIsoCode: this.countryIsoCode,
+                phoneNumber: this.phoneNumber,
+                otp: this.otp,
+                firstName: this.firstName,
+                surName: this.surName
+            });
+            console.log(response);
+            /* if req not resolved, map error message */
+            if(resolved === false) {
+                this.error.message = response.message;
+                this.error.status = true;
+                return;
+            }
+
+            console.log(response);
         }
     }
 }

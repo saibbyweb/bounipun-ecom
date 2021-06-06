@@ -199,13 +199,13 @@ export default (context, inject) => {
     /* if error occurred */
     if (error || response.resolved === false) {
       if(response.resolved === false) {
-        console.log(`%c Could not resolve: ${endpoint} with payload: ${JSON.stringify(payload)}`, 'color: red');
+        console.log(`%c Request not resolved: ${endpoint} with payload: ${JSON.stringify(payload)}`, 'color: red');
         // console.log(payload);
       }
-      return false
+      return { response, resolved: false }
     }
     /* if request resolved */
-    return response;
+    return { response, resolved: true };
   };
 
   inject("fetchCollection", fetchCollection);

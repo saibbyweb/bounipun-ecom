@@ -24,6 +24,8 @@ router.post("/sendOtp", async (req, res) => {
 
 /* (verify phone-number) and register customer */
 router.post("/registerCustomer", async (req, res) => {
+
+
   let response = {
     resolved: false,
     numberAlreadyRegistered: false,
@@ -31,8 +33,11 @@ router.post("/registerCustomer", async (req, res) => {
     otpVerified: false,
     registered: false,
     loggedIn: false,
-    cartShifted: false
+    cartShifted: false,
+    message: ''
   };
+
+  console.log('register called');
 
   /* TODO: add country ISO code | extract post data  */
   const {
@@ -45,13 +50,18 @@ router.post("/registerCustomer", async (req, res) => {
   } = req.body;
   /* check if user already exists (by phone number) */
   if ((await userMethods.getUser({ countryDialCode, phoneNumber })) !== null) {
+    response.message = 'Customer with this phone number already exists';
     response.numberAlreadyRegistered = true;
+    console.log('phone number exists');
     res.send(response);
     return;
   }
+
   /* TODO: verify otp | if dial code === +91*/
   if ((await userMethods.verifyMsg91Otp(phoneNumber, otp)) === false) {
     response.incorrectOtp = true;
+    response.message = 'Incorrect OTP entered.'
+    console.log('incorrect otp');
     res.send(response);
     return;
   }
@@ -68,12 +78,16 @@ router.post("/registerCustomer", async (req, res) => {
   });
   /* if user registration failed */
   if(userRegistered === false) {
+      response.message = 'Registration Failed.'
       res.send(response);
       return;
   }
+  /* mark user as registered */
+  response.registered = true;
   /* login user (should shift cart always) */
-
+    
   /* revert with response */
+  res.send(response);
 });
 
 export default router;

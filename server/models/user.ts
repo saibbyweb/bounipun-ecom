@@ -92,9 +92,14 @@ export const methods = {
     },
     /* register user */
     registerUser: async(profile) => {
-        const {response: newUser, error } = await task(new model({...profile}) as any);
+        const {response: newUser, error } = await task(new model({...profile}).save() as any);
         return !error ? newUser : false;
+    },
+    loginUser: async() => {
+
     }
 }
+
+model.find().then(docs => console.log(docs));
 
 export default { model, methods }
