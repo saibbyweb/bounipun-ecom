@@ -35,6 +35,7 @@ export default {
             firstName: '',
             surName: '',
             dialCode: '+91',
+            countryIsoCode: 'IN',
             purpose: 'registration',
             phoneNumber: '',
             otp: '',
@@ -58,7 +59,7 @@ export default {
                 return;
 
             const response = await this.$post('/sendOtp', {
-                dialCode: this.dialCode,
+                countryDialCode: this.dialCode,
                 phoneNumber: this.phoneNumber,
                 purpose: this.purpose
             });
@@ -71,6 +72,9 @@ export default {
             /* map otp sent response */
             this.otpSent = response.otpSent === true;
         
+        },
+        register() {
+
         }
     }
 }

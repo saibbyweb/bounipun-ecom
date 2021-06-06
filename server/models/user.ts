@@ -18,8 +18,6 @@ const schema = new mongoose.Schema({
     countryDialCode: String,
     /* country iso code */
     countryIsoCode: String,
-    /* registered on */
-    registeredOn: String,
     /* profession */
     profession: String,
     /* usergroup */
@@ -28,7 +26,7 @@ const schema = new mongoose.Schema({
     addressBook: [{
         firstName: String,
         surName: String,
-        phoneNumber:String,
+        phoneNumber: String,
         email: String,
         countryDialCode: String,
         countryIsoCode: String,
@@ -84,6 +82,19 @@ export const methods = {
         // console.log(response.data);
         return !error && response.data.type === "success" ? true : false;
     },
+    /* get user */
+    getUser: async (criteria) => {
+        const findUser: any = model.findOne(criteria)
+        const { response, error } = await task(findUser);
+        if (error)
+            return false;
+        return response;
+    },
+    /* register user */
+    registerUser: async(profile) => {
+        const {response: newUser, error } = await task(new model({...profile}) as any);
+        return !error ? newUser : false;
+    }
 }
 
 export default { model, methods }
