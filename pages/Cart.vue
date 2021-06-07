@@ -202,7 +202,7 @@ export default {
             : details.availabilityType === "made-to-order"
             ? true
             : false;
-            
+
         /* multi priced */
         if (multiPriced) {
           /* find variant index */

@@ -211,17 +211,11 @@ router.post('/fetchCart', userAuth('customer'), async (req, res) => {
     console.log(cart);
     /* get all unique product ids */
     const allUniqueProducts = [...new Set(cart.map(item => item.product))];
-    /* get all unique varianst */
-    const allUniqueVariants = [...new Set(cart.map(item => item.variant).filter(variant => variant !== null))]
-    /* get all unique fabrics */
-    const allUniqueFabrics = [...new Set(cart.map(item => item.fabric).filter(fabric => fabric !== null))];
-
-    console.log(allUniqueProducts, allUniqueVariants, allUniqueFabrics);
-
+    /* fetch all relevant details for each unique product */
     let allProductPromises = []
     for (const productId of allUniqueProducts) {
         const fetchProduct = db.model('products')
-        .findOne({ _id: productId })
+        .findOne({ _id: productId, status: true })
         .populate('bounipun_collection', { _id: 0, name: 1})
         .populate('variants._id', { name: 1})
         .populate('variants.fabrics._id', { name: 1, info1: 1 })
@@ -230,9 +224,66 @@ router.post('/fetchCart', userAuth('customer'), async (req, res) => {
         .lean();
         allProductPromises.push(fetchProduct);
     }
-
+    /* wait for all promises to resolve */
     const allProducts = await Promise.all(allProductPromises);
     console.log(JSON.stringify(allProducts));
+
+    let itemsToBeRemoved = []
+    
+    /* create cart items array */
+    let cartItems = cart.map(item => {
+        let cartItem = {
+            productId: item.product,
+            productName: '',
+            colorName: '',
+            mainImage: '',
+            collectionName: '',
+            variantName: '',
+            fabricName: '',
+            fabricInfo1: '',
+            price: 0,
+            quantity: item.quantity
+        };
+        /* find product */
+        const product = allProducts.find(prod => prod._id === item.product);
+        /* if productId didn't match, product is either unpublished or removed from the db,
+        mark this as item to be removed */
+        if(product === undefined) {
+            itemsToBeRemoved.push(item);
+            return false;
+        }
+        
+        /* find selected color */
+        const selectedColor = product.colors.find(color => color.code === item.colorCode);
+
+        /* if color is not found, color is either unpublished or removed from the db,
+        mark this as item to be removed */
+        if(selectedColor === undefined) {
+            itemsToBeRemoved.push(item);
+            return;
+        }
+
+        /* product name */
+        cartItem.productName = product.name;
+        /* color name */
+        cartItem.colorName = selectedColor.name;
+        /* main image */
+        cartItem.mainImage = '...';
+        /*  collection name */
+        cartItem.collectionName = product.bounipun_collection.name;
+        /* variant name */
+        const selectedVariant = product.variants.find(variant => variant._id._id === item.variant)
+        cartItem.variantName = selectedVariant._id.name;
+         /* fabric name */
+        const selectedFabric = selectedVariant.fabrics.find(fabric => fabric._id._id === item.fabric);
+        cartItem.fabricName = selectedFabric._id.name;
+        /* fabric info 1 */
+        cartItem.fabricInfo1 = selectedFabric._id.info1;
+        /* price */
+        cartItem.price = selectedFabric.price;
+
+        /* -- check for direct pricing & ready to ship cases from left side */
+    });
 
     // product name
     // colorname
