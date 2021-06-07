@@ -137,8 +137,48 @@ router.post('/loginCustomer', async (req, res) => {
         return;
     }
 
-    res.send(response);
+    /* TODO: verify otp | if dial code === +91*/
+    if ((await userMethods.verifyMsg91Otp(phoneNumber, otp)) === false) {
+        response.incorrectOtp = true;
+        response.message = 'Incorrect OTP entered.'
+        console.log('incorrect otp');
+        res.send(response);
+        return;
+    }
 
+    /* mark otp as verified */
+    response.otpVerified = true;
+
+    /* get user */
+    const user = await userMethods.getUser({countryDialCode, phoneNumber});
+
+    /* if user not found/couldnt fetch */
+    if(user === false) {
+        response.message = 'Could not fetch user';
+        res.send(response);
+        return;
+    }
+
+    /* login user (should shift cart always) */
+    const loginAttempt = await userMethods.registerSession(user._id);
+
+    if (loginAttempt === false) {
+        response.message = 'Session Generation failed'
+        res.send(response);
+        return;
+    }
+    /* mark as logged in */
+    if (platform === 'web') {
+        console.log('setting cookie...');
+        res.cookie('swecom_bounipun', loginAttempt.token, { maxAge: 2592000000, httpOnly: false, sameSite: 'none', secure: true });
+    }
+
+    response.loggedIn = true;
+    response.sessionToken = loginAttempt.token;
+    response.resolved = true;
+
+    /* revert with response */
+    res.send(response);
 
 })
 /* shitf local cart to user cart */
