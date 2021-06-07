@@ -57,9 +57,6 @@ export default {
             return true;
         },
         async sendOtp() {
-            await this.$post('/setCookie');
-            return;
-
             /* validate form or atleast phone number */
             if(!this.validatePhoneNumber())
                 return;
@@ -94,6 +91,7 @@ export default {
                 surName: this.surName,
                 platform: 'web'
             });
+            
             console.log(response);
             /* if req not resolved, map error message */
             if(resolved === false) {
@@ -105,6 +103,8 @@ export default {
             console.log('now is the time to shift cart');
             /* and move back to homepage */
             this.$store.commit('customer/setAuthorization', true);
+            /* navigate homepage */
+            this.$router.push('/');
         },
         async loginUser() {
             const loginAttempt = {
