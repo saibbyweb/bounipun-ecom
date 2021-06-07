@@ -4,10 +4,14 @@ import mongoose from "mongoose";
 import path from "path";
 import cors from "cors";
 import aws from "aws-sdk";
+import cookieParser from "cookie-parser";
+
 let connection = {};
 /* express app */
 const app = express();
 app.use(express.json());
+/* cookie parser */
+app.use(cookieParser());
 
 /* configuring aws */
 aws.config.update({

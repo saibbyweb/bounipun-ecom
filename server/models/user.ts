@@ -1,7 +1,9 @@
 import { mongoose, task } from "@helpers/essentials";
 import axios from "axios";
 import bcrypt from "bcrypt"
-import { model as session } from "./session"
+import { model as session, methods as sessionMethods } from "./session";
+/* validate session */
+const { validateSession } = sessionMethods; 
 
 /* msg91 template id */
 const templateId = "6037f99d7ea3595ee966782c";
@@ -49,6 +51,32 @@ const schema = new mongoose.Schema({
 /* model */
 const modelName = 'users';
 const model = mongoose.model('users', schema);
+
+/* express auth */
+const expressAuth = async (req, res, next, usergroup) => {
+    console.log(usergroup);
+    req.body.user = { status : false }
+    /* no cookie is found, mark user as guest */
+    if (req.cookies.swecom_bounipun === undefined) {
+        next()
+        return;
+    }
+
+    /* if cookie found, validate and return appropriate response */
+    const token = req.cookies.swecom_bounipun;
+    const session = await validateSession(token);
+
+    /* if session is invalid */
+    if(session === false) {
+        next()
+        return;
+    }
+
+    /* if session valid, append user data on req body */
+    req.body.user = session.user;
+    next();
+
+}
 
 /* helper methods */
 export const methods = {
@@ -108,6 +136,9 @@ export const methods = {
         }).save());
 
         return !error ? newSession : false;
+    },
+    userAuth: (userGroup) => (...args: [req: any, res: any, next: any]) => {
+        return expressAuth(...args, userGroup)
     }
 }
 

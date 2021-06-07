@@ -53,7 +53,8 @@ export default {
     baseUrl:
       process.env.NODE_ENV === "development"
         ? process.env.BASE_URL
-        : "https://bounipun-kashmir.herokuapp.com"
+        : "https://bounipun-kashmir.herokuapp.com",
+      credentials: true
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},

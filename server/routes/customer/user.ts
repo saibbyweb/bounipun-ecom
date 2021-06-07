@@ -2,6 +2,7 @@ import { server } from "@helpers/essentials";
 import { methods as userMethods } from "@models/user";
 /* creating express router */
 const router = server.express.Router();
+const { userAuth } = userMethods;
 
 /* send otp */
 router.post("/sendOtp", async (req, res) => {
@@ -21,8 +22,6 @@ router.post("/sendOtp", async (req, res) => {
 
 /* (verify phone-number) and register customer */
 router.post("/registerCustomer", async (req, res) => {
-
-
     let response = {
         resolved: false,
         numberAlreadyRegistered: false,
@@ -30,6 +29,7 @@ router.post("/registerCustomer", async (req, res) => {
         otpVerified: false,
         registered: false,
         loggedIn: false,
+        sessionToken: '',
         cartShifted: false,
         message: ''
     };
@@ -43,7 +43,8 @@ router.post("/registerCustomer", async (req, res) => {
         phoneNumber,
         otp,
         firstName,
-        surName
+        surName,
+        platform
     } = req.body;
     /* check if user already exists (by phone number) */
     if ((await userMethods.getUser({ countryDialCode, phoneNumber })) !== null) {
@@ -90,12 +91,23 @@ router.post("/registerCustomer", async (req, res) => {
         return;
     }
     /* mark as logged in */
-    response.loggedIn = true;
-    
-    console.log(loginAttempt);
+    if(platform === 'web') {
+        console.log('setting cookie...');
+        res.cookie('swecom_bounipun',loginAttempt.token, { maxAge: 2592000000, httpOnly: false, sameSite: 'none', secure: true});
+    }
 
+    response.loggedIn = true;
+    response.sessionToken = loginAttempt.token;
+    response.resolved = true;
+    
     /* revert with response */
     res.send(response);
+});
+
+/* shitf local cart to user cart */
+router.post('/shiftCart', userAuth('customer') ,async(req, res) => {
+    console.log(req.body.user);
+    res.send('shifting broo');
 });
 
 export default router;

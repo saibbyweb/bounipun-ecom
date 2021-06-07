@@ -19,7 +19,7 @@
     <!-- send otp -->
     <button v-if="!otpSent" class="action" @click="sendOtp()"> Continue </button>
     <!-- register -->
-    <button v-if="otpSent" class="action" @click="register()"> Register </button>
+    <button v-if="otpSent" class="action" @click="registerAndLogin()"> Register </button>
 
     <h3 id="already" class="heading"> Already Have An Account? </h3>
     <p class="desc"> Access your order history, personal information and receive our digital communications </p>
@@ -57,6 +57,9 @@ export default {
             return true;
         },
         async sendOtp() {
+            await this.$post('/shiftCart');
+            return;
+            
             /* validate form or atleast phone number */
             if(!this.validatePhoneNumber())
                 return;
@@ -77,7 +80,7 @@ export default {
             this.otpSent = response.otpSent === true;
         
         },
-        async register() {
+        async registerAndLogin() {
             console.log('register called');
             /* clear error */
             this.error.status = false;
@@ -88,7 +91,8 @@ export default {
                 phoneNumber: this.phoneNumber,
                 otp: this.otp,
                 firstName: this.firstName,
-                surName: this.surName
+                surName: this.surName,
+                platform: 'web'
             });
             console.log(response);
             /* if req not resolved, map error message */
@@ -97,8 +101,8 @@ export default {
                 this.error.status = true;
                 return;
             }
-
-            console.log(response);
+            /* at this point, cookie is set in the browser */
+            console.log('now is the time to shift cart');
         },
         async loginUser() {
             const loginAttempt = {
@@ -107,7 +111,7 @@ export default {
                 token: ""
             }
 
-            
+
         }
     }
 }
