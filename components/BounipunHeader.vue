@@ -3,6 +3,7 @@
     <!-- menu -->
     <div class="menu center" @click="$emit('showMenu')">
         <img class="action-icon" :src="getIconPath('menu.png')" />
+        <img v-if="$store.state.customer.authorized" class="action-icon account" :src="getIconPath('account.png')" />
     </div>
 
     <!-- logo -->
@@ -103,6 +104,10 @@ export default {
     .menu {
         justify-self: flex-start;
         padding-left: 10%;
+
+        .account {
+            margin-left:10px;
+        }
 
         @media (max-width: $breakpoint-tablet) {
             padding-left: 25%;

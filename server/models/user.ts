@@ -68,6 +68,7 @@ const expressAuth = async (req, res, next, usergroup) => {
 
     /* if session is invalid */
     if(session === false) {
+        /* TODO: reset cookie */
         next()
         return;
     }

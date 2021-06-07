@@ -1,8 +1,11 @@
+import cookies from "js-cookie";
+
 export const state = () => ({
   persistedStateLoaded: false,
   loading: false,
   authorized: false,
-  cart: []
+  cart: [],
+  user: {}
 });
 
 /* find product helper  */
@@ -36,6 +39,9 @@ export const mutations = {
       if(persistedState) {
           Object.assign(state, JSON.parse(persistedState))
       }
+
+      /* check for session cookie */
+      state.authorized = cookies.get('swecom_bounipun') !== undefined;
       state.persistedStateLoaded = true;
   },
   setLoading(state, value) {

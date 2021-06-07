@@ -110,4 +110,13 @@ router.post('/shiftCart', userAuth('customer') ,async(req, res) => {
     res.send('shifting broo');
 });
 
+
+router.post('/setCookie', (req, res) => {
+    
+    console.log(req.headers);
+
+    res.cookie('chill','1234567', { maxAge: 2592000000, httpOnly: false, sameSite: 'none', secure: false, path: req.headers.origin });
+    res.send('what')
+
+})
 export default router;

@@ -57,9 +57,9 @@ export default {
             return true;
         },
         async sendOtp() {
-            await this.$post('/shiftCart');
+            await this.$post('/setCookie');
             return;
-            
+
             /* validate form or atleast phone number */
             if(!this.validatePhoneNumber())
                 return;
@@ -103,6 +103,8 @@ export default {
             }
             /* at this point, cookie is set in the browser */
             console.log('now is the time to shift cart');
+            /* and move back to homepage */
+            this.$store.commit('customer/setAuthorization', true);
         },
         async loginUser() {
             const loginAttempt = {
