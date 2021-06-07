@@ -46,6 +46,7 @@ router.post("/registerCustomer", async (req, res) => {
         surName,
         platform
     } = req.body;
+
     /* check if user already exists (by phone number) */
     if ((await userMethods.getUser({ countryDialCode, phoneNumber })) !== null) {
         response.message = 'Customer with this phone number already exists';
@@ -91,31 +92,67 @@ router.post("/registerCustomer", async (req, res) => {
         return;
     }
     /* mark as logged in */
-    if(platform === 'web') {
+    if (platform === 'web') {
         console.log('setting cookie...');
-        res.cookie('swecom_bounipun',loginAttempt.token, { maxAge: 2592000000, httpOnly: false, sameSite: 'none', secure: true});
+        res.cookie('swecom_bounipun', loginAttempt.token, { maxAge: 2592000000, httpOnly: false, sameSite: 'none', secure: true });
     }
 
     response.loggedIn = true;
     response.sessionToken = loginAttempt.token;
     response.resolved = true;
-    
+
     /* revert with response */
     res.send(response);
 });
 
+/* login customer */
+router.post('/loginCustomer', async (req, res) => {
+    let response = {
+        resolved: false,
+        numberNotRegistered: false,
+        incorrectOtp: false,
+        otpVerified: false,
+        loggedIn: false,
+        sessionToken: '',
+        message: ''
+    };
+
+    console.log('login customer called');
+
+    /* TODO: add country ISO code | extract post data  */
+    const {
+        countryDialCode,
+        countryIsoCode,
+        phoneNumber,
+        otp,
+        platform
+    } = req.body;
+
+    /* check if user already exists (by phone number) */
+    if ((await userMethods.getUser({ countryDialCode, phoneNumber })) === null) {
+        response.message = 'Phone number not registered.';
+        response.numberNotRegistered = true;
+        console.log('phone number does not exist');
+        res.send(response);
+        return;
+    }
+
+    res.send(response);
+
+
+})
 /* shitf local cart to user cart */
-router.post('/shiftCart', userAuth('customer') ,async(req, res) => {
+router.post('/shiftCart', userAuth('customer'), async (req, res) => {
     console.log(req.body.user);
     res.send('shifting broo');
 });
 
 
 router.post('/setCookie', (req, res) => {
-    
+
     console.log(req.headers);
 
-    res.cookie('chill','1234567', { maxAge: 2592000000, httpOnly: false, sameSite: 'none', secure: false, path: req.headers.origin });
+    res.cookie('chill', '1234567', { maxAge: 2592000000, httpOnly: false, sameSite: 'none', secure: false, path: req.headers.origin });
     res.send('what')
 
 })
