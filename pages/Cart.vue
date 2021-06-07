@@ -60,9 +60,7 @@
     <div class="sub-total">
       <p class="label text">
         Sub Total <br />
-        <span class="length">
-        {{ cartDetails.length }} Item(s) :
-        </span>
+        <span class="length"> {{ cartDetails.length }} Item(s) : </span>
       </p>
       <span class="value text"> INR {{ subTotal }} </span>
     </div>
@@ -196,6 +194,7 @@ export default {
           mainImage: this.mainImagePath(color)
           // details,
         };
+
         /* check if product is multipriced */
         const multiPriced =
           details.type === "third-party"
@@ -203,6 +202,7 @@ export default {
             : details.availabilityType === "made-to-order"
             ? true
             : false;
+            
         /* multi priced */
         if (multiPriced) {
           /* find variant index */
@@ -363,8 +363,8 @@ export default {
     margin: 0 3px;
 
     .length {
-        color: $dark_gray;
-        font-family: $font_1_bold;
+      color: $dark_gray;
+      font-family: $font_1_bold;
     }
   }
 

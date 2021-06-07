@@ -46,6 +46,10 @@ export default {
       }
     };
   },
+  mounted() {
+    setTimeout(() => this.shiftCart(), 200)
+    // this.shiftCart();
+  },
   methods: {
     validatePhoneNumber() {
       console.log("validate called");
@@ -99,6 +103,11 @@ export default {
       this.$store.commit("customer/setAuthorization", true);
       /* navigate homepage */
       this.$router.push("/");
+    },
+    async shiftCart() {
+      await this.$post('/fetchCart', {
+        cart: this.$store.state.customer.cart
+      });
     }
   }
 };

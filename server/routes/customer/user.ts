@@ -1,4 +1,4 @@
-import { server } from "@helpers/essentials";
+import { server, db } from "@helpers/essentials";
 import { methods as userMethods } from "@models/user";
 /* creating express router */
 const router = server.express.Router();
@@ -150,10 +150,10 @@ router.post('/loginCustomer', async (req, res) => {
     response.otpVerified = true;
 
     /* get user */
-    const user = await userMethods.getUser({countryDialCode, phoneNumber});
+    const user = await userMethods.getUser({ countryDialCode, phoneNumber });
 
     /* if user not found/couldnt fetch */
-    if(user === false) {
+    if (user === false) {
         response.message = 'Could not fetch user';
         res.send(response);
         return;
@@ -183,11 +183,62 @@ router.post('/loginCustomer', async (req, res) => {
 })
 /* shitf local cart to user cart */
 router.post('/shiftCart', userAuth('customer'), async (req, res) => {
-    console.log(req.body.user);
+    let response = { resolved: true, shifted: false }
+    // console.log(req.body);
+    if (req.body.cart === undefined || req.body.length === 0) {
+        res.send(response);
+        return;
+    }
+
+    /* shifted cart */
+    const userCart = req.body.cart.map(item => ({
+        product: item._id,
+        colorCode: item.colorCode,
+        quantity: item.quantity,
+        variant: item.variantId === undefined ? null : item.variantId,
+        fabric: item.fabricId === undefined ? null : item.fabricId
+    }));
+
+    /* shift cart to database */
+    await db.model('users').findOneAndUpdate({ _id: req.body.user._id }, { cart: userCart });
+
     res.send('shifting broo');
 });
 
+/* fetch cart */
+router.post('/fetchCart', userAuth('customer'), async (req, res) => {
+    const cart = req.body.user.cart;
+    console.log(cart);
+    /* get all unique product ids */
+    const allUniqueProducts = [...new Set(cart.map(item => item.product))];
+    /* get all unique varianst */
+    const allUniqueVariants = [...new Set(cart.map(item => item.variant).filter(variant => variant !== null))]
+    /* get all unique fabrics */
+    const allUniqueFabrics = [...new Set(cart.map(item => item.fabric).filter(fabric => fabric !== null))];
 
+    console.log(allUniqueProducts, allUniqueVariants, allUniqueFabrics);
+    
+    let allProductPromises = []
+    for(const productId of allUniqueProducts) {
+        const fetchProduct = db.model('products').findOne({ _id: productId }).populate('bounipun_collection').lean();
+        allProductPromises.push(fetchProduct);
+    }
+
+    console.log(await Promise.all(allProductPromises));
+
+    // product name
+    // colorname
+    // collectionname (if under bounipun)
+    // variant name
+    // fabric name
+    // fabric info 1
+    // price
+    // quantity
+    // main image
+    // product id
+
+    res.send('ok broo');
+});
 router.post('/setCookie', (req, res) => {
 
     console.log(req.headers);

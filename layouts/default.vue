@@ -22,6 +22,7 @@ export default {
                 return;
             
             console.log(mutation);
+            console.log(state.customer.cart);
             /* save state in local storage */
             window.localStorage.setItem('persistedState', JSON.stringify(state.customer));
         });

@@ -1,4 +1,4 @@
-import { mongoose, task } from "@helpers/essentials";
+import { mongoose, ObjectId, task } from "@helpers/essentials";
 import axios from "axios";
 import bcrypt from "bcrypt"
 import { model as session, methods as sessionMethods } from "./session";
@@ -39,6 +39,15 @@ const schema = new mongoose.Schema({
         city: String,
         pincode: String
     }],
+    cart: [
+        {
+            product: { type: ObjectId, ref: 'products'},
+            colorCode: String,
+            quantity: Number,
+            variant: { type: ObjectId, ref: 'variants'},
+            fabric: { type: ObjectId, ref: 'fabrics' }
+        }
+    ],
     /* status */
     status: {
         type: Boolean,
@@ -54,11 +63,11 @@ const model = mongoose.model('users', schema);
 
 /* express auth */
 const expressAuth = async (req, res, next, usergroup) => {
-    console.log(usergroup);
     req.body.user = { status : false }
     /* no cookie is found, mark user as guest */
     if (req.cookies.swecom_bounipun === undefined) {
-        next()
+        // next()
+        res.send({notAuthorized: true })
         return;
     }
 
@@ -69,7 +78,7 @@ const expressAuth = async (req, res, next, usergroup) => {
     /* if session is invalid */
     if(session === false) {
         /* TODO: reset cookie */
-        next()
+        res.send({notAuthorized: true })
         return;
     }
 
@@ -133,7 +142,7 @@ export const methods = {
         /* save session token in db */
         const { response: newSession, error } = await task(new session({
             token,
-            userId
+            user: userId
         }).save());
 
         return !error ? newSession : false;
