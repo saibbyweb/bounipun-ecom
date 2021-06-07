@@ -217,14 +217,22 @@ router.post('/fetchCart', userAuth('customer'), async (req, res) => {
     const allUniqueFabrics = [...new Set(cart.map(item => item.fabric).filter(fabric => fabric !== null))];
 
     console.log(allUniqueProducts, allUniqueVariants, allUniqueFabrics);
-    
+
     let allProductPromises = []
-    for(const productId of allUniqueProducts) {
-        const fetchProduct = db.model('products').findOne({ _id: productId }).populate('bounipun_collection').lean();
+    for (const productId of allUniqueProducts) {
+        const fetchProduct = db.model('products')
+        .findOne({ _id: productId })
+        .populate('bounipun_collection', { _id: 0, name: 1})
+        .populate('variants._id', { name: 1})
+        .populate('variants.fabrics._id', { name: 1, info1: 1 })
+        .populate('colors._id', { name: 1})
+        .select('name styleId type availabiltyType variants.fabrics.price colors.name colors.code colors.images')
+        .lean();
         allProductPromises.push(fetchProduct);
     }
 
-    console.log(await Promise.all(allProductPromises));
+    const allProducts = await Promise.all(allProductPromises);
+    console.log(JSON.stringify(allProducts));
 
     // product name
     // colorname
