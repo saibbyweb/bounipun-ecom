@@ -100,7 +100,15 @@ export default {
             amountToBeCharged: parseInt(this.subTotal)
         };
 
-        await this.$post('/orderCheckout', checkoutPayload);
+        const checkout = await this.$post('/orderCheckout', checkoutPayload);
+
+        if(checkout.resolved === false) {
+            return;
+        }
+        
+        /* move to order placed page */
+        this.$router.push('/order-placed-successfully');
+
       }
   }
 };

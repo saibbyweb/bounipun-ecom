@@ -48,6 +48,10 @@ const schema = new mongoose.Schema({
             fabric: { type: ObjectId, ref: 'fabrics' }
         }
     ],
+    /* orders */
+    orders: [
+        { type: ObjectId, ref: 'orders'}
+    ],
     /* status */
     status: {
         type: Boolean,
@@ -151,7 +155,7 @@ export const methods = {
         return expressAuth(...args, userGroup)
     },
     async getCartItems(cart) {
-        console.log(cart);
+    
         /* get all unique product ids */
         const allUniqueProducts = [...new Set(cart.map(item => item.product))];
         /* fetch all relevant details for each unique product */
@@ -169,6 +173,7 @@ export const methods = {
         }
         /* wait for all promises to resolve */
         const allProducts = await Promise.all(allProductPromises);
+   
         // console.log(JSON.stringify(allProducts));
 
         let itemsToBeRemoved = []
@@ -188,10 +193,14 @@ export const methods = {
                 quantity: item.quantity,
                 cartEntry: item
             };
+
+
             /* find product */
             const product = allProducts.find(prod => {
                 return prod._id.toString() == item.product.toString()
             });
+
+
             /* if productId didn't match, product is either unpublished or removed from the db,
             mark this as item to be removed */
             if (product === undefined) {

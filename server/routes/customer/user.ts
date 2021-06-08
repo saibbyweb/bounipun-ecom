@@ -276,7 +276,7 @@ router.post('/orderCheckout', userAuth('customer'), async(req, res) => {
     const cartTotal = sumBy(cartItems, item => item.price * item.quantity);
     
     /* if amount doesn't match */
-    if(cartItems !== amountToBeCharged) {
+    if(cartTotal !== amountToBeCharged) {
         console.log('Amount doesnt match');
         res.send(response);
         return;
@@ -286,17 +286,29 @@ router.post('/orderCheckout', userAuth('customer'), async(req, res) => {
 
     /* construct order details */
     const orderDetails = {
-        id: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
-        chargeId: '',
+        number: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
+        paymentGateway: 'razorpay',
+        transactionId: '',
         amount: amountToBeCharged,
         deliveryAddress,
         status: 'pending',
-        items: cartItems
+        items: cartItems,
     }
 
     // console.log(deliveryAddress);
-    console.log(amountToBeCharged);
-    res.send('done')
+    // console.log(orderDetails);
+    const ordersCollection = db.model('orders');
+    
+    /* save order details to database */
+    const orderSaved = await new ordersCollection(orderDetails).save();
+    /* save order id to user account */
+    const userOrdersUpdated = await db.model('users').findOneAndUpdate({_id: user._id}, { $push: { orders: orderSaved._id}});
+
+    console.log(userOrdersUpdated);
+
+    response.resolved = true;
+
+    res.send(response);
 });
 
 router.post('/setCookie', (req, res) => {
