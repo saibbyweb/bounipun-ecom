@@ -224,18 +224,37 @@ router.post('/cartActions', userAuth('customer'), async (req, res) => {
     const { user, action, cartItem } = req.body;
     const { cart } = user;
 
+    let search: any = false;
+
     switch (action) {
         case 'add-to-cart':
             /* if cart is empty, directly push the item */
             if (cart.length === 0 || cart === undefined)
                 cart.push(cartItem);
             /* check if item already exists in cart */
-            let search = userMethods.findCartItem(cart, cartItem);
+            search = userMethods.findCartItem(cart, cartItem);
             /* if product found, add qty to existing qty */
             if (search !== false)
                 search.foundCartItem.quantity += cartItem.quantity;
             /* else just add it to the cart array */
             else cart.push(cartItem);
+            break;
+        case 'update-quantity':
+            /* check if item already exists in cart */
+            search = userMethods.findCartItem(cart, cartItem);
+            /* if yes, directly overwrite the qty */
+            if (search !== false) {
+                search.foundCartItem.quantity = parseInt(cartItem.quantity);
+            }
+            break;
+        case 'remove-from-cart':
+            /*  check if item is already present or not */
+            search = userMethods.findCartItem(cart, cartItem);
+            /* if yes, remove product from cart array */
+            if (search !== false) {
+                /* remove item from the cart */
+                cart.splice(search.foundIndex, 1);
+            }
             break;
     }
 

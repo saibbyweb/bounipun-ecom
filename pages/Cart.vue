@@ -16,7 +16,7 @@
     </div>
 
     <!-- sub total -->
-    <div class="sub-total">
+    <div v-if="!cartEmpty" class="sub-total">
       <p class="label text">
         Sub Total <br />
         <span class="length"> {{ remoteCartItems.length }} Item(s) : </span>
@@ -25,7 +25,7 @@
     </div>
 
     <!-- proceed to address page-->
-    <div class="pad-10">
+    <div v-if="!cartEmpty" class="pad-10">
       <button @click="$router.push('/delivery-address')" class="action">
         Proceed To Buy
       </button>
@@ -84,7 +84,7 @@ export default {
       if (cartItems.resolved === false) return;
       this.remoteCartItems = cartItems.response;
     },
-    updateQuantity(payload) {
+    async updateQuantity(payload) {
       const { item, operation } = payload;
       switch (operation) {
         case "decrease":
@@ -102,14 +102,24 @@ export default {
       if (!this.$store.state.customer.authorized) {
         this.$store.commit("customer/updateQuantity", item);
       }
+      else
+        await this.$post('/cartActions', {
+          action: 'update-quantity',
+          cartItem: item
+        })
 
       this.fetchCart();
     },
-    removeItem(cartItem) {
+    async removeItem(cartItem) {
       /* for guests */
       if (!this.$store.state.customer.authorized) {
         this.$store.commit("customer/removeFromCart", cartItem);
       }
+      else
+      await this.$post('/cartActions', {
+        action: 'remove-from-cart',
+        cartItem
+      })
       this.fetchCart();
     }
   }
