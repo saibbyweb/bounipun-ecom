@@ -1,5 +1,6 @@
 import { server, db } from "@helpers/essentials";
 import { methods as userMethods } from "@models/user";
+import sumBy from "lodash/sumBy";
 /* creating express router */
 const router = server.express.Router();
 const { userAuth } = userMethods;
@@ -258,13 +259,44 @@ router.post('/cartActions', userAuth('customer'), async (req, res) => {
             break;
     }
 
-    console.log(cart);
-
     /* save cart back to database */
     await db.model('users').findOneAndUpdate({ _id: user._id }, { cart })
 
-    res.send('broo')
+    res.send('cart_updated')
 
+});
+
+/* checkout */
+router.post('/orderCheckout', userAuth('customer'), async(req, res) => {
+    let response = { resolved: false, message: ''}
+    const { user, orderCartItems, deliveryAddress, amountToBeCharged } = req.body;
+    // console.log(orderCartItems);
+    /* TODO: to be supa sure, i can match the received cart items to the one in the db */
+    const cartItems = await userMethods.getCartItems(user.cart);
+    const cartTotal = sumBy(cartItems, item => item.price * item.quantity);
+    
+    /* if amount doesn't match */
+    if(cartItems !== amountToBeCharged) {
+        console.log('Amount doesnt match');
+        res.send(response);
+        return;
+    }
+
+    /* TODO: check finesse purchasing routine */
+
+    /* construct order details */
+    const orderDetails = {
+        id: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
+        chargeId: '',
+        amount: amountToBeCharged,
+        deliveryAddress,
+        status: 'pending',
+        items: cartItems
+    }
+
+    // console.log(deliveryAddress);
+    console.log(amountToBeCharged);
+    res.send('done')
 });
 
 router.post('/setCookie', (req, res) => {

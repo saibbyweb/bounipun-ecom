@@ -51,7 +51,7 @@
     <!-- proceed to checkout -->
     <div class="pad-10">
       <button
-        @click="$router.push('/order-placed-successfully')"
+        @click="placeOrder"
         class="action"
       >
         Place Order
@@ -63,10 +63,23 @@
 <script>
 import sumBy from "lodash/sumBy";
 
+/* demo delivery address */
+const demoDeliveryAddress = {
+    firstName: 'Suhaib',
+    surName: 'Khan',
+    mobileNumber: '9906697711',
+    email: 'hello@saibbyweb.com',
+    addressLine1: 'H.no 54, Chinar Enclave',
+    addressLine2: 'Rawalpora, Near Masjid',
+    city: 'Srinagar',
+    postalCode: '190005'
+}
+
 export default {
   data() {
     return {
-      deliveryAddress: this.$route.params.deliveryAddress,
+      deliveryAddress: demoDeliveryAddress,
+    //   deliveryAddress: this.$route.params.deliveryAddress,
       remoteCartItems: this.$store.state.customer.globalRemoteCart
     };
   },
@@ -78,7 +91,18 @@ export default {
       return sumBy(this.remoteCartItems, item => item.price * item.quantity);
     }
   },
-  methods: {}
+  methods: {
+      async placeOrder() {
+        //   this.$router.push('/order-placed-successfully')
+        const checkoutPayload = {
+            deliveryAddress: this.deliveryAddress,
+            orderCartItems: this.remoteCartItems.map(item => item.cartEntry),
+            amountToBeCharged: parseInt(this.subTotal)
+        };
+
+        await this.$post('/orderCheckout', checkoutPayload);
+      }
+  }
 };
 </script>
 
