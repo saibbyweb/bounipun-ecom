@@ -5,6 +5,7 @@ export const state = () => ({
   loading: false,
   authorized: false,
   cart: [],
+  globalRemoteCart: [],
   user: {}
 });
 
@@ -89,12 +90,18 @@ export const mutations = {
   clearCart(state) {
     /* clear cart array directly */
     state.cart = []
+  },
+  setGlobalRemoteCart(state, cart) {
+      state.globalRemoteCart = cart;
   }
 };
 
 export const getters = {
     alreadyInCart: (state) => (cartItem) => {
         return findCartItem(state.cart, cartItem) !== false;
+    },
+    cartCount: (state) => () => {
+      return state.globalRemoteCart.length;
     },
     getCartProductIds(state) {
         if(state.cart.length === 0)

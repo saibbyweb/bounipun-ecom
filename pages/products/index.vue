@@ -497,6 +497,7 @@ export default {
           return;
         }
         this.$store.commit("customer/addToCart", this.newCartItem);
+
       }
 
       /* take cart item to server */
@@ -509,6 +510,8 @@ export default {
       if(remoteAddToCart.resolved === false) {
         return;
       }
+      
+      /* TODO: need to refetch again */
 
       this.$forceUpdate();
     },

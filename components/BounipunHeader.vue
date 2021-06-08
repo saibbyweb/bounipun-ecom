@@ -55,10 +55,13 @@ export default {
     },
     computed: {
         cartCount() {
-            if(!this.$store.state.customer.authorized) {
-                return this.$store.state.customer.cart.length
-            }
-            return 0;
+
+            return this.$store.getters['customer/cartCount']();
+
+            // if(!this.$store.state.customer.authorized) {
+            //     return this.$store.state.customer.cart.length
+            // }
+            // return 0;
         }
     },
     watch: {

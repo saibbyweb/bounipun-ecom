@@ -83,6 +83,9 @@ export default {
 
       if (cartItems.resolved === false) return;
       this.remoteCartItems = cartItems.response;
+      /* save it globally */
+      this.$store.commit('customer/setGlobalRemoteCart', cartItems.response);
+
     },
     async updateQuantity(payload) {
       const { item, operation } = payload;
