@@ -41,7 +41,7 @@
 
     <!-- proceed to checkout -->
     <div class="pad-10">
-        <button @click="$router.push('/checkout')" class="action"> Continue to Checkout </button>
+        <button @click="proceedToCheckout" class="action"> Continue to Checkout </button>
     </div>
 </div>
 </template>
@@ -121,6 +121,14 @@ export default {
                 }
             }
             return deliveryAddress
+        },
+        proceedToCheckout() {
+            /* collect delivery address */
+            let deliveryAddress = {};
+            Object.keys(this.formData).forEach(key => {
+                deliveryAddress[key] = this.formData[key].value;
+            });
+            this.$router.push({name: 'Checkout', params: { deliveryAddress }})
         }
     }
 }

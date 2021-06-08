@@ -26,14 +26,14 @@
       <span class="price"> INR {{ item.price }} </span>
 
       <!-- quantity picker -->
-      <div class="quantity-picker">
+      <div v-if="allowUpdate" class="quantity-picker">
         <button @click.stop="emitUpdateQuantity(item, 'decrease')">-</button>
         <button class="qty">{{ item.quantity }}</button>
         <button @click.stop="emitUpdateQuantity(item, 'increase')">+</button>
       </div>
     </div>
     <!-- remove item -->
-    <img
+    <img v-if="allowUpdate"
       @click.stop="emitRemoveFromCart(item)"
       class="remove-item"
       src="/icons/dark/remove-cart-item.png"
@@ -46,7 +46,11 @@
 <script>
 export default {
   props: {
-    item: Object
+    item: Object,
+    allowUpdate: {
+        type: Boolean,
+        default: true
+    }
   },
   data() {
     return {
