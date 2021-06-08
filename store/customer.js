@@ -8,28 +8,24 @@ export const state = () => ({
   user: {}
 });
 
-/* find product helper  */
-const findProduct = (cart, product) => {
+/* find cartItem helper  */
+const findCartItem = (cart, cartItem) => {
   /* if cart empty */
   if (cart.length === 0) return false;
 
-  let foundIndex = cart.findIndex(pro => {
+  let foundCartItem = cart.find(item => {
     /* common params to match */
-    let paramsMatched = pro._id === product._id && pro.colorCode === product.colorCode;
-
-    /* figure out the type of product */
-    const multiPriced = product.type === "third-party" 
-    ? false 
-    : product.availabilityType === 'made-to-order' ? true : false;
+    let paramsToBeMatched = item.product === cartItem.product && item.colorCode === cartItem.colorCode;
     
-    /* add params, if product is multipriced */
-    if(multiPriced) {
-        paramsMatched = paramsMatched && pro.variantId === product.variantId && pro.fabricId === product.fabricId
+    /* TODO: (inventory can change) if variant and fabrics are present, match them as well */
+    if(cartItem.variant !== null && cartItem.fabric !== null) {
+        paramsToBeMatched = paramsToBeMatched && item.variant === cartItem.variant && item.fabric === cartItem.fabric;
     }
-    return paramsMatched;
+    return paramsToBeMatched;
   });
 
-  return foundIndex !== -1 ? { foundProduct: cart[foundIndex], foundIndex } : false;
+  return foundCartItem !== undefined ? foundCartItem : false;
+
 };
 
 export const mutations = {
@@ -51,28 +47,29 @@ export const mutations = {
   setAuthorization(state, value) {
     state.authorized = value;
   },
-  addToCart(state, product) {
+  addToCart(state, cartItem) {
     /* if logged in, return */
     if (state.authorized) return;
 
     /* if cart empty or product doesnt exist in cart array , push item */
     if (state.cart.length === 0) {
-      state.cart.push(product);
+      state.cart.push(cartItem);
       return;
     }
 
     /* check if item already exists in cart */
-    let search = findProduct(state.cart, product);
+    let foundCartItem = findCartItem(state.cart, cartItem);
 
     /* if product found, add qty to existing qty */
-    if (search.foundProduct) { 
-        search.foundProduct.quantity += product.quantity
+    if (foundCartItem !== false) { 
+       foundCartItem.quantity += cartItem.quantity;
     }
-    else state.cart.push(product);
+    /* else just add it to the cart array */
+    else state.cart.push(cartItem);
   },
   updateQuantity(state, item) {
     /*  check if item is already present or not */
-    let search = findProduct(state.cart, item.product);
+    let search = findCartItem(state.cart, item.product);
     /* if yes, directly overwrite the qty */
     if (search.foundProduct) {
         search.foundProduct.quantity = parseInt(item.newQuantity);
@@ -81,7 +78,7 @@ export const mutations = {
   },
   removeFromCart(state, product) {
     /*  check if item is already present or not */
-    let search = findProduct(state.cart, product);
+    let search = findCartItem(state.cart, product);
     /* if yes, remove product from cart array */
     if (search.foundProduct) {
       /* remove item from the cart */
@@ -96,7 +93,7 @@ export const mutations = {
 
 export const getters = {
     alreadyInCart: (state) => (product) => {
-        return findProduct(state.cart, product);
+        return findCartItem(state.cart, product);
     },
     getCartProductIds(state) {
         if(state.cart.length === 0)

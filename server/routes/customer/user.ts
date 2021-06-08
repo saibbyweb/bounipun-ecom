@@ -209,14 +209,14 @@ router.post('/shiftCart', userAuth('customer'), async (req, res) => {
 router.post('/fetchCart', userAuth('customer'), async (req, res) => {
     const cart = req.body.user.cart;
     const cartItems = await userMethods.getCartItems(cart);
-    // console.log(cartItems);
-
     res.send(cartItems);
 });
 
 /* router fetch local cart */
 router.post('/fetchLocalCart', async(req,res) => {
-    console.log(req.body.cart);
+   const cart = req.body.cart;
+   const cartItems = await userMethods.getCartItems(cart);
+    res.send(cartItems);
 });
 
 router.post('/setCookie', (req, res) => {

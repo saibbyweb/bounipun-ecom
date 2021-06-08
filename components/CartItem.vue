@@ -27,9 +27,9 @@
 
       <!-- quantity picker -->
       <div class="quantity-picker">
-        <button @click.stop="updateQuantity(item, 'decrease')">-</button>
+        <button @click.stop="emitUpdateQuantity(item, 'decrease')">-</button>
         <button class="qty">{{ item.quantity }}</button>
-        <button @click.stop="updateQuantity(item, 'increase')">+</button>
+        <button @click.stop="emitUpdateQuantity(item, 'increase')">+</button>
       </div>
     </div>
     <!-- remove item -->
@@ -61,7 +61,11 @@ export default {
   },
   computed: {},
   mounted() {},
-  methods: {}
+  methods: {
+      emitUpdateQuantity(item, operation) {
+          this.$emit('updateQuantity', { item, operation })
+      }
+  }
 };
 </script>
 

@@ -483,7 +483,7 @@ export default {
 
       return product;
     },
-    newCartProduct() {
+    newCartItem() {
       return {
         product: this.product._id,
         colorCode: this.product.colors[this.activeColorIndex].code,
@@ -512,11 +512,11 @@ export default {
         console.log(this.newCartProduct);
       /* if already added, move to cart page */
       if (this.alreadyInCart) {
-        console.log("Aleady addeds, move to cart page");
+        console.log("Aleady added, move to cart page");
         this.$router.push("/cart");
         return;
       }
-      this.$store.commit("customer/addToCart", this.cartProduct);
+      this.$store.commit("customer/addToCart", this.newCartItem);
       this.$forceUpdate();
     },
     ifActiveColorInCategory(colors) {
