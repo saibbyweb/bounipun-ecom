@@ -4,6 +4,11 @@
       <h2 class="title">Shopping Bag</h2>
     </div>
 
+    <!-- remote cart items -->
+    <div class="cart-items">
+      <CartItem v-for="(item, index) in remoteCartItems" :item="item" :key="index"/>
+    </div>
+
     <!-- cart items -->
     <div class="cart-items">
       <!-- cart item -->
@@ -89,13 +94,16 @@ import colorPickerVue from "../components/admin/colors/colorPicker.vue";
 export default {
   data() {
     return {
-      cartDetails: []
+      cartDetails: [],
+      remoteCartItems: []
     };
   },
   mounted() {
     if (!this.$store.state.customer.persistedStateLoaded)
       setTimeout(() => this.fetchCartDetails(), 300);
     else this.fetchCartDetails();
+
+    this.fetchRemoteCart();
   },
   computed: {
     cartEmpty: function() {
@@ -106,6 +114,13 @@ export default {
     }
   },
   methods: {
+    async fetchRemoteCart() {
+      const cartItems = await this.$post('/fetchCart');
+      if(cartItems.resolved === false)
+        return;
+
+      this.remoteCartItems = cartItems.response;
+    },
     updateQuantity(item, operation) {
       switch (operation) {
         case "decrease":

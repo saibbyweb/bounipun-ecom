@@ -1,9 +1,9 @@
 <template>
-  <div @click="$router.push('/products?_id=' + item._id)">
+  <div @click="$router.push('/products?_id=' + item.productId)" class="cart-item">
     <!-- main image -->
     <div
       class="image-container"
-      :style="`background-image: url(${item.mainImage})`"
+      :style="`background-image: url(${$getImagePath(item.mainImage)})`"
     >
       <!-- <img :src="item.mainImage" /> -->
     </div>
@@ -11,15 +11,15 @@
     <!-- details and quantity -->
     <div class="details-and-quantity">
       <!-- name -->
-      <span class="name"> {{ item.name }} </span>
+      <span class="name"> {{ item.productName }} </span>
       <!-- color name -->
       <span class="color-name"> {{ item.colorName }} </span>
       <!-- collection -->
-      <span class="collection"> {{ item.collection }} </span>
+      <span class="collection"> {{ item.collectionName }} </span>
       <!-- variant -->
-      <span class="variant"> {{ item.variant }} </span>
+      <span class="variant"> {{ item.variantName }} </span>
       <!-- fabric -->
-      <span class="fabric"> {{ item.fabric }} </span>
+      <span class="fabric"> {{ item.fabricName }} </span>
       <!-- fabric info 1-->
       <span class="fabric"> {{ item.fabricInfo1 }} </span>
       <!-- price -->
@@ -45,14 +45,17 @@
 
 <script>
 export default {
+  props: {
+    item: Object
+  },
   data() {
     return {
       cartItem: {
-          product: {},
-          colorCode: '',
-          quantity: 0,
-          variant: {},
-          fabric: {}
+        product: {},
+        colorCode: "",
+        quantity: 0,
+        variant: {},
+        fabric: {}
       }
     };
   },
