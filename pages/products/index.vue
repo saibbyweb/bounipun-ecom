@@ -483,6 +483,17 @@ export default {
 
       return product;
     },
+    newCartProduct() {
+      return {
+        product: this.product._id,
+        colorCode: this.product.colors[this.activeColorIndex].code,
+        quantity: this.quantity,
+        variant: this.multiPriced ? this.variants[this.activeVariantIndex]._id : null,
+        fabric: this.multiPriced ? this.variants[this.activeVariantIndex].fabrics[
+            this.activeFabricIndex
+          ]._id : null
+      };
+    },
     alreadyInCart() {
       return this.$store.getters["customer/alreadyInCart"](this.cartProduct) ===
         false
@@ -498,6 +509,7 @@ export default {
       return;
     },
     addToCart() {
+        console.log(this.newCartProduct);
       /* if already added, move to cart page */
       if (this.alreadyInCart) {
         console.log("Aleady addeds, move to cart page");

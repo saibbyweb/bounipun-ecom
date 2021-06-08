@@ -6,7 +6,11 @@
 
     <!-- remote cart items -->
     <div class="cart-items">
-      <CartItem v-for="(item, index) in remoteCartItems" :item="item" :key="index"/>
+      <CartItem
+        v-for="(item, index) in remoteCartItems"
+        :item="item"
+        :key="index"
+      />
     </div>
 
     <!-- cart items -->
@@ -100,7 +104,10 @@ export default {
   },
   mounted() {
     if (!this.$store.state.customer.persistedStateLoaded)
-      setTimeout(() => this.fetchCartDetails(), 300);
+      setTimeout(() => {
+        this.fetchCartDetails();
+        this.fetchLocalCart();
+      }, 300);
     else this.fetchCartDetails();
 
     this.fetchRemoteCart();
@@ -115,11 +122,15 @@ export default {
   },
   methods: {
     async fetchRemoteCart() {
-      const cartItems = await this.$post('/fetchCart');
-      if(cartItems.resolved === false)
-        return;
+      const cartItems = await this.$post("/fetchCart");
+      if (cartItems.resolved === false) return;
 
       this.remoteCartItems = cartItems.response;
+    },
+    async fetchLocalCart() {
+      const cartItems = await this.$post("/fetchLocalCart", {
+        cart: this.$store.state.customer.cart
+      });
     },
     updateQuantity(item, operation) {
       switch (operation) {
