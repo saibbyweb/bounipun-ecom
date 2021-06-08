@@ -185,7 +185,8 @@ export const methods = {
                 fabricName: '',
                 fabricInfo1: '',
                 price: 0,
-                quantity: item.quantity
+                quantity: item.quantity,
+                cartEntry: item
             };
             /* find product */
             const product = allProducts.find(prod => {

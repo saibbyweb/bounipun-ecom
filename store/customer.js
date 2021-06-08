@@ -13,7 +13,7 @@ const findCartItem = (cart, cartItem) => {
   /* if cart empty */
   if (cart.length === 0) return false;
 
-  let foundCartItem = cart.find(item => {
+  let foundIndex = cart.findIndex(item => {
     /* common params to match */
     let paramsToBeMatched = item.product === cartItem.product && item.colorCode === cartItem.colorCode;
     
@@ -23,10 +23,12 @@ const findCartItem = (cart, cartItem) => {
     }
     return paramsToBeMatched;
   });
-
-  return foundCartItem !== undefined ? foundCartItem : false;
+  
+  return foundIndex !== -1 ? { foundCartItem : cart[foundIndex], foundIndex }: false
 
 };
+
+
 
 export const mutations = {
     /* load state from local storage */
@@ -58,29 +60,28 @@ export const mutations = {
     }
 
     /* check if item already exists in cart */
-    let foundCartItem = findCartItem(state.cart, cartItem);
+    let search = findCartItem(state.cart, cartItem);
 
     /* if product found, add qty to existing qty */
-    if (foundCartItem !== false) { 
-       foundCartItem.quantity += cartItem.quantity;
+    if (search !== false) { 
+       search.foundCartItem.quantity += cartItem.quantity;
     }
     /* else just add it to the cart array */
     else state.cart.push(cartItem);
   },
-  updateQuantity(state, item) {
+  updateQuantity(state, cartItem) {
     /*  check if item is already present or not */
-    let search = findCartItem(state.cart, item.product);
+    let search = findCartItem(state.cart, cartItem);
     /* if yes, directly overwrite the qty */
-    if (search.foundProduct) {
-        search.foundProduct.quantity = parseInt(item.newQuantity);
-        console.log(search.foundProduct);
+    if (search !== false) {
+        search.foundCartItem.quantity = parseInt(cartItem.quantity);
     }
   },
-  removeFromCart(state, product) {
+  removeFromCart(state, cartItem) {
     /*  check if item is already present or not */
-    let search = findCartItem(state.cart, product);
+    let search = findCartItem(state.cart, cartItem);
     /* if yes, remove product from cart array */
-    if (search.foundProduct) {
+    if (search !== false) {
       /* remove item from the cart */
       state.cart.splice(search.foundIndex, 1);
     }

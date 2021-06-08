@@ -34,7 +34,7 @@
     </div>
     <!-- remove item -->
     <img
-      @click="removeFromCart(item.product)"
+      @click.stop="emitRemoveFromCart(item)"
       class="remove-item"
       src="/icons/dark/remove-cart-item.png"
     />
@@ -63,7 +63,10 @@ export default {
   mounted() {},
   methods: {
       emitUpdateQuantity(item, operation) {
-          this.$emit('updateQuantity', { item, operation })
+          this.$emit('updateQuantity', { item: item.cartEntry, operation })
+      },
+      emitRemoveFromCart(item) {
+          this.$emit('removeItem', item.cartEntry);
       }
   }
 };

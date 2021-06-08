@@ -58,7 +58,7 @@ export default {
     }
   },
   mounted() {
-    console.log('mounted')
+    console.log("mounted");
     setTimeout(() => {
       this.fetchCart();
     }, 300);
@@ -85,32 +85,31 @@ export default {
       this.remoteCartItems = cartItems.response;
     },
     updateQuantity(payload) {
-      const {item, operation} = payload;
+      const { item, operation } = payload;
       switch (operation) {
         case "decrease":
           if (item.quantity > 1) item.quantity--;
+          else return;
           break;
         case "increase":
           if (item.quantity < 3) item.quantity++;
+          else return;
           break;
       }
 
       console.log(payload);
 
-      // this.quantityUpdated(item.product, item.quantity);
+      if (!this.$store.state.customer.authorized) {
+        this.$store.commit("customer/updateQuantity", item);
+      }
 
+      this.fetchCart();
     },
-    removeItem() {
-
-    },
-    quantityUpdated(product, newQuantity) {
-      this.$store.commit("customer/updateQuantity", {
-        product,
-        newQuantity
-      });
-    },
-    removeFromCart(product) {
-      this.$store.commit("customer/removeFromCart", product);
+    removeItem(cartItem) {
+      /* for guests */
+      if (!this.$store.state.customer.authorized) {
+        this.$store.commit("customer/removeFromCart", cartItem);
+      }
       this.fetchCart();
     }
   }
