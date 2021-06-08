@@ -460,42 +460,23 @@ export default {
       if (this.product.colors.length === 0) return "";
       return this.product.colors[this.activeColorIndex].disclaimer;
     },
-    cartProduct() {
-      /* type, availability, product id, color code, variant id, fabric id */
-      let product = {
-        _id: this.product._id,
-        type: this.product.type,
-        availabilityType: this.product.availabilityType,
-        colorCode: this.product.colors[this.activeColorIndex].code,
-        quantity: this.quantity
-      };
-
-      /* add extra params if */
-      if (this.multiPriced) {
-        product = {
-          ...product,
-          variantId: this.variants[this.activeVariantIndex]._id,
-          fabricId: this.variants[this.activeVariantIndex].fabrics[
-            this.activeFabricIndex
-          ]._id
-        };
-      }
-
-      return product;
-    },
     newCartItem() {
       return {
         product: this.product._id,
         colorCode: this.product.colors[this.activeColorIndex].code,
         quantity: this.quantity,
-        variant: this.multiPriced ? this.variants[this.activeVariantIndex]._id : null,
-        fabric: this.multiPriced ? this.variants[this.activeVariantIndex].fabrics[
-            this.activeFabricIndex
-          ]._id : null
+        variant: this.multiPriced
+          ? this.variants[this.activeVariantIndex]._id
+          : null,
+        fabric: this.multiPriced
+          ? this.variants[this.activeVariantIndex].fabrics[
+              this.activeFabricIndex
+            ]._id
+          : null
       };
     },
     alreadyInCart() {
-      return this.$store.getters["customer/alreadyInCart"](this.cartProduct) ===
+      return this.$store.getters["customer/alreadyInCart"](this.newCartItem) ===
         false
         ? false
         : true;
@@ -508,15 +489,27 @@ export default {
       this.sticky = window.scrollY > 25;
       return;
     },
-    addToCart() {
-        console.log(this.newCartProduct);
-      /* if already added, move to cart page */
-      if (this.alreadyInCart) {
-        console.log("Aleady added, move to cart page");
-        this.$router.push("/cart");
+    async addToCart() {
+      if (!this.$store.state.customer.authorized) {
+        /* if already added, move to cart page */
+        if (this.alreadyInCart) {
+          this.$router.push("/cart");
+          return;
+        }
+        this.$store.commit("customer/addToCart", this.newCartItem);
+      }
+
+      /* take cart item to server */
+      const remoteAddToCart = await this.$post('/cartActions', {
+          action: 'add-to-cart',
+          cartItem: this.newCartItem
+      });
+        
+      /* remote add to cart */
+      if(remoteAddToCart.resolved === false) {
         return;
       }
-      this.$store.commit("customer/addToCart", this.newCartItem);
+
       this.$forceUpdate();
     },
     ifActiveColorInCategory(colors) {

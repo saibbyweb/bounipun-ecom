@@ -55,7 +55,10 @@ export default {
     },
     computed: {
         cartCount() {
-            return this.$store.state.customer.cart.length
+            if(!this.$store.state.customer.authorized) {
+                return this.$store.state.customer.cart.length
+            }
+            return 0;
         }
     },
     watch: {

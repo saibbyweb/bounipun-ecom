@@ -213,10 +213,39 @@ router.post('/fetchCart', userAuth('customer'), async (req, res) => {
 });
 
 /* router fetch local cart */
-router.post('/fetchLocalCart', async(req,res) => {
-   const cart = req.body.cart;
-   const cartItems = await userMethods.getCartItems(cart);
+router.post('/fetchLocalCart', async (req, res) => {
+    const cart = req.body.cart;
+    const cartItems = await userMethods.getCartItems(cart);
     res.send(cartItems);
+});
+
+/* cart actions */
+router.post('/cartActions', userAuth('customer'), async (req, res) => {
+    const { user, action, cartItem } = req.body;
+    const { cart } = user;
+
+    switch (action) {
+        case 'add-to-cart':
+            /* if cart is empty, directly push the item */
+            if (cart.length === 0 || cart === undefined)
+                cart.push(cartItem);
+            /* check if item already exists in cart */
+            let search = userMethods.findCartItem(cart, cartItem);
+            /* if product found, add qty to existing qty */
+            if (search !== false)
+                search.foundCartItem.quantity += cartItem.quantity;
+            /* else just add it to the cart array */
+            else cart.push(cartItem);
+            break;
+    }
+
+    console.log(cart);
+
+    /* save cart back to database */
+    await db.model('users').findOneAndUpdate({ _id: user._id }, { cart })
+
+    res.send('broo')
+
 });
 
 router.post('/setCookie', (req, res) => {

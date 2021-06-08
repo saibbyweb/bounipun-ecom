@@ -257,6 +257,24 @@ export const methods = {
         });
 
         return cartItems;
+    },
+    /* find cartItem helper  */
+    findCartItem(cart, cartItem) {
+        /* if cart empty */
+        if (cart.length === 0) return false;
+
+        let foundIndex = cart.findIndex(item => {
+            /* common params to match */
+            let paramsToBeMatched = item.product.toString() === cartItem.product.toString() && item.colorCode === cartItem.colorCode;
+
+            /* TODO: (inventory can change) if variant and fabrics are present, match them as well */
+            if (cartItem.variant !== null && cartItem.fabric !== null) {
+                paramsToBeMatched = paramsToBeMatched && item.variant.toString() === cartItem.variant.toString() && item.fabric.toString() === cartItem.fabric.toString();
+            }
+            return paramsToBeMatched;
+        });
+
+        return foundIndex !== -1 ? { foundCartItem: cart[foundIndex], foundIndex } : false
     }
 }
 

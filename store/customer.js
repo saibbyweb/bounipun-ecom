@@ -93,8 +93,8 @@ export const mutations = {
 };
 
 export const getters = {
-    alreadyInCart: (state) => (product) => {
-        return findCartItem(state.cart, product);
+    alreadyInCart: (state) => (cartItem) => {
+        return findCartItem(state.cart, cartItem) !== false;
     },
     getCartProductIds(state) {
         if(state.cart.length === 0)
