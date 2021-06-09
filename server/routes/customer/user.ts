@@ -320,6 +320,19 @@ router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
     res.send(profile);
 });
 
+/* update profile */
+router.post('/updateProfile', userAuth('customer'), async(req,res) => {
+    const { user, profile } = req.body;
+
+    const profileUpdate = await db.model('users').findOneAndUpdate({_id: user._id}, {
+        firstName: profile.firstName,
+        surName: profile.surName,
+        profession: profile.profession
+    });
+
+    res.send('done');
+});
+
 router.post('/setCookie', (req, res) => {
 
     console.log(req.headers);

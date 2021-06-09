@@ -1,22 +1,30 @@
 <template>
-<div class="profile-details page">
-
+  <div class="profile-details page">
     <div class="page-header center-col">
-        <h2 class="title"> Profile Details </h2>
+      <h2 class="title">Profile Details</h2>
     </div>
 
     <!-- actual details -->
     <div class="details">
-        <InputCredential label="Name" v-model="profile.name" />
-        <InputCredential label="Phone Number" v-model="profile.phoneNumber" :disabled="true" />
-        <InputCredential label="email" v-model="profile.email" />
-        <InputCredential label="profession" v-model="profile.profession" />
-        <button class="action" @click="updateProfile"> Update Profile </button>
+        <!-- first name -->
+      <InputCredential label="First Name" v-model="profile.firstName" />
+      <!-- sur name -->
+      <InputCredential label="Sur Name" v-model="profile.surName" />
+      <!-- phone number -->
+      <InputCredential
+        label="Phone Number"
+        v-model="profile.phoneNumber"
+        :disabled="true"
+      />
+      <!-- country -->
+      <InputCredential label="country" v-model="profile.countryIsoCode" :disabled="true"/>
+      <!-- profession -->
+      <InputCredential label="profession" v-model="profile.profession" />
+      <button class="action" @click="updateProfile">Update Profile</button>
     </div>
 
     <Toast :show="updated" msg="Profile Updated" />
-
-</div>
+  </div>
 </template>
 
 <script>
@@ -24,18 +32,41 @@ export default {
     data() {
         return {
             profile: {
-                name: "Suhaib Khan",
-                email: "hello@saibbyweb.com",
-                phoneNumber: "+91-9906697711",
-                profession: "Bank"
+                firstName: "",
+                surName: '',
+                phoneNumber: "",
+                countryIsoCode: "",
+                profession: ""
             },
             updated: false
         }
+    },
+    mounted() {
+        this.fetchProfile();
     },
     methods: {
         updateProfile() {
             this.updated = true;
             setTimeout(() => this.updated = false, 3000);
+        },
+        async fetchProfile() {
+            const {
+                response,
+                resolved
+            } = await this.$post("/fetchProfile");
+
+            if (resolved === false) {
+                return;
+            }
+
+            let profile = response;
+            profile.phoneNumber = profile.countryDialCode + profile.phoneNumber;
+            this.profile = profile;
+        },
+        async updateProfile() {
+            await this.$post('/updateProfile', { profile: this.profile });
+            this.updated = true;
+            setTimeout(() => this.updated = false, 1500);
         }
     }
 }
