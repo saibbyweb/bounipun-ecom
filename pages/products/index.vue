@@ -112,6 +112,8 @@
                 </button>
                 <button class="arrow">></button>
               </div>
+                <span style="font-size: 9px;">
+              Standard Shipping: 4 weeks </span>
             </div>
           </div>
         </div>

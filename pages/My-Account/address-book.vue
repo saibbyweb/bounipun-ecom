@@ -79,6 +79,7 @@ export default {
     },
     methods: {
         selectAddress(address) {
+            return;
             this.activeAddressId = address._id;
             this.activeAddress = address;
             this.updating = true;

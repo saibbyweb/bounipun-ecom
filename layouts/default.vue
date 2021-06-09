@@ -39,7 +39,10 @@ export default {
       );
     });
 
-    setTimeout(() => this.fetchCart(), 300)
+    setTimeout(() => {
+        this.fetchCart()
+        this.fetchProfile();
+    }, 300)
   },
   data() {
     return {
@@ -65,6 +68,14 @@ export default {
       /* setting global remote cart */
       console.log('we are here..')
       this.$store.commit('customer/setGlobalRemoteCart', cartItems.response);
+    },
+    async fetchProfile() {
+       const { response, resolved } = await this.$post('/fetchProfile');
+       if(resolved === false)
+        return;
+
+        this.$store.commit('customer/setUser', response)
+    
     }
   }
 };

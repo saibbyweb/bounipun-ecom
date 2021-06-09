@@ -471,8 +471,10 @@ export default {
         width: 50%;
         font-size: 13px;
         color: $dark_gray;
-        background-color: white;
-        border: 1px solid #a8a8a8;
+        // background-color: white;
+        background-color: #bfbfbf80;
+        color: rgb(123, 123, 123);
+        // border: 1px solid #a8a8a8;
 
         &:hover {
 

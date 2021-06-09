@@ -248,18 +248,24 @@ export default {
         bottom: 0;
         left: 0;
         width: 100%;
+        margin: -1%;
 
         .dot {
-            height: 4px;
-            width: 13px;
+            height: 2px;
+            width: 19px;
             // border-radius: 50%;
-            background-color: #ffffff;
-            margin: 0 5px 5px 5px;
-            border: 1px solid rgb(106, 106, 106);
+            background-color: #ffffffba;
+
+            // border:1px solid #6a6a6a;
+            margin: 0 0 5px;
+            transition: all 0.3s ease-in-out;
+            // border: 1px solid rgb(106, 106, 106);
 
 
             &.active {
-                background-color: $dark_gray;
+                // background-color: $dark_gray;
+                background-color: #7d7d7d;
+
             }
         }
     }

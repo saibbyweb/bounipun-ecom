@@ -50,6 +50,9 @@ export const mutations = {
   setAuthorization(state, value) {
     state.authorized = value;
   },
+  setUser(state, user) {
+    state.user = user;
+  },
   addToCart(state, cartItem) {
     /* if logged in, return */
     if (state.authorized) return;

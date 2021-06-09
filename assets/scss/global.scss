@@ -15,7 +15,8 @@ $font_2_bold: "SF-Pro Bold";
 $font_3: "Garamond";
 $font_3_bold: "Garamond-Bold";
 
-$font_4: "Charmonman";
+// $font_4: "Charmonman";
+$font_4: "DancingScript-Regular";
 $font_4_bold: "Charmonman-Bold";
 
 @font-face {
@@ -91,6 +92,17 @@ $font_4_bold: "Charmonman-Bold";
   font-display: swap;
   src: url("~assets/fonts/Charmonman/Charmonman-Regular.ttf") format("truetype");
 }
+
+/* dancing script */
+@font-face {
+  font-family: "DancingScript-Regular";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("~assets/fonts/DancingScript-Regular.ttf") format("truetype");
+}
+
+
 
 body {
   margin: 0 !important;
