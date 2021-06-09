@@ -46,14 +46,24 @@
           :class="{ active: isActiveBaseColor(index) }"
         ></div>
       </div>
+
       <!-- additional colors -->
-      <span class="additional-colors">
+      <span v-if="!readyToShip" class="additional-colors">
         {{
           baseColorImagesPreview.additional > 0
             ? `+ ${baseColorImagesPreview.additional} color(s)`
             : "&nbsp;"
         }}
       </span>
+
+      <!-- ready to ship -->
+      <span v-if="readyToShip" class="additional-colors">
+              {{
+            readyToShip ? 'Ready To Ship' : ''
+        }}
+      </span>
+
+
     </div>
 
     <!-- text details -->

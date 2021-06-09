@@ -201,7 +201,7 @@ export default {
 }
 
 .main-text-block {
-    margin-top:20px;
+    // margin-top:20px;
     padding: 5%;
 
     .text-1 {
@@ -227,7 +227,7 @@ export default {
 .collection-items {
     display: flex;
     flex-wrap: wrap;
-    margin-top: 10vw;
+    // margin-top: 10vw;
     justify-content: center;
 }
 
