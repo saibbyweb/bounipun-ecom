@@ -267,16 +267,16 @@ router.post('/cartActions', userAuth('customer'), async (req, res) => {
 });
 
 /* checkout */
-router.post('/orderCheckout', userAuth('customer'), async(req, res) => {
-    let response = { resolved: false, message: ''}
+router.post('/orderCheckout', userAuth('customer'), async (req, res) => {
+    let response = { resolved: false, message: '' }
     const { user, orderCartItems, deliveryAddress, amountToBeCharged } = req.body;
     // console.log(orderCartItems);
     /* TODO: to be supa sure, i can match the received cart items to the one in the db */
     const cartItems = await userMethods.getCartItems(user.cart);
     const cartTotal = sumBy(cartItems, item => item.price * item.quantity);
-    
+
     /* if amount doesn't match */
-    if(cartTotal !== amountToBeCharged) {
+    if (cartTotal !== amountToBeCharged) {
         console.log('Amount doesnt match');
         res.send(response);
         return;
@@ -291,24 +291,33 @@ router.post('/orderCheckout', userAuth('customer'), async(req, res) => {
         transactionId: '',
         amount: amountToBeCharged,
         deliveryAddress,
-        status: 'pending',
-        items: cartItems,
+        items: cartItems.map(item => ({ ...item, status: 'pending', trackingId: '', trackingUrl: '', delivered: '' })),
+        status: 'pending'
     }
 
     // console.log(deliveryAddress);
     // console.log(orderDetails);
     const ordersCollection = db.model('orders');
-    
+
     /* save order details to database */
     const orderSaved = await new ordersCollection(orderDetails).save();
     /* save order id to user account */
-    const userOrdersUpdated = await db.model('users').findOneAndUpdate({_id: user._id}, { $push: { orders: orderSaved._id}});
+    const userOrdersUpdated = await db.model('users').findOneAndUpdate({ _id: user._id }, { $push: { orders: orderSaved._id } });
 
     console.log(userOrdersUpdated);
 
     response.resolved = true;
 
     res.send(response);
+});
+
+/* fetch customer profile */
+router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
+    const { user } = req.body;
+
+    const profile = await db.model('users').findOne({ _id: user._id }).populate('orders');
+    // console.log(profile);
+    res.send(profile);
 });
 
 router.post('/setCookie', (req, res) => {

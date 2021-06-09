@@ -7,8 +7,9 @@ const schema = new mongoose.Schema({
     transactionId: String,
     amount: String,
     deliveryAddress: Object,
-    status: String,
     items: Array,
+    /* all four field below are sub-orders as well */
+    status: String,
     delivered: Date,
     trackingId: String,
     trackingUrl: String
