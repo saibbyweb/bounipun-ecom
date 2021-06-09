@@ -10,10 +10,44 @@
         <!-- status bar -->
         <div class="status-bar">
           <!-- status -->
-          <span class="status"> {{ subOrder.status }} </span>
+          <span class="status"> Order Status: {{ subOrder.status }} </span>
           <!-- icon -->
           <img class="arrow" src="/icons/account/arrow-white.png" />
         </div>
+
+    <!-- order details -->
+      <div class="details">
+        <!-- product image -->
+        <div class="image-box" :style="`background-image: url(${$getImagePath(subOrder.mainImage)})`"></div>
+        <!-- text details -->
+        <div class="text-details">
+          <span class="name"> {{ subOrder.productName }} </span>
+          <span class="collection"> {{ subOrder.collectionName }} </span>
+          <span class="fabric"> Fabric: {{ subOrder.fabricName }} </span>
+          <span class="fabric"> {{ subOrder.fabricInfo1 }} </span>
+          <span class="quantity"> Quantity: {{ subOrder.quantity }} </span>
+          <span class="price">
+            Amount Paid: <b> INR {{ subOrder.quantity * subOrder.price }} </b>
+          </span>
+        </div>
+      </div>
+
+      <!-- divider -->
+      <div class="divider"></div>
+
+      <!-- actions -->
+      <div class="actions">
+        <!-- pre delivery -->
+        <div class="pre-delivery">
+          <button>Track</button>
+          <button :disabled="true">Cancel</button>
+          <button>Help</button>
+        </div>
+        <!-- post delivery -->
+        <div class="post-delivery">
+          <!-- rate product -->
+        </div>
+      </div>
       </div>
     </div>
 
@@ -66,30 +100,6 @@
 export default {
   data() {
     return {
-      ordersx: [
-        {
-          product: "auto_2",
-          status: "Order Confirmed",
-          productName: "Khatamband Cashmere Stole",
-          collection: "Bounipun Autograph",
-          fabric: "100% Cashmere - Luxe Weight",
-          quantity: "2",
-          price: "899.00",
-          currency: "$",
-          rating: "0"
-        },
-        {
-          product: "kara_2",
-          status: "Shipped",
-          productName: "Kani Shawl",
-          collection: "Bounipun Escape",
-          fabric: "80% Wool - Feather Weight",
-          quantity: "1",
-          price: "249.00",
-          currency: "$",
-          rating: "0"
-        }
-      ],
       orders: []
     };
   },
@@ -98,23 +108,14 @@ export default {
   },
   methods: {
     async fetchOrders() {
-      const profile = await this.$post("/fetchProfile");
-      if (profile.resolved === false) {
+      const { response, resolved } = await this.$post("/fetchProfile");
+
+      if (resolved === false) {
         return;
       }
 
-      const orders = profile.orders;
+      const orders = response.orders;
       this.orders = orders;
-    },
-    imagePath(product) {
-      const param = product;
-      const prod = param.split("_");
-      const collection = prod[0];
-      const prodId = prod[1];
-      const path = `/demo_images/products/${collection}/${collection}_prod${prodId}_1.png`;
-      return {
-        backgroundImage: `url(${path})`
-      };
     }
   }
 };
@@ -126,6 +127,7 @@ export default {
     width: 100%;
     box-shadow: 1px 1px 15px rgba(51, 51, 51, 0.16);
     margin: 20px 0;
+    // height:40vh;
 
     /* status bar */
     .status-bar {
@@ -140,6 +142,7 @@ export default {
       .status {
         color: white;
         font-size: 12px;
+        text-transform: capitalize;
       }
 
       /* icon */
@@ -168,6 +171,7 @@ export default {
         display: flex;
         justify-content: center;
         flex-direction: column;
+        padding-top:10px;
 
         span {
           font-size: 10px;
