@@ -272,28 +272,47 @@ router.post('/updateOrder', async (req, res) => {
 });
 
 /* update order item details */
-router.post('/updateOrderItemDetails', async(req, res) => {
+router.post('/updateOrderItemDetails', async (req, res) => {
     console.log('req received:')
     console.log(req.body);
     const { orderId, subOrderId, status, trackingId, trackingUrl } = req.body;
-    const filter = {_id: orderId, 'items._id': mongoose.Types.ObjectId(subOrderId)};
-    // console.log(await db.model('orders').find(filter));
+    const filter = { _id: orderId, 'items._id': mongoose.Types.ObjectId(subOrderId) };
 
-    await db.model('orders').findOneAndUpdate(filter, {
-            $set: {
-                "items.$.status": status,
-                "items.$.trackingId": trackingId,
-                "items.$.trackingUrl": trackingUrl
-            },
+    /* update order with new details */
+    const originalOrder: any = await db.model('orders').findOneAndUpdate(filter, {
+        $set: {
+            "items.$.status": status,
+            "items.$.trackingId": trackingId,
+            "items.$.trackingUrl": trackingUrl
+        }
+    });
+
+    // console.log(originalOrder);
+
+    /* find sub-order */
+    let subOrder = originalOrder.items.find(item => item._id.toString() === subOrderId.toString());
+
+    /* if sub order status changed, update timeline */
+    if (subOrder.status !== status) {
+        await db.model('orders').findOneAndUpdate(filter, {
             $push: {
                 "items.$.timeline": {
                     status,
                     updatedAt: new Date()
                 }
             }
-    });
+        });
+        
+        /* if delivered */
+        if (status === 'delivered') {
+            await db.model('orders').findOneAndUpdate(filter, {
+                $set: {
+                    "items.$.delivered": new Date()
+                }
+            })
+        }
+    }
 
-    /* update timeline */
     /* if status set to delivered, set delivery timestamp */
 
 

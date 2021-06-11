@@ -194,8 +194,12 @@ export default (context, inject) => {
   /* request */
   const httpPostRequest = async (endpoint, payload) => {
     const request = context.$axios.$post(endpoint, payload);
+    $store.commit("customer/setLoading", true);
+    $store.commit("admin/setLoading", true);
     /* wait for request to complete */
     const { response, error } = await task(request);
+    $store.commit("customer/setLoading", false);
+    $store.commit("admin/setLoading", false);
     /* if error occurred */
     if (error || response.resolved === false) {
       if(response.resolved === false) {

@@ -55,6 +55,8 @@
       />
 
       <button class="update" @click="updateOrder">Update Order</button>
+
+      <Toast :show="updated" msg="Order Updated" />
     </div>
   </div>
 </template>
@@ -94,20 +96,28 @@ export default {
           name: "Delivered",
           value: "delivered"
         }
-      ]
+      ],
+      updated: false
     };
   },
-  computed: {},
-  mounted() {},
   methods: {
     async updateOrder() {
-        await this.$post('/updateOrderItemDetails', {
+        const pushUpdate = await this.$post('/updateOrderItemDetails', {
             orderId: this.orderId,
             subOrderId: this.item._id,
             status: this.localItem.status,
             trackingId: this.localItem.trackingId,
             trackingUrl: this.localItem.trackingUrl
         });
+
+        /* if request not resolved */
+        if(pushUpdate.resolved === false) {
+             return;
+        }
+
+        this.updated = true;
+        setTimeout(() => this.updated = false, 1300)
+        
     }
   }
 };

@@ -20,7 +20,7 @@ export default {
 <style lang="scss" scoped>
 .response {
     position:relative;
-    height:20vw;
+    height:2vw;
     width:100%;
 }
 
