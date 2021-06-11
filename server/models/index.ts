@@ -15,6 +15,7 @@ import homepage from "./homepage";
 import user from "./user";
 import session from "./session";
 import order from "./order";
+import payment from "./payment";
 
 const register = function () {
     fabric.methods.register();
@@ -33,6 +34,7 @@ const register = function () {
     user.methods.registerModel();
     session.methods.register();
     order.methods.register();
+    payment.methods.register();
 }
 
-export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage,user, session, order, register };
+export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage,user, session, order, payment, register };
