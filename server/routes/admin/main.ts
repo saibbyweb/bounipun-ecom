@@ -2,7 +2,6 @@ import { server, db, mongoose } from "@helpers/essentials";
 import admin from "@helpers/admin";
 import { uploader, methods as imageHelper } from "@models/imageUpload";
 import { register } from "@models";
-import { modelNames } from "mongoose";
 register();
 
 /* creating express router */

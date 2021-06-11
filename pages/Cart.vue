@@ -7,7 +7,7 @@
     <!-- cart items -->
     <div class="cart-items">
       <CartItem
-        v-for="(item, index) in remoteCartItems"
+        v-for="(item, index) in $store.state.customer.globalRemoteCart"
         :item="item"
         :key="index"
         @updateQuantity="updateQuantity"
@@ -49,8 +49,8 @@ export default {
   data() {
     return {
       cartDetails: [],
-      remoteCartItems: []
-    };
+      remoteCartItems: this.$store.state.customer.globalRemoteCart
+    }
   },
   watch: {
     $route(newVal) {
@@ -60,7 +60,7 @@ export default {
   mounted() {
     console.log("mounted");
     setTimeout(() => {
-      this.fetchCart();
+      this.$store.dispatch('customer/fetchCart');
     }, 300);
   },
   computed: {
@@ -72,21 +72,6 @@ export default {
     }
   },
   methods: {
-    async fetchCart() {
-      const endPoint = this.$store.state.customer.authorized
-        ? "/fetchCart"
-        : "/fetchLocalCart";
-
-      const cartItems = await this.$post(endPoint, {
-        cart: this.$store.state.customer.cart
-      });
-
-      if (cartItems.resolved === false) return;
-      this.remoteCartItems = cartItems.response;
-      /* save it globally */
-      this.$store.commit('customer/setGlobalRemoteCart', cartItems.response);
-
-    },
     async updateQuantity(payload) {
       const { item: vuexItem, operation } = payload;
       let item = {...vuexItem}
@@ -112,7 +97,8 @@ export default {
           cartItem: item
         })
 
-      this.fetchCart();
+      await this.$store.dispatch('customer/fetchCart');
+      this.$forceUpdate();
     },
     async removeItem(cartItem) {
       /* for guests */
@@ -124,7 +110,8 @@ export default {
         action: 'remove-from-cart',
         cartItem
       })
-      this.fetchCart();
+      
+      await this.$store.dispatch('customer/fetchCart');
     }
   }
 };

@@ -81,7 +81,7 @@ export default {
       deliveryAddress: demoDeliveryAddress,
     //   deliveryAddress: this.$route.params.deliveryAddress,
       remoteCartItems: this.$store.state.customer.globalRemoteCart
-    };
+    }
   },
   computed: {
     cartEmpty: function() {

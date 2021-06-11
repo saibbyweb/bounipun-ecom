@@ -5,6 +5,9 @@ export default {
     htmlAttrs: {
       lang: "en"
     },
+    script: [
+      { src: 'https://checkout.razorpay.com/v1/checkout.js' },
+    ],
     meta: [
       { charset: "utf-8" },
       {

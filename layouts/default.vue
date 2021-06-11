@@ -16,7 +16,7 @@
       :class="{ visible: searchOpen }"
       @closeSearch="searchOpen = false"
     />
-    <Nuxt @cartUpdated="fetchCart" />
+    <Nuxt />
     <BounipunFooter />
   </div>
 </template>
@@ -40,9 +40,10 @@ export default {
     });
 
     setTimeout(() => {
-        this.fetchCart()
+        // this.fetchCart()
+        this.$store.dispatch('customer/fetchCart');
         this.fetchProfile();
-    }, 300)
+    }, 400)
   },
   data() {
     return {
@@ -54,20 +55,6 @@ export default {
   methods: {
     doThis() {
       console.log("yo bro");
-    },
-    async fetchCart() {
-      const endPoint = this.$store.state.customer.authorized
-        ? "/fetchCart"
-        : "/fetchLocalCart";
-
-      const cartItems = await this.$post(endPoint, {
-        cart: this.$store.state.customer.cart
-      });
-
-      if (cartItems.resolved === false) return;
-      /* setting global remote cart */
-      console.log('we are here..')
-      this.$store.commit('customer/setGlobalRemoteCart', cartItems.response);
     },
     async fetchProfile() {
        const { response, resolved } = await this.$post('/fetchProfile');

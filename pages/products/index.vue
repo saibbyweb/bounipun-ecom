@@ -499,7 +499,7 @@ export default {
           return;
         }
         this.$store.commit("customer/addToCart", this.newCartItem);
-
+        return;
       }
 
       /* take cart item to server */
@@ -514,7 +514,7 @@ export default {
       }
       
       /* TODO: need to refetch again */
-
+      await this.$store.dispatch('customer/fetchCart');
       this.$forceUpdate();
     },
     ifActiveColorInCategory(colors) {

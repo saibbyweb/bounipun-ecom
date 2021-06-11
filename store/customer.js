@@ -16,32 +16,40 @@ const findCartItem = (cart, cartItem) => {
 
   let foundIndex = cart.findIndex(item => {
     /* common params to match */
-    let paramsToBeMatched = item.product === cartItem.product && item.colorCode === cartItem.colorCode;
-    
+    let paramsToBeMatched =
+      item.product === cartItem.product &&
+      item.colorCode === cartItem.colorCode;
+
     /* TODO: (inventory can change) if variant and fabrics are present, match them as well */
-    if(cartItem.variant !== null && cartItem.fabric !== null) {
-        paramsToBeMatched = paramsToBeMatched && item.variant === cartItem.variant && item.fabric === cartItem.fabric;
+    if (cartItem.variant !== null && cartItem.fabric !== null) {
+      paramsToBeMatched =
+        paramsToBeMatched &&
+        item.variant === cartItem.variant &&
+        item.fabric === cartItem.fabric;
     }
     return paramsToBeMatched;
   });
-  
-  return foundIndex !== -1 ? { foundCartItem : cart[foundIndex], foundIndex }: false
 
+  return foundIndex !== -1
+    ? { foundCartItem: cart[foundIndex], foundIndex }
+    : false;
 };
 
-
-
 export const mutations = {
-    /* load state from local storage */
+  /* load state from local storage */
   loadPersistedState(state) {
-      const persistedState = window.localStorage.getItem('persistedState');
-      if(persistedState) {
-          Object.assign(state, JSON.parse(persistedState))
-      }
+    let persistedState = window.localStorage.getItem("persistedState");
 
-      /* check for session cookie */
-      state.authorized = cookies.get('swecom_bounipun') !== undefined;
-      state.persistedStateLoaded = true;
+    if (persistedState) {
+      /* clear global cart */
+      persistedState = JSON.parse(persistedState);
+      persistedState.globalRemoteCart = [];
+      Object.assign(state, persistedState);
+    }
+
+    /* check for session cookie */
+    state.authorized = cookies.get("swecom_bounipun") !== undefined;
+    state.persistedStateLoaded = true;
   },
   setLoading(state, value) {
     state.loading = value;
@@ -67,18 +75,17 @@ export const mutations = {
     let search = findCartItem(state.cart, cartItem);
 
     /* if product found, add qty to existing qty */
-    if (search !== false) { 
-       search.foundCartItem.quantity += cartItem.quantity;
-    }
+    if (search !== false) {
+      search.foundCartItem.quantity += cartItem.quantity;
+    } else state.cart.push(cartItem);
     /* else just add it to the cart array */
-    else state.cart.push(cartItem);
   },
   updateQuantity(state, cartItem) {
     /*  check if item is already present or not */
     let search = findCartItem(state.cart, cartItem);
     /* if yes, directly overwrite the qty */
     if (search !== false) {
-        search.foundCartItem.quantity = parseInt(cartItem.quantity);
+      search.foundCartItem.quantity = parseInt(cartItem.quantity);
     }
   },
   removeFromCart(state, cartItem) {
@@ -92,23 +99,37 @@ export const mutations = {
   },
   clearCart(state) {
     /* clear cart array directly */
-    state.cart = []
+    state.cart = [];
   },
   setGlobalRemoteCart(state, cart) {
-      state.globalRemoteCart = cart;
+    state.globalRemoteCart = cart;
+
   }
 };
 
 export const getters = {
-    alreadyInCart: (state) => (cartItem) => {
-        return findCartItem(state.cart, cartItem) !== false;
-    },
-    cartCount: (state) => () => {
-      return state.globalRemoteCart.length;
-    },
-    getCartProductIds(state) {
-        if(state.cart.length === 0)
-            return false;
-        return [...new Set(state.cart.map(product => product._id))]
-    }
-}
+  alreadyInCart: state => cartItem => {
+    return findCartItem(state.cart, cartItem) !== false;
+  },
+  cartCount: state => () => {
+    return state.globalRemoteCart.length;
+  },
+  getCartProductIds(state) {
+    if (state.cart.length === 0) return false;
+    return [...new Set(state.cart.map(product => product._id))];
+  }
+};
+
+export const actions = {
+  async fetchCart({ state, commit }) {
+    const endPoint = state.authorized ? "/fetchCart" : "/fetchLocalCart";
+
+    const cartItems = await this.$post(endPoint, {
+      cart: state.cart
+    });
+
+    if (cartItems.resolved === false) return;
+ 
+    commit('setGlobalRemoteCart', cartItems.response);
+  }
+};
