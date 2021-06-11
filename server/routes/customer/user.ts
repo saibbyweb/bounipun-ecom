@@ -1,6 +1,8 @@
 import { server, db, mongoose } from "@helpers/essentials";
 import { methods as userMethods } from "@models/user";
 import sumBy from "lodash/sumBy";
+import { methods as paymentMethods } from "@models/payment"
+
 /* creating express router */
 const router = server.express.Router();
 const { userAuth } = userMethods;
@@ -331,6 +333,41 @@ router.post('/updateProfile', userAuth('customer'), async (req, res) => {
     });
 
     res.send('done');
+});
+
+/* fetch razorpay order id */
+router.post('/fetchRazorpayOrderId', userAuth('customer'), async(req, res) => {
+    let response = { resolved: false, orderId: '' }
+    const { user, amountToBeCharged } = req.body;
+    /* refetch cart  */
+    const cartItems = await userMethods.getCartItems(user.cart);
+    /* calculate cart total */
+    const cartTotal = sumBy(cartItems, item => item.price * item.quantity);
+
+    /* if amount doesn't match */
+    if (cartTotal !== amountToBeCharged) {
+        console.log('Amount doesnt match');
+        res.send(response);
+        return;
+    }
+
+    const razorpayOrder = await paymentMethods.createRazorpayOrder({
+        amount: amountToBeCharged * 100,
+        currency: "INR",
+        receipt: "Bounipun Test"
+    });
+
+    if (!razorpayOrder) {
+        res.send(response);
+        return;
+    }
+
+    console.log(razorpayOrder);
+
+    response.orderId = razorpayOrder.id;
+    response.resolved = true;
+    res.send(response);
+
 });
 
 router.post('/setCookie', (req, res) => {

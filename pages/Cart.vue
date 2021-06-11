@@ -19,7 +19,7 @@
     <div v-if="!cartEmpty" class="sub-total">
       <p class="label text">
         Sub Total <br />
-        <span class="length"> {{ remoteCartItems.length }} Item(s) : </span>
+        <span class="length"> {{ $store.getters['customer/cartCount']() }} Item(s) : </span>
       </p>
       <span class="value text"> INR {{ subTotal }} </span>
     </div>

@@ -11,7 +11,7 @@
       <h3 class="section-heading">Products</h3>
       <div class="cart-items">
         <CartItem
-          v-for="(item, index) in remoteCartItems"
+          v-for="(item, index) in $store.state.customer.globalRemoteCart"
           :item="item"
           :key="index"
           :allowUpdate="false"
@@ -24,7 +24,7 @@
           {{ deliveryAddress.firstName }} {{ deliveryAddress.surName }}
         </span>
         <span> {{ deliveryAddress.mobileNumber }} </span>
-        <span> {{ deliveryAddress.email }} </span>
+        <!-- <span> {{ deliveryAddress.email }} </span> -->
         <span> {{ deliveryAddress.addressLine1 }}</span>
         <span> {{ deliveryAddress.addressLine2 }} </span>
         <span> {{ deliveryAddress.city }} </span>
@@ -35,7 +35,7 @@
     <div v-if="!cartEmpty" class="sub-total">
       <p class="label text">
         Grand Total: <br />
-        <span class="length"> {{ remoteCartItems.length }} Item(s) : </span>
+        <span class="length"> {{ $store.getters['customer/cartCount']() }} Item(s) : </span>
       </p>
       <span class="value text"> INR {{ subTotal }} </span>
     </div>
@@ -76,6 +76,10 @@ const demoDeliveryAddress = {
 }
 
 export default {
+  mounted() {
+    this.$store.dispatch('customer/fetchCart');
+    this.fetchRazorpayOrderId();
+  },
   data() {
     return {
       deliveryAddress: demoDeliveryAddress,
@@ -85,18 +89,24 @@ export default {
   },
   computed: {
     cartEmpty: function() {
-      return this.remoteCartItems.length === 0;
+      return this.$store.state.customer.globalRemoteCart.length === 0;
     },
     subTotal() {
-      return sumBy(this.remoteCartItems, item => item.price * item.quantity);
+      return sumBy(this.$store.state.customer.globalRemoteCart, item => item.price * item.quantity);
     }
   },
   methods: {
+      async fetchRazorpayOrderId() {
+        await this.$post('/fetchRazorpayOrderId', {
+          amountToBeCharged: this.subTotal
+        });
+      },
       async placeOrder() {
+        const remoteCartItems = this.$store.state.customer.globalRemoteCart
         //   this.$router.push('/order-placed-successfully')
         const checkoutPayload = {
             deliveryAddress: this.deliveryAddress,
-            orderCartItems: this.remoteCartItems.map(item => item.cartEntry),
+            orderCartItems: remoteCartItems.map(item => item.cartEntry),
             amountToBeCharged: parseInt(this.subTotal)
         };
 
