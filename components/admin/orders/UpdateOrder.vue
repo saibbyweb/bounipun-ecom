@@ -28,14 +28,22 @@
     <InputBox label="Amount" v-model="doc.amount" :disabled="true" />
     <!-- delivery address -->
     <div class="delivery-address">
-      <p>{{ doc.deliveryAddress.firstName }}</p>
-      <p>{{ doc.deliveryAddress.surName }}</p>
+      <!-- label -->
+      <label class="label"> Delivery Address: </label>
+      <p class="name">{{ doc.deliveryAddress.firstName }} {{ doc.deliveryAddress.surName }} </p>
       <p>{{ doc.deliveryAddress.mobileNumber }}</p>
       <p>{{ doc.deliveryAddress.email }}</p>
       <p>{{ doc.deliveryAddress.addressLine1 }}</p>
       <p>{{ doc.deliveryAddress.addressLine2 }}</p>
       <p>{{ doc.deliveryAddress.city }}</p>
       <p>{{ doc.deliveryAddress.postalCode }}</p>
+    </div>
+
+    <!-- order items -->
+    <div class="items cart-items">
+        <div class="item" v-for="(subOrder, index) in doc.items" :key="index">
+            <CartItem :item="subOrder" :allowUpdate="false" />
+        </div>
     </div>
 
     <!-- update order status -->
@@ -66,23 +74,24 @@
 
 <script>
 const baseDoc = () => ({
-        _id: "",
-        number: "",
-        paymentGateway: "",
-        transactionId: "",
-        amount: "",
-        deliveryAddress: {
-          firstName: "",
-          surName: "",
-          mobileNumber: "",
-          email: "",
-          addressLine1: "",
-          addressLine2: "",
-          city: "",
-          postalCode: ""
-        },
-        status: false
-      })
+  _id: "",
+  items: [],
+  number: "",
+  paymentGateway: "",
+  transactionId: "",
+  amount: "",
+  deliveryAddress: {
+    firstName: "",
+    surName: "",
+    mobileNumber: "",
+    email: "",
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    postalCode: ""
+  },
+  status: false
+});
 export default {
   props: {
     model: String
@@ -129,6 +138,7 @@ export default {
     populateForm(details) {
       const {
         _id,
+        items,
         number,
         paymentGateway,
         transactionId,
@@ -138,6 +148,7 @@ export default {
       } = details;
       this.doc = {
         _id,
+        items,
         number,
         paymentGateway,
         transactionId,
@@ -175,5 +186,21 @@ export default {
   padding: 2%;
   margin-left: 5px;
   font-weight: 900;
+}
+.delivery-address {
+  p {
+    padding: 0 15px;
+    color: $gray;
+    font-family: $font_2;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+
+    &.name {
+        font-family: $font_1;
+        font-weight: 700;
+        font-size:15px;
+        color: rgba(0, 0, 0, 0.651);
+    }
+  }
 }
 </style>
