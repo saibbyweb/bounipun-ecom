@@ -88,7 +88,8 @@ export default {
 
     },
     async updateQuantity(payload) {
-      const { item, operation } = payload;
+      const { item: vuexItem, operation } = payload;
+      let item = {...vuexItem}
       switch (operation) {
         case "decrease":
           if (item.quantity > 1) item.quantity--;
@@ -101,7 +102,7 @@ export default {
       }
 
       console.log(payload);
-
+      /* if user is guest */
       if (!this.$store.state.customer.authorized) {
         this.$store.commit("customer/updateQuantity", item);
       }
