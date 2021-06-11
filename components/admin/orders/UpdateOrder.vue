@@ -28,9 +28,11 @@
     <InputBox label="Amount" v-model="doc.amount" :disabled="true" />
     <!-- delivery address -->
     <div class="delivery-address">
-      <!-- label -->
+      <!-- label delivery address -->
       <label class="label"> Delivery Address: </label>
-      <p class="name">{{ doc.deliveryAddress.firstName }} {{ doc.deliveryAddress.surName }} </p>
+      <p class="name">
+        {{ doc.deliveryAddress.firstName }} {{ doc.deliveryAddress.surName }}
+      </p>
       <p>{{ doc.deliveryAddress.mobileNumber }}</p>
       <p>{{ doc.deliveryAddress.email }}</p>
       <p>{{ doc.deliveryAddress.addressLine1 }}</p>
@@ -40,10 +42,12 @@
     </div>
 
     <!-- order items -->
-    <div class="items cart-items">
-        <div class="item" v-for="(subOrder, index) in doc.items" :key="index">
-            <CartItem :item="subOrder" :allowUpdate="false" />
-        </div>
+    <div class="items">
+      <!-- label order items -->
+      <label class="label"> Ordered Item(s): </label>
+      <div class="item" v-for="(subOrder, index) in doc.items" :key="index">
+        <OrderItem :item="subOrder" :allowUpdate="false" />
+      </div>
     </div>
 
     <!-- update order status -->
@@ -196,11 +200,15 @@ export default {
     letter-spacing: 0.5px;
 
     &.name {
-        font-family: $font_1;
-        font-weight: 700;
-        font-size:15px;
-        color: rgba(0, 0, 0, 0.651);
+      font-family: $font_1;
+      font-weight: 700;
+      font-size: 15px;
+      color: rgba(0, 0, 0, 0.651);
     }
   }
+}
+
+.items {
+    margin-top:10px;
 }
 </style>

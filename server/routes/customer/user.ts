@@ -291,7 +291,7 @@ router.post('/orderCheckout', userAuth('customer'), async (req, res) => {
         transactionId: '',
         amount: amountToBeCharged,
         deliveryAddress,
-        items: cartItems.map(item => ({ ...item, status: 'pending', trackingId: '', trackingUrl: '', delivered: '' })),
+        items: cartItems.map(item => ({ ...item, status: 'pending', timeline: [], trackingId: '', trackingUrl: '', delivered: '' })),
         status: 'pending'
     }
 
