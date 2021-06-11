@@ -31,29 +31,24 @@
         <span> {{ deliveryAddress.postalCode }} </span>
       </div>
 
-          <!-- sub total -->
-    <div v-if="!cartEmpty" class="sub-total">
-      <p class="label text">
-        Grand Total: <br />
-        <span class="length"> {{ $store.getters['customer/cartCount']() }} Item(s) : </span>
-      </p>
-      <span class="value text"> INR {{ subTotal }} </span>
-    </div>
+      <!-- sub total -->
+      <div v-if="!cartEmpty" class="sub-total">
+        <p class="label text">
+          Grand Total: <br />
+          <span class="length">
+            {{ $store.getters["customer/cartCount"]() }} Item(s) :
+          </span>
+        </p>
+        <span class="value text"> INR {{ subTotal }} </span>
+      </div>
 
       <!-- shipping note -->
       <p class="note">Standard shipping 4 weeks</p>
-
-
     </div>
-
-
 
     <!-- proceed to checkout -->
     <div class="pad-10">
-      <button
-        @click="placeOrder"
-        class="action"
-      >
+      <button @click="placeOrder" class="action">
         Place Order
       </button>
     </div>
@@ -65,61 +60,101 @@ import sumBy from "lodash/sumBy";
 
 /* demo delivery address */
 const demoDeliveryAddress = {
-    firstName: 'Suhaib',
-    surName: 'Khan',
-    mobileNumber: '9906697711',
-    email: 'hello@saibbyweb.com',
-    addressLine1: 'H.no 54, Chinar Enclave',
-    addressLine2: 'Rawalpora, Near Masjid',
-    city: 'Srinagar',
-    postalCode: '190005'
-}
+  firstName: "Suhaib",
+  surName: "Khan",
+  mobileNumber: "9906697711",
+  email: "hello@saibbyweb.com",
+  addressLine1: "H.no 54, Chinar Enclave",
+  addressLine2: "Rawalpora, Near Masjid",
+  city: "Srinagar",
+  postalCode: "190005"
+};
 
 export default {
   mounted() {
-    this.$store.dispatch('customer/fetchCart');
+    this.$store.dispatch("customer/fetchCart");
     this.fetchRazorpayOrderId();
   },
   data() {
     return {
       deliveryAddress: demoDeliveryAddress,
-    //   deliveryAddress: this.$route.params.deliveryAddress,
-      remoteCartItems: this.$store.state.customer.globalRemoteCart
-    }
+      //   deliveryAddress: this.$route.params.deliveryAddress,
+      remoteCartItems: this.$store.state.customer.globalRemoteCart,
+      razorpayCheckout: null
+    };
   },
   computed: {
     cartEmpty: function() {
       return this.$store.state.customer.globalRemoteCart.length === 0;
     },
     subTotal() {
-      return sumBy(this.$store.state.customer.globalRemoteCart, item => item.price * item.quantity);
+      return sumBy(
+        this.$store.state.customer.globalRemoteCart,
+        item => item.price * item.quantity
+      );
     }
   },
   methods: {
-      async fetchRazorpayOrderId() {
-        await this.$post('/fetchRazorpayOrderId', {
-          amountToBeCharged: this.subTotal
-        });
-      },
-      async placeOrder() {
-        const remoteCartItems = this.$store.state.customer.globalRemoteCart
-        //   this.$router.push('/order-placed-successfully')
-        const checkoutPayload = {
-            deliveryAddress: this.deliveryAddress,
-            orderCartItems: remoteCartItems.map(item => item.cartEntry),
-            amountToBeCharged: parseInt(this.subTotal)
-        };
+    async fetchRazorpayOrderId() {
+      const razorpayOrder = await this.$post("/fetchRazorpayOrderId", {
+        amountToBeCharged: this.subTotal
+      });
 
-        const checkout = await this.$post('/orderCheckout', checkoutPayload);
+      if (razorpayOrder.resolved === false) return;
 
-        if(checkout.resolved === false) {
-            return;
+      this.setupRazorpayOrder(razorpayOrder.orderId);
+    },
+    setupRazorpayOrder(orderId) {
+      let options = {
+        key: "rzp_test_LnJPEC0MOtvlSn", // Enter the Key ID generated from the Dashboard
+        amount: `${this.subTotal * 100}`, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        currency: "INR",
+        name: "Bounipun Ecom",
+        description: "Test Transaction",
+        image: "https://example.com/your_logo",
+        order_id: orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+        handler: function(response) {
+          alert(response.razorpay_payment_id);
+          alert(response.razorpay_order_id);
+          alert(response.razorpay_signature);
+
+          /* send amount, gateway, currency, delivery address, and current cart  */
+        },
+        prefill: {
+          name: this.deliveryAddress.firstName + " " + this.deliveryAddress.surName,
+          email: this.deliveryAddress.email,
+          contact: this.deliveryAddress.mobileNumber
+        },
+        theme: {
+          color: "#3399cc"
         }
-        
-        /* move to order placed page */
-        this.$router.push('/order-placed-successfully');
+      };
+      
+      /* razorpay anchor */
+      this.razorpayCheckout = new Razorpay(options);
 
+    },
+    async placeOrder() {
+      this.razorpayCheckout.open();
+      return;
+
+      const remoteCartItems = this.$store.state.customer.globalRemoteCart;
+      //   this.$router.push('/order-placed-successfully')
+      const checkoutPayload = {
+        deliveryAddress: this.deliveryAddress,
+        orderCartItems: remoteCartItems.map(item => item.cartEntry),
+        amountToBeCharged: parseInt(this.subTotal)
+      };
+
+      const checkout = await this.$post("/orderCheckout", checkoutPayload);
+
+      if (checkout.resolved === false) {
+        return;
       }
+
+      /* move to order placed page */
+      this.$router.push("/order-placed-successfully");
+    }
   }
 };
 </script>
