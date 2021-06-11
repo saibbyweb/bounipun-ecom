@@ -88,6 +88,11 @@ export default {
                     path: '/admin-panel/coupons',
                     desc: 'Manage Homepage Layouts'
                 },
+                {
+                    name: 'Orders',
+                    path: '/admin-panel/orders',
+                    desc: 'Manage Homepage Layouts'
+                },
             ]
         }
     }

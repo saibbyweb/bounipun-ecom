@@ -155,6 +155,10 @@ export const methods = {
         return expressAuth(...args, userGroup)
     },
     async getCartItems(cart) {
+
+        /*  if cart is empty */
+        if(cart.length === 0)
+            return [];
     
         /* get all unique product ids */
         const allUniqueProducts = [...new Set(cart.map(item => item.product))];
@@ -171,11 +175,11 @@ export const methods = {
                 .lean();
             allProductPromises.push(fetchProduct);
         }
+        
         /* wait for all promises to resolve */
         const allProducts = await Promise.all(allProductPromises);
-   
-        // console.log(JSON.stringify(allProducts));
-
+    
+        /* TODO: put this to use */
         let itemsToBeRemoved = []
 
         /* create cart items array */

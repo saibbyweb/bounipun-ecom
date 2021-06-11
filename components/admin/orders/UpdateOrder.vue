@@ -1,0 +1,179 @@
+<template>
+  <div class="contents">
+    <CancelUpdate @close="closeForm" />
+    <h2 class="heading">{{ editMode ? "Update" : "Add New" }} Order</h2>
+    <!-- sale ID -->
+    <InputBox
+      v-if="editMode"
+      label="Order ID"
+      v-model="doc._id"
+      disabled
+      :internal="true"
+    />
+    <!-- order number-->
+    <InputBox label="Order Number" v-model="doc.number" :disabled="true" />
+    <!-- payment gateway -->
+    <InputBox
+      label="Payment Gateway"
+      v-model="doc.paymentGateway"
+      :disabled="true"
+    />
+    <!-- transaction id -->
+    <InputBox
+      label="Transaction ID"
+      v-model="doc.transactionId"
+      :disabled="true"
+    />
+    <!-- amount -->
+    <InputBox label="Amount" v-model="doc.amount" :disabled="true" />
+    <!-- delivery address -->
+    <div class="delivery-address">
+      <p>{{ doc.deliveryAddress.firstName }}</p>
+      <p>{{ doc.deliveryAddress.surName }}</p>
+      <p>{{ doc.deliveryAddress.mobileNumber }}</p>
+      <p>{{ doc.deliveryAddress.email }}</p>
+      <p>{{ doc.deliveryAddress.addressLine1 }}</p>
+      <p>{{ doc.deliveryAddress.addressLine2 }}</p>
+      <p>{{ doc.deliveryAddress.city }}</p>
+      <p>{{ doc.deliveryAddress.postalCode }}</p>
+    </div>
+
+    <!-- update order status -->
+    <!-- <SelectBox :options="allStatusOptions" v-model="doc.list" label="Select Product List" /> -->
+
+    <!-- update button -->
+    <div class="center-space">
+      <!-- loading bar -->
+      <img v-if="loading" class="loading" src="/loading.gif" />
+      <!-- action complete gif -->
+      <img v-if="updated" class="action-complete" src="/complete.gif" />
+      <!-- update document -->
+      <button @click="updateDocument" class="action" :disabled="loading">
+        {{ editMode ? "Edit" : "Add" }} Order
+      </button>
+      <!-- delete document -->
+      <button
+        v-if="editMode"
+        @click="deleteDocument"
+        class="action delete"
+        :disabled="loading"
+      >
+        Delete
+      </button>
+    </div>
+  </div>
+</template>
+
+<script>
+const baseDoc = () => ({
+        _id: "",
+        number: "",
+        paymentGateway: "",
+        transactionId: "",
+        amount: "",
+        deliveryAddress: {
+          firstName: "",
+          surName: "",
+          mobileNumber: "",
+          email: "",
+          addressLine1: "",
+          addressLine2: "",
+          city: "",
+          postalCode: ""
+        },
+        status: false
+      })
+export default {
+  props: {
+    model: String
+  },
+  data() {
+    return {
+      editMode: false,
+      doc: baseDoc(),
+      allProductLists: [],
+      loading: false,
+      updated: false
+    };
+  },
+  mounted() {
+    // this.fetchAllProductLists();
+  },
+  methods: {
+    async updateDocument() {
+      this.loading = true;
+      const result = await this.$updateDocument(
+        this.model,
+        this.doc,
+        this.editMode
+      );
+      this.loading = false;
+
+      if (!result.updated) return;
+
+      this.$emit("updated");
+      this.populateForm(result.doc);
+      this.$flash(this);
+    },
+    async deleteDocument() {
+      this.loading = true;
+      const result = await this.$deleteDocument(this.model, this.doc._id);
+      this.loading = false;
+
+      if (!result.deleted) return;
+
+      this.$emit("updated");
+      this.resetForm();
+      this.$flash(this);
+    },
+    populateForm(details) {
+      const {
+        _id,
+        number,
+        paymentGateway,
+        transactionId,
+        amount,
+        deliveryAddress,
+        status
+      } = details;
+      this.doc = {
+        _id,
+        number,
+        paymentGateway,
+        transactionId,
+        amount,
+        deliveryAddress
+      };
+      this.editMode = true;
+    },
+    closeForm() {
+      this.resetForm();
+      this.$emit("close");
+    },
+    resetForm() {
+      this.populateForm(baseDoc());
+      this.editMode = false;
+    }
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+.section {
+  position: relative;
+  margin: 10px;
+  padding: 5px 5px 30px 5px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.label {
+  font-family: $font_2_bold;
+  color: $gray;
+  text-transform: uppercase;
+  font-size: 10px;
+  padding: 2%;
+  margin-left: 5px;
+  font-weight: 900;
+}
+</style>

@@ -1,15 +1,15 @@
 <template>
-  <div class="sales crud">
+  <div class="orders crud">
     <!-- filters -->
     <div :class="{ updating: showForm }" class="filters center">
       <input
         v-model="rawCriterion.search.term"
         class="search shadow"
         type="text"
-        placeholder="Search for Sales"
+        placeholder="Search for Orders"
       />
     </div>
-    <!-- list of sales -->
+    <!-- list of orders -->
     <div :class="{ updating: showForm }" class="list">
       <List
         :list="list"
@@ -30,32 +30,28 @@
     </div>
     <!-- update sales form -->
     <div :class="{ updating: showForm }" class="update">
-      <UpdateSale
+      <UpdateOrder
         v-show="showForm"
         ref="updateComponent"
         @updated="updateList"
         :model="model"
         @close="showForm = false"
       />
-      <AddNewItem v-if="!showForm" label="Sale" @showForm="showForm = true" />
+      <!-- <AddNewItem v-if="!showForm" label="Order" @showForm="showForm = true" /> -->
     </div>
   </div>
 </template>
 
 <script>
-import { v4 as uuidv4 } from "uuid";
-
 export default {
   layout: "admin",
   data() {
     return {
       showForm: false,
-      loading: false,
-      model: "sales",
-      /* rawCriterion */
+      model: "orders",
       rawCriterion: {
         search: {
-          key: "name",
+          key: "number",
           term: ""
         },
         filters: {
@@ -65,12 +61,9 @@ export default {
         limit: 20
       },
       list: [],
-      sortByFields: ["name", "status"],
-      headings: ["_id", "name", "description", "status"]
+      sortByFields: ["number, status"],
+      headings: ["_id", "number", "amount", "status"]
     };
-  },
-  async mounted() {
-    // await this.fetchList();
   },
   methods: {
     updateList() {
@@ -95,11 +88,11 @@ export default {
       }
 
       /* extract list */
-      this.list = result.docs.map(({ _id, name, description, status }) => {
+      this.list = result.docs.map(({ _id, number, amount, status }) => {
         return {
           _id,
-          name,
-          description,
+          number,
+          amount,
           status
         };
       });
