@@ -1,4 +1,4 @@
-import { server, db } from "@helpers/essentials";
+import { server, db, mongoose } from "@helpers/essentials";
 import { methods as userMethods } from "@models/user";
 import sumBy from "lodash/sumBy";
 /* creating express router */
@@ -282,7 +282,7 @@ router.post('/orderCheckout', userAuth('customer'), async (req, res) => {
         return;
     }
 
-    /* TODO: check finesse purchasing routine */
+    /* TODO: check finesse and mbm purchasing routine */
 
     /* construct order details */
     const orderDetails = {
@@ -291,7 +291,7 @@ router.post('/orderCheckout', userAuth('customer'), async (req, res) => {
         transactionId: '',
         amount: amountToBeCharged,
         deliveryAddress,
-        items: cartItems.map(item => ({ ...item, status: 'pending', timeline: [], trackingId: '', trackingUrl: '', delivered: '' })),
+        items: cartItems.map(item => ({ _id: mongoose.Types.ObjectId(), ...item, status: 'pending', timeline: [], trackingId: '', trackingUrl: '', delivered: '' })),
         status: 'pending'
     }
 
@@ -321,10 +321,10 @@ router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
 });
 
 /* update profile */
-router.post('/updateProfile', userAuth('customer'), async(req,res) => {
+router.post('/updateProfile', userAuth('customer'), async (req, res) => {
     const { user, profile } = req.body;
 
-    const profileUpdate = await db.model('users').findOneAndUpdate({_id: user._id}, {
+    const profileUpdate = await db.model('users').findOneAndUpdate({ _id: user._id }, {
         firstName: profile.firstName,
         surName: profile.surName,
         profession: profile.profession

@@ -4,7 +4,7 @@
       <!-- main image -->
       <div
         class="image-container"
-        :style="`background-image: url(${$getImagePath(item.mainImage)})`"
+        :style="`background-image: url(${$getImagePath(localItem.mainImage)})`"
       >
         <!-- <img :src="item.mainImage" /> -->
       </div>
@@ -12,39 +12,49 @@
       <!-- details and quantity -->
       <div class="details-and-quantity">
         <!-- name -->
-        <span class="name"> {{ item.productName }} </span>
+        <span class="name"> {{ localItem.productName }} </span>
         <!-- color name -->
-        <span class="color-name"> {{ item.colorName }} </span>
+        <span class="color-name"> {{ localItem.colorName }} </span>
         <!-- collection -->
-        <span class="collection"> {{ item.collectionName }} </span>
+        <span class="collection"> {{ localItem.collectionName }} </span>
         <!-- variant -->
-        <span class="variant"> {{ item.variantName }} </span>
+        <span class="variant"> {{ localItem.variantName }} </span>
         <!-- fabric -->
-        <span class="fabric"> {{ item.fabricName }} </span>
+        <span class="fabric"> {{ localItem.fabricName }} </span>
         <!-- fabric info 1-->
-        <span class="fabric"> {{ item.fabricInfo1 }} </span>
+        <span class="fabric"> {{ localItem.fabricInfo1 }} </span>
         <!-- price -->
-        <span class="price"> INR {{ item.price }} </span>
+        <span class="price"> INR {{ localItem.price }} </span>
         <!-- quantity -->
-        <span class="quantity"> Quantity: {{ item.quantity }} </span>
+        <span class="quantity"> Quantity: {{ localItem.quantity }} </span>
       </div>
 
       <!-- total product price -->
-      <p class="total-product-price">INR {{ item.quantity * item.price }}</p>
+      <p class="total-product-price">INR {{ localItem.quantity * localItem.price }}</p>
     </div>
     <!-- actions -->
-    <div class="actions center">
-      <!-- <span> Status : {{ item.status }} </span> -->
-          <!-- tracking id -->
-    <InputBox
-      label="Tracking ID"
-      v-model="item.trackingId"
-    />
+    <div class="actions flex wrap v-center">
+      <!-- tracking id -->
+      <InputBox
+        class="tracking-id"
+        label="Tracking ID"
+        v-model="localItem.trackingId"
+      />
       <!-- tracking url -->
       <InputBox
+        class="tracking-url"
         label="Tracking URL"
-        v-model="item.trackingUrl"
+        v-model="localItem.trackingUrl"
       />
+      <!-- update status -->
+      <SelectBox
+        class="status"
+        :options="allStatusUpdates"
+        v-model="localItem.status"
+        label="Set Order Status:"
+      />
+
+      <button class="update" @click="updateOrder">Update Order</button>
     </div>
   </div>
 </template>
@@ -52,34 +62,52 @@
 <script>
 export default {
   props: {
-    item: Object,
-    allowUpdate: {
-      type: Boolean,
-      default: true
+    orderId: String,
+    item: Object
+  },
+  watch: {
+    item(newVal) {
+        this.localItem = newVal
     }
   },
   data() {
     return {
-      cartItem: {
-        product: {},
-        colorCode: "",
-        quantity: 0,
-        variant: {},
-        fabric: {}
-      }
+      localItem: this.item,
+      allStatusUpdates: [
+        {
+          name: "Pending",
+          value: "pending"
+        },
+        {
+          name: "Confirmed",
+          value: "confirmed"
+        },
+        {
+          name: "Shipped",
+          value: "shipped"
+        },
+        {
+          name: "Delayed",
+          value: "delayed"
+        },
+        {
+          name: "Delivered",
+          value: "delivered"
+        }
+      ]
     };
   },
   computed: {},
   mounted() {},
   methods: {
-    emitUpdateQuantity(item, operation) {
-      this.$emit("updateQuantity", {
-        item: item.cartEntry,
-        operation
-      });
-    },
-    emitRemoveFromCart(item) {
-      this.$emit("removeItem", item.cartEntry);
+    async updateOrder() {
+        await this.$post('/updateOrderItemDetails', {
+            orderId: this.orderId,
+            subOrderId: this.item._id,
+            status: this.localItem.status,
+            trackingId: this.localItem.trackingId,
+            trackingUrl: this.localItem.trackingUrl
+        });
     }
   }
 };
@@ -89,6 +117,7 @@ export default {
 .order-item-wrapper {
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
   margin: 20px;
+  padding-bottom: 10px;
   .order-item {
     display: flex;
     align-items: center;
@@ -184,14 +213,6 @@ export default {
       }
     }
 
-    /* remove icon */
-    .remove-item {
-      position: absolute;
-      right: 3%;
-      top: 10%;
-      width: 6%;
-    }
-
     /* total product price */
     .total-product-price {
       font-family: $font_1_bold;
@@ -199,6 +220,27 @@ export default {
       bottom: 10%;
       right: 3%;
       color: $dark_gray;
+    }
+  }
+  /* actions */
+  .actions {
+    .tracking-id {
+      width: 50%;
+    }
+    .tracking-url {
+      width: 50%;
+    }
+    .status {
+      width: 60%;
+      margin-left: 10px;
+    }
+
+    .update {
+      font-size: 12px;
+      padding: 5px 10px;
+      background-color: $dark_gray;
+      color: white;
+      margin-left: 10px;
     }
   }
 }

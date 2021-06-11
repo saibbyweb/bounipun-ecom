@@ -1,4 +1,4 @@
-import { server, db } from "@helpers/essentials";
+import { server, db, mongoose } from "@helpers/essentials";
 import admin from "@helpers/admin";
 import { uploader, methods as imageHelper } from "@models/imageUpload";
 import { register } from "@models";
@@ -40,18 +40,18 @@ router.post('/getDocument', async (req, res) => {
 
                 /* if bounipun colors, get grouped color data */
                 if (document.colorSource === 'bounipun-colors') {
-                    
+
                     /* get color categories */
                     const colorCategories = await db.model('color_categories').find().sort('order');
                     /* grouped data array */
                     let groupedData = [];
-                    colorCategories.forEach((category : any) => {
+                    colorCategories.forEach((category: any) => {
                         /* find all colors under this category */
                         const colors = document.colors.filter(color => {
                             return color._id.category.toString() === category._id.toString() && color.status === true
                         });
                         /* save colors */
-                        groupedData.push({name: category.name, description: category.description, colors })
+                        groupedData.push({ name: category.name, description: category.description, colors })
                     });
 
 
@@ -95,11 +95,11 @@ router.post('/getDocument', async (req, res) => {
 
                 break;
             case 'product_lists':
-                
+
                 document = await document.populate('list._id', 'name styleId');
                 // console.log(document);
                 document.list.forEach(product => {
-                    if(product._id === null)
+                    if (product._id === null)
                         return;
                     product.name = `${product._id.styleId} - (${product._id.name})`;
                     product._id = product._id._id;
@@ -167,29 +167,29 @@ router.post('/fetchPaginatedResults', async (req, res) => {
 
     /* text search match */
     const textSearch = { name: { $regex: rawCriterion.search.term, $options: "i" } }
-   
+
 
     /* add text search */
     // criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
     if (model === "products" && requestedBy === "customer") {
         criterion.match = {
             $or: [
-                { name : { $regex: rawCriterion.search.term, $options: "i" } },
+                { name: { $regex: rawCriterion.search.term, $options: "i" } },
                 { 'colors.name': { $regex: rawCriterion.search.term, $options: "i" } },
                 { 'colors.baseColor': { $regex: rawCriterion.search.term, $options: "i" } },
                 { meta: { $regex: rawCriterion.search.term, $options: "i" } }
-            ], ...admin.setObjectIds(rawCriterion.filters, ['bounipun_collection','variants._id'])
+            ], ...admin.setObjectIds(rawCriterion.filters, ['bounipun_collection', 'variants._id'])
         }
     }
-    else if(model === "products" && requestedBy === "default") {
-        const objectided = admin.setObjectIds(rawCriterion.filters,['bounipun_collection']);
+    else if (model === "products" && requestedBy === "default") {
+        const objectided = admin.setObjectIds(rawCriterion.filters, ['bounipun_collection']);
         // criterion.match = {...textSearch, ...objectided}
-        criterion.match = {...objectided}
+        criterion.match = { ...objectided }
         criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
 
     }
-    else if(model === "colors" && requestedBy === "default") {
-        criterion.match = {...textSearch, ...admin.setObjectIds(rawCriterion.filters,['category'])}
+    else if (model === "colors" && requestedBy === "default") {
+        criterion.match = { ...textSearch, ...admin.setObjectIds(rawCriterion.filters, ['category']) }
     }
     else
         criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
@@ -259,18 +259,46 @@ router.get('/test', async (req, res) => {
 })
 
 /* update order */
-router.post('/updateOrder', async(req, res) => {
+router.post('/updateOrder', async (req, res) => {
 
     const { model, newList } = req.body;
     console.log(newList);
     /* update order one by one */
-    for(const item of newList) {
+    for (const item of newList) {
         // console.log(item);
         await db.model(model).findOneAndUpdate({ _id: item._id }, { order: item.newOrder })
     }
     res.send('up');
 });
 
+/* update order item details */
+router.post('/updateOrderItemDetails', async(req, res) => {
+    console.log('req received:')
+    console.log(req.body);
+    const { orderId, subOrderId, status, trackingId, trackingUrl } = req.body;
+    const filter = {_id: orderId, 'items._id': mongoose.Types.ObjectId(subOrderId)};
+    // console.log(await db.model('orders').find(filter));
+
+    await db.model('orders').findOneAndUpdate(filter, {
+            $set: {
+                "items.$.status": status,
+                "items.$.trackingId": trackingId,
+                "items.$.trackingUrl": trackingUrl
+            },
+            $push: {
+                "items.$.timeline": {
+                    status,
+                    updatedAt: new Date()
+                }
+            }
+    });
+
+    /* update timeline */
+    /* if status set to delivered, set delivery timestamp */
+
+
+    res.send('broo');
+});
 
 
 export default router;

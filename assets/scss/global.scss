@@ -300,3 +300,50 @@ p {
     }
   }
 }
+
+.flex {
+  display: flex;
+
+  &.around {
+    justify-content: space-around;
+  }
+  &.between {
+    justify-content: space-between;
+  }
+  &.evenly {
+    justify-content: space-evenly;
+  }
+
+  &.col {
+    flex-direction: column;
+  }
+
+  &.wrap {
+    flex-wrap: wrap;
+  }
+
+  &.center {
+    justify-content: center;
+    align-items: center;
+  }
+
+  &.v-center {
+    align-items: center;
+  }
+
+  &.start {
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    &.center {
+      align-items: center;
+    }
+  }
+
+  &.end {
+    justify-content: flex-end;
+    &.center {
+      align-items: center;
+    }
+  }
+}

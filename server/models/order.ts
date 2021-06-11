@@ -13,6 +13,8 @@ const schema = new mongoose.Schema({
     delivered: Date,
     trackingId: String,
     trackingUrl: String
+},{
+    timestamps: true
 });
 
 /* model */

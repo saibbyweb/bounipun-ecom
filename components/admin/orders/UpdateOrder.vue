@@ -46,7 +46,7 @@
       <!-- label order items -->
       <label class="label"> Ordered Item(s): </label>
       <div class="item" v-for="(subOrder, index) in doc.items" :key="index">
-        <OrderItem :item="subOrder" :allowUpdate="false" />
+        <OrderItem :orderId="doc._id" :item="subOrder" :allowUpdate="false" />
       </div>
     </div>
 
