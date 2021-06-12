@@ -275,7 +275,10 @@ router.post('/updateOrderItemDetails', async (req, res) => {
     console.log('req received:')
     console.log(req.body);
     const { orderId, subOrderId, status, trackingId, trackingUrl } = req.body;
-    const filter = { _id: orderId, 'items._id': mongoose.Types.ObjectId(subOrderId) };
+    // const filter = { _id: orderId, 'items._id': mongoose.Types.ObjectId(subOrderId) };
+
+    const filter = { _id: orderId, 'items._id': subOrderId };
+
 
     /* update order with new details */
     const originalOrder: any = await db.model('orders').findOneAndUpdate(filter, {

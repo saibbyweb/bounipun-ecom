@@ -343,7 +343,7 @@ router.post('/createRazorpayOrder', userAuth('customer'), async (req, res) => {
     const { user, amountToBeCharged, deliveryAddress } = req.body;
 
     /* verify cart and create order payload */
-    const orderPayload = await userMethods.createOrderPayload(user.cart, amountToBeCharged, deliveryAddress, 'razorpay');
+    const orderPayload = await userMethods.createOrderPayload(user.cart, amountToBeCharged, 'INR', deliveryAddress);
 
     /* if verification failed */
     if (orderPayload === false) {
@@ -369,12 +369,12 @@ router.post('/createRazorpayOrder', userAuth('customer'), async (req, res) => {
         amount: razorpayOrder.amount,
         currency: razorpayOrder.currency,
         gateway: 'razorpay',
-        payload: orderPayload
+        payload: { ...orderPayload, razorpay_order_id: razorpayOrder.id }
     });
 
     console.log(razorpayOrder);
     console.log(paymentIntent);
-    
+
     /* set razorpay order id */
     response.razorpayOrderId = razorpayOrder.id;
     /* set payment intent id */
@@ -385,27 +385,56 @@ router.post('/createRazorpayOrder', userAuth('customer'), async (req, res) => {
 });
 
 /* complete checkout */
-router.post('/completeCheckout', userAuth('customer'), async(req, res) => {
+router.post('/completeCheckout', userAuth('customer'), async (req, res) => {
     /* response */
-    let response = { resolved : false };
+    let response = { resolved: false };
     /* extract body */
-    const { gateway, gatewayResponse, paymentIntentId } = req.body;
+    const { user, gateway, gatewayResponse, paymentIntentId } = req.body;
+    
+    /* common transaction id | RAZORPAY - STRIPE */
+    let transactionId;
 
-    switch(gateway) {
+    /* fetch payment intent details */
+    const paymentIntentDetails: any = await db.model('paymentIntents').findOne({ _id: paymentIntentId });
+    
+    /* act according to gateway */
+    switch (gateway) {
         case 'razorpay':
-            /* match order id & payment intent, only then proceed */
-            
-            /* add order id */
+            /* match order id, only then proceed */
+            if (paymentIntentDetails.payload.razorpay_order_id !== gatewayResponse.razorpay_order_id) {
+                console.log('payment verification failed');
+                res.send(response);
+                return;
+            }
             /* add transaction id */
-            /* loop through cart items, add extra things */
+            transactionId = gatewayResponse.razorpay_payment_id;
             break;
         case 'stripe':
             /* payment routine might be processed here only */
             break;
     }
+
+    /* give order shape */
+    const orderDetails = {
+        number: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
+        paymentGateway: gateway,
+        gatewayResponse,
+        transactionId,
+        amount: paymentIntentDetails.amount,
+        currency: paymentIntentDetails.currency,
+        deliveryAddress: paymentIntentDetails.payload.deliveryAddress,
+        items: paymentIntentDetails.payload.cartItems.map(item => ({ _id: mongoose.Types.ObjectId(), ...item, status: 'pending', timeline: [], trackingId: '', trackingUrl: '', delivered: '' })),
+    }
     
+    /* save processed order in database */
+    const ordersCollection = db.model('orders');
+    /* save order details to database */
+    const orderSaved = await new ordersCollection(orderDetails).save();
+    /* save order id to user account */
+    const userOrdersUpdated = await db.model('users').findOneAndUpdate({ _id: user._id }, { $push: { orders: orderSaved._id } });
 
-
+    response.resolved = true;
+    res.send(response);
 });
 router.post('/setCookie', (req, res) => {
 

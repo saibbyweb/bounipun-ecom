@@ -103,9 +103,11 @@ export default {
 
       if (razorpayOrder.resolved === false) return;
 
-    console.log(razorpayOrder);
+      console.log(razorpayOrder);
 
       this.setupRazorpayOrder(razorpayOrder.response.razorpayOrderId);
+      /* save payment intent id */
+      this.paymentIntentId = razorpayOrder.response.paymentIntentId;
     },
     setupRazorpayOrder(orderId) {
       let options = {
@@ -116,15 +118,35 @@ export default {
         description: "Test Transaction",
         image: "https://example.com/your_logo",
         order_id: orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-        handler: function(response) {
-          alert(response.razorpay_payment_id);
-          alert(response.razorpay_order_id);
-          alert(response.razorpay_signature);
+        handler: async response => {
+          console.log(response);
 
-          /* send amount, gateway, currency, delivery address, and current cart  */
+          const {
+            razorpay_order_id,
+            razorpay_payment_id,
+            razorpay_signature
+          } = response;
+
+          const completeCheckout = await this.$post("/completeCheckout", {
+            gateway: "razorpay",
+            gatewayResponse: {
+              razorpay_order_id,
+              razorpay_payment_id,
+              razorpay_signature
+            },
+            paymentIntentId: this.paymentIntentId
+          });
+
+          if (completeCheckout.resolved === false) {
+            return;
+          }
+
+          /* move to order placed page */
+          this.$router.push("/order-placed-successfully");
         },
         prefill: {
-          name: this.deliveryAddress.firstName + " " + this.deliveryAddress.surName,
+          name:
+            this.deliveryAddress.firstName + " " + this.deliveryAddress.surName,
           email: this.deliveryAddress.email,
           contact: this.deliveryAddress.mobileNumber
         },
@@ -132,10 +154,9 @@ export default {
           color: "#3399cc"
         }
       };
-      
+
       /* razorpay anchor */
       this.razorpayCheckout = new Razorpay(options);
-
     },
     async placeOrder() {
       this.razorpayCheckout.open();

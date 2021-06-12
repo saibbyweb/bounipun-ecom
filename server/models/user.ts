@@ -291,7 +291,7 @@ export const methods = {
 
         return foundIndex !== -1 ? { foundCartItem: cart[foundIndex], foundIndex } : false
     },
-    async createOrderPayload(cart, amountToBeCharged, deliveryAddress, paymentGateway) {
+    async createOrderPayload(cart, amountToBeCharged, currency, deliveryAddress) {
         const cartItems = await this.getCartItems(cart);
         const cartTotal = sumBy(cartItems, item => item.price * item.quantity);
     
@@ -305,12 +305,8 @@ export const methods = {
     
         /* construct order details */
         const orderPayload = {
-            // number: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
-            paymentGateway,
-            // transactionId: '',
-            amount: amountToBeCharged,
             deliveryAddress,
-            items: cartItems
+            cartItems: cartItems
             // items: cartItems.map(item => ({ _id: mongoose.Types.ObjectId(), ...item, status: 'pending', timeline: [], trackingId: '', trackingUrl: '', delivered: '' })),
             // status: 'pending'
         }

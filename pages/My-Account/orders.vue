@@ -51,48 +51,6 @@
       </div>
     </div>
 
-    <div class="order-item" v-for="(order, index) in ordersx" :key="index">
-      <!-- status bar -->
-      <div class="status-bar">
-        <!-- status -->
-        <span class="status"> {{ order.status }} </span>
-        <!-- icon -->
-        <img class="arrow" src="/icons/account/arrow-white.png" />
-      </div>
-
-      <!-- order details -->
-      <div class="details">
-        <!-- product image -->
-        <div class="image-box" :style="imagePath(order.product)"></div>
-        <!-- text details -->
-        <div class="text-details">
-          <span class="name"> {{ order.productName }} </span>
-          <span class="collection"> {{ order.collection }} </span>
-          <span class="fabric"> Fabric: {{ order.fabric }} </span>
-          <span class="quantity"> Quantity: {{ order.quantity }} </span>
-          <span class="price">
-            Amount Paid: <b> {{ order.currency + order.price }} </b>
-          </span>
-        </div>
-      </div>
-
-      <!-- divider -->
-      <div class="divider"></div>
-
-      <!-- actions -->
-      <div class="actions">
-        <!-- pre delivery -->
-        <div class="pre-delivery">
-          <button>Track</button>
-          <button :disabled="true">Cancel</button>
-          <button>Help</button>
-        </div>
-        <!-- post delivery -->
-        <div class="post-delivery">
-          <!-- rate product -->
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 

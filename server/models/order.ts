@@ -4,8 +4,10 @@ import { mongoose } from "@helpers/essentials";
 const schema = new mongoose.Schema({
     number: String,
     paymentGateway: String,
+    gatewayResponse: Object,
     transactionId: String,
     amount: String,
+    currency: String,
     deliveryAddress: Object,
     items: Array,
     /* all four field below are sub-orders as well */
