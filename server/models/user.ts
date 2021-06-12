@@ -297,22 +297,25 @@ export const methods = {
     
         /* if amount doesn't match */
         if (cartTotal !== amountToBeCharged) {
-            console.log('Amount doesnt match');
+            console.log('Amount doesnt match, yo');
             return false;
         }
     
         /* TODO: check finesse and mbm purchasing routine */
     
         /* construct order details */
-        const orderDetails = {
-            number: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
+        const orderPayload = {
+            // number: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
             paymentGateway,
-            transactionId: '',
+            // transactionId: '',
             amount: amountToBeCharged,
             deliveryAddress,
-            items: cartItems.map(item => ({ _id: mongoose.Types.ObjectId(), ...item, status: 'pending', timeline: [], trackingId: '', trackingUrl: '', delivered: '' })),
-            status: 'pending'
+            items: cartItems
+            // items: cartItems.map(item => ({ _id: mongoose.Types.ObjectId(), ...item, status: 'pending', timeline: [], trackingId: '', trackingUrl: '', delivered: '' })),
+            // status: 'pending'
         }
+
+        return orderPayload;
     }
 }
 

@@ -2,6 +2,7 @@ import { server, db, mongoose } from "@helpers/essentials";
 import { methods as userMethods } from "@models/user";
 import sumBy from "lodash/sumBy";
 import { methods as paymentMethods } from "@models/payment"
+import { methods as paymentIntentMethods } from "@models/paymentIntent";
 
 /* creating express router */
 const router = server.express.Router();
@@ -300,7 +301,6 @@ router.post('/orderCheckout', userAuth('customer'), async (req, res) => {
     // console.log(deliveryAddress);
     // console.log(orderDetails);
     const ordersCollection = db.model('orders');
-
     /* save order details to database */
     const orderSaved = await new ordersCollection(orderDetails).save();
     /* save order id to user account */
@@ -336,43 +336,77 @@ router.post('/updateProfile', userAuth('customer'), async (req, res) => {
 });
 
 /* fetch razorpay order id */
-router.post('/fetchRazorpayOrderId', userAuth('customer'), async (req, res) => {
-    let response = { resolved: false, orderId: '' }
-    const { user, amountToBeCharged, deliveryAddress } = req.body;
-    /* refetch cart  */
-    const cartItems = await userMethods.getCartItems(user.cart);
-    /* calculate cart total */
-    const cartTotal = sumBy(cartItems, item => item.price * item.quantity);
+router.post('/createRazorpayOrder', userAuth('customer'), async (req, res) => {
+    /* response to be sent back */
+    let response = { resolved: false, razorpayOrderId: '', paymentIntentId: '' };
 
-    /* if amount doesn't match */
-    if (cartTotal !== amountToBeCharged) {
-        console.log('Amount doesnt match');
+    const { user, amountToBeCharged, deliveryAddress } = req.body;
+
+    /* verify cart and create order payload */
+    const orderPayload = await userMethods.createOrderPayload(user.cart, amountToBeCharged, deliveryAddress, 'razorpay');
+
+    /* if verification failed */
+    if (orderPayload === false) {
         res.send(response);
         return;
     }
 
-    /* verify cart and create order payload */
-    await userMethods.createOrderPayload(user.cart, amountToBeCharged, deliveryAddress, 'razorpay')
-
+    /* create razorpay order */
     const razorpayOrder = await paymentMethods.createRazorpayOrder({
         amount: amountToBeCharged * 100,
         currency: "INR",
-        receipt: "Bounipun Test"
-    });
+        receipt: "Bounipun Test",
+    }, orderPayload);
 
     if (!razorpayOrder) {
         res.send(response);
         return;
     }
 
-    console.log(razorpayOrder);
+    /* create payment intent */
+    const paymentIntent = await paymentIntentMethods.createNew({
+        intentType: 'order',
+        amount: razorpayOrder.amount,
+        currency: razorpayOrder.currency,
+        gateway: 'razorpay',
+        payload: orderPayload
+    });
 
-    response.orderId = razorpayOrder.id;
+    console.log(razorpayOrder);
+    console.log(paymentIntent);
+    
+    /* set razorpay order id */
+    response.razorpayOrderId = razorpayOrder.id;
+    /* set payment intent id */
+    response.paymentIntentId = paymentIntent._id;
     response.resolved = true;
     res.send(response);
 
 });
 
+/* complete checkout */
+router.post('/completeCheckout', userAuth('customer'), async(req, res) => {
+    /* response */
+    let response = { resolved : false };
+    /* extract body */
+    const { gateway, gatewayResponse, paymentIntentId } = req.body;
+
+    switch(gateway) {
+        case 'razorpay':
+            /* match order id & payment intent, only then proceed */
+            
+            /* add order id */
+            /* add transaction id */
+            /* loop through cart items, add extra things */
+            break;
+        case 'stripe':
+            /* payment routine might be processed here only */
+            break;
+    }
+    
+
+
+});
 router.post('/setCookie', (req, res) => {
 
     console.log(req.headers);

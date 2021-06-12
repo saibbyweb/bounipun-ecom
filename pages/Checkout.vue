@@ -96,13 +96,16 @@ export default {
   },
   methods: {
     async fetchRazorpayOrderId() {
-      const razorpayOrder = await this.$post("/fetchRazorpayOrderId", {
-        amountToBeCharged: this.subTotal
+      const razorpayOrder = await this.$post("/createRazorpayOrder", {
+        amountToBeCharged: this.subTotal,
+        deliveryAddress: this.deliveryAddress
       });
 
       if (razorpayOrder.resolved === false) return;
 
-      this.setupRazorpayOrder(razorpayOrder.orderId);
+    console.log(razorpayOrder);
+
+      this.setupRazorpayOrder(razorpayOrder.response.razorpayOrderId);
     },
     setupRazorpayOrder(orderId) {
       let options = {
