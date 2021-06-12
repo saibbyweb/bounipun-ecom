@@ -1,5 +1,6 @@
 import { mongoose, ObjectId, task } from "@helpers/essentials"
 import Razorpay from "razorpay";
+import { methods as paymentIntentMethods } from "@models/paymentIntent";
 
 /* razorpay test key */
 const razorpayTestKey = {
@@ -39,11 +40,23 @@ export const methods = {
     async createRazorpayOrder(orderDetails: RazorpayOrder) {
         /* create order */
         const { response, error } = await task(razorpayInstance.orders.create(orderDetails));
-        
+
         /* if error occurred */
-        if(error) {
+        if (error) {
             return;
         }
+
+        
+
+
+        /* create payment intent */
+        const paymentIntent = await paymentIntentMethods.createNew({
+            intentType: 'order',
+            amount: orderDetails.amount,
+            currency: orderDetails.currency,
+            gateway: 'razorpay',
+            payload: {}
+        });
 
         console.log(response);
         return response;

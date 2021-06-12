@@ -2,6 +2,8 @@ import { mongoose, ObjectId, task, db } from "@helpers/essentials";
 import axios from "axios";
 import bcrypt from "bcrypt"
 import { model as session, methods as sessionMethods } from "./session";
+import sumBy from "lodash/sumBy";
+
 /* validate session */
 const { validateSession } = sessionMethods;
 
@@ -288,6 +290,29 @@ export const methods = {
         });
 
         return foundIndex !== -1 ? { foundCartItem: cart[foundIndex], foundIndex } : false
+    },
+    async createOrderPayload(cart, amountToBeCharged, deliveryAddress, paymentGateway) {
+        const cartItems = await this.getCartItems(cart);
+        const cartTotal = sumBy(cartItems, item => item.price * item.quantity);
+    
+        /* if amount doesn't match */
+        if (cartTotal !== amountToBeCharged) {
+            console.log('Amount doesnt match');
+            return false;
+        }
+    
+        /* TODO: check finesse and mbm purchasing routine */
+    
+        /* construct order details */
+        const orderDetails = {
+            number: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
+            paymentGateway,
+            transactionId: '',
+            amount: amountToBeCharged,
+            deliveryAddress,
+            items: cartItems.map(item => ({ _id: mongoose.Types.ObjectId(), ...item, status: 'pending', timeline: [], trackingId: '', trackingUrl: '', delivered: '' })),
+            status: 'pending'
+        }
     }
 }
 

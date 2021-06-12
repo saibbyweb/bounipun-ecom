@@ -18,8 +18,22 @@ const schema = new mongoose.Schema({
 const modelName = "paymentIntents";
 const model = mongoose.model(modelName, schema);
 
+/* intent options type */
+type IntentOptions = {
+    intentType: string,
+    amount: number,
+    currency: string,
+    gateway: string,
+    /* can be an order or a gift card */
+    payload: any
+}
+
 export const methods = {
     register: () => { console.log('registered') },
+    async createNew (options: IntentOptions) {
+        const newPaymentIntent = await new model(options).save();
+        return newPaymentIntent;
+    }
 }
 
 export default { model, methods };

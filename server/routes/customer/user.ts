@@ -336,9 +336,9 @@ router.post('/updateProfile', userAuth('customer'), async (req, res) => {
 });
 
 /* fetch razorpay order id */
-router.post('/fetchRazorpayOrderId', userAuth('customer'), async(req, res) => {
+router.post('/fetchRazorpayOrderId', userAuth('customer'), async (req, res) => {
     let response = { resolved: false, orderId: '' }
-    const { user, amountToBeCharged } = req.body;
+    const { user, amountToBeCharged, deliveryAddress } = req.body;
     /* refetch cart  */
     const cartItems = await userMethods.getCartItems(user.cart);
     /* calculate cart total */
@@ -350,6 +350,9 @@ router.post('/fetchRazorpayOrderId', userAuth('customer'), async(req, res) => {
         res.send(response);
         return;
     }
+
+    /* verify cart and create order payload */
+    await userMethods.createOrderPayload(user.cart, amountToBeCharged, deliveryAddress, 'razorpay')
 
     const razorpayOrder = await paymentMethods.createRazorpayOrder({
         amount: amountToBeCharged * 100,
