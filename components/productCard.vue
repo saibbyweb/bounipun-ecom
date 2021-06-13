@@ -81,10 +81,10 @@
         </span>
         <span class="collection"> {{ collectionName }} </span>
         <span v-if="!readyToShip" class="price">
-          INR {{ lowestVariantPrice }} - INR {{ highestVariantPirce }}
+           {{ currency + '' + adjustPrice(lowestVariantPrice) }} -  {{ currency + '' + adjustPrice(highestVariantPirce) }}
         </span>
         <span v-if="readyToShip" class="price">
-          INR {{ product.directPrice }}
+          {{ currency + '' + adjustPrice(product.directPrice) }}
         </span>
       </div>
     </div>
@@ -108,6 +108,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   props: {
     searchView: {
@@ -152,6 +154,9 @@ export default {
     }
   },
   computed: {
+    currency() {
+      return this.$store.state.customer.currency + ' ';
+    },
     imagePath() {
       if (this.product.notProvided || this.product.colors.length === 0)
         return "/default-image.png";
@@ -333,6 +338,10 @@ export default {
     };
   },
   methods: {
+    adjustPrice(price) {
+      price = parseInt(price);
+      return this.$store.getters['customer/adjustPrice'](price);
+    },
     toggleWishlist() {
       this.addedToWishlist = !this.addedToWishlist;
     },

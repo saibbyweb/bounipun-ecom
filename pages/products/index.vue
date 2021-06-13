@@ -94,12 +94,12 @@
             <div class="price-and-actions">
               <div class="price">
                 <h5>
-                  INR
+                  {{ currency }}
                   {{
                     thirdPartyProduct || readyToShip
-                      ? product.directPrice
-                      : variants[activeVariantIndex].fabrics[activeFabricIndex]
-                          .price
+                      ? adjustPrice(product.directPrice)
+                      : adjustPrice(variants[activeVariantIndex].fabrics[activeFabricIndex]
+                          .price)
                   }}
                 </h5>
                 <p>Taxes and Shipping Included</p>
@@ -112,8 +112,7 @@
                 </button>
                 <button class="arrow">></button>
               </div>
-                <span style="font-size: 9px;">
-              Standard Shipping: 4 weeks </span>
+              <span style="font-size: 9px;"> Standard Shipping: 4 weeks </span>
             </div>
           </div>
         </div>
@@ -244,7 +243,7 @@
               >
                 <span class="name"> {{ fabric.name }} </span>
                 <span class="info"> {{ fabric.info1 }} </span>
-                <span class="price"> INR {{ fabric.price }} </span>
+                <span class="price"> {{ currency }} {{ adjustPrice(fabric.price) }} </span>
               </div>
             </div>
           </div>
@@ -397,6 +396,9 @@ export default {
     };
   },
   computed: {
+    currency() {
+      return this.$store.state.customer.currency + " ";
+    },
     collectionName() {
       if (!this.product.thirdParty)
         return this.product.bounipun_collection.name;
@@ -485,6 +487,10 @@ export default {
     }
   },
   methods: {
+    adjustPrice(price) {
+      price = parseInt(price);
+      return this.$store.getters["customer/adjustPrice"](price);
+    },
     handleScroll(event) {
       // console.log(this.$store.getters['customer/alreadyInCart'], );
       const scrolled = screen.height + window.scrollY;
@@ -503,18 +509,18 @@ export default {
       }
 
       /* take cart item to server */
-      const remoteAddToCart = await this.$post('/cartActions', {
-          action: 'add-to-cart',
-          cartItem: this.newCartItem
+      const remoteAddToCart = await this.$post("/cartActions", {
+        action: "add-to-cart",
+        cartItem: this.newCartItem
       });
-        
+
       /* remote add to cart */
-      if(remoteAddToCart.resolved === false) {
+      if (remoteAddToCart.resolved === false) {
         return;
       }
-      
+
       /* TODO: need to refetch again */
-      await this.$store.dispatch('customer/fetchCart');
+      await this.$store.dispatch("customer/fetchCart");
       this.$forceUpdate();
     },
     ifActiveColorInCategory(colors) {
@@ -692,6 +698,7 @@ export default {
 <style lang="scss" scoped>
 .product-page {
   margin-top: 10vh;
+  background-color: #f4f5f7;
 
   .product-images {
     position: relative;

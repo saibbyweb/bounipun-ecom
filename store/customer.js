@@ -6,7 +6,9 @@ export const state = () => ({
   authorized: false,
   cart: [],
   globalRemoteCart: [],
-  user: {}
+  user: {},
+  currency: 'USD',
+  currencyMultiplier: 1.3
 });
 
 /* find cartItem helper  */
@@ -44,6 +46,8 @@ export const mutations = {
       /* clear global cart */
       persistedState = JSON.parse(persistedState);
       persistedState.globalRemoteCart = [];
+      persistedState.currencyMultiplier = 1.3;
+      persistedState.currency = "USD";
       Object.assign(state, persistedState);
     }
 
@@ -117,6 +121,19 @@ export const getters = {
   getCartProductIds(state) {
     if (state.cart.length === 0) return false;
     return [...new Set(state.cart.map(product => product._id))];
+  },
+  adjustPrice: state => dbPrice => {
+    console.log('hey i was called', state.currency)
+    /* if currence is INR, return as is */
+    if(state.currency === "INR") {
+      return dbPrice;
+    }
+    else {
+      const inflatedPrice = dbPrice * state.currencyMultiplier / 70;
+      console.log(dbPrice, inflatedPrice, state.currencyMultiplier)
+      return inflatedPrice.toFixed(2);
+    }
+    /* if not then, multiply db price with currency multiplier and return */
   }
 };
 
@@ -131,5 +148,8 @@ export const actions = {
     if (cartItems.resolved === false) return;
  
     commit('setGlobalRemoteCart', cartItems.response);
+  },
+  async fetchGlobalConfig({ state, commit }) {
+
   }
 };
