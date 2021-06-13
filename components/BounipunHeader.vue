@@ -3,7 +3,7 @@
     <!-- menu -->
     <div class="menu center" @click="$emit('showMenu')">
         <img class="action-icon" :src="getIconPath('menu.png')" />
-        <img v-if="$store.state.customer.authorized" class="action-icon account" :src="getIconPath('account.png')" />
+        <img @click.stop="$store.commit('customer/switchCurrency')" v-if="$store.state.customer.authorized" class="action-icon account" :src="getIconPath('account.png')" />
     </div>
 
     <!-- logo -->

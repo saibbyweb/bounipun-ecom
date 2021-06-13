@@ -4,39 +4,13 @@
         <!-- country region -->
         <h2 class="title"> Country/Region </h2>
         <!-- country selection -->
-        <div v-if="countryCodes.length !== 0" class="country-select">
-            <div @click="showCountrySelect = true" class="selected-country" :class="{focused: showCountrySelect}">
-                <img :src="selectedCountry.flag" />
-                <span> {{ selectedCountry.name }} </span>
-                <span v-if="selectedCountry !== ''" style="margin-left: 4px;"> ({{ selectedCountry.dialCode }}) </span>
-            </div>
 
-            <!-- list of countries -->
-            <div v-if="showCountrySelect" class="country-list">
 
-                <!-- search -->
-                <div class="search">
-                    <input type="text" class="field" placeholder="Enter Country Name" v-model.trim="countrySearchTerm" autocomplete="new-password" />
-                </div>
-
-                <!-- country list -->
-                <div class="item" v-for="(country, index) in matchedCountries" :key="country.isoCode" @click="selectCountry(index)">
-                    <img :src="country.flag" />
-                    <span> {{ country.name }} </span>
-                    <span style="margin-left: 4px;"> ({{ country.dialCode }}) </span>
-                </div>
-
-                <!-- no results found -->
-                <div v-if="matchedCountries.length === 0" class="no-results">
-                    <span> No results found </span>
-                </div>
-
-            </div>
-        </div>
+        <CountrySelect v-model="selectedCountryCodex"/>
 
         <h2 class="title"> Shipping Address </h2>
         <!-- delivery input fields -->
-        <DeliveryInput v-for="(field, key, index) in formData" :key="index" v-model="field.value" :error="field.error" :label="field.label" @input="field.error = false" :isMobileNumber="key === 'mobileNumber'" :countryCode="selectedCountryCode" />
+        <DeliveryInput v-for="(field, key, index) in formData" :key="index" v-model="field.value" :error="field.error" :label="field.label" @input="field.error = false" :isMobileNumber="key === 'mobileNumber'" :countryCode="selectedCountryCodex" />
     </div>
 
     <!-- proceed to checkout -->
@@ -56,7 +30,8 @@ export default {
             countryCodes: countryData,
             selectedCountryIndex: 98,
             countrySearchTerm: "",
-            showCountrySelect: false
+            showCountrySelect: false,
+            selectedCountryCodex: ""
         }
     },
     computed: {

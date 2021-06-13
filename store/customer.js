@@ -107,7 +107,9 @@ export const mutations = {
   },
   setGlobalRemoteCart(state, cart) {
     state.globalRemoteCart = cart;
-
+  },
+  switchCurrency(state) {
+    state.currency = state.currency === "INR" ? "USD" : "INR";
   }
 };
 
