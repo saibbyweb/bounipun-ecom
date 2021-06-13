@@ -27,7 +27,7 @@
           <span class="fabric"> {{ subOrder.fabricInfo1 }} </span>
           <span class="quantity"> Quantity: {{ subOrder.quantity }} </span>
           <span class="price">
-            Amount Paid: <b> INR {{ subOrder.quantity * subOrder.price }} </b>
+            Amount Paid: <b>  {{ order.currency }} {{ subOrder.quantity * subOrder.price }} </b>
           </span>
         </div>
       </div>

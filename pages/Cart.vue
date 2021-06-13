@@ -21,7 +21,7 @@
         Sub Total <br />
         <span class="length"> {{ $store.getters['customer/cartCount']() }} Item(s) : </span>
       </p>
-      <span class="value text"> INR {{ subTotal }} </span>
+      <span class="value text"> {{ currency }} {{ subTotal }} </span>
     </div>
 
     <!-- proceed to address page-->
@@ -64,14 +64,21 @@ export default {
     }, 300);
   },
   computed: {
+        currency() {
+      return this.$store.state.customer.currency + ' ';
+    },
     cartEmpty: function() {
       return this.remoteCartItems.length === 0;
     },
     subTotal() {
-      return sumBy(this.remoteCartItems, item => item.price * item.quantity);
+      return sumBy(this.$store.state.customer.globalRemoteCart, item => this.adjustPrice(item.price) * item.quantity);
     }
   },
   methods: {
+        adjustPrice(price) {
+      price = parseInt(price);
+      return this.$store.getters['customer/adjustPrice'](price);
+    },
     async updateQuantity(payload) {
       const { item: vuexItem, operation } = payload;
       let item = {...vuexItem}

@@ -1,5 +1,8 @@
 <template>
-  <div @click="$router.push('/products?_id=' + item.productId)" class="cart-item">
+  <div
+    @click="$router.push('/products?_id=' + item.productId)"
+    class="cart-item"
+  >
     <!-- main image -->
     <div
       class="image-container"
@@ -23,7 +26,7 @@
       <!-- fabric info 1-->
       <span class="fabric"> {{ item.fabricInfo1 }} </span>
       <!-- price -->
-      <span class="price"> INR {{ item.price }} </span>
+      <span class="price"> {{ currency }} {{ adjustPrice(item.price) }} </span>
 
       <!-- quantity picker -->
       <div v-if="allowUpdate" class="quantity-picker">
@@ -33,13 +36,14 @@
       </div>
     </div>
     <!-- remove item -->
-    <img v-if="allowUpdate"
+    <img
+      v-if="allowUpdate"
       @click.stop="emitRemoveFromCart(item)"
       class="remove-item"
       src="/icons/dark/remove-cart-item.png"
     />
     <!-- total product price -->
-    <p class="total-product-price">INR {{ item.quantity * item.price }}</p>
+    <p class="total-product-price">{{ currency }} {{ item.quantity * adjustPrice(item.price) }}</p>
   </div>
 </template>
 
@@ -48,8 +52,8 @@ export default {
   props: {
     item: Object,
     allowUpdate: {
-        type: Boolean,
-        default: true
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -63,15 +67,23 @@ export default {
       }
     };
   },
-  computed: {},
+  computed: {
+    currency() {
+      return this.$store.state.customer.currency + " ";
+    }
+  },
   mounted() {},
   methods: {
-      emitUpdateQuantity(item, operation) {
-          this.$emit('updateQuantity', { item: item.cartEntry, operation })
-      },
-      emitRemoveFromCart(item) {
-          this.$emit('removeItem', item.cartEntry);
-      }
+    adjustPrice(price) {
+      price = parseInt(price);
+      return this.$store.getters["customer/adjustPrice"](price);
+    },
+    emitUpdateQuantity(item, operation) {
+      this.$emit("updateQuantity", { item: item.cartEntry, operation });
+    },
+    emitRemoveFromCart(item) {
+      this.$emit("removeItem", item.cartEntry);
+    }
   }
 };
 </script>

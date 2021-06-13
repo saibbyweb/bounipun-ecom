@@ -73,7 +73,8 @@ const demoDeliveryAddress = {
 export default {
   mounted() {
     this.$store.dispatch("customer/fetchCart");
-    this.fetchRazorpayOrderId();
+    if(this.currency === "INR")
+      this.fetchRazorpayOrderId();
   },
   data() {
     return {
@@ -84,17 +85,24 @@ export default {
     };
   },
   computed: {
+            currency() {
+      return this.$store.state.customer.currency + ' ';
+    },
     cartEmpty: function() {
       return this.$store.state.customer.globalRemoteCart.length === 0;
     },
     subTotal() {
       return sumBy(
         this.$store.state.customer.globalRemoteCart,
-        item => item.price * item.quantity
+        item => this.adjustPrice(item.price) * item.quantity
       );
     }
   },
   methods: {
+            adjustPrice(price) {
+      price = parseInt(price);
+      return this.$store.getters['customer/adjustPrice'](price);
+    },
     async fetchRazorpayOrderId() {
       const razorpayOrder = await this.$post("/createRazorpayOrder", {
         amountToBeCharged: this.subTotal,
@@ -159,25 +167,10 @@ export default {
       this.razorpayCheckout = new Razorpay(options);
     },
     async placeOrder() {
-      this.razorpayCheckout.open();
+      if(this.currency === "INR")
+        this.razorpayCheckout.open();
       return;
 
-      const remoteCartItems = this.$store.state.customer.globalRemoteCart;
-      //   this.$router.push('/order-placed-successfully')
-      const checkoutPayload = {
-        deliveryAddress: this.deliveryAddress,
-        orderCartItems: remoteCartItems.map(item => item.cartEntry),
-        amountToBeCharged: parseInt(this.subTotal)
-      };
-
-      const checkout = await this.$post("/orderCheckout", checkoutPayload);
-
-      if (checkout.resolved === false) {
-        return;
-      }
-
-      /* move to order placed page */
-      this.$router.push("/order-placed-successfully");
     }
   }
 };
