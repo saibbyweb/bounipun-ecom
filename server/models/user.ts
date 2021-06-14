@@ -68,12 +68,15 @@ const modelName = 'users';
 const model = mongoose.model('users', schema);
 
 /* express auth */
-const expressAuth = async (req, res, next, usergroup) => {
+const expressAuth = async (req, res, next, usergroup, strictMode) => {
+    
     req.body.user = { status: false }
     /* no cookie is found, mark user as guest */
     if (req.cookies.swecom_bounipun === undefined) {
-        // next()
-        res.send({ notAuthorized: true })
+        if(strictMode)
+            res.send({ notAuthorized: true })
+        else
+            next();
         return;
     }
 
@@ -84,7 +87,10 @@ const expressAuth = async (req, res, next, usergroup) => {
     /* if session is invalid */
     if (session === false) {
         /* TODO: reset cookie */
-        res.send({ notAuthorized: true })
+        if(strictMode)
+            res.send({ notAuthorized: true });
+        else
+            next()
         return;
     }
 
@@ -153,8 +159,8 @@ export const methods = {
 
         return !error ? newSession : false;
     },
-    userAuth: (userGroup) => (...args: [req: any, res: any, next: any]) => {
-        return expressAuth(...args, userGroup)
+    userAuth: (userGroup, strictMode = true) => (...args: [req: any, res: any, next: any]) => {
+        return expressAuth(...args, userGroup, strictMode)
     },
     async getCartItems(cart) {
 

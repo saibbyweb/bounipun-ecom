@@ -43,6 +43,7 @@ export default {
         // this.fetchCart()
         this.$store.dispatch('customer/fetchCart');
         this.fetchProfile();
+        this.$store.dispatch('customer/fetchStoreLocation');
     }, 400)
   },
   data() {

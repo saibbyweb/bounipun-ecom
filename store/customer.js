@@ -7,7 +7,7 @@ export const state = () => ({
   cart: [],
   globalRemoteCart: [],
   user: {},
-  currency: 'USD',
+  currency: "USD",
   currencyMultiplier: 1.3
 });
 
@@ -110,6 +110,10 @@ export const mutations = {
   },
   switchCurrency(state) {
     state.currency = state.currency === "INR" ? "USD" : "INR";
+  },
+  setStoreCurrency(state, countryCode) {
+    console.log(countryCode,'-- STORE CURRENCY SET');
+    state.currency = countryCode === "IN" ? "INR" : "USD";
   }
 };
 
@@ -125,14 +129,13 @@ export const getters = {
     return [...new Set(state.cart.map(product => product._id))];
   },
   adjustPrice: state => dbPrice => {
-    console.log('hey i was called', state.currency)
+    console.log("hey i was called", state.currency);
     /* if currence is INR, return as is */
-    if(state.currency === "INR") {
+    if (state.currency === "INR") {
       return dbPrice;
-    }
-    else {
-      const inflatedPrice = dbPrice * state.currencyMultiplier / 70;
-      console.log(dbPrice, inflatedPrice, state.currencyMultiplier)
+    } else {
+      const inflatedPrice = (dbPrice * state.currencyMultiplier) / 70;
+      console.log(dbPrice, inflatedPrice, state.currencyMultiplier);
       return inflatedPrice.toFixed(2);
     }
     /* if not then, multiply db price with currency multiplier and return */
@@ -148,10 +151,14 @@ export const actions = {
     });
 
     if (cartItems.resolved === false) return;
- 
-    commit('setGlobalRemoteCart', cartItems.response);
-  },
-  async fetchGlobalConfig({ state, commit }) {
 
-  }
+    commit("setGlobalRemoteCart", cartItems.response);
+  },
+  async fetchStoreLocation({ commit }) {
+    const ipLookup = await this.$post("/ipLookup");
+    console.log(ipLookup,'from actions');
+    if (ipLookup.resolved === false) return;
+    commit("setStoreCurrency", ipLookup.response.countryCode);
+  },
+  async fetchGlobalConfig({ state, commit }) {}
 };

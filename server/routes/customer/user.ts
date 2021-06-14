@@ -1,8 +1,12 @@
-import { server, db, mongoose } from "@helpers/essentials";
+import { server, db, mongoose, task } from "@helpers/essentials";
 import { methods as userMethods } from "@models/user";
 import sumBy from "lodash/sumBy";
 import { methods as paymentMethods } from "@models/payment"
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
+import axios from "axios";
+
+/* ipregistry key */
+const ipRegistryKey = "zyj95uvw8cy5g1";
 
 /* creating express router */
 const router = server.express.Router();
@@ -436,6 +440,7 @@ router.post('/completeCheckout', userAuth('customer'), async (req, res) => {
     response.resolved = true;
     res.send(response);
 });
+/* set cookie demo */
 router.post('/setCookie', (req, res) => {
 
     console.log(req.headers);
@@ -443,5 +448,42 @@ router.post('/setCookie', (req, res) => {
     res.cookie('chill', '1234567', { maxAge: 2592000000, httpOnly: false, sameSite: 'none', secure: false, path: req.headers.origin });
     res.send('what')
 
-})
+});
+
+/* ip lookup */
+router.post('/ipLookup', userAuth('customer', false), async(req, res) => {
+    /* response to be sent back */
+    let response = { resolved: false, countryCode: '' };
+
+    const { user } = req.body;
+    
+    /* if user is logged in, fetch country code from account */
+    if(user.status === true) {
+        console.log('LOGGED IN, IP fetched from account')
+        response.countryCode = user.countryIsoCode;
+        response.resolved = true;
+        res.send(response);
+        return;
+    }
+
+    const ipLookup = axios.get(`https://api.ipregistry.co/?key=${ipRegistryKey}`);
+    const { response: lookupResponse, error } = await task(ipLookup);
+    /* if error */
+    if(error) {
+        res.send(response);
+        return;
+    }
+    
+    
+    /* if match found */
+    if(lookupResponse.data.location.country.code) {
+        console.log('IP Looked-Up');
+        response.countryCode = lookupResponse.data.location.country.code;
+        response.resolved = true;
+    }
+    
+    res.send(response);
+
+});
+
 export default router;
