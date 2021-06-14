@@ -73,7 +73,7 @@ const demoDeliveryAddress = {
 export default {
   mounted() {
     this.$store.dispatch("customer/fetchCart");
-    if(this.currency === "INR")
+    if(this.currency.trim() === "INR")
       this.fetchRazorpayOrderId();
   },
   data() {
@@ -167,7 +167,7 @@ export default {
       this.razorpayCheckout = new Razorpay(options);
     },
     async placeOrder() {
-      if(this.currency === "INR")
+      if(this.currency.trim() === "INR")
         this.razorpayCheckout.open();
       return;
 
