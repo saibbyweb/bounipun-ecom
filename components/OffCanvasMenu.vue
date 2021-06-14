@@ -7,8 +7,7 @@
           Good Afternoon,<br>
           {{
             $store.state.customer.user !== undefined
-              ? $store.state.customer.user.firstName + ' ' +
-                $store.state.customer.user.surName
+              ? $store.state.customer.user.firstName 
               : ""
           }}
         </h4>
@@ -144,7 +143,7 @@ export default {
       width: 100%;
       margin-bottom: 10px;
       display: flex;
-      justify-content: space-around;
+      justify-content: flex-start;
       align-items: center;
       padding: 0 10px;
       box-sizing: border-box;
