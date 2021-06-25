@@ -28,6 +28,11 @@ export const methods = {
         const findSession = model.findOne({ token, valid: true }).populate('user').lean();
         const { response: session, error } = await task(findSession as any);
         return error || session === null ? false : session;
+    },
+    async invalidateSession(userId, token) {
+        const invalidateRequest: any = model.findOneAndUpdate({user: userId, token}, { valid: false });
+        const { response, error } = await task(invalidateRequest);
+        return error || response === null ? false : true;
     }
 }
 

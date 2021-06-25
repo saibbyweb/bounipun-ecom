@@ -200,14 +200,20 @@ export default (context, inject) => {
     const { response, error } = await task(request);
     $store.commit("customer/setLoading", false);
     $store.commit("admin/setLoading", false);
+
     /* if error occurred */
-    if (error || response.resolved === false) {
+    if(error) {
+      return { response, resolved: false };
+    }
+
+    if (response.resolved === false) {
       if(response.resolved === false) {
         console.log(`%c Request not resolved: ${endpoint} with payload: ${JSON.stringify(payload)}`, 'color: red');
-        // console.log(payload);
       }
       return { response, resolved: false }
     }
+
+
     /* if request resolved */
     return { response, resolved: true };
   };

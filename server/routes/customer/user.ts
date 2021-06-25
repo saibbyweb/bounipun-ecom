@@ -1,5 +1,6 @@
 import { server, db, mongoose, task } from "@helpers/essentials";
 import { methods as userMethods } from "@models/user";
+import { methods as sessionMethods } from "@models/session"
 import sumBy from "lodash/sumBy";
 import { methods as paymentMethods } from "@models/payment"
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
@@ -486,4 +487,12 @@ router.post('/ipLookup', userAuth('customer', false), async(req, res) => {
 
 });
 
+/* logout user */
+router.post('/logoutCustomer', userAuth('customer'), async(req, res) => {
+    console.log('logout called');
+    /* mark session as invalid */
+    const { user, token } = req.body;
+    await sessionMethods.invalidateSession(user._id, token);
+    res.send('logout called');
+});
 export default router;

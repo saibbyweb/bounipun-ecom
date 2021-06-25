@@ -1,4 +1,4 @@
-export default [
+const allCountries = [
     {
         "name": "Afghanistan",
         "dialCode": "+93",
@@ -1470,3 +1470,16 @@ export default [
         "flag": "https://www.countryflags.io/ZW/flat/64.png"
     }
 ]
+export default allCountries;
+/* get country */
+export const getCountry = (countryIsoCode) => {
+    /* found country */
+    const foundCountry = allCountries.find(country => country.isoCode === countryIsoCode);
+    if(foundCountry === undefined)
+        return false;
+    return foundCountry;
+}
+/* get country index */
+export const getCountryIndex = (countryIsoCode) => {
+    return allCountries.findIndex(country => country.isoCode === countryIsoCode);
+}

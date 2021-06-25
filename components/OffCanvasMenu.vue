@@ -4,16 +4,22 @@
       <!-- header -->
       <div class="header">
         <h4 v-if="$store.state.customer.authorized" class="white">
-          Good Afternoon,<br>
+          Good Afternoon,<br />
           {{
             $store.state.customer.user !== undefined
-              ? $store.state.customer.user.firstName 
+              ? $store.state.customer.user.firstName
               : ""
           }}
         </h4>
         <!-- <img class="close" src="/icons/light/close.png" @click="$emit('closeMenu')"> -->
 
-        <h4 v-if="!$store.state.customer.authorized" class="white" @click="navigate('/login')"> Login/Register </h4>
+        <h4
+          v-if="!$store.state.customer.authorized"
+          class="white"
+          @click="navigate('/login')"
+        >
+          Login/Register
+        </h4>
       </div>
 
       <!-- menu items -->
@@ -31,34 +37,34 @@
       <!-- <button class="clear item"> Categories </button> -->
       <button class="clear item">The Bounipun Lab</button>
       <button class="clear item">Story</button>
-    
-    <div v-if="$store.state.customer.authorized">
-      <!-- acc items -->
-      <button @click="navigate('/my-account')" class="clear item">
-        My Account
-      </button>
-      <button @click="navigate('/my-account/orders')" class="clear item acc">
-        Orders
-      </button>
-      <button
-        @click="navigate('/my-account/address-book')"
-        class="clear item acc"
-      >
-        Address Book
-      </button>
-      <button
-        @click="navigate('/my-account/profile-details')"
-        class="clear item acc"
-      >
-        Profile Details
-      </button>
-      <button
-        @click="navigate('/my-account/gift-cards')"
-        class="clear item acc"
-      >
-        Gift Cards
-      </button>
-    </div>
+
+      <div v-if="$store.state.customer.authorized">
+        <!-- acc items -->
+        <button @click="navigate('/my-account')" class="clear item">
+          My Account
+        </button>
+        <button @click="navigate('/my-account/orders')" class="clear item acc">
+          Orders
+        </button>
+        <button
+          @click="navigate('/my-account/address-book')"
+          class="clear item acc"
+        >
+          Address Book
+        </button>
+        <button
+          @click="navigate('/my-account/profile-details')"
+          class="clear item acc"
+        >
+          Profile Details
+        </button>
+        <button
+          @click="navigate('/my-account/gift-cards')"
+          class="clear item acc"
+        >
+          Gift Cards
+        </button>
+      </div>
 
       <br />
       <!-- links -->
@@ -67,6 +73,11 @@
       <button class="clear link">About Us</button>
       <button class="clear link">Terms of Use</button>
       <button class="clear link">Privacy Policy</button>
+
+      <br />
+
+      <!-- logout -->
+      <button @click="logout()" class="clear link logout">Logout</button>
     </div>
     <div class="place-holder" @click="$emit('closeMenu')"></div>
   </div>
@@ -113,6 +124,13 @@ export default {
       if (!collections.fetched) return;
 
       this.collections = collections.docs;
+    },
+    async logout() {
+      const { resolved, response }  = await this.$post('/logoutCustomer');
+      
+      /* set user as logged off */
+      this.$store.commit("customer/setAuthorization",false);
+      this.$router.push('/');
     }
   }
 };
@@ -137,6 +155,8 @@ export default {
   .main {
     width: 70%;
     background-color: white;
+    position: relative;
+
     .header {
       background: $primary_dark;
       height: 10vh;
@@ -183,6 +203,17 @@ export default {
       padding: 2%;
       margin-left: 5px;
       opacity: 0.8;
+    }
+
+    .logout {
+      position: absolute;
+      bottom: 10px;
+      font-size: 13px;
+      width: fit-content;
+      background-color: #b56b6b;
+      color: white;
+      padding: 3px 20px;
+      right: 0px;
     }
   }
 

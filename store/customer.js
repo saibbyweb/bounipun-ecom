@@ -1,4 +1,5 @@
 import cookies from "js-cookie";
+import { getCountryIndex } from "../helpers/countryCodes";
 
 export const state = () => ({
   persistedStateLoaded: false,
@@ -8,6 +9,7 @@ export const state = () => ({
   globalRemoteCart: [],
   user: {},
   currency: "USD",
+  countryIndex: 0,
   currencyMultiplier: 1.3
 });
 
@@ -48,6 +50,7 @@ export const mutations = {
       persistedState.globalRemoteCart = [];
       persistedState.currencyMultiplier = 1.3;
       persistedState.currency = "USD";
+      persistedState.countryIndex = 0;
       Object.assign(state, persistedState);
     }
 
@@ -112,10 +115,12 @@ export const mutations = {
     state.currency = state.currency === "INR" ? "USD" : "INR";
   },
   setStoreCurrency(state, countryCode) {
-    console.log(countryCode,'-- STORE CURRENCY SET');
     state.currency = countryCode === "IN" ? "INR" : "USD";
+  },
+  setCountryIndex(state, countryIndex) {
+    state.countryIndex = countryIndex;
   }
-};
+}
 
 export const getters = {
   alreadyInCart: state => cartItem => {
@@ -156,9 +161,18 @@ export const actions = {
   },
   async fetchStoreLocation({ commit }) {
     const ipLookup = await this.$post("/ipLookup");
-    console.log(ipLookup,'from actions');
+    console.log(ipLookup, "from actions");
     if (ipLookup.resolved === false) return;
-    commit("setStoreCurrency", ipLookup.response.countryCode);
+    const countryIsoCode = ipLookup.response.countryCode;
+    commit("setStoreCurrency", countryIsoCode);
+    /* figure out dial code */
+    const countryIndex = getCountryIndex(countryIsoCode);
+
+    if (countryIndex === -1) {
+      return;
+    }
+    /* set country index */
+    commit("setCountryIndex", countryIndex);
   },
   async fetchGlobalConfig({ state, commit }) {}
 };

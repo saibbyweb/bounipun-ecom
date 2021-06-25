@@ -52,18 +52,18 @@ export default {
   data() {
     return {
       countryCodes: countryData,
-      selectedCountryIndex: 98,
+      selectedCountryIndex: this.$store.state.customer.countryIndex,
       countrySearchTerm: "",
       showCountrySelect: false
     };
   },
   mounted() {
-        this.$emit('input', this.selectedCountryCode);
+    this.$emit("input", this.selectedCountryCode);
   },
   watch: {
-      selectedCountryCode(newVal) {
-          this.$emit('input', newVal);
-      }
+    selectedCountryCode(newVal) {
+      this.$emit("input", newVal);
+    }
   },
   computed: {
     selectedCountry() {

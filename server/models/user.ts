@@ -96,6 +96,7 @@ const expressAuth = async (req, res, next, usergroup, strictMode) => {
 
     /* if session valid, append user data on req body */
     req.body.user = session.user;
+    req.body.token = token;
     next();
 
 }

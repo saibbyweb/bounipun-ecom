@@ -73,8 +73,7 @@ const demoDeliveryAddress = {
 export default {
   mounted() {
     this.$store.dispatch("customer/fetchCart");
-    if(this.currency.trim() === "INR")
-      this.fetchRazorpayOrderId();
+    if (this.currency.trim() === "INR") this.fetchRazorpayOrderId();
   },
   data() {
     return {
@@ -85,8 +84,8 @@ export default {
     };
   },
   computed: {
-            currency() {
-      return this.$store.state.customer.currency + ' ';
+    currency() {
+      return this.$store.state.customer.currency + " ";
     },
     cartEmpty: function() {
       return this.$store.state.customer.globalRemoteCart.length === 0;
@@ -99,9 +98,9 @@ export default {
     }
   },
   methods: {
-            adjustPrice(price) {
+    adjustPrice(price) {
       price = parseInt(price);
-      return this.$store.getters['customer/adjustPrice'](price);
+      return this.$store.getters["customer/adjustPrice"](price);
     },
     async fetchRazorpayOrderId() {
       const razorpayOrder = await this.$post("/createRazorpayOrder", {
@@ -167,10 +166,8 @@ export default {
       this.razorpayCheckout = new Razorpay(options);
     },
     async placeOrder() {
-      if(this.currency.trim() === "INR")
-        this.razorpayCheckout.open();
+      if (this.currency.trim() === "INR") this.razorpayCheckout.open();
       return;
-
     }
   }
 };
