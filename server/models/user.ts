@@ -3,6 +3,10 @@ import axios from "axios";
 import bcrypt from "bcrypt"
 import { model as session, methods as sessionMethods } from "./session";
 import sumBy from "lodash/sumBy";
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const twilio = require('twilio')(accountSid, authToken);
+const twilioServiceId = process.env.TWILIO_VERIFY_SERVICE_ID
 
 /* validate session */
 const { validateSession } = sessionMethods;
@@ -134,6 +138,34 @@ export const methods = {
         const { response, error } = await task(axios.get(verifyOtpUrl));
         // console.log(response.data);
         return !error && response.data.type === "success" ? true : false;
+    },
+    /* send internation otp */
+    sendInternationalOtp: async(countryDialCode, phoneNumber) => {
+        let otpSent = false;
+        const verfication = await twilio.verify
+          .services(twilioServiceId)
+          .verifications.create({
+            to: countryDialCode+phoneNumber,
+            channel: "sms"
+          });
+    
+        if(verfication.status === 'pending')
+          otpSent = true;
+        
+          return otpSent;
+    },
+    /* verify international otp */
+    verifyInternationalOtp: async(countryDialCode, phoneNumber, otp) => {
+        let verified = false;
+        const verification_check = await twilio.verify.services(twilioServiceId)
+          .verificationChecks
+          .create({to: countryDialCode+phoneNumber, code: otp});
+    
+        console.log(verification_check);
+        if(verification_check.status === "approved")
+          verified = true;
+    
+        return verified;
     },
     /* get user */
     getUser: async (criteria) => {

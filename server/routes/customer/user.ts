@@ -7,7 +7,7 @@ import { methods as paymentIntentMethods } from "@models/paymentIntent";
 import axios from "axios";
 
 /* ipregistry key */
-const ipRegistryKey = "zyj95uvw8cy5g1";
+const ipRegistryKey = process.env.IP_REGISTRY_KEY;
 
 /* creating express router */
 const router = server.express.Router();
@@ -20,9 +20,14 @@ router.post("/sendOtp", async (req, res) => {
     const { countryDialCode, phoneNumber, purpose } = req.body;
 
     console.log(countryDialCode, phoneNumber, purpose);
-
-    /* TODO: if dial code === +91 */
-    const sendOtpRequestStatus = await userMethods.sendMsg91Otp(phoneNumber);
+    
+    let sendOtpRequestStatus = false;
+    sendOtpRequestStatus = await userMethods.sendInternationalOtp(countryDialCode, phoneNumber)
+    
+    // if(countryDialCode === "+91")
+    //     sendOtpRequestStatus = await userMethods.sendMsg91Otp(phoneNumber)
+    // else
+    //     sendOtpRequestStatus = await userMethods.sendInternationalOtp(countryDialCode, phoneNumber)
 
     response.resolved = true;
     response.otpSent = sendOtpRequestStatus;
@@ -147,7 +152,8 @@ router.post('/loginCustomer', async (req, res) => {
     }
 
     /* TODO: verify otp | if dial code === +91*/
-    if ((await userMethods.verifyMsg91Otp(phoneNumber, otp)) === false) {
+    // if ((await userMethods.verifyMsg91Otp(phoneNumber, otp)) === false) {
+    if ((await userMethods.verifyInternationalOtp(countryDialCode, phoneNumber, otp)) === false) {
         response.incorrectOtp = true;
         response.message = 'Incorrect OTP entered.'
         console.log('incorrect otp');
