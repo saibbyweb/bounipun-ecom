@@ -47,10 +47,6 @@ export default {
         this.fetchProfile();
     },
     methods: {
-        updateProfile() {
-            this.updated = true;
-            setTimeout(() => this.updated = false, 3000);
-        },
         async fetchProfile() {
             const {
                 response,
@@ -67,9 +63,9 @@ export default {
             this.profile = profile;
         },
         async updateProfile() {
-            await this.$post('/updateProfile', { profile: this.profile });
-            this.updated = true;
-            setTimeout(() => this.updated = false, 1500);
+            // await this.$post('/updateProfile', { profile: this.profile });
+            // this.updated = true;
+            // setTimeout(() => this.updated = false, 1500);
         }
     }
 }

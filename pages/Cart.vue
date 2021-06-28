@@ -68,7 +68,7 @@ export default {
       return this.$store.state.customer.currency + ' ';
     },
     cartEmpty: function() {
-      return this.remoteCartItems.length === 0;
+      return this.$store.state.customer.globalRemoteCart.length === 0;
     },
     subTotal() {
       return sumBy(this.$store.state.customer.globalRemoteCart, item => this.adjustPrice(item.price) * item.quantity);

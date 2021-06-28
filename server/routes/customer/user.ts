@@ -22,10 +22,10 @@ router.post("/sendOtp", async (req, res) => {
     console.log(countryDialCode, phoneNumber, purpose);
 
     let sendOtpRequestStatus = false;
-    sendOtpRequestStatus = await userMethods.sendInternationalOtp(countryDialCode, phoneNumber)
+    // sendOtpRequestStatus = await userMethods.sendInternationalOtp(countryDialCode, phoneNumber)
 
     // if(countryDialCode === "+91")
-    //     sendOtpRequestStatus = await userMethods.sendMsg91Otp(phoneNumber)
+        sendOtpRequestStatus = await userMethods.sendMsg91Otp(phoneNumber)
     // else
     //     sendOtpRequestStatus = await userMethods.sendInternationalOtp(countryDialCode, phoneNumber)
 
@@ -152,8 +152,8 @@ router.post('/loginCustomer', async (req, res) => {
     }
 
     /* TODO: verify otp | if dial code === +91*/
-    // if ((await userMethods.verifyMsg91Otp(phoneNumber, otp)) === false) {
-    if ((await userMethods.verifyInternationalOtp(countryDialCode, phoneNumber, otp)) === false) {
+    if ((await userMethods.verifyMsg91Otp(phoneNumber, otp)) === false) {
+    // if ((await userMethods.verifyInternationalOtp(countryDialCode, phoneNumber, otp)) === false) {
         response.incorrectOtp = true;
         response.message = 'Incorrect OTP entered.'
         console.log('incorrect otp');
@@ -199,25 +199,34 @@ router.post('/loginCustomer', async (req, res) => {
 /* shitf local cart to user cart */
 router.post('/shiftCart', userAuth('customer'), async (req, res) => {
     let response = { resolved: true, shifted: false }
-    // console.log(req.body);
-    if (req.body.cart === undefined || req.body.length === 0) {
+    
+    if (req.body.cart === undefined || req.body.cart.length === 0) {
+        res.send(response);
+        return;
+    }
+    
+    /* user cart is not empty, dont do anything */
+    if(req.body.user.cart.length > 0) {
+        response.shifted = true;
         res.send(response);
         return;
     }
 
     /* shifted cart */
     const userCart = req.body.cart.map(item => ({
-        product: item._id,
+        product: item.product,
         colorCode: item.colorCode,
         quantity: item.quantity,
-        variant: item.variantId === undefined ? null : item.variantId,
-        fabric: item.fabricId === undefined ? null : item.fabricId
+        variant: item.variant === undefined ? null : item.variant,
+        fabric: item.fabric === undefined ? null : item.fabric
     }));
 
     /* shift cart to database */
     await db.model('users').findOneAndUpdate({ _id: req.body.user._id }, { cart: userCart });
+    
+    response.shifted = true;
 
-    res.send('shifting broo');
+    res.send(response);
 });
 
 /* fetch cart */

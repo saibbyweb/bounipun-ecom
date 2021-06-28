@@ -505,6 +505,8 @@ export default {
           return;
         }
         this.$store.commit("customer/addToCart", this.newCartItem);
+        await this.$store.dispatch("customer/fetchCart");
+        this.$forceUpdate();
         return;
       }
 

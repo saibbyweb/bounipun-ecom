@@ -77,7 +77,7 @@
       <br />
 
       <!-- logout -->
-      <button @click="logout()" class="clear link logout">Logout</button>
+      <button v-if="$store.state.customer.authorized" @click="logout()" class="clear link logout">Logout</button>
     </div>
     <div class="place-holder" @click="$emit('closeMenu')"></div>
   </div>
@@ -129,8 +129,11 @@ export default {
       const { resolved, response }  = await this.$post('/logoutCustomer');
       
       /* set user as logged off */
-      this.$store.commit("customer/setAuthorization",false);
+      this.$store.commit("customer/unauthorize");
       this.$router.push('/');
+      await this.$store.dispatch("customer/fetchCart");
+      this.$forceUpdate();
+      this.$emit("closeMenu");
     }
   }
 }

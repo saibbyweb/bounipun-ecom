@@ -65,6 +65,12 @@ export const mutations = {
   setAuthorization(state, value) {
     state.authorized = value;
   },
+  /* unauthorize */
+  unauthorize(state) {
+    state.authorized = false;
+    state.user = {};
+    cookies.remove('swecom_bounipun')
+  },
   setUser(state, user) {
     state.user = user;
   },
@@ -107,6 +113,7 @@ export const mutations = {
   clearCart(state) {
     /* clear cart array directly */
     state.cart = [];
+    console.log('cart emptied')
   },
   setGlobalRemoteCart(state, cart) {
     state.globalRemoteCart = cart;

@@ -2,18 +2,24 @@
   <div class="page center-col">
     <h3 class="heading">Member Sign In</h3>
     <!-- phone number -->
-    <InputCredential label="Phone Number" v-model="phoneNumber" :disabled="otpSent" />
+    <InputCredential
+      label="Phone Number"
+      v-model="phoneNumber"
+      :disabled="otpSent"
+    />
     <!-- one time password -->
     <InputCredential label="One Time Password" v-model="otp" v-if="otpSent" />
-       <!-- form error -->
-    <p v-if="error.status" class="msg error"> {{ error.message }} </p>
+    <!-- form error -->
+    <p v-if="error.status" class="msg error">{{ error.message }}</p>
 
     <!-- otp sent message -->
-    <p class="msg success" v-if="otpSent"> A one time password has been sent to your mobile number. </p>
+    <p class="msg success" v-if="otpSent">
+      A one time password has been sent to your mobile number.
+    </p>
     <!-- send otp -->
-    <button v-if="!otpSent" class="action" @click="sendOtp()"> Continue </button>
+    <button v-if="!otpSent" class="action" @click="sendOtp()">Continue</button>
     <!-- login -->
-    <button v-if="otpSent" class="action" @click="login()"> Login </button>
+    <button v-if="otpSent" class="action" @click="login()">Login</button>
 
     <h3 id="already" class="heading">Don't Have An Account Yet?</h3>
     <p class="desc">
@@ -46,10 +52,7 @@ export default {
       }
     };
   },
-  mounted() {
-    setTimeout(() => this.shiftCart(), 200)
-    // this.shiftCart();
-  },
+  mounted() {},
   methods: {
     validatePhoneNumber() {
       console.log("validate called");
@@ -98,16 +101,25 @@ export default {
         return;
       }
       /* at this point, cookie is set in the browser */
-      console.log("now is the time to shift cart");
+      this.shiftCart();
+
       /* and move back to homepage */
       this.$store.commit("customer/setAuthorization", true);
       /* navigate homepage */
       this.$router.push("/");
     },
     async shiftCart() {
-      await this.$post('/fetchCart', {
+      const { resolved, response } = await this.$post("/shiftCart", {
         cart: this.$store.state.customer.cart
       });
+
+      /* clear local cart if cart shifted */
+      if (resolved && response.shifted === true) {
+        this.$store.commit("customer/clearCart");
+      }
+      
+      /* refetch cart */
+      await this.$store.dispatch("customer/fetchCart");
     }
   }
 };

@@ -219,6 +219,12 @@ export const methods = {
         
         /* wait for all promises to resolve */
         const allProducts = await Promise.all(allProductPromises);
+        
+        /* you should clear cart from user database and return */
+        console.log(allProducts,'-- all products')
+
+        /* remove all the nulls from cart as well as all products */
+        
     
         /* TODO: put this to use */
         let itemsToBeRemoved = []
