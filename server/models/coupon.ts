@@ -26,6 +26,21 @@ const model = mongoose.model('coupons', schema);
 export const methods = {
     register() {
         console.log('registered');
+    },
+    async validateCoupon(code) {
+        const findActiveCoupon: any = model.findOne({
+            code: code.toUpperCase(),
+            status: true,
+            validity: { $gt: 0 },
+            "validityRange.start": { $lte: new Date() },
+            "validityRange.end": { $gte: new Date().setHours(0,0,0,0) }
+        });
+
+        /* find active coupon */
+        const { response, error } = await task(findActiveCoupon);
+        
+        /*  */
+
     }
 }
 

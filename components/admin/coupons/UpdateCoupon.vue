@@ -122,6 +122,8 @@ export default {
   mounted() {},
   methods: {
     async updateDocument() {
+      this.doc.code = this.doc.code.toUpperCase();
+
       this.loading = true;
       const result = await this.$updateDocument(
         this.model,

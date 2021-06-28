@@ -74,13 +74,13 @@ export default {
             this.list = result.docs.map(({
                 _id,
                 code,
-                description,
+                currency,
                 status
             }) => {
                 return {
                     _id,
                     code,
-                    description,
+                    currency,
                     status
                 }
             });

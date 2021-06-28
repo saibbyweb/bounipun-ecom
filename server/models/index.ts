@@ -17,6 +17,7 @@ import session from "./session";
 import order from "./order";
 import payment from "./payment";
 import paymentIntent from "./paymentIntent";
+import globalConfig from "./globalConfig";
 
 const register = function () {
     fabric.methods.register();
@@ -37,6 +38,7 @@ const register = function () {
     order.methods.register();
     payment.methods.register();
     paymentIntent.methods.register();
+    globalConfig.methods.register();
 }
 
-export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage,user, session, order, payment, paymentIntent, register };
+export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage,user, session, order, payment, paymentIntent, globalConfig, register };
