@@ -20,10 +20,10 @@ router.post("/sendOtp", async (req, res) => {
     const { countryDialCode, phoneNumber, purpose } = req.body;
 
     console.log(countryDialCode, phoneNumber, purpose);
-    
+
     let sendOtpRequestStatus = false;
     sendOtpRequestStatus = await userMethods.sendInternationalOtp(countryDialCode, phoneNumber)
-    
+
     // if(countryDialCode === "+91")
     //     sendOtpRequestStatus = await userMethods.sendMsg91Otp(phoneNumber)
     // else
@@ -401,13 +401,13 @@ router.post('/completeCheckout', userAuth('customer'), async (req, res) => {
     let response = { resolved: false };
     /* extract body */
     const { user, gateway, gatewayResponse, paymentIntentId } = req.body;
-    
+
     /* common transaction id | RAZORPAY - STRIPE */
     let transactionId;
 
     /* fetch payment intent details */
     const paymentIntentDetails: any = await db.model('paymentIntents').findOne({ _id: paymentIntentId });
-    
+
     /* act according to gateway */
     switch (gateway) {
         case 'razorpay':
@@ -436,7 +436,7 @@ router.post('/completeCheckout', userAuth('customer'), async (req, res) => {
         deliveryAddress: paymentIntentDetails.payload.deliveryAddress,
         items: paymentIntentDetails.payload.cartItems.map(item => ({ _id: mongoose.Types.ObjectId(), ...item, status: 'pending', timeline: [], trackingId: '', trackingUrl: '', delivered: '' })),
     }
-    
+
     /* save processed order in database */
     const ordersCollection = db.model('orders');
     /* save order details to database */
@@ -458,14 +458,14 @@ router.post('/setCookie', (req, res) => {
 });
 
 /* ip lookup */
-router.post('/ipLookup', userAuth('customer', false), async(req, res) => {
+router.post('/ipLookup', userAuth('customer', false), async (req, res) => {
     /* response to be sent back */
     let response = { resolved: false, countryCode: '' };
 
     const { user } = req.body;
-    
+
     /* if user is logged in, fetch country code from account */
-    if(user.status === true) {
+    if (user.status === true) {
         console.log('LOGGED IN, IP fetched from account')
         response.countryCode = user.countryIsoCode;
         response.resolved = true;
@@ -476,25 +476,25 @@ router.post('/ipLookup', userAuth('customer', false), async(req, res) => {
     const ipLookup = axios.get(`https://api.ipregistry.co/?key=${ipRegistryKey}`);
     const { response: lookupResponse, error } = await task(ipLookup);
     /* if error */
-    if(error) {
+    if (error) {
         res.send(response);
         return;
     }
-    
-    
+
+
     /* if match found */
-    if(lookupResponse.data.location.country.code) {
+    if (lookupResponse.data.location.country.code) {
         console.log('IP Looked-Up');
         response.countryCode = lookupResponse.data.location.country.code;
         response.resolved = true;
     }
-    
+
     res.send(response);
 
 });
 
 /* logout user */
-router.post('/logoutCustomer', userAuth('customer'), async(req, res) => {
+router.post('/logoutCustomer', userAuth('customer'), async (req, res) => {
     console.log('logout called');
     /* mark session as invalid */
     const { user, token } = req.body;

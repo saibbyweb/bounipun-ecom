@@ -218,6 +218,14 @@ export default (context, inject) => {
     return { response, resolved: true };
   };
 
+  /* vibrate device */
+  const vibrateDevice = (duration) => {
+    if("vibrate" in navigator) {
+      navigator.vibrate(duration);
+      console.log('vibrate device')
+    }
+  }
+
   inject("fetchCollection", fetchCollection);
   inject("fetchPaginatedResults", fetchPaginatedResults);
   inject("updateDocument", updateDocument);
@@ -227,4 +235,5 @@ export default (context, inject) => {
   inject("getImagePath", getImagePath);
   inject("flash", flash);
   inject("post", httpPostRequest);
+  inject("vibrateDevice", vibrateDevice);
 };

@@ -235,7 +235,7 @@
             <div class="fabrics-container">
               <!-- fabric -->
               <div
-                @click="activeFabricIndex = index"
+                @click="setActiveFabric(index)"
                 v-for="(fabric, index) in variants[activeVariantIndex].fabrics"
                 :key="index"
                 class="fabric center-col"
@@ -641,6 +641,13 @@ export default {
     setActiveVariant(index) {
       this.activeFabricIndex = 0;
       this.activeVariantIndex = index;
+      /* vibrate */
+      this.$vibrateDevice(300);
+    },
+    setActiveFabric(index) {
+        this.activeFabricIndex = index;
+          /* vibrate */
+      this.$vibrateDevice(300);
     },
     setActiveColor(index, colorId = false) {
       let activeIndex = index;
