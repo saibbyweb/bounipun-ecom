@@ -5,6 +5,7 @@ const schema = new mongoose.Schema({
     code: String,
     type: String,
     value: Number,
+    currency: String,
     validity: Number,
     validityRange: {
         start: Date,
