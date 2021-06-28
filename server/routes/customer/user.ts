@@ -486,7 +486,7 @@ router.post('/setCookie', (req, res) => {
 /* ip lookup */
 router.post('/ipLookup', userAuth('customer', false), async (req, res) => {
     /* response to be sent back */
-    let response = { resolved: false, countryCode: '' };
+    let response = { resolved: false, countryCode: 'IN' };
 
     const { user } = req.body;
 
@@ -498,7 +498,8 @@ router.post('/ipLookup', userAuth('customer', false), async (req, res) => {
         res.send(response);
         return;
     }
-
+    
+    /* otherwise do an country lookup */
     const ipLookup = axios.get(`https://api.ipregistry.co/?key=${ipRegistryKey}`);
     const { response: lookupResponse, error } = await task(ipLookup);
     /* if error */
@@ -506,7 +507,6 @@ router.post('/ipLookup', userAuth('customer', false), async (req, res) => {
         res.send(response);
         return;
     }
-
 
     /* if match found */
     if (lookupResponse.data.location.country.code) {

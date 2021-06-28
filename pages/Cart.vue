@@ -24,6 +24,9 @@
       <span class="value text"> {{ currency }} {{ subTotal }} </span>
     </div>
 
+    <!-- TODO: show grand total (with coupon discount) -->
+    <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
+
     <!-- proceed to address page-->
     <div v-if="!cartEmpty" class="pad-10">
       <button @click="$router.push('/delivery-address')" class="action">

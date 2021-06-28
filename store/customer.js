@@ -173,9 +173,11 @@ export const actions = {
     commit("setUser", response);
   },
   async fetchStoreLocation({ commit }) {
+    /* ask server to do an ip lookup */
     const ipLookup = await this.$post("/ipLookup");
-    console.log(ipLookup, "from actions");
+    /* if lookup failed, return (default country = India) */
     if (ipLookup.resolved === false) return;
+    /* if match found, set store currency accordingly */
     const countryIsoCode = ipLookup.response.countryCode;
     commit("setStoreCurrency", countryIsoCode);
     /* figure out dial code */

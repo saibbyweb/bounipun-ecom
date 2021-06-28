@@ -2,7 +2,7 @@
   <div class="page center-col">
     <h3 class="heading">Member Sign In</h3>
     <!-- country select -->
-    <CountrySelect v-model="countryDialCode" />
+    <CountrySelect v-model="countryDialCode" @setCountryIsoCode="countryIsoCode = $event" />
 
     <!-- phone number -->
     <!-- <InputCredential
@@ -122,6 +122,9 @@ export default {
 
       /* fetch profile */
       this.$store.dispatch('customer/fetchProfile');
+
+      /* update store location */
+      this.$store.dispatch('customer/fetchStoreLocation');
       
       /* navigate homepage */
       this.$router.push("/");

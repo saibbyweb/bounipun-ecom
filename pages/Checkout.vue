@@ -31,6 +31,10 @@
         <span> {{ deliveryAddress.postalCode }} </span>
       </div>
 
+      <!-- TODO: show grand total (with coupon discount, taxes and shipping cost ) -->
+      <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
+      <!-- TODO: show user consent checkbox for combined delivery for all items -->
+      
       <!-- sub total -->
       <div v-if="!cartEmpty" class="sub-total">
         <p class="label text">

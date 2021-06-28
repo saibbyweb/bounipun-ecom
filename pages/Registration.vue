@@ -2,7 +2,7 @@
   <div class="page center-col">
     <h3 class="heading">Create new account</h3>
     <!-- country select -->
-    <CountrySelect v-model="countryDialCode" />
+    <CountrySelect v-model="countryDialCode" @setCountryIsoCode="countryIsoCode = $event" />
     <!-- first name -->
     <InputCredential
       label="First Name"

@@ -64,10 +64,12 @@ export default {
   },
   mounted() {
     this.$emit("input", this.selectedCountryCode);
+    this.$emit('setCountryIsoCode', this.selectedCountryIsoCode);
   },
   watch: {
     selectedCountryCode(newVal) {
       this.$emit("input", newVal);
+      this.$emit('setCountryIsoCode', this.selectedCountryIsoCode);
     }
   },
   computed: {
@@ -78,6 +80,10 @@ export default {
     selectedCountryCode() {
       if (this.matchedCountries.length === 0) return "";
       return this.matchedCountries[this.selectedCountryIndex].dialCode;
+    },
+    selectedCountryIsoCode() {
+      if(this.matchedCountries.length === 0) return "";
+      return this.matchedCountries[this.selectedCountryIndex].isoCode;
     },
     matchedCountries() {
       if (this.countrySearchTerm === "") return this.countryCodes;
