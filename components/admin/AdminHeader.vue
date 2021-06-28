@@ -6,7 +6,7 @@
     </div>
 
     <div class="menu-links center">
-        <div @click="$router.push(item.path)" class="menu-item" v-for="(item,index) in items" :key="index">
+        <div @click="setActive(item,index)" class="menu-item" :class="{active: activeIndex === index}" v-for="(item,index) in items" :key="index">
             <span> {{ item.name }} </span>
         </div>
     </div>
@@ -93,7 +93,14 @@ export default {
                     path: '/admin-panel/orders',
                     desc: 'Manage Homepage Layouts'
                 },
-            ]
+            ],
+            activeIndex: -1
+        }
+    },
+    methods: {
+        setActive(item,index) {
+            this.activeIndex = index;
+            this.$router.push(item.path);
         }
     }
 }
@@ -120,7 +127,8 @@ export default {
         // padding-top: 10px;
 
         .menu-item {
-            padding: 4px 1%;
+            padding: 1px 8px;
+            margin: 0 3px;
             color: $dark_gray;
             border-radius: 5px;
             cursor: pointer;
@@ -133,12 +141,16 @@ export default {
 
             &:hover {
                 background-color: #c8c8c8ca;
-
-                // box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
-                //   transform: translateX(-3px);
                 span {
                     color: $dark_gray;
 
+                }
+            }
+
+            &.active {
+                background-color: rgb(41, 157, 111);
+                span {
+                    color: white;
                 }
             }
         }

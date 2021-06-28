@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import { getCountry } from "@/helpers/countryCodes.js";
+
 export default {
     data() {
         return {
@@ -61,6 +63,7 @@ export default {
 
             let profile = response;
             profile.phoneNumber = profile.countryDialCode + profile.phoneNumber;
+            profile.countryIsoCode = getCountry(profile.countryIsoCode).name
             this.profile = profile;
         },
         async updateProfile() {

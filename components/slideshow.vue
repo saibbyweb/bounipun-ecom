@@ -10,7 +10,7 @@
         </div>
 
         <!-- indicator dots -->
-        <div v-if="dots" class="dots" :style="{width: slideWidth}">
+        <div v-if="dots && !singleImage" class="dots" :style="{width: slideWidth}">
             <div :class="[{active: isActive(index)},'dot']" :key="index" v-for="(image, index) in images"> </div>
         </div>
     </div>
@@ -53,7 +53,7 @@ export default {
         },
         images: {
             type: Array,
-            default: () => ['/demo_images/slider/desk1.png', '/hero/1.jpg']
+            default: () => ['/demo_images/slider/desk1.png']
         },
         size: {
             type: String,
@@ -86,6 +86,11 @@ export default {
             slideMargin: 0,
             activeIndex: 0,
             thumbnailsMargin: 0
+        }
+    },
+    computed: {
+        singleImage() {
+            return this.images.length === 1;
         }
     },
     methods: {

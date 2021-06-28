@@ -80,7 +80,7 @@ router.post("/registerCustomer", async (req, res) => {
     }
     /* mark otp as verified */
     response.otpVerified = true;
-    /* register customer */
+    /* register customer  */
     const userRegistered = await userMethods.registerUser({
         firstName,
         surName,
@@ -328,9 +328,12 @@ router.post('/orderCheckout', userAuth('customer'), async (req, res) => {
 router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
     const { user } = req.body;
 
-    const profile = await db.model('users').findOne({ _id: user._id }).populate('orders');
-    // console.log(profile);
-    res.send(profile);
+    const profile = await db
+    .model('users')
+    .findOne({ _id: user._id })
+    .populate('orders')
+    
+    res.send(profile)
 });
 
 /* update profile */
