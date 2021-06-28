@@ -21,20 +21,15 @@ router.post("/sendOtp", async (req, res) => {
 
     console.log(countryDialCode, phoneNumber, purpose);
 
-    if(countryDialCode === "+91") {
-        console.log('sent local')
-    }
-    else {
-        console.log('send international', countryDialCode, phoneNumber)
-    }
-
+    /* send otp request status */
     let sendOtpRequestStatus = false;
-    sendOtpRequestStatus = await userMethods.sendInternationalOtp(countryDialCode, phoneNumber)
 
-    // if(countryDialCode === "+91")
-        // sendOtpRequestStatus = await userMethods.sendMsg91Otp(phoneNumber)
-    // else
-    //     sendOtpRequestStatus = await userMethods.sendInternationalOtp(countryDialCode, phoneNumber)
+    /* if number is indian, use msg91 */
+    if (countryDialCode === "+91")
+        sendOtpRequestStatus = await userMethods.sendMsg91Otp(phoneNumber)
+    /* other wise use international sms gateway */
+    else
+        sendOtpRequestStatus = await userMethods.sendInternationalOtp(countryDialCode, phoneNumber)
 
     response.resolved = true;
     response.otpSent = sendOtpRequestStatus;
@@ -57,7 +52,6 @@ router.post("/registerCustomer", async (req, res) => {
 
     console.log('register called');
 
-    /* TODO: add country ISO code | extract post data  */
     const {
         countryDialCode,
         countryIsoCode,
@@ -77,9 +71,15 @@ router.post("/registerCustomer", async (req, res) => {
         return;
     }
 
-    /* TODO: verify otp | if dial code === +91*/
-    // if ((await userMethods.verifyMsg91Otp(phoneNumber, otp)) === false) {
-          if ((await userMethods.verifyInternationalOtp(countryDialCode, phoneNumber, otp)) === false) {
+    /* otp verified status */
+    let otpVerified = false;
+
+    if (countryDialCode === "+91")
+        otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp)
+    else
+        otpVerified = await userMethods.verifyInternationalOtp(countryDialCode, phoneNumber, otp)
+
+    if (otpVerified === false) {
         response.incorrectOtp = true;
         response.message = 'Incorrect OTP entered.'
         console.log('incorrect otp');
@@ -159,9 +159,15 @@ router.post('/loginCustomer', async (req, res) => {
         return;
     }
 
-    /* TODO: verify otp | if dial code === +91*/
-    if ((await userMethods.verifyMsg91Otp(phoneNumber, otp)) === false) {
-    // if ((await userMethods.verifyInternationalOtp(countryDialCode, phoneNumber, otp)) === false) {
+    let otpVerified = false;
+    
+    if (countryDialCode === "+91")
+        otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp)
+    else
+        otpVerified = await userMethods.verifyInternationalOtp(countryDialCode, phoneNumber, otp)
+
+    /* if otp verification failed */
+    if (otpVerified === false) {
         response.incorrectOtp = true;
         response.message = 'Incorrect OTP entered.'
         console.log('incorrect otp');
@@ -207,14 +213,14 @@ router.post('/loginCustomer', async (req, res) => {
 /* shitf local cart to user cart */
 router.post('/shiftCart', userAuth('customer'), async (req, res) => {
     let response = { resolved: true, shifted: false }
-    
+
     if (req.body.cart === undefined || req.body.cart.length === 0) {
         res.send(response);
         return;
     }
-    
+
     /* user cart is not empty, dont do anything */
-    if(req.body.user.cart.length > 0) {
+    if (req.body.user.cart.length > 0) {
         response.shifted = true;
         res.send(response);
         return;
@@ -231,7 +237,7 @@ router.post('/shiftCart', userAuth('customer'), async (req, res) => {
 
     /* shift cart to database */
     await db.model('users').findOneAndUpdate({ _id: req.body.user._id }, { cart: userCart });
-    
+
     response.shifted = true;
 
     res.send(response);
@@ -346,10 +352,10 @@ router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
     const { user } = req.body;
 
     const profile = await db
-    .model('users')
-    .findOne({ _id: user._id })
-    .populate('orders')
-    
+        .model('users')
+        .findOne({ _id: user._id })
+        .populate('orders')
+
     res.send(profile)
 });
 

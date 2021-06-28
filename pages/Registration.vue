@@ -122,6 +122,8 @@ export default {
       }
       /* TODO: should work but not tested */
       this.shiftCart();
+      /* fetch profile */
+      this.$store.dispatch('customer/fetchProfile');
       /* and move back to homepage */
       this.$store.commit("customer/setAuthorization", true);
       /* navigate homepage */

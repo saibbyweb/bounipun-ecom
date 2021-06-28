@@ -119,6 +119,10 @@ export default {
 
       /* and move back to homepage */
       this.$store.commit("customer/setAuthorization", true);
+
+      /* fetch profile */
+      this.$store.dispatch('customer/fetchProfile');
+      
       /* navigate homepage */
       this.$router.push("/");
     },

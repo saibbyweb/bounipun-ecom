@@ -166,6 +166,12 @@ export const actions = {
 
     commit("setGlobalRemoteCart", cartItems.response);
   },
+  /* fetch user profile */
+  async fetchProfile({ state, commit }) {
+    const { response, resolved } = await this.$post('/fetchProfile');
+    if(resolved == false) return;
+    commit("setUser", response);
+  },
   async fetchStoreLocation({ commit }) {
     const ipLookup = await this.$post("/ipLookup");
     console.log(ipLookup, "from actions");
