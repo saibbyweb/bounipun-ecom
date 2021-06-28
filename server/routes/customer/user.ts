@@ -21,11 +21,18 @@ router.post("/sendOtp", async (req, res) => {
 
     console.log(countryDialCode, phoneNumber, purpose);
 
+    if(countryDialCode === "+91") {
+        console.log('sent local')
+    }
+    else {
+        console.log('send international', countryDialCode, phoneNumber)
+    }
+
     let sendOtpRequestStatus = false;
-    // sendOtpRequestStatus = await userMethods.sendInternationalOtp(countryDialCode, phoneNumber)
+    sendOtpRequestStatus = await userMethods.sendInternationalOtp(countryDialCode, phoneNumber)
 
     // if(countryDialCode === "+91")
-        sendOtpRequestStatus = await userMethods.sendMsg91Otp(phoneNumber)
+        // sendOtpRequestStatus = await userMethods.sendMsg91Otp(phoneNumber)
     // else
     //     sendOtpRequestStatus = await userMethods.sendInternationalOtp(countryDialCode, phoneNumber)
 
@@ -71,7 +78,8 @@ router.post("/registerCustomer", async (req, res) => {
     }
 
     /* TODO: verify otp | if dial code === +91*/
-    if ((await userMethods.verifyMsg91Otp(phoneNumber, otp)) === false) {
+    // if ((await userMethods.verifyMsg91Otp(phoneNumber, otp)) === false) {
+          if ((await userMethods.verifyInternationalOtp(countryDialCode, phoneNumber, otp)) === false) {
         response.incorrectOtp = true;
         response.message = 'Incorrect OTP entered.'
         console.log('incorrect otp');

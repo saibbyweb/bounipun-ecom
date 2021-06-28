@@ -2,7 +2,7 @@
   <div class="page center-col">
     <h3 class="heading">Create new account</h3>
     <!-- country select -->
-    <CountrySelect v-model="countryDialCode"/>
+    <CountrySelect v-model="countryDialCode" />
     <!-- first name -->
     <InputCredential
       label="First Name"
@@ -71,12 +71,12 @@ export default {
   methods: {
     validatePhoneNumber() {
       console.log("validate called");
-      if (this.phoneNumber.length !== 10) {
-        this.error.message = "Kindly enter a valid 10 digit mobile number";
-        this.error.status = true;
-        console.log("hey there");
-        return false;
-      }
+      // if (this.phoneNumber.length !== 10) {
+      //   this.error.message = "Kindly enter a valid 10 digit mobile number";
+      //   this.error.status = true;
+      //   console.log("hey there");
+      //   return false;
+      // }
       return true;
     },
     async sendOtp() {
@@ -120,22 +120,28 @@ export default {
         this.error.status = true;
         return;
       }
-      /* at this point, cookie is set in the browser */
-      console.log("now is the time to shift cart");
+      /* TODO: should work but not tested */
+      this.shiftCart();
       /* and move back to homepage */
       this.$store.commit("customer/setAuthorization", true);
       /* navigate homepage */
       this.$router.push("/");
     },
-    async loginUser() {
-      const loginAttempt = {
-        message: "",
-        status: false,
-        token: ""
-      };
+    async shiftCart() {
+      const { resolved, response } = await this.$post("/shiftCart", {
+        cart: this.$store.state.customer.cart
+      });
+
+      /* clear local cart if cart shifted */
+      if (resolved && response.shifted === true) {
+        this.$store.commit("customer/clearCart");
+      }
+
+      /* refetch cart */
+      await this.$store.dispatch("customer/fetchCart");
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>

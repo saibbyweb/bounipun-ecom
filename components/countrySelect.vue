@@ -1,6 +1,6 @@
 <template>
   <!-- country selection -->
-  <div v-if="countryCodes.length !== 0" class="country-select">
+  <div v-click-outside="hideCountries" v-if="countryCodes.length !== 0" class="country-select">
     <div
       @click="showCountrySelect = true"
       class="selected-country"
@@ -48,7 +48,12 @@
 
 <script>
 import countryData from "@/helpers/countryCodes.js";
+import ClickOutside from 'vue-click-outside'
+
 export default {
+  directives: {
+    ClickOutside
+  },
   data() {
     return {
       countryCodes: countryData,
@@ -87,6 +92,9 @@ export default {
     }
   },
   methods: {
+    hideCountries() {
+      this.showCountrySelect = false
+    },
     selectCountry(index) {
       this.selectedCountryIndex = index;
       this.showCountrySelect = false;

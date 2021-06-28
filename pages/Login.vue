@@ -1,12 +1,26 @@
 <template>
   <div class="page center-col">
     <h3 class="heading">Member Sign In</h3>
+    <!-- country select -->
+    <CountrySelect v-model="countryDialCode" />
+
     <!-- phone number -->
-    <InputCredential
+    <!-- <InputCredential
       label="Phone Number"
       v-model="phoneNumber"
       :disabled="otpSent"
+    /> -->
+
+       <!-- phone number -->
+    <InputCredential
+      type="number"
+      label="Phone Number"
+      v-model="phoneNumber"
+      :disabled="otpSent"
+      :isMobileNumber="true"
+      :countryDialCode="countryDialCode"
     />
+
     <!-- one time password -->
     <InputCredential label="One Time Password" v-model="otp" v-if="otpSent" />
     <!-- form error -->
@@ -117,7 +131,7 @@ export default {
       if (resolved && response.shifted === true) {
         this.$store.commit("customer/clearCart");
       }
-      
+
       /* refetch cart */
       await this.$store.dispatch("customer/fetchCart");
     }
