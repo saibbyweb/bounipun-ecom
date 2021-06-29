@@ -56,7 +56,7 @@ export default {
     computed: {
         cartCount() {
 
-            return this.$store.getters['customer/cartCount']();
+            return this.$store.getters['customer/getCartCount'];
 
             // if(!this.$store.state.customer.authorized) {
             //     return this.$store.state.customer.cart.length

@@ -2,26 +2,29 @@
   <div class="order-total">
     <!-- cart total -->
     <div class="data-point flex between">
-      <span class="name"> Cart Total: </span>
+      <p class="name"> Cart Total: <span class="count"> {{ cartCount }} Items (s) </span> </p>
       <span class="value"> {{ currency }} {{ cartTotal }} </span>
     </div>
+    <hr />
     <!-- discount -->
-    <div class="data-point flex between">
+    <div v-if="couponApplied" class="data-point flex between">
       <span class="name green"> Discount: </span>
-      <span class="value green small"> - {{ currency }} {{ discountValue }} </span>
+      <span class="value green small">
+        - {{ currency }} {{ discountValue }}
+      </span>
     </div>
 
-    <!-- <hr /> -->
+    <hr v-if="couponApplied" />
 
     <!-- sub total -->
-    <div class="data-point flex between">
+    <div v-if="couponApplied" class="data-point flex between">
       <span class="name"> Sub-Total: </span>
       <span class="value"> {{ currency }} {{ subTotal }} </span>
     </div>
-
+    <hr v-if="couponApplied" />
     <!-- shipping charge -->
     <div class="data-point flex between">
-      <span class="name"> Shipping Charge: </span>
+      <span class="name"> Shipping: </span>
       <span v-if="!zeroShippingCharge" class="value small">
         {{ `+ ${currency} ${shippingCharge}` }}
       </span>
@@ -29,18 +32,25 @@
         Free Shipping
       </span>
     </div>
+    <hr />
     <!-- taxes -->
     <div class="data-point flex between">
       <span class="name"> Taxes: </span>
-      <span v-if="!zeroTaxes" class="value small">  {{ `+ ${currency} ${taxes}` }} </span>
+      <span v-if="!zeroTaxes" class="value small">
+        {{ `+ ${currency} ${taxes}` }}
+      </span>
       <span v-else class="value green small"> Tax Included </span>
     </div>
 
-        <hr />
+    <hr />
+
     <!-- grand total -->
-    <div class="data-point grand flex between">
-      <span class="name"> Grand Total: </span>
-      <span class="value">  {{ ` ${currency} ${grandTotal}` }} </span>
+    <div class="data-point grand-total flex between">
+      <p class="name flex center col">
+        Grand Total: <br />
+        <!-- <span class="count"> {{ cartCount }} Items(s) </span> -->
+      </p>
+      <span class="value"> {{ ` ${currency} ${grandTotal}` }} </span>
     </div>
 
   </div>
@@ -74,40 +84,43 @@ export default {
           discountValue = this.coupon.value;
           break;
       }
-      return discountValue;
+      return discountValue.toFixed(2);
     },
     shippingCharge() {
       /* calculate the total number of item in total (sum of all quantities) */
       const totalCartItems = this.$store.getters["customer/getTotalCartItems"];
       const shippingCharge =
         this.$store.getters["customer/getShippingCharge"] * totalCartItems;
-      return shippingCharge;
+      return shippingCharge.toFixed(2);
     },
     zeroShippingCharge() {
-      return this.shippingCharge === 0;
+      return this.shippingCharge === "0.00";
     },
     taxes() {
       const taxPercentage = this.$store.getters["customer/getTaxPercentage"];
       const taxableAmount = this.subTotal * (taxPercentage / 100);
-      return taxableAmount;
+      return taxableAmount.toFixed(2);
     },
     zeroTaxes() {
-      return this.taxes === 0;
+      return this.taxes === "0.00";
     },
     subTotal() {
       let subTotal = this.cartTotal - this.discountValue;
-       return parseInt(subTotal.toFixed(2));
+      return subTotal.toFixed(2);
     },
     cartTotal() {
       const cartTotal = this.$store.getters["customer/getCartTotal"];
-      return cartTotal;
+      return cartTotal.toFixed(2);
     },
     cartCount() {
-      return this.$store.getters["customer/cartCount"];
+      return this.$store.getters["customer/getCartCount"];
     },
     grandTotal() {
-        let grandTotal = this.subTotal + this.shippingCharge + this.taxes;
-        return grandTotal;
+      let grandTotal =
+        parseFloat(this.subTotal) +
+        parseFloat(this.shippingCharge) +
+        parseFloat(this.taxes);
+      return grandTotal.toFixed(2);
     }
   }
 };
@@ -120,37 +133,54 @@ export default {
   padding: 10px;
 
   .data-point {
+    margin: 3px 0;
+
     .name {
       color: $gray;
       font-family: $font_1;
+      font-size: 14px;
       text-transform: uppercase;
-         &.green {
+
+      &.green {
         color: rgb(37, 154, 107);
       }
     }
+
     .value {
       color: $dark_gray;
       font-size: 17px;
       font-family: $font_2;
 
+      &.small {
+        font-family: $font_2;
+        font-size: 15px;
+      }
+
       &.green {
         color: rgb(37, 154, 107);
-      }
-
-      &.small {
-          font-family: $font_2;
-          font-size: 16px;
+        // font-family: $font_2_bold;
+        text-transform: uppercase;
       }
     }
+  }
 
-    &.grand {
-        .name {
-            font-family: $font_1_bold;
-        }
-        .value {
-            font-family: $font_1_bold;
-        }
+  .grand-total {
+    .name {
+      font-family: $font_1;
     }
+    .value {
+      font-family: $font_1_bold;
+    }
+  }
+
+  .count {
+    color: $dark_gray;
+    font-size: 12px;
+    font-family: $font_2_bold;
+  }
+
+  hr {
+    opacity: 0.5;
   }
 }
 </style>

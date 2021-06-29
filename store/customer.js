@@ -148,7 +148,7 @@ export const getters = {
     const localCart = state.globalRemoteCart.map(item => item.cartEntry);
     return findCartItem(localCart, cartItem) !== false;
   },
-  cartCount: state => () => {
+  getCartCount(state) {
     return state.globalRemoteCart.length;
   },
   getCartProductIds(state) {
@@ -244,6 +244,7 @@ export const actions = {
     });
     /* if request failed */
     if (fetchCouponRequest.resolved == false) {
+      commit("setCoupon", { applied: false, code: ""})
       return false;
     }
     /* extract details */
