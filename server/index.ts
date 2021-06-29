@@ -9,6 +9,7 @@ server.applyStaticMiddleware('/frontend');
 app.use('/', mainRoutes);
 app.use('/', customerRoutes.endpoints);
 app.use('/',customerRoutes.user);
+app.use('/', customerRoutes.storeEndpoints);
 
 /* connect to mongodb */
 dbConnect();

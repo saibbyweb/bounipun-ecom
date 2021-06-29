@@ -7,6 +7,7 @@ export const state = () => ({
   authorized: false,
   cart: [],
   globalRemoteCart: [],
+  globalConfig: {},
   user: {},
   currency: "USD",
   countryIndex: 0,
@@ -64,6 +65,9 @@ export const mutations = {
   /* authorize user (customer) */
   setAuthorization(state, value) {
     state.authorized = value;
+  },
+  setGlobalConfig(state, value) {
+    state.globalConfig = value;
   },
   /* unauthorize */
   unauthorize(state) {
@@ -189,5 +193,18 @@ export const actions = {
     /* set country index */
     commit("setCountryIndex", countryIndex);
   },
-  async fetchGlobalConfig({ state, commit }) {}
+  /* fetch store global config */
+  async fetchGlobalConfig({ state, commit }) {
+    console.log('fgc called')
+    /* fetch global config from server */
+    const fetchConfigRequest = await this.$post('/fetchGlobalConfig');
+    /* if request failed */
+    if(fetchConfigRequest.resolved === false) return;
+    /* extract global config */
+    console.log(fetchConfigRequest.response,'--genius')
+    const { globalConfig } = fetchConfigRequest.response;
+    console.log(globalConfig,'--again genius')
+    /* set config in vuex */
+    commit("setGlobalConfig", {...globalConfig});
+  }
 };
