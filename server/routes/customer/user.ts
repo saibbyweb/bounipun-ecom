@@ -511,7 +511,8 @@ router.post('/ipLookup', userAuth('customer', false), async (req, res) => {
     /* if match found */
     if (lookupResponse.data.location.country.code) {
         console.log('IP Looked-Up');
-        response.countryCode = lookupResponse.data.location.country.code;
+        // response.countryCode = lookupResponse.data.location.country.code;
+        response.countryCode = "IN"
         response.resolved = true;
     }
 

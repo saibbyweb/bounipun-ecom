@@ -10,7 +10,7 @@ export const state = () => ({
   globalRemoteCart: [],
   globalConfig: {},
   user: {},
-  currency: "USD",
+  currency: "INR",
   coupon: {
     applied: false,
     code: ""
@@ -57,7 +57,7 @@ export const mutations = {
       persistedState = JSON.parse(persistedState);
       persistedState.globalRemoteCart = [];
       persistedState.currencyMultiplier = 1.3;
-      persistedState.currency = "USD";
+      persistedState.currency = "INR";
       persistedState.countryIndex = 0;
       Object.assign(state, persistedState);
     }
