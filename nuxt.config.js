@@ -48,7 +48,8 @@ export default {
     scss: ["~/assets/scss/global.scss"]
   },
   env: {
-    baseAWSURL: "https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/"
+    baseAWSURL: "https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/",
+    BASE_URL: process.env.BASE_URL
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {

@@ -45,9 +45,9 @@
         {{ couponError.message }}
       </p>
     </div>
-    
+
     <!-- order total -->
-    <OrderTotal v-if="!cartEmpty"/>
+    <OrderTotal v-if="!cartEmpty" />
 
     <!-- TODO: show grand total (with coupon discount) -->
     <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
@@ -93,7 +93,7 @@ export default {
   },
   mounted() {
     console.log("mounted");
-    
+
     setTimeout(() => {
       this.couponCode = this.coupon.code;
       this.$store.dispatch("customer/fetchCart");

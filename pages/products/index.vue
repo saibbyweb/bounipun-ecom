@@ -39,7 +39,9 @@
           <img src="/icons/dark/social/facebook.png" />
           <img src="/icons/dark/social/pinterest.png" />
           <img src="/icons/dark/social/instagram.png" />
+          <a :href="whatsAppShareLink" target="_blank">
           <img src="/icons/dark/social/whatsapp.png" />
+          </a>
         </div>
       </div>
     </div>
@@ -489,6 +491,12 @@ export default {
         false
         ? false
         : true;
+    },
+    whatsAppShareLink() {
+      const BASE_SHARE_URL = 'https://wa.me/?text=';
+      let msg = `Check out this Bounipun special: ${location.host}/products?_id=${this.product._id}`
+      msg = encodeURI(msg);
+      return BASE_SHARE_URL + msg
     }
   },
   methods: {
