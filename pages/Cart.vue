@@ -15,11 +15,30 @@
       />
     </div>
 
+    <!-- coupon box -->
+    <div class="coupon-box flex center">
+      <div class="input flex center col">
+        <!-- code input box -->
+        <InputCredential v-model="couponCode" label="Enter Coupon Code (optional)" :uppercase="true" :disabled="couponApplied" />
+        <!-- apply button -->
+        <button @click="applyCoupon" class="action apply" :class="{applied: couponApplied }">{{ couponApplied ? "Remove" : "Apply Coupon"}}</button>
+      </div>
+
+      <!-- coupon applied -->
+      <div class="applied">
+
+      </div>
+      <!-- coupon error -->
+      <p class="error"></p>
+    </div>
+
     <!-- sub total -->
     <div v-if="!cartEmpty" class="sub-total">
       <p class="label text">
         Sub Total <br />
-        <span class="length"> {{ $store.getters['customer/cartCount']() }} Item(s) : </span>
+        <span class="length">
+          {{ $store.getters["customer/cartCount"]() }} Item(s) :
+        </span>
       </p>
       <span class="value text"> {{ currency }} {{ subTotal }} </span>
     </div>
@@ -47,13 +66,15 @@
 
 <script>
 import sumBy from "lodash/sumBy";
-import colorPickerVue from "../components/admin/colors/colorPicker.vue";
+// import colorPickerVue from "../components/admin/colors/colorPicker.vue";
+// import InputBox from "../components/admin/input/InputBox.vue";
 export default {
   data() {
     return {
       cartDetails: [],
+      couponCode: "",
       remoteCartItems: this.$store.state.customer.globalRemoteCart
-    }
+    };
   },
   watch: {
     $route(newVal) {
@@ -63,28 +84,41 @@ export default {
   mounted() {
     console.log("mounted");
     setTimeout(() => {
-      this.$store.dispatch('customer/fetchCart');
+      this.$store.dispatch("customer/fetchCart");
+      this.$store.dispatch("customer/applyCoupon", "SAIBBYWEB100");
     }, 300);
   },
   computed: {
-        currency() {
-      return this.$store.state.customer.currency + ' ';
+    currency() {
+      return this.$store.state.customer.currency + " ";
     },
     cartEmpty: function() {
       return this.$store.state.customer.globalRemoteCart.length === 0;
     },
+    couponApplied() {
+      return this.$store.state.customer.coupon.applied === true;
+    },
     subTotal() {
-      return sumBy(this.$store.state.customer.globalRemoteCart, item => this.adjustPrice(item.price) * item.quantity);
+      return sumBy(
+        this.$store.state.customer.globalRemoteCart,
+        item => this.adjustPrice(item.price) * item.quantity
+      );
     }
   },
   methods: {
-        adjustPrice(price) {
+    applyCoupon() {
+      if(this.couponApplied === false)
+        this.$store.commit('customer/setCoupon', { applied: true, code: this.couponCode });
+      else
+        this.$store.commit('customer/setCoupon', { applied: false, code: ""});
+    },
+    adjustPrice(price) {
       price = parseInt(price);
-      return this.$store.getters['customer/adjustPrice'](price);
+      return this.$store.getters["customer/adjustPrice"](price);
     },
     async updateQuantity(payload) {
       const { item: vuexItem, operation } = payload;
-      let item = {...vuexItem}
+      let item = { ...vuexItem };
       switch (operation) {
         case "decrease":
           if (item.quantity > 1) item.quantity--;
@@ -100,28 +134,26 @@ export default {
       /* if user is guest */
       if (!this.$store.state.customer.authorized) {
         this.$store.commit("customer/updateQuantity", item);
-      }
-      else
-        await this.$post('/cartActions', {
-          action: 'update-quantity',
+      } else
+        await this.$post("/cartActions", {
+          action: "update-quantity",
           cartItem: item
-        })
+        });
 
-      await this.$store.dispatch('customer/fetchCart');
+      await this.$store.dispatch("customer/fetchCart");
       this.$forceUpdate();
     },
     async removeItem(cartItem) {
       /* for guests */
       if (!this.$store.state.customer.authorized) {
         this.$store.commit("customer/removeFromCart", cartItem);
-      }
-      else
-      await this.$post('/cartActions', {
-        action: 'remove-from-cart',
-        cartItem
-      })
-      
-      await this.$store.dispatch('customer/fetchCart');
+      } else
+        await this.$post("/cartActions", {
+          action: "remove-from-cart",
+          cartItem
+        });
+
+      await this.$store.dispatch("customer/fetchCart");
     }
   }
 };
@@ -226,6 +258,24 @@ export default {
       color: $dark_gray;
     }
   }
+}
+/* coupon box */
+.coupon-box {
+  .input {
+    width: 70%;
+    
+  .apply {
+    width: 70%;
+    background-color: rgb(86, 152, 86);
+
+    &.applied {
+      background-color: rgb(188, 34, 34);
+      width: 30%;
+      font-size: 12px;
+    }
+  }
+  }
+
 }
 .sub-total {
   display: flex;

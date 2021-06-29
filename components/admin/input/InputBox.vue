@@ -4,7 +4,7 @@
         <div v-if="internal" class="internal"></div>
         <label class="label"> {{ label }} </label>
     </div>
-    <input class="input-box" :type="type" :placeholder="placeholder" :value="value" @input="$emit('input', $event.target.value)" :disabled="disabled" />
+    <input class="input-box" :class="{uppercase}" :type="type" :placeholder="placeholder" :value="value" @input="$emit('input', $event.target.value)" :disabled="disabled" />
 </div>
 </template>
 
@@ -26,6 +26,10 @@ export default {
             default: false
         },
         disabled: {
+            type: Boolean,
+            default: false
+        },
+        uppercase: {
             type: Boolean,
             default: false
         }
@@ -66,6 +70,10 @@ export default {
         font-family: $font_2;
         font-size: 11px;
         letter-spacing: 0.5px;
+
+        &.uppercase {
+            text-transform: uppercase;
+        }
 
         &::placeholder {
             font-size: 11px;

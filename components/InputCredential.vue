@@ -10,7 +10,7 @@
         :value="value"
         @input="emitInput"
         :disabled="disabled"
-        :class="{ isMobileNumber }"
+        :class="{ isMobileNumber, uppercase }"
       />
     </div>
   </div>
@@ -24,6 +24,7 @@ export default {
     type: { type: String, default: "text" },
     disabled: { type: Boolean, default: false },
     clearError: { type: Boolean, default: true },
+    uppercase: { type: Boolean, default: false },
     isMobileNumber: {
       type: Boolean,
       default: false
@@ -94,6 +95,10 @@ export default {
       color: $gray;
       font-family: $font_2_semibold;
       letter-spacing: 1px;
+
+      &.uppercase {
+        text-transform: uppercase;
+      }
 
       &.isMobileNumber {
         text-indent: 16%;

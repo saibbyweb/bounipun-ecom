@@ -10,6 +10,10 @@ export const state = () => ({
   globalConfig: {},
   user: {},
   currency: "USD",
+  coupon: {
+    applied: false,
+    code: ""
+  },
   countryIndex: 0,
   currencyMultiplier: 1.3
 });
@@ -114,6 +118,12 @@ export const mutations = {
       state.cart.splice(search.foundIndex, 1);
     }
   },
+  setCoupon(state, value) {
+      state.coupon = {
+        applied: value.applied,
+        code: value.code
+      }
+  },
   clearCart(state) {
     /* clear cart array directly */
     state.cart = [];
@@ -194,8 +204,7 @@ export const actions = {
     commit("setCountryIndex", countryIndex);
   },
   /* fetch store global config */
-  async fetchGlobalConfig({ state, commit }) {
-    console.log('fgc called')
+async fetchGlobalConfig({ state, commit }) {
     /* fetch global config from server */
     const fetchConfigRequest = await this.$post('/fetchGlobalConfig');
     /* if request failed */
@@ -206,5 +215,12 @@ export const actions = {
     console.log(globalConfig,'--again genius')
     /* set config in vuex */
     commit("setGlobalConfig", {...globalConfig});
+  },
+  /* apply coupon */
+  async applyCoupon({ commit }, couponCode ) {
+    const applyCouponRequest = await this.$post('/applyCoupon', {
+      couponCode
+    });
+
   }
 };
