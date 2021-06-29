@@ -16,20 +16,35 @@
     </div>
 
     <!-- coupon box -->
-    <div class="coupon-box flex center">
+    <div class="coupon-box flex col center">
       <div class="input flex center col">
+
         <!-- code input box -->
-        <InputCredential v-model="couponCode" label="Enter Coupon Code (optional)" :uppercase="true" :disabled="couponApplied" />
+        <InputCredential
+          v-model="couponCode"
+          label="Enter Coupon Code (optional)"
+          :uppercase="true"
+          :checked="couponApplied"
+          :disabled="couponApplied"
+          @input="couponError.status = false"
+        />
+
         <!-- apply button -->
-        <button @click="applyCoupon" class="action apply" :class="{applied: couponApplied }">{{ couponApplied ? "Remove" : "Apply Coupon"}}</button>
+        <button
+          @click="applyCoupon"
+          class="action apply"
+          :class="{ applied: couponApplied }"
+        >
+          {{ couponApplied ? "Remove" : "Apply Coupon" }}
+        </button>
       </div>
 
       <!-- coupon applied -->
-      <div class="applied">
-
-      </div>
+      <div class="applied"></div>
       <!-- coupon error -->
-      <p class="error"></p>
+      <p v-if="couponError.status" class="error msg">
+        {{ couponError.message }}
+      </p>
     </div>
 
     <!-- sub total -->
@@ -73,6 +88,10 @@ export default {
     return {
       cartDetails: [],
       couponCode: "",
+      couponError: {
+        status: false,
+        message: "This coupon code is not valid"
+      },
       remoteCartItems: this.$store.state.customer.globalRemoteCart
     };
   },
@@ -85,7 +104,7 @@ export default {
     console.log("mounted");
     setTimeout(() => {
       this.$store.dispatch("customer/fetchCart");
-      this.$store.dispatch("customer/applyCoupon", "SAIBBYWEB100");
+      // this.$store.dispatch("customer/fetchCoupon", coupon.code);
     }, 300);
   },
   computed: {
@@ -94,6 +113,9 @@ export default {
     },
     cartEmpty: function() {
       return this.$store.state.customer.globalRemoteCart.length === 0;
+    },
+    coupon() {
+      return this.$store.state.customer.coupon;
     },
     couponApplied() {
       return this.$store.state.customer.coupon.applied === true;
@@ -106,11 +128,15 @@ export default {
     }
   },
   methods: {
-    applyCoupon() {
-      if(this.couponApplied === false)
-        this.$store.commit('customer/setCoupon', { applied: true, code: this.couponCode });
-      else
-        this.$store.commit('customer/setCoupon', { applied: false, code: ""});
+    async applyCoupon() {
+      if (this.couponApplied === false) {
+        const couponDetails = await this.$store.dispatch(
+          "customer/fetchCoupon",
+          this.couponCode
+        );
+        this.couponError.status = couponDetails === false;
+      } else
+        this.$store.commit("customer/setCoupon", { applied: false, code: "" });
     },
     adjustPrice(price) {
       price = parseInt(price);
@@ -262,20 +288,20 @@ export default {
 /* coupon box */
 .coupon-box {
   .input {
-    width: 70%;
     
-  .apply {
-    width: 70%;
-    background-color: rgb(86, 152, 86);
+     width: 70%;
+    .apply {
+      width: 70%;
+      background-color: rgb(86, 152, 86);
 
-    &.applied {
-      background-color: rgb(188, 34, 34);
-      width: 30%;
-      font-size: 12px;
+      &.applied {
+        background-color: rgb(188, 34, 34);
+        width: 30%;
+        font-size: 12px;
+      }
     }
+    
   }
-  }
-
 }
 .sub-total {
   display: flex;

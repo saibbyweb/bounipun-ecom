@@ -13,6 +13,7 @@ export const state = () => ({
   coupon: {
     applied: false,
     code: ""
+    /* more props added after fetching from server */
   },
   countryIndex: 0,
   currencyMultiplier: 1.3
@@ -119,10 +120,7 @@ export const mutations = {
     }
   },
   setCoupon(state, value) {
-      state.coupon = {
-        applied: value.applied,
-        code: value.code
-      }
+      state.coupon = value;
   },
   clearCart(state) {
     /* clear cart array directly */
@@ -216,11 +214,19 @@ async fetchGlobalConfig({ state, commit }) {
     /* set config in vuex */
     commit("setGlobalConfig", {...globalConfig});
   },
-  /* apply coupon */
-  async applyCoupon({ commit }, couponCode ) {
-    const applyCouponRequest = await this.$post('/applyCoupon', {
-      couponCode
+  /* fetch coupon */
+  async fetchCoupon({ state, commit }, couponCode ) {
+    const fetchCouponRequest = await this.$post('/fetchCoupon', {
+      couponCode,
+      currency: state.currency
     });
-
+    /* if request failed */
+    if(fetchCouponRequest.resolved == false) {
+      return false;
+    };
+    /* extract details */
+    const { couponDetails } = fetchCouponRequest.response;
+    /* save coupon details */
+    commit('setCoupon', { applied: true, ...couponDetails });
   }
 };

@@ -3,7 +3,14 @@
     <label class="label"> {{ label }} </label>
     <div class="input-box">
       <!-- country code -->
-      <div v-if="isMobileNumber" class="country-code">{{ countryDialCode }}</div>
+      <div v-if="isMobileNumber" class="country-code">
+        {{ countryDialCode }}
+      </div>
+      <!-- checked -->
+      <div v-if="checked" class="checked flex center">
+        <img src="/icons/simple_green_check.png" />
+      </div>
+
       <input
         class="field"
         :type="type"
@@ -25,6 +32,7 @@ export default {
     disabled: { type: Boolean, default: false },
     clearError: { type: Boolean, default: true },
     uppercase: { type: Boolean, default: false },
+    checked: { type: Boolean, default: false },
     isMobileNumber: {
       type: Boolean,
       default: false
@@ -84,6 +92,19 @@ export default {
       background-color: $dark_gray;
       color: white;
       font-size: 13px;
+    }
+
+    .checked {
+      position: absolute;
+      width:15%;
+      height: 100%;
+      right: 0;
+      top:0;
+
+      img {
+        height: 20px;
+        width: 20px;
+      }
     }
 
     .field {

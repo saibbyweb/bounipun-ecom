@@ -30,10 +30,12 @@ router.post('/fetchCoupon', userAuth('customer', false), async(req, res) => {
     /* response to be sent back */
     let response = { resolved: false, couponDetails: {}};
     /* extract coupon code from body */
-    const { couponCode } = req.body;
+    const { couponCode, currency } = req.body;
     /* validate coupon code */
-    await couponMethods.validateCoupon(couponCode);
-
+    const couponDetails = await couponMethods.validateCoupon(couponCode, currency);
+    /* set reponse */
+    response.resolved = couponDetails !== false;
+    response.couponDetails = couponDetails;
     res.send(response);
 });
 
