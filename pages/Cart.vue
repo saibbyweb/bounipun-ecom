@@ -121,10 +121,7 @@ export default {
       return this.$store.state.customer.coupon.applied === true;
     },
     subTotal() {
-      return sumBy(
-        this.$store.state.customer.globalRemoteCart,
-        item => this.adjustPrice(item.price) * item.quantity
-      );
+      return this.$store.getters['customer/getCartSubTotal'];
     }
   },
   methods: {
@@ -288,7 +285,7 @@ export default {
 /* coupon box */
 .coupon-box {
   .input {
-    
+
      width: 70%;
     .apply {
       width: 70%;

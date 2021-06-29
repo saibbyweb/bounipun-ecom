@@ -1,5 +1,6 @@
 import cookies from "js-cookie";
 import { getCountryIndex } from "../helpers/countryCodes";
+import sumBy from "lodash/sumBy";
 
 export const state = () => ({
   persistedStateLoaded: false,
@@ -21,6 +22,7 @@ export const state = () => ({
 
 /* find cartItem helper  */
 const findCartItem = (cart, cartItem) => {
+  console.log('find cart item was called', cartItem, cart)
   /* if cart empty */
   if (cart.length === 0) return false;
 
@@ -143,7 +145,8 @@ export const mutations = {
 
 export const getters = {
   alreadyInCart: state => cartItem => {
-    return findCartItem(state.cart, cartItem) !== false;
+    const localCart = state.globalRemoteCart.map(item => item.cartEntry);
+    return findCartItem(localCart, cartItem) !== false;
   },
   cartCount: state => () => {
     return state.globalRemoteCart.length;
@@ -152,13 +155,19 @@ export const getters = {
     if (state.cart.length === 0) return false;
     return [...new Set(state.cart.map(product => product._id))];
   },
+  getCartSubTotal(state, getters) {
+    return sumBy(
+      state.globalRemoteCart,
+      item => getters.adjustPrice(item.price) * item.quantity
+    );
+  },
   adjustPrice: state => dbPrice => {
     console.log("hey i was called", state.currency);
     /* if currence is INR, return as is */
     if (state.currency === "INR") {
       return dbPrice;
     } else {
-      const inflatedPrice = (dbPrice * state.currencyMultiplier) / 70;
+      const inflatedPrice = (dbPrice * state.currencyMultiplier) / 72;
       console.log(dbPrice, inflatedPrice, state.currencyMultiplier);
       return inflatedPrice.toFixed(2);
     }

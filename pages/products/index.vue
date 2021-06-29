@@ -98,8 +98,11 @@
                   {{
                     thirdPartyProduct || readyToShip
                       ? adjustPrice(product.directPrice)
-                      : adjustPrice(variants[activeVariantIndex].fabrics[activeFabricIndex]
-                          .price)
+                      : adjustPrice(
+                          variants[activeVariantIndex].fabrics[
+                            activeFabricIndex
+                          ].price
+                        )
                   }}
                 </h5>
                 <p>Taxes and Shipping Included</p>
@@ -243,7 +246,9 @@
               >
                 <span class="name"> {{ fabric.name }} </span>
                 <span class="info"> {{ fabric.info1 }} </span>
-                <span class="price"> {{ currency }} {{ adjustPrice(fabric.price) }} </span>
+                <span class="price">
+                  {{ currency }} {{ adjustPrice(fabric.price) }}
+                </span>
               </div>
             </div>
           </div>
@@ -498,12 +503,13 @@ export default {
       return;
     },
     async addToCart() {
+      /* if already added, move to cart page */
+      if (this.alreadyInCart) {
+        this.$router.push("/cart");
+        return;
+      }
+
       if (!this.$store.state.customer.authorized) {
-        /* if already added, move to cart page */
-        if (this.alreadyInCart) {
-          this.$router.push("/cart");
-          return;
-        }
         this.$store.commit("customer/addToCart", this.newCartItem);
         await this.$store.dispatch("customer/fetchCart");
         this.$forceUpdate();
@@ -647,8 +653,8 @@ export default {
       this.$vibrateDevice(300);
     },
     setActiveFabric(index) {
-        this.activeFabricIndex = index;
-          /* vibrate */
+      this.activeFabricIndex = index;
+      /* vibrate */
       this.$vibrateDevice(300);
     },
     setActiveColor(index, colorId = false) {
@@ -868,6 +874,7 @@ export default {
       /* section 1 */
       .section-1 {
         width: 61%;
+
         /* main text details */
         .main-details {
           h3 {
