@@ -22,7 +22,7 @@ export const state = () => ({
 
 /* find cartItem helper  */
 const findCartItem = (cart, cartItem) => {
-  console.log('find cart item was called', cartItem, cart)
+  console.log("find cart item was called", cartItem, cart);
   /* if cart empty */
   if (cart.length === 0) return false;
 
@@ -80,7 +80,7 @@ export const mutations = {
   unauthorize(state) {
     state.authorized = false;
     state.user = {};
-    cookies.remove('swecom_bounipun')
+    cookies.remove("swecom_bounipun");
   },
   setUser(state, user) {
     state.user = user;
@@ -122,12 +122,12 @@ export const mutations = {
     }
   },
   setCoupon(state, value) {
-      state.coupon = value;
+    state.coupon = value;
   },
   clearCart(state) {
     /* clear cart array directly */
     state.cart = [];
-    console.log('cart emptied')
+    console.log("cart emptied");
   },
   setGlobalRemoteCart(state, cart) {
     state.globalRemoteCart = cart;
@@ -141,7 +141,7 @@ export const mutations = {
   setCountryIndex(state, countryIndex) {
     state.countryIndex = countryIndex;
   }
-}
+};
 
 export const getters = {
   alreadyInCart: state => cartItem => {
@@ -155,11 +155,24 @@ export const getters = {
     if (state.cart.length === 0) return false;
     return [...new Set(state.cart.map(product => product._id))];
   },
-  getCartSubTotal(state, getters) {
+  getCartTotal(state, getters) {
     return sumBy(
       state.globalRemoteCart,
       item => getters.adjustPrice(item.price) * item.quantity
     );
+  },
+  getTotalCartItems(state) {
+    return sumBy(state.globalRemoteCart, item => item.quantity)
+  },
+  getShippingCharge(state) {
+    return state.currency === "INR"
+      ? state.globalConfig.domesticShippingCharge
+      : state.globalConfig.internationalShippingCharge;
+  },
+  getTaxPercentage(state) {
+    return state.currency === "INR"
+    ? state.globalConfig.gstPercentage
+    : state.globalConfig.internationalTaxPercentage
   },
   adjustPrice: state => dbPrice => {
     console.log("hey i was called", state.currency);
@@ -189,8 +202,8 @@ export const actions = {
   },
   /* fetch user profile */
   async fetchProfile({ state, commit }) {
-    const { response, resolved } = await this.$post('/fetchProfile');
-    if(resolved == false) return;
+    const { response, resolved } = await this.$post("/fetchProfile");
+    if (resolved == false) return;
     commit("setUser", response);
   },
   async fetchStoreLocation({ commit }) {
@@ -211,31 +224,31 @@ export const actions = {
     commit("setCountryIndex", countryIndex);
   },
   /* fetch store global config */
-async fetchGlobalConfig({ state, commit }) {
+  async fetchGlobalConfig({ state, commit }) {
     /* fetch global config from server */
-    const fetchConfigRequest = await this.$post('/fetchGlobalConfig');
+    const fetchConfigRequest = await this.$post("/fetchGlobalConfig");
     /* if request failed */
-    if(fetchConfigRequest.resolved === false) return;
+    if (fetchConfigRequest.resolved === false) return;
     /* extract global config */
-    console.log(fetchConfigRequest.response,'--genius')
+    console.log(fetchConfigRequest.response, "--genius");
     const { globalConfig } = fetchConfigRequest.response;
-    console.log(globalConfig,'--again genius')
+    console.log(globalConfig, "--again genius");
     /* set config in vuex */
-    commit("setGlobalConfig", {...globalConfig});
+    commit("setGlobalConfig", { ...globalConfig });
   },
   /* fetch coupon */
-  async fetchCoupon({ state, commit }, couponCode ) {
-    const fetchCouponRequest = await this.$post('/fetchCoupon', {
+  async fetchCoupon({ state, commit }, couponCode) {
+    const fetchCouponRequest = await this.$post("/fetchCoupon", {
       couponCode,
       currency: state.currency
     });
     /* if request failed */
-    if(fetchCouponRequest.resolved == false) {
+    if (fetchCouponRequest.resolved == false) {
       return false;
-    };
+    }
     /* extract details */
     const { couponDetails } = fetchCouponRequest.response;
     /* save coupon details */
-    commit('setCoupon', { applied: true, ...couponDetails });
+    commit("setCoupon", { applied: true, ...couponDetails });
   }
 };

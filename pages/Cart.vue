@@ -18,7 +18,6 @@
     <!-- coupon box -->
     <div class="coupon-box flex col center">
       <div class="input flex center col">
-
         <!-- code input box -->
         <InputCredential
           v-model="couponCode"
@@ -49,14 +48,24 @@
 
     <!-- sub total -->
     <div v-if="!cartEmpty" class="sub-total">
+
       <p class="label text">
         Sub Total <br />
         <span class="length">
           {{ $store.getters["customer/cartCount"]() }} Item(s) :
         </span>
       </p>
-      <span class="value text"> {{ currency }} {{ subTotal }} </span>
+
+      <!-- cart total -->
+      <!-- discount -->
+      <!-- shipping charge -->
+      <!-- taxes -->
+
+      <span class="value text"> {{ currency }} {{ cartTotal }} </span>
     </div>
+    
+    <!-- order total -->
+    <OrderTotal />
 
     <!-- TODO: show grand total (with coupon discount) -->
     <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
@@ -120,8 +129,8 @@ export default {
     couponApplied() {
       return this.$store.state.customer.coupon.applied === true;
     },
-    subTotal() {
-      return this.$store.getters['customer/getCartSubTotal'];
+    cartTotal() {
+      return this.$store.getters["customer/getCartTotal"];
     }
   },
   methods: {
@@ -285,8 +294,7 @@ export default {
 /* coupon box */
 .coupon-box {
   .input {
-
-     width: 70%;
+    width: 70%;
     .apply {
       width: 70%;
       background-color: rgb(86, 152, 86);
@@ -297,7 +305,6 @@ export default {
         font-size: 12px;
       }
     }
-    
   }
 }
 .sub-total {
