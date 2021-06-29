@@ -11,7 +11,7 @@
       <span class="value green small"> - {{ currency }} {{ discountValue }} </span>
     </div>
 
-    <hr />
+    <!-- <hr /> -->
 
     <!-- sub total -->
     <div class="data-point flex between">
@@ -35,6 +35,14 @@
       <span v-if="!zeroTaxes" class="value small">  {{ `+ ${currency} ${taxes}` }} </span>
       <span v-else class="value green small"> Tax Included </span>
     </div>
+
+        <hr />
+    <!-- grand total -->
+    <div class="data-point grand flex between">
+      <span class="name"> Grand Total: </span>
+      <span class="value">  {{ ` ${currency} ${grandTotal}` }} </span>
+    </div>
+
   </div>
 </template>
 
@@ -66,35 +74,40 @@ export default {
           discountValue = this.coupon.value;
           break;
       }
-      return discountValue.toFixed(2);
+      return discountValue;
     },
     shippingCharge() {
       /* calculate the total number of item in total (sum of all quantities) */
       const totalCartItems = this.$store.getters["customer/getTotalCartItems"];
       const shippingCharge =
         this.$store.getters["customer/getShippingCharge"] * totalCartItems;
-      return shippingCharge.toFixed(2);
+      return shippingCharge;
     },
     zeroShippingCharge() {
-      return this.shippingCharge === "0.00";
+      return this.shippingCharge === 0;
     },
     taxes() {
       const taxPercentage = this.$store.getters["customer/getTaxPercentage"];
       const taxableAmount = this.subTotal * (taxPercentage / 100);
-      return taxableAmount.toFixed(2);
+      return taxableAmount;
     },
     zeroTaxes() {
-      return this.taxes === "0.00";
+      return this.taxes === 0;
     },
     subTotal() {
-      const subTotal = this.cartTotal - this.discountValue;
-      return subTotal.toFixed(2);
+      let subTotal = this.cartTotal - this.discountValue;
+       return parseInt(subTotal.toFixed(2));
     },
     cartTotal() {
-      return this.$store.getters["customer/getCartTotal"].toFixed(2);
+      const cartTotal = this.$store.getters["customer/getCartTotal"];
+      return cartTotal;
     },
     cartCount() {
       return this.$store.getters["customer/cartCount"];
+    },
+    grandTotal() {
+        let grandTotal = this.subTotal + this.shippingCharge + this.taxes;
+        return grandTotal;
     }
   }
 };
@@ -118,7 +131,7 @@ export default {
     .value {
       color: $dark_gray;
       font-size: 17px;
-      font-family: $font_2_bold;
+      font-family: $font_2;
 
       &.green {
         color: rgb(37, 154, 107);
@@ -128,6 +141,15 @@ export default {
           font-family: $font_2;
           font-size: 16px;
       }
+    }
+
+    &.grand {
+        .name {
+            font-family: $font_1_bold;
+        }
+        .value {
+            font-family: $font_1_bold;
+        }
     }
   }
 }
