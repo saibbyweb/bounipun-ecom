@@ -2,9 +2,11 @@ import { mongoose, task } from "@helpers/essentials";
 
 /* schema */
 const schema = new mongoose.Schema({
+    bounipun_id: String,
     domesticShippingCharge: Number,
     internationalShippingCharge: Number,
-    chargeGst: Boolean
+    gstPercentage: Number,
+    internationalTaxPercentage: Number
 },
     {
         timestamps: true
@@ -15,10 +17,38 @@ const schema = new mongoose.Schema({
 const modelName = 'globalConfig'
 const model = mongoose.model(modelName, schema);
 
-
 export const methods = {
     register() {
         console.log(`${modelName} registered`);
+        // this.setGlobalConfig();
+        // this.getGlobalConfig();
+        // this.updateGlobalConfig({
+        //     domesticShippingCharge: 150,
+        //     internationalTaxPercentage: 80,
+        //     chargeGst: false
+        // });
+    },
+    async setGlobalConfig(config) {
+       let newConfig = new model({
+            bounipun_id: "saibbyweb",
+            domesticShippingCharge: 100,
+            internationalShippingCharge: 300,
+            chargeGst: false,
+            gstPercentage: 8,
+            chargeInternationalTax: false,
+            internationalTaxPercentage: 3
+        });
+
+        await newConfig.save();
+    },
+    async updateGlobalConfig(config) {
+        await model.findOneAndUpdate({ bounipun_id: "saibbyweb"}, {
+            ...config
+        });
+    },
+    async getGlobalConfig() {
+        const config = await model.findOne();
+        console.log(config);
     }
 }
 
