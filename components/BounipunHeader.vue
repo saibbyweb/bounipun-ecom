@@ -80,7 +80,7 @@ export default {
       return this.$store.getters["customer/getCartCount"];
     },
     whatsAppShareLink() {
-      const BASE_SHARE_URL = "https://wa.me/send?phone=918082007711&text=";
+      const BASE_SHARE_URL = "https://wa.me/918082007711?text=";
       let msg = `Hi! Could you help me with a few queries!`;
       msg = encodeURI(msg);
       return BASE_SHARE_URL + msg;
