@@ -71,10 +71,20 @@ export default {
   async mounted() {
     // this.countryCodes = await this.$axios.$get('https://gist.githubusercontent.com/kcak11/4a2f22fb8422342b3b3daa7a1965f4e4/raw/95677f414c98b0289b75436c1e10d9c1755c62f0/countries.json');
     // this.countryCodes = countryData;
+    this.fetchAddressBook();
   },
   methods: {
     async fetchAddressBook() {
+        const request = await this.$post('/fetchCustomerDataPoints', {
+            field: 'addressBook'
+        });
+
+        if(request.resolved === false) {
+            return;
+        }
         
+
+
     },
     selectCountry(index) {
       this.selectedCountryIndex = index;
@@ -110,7 +120,13 @@ export default {
       }
       return deliveryAddress;
     },
+    validateForm() {
+        
+    },
     proceedToCheckout() {
+    if(!this.validateForm())
+            return;
+
       /* collect delivery address */
       let deliveryAddress = {};
       Object.keys(this.formData).forEach(key => {
