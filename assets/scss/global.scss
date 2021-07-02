@@ -340,6 +340,10 @@ p {
     }
   }
 
+  &.baseline {
+    align-items: baseline;
+  }
+
   &.end {
     justify-content: flex-end;
     &.center {

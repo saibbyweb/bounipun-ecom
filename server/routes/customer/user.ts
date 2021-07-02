@@ -350,13 +350,41 @@ router.post('/orderCheckout', userAuth('customer'), async (req, res) => {
 /* fetch customer profile */
 router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
     const { user } = req.body;
+    let fields = 'firstName surName phoneNumber countryDialCode countryIsoCode profession cart';
 
     const profile = await db
         .model('users')
         .findOne({ _id: user._id })
-        .populate('orders')
+        .select(fields)
 
     res.send(profile)
+});
+
+/* fetch customer details */
+router.post('/fetchCustomerDataPoints', userAuth('customer'), async(req, res) => {
+    let response = { resolved: false, doc: {} };
+
+    const { user, field } = req.body;
+
+    let query = db
+    .model('users')
+    .findOne({ _id: user._id })
+    .select(field)
+
+    switch(field) {
+        case 'orders':
+            query = query.populate(field)
+        break;
+    }
+    
+    /* fetch document */
+    const document = await query;
+    if(document !== null) {
+        response.doc = document;
+        response.resolved = true;
+    }
+
+    res.send(response);
 });
 
 /* update profile */

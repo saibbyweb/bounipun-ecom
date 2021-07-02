@@ -2,7 +2,7 @@
   <!-- country selection -->
   <div v-click-outside="hideCountries" v-if="countryCodes.length !== 0" class="country-select">
     <div
-      @click="showCountrySelect = true"
+      @click="showCountrySelectList"
       class="selected-country"
       :class="{ focused: showCountrySelect }"
     >
@@ -54,6 +54,12 @@ export default {
   directives: {
     ClickOutside
   },
+  props: {
+    lock: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       countryCodes: countryData,
@@ -70,9 +76,15 @@ export default {
     selectedCountryCode(newVal) {
       this.$emit("input", newVal);
       this.$emit('setCountryIsoCode', this.selectedCountryIsoCode);
+    },
+    customerCountryIndex(newVal) {
+      this.selectedCountryIndex = newVal;
     }
   },
   computed: {
+      customerCountryIndex() {
+      return this.$store.state.customer.countryIndex
+    },
     selectedCountry() {
       if (this.matchedCountries.length === 0) return "";
       return this.matchedCountries[this.selectedCountryIndex];
@@ -98,6 +110,10 @@ export default {
     }
   },
   methods: {
+    showCountrySelectList() {
+      if(!this.lock)
+        this.showCountrySelect = true
+    },
     hideCountries() {
       this.showCountrySelect = false
     },

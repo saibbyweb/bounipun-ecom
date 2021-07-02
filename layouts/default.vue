@@ -44,7 +44,7 @@ export default {
         this.$store.dispatch('customer/fetchProfile');
         this.$store.dispatch('customer/fetchStoreLocation');
         this.$store.dispatch('customer/fetchGlobalConfig');
-    }, 400)
+    }, 100)
   },
   data() {
     return {
