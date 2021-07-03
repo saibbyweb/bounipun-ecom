@@ -34,6 +34,7 @@
 
 <script>
 import countryData from "@/helpers/countryCodes.js";
+import validate from "@/helpers/validate.js";
 
 export default {
   data() {
@@ -82,9 +83,6 @@ export default {
         if(request.resolved === false) {
             return;
         }
-        
-
-
     },
     selectCountry(index) {
       this.selectedCountryIndex = index;
@@ -101,8 +99,8 @@ export default {
         addressLine1: "Address Line #1",
         addressLine2: "Address Line #2",
         city: "City",
-        postalCode: "Pincode"
-      };
+        postalCode: "Postal Code"
+      }
 
       /* delivery address object */
       let deliveryAddress = {};
@@ -122,6 +120,15 @@ export default {
     },
     validateForm() {
         
+        /* except for addressLine#2, no field can be blank */
+
+        /* firstName and surName should only consist of alphabets */
+        /* mobile number should only consist of numbers */
+        /* email should be in a valid format */
+        /* address lines should have character limit */
+        /* city should only consist of alphabets */
+        /* postal code should only consist of numbers */
+        return false;
     },
     proceedToCheckout() {
     if(!this.validateForm())
