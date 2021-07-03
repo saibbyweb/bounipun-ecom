@@ -17,6 +17,7 @@
         :label="field.label"
         @input="field.error.status = false"
         :isMobileNumber="key === 'mobileNumber'"
+        :maxLength="key === 'addressLine1' || key === 'addressLine2' ? 60 : 100"
         :countryCode="selectedCountryCodex"
       />
       <!-- consent for adding address to address book -->
@@ -70,8 +71,6 @@ export default {
     }
   },
   async mounted() {
-    // this.countryCodes = await this.$axios.$get('https://gist.githubusercontent.com/kcak11/4a2f22fb8422342b3b3daa7a1965f4e4/raw/95677f414c98b0289b75436c1e10d9c1755c62f0/countries.json');
-    // this.countryCodes = countryData;
     this.fetchAddressBook();
   },
   methods: {
@@ -163,9 +162,21 @@ export default {
       emailField.error.status = !emailValid;
       emailField.error.msg = "Please enter a valid email address";
 
-      /* address lines should have character limit */
+      /* TODO: RESUME_FROM_HERE address lines should have character limit */
+    //   const addressLine1Field= this.formData["addressLine1"];
+    //   const addressLine2Field = this.formData["addressLine2"];
+
       /* city should only consist of alphabets */
+      const cityField = this.formData["city"];
+      const cityOnlyHasAlphabets = cityField.value.hasOnlyAlphabets();
+      cityField.error.status = !cityOnlyHasAlphabets;
+      cityField.error.msg = !cityOnlyHasAlphabets ? "Only Alphabets are allowed" : "";
+
       /* postal code should only consist of numbers */
+      const postalCodeField = this.formData["postalCode"];
+      const postalCodeOnlyHasNumbers = postalCodeField.value.hasOnlyNumbers();
+      postalCodeField.error.status = !postalCodeOnlyHasNumbers;
+      postalCodeField.error.msg = !postalCodeOnlyHasNumbers ? "Only numbers are allowed" : "";
 
       /* except for addressLine#2, no field can be blank */
       requiredFields.forEach(key => {
@@ -187,7 +198,7 @@ export default {
 
       console.log(validated, "--validated");
 
-      return false;
+      return validated;
     },
     proceedToCheckout() {
       if (!this.validateForm()) return;

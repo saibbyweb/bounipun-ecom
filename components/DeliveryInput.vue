@@ -10,6 +10,7 @@
         :value="value"
         @input="$emit('input', $event.target.value)"
         autocomplete="new-password"
+        :maxlength="maxLength"
         :class="{ error: error.status, isMobileNumber }"
       />
     </div>
@@ -27,6 +28,10 @@ export default {
       default: false
     },
     countryCode: String,
+    maxLength: {
+      type: Number,
+      default: 100
+    },
     error: {
       status: Boolean,
       msg: String
