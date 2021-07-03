@@ -20,7 +20,7 @@
         :countryCode="selectedCountryCodex"
       />
       <!-- consent for adding address to address book -->
-      <Checkbox label="Save address for later use." v-model="saveNewAddress"/>
+      <Checkbox label="Save address for later use." v-model="saveNewAddress" />
     </div>
 
     <!-- proceed to checkout -->
@@ -46,7 +46,7 @@ export default {
       showCountrySelect: false,
       selectedCountryCodex: "",
       saveNewAddress: true
-    }
+    };
   },
   computed: {
     selectedCountry() {
@@ -76,13 +76,13 @@ export default {
   },
   methods: {
     async fetchAddressBook() {
-        const request = await this.$post('/fetchCustomerDataPoints', {
-            field: 'addressBook'
-        });
+      const request = await this.$post("/fetchCustomerDataPoints", {
+        field: "addressBook"
+      });
 
-        if(request.resolved === false) {
-            return;
-        }
+      if (request.resolved === false) {
+        return;
+      }
     },
     selectCountry(index) {
       this.selectedCountryIndex = index;
@@ -100,7 +100,7 @@ export default {
         addressLine2: "Address Line #2",
         city: "City",
         postalCode: "Postal Code"
-      }
+      };
 
       /* delivery address object */
       let deliveryAddress = {};
@@ -119,20 +119,27 @@ export default {
       return deliveryAddress;
     },
     validateForm() {
-        
-        /* except for addressLine#2, no field can be blank */
-
-        /* firstName and surName should only consist of alphabets */
-        /* mobile number should only consist of numbers */
-        /* email should be in a valid format */
-        /* address lines should have character limit */
-        /* city should only consist of alphabets */
-        /* postal code should only consist of numbers */
-        return false;
+      /* except for addressLine#2, no field can be blank */
+      [
+        "firstName",
+        "surName",
+        "mobileNumber",
+        "email",
+        "addressLine1",
+        "city",
+        "postalCode"
+      ].every(field => this.formData[field].value.isEmpty())
+      /* firstName and surName should only consist of alphabets */
+      
+      /* mobile number should only consist of numbers */
+      /* email should be in a valid format */
+      /* address lines should have character limit */
+      /* city should only consist of alphabets */
+      /* postal code should only consist of numbers */
+      return false;
     },
     proceedToCheckout() {
-    if(!this.validateForm())
-            return;
+      if (!this.validateForm()) return;
 
       /* collect delivery address */
       let deliveryAddress = {};

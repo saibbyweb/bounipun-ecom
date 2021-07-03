@@ -1,12 +1,14 @@
+/* check if string is empty/blank */
+String.prototype.isEmpty = function() {
+  return this.trim() === "";
+};
+
 /* check if string has only alphabets */
 String.prototype.hasOnlyAlphabets = function() {
   const regx = new RegExp("^[a-zA-Z ]+$");
   return regx.test(this);
 };
-/* check if string is empty/blank */
-String.prototype.isEmpty = function() {
-  return this.trim() === "";
-};
+
 /* check if string only has numbers */
 String.prototype.hasOnlyNumbers = function() {
   return /^\d+$/.test(this);

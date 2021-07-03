@@ -66,7 +66,7 @@ export default {
       selectedCountryIndex: this.$store.state.customer.countryIndex,
       countrySearchTerm: "",
       showCountrySelect: false
-    };
+    }
   },
   mounted() {
     this.$emit("input", this.selectedCountryCode);

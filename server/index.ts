@@ -1,9 +1,7 @@
 import { server, port, environment, dbConnect } from "@helpers/essentials";
 import mainRoutes from "@routes/admin/main";
-const validate =  require("../helpers/validate.js");
+require('../helpers/validate.js');
 import customerRoutes from "@routes/customer";
-
-console.log("suhaib".isEmpty());
 
 const { app } = server;
 server.enableCorsIfNeeded();
