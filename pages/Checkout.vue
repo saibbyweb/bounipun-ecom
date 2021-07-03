@@ -50,6 +50,9 @@
 
       <!-- shipping note -->
       <p class="note">Standard shipping 4 weeks</p>
+
+      <!-- TODO: START_FROM_HERE stripe card payment -->
+      <div id="stripe-mount" />
     </div>
 
     <!-- proceed to checkout -->
@@ -63,6 +66,29 @@
 
 <script>
 import sumBy from "lodash/sumBy";
+import { loadStripe } from "@stripe/stripe-js";
+const style = {
+  style: {
+    base: {
+      iconColor: "#000",
+      color: "#000",
+      fontWeight: "800",
+      fontFamily: "Press Start 2P",
+      fontSize: "22px",
+      fontSmoothing: "antialiased",
+      ":-webkit-autofill": {
+        color: "#fce883"
+      },
+      "::placeholder": {
+        color: "green"
+      }
+    },
+    invalid: {
+      iconColor: "#FFC7EE",
+      color: "red"
+    }
+  }
+};
 
 /* demo delivery address */
 const demoDeliveryAddress = {
@@ -79,20 +105,28 @@ const demoDeliveryAddress = {
 export default {
   mounted() {
     /* this page should not be accessible to guest */
+
     /* fetch updated cart from user account */
+    this.$store.dispatch("customer/fetchCart");
+
     /* if cart is empty redirect to cart | homepage */
-    /* show order total along with coupon details */
+
+    /* create payment intent */
+
     /* according to currency, setup payment options */
 
-    this.$store.dispatch("customer/fetchCart");
-    if (this.currency.trim() === "INR") this.fetchRazorpayOrderId();
+    this.initializeStripe();
+    // if (this.currency.trim() === "INR") this.fetchRazorpayOrderId();
+    // else this.initializeStripe();
   },
   data() {
     return {
       deliveryAddress: demoDeliveryAddress,
       // deliveryAddress: this.$route.params.deliveryAddress,
       remoteCartItems: this.$store.state.customer.globalRemoteCart,
-      razorpayCheckout: null
+      razorpayCheckout: null,
+      stripe: null,
+      elements: null
     };
   },
   computed: {
@@ -113,6 +147,13 @@ export default {
     adjustPrice(price) {
       price = parseInt(price);
       return this.$store.getters["customer/adjustPrice"](price);
+    },
+    async initializeStripe() {
+      console.log();
+      this.stripe = await loadStripe(process.env.STRIPE_PK);
+      this.elements = this.stripe.elements();
+      const element = this.elements.create("card", { hidePostalCode: true });
+      element.mount("#stripe-mount");
     },
     async fetchRazorpayOrderId() {
       const razorpayOrder = await this.$post("/createRazorpayOrder", {
@@ -234,38 +275,12 @@ export default {
     // margin-top: 10px;
   }
 
-  .sub-total {
-    display: flex;
+  #stripe-mount {
+    margin-top: 20px;
+    width: 80%;
+    background-color: white;
     box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
-    margin: 10%;
-    justify-content: center;
-    align-items: center;
-
-    .text {
-      font-family: $font_1_bold;
-      font-size: 12px;
-      padding: 10px;
-      margin: 0 3px;
-
-      .length {
-        color: $dark_gray;
-        font-family: $font_1_bold;
-      }
-    }
-
-    p {
-      &.label {
-        color: $gray;
-        font-family: $font_1;
-        text-transform: uppercase;
-      }
-    }
-    span {
-      &.value {
-        color: $dark_gray;
-        font-size: 17px;
-      }
-    }
+    padding: 3%;
   }
 }
 </style>

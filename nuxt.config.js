@@ -49,7 +49,8 @@ export default {
   },
   env: {
     baseAWSURL: "https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/",
-    BASE_URL: process.env.BASE_URL
+    BASE_URL: process.env.BASE_URL,
+    STRIPE_PK: process.env.STRIPE_PK
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
