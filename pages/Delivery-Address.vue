@@ -71,9 +71,19 @@ export default {
     }
   },
   async mounted() {
+      this.prefillForm();
     this.fetchAddressBook();
   },
   methods: {
+    prefillForm() {
+        this.formData.firstName.value = "Suhaib"
+        this.formData.surName.value = "Khan"
+        this.formData.mobileNumber.value = "9906697711"
+        this.formData.email.value = "hello@saibbyweb.com"
+        this.formData.addressLine1.value = "H.no 54, Chinar Enclave, Rawalpora, Srinagar, Jammu & Kashmir"
+        this.formData.city.value = "Srinagar"
+        this.formData.postalCode.value = "190005"
+    },
     async fetchAddressBook() {
       const request = await this.$post("/fetchCustomerDataPoints", {
         field: "addressBook"
@@ -86,7 +96,6 @@ export default {
     selectCountry(index) {
       this.selectedCountryIndex = index;
       this.showCountrySelect = false;
-      // this.formData.countryCode.value = this.matchedCountries[this.selectedCountryIndex].dialCode;
     },
     createFormData() {
       /* form fields */
@@ -117,6 +126,15 @@ export default {
       }
       return deliveryAddress;
     },
+    setError(key, flag, msg) {
+      const field = this.formData[key];
+      if (flag) {
+        field.error = {
+          status: true,
+          msg
+        };
+      }
+    },
     validateForm() {
       /* required fields */
       const requiredFields = [
@@ -133,61 +151,58 @@ export default {
       ["firstName", "surName"].forEach(key => {
         const field = this.formData[key];
         const hasOnlyAlphabets = field.value.hasOnlyAlphabets();
-        field.error.status = !hasOnlyAlphabets;
-        field.error.msg = !hasOnlyAlphabets ? "Only Alphabets are allowed" : "";
+        this.setError(key, !hasOnlyAlphabets, "Only Alphabets are allowed!");
       });
 
-      /* validate mobile number  */
+      /*  mobile number field */
       const mobileNumberField = this.formData["mobileNumber"];
 
-      /* mobile number should only consist of numbers & length should be between 4 - 14 */
+      /* mobile number should only consist of numbers  */
       const mobileNumberHasOnlyNumbers = mobileNumberField.value.hasOnlyNumbers();
+      this.setError(
+        "mobileNumber",
+        !mobileNumberHasOnlyNumbers,
+        "Mobile number can only consist of digits"
+      );
+
+      /* mobile number length should be between 4 - 14 */
       const mobileNumberLengthInRange =
         mobileNumberField.value.length > 3 &&
         mobileNumberField.value.length < 15;
-    
-    /* mobile number validated flag */
-      const mobileNumberValidated =
-        mobileNumberHasOnlyNumbers && mobileNumberLengthInRange;
-    
-      /* set error message accordingly */
-      mobileNumberField.error.status = !mobileNumberValidated;
-      mobileNumberField.error.msg = !mobileNumberValidated
-        ? "Please enter a valid mobile number"
-        : "";
+      this.setError(
+        "mobileNumber",
+        !mobileNumberLengthInRange,
+        "Please enter a valid mobile number"
+      );
 
       /* email should be in a valid format */
       const emailField = this.formData["email"];
       const emailValid = emailField.value.isValidEmail();
-      emailField.error.status = !emailValid;
-      emailField.error.msg = "Please enter a valid email address";
-
-      /* TODO: RESUME_FROM_HERE address lines should have character limit */
-    //   const addressLine1Field= this.formData["addressLine1"];
-    //   const addressLine2Field = this.formData["addressLine2"];
+      this.setError("email", !emailValid, "Please enter a valid email address");
 
       /* city should only consist of alphabets */
       const cityField = this.formData["city"];
       const cityOnlyHasAlphabets = cityField.value.hasOnlyAlphabets();
-      cityField.error.status = !cityOnlyHasAlphabets;
-      cityField.error.msg = !cityOnlyHasAlphabets ? "Only Alphabets are allowed" : "";
+      this.setError(
+        "city",
+        !cityOnlyHasAlphabets,
+        "Only Alphabets are allowed"
+      );
 
       /* postal code should only consist of numbers */
       const postalCodeField = this.formData["postalCode"];
       const postalCodeOnlyHasNumbers = postalCodeField.value.hasOnlyNumbers();
-      postalCodeField.error.status = !postalCodeOnlyHasNumbers;
-      postalCodeField.error.msg = !postalCodeOnlyHasNumbers ? "Only numbers are allowed" : "";
+      this.setError(
+        "postalCode",
+        !postalCodeOnlyHasNumbers,
+        "Only Number are allowed"
+      );
 
       /* except for addressLine#2, no field can be blank */
       requiredFields.forEach(key => {
         const field = this.formData[key];
         const fieldEmpty = field.value.isEmpty();
-        if (fieldEmpty) {
-          field.error = {
-            status: true,
-            msg: "This field cannot be left blank"
-          };
-        }
+        this.setError(key, fieldEmpty, "This field cannot be left blank!");
       });
 
       /* check for any error flags */
