@@ -34,17 +34,19 @@
       <!-- TODO: show grand total (with coupon discount, taxes and shipping cost ) -->
       <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
       <!-- TODO: show user consent checkbox for combined delivery for all items -->
-      
+
       <!-- sub total -->
-      <div v-if="!cartEmpty" class="sub-total">
+      <!-- <div v-if="!cartEmpty" class="sub-total">
         <p class="label text">
           Grand Total: <br />
           <span class="length">
-            {{ $store.getters["customer/cartCount"]() }} Item(s) :
+            {{ $store.getters["customer/cartCount"] }} Item(s) :
           </span>
         </p>
         <span class="value text"> INR {{ subTotal }} </span>
-      </div>
+      </div> -->
+
+      <OrderTotal />
 
       <!-- shipping note -->
       <p class="note">Standard shipping 4 weeks</p>
@@ -76,13 +78,19 @@ const demoDeliveryAddress = {
 
 export default {
   mounted() {
+    /* this page should not be accessible to guest */
+    /* fetch updated cart from user account */
+    /* if cart is empty redirect to cart | homepage */
+    /* show order total along with coupon details */
+    /* according to currency, setup payment options */
+
     this.$store.dispatch("customer/fetchCart");
     if (this.currency.trim() === "INR") this.fetchRazorpayOrderId();
   },
   data() {
     return {
       deliveryAddress: demoDeliveryAddress,
-      //   deliveryAddress: this.$route.params.deliveryAddress,
+      // deliveryAddress: this.$route.params.deliveryAddress,
       remoteCartItems: this.$store.state.customer.globalRemoteCart,
       razorpayCheckout: null
     };
