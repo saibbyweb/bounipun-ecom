@@ -15,7 +15,7 @@
         v-model="field.value"
         :error="field.error"
         :label="field.label"
-        @input="field.error = false"
+        @input="field.error.status = false"
         :isMobileNumber="key === 'mobileNumber'"
         :countryCode="selectedCountryCodex"
       />
@@ -119,8 +119,8 @@ export default {
       return deliveryAddress;
     },
     validateForm() {
-      /* except for addressLine#2, no field can be blank */
-      [
+      /* required fields */
+      const requiredFields = [
         "firstName",
         "surName",
         "mobileNumber",
@@ -128,14 +128,65 @@ export default {
         "addressLine1",
         "city",
         "postalCode"
-      ].every(field => this.formData[field].value.isEmpty())
+      ];
+
       /* firstName and surName should only consist of alphabets */
-      
-      /* mobile number should only consist of numbers */
+      ["firstName", "surName"].forEach(key => {
+        const field = this.formData[key];
+        const hasOnlyAlphabets = field.value.hasOnlyAlphabets();
+        field.error.status = !hasOnlyAlphabets;
+        field.error.msg = !hasOnlyAlphabets ? "Only Alphabets are allowed" : "";
+      });
+
+      /* validate mobile number  */
+      const mobileNumberField = this.formData["mobileNumber"];
+
+      /* mobile number should only consist of numbers & length should be between 4 - 14 */
+      const mobileNumberHasOnlyNumbers = mobileNumberField.value.hasOnlyNumbers();
+      const mobileNumberLengthInRange =
+        mobileNumberField.value.length > 3 &&
+        mobileNumberField.value.length < 15;
+    
+    /* mobile number validated flag */
+      const mobileNumberValidated =
+        mobileNumberHasOnlyNumbers && mobileNumberLengthInRange;
+    
+      /* set error message accordingly */
+      mobileNumberField.error.status = !mobileNumberValidated;
+      mobileNumberField.error.msg = !mobileNumberValidated
+        ? "Please enter a valid mobile number"
+        : "";
+
       /* email should be in a valid format */
+      const emailField = this.formData["email"];
+      const emailValid = emailField.value.isValidEmail();
+      emailField.error.status = !emailValid;
+      emailField.error.msg = "Please enter a valid email address";
+
       /* address lines should have character limit */
       /* city should only consist of alphabets */
       /* postal code should only consist of numbers */
+
+      /* except for addressLine#2, no field can be blank */
+      requiredFields.forEach(key => {
+        const field = this.formData[key];
+        const fieldEmpty = field.value.isEmpty();
+        if (fieldEmpty) {
+          field.error = {
+            status: true,
+            msg: "This field cannot be left blank"
+          };
+        }
+      });
+
+      /* check for any error flags */
+      const validated = requiredFields.every(key => {
+        console.log(this.formData[key].error.status, key);
+        return !this.formData[key].error.status;
+      });
+
+      console.log(validated, "--validated");
+
       return false;
     },
     proceedToCheckout() {
