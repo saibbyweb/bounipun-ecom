@@ -33,6 +33,14 @@ export const methods = {
     async createNew (options: IntentOptions) {
         const newPaymentIntent = await new model(options).save();
         return newPaymentIntent;
+    },
+    async capturePaymentIntent(details) {
+        
+    },
+    stripePaymentSucceeded(intentId, amount, currency) {
+        /* get stripe intent id from db */
+        /* match intent details with amount and currency */
+        /*  */
     }
 }
 

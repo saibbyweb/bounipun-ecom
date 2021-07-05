@@ -52,12 +52,13 @@
       <p class="note">Standard shipping 4 weeks</p>
 
       <!-- TODO: START_FROM_HERE stripe card payment -->
+      <h2 class="payment-title"> Payment Information </h2>
       <div id="stripe-mount" />
     </div>
 
     <!-- proceed to checkout -->
     <div class="pad-10">
-      <button @click="placeOrder" class="action">
+      <button :class="{disabled: !enableCheckout}" @click="placeOrder" class="action checkout-btn">
         Place Order
       </button>
     </div>
@@ -109,6 +110,8 @@ export default {
     /* fetch updated cart from user account */
     this.$store.dispatch("customer/fetchCart");
 
+    /* decide which gateway is to be used */
+
     /* if cart is empty redirect to cart | homepage */
 
     /* create payment intent */
@@ -126,6 +129,7 @@ export default {
       remoteCartItems: this.$store.state.customer.globalRemoteCart,
       razorpayCheckout: null,
       stripe: null,
+      enableCheckout: false,
       elements: null
     };
   },
@@ -153,6 +157,12 @@ export default {
       this.stripe = await loadStripe(process.env.STRIPE_PK);
       this.elements = this.stripe.elements();
       const element = this.elements.create("card", { hidePostalCode: true });
+      element.on("change",(event) => {
+        if(event.complete)
+          this.enableCheckout = true;
+        else
+          this.enableCheckout = false;
+      });
       element.mount("#stripe-mount");
     },
     async fetchRazorpayOrderId() {
@@ -219,8 +229,15 @@ export default {
       this.razorpayCheckout = new Razorpay(options);
     },
     async placeOrder() {
+      if(!this.enableCheckout)
+        return false;
+
       if (this.currency.trim() === "INR") this.razorpayCheckout.open();
+      else this.stripeCheckout();
       return;
+    },
+    async stripeCheckout() {
+
     }
   }
 };
@@ -274,6 +291,10 @@ export default {
     font-family: $font_1;
     // margin-top: 10px;
   }
+  
+  .payment-title {
+    margin-top:20px;
+  }
 
   #stripe-mount {
     margin-top: 20px;
@@ -281,6 +302,11 @@ export default {
     background-color: white;
     box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
     padding: 3%;
+  }
+}
+.checkout-btn {
+  &.disabled {
+    background-color: gray;
   }
 }
 </style>
