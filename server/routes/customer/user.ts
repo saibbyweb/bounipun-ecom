@@ -160,7 +160,7 @@ router.post('/loginCustomer', async (req, res) => {
     }
 
     let otpVerified = false;
-    
+
     if (countryDialCode === "+91")
         otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp)
     else
@@ -361,25 +361,25 @@ router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
 });
 
 /* fetch customer details */
-router.post('/fetchCustomerDataPoints', userAuth('customer'), async(req, res) => {
+router.post('/fetchCustomerDataPoints', userAuth('customer'), async (req, res) => {
     let response = { resolved: false, doc: {} };
 
     const { user, field } = req.body;
 
     let query = db
-    .model('users')
-    .findOne({ _id: user._id })
-    .select(field)
+        .model('users')
+        .findOne({ _id: user._id })
+        .select(field)
 
-    switch(field) {
+    switch (field) {
         case 'orders':
             query = query.populate(field)
-        break;
+            break;
     }
-    
+
     /* fetch document */
     const document = await query;
-    if(document !== null) {
+    if (document !== null) {
         response.doc = document;
         response.resolved = true;
     }
@@ -526,7 +526,7 @@ router.post('/ipLookup', userAuth('customer', false), async (req, res) => {
         res.send(response);
         return;
     }
-    
+
     /* otherwise do an country lookup */
     const ipLookup = axios.get(`https://api.ipregistry.co/?key=${ipRegistryKey}`);
     const { response: lookupResponse, error } = await task(ipLookup);

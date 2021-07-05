@@ -7,6 +7,7 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilio = require('twilio')(accountSid, authToken);
 const twilioServiceId = process.env.TWILIO_VERIFY_SERVICE_ID
+import { methods as couponMethods } from "@models/coupon";
 
 /* validate session */
 const { validateSession } = sessionMethods;
@@ -56,7 +57,7 @@ const schema = new mongoose.Schema({
     ],
     /* orders */
     orders: [
-        { type: ObjectId, ref: 'orders'}
+        { type: ObjectId, ref: 'orders' }
     ],
     /* status */
     status: {
@@ -73,11 +74,11 @@ const model = mongoose.model('users', schema);
 
 /* express auth */
 const expressAuth = async (req, res, next, usergroup, strictMode) => {
-    
+
     req.body.user = { status: false }
     /* no cookie is found, mark user as guest */
     if (req.cookies.swecom_bounipun === undefined) {
-        if(strictMode)
+        if (strictMode)
             res.send({ notAuthorized: true })
         else
             next();
@@ -91,7 +92,7 @@ const expressAuth = async (req, res, next, usergroup, strictMode) => {
     /* if session is invalid */
     if (session === false) {
         /* TODO: reset cookie */
-        if(strictMode)
+        if (strictMode)
             res.send({ notAuthorized: true });
         else
             next()
@@ -140,31 +141,31 @@ export const methods = {
         return !error && response.data.type === "success" ? true : false;
     },
     /* send internation otp */
-    sendInternationalOtp: async(countryDialCode, phoneNumber) => {
+    sendInternationalOtp: async (countryDialCode, phoneNumber) => {
         let otpSent = false;
         const verfication = await twilio.verify
-          .services(twilioServiceId)
-          .verifications.create({
-            to: countryDialCode+phoneNumber,
-            channel: "sms"
-          });
-    
-        if(verfication.status === 'pending')
-          otpSent = true;
-        
-          return otpSent;
+            .services(twilioServiceId)
+            .verifications.create({
+                to: countryDialCode + phoneNumber,
+                channel: "sms"
+            });
+
+        if (verfication.status === 'pending')
+            otpSent = true;
+
+        return otpSent;
     },
     /* verify international otp */
-    verifyInternationalOtp: async(countryDialCode, phoneNumber, otp) => {
+    verifyInternationalOtp: async (countryDialCode, phoneNumber, otp) => {
         let verified = false;
         const verification_check = await twilio.verify.services(twilioServiceId)
-          .verificationChecks
-          .create({to: countryDialCode+phoneNumber, code: otp});
-    
+            .verificationChecks
+            .create({ to: countryDialCode + phoneNumber, code: otp });
+
         console.log(verification_check);
-        if(verification_check.status === "approved")
-          verified = true;
-    
+        if (verification_check.status === "approved")
+            verified = true;
+
         return verified;
     },
     /* get user */
@@ -198,9 +199,9 @@ export const methods = {
     async getCartItems(cart) {
 
         /*  if cart is empty */
-        if(cart.length === 0)
+        if (cart.length === 0)
             return [];
-    
+
         /* get all unique product ids */
         const allUniqueProducts = [...new Set(cart.map(item => item.product))];
         /* fetch all relevant details for each unique product */
@@ -216,16 +217,16 @@ export const methods = {
                 .lean();
             allProductPromises.push(fetchProduct);
         }
-        
+
         /* wait for all promises to resolve */
         const allProducts = await Promise.all(allProductPromises);
-        
+
         /* you should clear cart from user database and return */
-        console.log(allProducts,'-- all products')
+        console.log(allProducts, '-- all products')
 
         /* remove all the nulls from cart as well as all products */
-        
-    
+
+
         /* TODO: put this to use */
         let itemsToBeRemoved = []
 
@@ -336,24 +337,65 @@ export const methods = {
 
         return foundIndex !== -1 ? { foundCartItem: cart[foundIndex], foundIndex } : false
     },
+    async calculateCouponDiscountValue(cartTotal, couponCode, currency) {
+        /* validate coupon code */
+        const coupon = await couponMethods.validateCoupon(couponCode, currency);
+        /* stop execution if coupon is invalid */
+        if (coupon === false)
+            return false;
+
+        let discountValue = 0;
+        switch (coupon.type) {
+            case "percentage":
+                discountValue = cartTotal * (coupon.value / 100);
+                break;
+            case "directDiscount":
+                discountValue = coupon.value;
+                break;
+        }
+        return discountValue.toFixed(2);
+    },
+    async calculateGrandTotal(cartTotal, currency, couponCode) {
+        let discountValue : any = 0;
+        let subTotal;
+        let shippingChargePerItem;
+        let taxes;
+
+        /* validate couponCode if provided */
+        if (couponCode !== false) {
+            discountValue = await this.calculateCouponDiscountValue(cartTotal, couponCode, currency);
+            /* if coupon not valid, stop execution */
+            if(discountValue === false)
+                return false;
+        }
+        /* calculate sub-total */
+        subTotal = cartTotal - discountValue;
+        /* shipping charge */
+        // TODO: get total cart items --> CHECK VUEX FOR REFERENCE
+        /* taxes */
+    },
     async createOrderPayload(cart, amountToBeCharged, currency, deliveryAddress) {
         const cartItems = await this.getCartItems(cart);
         const cartTotal = sumBy(cartItems, item => item.price * item.quantity);
-    
+
+
+        /* grand total should be equal to amount to be charged (PROVIDE COUPON) */
+        const grandTotal = this.calculateGrandTotal(cartTotal, currency, false)
         /* if amount doesn't match */
         if (cartTotal !== amountToBeCharged) {
             console.log('Amount doesnt match, yo');
             return false;
         }
-    
+
         /* TODO: check finesse and mbm purchasing routine */
-    
+
         /* construct order details */
         const orderPayload = {
             deliveryAddress,
-            cartItems: cartItems
-            // items: cartItems.map(item => ({ _id: mongoose.Types.ObjectId(), ...item, status: 'pending', timeline: [], trackingId: '', trackingUrl: '', delivered: '' })),
-            // status: 'pending'
+            cartItems: cartItems,
+            //coupondetails,
+            //shipping_charge
+            //taxes
         }
 
         return orderPayload;
