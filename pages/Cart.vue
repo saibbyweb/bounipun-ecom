@@ -98,6 +98,7 @@ export default {
       this.couponCode = this.coupon.code;
       this.$store.dispatch("customer/fetchCart");
       this.$store.dispatch("customer/fetchCoupon", this.coupon.code);
+        this.$store.dispatch('customer/fetchGlobalConfig');
     }, 300);
   },
   computed: {

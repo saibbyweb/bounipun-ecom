@@ -60,8 +60,9 @@
 <script>
 export default {
   mounted() {
-    if(this.initializeCheckout)
-      this.createPaymentIntent();
+    setTimeout(() => {
+      if (this.initializeCheckout) this.createPaymentIntent();
+    }, 1000);
   },
   props: {
     initializeCheckout: {
@@ -140,7 +141,7 @@ export default {
   },
   methods: {
     async createPaymentIntent() {
-      await this.$post("/createPaymentIntent", {
+      const paymentIntentFetch = await this.$post("/createPaymentIntent", {
         intentType: "order",
         amountToBeCharged: this.grandTotal,
         currency: this.currency.trim(),
@@ -149,6 +150,10 @@ export default {
         deliveryAddress: this.deliveryAddress
       });
 
+      if(paymentIntentFetch.resolved === false) {
+        /* refresh or move to cart */
+        this.$router.push('/cart');
+      }
     }
   }
 };

@@ -112,7 +112,9 @@ export default {
 
     /* fetch updated cart from user account */
     this.$store.dispatch("customer/fetchCart");
-
+    this.$store.dispatch("customer/fetchCoupon", this.coupon.code);
+    this.$store.dispatch('customer/fetchGlobalConfig');
+    
     /* decide which gateway is to be used */
 
     /* if cart is empty redirect to cart | homepage */
@@ -149,6 +151,9 @@ export default {
         this.$store.state.customer.globalRemoteCart,
         item => this.adjustPrice(item.price) * item.quantity
       );
+    },
+      coupon() {
+      return this.$store.state.customer.coupon;
     },
     gatewayName() {
       return this.currency.trim() === "INR" ? "razorpay" : "stripe";

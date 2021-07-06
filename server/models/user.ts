@@ -8,7 +8,8 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilio = require('twilio')(accountSid, authToken);
 const twilioServiceId = process.env.TWILIO_VERIFY_SERVICE_ID
 import { methods as couponMethods } from "@models/coupon";
-import { methods as globalConfigMethods } from "models/globalConfig";
+import { methods as globalConfigMethods } from "@models/globalConfig";
+import { methods as paymentMethods } from "@models/payment";
 
 /* validate session */
 const { validateSession } = sessionMethods;
@@ -223,7 +224,7 @@ export const methods = {
         const allProducts = await Promise.all(allProductPromises);
 
         /* TODO: you should clear cart from user database and return */
-       
+
 
         /* remove all the nulls from cart as well as all products */
 
@@ -376,7 +377,7 @@ export const methods = {
 
     },
     /* calculate grand total */
-    async calculateGrandTotal(cartItems, totalOrderQuantity, currency, couponCode) {
+    async calculateOrderTotal(cartItems, totalOrderQuantity, currency, couponCode) {
         /* cart total */
         const cartTotal = sumBy(cartItems, item => item.price * item.quantity);
 
@@ -408,7 +409,19 @@ export const methods = {
         taxes = this.calculateTaxes(subTotal, currency, globalConfig);
 
         const grandTotal = parseFloat(subTotal) + parseFloat(shippingCharge) + parseFloat(taxes);
-        return grandTotal.toFixed(2);
+
+        return {
+            subTotal,
+            discountValue,
+            shippingCharge,
+            tax: {
+                percentage: currency === "INR"
+                    ? globalConfig.gstPercentage
+                    : globalConfig.internationalTaxPercentage,
+                value: taxes
+            },
+            grandTotal: grandTotal.toFixed(2),
+        }
     },
     async createOrderPayload(cart, amountToBeCharged, currency, couponCode, deliveryAddress) {
         const cartItems = await this.getCartItems(cart);
@@ -416,9 +429,15 @@ export const methods = {
         const totalOrderQuantity = sumBy(cart, item => item.quantity);
 
         /* grand total should be equal to amount to be charged (PROVIDE COUPON) */
-        const grandTotal = await this.calculateGrandTotal(cartItems, totalOrderQuantity, currency, couponCode);
+        const orderTotal = await this.calculateOrderTotal(cartItems, totalOrderQuantity, currency, couponCode);
 
-        console.log('GRAND TOTAL-->', grandTotal);
+        /* if calculation failed */
+        if (orderTotal == false)
+            return;
+
+        const { subTotal, discountValue, shippingCharge, tax, grandTotal } = orderTotal;
+
+        console.log('GRAND TOTAL-->', orderTotal.grandTotal, grandTotal);
 
         /* if amount doesn't match */
         if (grandTotal !== amountToBeCharged) {
@@ -426,15 +445,39 @@ export const methods = {
             return false;
         }
 
-        /* TODO: check finesse and mbm purchasing routine */
+        /* according to gateway, generate token/order id */
+        let gatewayToken;
 
+        if (currency === "INR") {
+            /* create razorpay order */
+            const razorpayOrder = await paymentMethods.createRazorpayOrder({
+                amount: grandTotal * 100,
+                currency: "INR",
+                receipt: "Bounipun Test",
+            });
+
+            if(razorpayOrder === false)
+                return false;
+
+            gatewayToken = razorpayOrder.id;
+        }
+        /* generate stripe token */
+        else {
+            gatewayToken = "_STRIPE_"
+        }
+
+        /* TODO: check finesse and mbm purchasing routine */
         /* construct order details */
         const orderPayload = {
             deliveryAddress,
             cartItems: cartItems,
-            //coupondetails,
-            //shipping_charge
-            //taxes
+            couponCode,
+            discountValue,
+            subTotal,
+            shippingCharge,
+            tax,
+            grandTotal,
+            gatewayToken
         }
 
         return orderPayload;

@@ -42,10 +42,11 @@ router.post('/fetchCoupon', userAuth('customer', false), async (req, res) => {
 
 /* create payment intent order */
 router.post('/createPaymentIntent', userAuth('customer'), async (req, res) => {
+    const response = { resolved: false, intentId: "", gatewayToken: ""};
+    
+    /* TODO: verify gateway */
     const { user, intentType, amountToBeCharged, currency, gateway, couponCode, deliveryAddress } = req.body;
     
-    console.log(req.body);
-    console.log('CREATE_PAYMENT_INTENT_CALLED');
     /* payload (can be for order or anything) */
     let payload;
 
@@ -56,15 +57,31 @@ router.post('/createPaymentIntent', userAuth('customer'), async (req, res) => {
             
             /* if verification failed, stop execution */
             if(payload === false) {
+                res.send(response);
                 return;
             }
 
             break;
         case "..gift_card_maybe":
+            res.send(response)
+            return;
             break;
     }
 
-    res.send(payload);
+    /* save payment intent in database */
+    const paymentIntent = await paymentIntentMethods.createNew({
+        intentType,
+        amount: amountToBeCharged,
+        currency,
+        gateway,
+        payload
+    });
+
+    response.gatewayToken = payload.gatewayToken;
+    response.intentId = paymentIntent._id;
+    response.resolved = true;
+
+    res.send(response);
 
 });
 

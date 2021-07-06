@@ -401,53 +401,53 @@ router.post('/updateProfile', userAuth('customer'), async (req, res) => {
 });
 
 /* fetch razorpay order id */
-router.post('/createRazorpayOrder', userAuth('customer'), async (req, res) => {
-    /* response to be sent back */
-    let response = { resolved: false, razorpayOrderId: '', paymentIntentId: '' };
+// router.post('/createRazorpayOrder', userAuth('customer'), async (req, res) => {
+//     /* response to be sent back */
+//     let response = { resolved: false, razorpayOrderId: '', paymentIntentId: '' };
 
-    const { user, amountToBeCharged, deliveryAddress } = req.body;
+//     const { user, amountToBeCharged, deliveryAddress } = req.body;
 
-    /* verify cart and create order payload */
-    const orderPayload = await userMethods.createOrderPayload(user.cart, amountToBeCharged, 'INR', deliveryAddress);
+//     /* verify cart and create order payload */
+//     const orderPayload = await userMethods.createOrderPayload(user.cart, amountToBeCharged, 'INR', deliveryAddress);
 
-    /* if verification failed */
-    if (orderPayload === false) {
-        res.send(response);
-        return;
-    }
+//     /* if verification failed */
+//     if (orderPayload === false) {
+//         res.send(response);
+//         return;
+//     }
 
-    /* create razorpay order */
-    const razorpayOrder = await paymentMethods.createRazorpayOrder({
-        amount: amountToBeCharged * 100,
-        currency: "INR",
-        receipt: "Bounipun Test",
-    }, orderPayload);
+//     /* create razorpay order */
+//     const razorpayOrder = await paymentMethods.createRazorpayOrder({
+//         amount: amountToBeCharged * 100,
+//         currency: "INR",
+//         receipt: "Bounipun Test",
+//     }, orderPayload);
 
-    if (!razorpayOrder) {
-        res.send(response);
-        return;
-    }
+//     if (!razorpayOrder) {
+//         res.send(response);
+//         return;
+//     }
 
-    /* create payment intent */
-    const paymentIntent = await paymentIntentMethods.createNew({
-        intentType: 'order',
-        amount: razorpayOrder.amount,
-        currency: razorpayOrder.currency,
-        gateway: 'razorpay',
-        payload: { ...orderPayload, razorpay_order_id: razorpayOrder.id }
-    });
+//     /* create payment intent */
+//     const paymentIntent = await paymentIntentMethods.createNew({
+//         intentType: 'order',
+//         amount: razorpayOrder.amount,
+//         currency: razorpayOrder.currency,
+//         gateway: 'razorpay',
+//         payload: { ...orderPayload, razorpay_order_id: razorpayOrder.id }
+//     });
 
-    console.log(razorpayOrder);
-    console.log(paymentIntent);
+//     console.log(razorpayOrder);
+//     console.log(paymentIntent);
 
-    /* set razorpay order id */
-    response.razorpayOrderId = razorpayOrder.id;
-    /* set payment intent id */
-    response.paymentIntentId = paymentIntent._id;
-    response.resolved = true;
-    res.send(response);
+//     /* set razorpay order id */
+//     response.razorpayOrderId = razorpayOrder.id;
+//     /* set payment intent id */
+//     response.paymentIntentId = paymentIntent._id;
+//     response.resolved = true;
+//     res.send(response);
 
-});
+// });
 
 /* complete checkout */
 router.post('/completeCheckout', userAuth('customer'), async (req, res) => {

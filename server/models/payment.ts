@@ -37,16 +37,14 @@ type RazorpayOrder = {
 /* helper methods */
 export const methods = {
     register: () => { console.log('registered') },
-    async createRazorpayOrder(orderDetails: RazorpayOrder, payload) {
+    async createRazorpayOrder(orderDetails: RazorpayOrder) {
         /* create order */
         const { response, error } = await task(razorpayInstance.orders.create(orderDetails));
 
         /* if error occurred */
         if (error) {
-            return;
+            return false;
         }
-
-        console.log(response);
         return response;
     }
 }
