@@ -55,8 +55,8 @@ export const methods = {
     },
     async createStripePaymentIntent(intentDetails: StripeDetails) {
         /* stripe intent */
-        const { response, error } = await task(stripe.paymentIntent.create(intentDetails));
-        /*  */
+        const { response, error } = await task(stripe.paymentIntents.create(intentDetails));
+        
         if(error) {
             return false;
         }

@@ -12,7 +12,7 @@ const router = server.express.Router();
 /* fetch global config */
 router.post('/fetchGlobalConfig', async (req, res) => {
     let response = { resolved: false, globalConfig: {} }
-    const fetchGlobalConfig: any = db.model('globalConfig').findOne({ bounipun_id: "saibbyweb" }).select('currencyMultiplier domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage');
+    const fetchGlobalConfig: any = db.model('globalConfig').findOne({ bounipun_id: "saibbyweb" }).select('currencyMultiplier dollarValue domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage');
     
     /* config */
     const { response: config, error } = await task(fetchGlobalConfig);

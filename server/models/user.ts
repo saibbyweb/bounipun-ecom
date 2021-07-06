@@ -392,7 +392,7 @@ export const methods = {
             return false;
 
         /* cart total */
-        const cartTotal = sumBy(cartItems, item => item.price * item.quantity);
+        const cartTotal = sumBy(cartItems, item => this.adjustPrice(currency,item.price,globalConfig) * item.quantity);
 
         let discountValue: any = 0;
         let subTotal;
@@ -401,7 +401,8 @@ export const methods = {
 
         /* validate couponCode if provided */
         if (couponCode !== "") {
-            discountValue = await this.calculateCouponDiscountValue(cartTotal, couponCode, currency);
+            discountValue = await this.calculateCouponDiscountValue(cartTotal, couponCode, currency)
+            ;
             /* if coupon not valid, stop execution */
             if (discountValue === false)
                 return false;
@@ -468,13 +469,12 @@ export const methods = {
         }
         /* generate stripe token */
         else {
-            gatewayToken = "_STRIPE_"
             const stripePaymentIntent = await paymentMethods.createStripePaymentIntent({
                 amount: grandTotal * 100,
                 currency: "usd"
             });
 
-            console.log(stripePaymentIntent);
+            gatewayToken = stripePaymentIntent.id;
         }
 
         /* TODO: check finesse and mbm purchasing routine */

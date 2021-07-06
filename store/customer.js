@@ -181,7 +181,7 @@ export const getters = {
     }
     /* if not then, multiply db price with currency multiplier and return */
     else {
-      const inflatedPrice = (dbPrice * state.globalConfig.currencyMultiplier) / 72;
+      const inflatedPrice = (dbPrice * state.globalConfig.currencyMultiplier) / state.globalConfig.dollarValue;
       return inflatedPrice.toFixed(2);
     }
   }

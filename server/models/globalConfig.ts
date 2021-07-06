@@ -4,6 +4,7 @@ import { mongoose, task } from "@helpers/essentials";
 const schema = new mongoose.Schema({
     bounipun_id: String,
     currencyMultiplier: Number,
+    dollarValue: Number,
     domesticShippingCharge: Number,
     internationalShippingCharge: Number,
     gstPercentage: Number,
@@ -26,6 +27,7 @@ export const methods = {
         let newConfig = new model({
             bounipun_id: "saibbyweb",
             currencyMultiplier: 1.3,
+            dollarValue: 72,
             domesticShippingCharge: 100,
             internationalShippingCharge: 300,
             gstPercentage: 8,
@@ -40,9 +42,9 @@ export const methods = {
         });
     },
     async getGlobalConfig() {
-        const config = await model.findOne({ bounipun_id: "saibbyweb" }).select('currencyMultiplier domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage');
+        const config = await model.findOne({ bounipun_id: "saibbyweb" }).select('currencyMultiplier dollarValue domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage');
 
-        console.log(config);
+        // console.log(config);
 
         return config === null ? false : config;
     }

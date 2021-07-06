@@ -6,6 +6,12 @@
       label="Currency Multiplier"
       v-model="doc.currencyMultiplier"
     />
+    <!-- dollar value -->
+    <InputBox
+      type="number"
+      label="Normalized Dollar Value"
+      v-model="doc.dollarValue"
+    />
     <!-- domestic shipping charge -->
     <InputBox
       type="number"
@@ -56,6 +62,7 @@ export default {
       doc: {
         _id: "",
         currencyMultiplier: "",
+        dollarValue: "",
         domesticShippingCharge: "",
         internationalShippingCharge: "",
         gstPercentage: "",
@@ -78,6 +85,7 @@ export default {
       this.doc = {
         _id: doc._id,
         currencyMultiplier: doc.currencyMultiplier,
+        dollarValue: doc.dollarValue,
         domesticShippingCharge: doc.domesticShippingCharge,
         internationalShippingCharge: doc.internationalShippingCharge,
         gstPercentage: doc.gstPercentage,

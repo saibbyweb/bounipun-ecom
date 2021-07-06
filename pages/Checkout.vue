@@ -197,7 +197,6 @@ export default {
       if(this.gatewayName === "razorpay")
         this.setupRazorpayOrder(details.gatewayToken, details.amount);
       
-
     },
     setupRazorpayOrder(orderId, amount) {
       let options = {
@@ -257,7 +256,9 @@ export default {
       else this.stripeCheckout();
       return;
     },
-    async stripeCheckout() {},
+    async stripeCheckout() {
+      console.log('do the stripe routine');
+    },
 
   }
 };
