@@ -12,8 +12,11 @@ const router = server.express.Router();
 /* fetch global config */
 router.post('/fetchGlobalConfig', async (req, res) => {
     let response = { resolved: false, globalConfig: {} }
-    const fetchGlobalConfig: any = db.model('globalConfig').findOne({ bounipun_id: "saibbyweb" }).select('domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage');
+    const fetchGlobalConfig: any = db.model('globalConfig').findOne({ bounipun_id: "saibbyweb" }).select('currencyMultiplier domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage');
+    
+    /* config */
     const { response: config, error } = await task(fetchGlobalConfig);
+
     /* if error occurred */
     if (error || config === null) {
         res.send(response);
@@ -89,6 +92,7 @@ router.post('/createPaymentIntent', userAuth('customer'), async (req, res) => {
 /*  stripe webhooks */
 router.post('/stripeWebhooks', async (req, res) => {
     const event = req.body;
+    console.log(event);
     const amount = event.data.object.amount;
     const currency = event.data.object.currency;
 

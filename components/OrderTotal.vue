@@ -150,9 +150,12 @@ export default {
         deliveryAddress: this.deliveryAddress
       });
 
+      console.log(paymentIntentFetch);
+
       if(paymentIntentFetch.resolved === false) {
+        return;
         /* refresh or move to cart */
-        this.$router.push('/cart');
+        // this.$router.push('/cart');
       }
 
       this.$emit('paymentIntentCreated', paymentIntentFetch.response);

@@ -34,25 +34,21 @@
       <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
       <!-- TODO: show user consent checkbox for combined delivery for all items -->
 
-      <!-- sub total -->
-      <!-- <div v-if="!cartEmpty" class="sub-total">
-        <p class="label text">
-          Grand Total: <br />
-          <span class="length">
-            {{ $store.getters["customer/cartCount"] }} Item(s) :
-          </span>
-        </p>
-        <span class="value text"> INR {{ subTotal }} </span>
-      </div> -->
-
       <OrderTotal v-if="!cartEmpty" :deliveryAddress="deliveryAddress" :initializeCheckout="true" @paymentIntentCreated="onPaymentIntentCreated" />
+
+       <!-- consent for combined delivery -->
+       <div class="pad-10">
+        <Checkbox label="I would like receive all items in the order as a single package." v-model="combinedDeliveryConsent" />
+       </div>
 
       <!-- shipping note -->
       <p class="note">Standard shipping 4 weeks</p>
 
       <!-- TODO: START_FROM_HERE stripe card payment -->
-      <h2 class="payment-title">Payment Information</h2>
+     
+      <h2 v-if="gatewayName === 'stripe'" class="payment-title">Payment Information</h2>
       <div v-if="gatewayName === 'stripe'" id="stripe-mount" />
+   
     </div>
 
     <!-- proceed to checkout -->
@@ -139,8 +135,9 @@ export default {
       stripe: null,
       enableCheckout: false,
       elements: null,
-      orderDetails: {}
-    };
+      orderDetails: {},
+      combinedDeliveryConsent: false
+    }
   },
   computed: {
     currency() {

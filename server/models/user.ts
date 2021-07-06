@@ -9,7 +9,7 @@ const twilio = require('twilio')(accountSid, authToken);
 const twilioServiceId = process.env.TWILIO_VERIFY_SERVICE_ID
 import { methods as couponMethods } from "@models/coupon";
 import { methods as globalConfigMethods } from "@models/globalConfig";
-import { methods as paymentMethods } from "@models/payment";
+import payment, { methods as paymentMethods } from "@models/payment";
 
 /* validate session */
 const { validateSession } = sessionMethods;
@@ -376,11 +376,14 @@ export const methods = {
         return taxableAmount.toFixed(2);
 
     },
+    adjustPrice(currency, price, globalConfig) {
+        if(currency === "INR")
+            return price
+        else
+            return (price * globalConfig.currencyMultiplier) / globalConfig.dollarValue;
+    },
     /* calculate grand total */
     async calculateOrderTotal(cartItems, totalOrderQuantity, currency, couponCode) {
-        /* cart total */
-        const cartTotal = sumBy(cartItems, item => item.price * item.quantity);
-
         /* fetch global config */
         const globalConfig: any = await globalConfigMethods.getGlobalConfig();
 
@@ -388,6 +391,8 @@ export const methods = {
         if (!globalConfig)
             return false;
 
+        /* cart total */
+        const cartTotal = sumBy(cartItems, item => item.price * item.quantity);
 
         let discountValue: any = 0;
         let subTotal;
@@ -456,7 +461,7 @@ export const methods = {
                 receipt: "Bounipun Test",
             });
 
-            if(razorpayOrder === false)
+            if (razorpayOrder === false)
                 return false;
 
             gatewayToken = razorpayOrder.id;
@@ -464,6 +469,12 @@ export const methods = {
         /* generate stripe token */
         else {
             gatewayToken = "_STRIPE_"
+            const stripePaymentIntent = await paymentMethods.createStripePaymentIntent({
+                amount: grandTotal * 100,
+                currency: "usd"
+            });
+
+            console.log(stripePaymentIntent);
         }
 
         /* TODO: check finesse and mbm purchasing routine */

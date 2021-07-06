@@ -5,7 +5,7 @@
         <img src="/icons/light/logo.png" />
     </div>
 
-    <div class="menu-links center">
+    <div class="menu-links flex wrap center">
         <div @click="setActive(item,index)" class="menu-item" :class="{active: activeIndex === index}" v-for="(item,index) in items" :key="index">
             <span> {{ item.name }} </span>
         </div>
@@ -38,11 +38,6 @@ export default {
                     path: '/admin-panel/variants',
                     desc: 'Manage bounipun colors'
                 },
-                // {
-                //     name: 'Categories',
-                //     path: '/admin-panel/collections',
-                //     desc: 'Add or remove list of categories'
-                // },
                 {
                     name: 'Fabrics',
                     path: '/admin-panel/fabrics',
@@ -93,6 +88,11 @@ export default {
                     path: '/admin-panel/orders',
                     desc: 'Manage Homepage Layouts'
                 },
+                {
+                    name: 'Global Config',
+                    path: '/admin-panel/globalConfig',
+                    desc: '...'
+                }
             ],
             activeIndex: -1
         }

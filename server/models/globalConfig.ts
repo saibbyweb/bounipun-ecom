@@ -3,6 +3,7 @@ import { mongoose, task } from "@helpers/essentials";
 /* schema */
 const schema = new mongoose.Schema({
     bounipun_id: String,
+    currencyMultiplier: Number,
     domesticShippingCharge: Number,
     internationalShippingCharge: Number,
     gstPercentage: Number,
@@ -20,22 +21,14 @@ const model = mongoose.model(modelName, schema);
 export const methods = {
     register() {
         console.log(`${modelName} registered`);
-        // this.setGlobalConfig();
-        // this.getGlobalConfig();
-        // this.updateGlobalConfig({
-        //     domesticShippingCharge: 150,
-        //     internationalTaxPercentage: 80,
-        //     chargeGst: false
-        // });
     },
     async setGlobalConfig(config) {
         let newConfig = new model({
             bounipun_id: "saibbyweb",
+            currencyMultiplier: 1.3,
             domesticShippingCharge: 100,
             internationalShippingCharge: 300,
-            chargeGst: false,
             gstPercentage: 8,
-            chargeInternationalTax: false,
             internationalTaxPercentage: 3
         });
 
@@ -47,8 +40,8 @@ export const methods = {
         });
     },
     async getGlobalConfig() {
-        const config = await model.findOne({ bounipun_id: "saibbyweb" }).select('domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage');
-        
+        const config = await model.findOne({ bounipun_id: "saibbyweb" }).select('currencyMultiplier domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage');
+
         console.log(config);
 
         return config === null ? false : config;

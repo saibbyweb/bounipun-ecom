@@ -34,6 +34,12 @@ type RazorpayOrder = {
     receipt: string
 }
 
+/* stripe intent details */
+type StripeDetails = {
+    amount: number,
+    currency: string
+}
+
 /* helper methods */
 export const methods = {
     register: () => { console.log('registered') },
@@ -45,6 +51,16 @@ export const methods = {
         if (error) {
             return false;
         }
+        return response;
+    },
+    async createStripePaymentIntent(intentDetails: StripeDetails) {
+        /* stripe intent */
+        const { response, error } = await task(stripe.paymentIntent.create(intentDetails));
+        /*  */
+        if(error) {
+            return false;
+        }
+
         return response;
     }
 }

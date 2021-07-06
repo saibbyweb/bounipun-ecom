@@ -175,16 +175,15 @@ export const getters = {
     : state.globalConfig.internationalTaxPercentage
   },
   adjustPrice: state => dbPrice => {
-    console.log("hey i was called", state.currency);
     /* if currence is INR, return as is */
     if (state.currency === "INR") {
       return dbPrice;
-    } else {
-      const inflatedPrice = (dbPrice * state.currencyMultiplier) / 72;
-      console.log(dbPrice, inflatedPrice, state.currencyMultiplier);
-      return inflatedPrice.toFixed(2);
     }
     /* if not then, multiply db price with currency multiplier and return */
+    else {
+      const inflatedPrice = (dbPrice * state.globalConfig.currencyMultiplier) / 72;
+      return inflatedPrice.toFixed(2);
+    }
   }
 };
 

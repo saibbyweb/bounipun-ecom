@@ -1,5 +1,11 @@
 <template>
   <div class="global-config">
+    <!-- currency multiplier -->
+    <InputBox
+      type="number"
+      label="Currency Multiplier"
+      v-model="doc.currencyMultiplier"
+    />
     <!-- domestic shipping charge -->
     <InputBox
       type="number"
@@ -49,6 +55,7 @@ export default {
       model: "globalConfig",
       doc: {
         _id: "",
+        currencyMultiplier: "",
         domesticShippingCharge: "",
         internationalShippingCharge: "",
         gstPercentage: "",
@@ -56,7 +63,7 @@ export default {
       },
       loading: true,
       updated: false
-    };
+    }
   },
   methods: {
     async fetchConfig() {
@@ -70,16 +77,16 @@ export default {
 
       this.doc = {
         _id: doc._id,
+        currencyMultiplier: doc.currencyMultiplier,
         domesticShippingCharge: doc.domesticShippingCharge,
         internationalShippingCharge: doc.internationalShippingCharge,
         gstPercentage: doc.gstPercentage,
         internationalTaxPercentage: doc.internationalTaxPercentage
-      };
+      }
     },
     async updateDocument() {
   
       const result = await this.$updateDocument(this.model, this.doc, true);
-
 
       if (!result.updated) return;
 
@@ -88,3 +95,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.global-config {
+  width: 60%;
+  padding: 20px 40px;
+}
+</style>
