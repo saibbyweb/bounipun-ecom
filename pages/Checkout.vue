@@ -45,14 +45,14 @@
         <span class="value text"> INR {{ subTotal }} </span>
       </div> -->
 
-      <OrderTotal :deliveryAddress="deliveryAddress" :initializeCheckout="true"/>
+      <OrderTotal v-if="!cartEmpty" :deliveryAddress="deliveryAddress" :initializeCheckout="true" @paymentIntentCreated="onPaymentIntentCreated" />
 
       <!-- shipping note -->
       <p class="note">Standard shipping 4 weeks</p>
 
       <!-- TODO: START_FROM_HERE stripe card payment -->
       <h2 class="payment-title">Payment Information</h2>
-      <div id="stripe-mount" />
+      <div v-if="gatewayName === 'stripe'" id="stripe-mount" />
     </div>
 
     <!-- proceed to checkout -->
@@ -118,7 +118,10 @@ export default {
     /* decide which gateway is to be used */
 
     /* if cart is empty redirect to cart | homepage */
-
+    if(this.cartEmpty) {
+      this.$router.push('/');
+      return;
+    }
     /* create payment intent */
 
     /* according to currency, setup payment options */
@@ -189,10 +192,20 @@ export default {
       /* save payment intent id */
       this.paymentIntentId = razorpayOrder.response.paymentIntentId;
     },
-    setupRazorpayOrder(orderId) {
+    onPaymentIntentCreated(details) {
+      /* save payment intent id */
+      this.paymentIntentId = details.intentId;
+      
+      /* act according to gateway */
+      if(this.gatewayName === "razorpay")
+        this.setupRazorpayOrder(details.gatewayToken, details.amount);
+      
+
+    },
+    setupRazorpayOrder(orderId, amount) {
       let options = {
         key: "rzp_test_LnJPEC0MOtvlSn", // Enter the Key ID generated from the Dashboard
-        amount: `${this.subTotal * 100}`, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+        amount: amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
         currency: "INR",
         name: "Bounipun Ecom",
         description: "Test Transaction",
@@ -206,7 +219,8 @@ export default {
             razorpay_payment_id,
             razorpay_signature
           } = response;
-
+        
+          /* complete checkout routine */
           const completeCheckout = await this.$post("/completeCheckout", {
             gateway: "razorpay",
             gatewayResponse: {
@@ -237,6 +251,7 @@ export default {
 
       /* razorpay anchor */
       this.razorpayCheckout = new Razorpay(options);
+      this.enableCheckout = true;
     },
     async placeOrder() {
       if (!this.enableCheckout) return false;

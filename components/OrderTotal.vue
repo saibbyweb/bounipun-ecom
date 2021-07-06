@@ -154,6 +154,8 @@ export default {
         /* refresh or move to cart */
         this.$router.push('/cart');
       }
+
+      this.$emit('paymentIntentCreated', paymentIntentFetch.response);
     }
   }
 };

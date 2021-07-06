@@ -449,7 +449,7 @@ router.post('/updateProfile', userAuth('customer'), async (req, res) => {
 
 // });
 
-/* complete checkout */
+/* TODO: make it a function so that hooks work -- complete checkout */
 router.post('/completeCheckout', userAuth('customer'), async (req, res) => {
     /* response */
     let response = { resolved: false };
@@ -466,7 +466,7 @@ router.post('/completeCheckout', userAuth('customer'), async (req, res) => {
     switch (gateway) {
         case 'razorpay':
             /* match order id, only then proceed */
-            if (paymentIntentDetails.payload.razorpay_order_id !== gatewayResponse.razorpay_order_id) {
+            if (paymentIntentDetails.payload.gatewayToken !== gatewayResponse.razorpay_order_id) {
                 console.log('payment verification failed');
                 res.send(response);
                 return;

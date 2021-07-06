@@ -42,7 +42,7 @@ router.post('/fetchCoupon', userAuth('customer', false), async (req, res) => {
 
 /* create payment intent order */
 router.post('/createPaymentIntent', userAuth('customer'), async (req, res) => {
-    const response = { resolved: false, intentId: "", gatewayToken: ""};
+    const response = { resolved: false, intentId: "", gatewayToken: "", amount: 0};
     
     /* TODO: verify gateway */
     const { user, intentType, amountToBeCharged, currency, gateway, couponCode, deliveryAddress } = req.body;
@@ -71,7 +71,7 @@ router.post('/createPaymentIntent', userAuth('customer'), async (req, res) => {
     /* save payment intent in database */
     const paymentIntent = await paymentIntentMethods.createNew({
         intentType,
-        amount: amountToBeCharged,
+        amount: amountToBeCharged * 100,
         currency,
         gateway,
         payload
@@ -79,6 +79,7 @@ router.post('/createPaymentIntent', userAuth('customer'), async (req, res) => {
 
     response.gatewayToken = payload.gatewayToken;
     response.intentId = paymentIntent._id;
+    response.amount = amountToBeCharged * 100;
     response.resolved = true;
 
     res.send(response);

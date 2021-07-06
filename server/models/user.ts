@@ -472,11 +472,14 @@ export const methods = {
             deliveryAddress,
             cartItems: cartItems,
             couponCode,
-            discountValue,
-            subTotal,
-            shippingCharge,
-            tax,
-            grandTotal,
+            discountValue: discountValue * 100,
+            subTotal: subTotal * 100,
+            shippingCharge: shippingCharge * 100,
+            tax: {
+                percentage: tax.percentage,
+                value: tax.value * 100
+            },
+            grandTotal: grandTotal * 100,
             gatewayToken
         }
 
