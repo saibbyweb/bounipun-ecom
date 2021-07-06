@@ -31,7 +31,6 @@
         <span> {{ deliveryAddress.postalCode }} </span>
       </div>
 
-      <!-- TODO: show grand total (with coupon discount, taxes and shipping cost ) -->
       <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
       <!-- TODO: show user consent checkbox for combined delivery for all items -->
 
@@ -46,19 +45,23 @@
         <span class="value text"> INR {{ subTotal }} </span>
       </div> -->
 
-      <OrderTotal />
+      <OrderTotal :deliveryAddress="deliveryAddress" :initializeCheckout="true"/>
 
       <!-- shipping note -->
       <p class="note">Standard shipping 4 weeks</p>
 
       <!-- TODO: START_FROM_HERE stripe card payment -->
-      <h2 class="payment-title"> Payment Information </h2>
+      <h2 class="payment-title">Payment Information</h2>
       <div id="stripe-mount" />
     </div>
 
     <!-- proceed to checkout -->
     <div class="pad-10">
-      <button :class="{disabled: !enableCheckout}" @click="placeOrder" class="action checkout-btn">
+      <button
+        :class="{ disabled: !enableCheckout }"
+        @click="placeOrder"
+        class="action checkout-btn"
+      >
         Place Order
       </button>
     </div>
@@ -130,7 +133,8 @@ export default {
       razorpayCheckout: null,
       stripe: null,
       enableCheckout: false,
-      elements: null
+      elements: null,
+      orderDetails: {}
     };
   },
   computed: {
@@ -145,6 +149,9 @@ export default {
         this.$store.state.customer.globalRemoteCart,
         item => this.adjustPrice(item.price) * item.quantity
       );
+    },
+    gatewayName() {
+      return this.currency.trim() === "INR" ? "razorpay" : "stripe";
     }
   },
   methods: {
@@ -157,11 +164,9 @@ export default {
       this.stripe = await loadStripe(process.env.STRIPE_PK);
       this.elements = this.stripe.elements();
       const element = this.elements.create("card", { hidePostalCode: true });
-      element.on("change",(event) => {
-        if(event.complete)
-          this.enableCheckout = true;
-        else
-          this.enableCheckout = false;
+      element.on("change", event => {
+        if (event.complete) this.enableCheckout = true;
+        else this.enableCheckout = false;
       });
       element.mount("#stripe-mount");
     },
@@ -229,16 +234,14 @@ export default {
       this.razorpayCheckout = new Razorpay(options);
     },
     async placeOrder() {
-      if(!this.enableCheckout)
-        return false;
+      if (!this.enableCheckout) return false;
 
       if (this.currency.trim() === "INR") this.razorpayCheckout.open();
       else this.stripeCheckout();
       return;
     },
-    async stripeCheckout() {
+    async stripeCheckout() {},
 
-    }
   }
 };
 </script>
@@ -291,9 +294,9 @@ export default {
     font-family: $font_1;
     // margin-top: 10px;
   }
-  
+
   .payment-title {
-    margin-top:20px;
+    margin-top: 20px;
   }
 
   #stripe-mount {

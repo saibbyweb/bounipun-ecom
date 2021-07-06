@@ -10,12 +10,12 @@ const { userAuth } = userMethods;
 const router = server.express.Router();
 
 /* fetch global config */
-router.post('/fetchGlobalConfig', async(req,res) => {
-    let response = { resolved: false, globalConfig: {}}
-    const fetchGlobalConfig:any = db.model('globalConfig').findOne({bounipun_id: "saibbyweb"}).select('domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage');
-    const {response: config, error} = await task(fetchGlobalConfig);
+router.post('/fetchGlobalConfig', async (req, res) => {
+    let response = { resolved: false, globalConfig: {} }
+    const fetchGlobalConfig: any = db.model('globalConfig').findOne({ bounipun_id: "saibbyweb" }).select('domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage');
+    const { response: config, error } = await task(fetchGlobalConfig);
     /* if error occurred */
-    if(error || config === null) {
+    if (error || config === null) {
         res.send(response);
         return;
     }
@@ -27,9 +27,9 @@ router.post('/fetchGlobalConfig', async(req,res) => {
 });
 
 /* validate and fetch coupon code details */
-router.post('/fetchCoupon', userAuth('customer', false), async(req, res) => {
+router.post('/fetchCoupon', userAuth('customer', false), async (req, res) => {
     /* response to be sent back */
-    let response = { resolved: false, couponDetails: {}};
+    let response = { resolved: false, couponDetails: {} };
     /* extract coupon code from body */
     const { couponCode, currency } = req.body;
     /* validate coupon code */
@@ -41,18 +41,40 @@ router.post('/fetchCoupon', userAuth('customer', false), async(req, res) => {
 });
 
 /* create payment intent order */
-router.post('/createPaymentIntent', userAuth('customer'), async(req, res) => {
-    const { intentType, amount, currency, gateway, payload } = req.body;
+router.post('/createPaymentIntent', userAuth('customer'), async (req, res) => {
+    const { user, intentType, amountToBeCharged, currency, gateway, couponCode, deliveryAddress } = req.body;
     
+    console.log(req.body);
+    console.log('CREATE_PAYMENT_INTENT_CALLED');
+    /* payload (can be for order or anything) */
+    let payload;
+
+    switch (intentType) {
+        case "order":
+            /* create order payload */
+            payload = await userMethods.createOrderPayload(user.cart, amountToBeCharged,currency,couponCode, deliveryAddress);
+            
+            /* if verification failed, stop execution */
+            if(payload === false) {
+                return;
+            }
+
+            break;
+        case "..gift_card_maybe":
+            break;
+    }
+
+    res.send(payload);
+
 });
 
 /*  stripe webhooks */
-router.post('/stripeWebhooks', async(req, res) => {
+router.post('/stripeWebhooks', async (req, res) => {
     const event = req.body;
     const amount = event.data.object.amount;
     const currency = event.data.object.currency;
 
-    switch(event.type) {
+    switch (event.type) {
         case "payment_intent.succeeded":
             const paymentIntent = event.data.object;
             // paymentSucceeded()

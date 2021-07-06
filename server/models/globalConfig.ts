@@ -29,7 +29,7 @@ export const methods = {
         // });
     },
     async setGlobalConfig(config) {
-       let newConfig = new model({
+        let newConfig = new model({
             bounipun_id: "saibbyweb",
             domesticShippingCharge: 100,
             internationalShippingCharge: 300,
@@ -42,13 +42,16 @@ export const methods = {
         await newConfig.save();
     },
     async updateGlobalConfig(config) {
-        await model.findOneAndUpdate({ bounipun_id: "saibbyweb"}, {
+        await model.findOneAndUpdate({ bounipun_id: "saibbyweb" }, {
             ...config
         });
     },
     async getGlobalConfig() {
-        const config = await model.findOne();
+        const config = await model.findOne({ bounipun_id: "saibbyweb" }).select('domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage');
+        
         console.log(config);
+
+        return config === null ? false : config;
     }
 }
 

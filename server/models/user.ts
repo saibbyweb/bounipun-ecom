@@ -8,6 +8,7 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilio = require('twilio')(accountSid, authToken);
 const twilioServiceId = process.env.TWILIO_VERIFY_SERVICE_ID
 import { methods as couponMethods } from "@models/coupon";
+import { methods as globalConfigMethods } from "models/globalConfig";
 
 /* validate session */
 const { validateSession } = sessionMethods;
@@ -221,8 +222,8 @@ export const methods = {
         /* wait for all promises to resolve */
         const allProducts = await Promise.all(allProductPromises);
 
-        /* you should clear cart from user database and return */
-        console.log(allProducts, '-- all products')
+        /* TODO: you should clear cart from user database and return */
+       
 
         /* remove all the nulls from cart as well as all products */
 
@@ -337,6 +338,7 @@ export const methods = {
 
         return foundIndex !== -1 ? { foundCartItem: cart[foundIndex], foundIndex } : false
     },
+    /* validate and calculate discount coupon value */
     async calculateCouponDiscountValue(cartTotal, couponCode, currency) {
         /* validate coupon code */
         const coupon = await couponMethods.validateCoupon(couponCode, currency);
@@ -355,34 +357,71 @@ export const methods = {
         }
         return discountValue.toFixed(2);
     },
-    async calculateGrandTotal(cartTotal, currency, couponCode) {
-        let discountValue : any = 0;
+    /* calculate shipping charge */
+    calculateShippingCharge(totalOrderQuantity, currency, globalConfig) {
+        /* get shipping charge per item (acc. to currency) */
+        const shippingChargePerItem = currency === "INR" ? globalConfig.domesticShippingCharge : globalConfig.internationalShippingCharge;
+
+        /* calculate total shipping charge */
+        const shippingCharge = shippingChargePerItem * totalOrderQuantity;
+        return shippingCharge.toFixed(2);
+    },
+    /* calculate taxes */
+    calculateTaxes(subTotal, currency, globalConfig) {
+        /* figure out tax percentage */
+        const taxPercentage = currency === "INR" ? globalConfig.gstPercentage : globalConfig.internationalTaxPercentage;
+        /* taxable amount */
+        const taxableAmount = subTotal * (taxPercentage / 100);
+        return taxableAmount.toFixed(2);
+
+    },
+    /* calculate grand total */
+    async calculateGrandTotal(cartItems, totalOrderQuantity, currency, couponCode) {
+        /* cart total */
+        const cartTotal = sumBy(cartItems, item => item.price * item.quantity);
+
+        /* fetch global config */
+        const globalConfig: any = await globalConfigMethods.getGlobalConfig();
+
+        /* if config couldn't be fetched */
+        if (!globalConfig)
+            return false;
+
+
+        let discountValue: any = 0;
         let subTotal;
-        let shippingChargePerItem;
+        let shippingCharge;
         let taxes;
 
         /* validate couponCode if provided */
-        if (couponCode !== false) {
+        if (couponCode !== "") {
             discountValue = await this.calculateCouponDiscountValue(cartTotal, couponCode, currency);
             /* if coupon not valid, stop execution */
-            if(discountValue === false)
+            if (discountValue === false)
                 return false;
         }
         /* calculate sub-total */
         subTotal = cartTotal - discountValue;
         /* shipping charge */
-        // TODO: get total cart items --> CHECK VUEX FOR REFERENCE
+        shippingCharge = this.calculateShippingCharge(totalOrderQuantity, currency, globalConfig);
         /* taxes */
-    },
-    async createOrderPayload(cart, amountToBeCharged, currency, deliveryAddress) {
-        const cartItems = await this.getCartItems(cart);
-        const cartTotal = sumBy(cartItems, item => item.price * item.quantity);
+        taxes = this.calculateTaxes(subTotal, currency, globalConfig);
 
+        const grandTotal = parseFloat(subTotal) + parseFloat(shippingCharge) + parseFloat(taxes);
+        return grandTotal.toFixed(2);
+    },
+    async createOrderPayload(cart, amountToBeCharged, currency, couponCode, deliveryAddress) {
+        const cartItems = await this.getCartItems(cart);
+        /* total order quantity */
+        const totalOrderQuantity = sumBy(cart, item => item.quantity);
 
         /* grand total should be equal to amount to be charged (PROVIDE COUPON) */
-        const grandTotal = this.calculateGrandTotal(cartTotal, currency, false)
+        const grandTotal = await this.calculateGrandTotal(cartItems, totalOrderQuantity, currency, couponCode);
+
+        console.log('GRAND TOTAL-->', grandTotal);
+
         /* if amount doesn't match */
-        if (cartTotal !== amountToBeCharged) {
+        if (grandTotal !== amountToBeCharged) {
             console.log('Amount doesnt match, yo');
             return false;
         }

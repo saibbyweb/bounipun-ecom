@@ -1,8 +1,10 @@
 <template>
-  <div class="order-total">
+  <div class="order-total" @click="createPaymentIntent">
     <!-- cart total -->
     <div class="data-point flex between">
-      <p class="name"> Cart Total: <span class="count"> {{ cartCount }} Items (s) </span> </p>
+      <p class="name">
+        Cart Total: <span class="count"> {{ cartCount }} Items (s) </span>
+      </p>
       <span class="value"> {{ currency }} {{ cartTotal }} </span>
     </div>
     <hr />
@@ -52,15 +54,28 @@
       </p>
       <span class="value"> {{ ` ${currency} ${grandTotal}` }} </span>
     </div>
-
   </div>
 </template>
 
 <script>
 export default {
+  mounted() {
+    if(this.initializeCheckout)
+      this.createPaymentIntent();
+  },
+  props: {
+    initializeCheckout: {
+      type: Boolean,
+      default: false
+    },
+    deliveryAddress: Object
+  },
   computed: {
     currency() {
       return this.$store.state.customer.currency + " ";
+    },
+    gatewayName() {
+      return this.currency.trim() === "INR" ? "razorpay" : "stripe";
     },
     cartEmpty: function() {
       return this.$store.state.customer.globalRemoteCart.length === 0;
@@ -121,6 +136,19 @@ export default {
         parseFloat(this.shippingCharge) +
         parseFloat(this.taxes);
       return grandTotal.toFixed(2);
+    }
+  },
+  methods: {
+    async createPaymentIntent() {
+      await this.$post("/createPaymentIntent", {
+        intentType: "order",
+        amountToBeCharged: this.grandTotal,
+        currency: this.currency.trim(),
+        gateway: this.gatewayName,
+        couponCode: this.coupon.code,
+        deliveryAddress: this.deliveryAddress
+      });
+
     }
   }
 };
