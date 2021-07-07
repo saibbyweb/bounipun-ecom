@@ -1,64 +1,50 @@
 <template>
   <div class="footer-new">
     <!-- important links -->
-    <Accordion heading="Important Links" :light="true" :noMargin="true">
+    <Accordion
+      heading="Important Links"
+      :light="true"
+      :noMargin="true"
+      :expanded="true"
+    >
       <div class="flex col start">
         <Button class="item" v-for="item in importantLinks" :key="item">
           {{ item.name }}
         </Button>
       </div>
     </Accordion>
+
     <!-- find us on -->
-    <Accordion heading="Find Us On" :light="true"> </Accordion>
-
-    <div v-if="false">
-      <!-- help section -->
-      <div class="center">
-        <div id="help" class="section">
-          <h3>Help</h3>
-          <Button class="item" v-for="item in helpSection" :key="item">
-            {{ item }}
-          </Button>
-        </div>
+    <Accordion
+      heading="Find Us On"
+      :light="true"
+      :noMargin="true"
+      :expanded="true"
+    >
+      <div class="find-us-on flex">
+        <img src="/icons/light/instagram.png" />
+        <img src="/icons/light/facebook.png" />
       </div>
+    </Accordion>
 
-      <!-- find us on section -->
-      <div class="center">
-        <div id="find-us-on" class="section">
-          <h3>Find Us On</h3>
-          <Button class="item" v-for="item in findUsOnSection" :key="item">
-            {{ item }}
-          </Button>
-        </div>
-      </div>
-
-      <!-- company section -->
-      <div class="center">
-        <div id="company" class="section">
-          <h3>Comapny</h3>
-          <Button class="item" v-for="item in companySection" :key="item">
-            {{ item }}
-          </Button>
-        </div>
-      </div>
-
-      <!-- card symbols section -->
-      <div id="card-symbols" class="section">
-        <img src="/icons/visa.png" />
-        <img src="/icons/maestro.png" />
-        <img src="/icons/master_card.png" />
-        <img src="/icons/american_express.png" />
-      </div>
+    <!-- logo -->
+    <div class="logo flex center" @click="$router.push('/')">
+      <img src="/icons/light/logo.png" />
     </div>
 
-    <!-- copyright -->
-    <div id="copyright" class="section">
-      <span class="last-footer-item"> © 2005 - 2020 Bounipun </span>
-    </div>
+    <!-- final footer text -->
+    <div class="flex text center">
+      <!-- copyright -->
+      <div id="copyright" class="section">
+        <span class="last-footer-item">
+          Copyright © 2021 Bounipun Kashmir. All Rights Reserved.</span
+        >
+      </div>
 
-    <!-- crafted in kashmir -->
-    <div id="crafted-in-kashmir" class="section">
-      <span class="last-footer-item"> Crafted with ❤ in Kashmir </span>
+      <!-- crafted in kashmir -->
+      <div id="crafted-in-kashmir" class="section">
+        <span class="last-footer-item"> Crafted with ❤ in Kashmir </span>
+      </div>
     </div>
   </div>
 </template>
@@ -105,7 +91,15 @@ export default {
 .footer-new {
   background-color: $primary_dark;
   width: 100%;
-  padding: 3%;
+  padding: 7% 3%;
+
+  .logo {
+    width: 100%;
+    img {
+      width: 40%;
+    }
+    margin-top: 40px;
+  }
 
   .item {
     background: transparent;
@@ -113,12 +107,34 @@ export default {
     color: white;
     padding: 0;
     margin: 7px 0;
-    font-size: 17px;
+    font-size: 13px;
     color: #efefef;
     font-family: $font_1;
 
     @media (max-width: $breakpoint-tablet) {
-      font-size: 2.8vw;
+      font-size: 13px;
+    }
+  }
+
+  .find-us-on {
+    margin-bottom: 20px;
+    img {
+      width: 27px;
+      margin: 7px;
+    }
+  }
+
+  .text {
+    @media (max-width: 768px) {
+      flex-direction: column;
+    }
+  }
+
+  .section {
+    span {
+      color: white;
+      font-size: 10px;
+      font-family: $font_2;
     }
   }
 }
@@ -227,28 +243,6 @@ export default {
         img {
           width: 85%;
         }
-      }
-    }
-
-    &#copyright,
-    &#crafted-in-kashmir {
-      align-items: center;
-      padding: 0 5%;
-
-      @media (max-width: $breakpoint-tablet) {
-        justify-content: center;
-        padding: 5%;
-      }
-    }
-
-    /* crafted in kashmir */
-    &#crafted-in-kashmir {
-      grid-column: 3;
-      justify-content: flex-end;
-
-      @media (max-width: $breakpoint-tablet) {
-        grid-column: auto;
-        justify-content: flex-start;
       }
     }
 
