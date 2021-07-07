@@ -2,18 +2,21 @@
   <div :class="[{ 'dark-mode': darkMode }, 'header']">
     <!-- menu -->
     <div class="menu center" @click="$emit('showMenu')">
-      
       <img class="action-icon" :src="getIconPath('menu.png')" />
-  
-        <img
-            @click.stop="$store.commit('customer/switchCurrency')"
-            v-if="$store.state.customer.authorized"
-            class="action-icon account"
-            :src="getIconPath('account.png')"
-        />
+
+      <img
+        @click.stop="$store.commit('customer/switchCurrency')"
+        v-if="$store.state.customer.authorized"
+        class="action-icon account"
+        :src="getIconPath('account.png')"
+      />
       <!-- whatsapp -->
       <!-- <router-link> -->
-        <img @click="openInNewTab(whatsAppShareLink)" class="action-icon whatsapp" :src="getIconPath('whatsapp.png')" />
+      <img
+        @click="openInNewTab(whatsAppShareLink)"
+        class="action-icon whatsapp"
+        :src="getIconPath('whatsapp.png')"
+      />
       <!-- </router-link> -->
     </div>
 
@@ -56,23 +59,23 @@
 <script>
 export default {
   created() {
-    // if (process.client) {
-    //     window.addEventListener('scroll', this.handleScroll);
-    // }
-    // if (this.$route.name !== 'index') {
-    //     this.darkMode = true;
-    //     return;
-    // }
+    if (process.client) {
+      window.addEventListener("scroll", this.handleScroll);
+    }
+    if (this.$route.name !== "index") {
+      this.darkMode = true;
+      return;
+    }
   },
   destroyed() {
-    // if (process.client) {
-    //     window.removeEventListener('scroll', this.handleScroll);
-    // }
+    if (process.client) {
+      window.removeEventListener("scroll", this.handleScroll);
+    }
   },
   data() {
     return {
-      // darkMode: this.$route.name === 'products-collection' ? true : false
-      darkMode: true
+      darkMode: this.$route.name === "products-collection" ? true : false
+      // darkMode: true
     };
   },
   computed: {
@@ -89,22 +92,20 @@ export default {
   watch: {
     $route(to, from) {
       console.log(to.name);
-      // this.darkMode = to.name !== 'index'
+      this.darkMode = to.name !== "index";
     }
   },
   methods: {
     openInNewTab(link) {
-        window.open(link,'_newtab')
+      window.open(link, "_newtab");
     },
     handleScroll() {
-      // if (this.$route.name !== 'index') {
-      //     this.darkMode = true;
-      //     return;
-      // }
-      // if (window.scrollY > 200)
-      //     this.darkMode = true;
-      // else
-      //     this.darkMode = false;
+      if (this.$route.name !== "index") {
+        this.darkMode = true;
+        return;
+      }
+      if (window.scrollY > 200) this.darkMode = true;
+      else this.darkMode = false;
     },
     getIconPath(icon) {
       const directory = "/icons/light/";

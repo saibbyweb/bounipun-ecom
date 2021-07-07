@@ -212,7 +212,7 @@ export default {
 
 <style lang="scss">
 .homepage {
-  margin-top: 10vh;
+  // margin-top: 10vh;
 
   .blocks {
     padding: 0 1%;

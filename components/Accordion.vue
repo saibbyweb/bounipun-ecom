@@ -2,12 +2,12 @@
 <div class="sw-accordion">
     <!-- <button @click="toggle()" :class="[{'active': active},'accordion']"> {{ heading }}</button> -->
 
-    <div @click="toggle()" :class="[{'active': active},'accordion']">
+    <div @click="toggle()" :class="[{'active': active}, {light},'accordion']">
         <span class="title"> {{ heading }} </span>
         <span class="switch"> {{ active ? "-" : "+" }} </span>
     </div>
 
-    <div ref="content" class="content" :style="{maxHeight}">
+    <div ref="content" class="content" :class="{noMargin}" :style="{maxHeight}">
         <slot>
             <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span>
         </slot>
@@ -23,6 +23,14 @@ export default {
             default: 'Heading 1'
         },
         expanded: {
+            type: Boolean,
+            default: false
+        },
+        light: {
+            type: Boolean, 
+            default: false
+        },
+        noMargin: {
             type: Boolean,
             default: false
         }
@@ -64,6 +72,7 @@ export default {
         display: flex;
         justify-content: space-between;
         border-bottom: 1px solid #6a6a6a;
+        cursor: pointer;
 
         .title {
             text-transform: uppercase;
@@ -77,6 +86,12 @@ export default {
             padding: 0 10px;
             cursor: pointer;
         }
+
+        &.light {
+            span { 
+                color:white;
+            }
+        }
     }
 
     .content {
@@ -86,6 +101,10 @@ export default {
         overflow: hidden;
         transition: max-height 0.3s ease-out;
         box-sizing: border-box;
+
+        &.noMargin {
+            margin: 18px 0;
+        }
     }
 }
 </style>
