@@ -1,31 +1,37 @@
 <template>
   <div class="footer-new">
-    <!-- important links -->
-    <Accordion
-      heading="Important Links"
-      :light="true"
-      :noMargin="true"
-      :expanded="true"
-    >
-      <div class="flex col start">
-        <Button class="item" v-for="item in importantLinks" :key="item">
-          {{ item.name }}
-        </Button>
+    <div class="flex accordions">
+      <!-- important links -->
+      <div class="container">
+        <Accordion
+          heading="Important Links"
+          :light="true"
+          :noMargin="true"
+          :expanded="true"
+        >
+          <div class="flex col start">
+            <Button class="item" v-for="item in importantLinks" :key="item">
+              {{ item.name }}
+            </Button>
+          </div>
+        </Accordion>
       </div>
-    </Accordion>
 
-    <!-- find us on -->
-    <Accordion
-      heading="Find Us On"
-      :light="true"
-      :noMargin="true"
-      :expanded="true"
-    >
-      <div class="find-us-on flex">
-        <img src="/icons/light/instagram.png" />
-        <img src="/icons/light/facebook.png" />
+      <!-- find us on -->
+      <div class="container">
+        <Accordion
+          heading="Find Us On"
+          :light="true"
+          :noMargin="true"
+          :expanded="true"
+        >
+          <div class="find-us-on flex">
+            <img src="/icons/light/instagram.png" />
+            <img src="/icons/light/facebook.png" />
+          </div>
+        </Accordion>
       </div>
-    </Accordion>
+    </div>
 
     <!-- logo -->
     <div class="logo flex center" @click="$router.push('/')">
@@ -91,14 +97,40 @@ export default {
 .footer-new {
   background-color: $primary_dark;
   width: 100%;
-  padding: 7% 3%;
+  padding: 2% 3%;
+
+  .accordions {
+    justify-content: space-around;
+    width: 100%;
+
+    .container {
+      width: 40%;
+    }
+
+    @media(max-width: 768px) {
+        flex-direction: column;
+        .container {
+            width: 100%;
+        }
+    }
+  }
 
   .logo {
     width: 100%;
     img {
-      width: 40%;
+      width: 20%;
     }
-    margin-top: 40px;
+    margin-top: 10px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 7% 3%;
+    .logo {
+      margin-top: 40px;
+      img {
+        width: 40%;
+      }
+    }
   }
 
   .item {
