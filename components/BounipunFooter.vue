@@ -10,7 +10,7 @@
           :expanded="true"
         >
           <div class="flex col start">
-            <Button class="item" v-for="item in importantLinks" :key="item">
+            <Button class="item" v-for="item in importantLinks" :key="item.name">
               {{ item.name }}
             </Button>
           </div>

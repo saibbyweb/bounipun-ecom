@@ -19,15 +19,17 @@
 
     <!-- main image container -->
     <div class="main-image-container center">
-      <!-- <img class="main-image" :src="imagePath" /> -->
+      <!-- TODO: size was 165% -->
       <slideshow
         ref="slideshow"
         :images="slideshowImages"
         extraClass="search-slideshow"
         :dots="true"
-        :slideWidth="48"
+        :mSlideWidth="48"
+        :dSlideWidth="29"
         mSlideHeight="315px"
-        :size="'165%'"
+        dSlideHeight="400px"
+        size="cover"
       />
     </div>
 
@@ -382,11 +384,14 @@ export default {
 <style lang="scss" scoped>
 .product-card {
   width: 29vw;
-  height: 36vw;
+  height: 550px;
   overflow: hidden;
   padding: 1vw;
   margin: 5px 0;
   position: relative;
+  border: 1px dashed #efefef;
+  cursor: pointer;
+
 
   .wishlist {
     position: absolute;
@@ -400,60 +405,37 @@ export default {
     }
   }
 
-  // border-top: 1px solid rgb(219, 219, 219);
-
-  &:nth-child(odd) {
-    // border-right: 1px solid rgb(219, 219, 219);
-  }
-
-  &:nth-child(even) {
-    // border-right: 1px solid rgb(219, 219, 219);
-    // border-bottom: 1px solid rgb(219, 219, 219);
-  }
-
-  @media (max-width: $breakpoint-tablet) {
-    width: 48vw;
-    height: 480px;
-
-    &.escape {
-      height: 440px;
-
-      .main-image-container {
-        height: 70%;
-      }
-
-      .text-details {
-        height: 16%;
-      }
-    }
-  }
-
   /* main image container */
   .main-image-container {
     width: 100%;
-    height: 67%;
+    height: 75%;
     overflow: hidden;
+    // border: 1px solid rgba(0, 0, 255, 0.291);
 
     .main-image {
       height: 100%;
     }
+
+    @media(max-width: 768px) {
+      height: 67%;
+    }
   }
 
   .color-previews {
-    height: 16%;
+    height: 10%;
 
     .base-color-boxes {
       display: flex;
       justify-content: center;
       align-items: center;
       width: 100%;
-      margin-bottom: 5px;
+      margin-bottom: 0px;
 
       .color-image {
-        width: 35px;
-        height: 35px;
+        width: 30px;
+        height: 30px;
         background-size: contain;
-        margin: 5px;
+        margin: 0px 5px;
         transition: all 0.3s ease-in-out;
 
         &.active {
@@ -466,14 +448,31 @@ export default {
       font-size: 10px;
       color: $gray;
     }
+
+    @media(max-width: 768px) {
+      height: 16%;
+
+      .base-color-boxes {
+          margin-bottom: 5px;
+          .color-image {
+            margin: 5px;
+          }
+      }
+    }
+
   }
 
   /* text-details */
   .text-details {
     width: 100%;
-    height: 12%;
+    height: 10%;
     padding-bottom: 2px;
     padding-top: 3px;
+    // background: rgba(255, 0, 0, 0.737);
+
+    @media(max-width: 768px) {
+      height: 12%;
+    }
 
     .product-name {
       font-size: 12px;
@@ -502,6 +501,10 @@ export default {
 
   .variants-available {
     height: 5%;
+    // background: rgba(255, 255, 0, 0.648);
+    @media(max-width: 768px) {
+      height: 5%;
+    }
 
     .variant {
       color: $primary_dark;
@@ -517,12 +520,33 @@ export default {
   }
 
   .actions {
-    height: 5%;
+    height: 0%;
+    background: rgba(0, 128, 0, 0.607);
+
+    @media(max-width: 768px) {
+      height: 5%;
+    }
 
     .shop-now {
       font-size: 12px;
       text-transform: uppercase;
       font-family: $font_1;
+    }
+  }
+    @media (max-width: $breakpoint-tablet) {
+    width: 48vw;
+    height: 480px;
+
+    &.escape {
+      height: 440px;
+
+      .main-image-container {
+        height: 70%;
+      }
+
+      .text-details {
+        height: 16%;
+      }
     }
   }
 }

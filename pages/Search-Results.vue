@@ -1,7 +1,7 @@
 <template>
   <div
     class="page -broad center-col search-results-page"
-    style="padding-top:10%;"
+    style="padding-top:3%;"
   >
     <p>
       Showing {{ totalMatches }} results for
@@ -17,7 +17,10 @@
           style="display:flex; align-items:center; justify-content: space-between;"
         >
           <h3>Filters</h3>
-          <span style="font-size:12px;" @click="clearAllFilters">
+          <span
+            style="font-size:12px; cursor:pointer;"
+            @click="clearAllFilters"
+          >
             Clear Selection
           </span>
         </div>
@@ -87,8 +90,8 @@
           </div>
         </Accordion>
 
-        <!-- price range options -->
-        <Accordion heading="Price Range" :expanded="true">
+        <!-- TODO: re-enable after verifying USD specific results price range options -->
+        <Accordion heading="Price Range" :expanded="true" v-if="false">
           <div
             class="option"
             v-for="(range, index) in filterData.priceRanges"
@@ -162,7 +165,7 @@
 
     <!-- filter and sort -->
     <div class="filters-and-sort">
-        <!-- filter -->
+      <!-- filter -->
       <button class="action" @click="filtersOpen = true">
         Filters
         <img class="arrow-bottom" src="/icons/arrow_bottom.png" />
@@ -170,8 +173,8 @@
 
       <!-- center pipe -->
       <span class="pipe"> | </span>
-    
-        <!-- sort -->
+
+      <!-- sort -->
       <button class="action" @click="sortOpen = true">
         Sort
         <img class="arrow-bottom" src="/icons/arrow_bottom.png" />
@@ -578,7 +581,7 @@ export default {
 
 <style lang="scss" scoped>
 .search-results-page {
-  background-color: #f4f5f7;
+  // background-color: #f4f5f7;
 }
 .filters-and-sort {
   margin-top: 10px;
@@ -593,6 +596,8 @@ export default {
     font-size: 13px;
     color: $dark_gray;
     background-color: white;
+    // background-color: #f4f5f7;
+
     // background-color: #bfbfbf80;
     color: rgb(123, 123, 123);
     // border: 1px solid #a8a8a8;
@@ -601,12 +606,10 @@ export default {
     align-items: center;
 
     .arrow-bottom {
-      width: 15%;
+      width: 5%;
       margin-left: 5px;
       opacity: 0.8;
     }
-
-
 
     &:hover {
     }
@@ -618,9 +621,17 @@ export default {
     font-family: $font_2_bold;
   }
 
-      .pipe {
-        color: rgb(123, 123, 123);
+  .pipe {
+    color: rgb(123, 123, 123);
+  }
+
+  @media (max-width: 768px) {
+    .action {
+      .arrow-bottom {
+        width: 15%;
+      }
     }
+  }
 }
 
 .offcanvas-filters {
@@ -643,13 +654,19 @@ export default {
   .label {
     font-family: $font_2;
     text-transform: capitalize;
+    font-size: 12px;
+    cursor: pointer;
   }
 
   .close {
     position: absolute;
     top: 0;
     right: 3%;
-    width: 7%;
+    width: 3%;
+
+    @media (max-width: 768px) {
+      width: 7%;
+    }
   }
 }
 
@@ -671,6 +688,8 @@ export default {
 
   .label {
     font-family: $font_2;
+    font-size: 12px;
+    cursor: pointer;
   }
 
   .close {

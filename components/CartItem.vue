@@ -95,7 +95,15 @@ export default {
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
   margin: 20px;
   position: relative;
-  height: 45vw;
+  height: 250px;
+  width: 50%;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    width: 90%;
+    height: 45vw;
+  }
+
   /* cart item thumbnail/image */
   .image-container {
     width: 35%;

@@ -5,7 +5,7 @@
     </div>
 
     <!-- cart items -->
-    <div class="cart-items">
+    <div class="cart-items flex center col">
       <CartItem
         v-for="(item, index) in $store.state.customer.globalRemoteCart"
         :item="item"
@@ -178,103 +178,7 @@ export default {
 
 <style lang="scss" scoped>
 .cart-items {
-  .cart-item {
-    display: flex;
-    align-items: center;
-    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
-    margin: 20px;
-    position: relative;
-    height: 45vw;
-    /* cart item thumbnail/image */
-    .image-container {
-      width: 35%;
-      height: 90%;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      img {
-        width: 100%;
-      }
-    }
-    /* cart item details and quantity input */
-    .details-and-quantity {
-      width: 65%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      span {
-        color: $gray;
-        font-size: 11px;
-        display: inline-block;
-        &.name {
-          color: $dark_gray;
-          font-family: $font_1_bold;
-          text-transform: uppercase;
-          font-size: 13px;
-        }
-        &.collection {
-          font-family: $font_2;
-          font-size: 11px;
-          margin-bottom: 4px;
-        }
-        &.price {
-          color: $dark_gray;
-          font-family: $font_1;
-          font-size: 12px;
-        }
-        &.variant {
-          font-weight: 900;
-          color: $dark_gray;
-        }
-      }
-
-      .quantity-picker {
-        margin-top: 7px;
-        display: flex;
-        justify-content: space-around;
-        border: 1px solid #919191;
-        width: 80px;
-
-        button {
-          background: transparent;
-          font-family: $font_1_bold;
-          text-align: center;
-          padding: 0px;
-          font-size: 10px;
-
-          &:first-child {
-            border-right: 1px solid #919191;
-            padding: 0 5px;
-          }
-
-          &:nth-child(3) {
-            border-left: 1px solid #919191;
-            padding: 0 5px;
-          }
-
-          &.qty {
-            width: 50%;
-            padding: 0 15px;
-          }
-        }
-      }
-    }
-    /* remove icon */
-    .remove-item {
-      position: absolute;
-      right: 3%;
-      top: 10%;
-      width: 6%;
-    }
-    /* total product price */
-    .total-product-price {
-      font-family: $font_1_bold;
-      position: absolute;
-      bottom: 10%;
-      right: 3%;
-      color: $dark_gray;
-    }
-  }
+ 
 }
 /* coupon box */
 .coupon-box {
