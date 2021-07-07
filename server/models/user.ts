@@ -474,7 +474,7 @@ export const methods = {
                 currency: "usd"
             });
 
-            gatewayToken = stripePaymentIntent.id;
+            gatewayToken = stripePaymentIntent.client_secret;
         }
 
         /* TODO: check finesse and mbm purchasing routine */

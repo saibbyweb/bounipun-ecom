@@ -1,6 +1,10 @@
 import { mongoose, ObjectId, task } from "@helpers/essentials"
 import Razorpay from "razorpay";
-const stripe = require("stripe")(process.env.STRIPE_SK);
+// const stripe = require("stripe")(process.env.STRIPE_SK);
+import Stripe from "stripe";
+const stripe = new Stripe(process.env.STRIPE_SK, {
+    apiVersion: '2020-08-27'
+});
 
 /* razorpay test key */
 const razorpayTestKey = {

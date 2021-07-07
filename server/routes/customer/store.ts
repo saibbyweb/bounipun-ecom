@@ -2,6 +2,7 @@ import { server, db, mongoose, task } from "@helpers/essentials";
 import { methods as userMethods } from "@models/user";
 import { methods as couponMethods } from "@models/coupon";
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
+import Stripe from "stripe";
 
 /* user auth middleware */
 const { userAuth } = userMethods;
@@ -87,6 +88,11 @@ router.post('/createPaymentIntent', userAuth('customer'), async (req, res) => {
 
     res.send(response);
 
+});
+
+/* process stripe payment */
+router.post('/processStripePayment', userAuth('customer'), async (req, res) => {
+       
 });
 
 /*  stripe webhooks */
