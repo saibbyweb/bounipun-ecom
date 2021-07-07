@@ -6,7 +6,7 @@
       size="cover"
       :images="fetchSlideshow(layout.mainSlideshow.slides)"
       mSlideHeight="120vw"
-      dSlideHeight="30vw"
+      dSlideHeight="90vh"
       :dSlideWidth="100"
     />
     <!-- main text block -->
@@ -100,6 +100,9 @@
         <p class="paragraph text-2">{{ layout.bounipunLab.paragraph }}</p>
       </div>
     </div>
+
+    <div class="press-and-quote flex">
+
     <!-- quote -->
     <div class="quote" v-if="layout.quote.visible">
       <!-- logo -->
@@ -119,16 +122,14 @@
       v-if="layout.press.visible"
       @click="$router.push('/press')"
     >
+      <!-- logo -->
+      <div
+        class="logo"
+        :style="`background-image: url(${$getImagePath(layout.press.logo)})`"
+      ></div>
+
       <div class="scrollable-list">
         <div class="list">
-          <!-- logo -->
-          <div
-            class="logo"
-            :style="
-              `background-image: url(${$getImagePath(layout.press.logo)})`
-            "
-          ></div>
-
           <!-- image list -->
           <div class="image-list">
             <div
@@ -141,6 +142,9 @@
         </div>
       </div>
     </div>
+
+    </div>
+
   </div>
 </template>
 
@@ -238,15 +242,22 @@ export default {
   .pad {
     padding: 5%;
   }
+
+  .press-and-quote {
+    @media(max-width: 768px) {
+      flex-direction: column;
+    }
+  }
+
   .quote {
     display: flex;
-    width: 100%;
+    width: 50%;
     height: 40vw;
     justify-content: space-between;
     padding: 5px;
     .logo {
-      width: 40vw;
-      height: 40vw;
+      width: 40%;
+      // height: 40vw;
       background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
@@ -265,18 +276,37 @@ export default {
         text-align: center;
       }
     }
+
+    @media (max-width: 768px) {
+      width: 100%;
+      .logo {
+        width: 40vw;
+        height: 40vw;
+      }
+    }
   }
+
+
   .press {
     display: flex;
-    width: 100%;
+    width: 50%;
     height: 40vw;
+    position: relative;
+
+
     .logo {
-      width: 40vw;
-      height: 100%;
+      width: 40%;
+      height: 40vw;
       background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
     }
+
+    .scrollable-list {
+      justify-content: flex-start;
+      width: 60%;
+    }
+
     .image-list {
       // width: 70%;
       height: 100%;
@@ -287,6 +317,15 @@ export default {
         background-size: contain;
         background-position: center;
         background-repeat: no-repeat;
+      }
+    }
+
+    @media (max-width: 768px) {
+      width: 100%;
+      height: 40vw;
+
+      .logo {
+        width: 40vw;
       }
     }
   }

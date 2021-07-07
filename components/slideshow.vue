@@ -264,11 +264,15 @@ export default {
         align-items: center;
         box-sizing: border-box;
         position: absolute;
-        bottom: 0;
+        bottom: 2%;
         left: 0;
         width: 100%;
         margin: -1%;
 
+        @media(max-width: 768px) {
+            bottom:0;
+        }
+ 
         .dot {
             height: 2px;
             width: 19px;
