@@ -26,7 +26,7 @@
         extraClass="search-slideshow"
         :dots="true"
         :slideWidth="48"
-        slideHeight="315px"
+        mSlideHeight="315px"
         :size="'165%'"
       />
     </div>

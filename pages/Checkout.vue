@@ -103,7 +103,7 @@ const demoDeliveryAddress = {
   addressLine2: "Rawalpora, Near Masjid",
   city: "Srinagar",
   postalCode: "190005",
-  countryIsoCode: "IN"
+  countryIsoCode: "US"
 };
 
 export default {

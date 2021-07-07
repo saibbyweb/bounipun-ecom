@@ -11,6 +11,7 @@ import Draggable from 'vuedraggable'
 import Verte from 'verte';
 import 'verte/dist/verte.css';
 // register component globally
+import VueWindowSize from "vue-window-size";
 
 
 Vue.use(VueHammer);
@@ -25,3 +26,4 @@ Vue.use(VCalendar, {
 Vue.component("v-datepicker", VDatepicker);
 Vue.component("Draggable", Draggable);
 Vue.component('verte', Verte);
+Vue.use(VueWindowSize);

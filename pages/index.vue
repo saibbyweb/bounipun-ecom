@@ -5,7 +5,9 @@
       v-if="layout.mainSlideshow.visible"
       size="cover"
       :images="fetchSlideshow(layout.mainSlideshow.slides)"
-      :slideHeight="'120vw'"
+      mSlideHeight="120vw"
+      dSlideHeight="30vw"
+      :dSlideWidth="100"
     />
     <!-- main text block -->
     <div
@@ -17,68 +19,72 @@
       <p class="text-3">{{ layout.mainTextBlock.text3 }}</p>
       <p class="author">{{ layout.mainTextBlock.author }}</p>
     </div>
+
     <!-- collection blocks -->
     <div class="collection-blocks blocks section">
       <div
-        class="block flex center-col"
+        class="block flex center"
         v-for="(block, index) in layout.collectionBlocks"
         :key="index"
       >
-        <div v-if="block.visible">
-          <div class="cover">
-            <slideshow
-              size="cover"
-              :images="fetchSlideshow(block.slideshow)"
-              :slideHeight="'120vw'"
-              :dots="true"
-            />
-            <div class="cta center">
-              <button
-                class="action"
-                @click="navigateToCollection(block.bounipun_collection)"
-              >
-                {{ block.buttonText }}
-              </button>
-            </div>
+        <!-- cover image and CTA  -->
+        <div v-if="block.visible" class="cover">
+          <slideshow
+            size="cover"
+            :images="fetchSlideshow(block.slideshow)"
+            mslideHeight="120vw"
+            dSlideHeight="50vh"
+            :dSlideWidth="50"
+            :dots="true"
+          />
+          <div class="cta center">
+            <button
+              class="action"
+              @click="navigateToCollection(block.bounipun_collection)"
+            >
+              {{ block.buttonText }}
+            </button>
           </div>
-          <div class="pad center-col">
-            <h2 class="text-1">{{ block.text1 }}</h2>
-            <p class="text-2">{{ block.text2 }}</p>
-            <p class="text-3">{{ block.text3 }}</p>
-          </div>
+        </div>
+        <!-- text block width heading and description -->
+        <div v-if="block.visible" class="pad center-col text">
+          <h2 class="text-1">{{ block.text1 }}</h2>
+          <p class="text-2">{{ block.text2 }}</p>
+          <p class="text-3">{{ block.text3 }}</p>
         </div>
       </div>
     </div>
+
     <!-- product list block -->
     <div class="product-blocks blocks section">
       <div
-        class="block flex center-col"
+        class="block flex center"
         v-for="(block, index) in layout.productListBlocks"
         :key="index"
       >
-        <div v-if="block.visible">
-          <!-- product list block cover image -->
-          <div class="cover">
-            <slideshow
-              size="cover"
-              :images="fetchSlideshow(block.imageList)"
-              :slideHeight="'120vw'"
-              :dots="true"
-            />
+        <!-- product list block cover image -->
+        <div class="cover" v-if="block.visible">
+          <slideshow
+            size="cover"
+            :images="fetchSlideshow(block.imageList)"
+            mSlideHeight="120vw"
+            dSlideHeight="30vw"
+            :dSlideWidth="50"
+            :dots="true"
+          />
 
-            <div class="cta center">
-              <button class="action">{{ block.buttonText }}</button>
-            </div>
+          <div class="cta center">
+            <button class="action">{{ block.buttonText }}</button>
           </div>
-          <div class="pad center-col">
-            <h2 class="text-1">{{ block.text1 }}</h2>
-            <p class="text-2">{{ block.text2 }}</p>
-          </div>
+        </div>
+        <div class="pad center-col text" v-if="block.visible">
+          <h2 class="text-1">{{ block.text1 }}</h2>
+          <p class="text-2">{{ block.text2 }}</p>
         </div>
       </div>
     </div>
     <!-- bounipun lab -->
-    <div class="bounipun-lab center-col" v-if="layout.bounipunLab.visible">
+    <div class="bounipun-lab center" v-if="layout.bounipunLab.visible">
       <div
         class="cover"
         :style="
@@ -89,7 +95,7 @@
           <button class="action">{{ layout.bounipunLab.buttonText }}</button>
         </div>
       </div>
-      <div class="pad center-col">
+      <div class="pad center-col text">
         <h2 class="head text-1">{{ layout.bounipunLab.heading }}</h2>
         <p class="paragraph text-2">{{ layout.bounipunLab.paragraph }}</p>
       </div>
@@ -159,22 +165,17 @@ export default {
         console.log("Layout not fetched");
         return;
       }
-
       this.layout = layout.doc;
       console.log(this.layout);
-
       this.setSlideshow(this.layout.mainSlideshow.slides);
-
       const totalCollectionBlocks = this.layout.collectionBlocks.length;
       const totalProductListBlocks = this.layout.productListBlocks.length;
-
       let i = 0;
       let sections = [];
       const maxSections =
         totalCollectionBlocks > totalProductListBlocks
           ? totalCollectionBlocks
           : totalProductListBlocks;
-
       for (i = 0; i < maxSections; i++) {
         let section = {};
         section.collectionBlock =
@@ -187,7 +188,6 @@ export default {
             : false;
         sections.push(section);
       }
-
       this.sections = sections;
       console.log(sections);
     },
@@ -210,17 +210,40 @@ export default {
 .homepage {
   margin-top: 10vh;
 
+  .blocks {
+    padding: 0 1%;
+    .block {
+      height: 50vh;
+      margin-bottom: 20px;
+      overflow: hidden;
+
+      .text {
+        width: 50%;
+      }
+    }
+    @media (max-width: 768px) {
+      padding: 0%;
+      .block {
+        flex-direction: column;
+        height: auto;
+        margin: 0;
+
+        .text {
+          width: 100%;
+        }
+      }
+    }
+  }
+
   .pad {
     padding: 5%;
   }
-
   .quote {
     display: flex;
     width: 100%;
     height: 40vw;
     justify-content: space-between;
     padding: 5px;
-
     .logo {
       width: 40vw;
       height: 40vw;
@@ -228,30 +251,25 @@ export default {
       background-position: center;
       background-repeat: no-repeat;
     }
-
     .text {
       width: 60%;
       display: flex;
       flex-direction: column;
       justify-content: center;
-
       .text-2 {
         font-family: $font_4;
         line-height: 30px;
         font-size: 18px;
       }
-
       .head {
         text-align: center;
       }
     }
   }
-
   .press {
     display: flex;
     width: 100%;
     height: 40vw;
-
     .logo {
       width: 40vw;
       height: 100%;
@@ -259,12 +277,10 @@ export default {
       background-position: center;
       background-repeat: no-repeat;
     }
-
     .image-list {
       // width: 70%;
       height: 100%;
       display: flex;
-
       .image-box {
         width: 25vw;
         height: 100%;
@@ -274,26 +290,22 @@ export default {
       }
     }
   }
-
   .text-1 {
     font-family: $font_3_bold;
     margin-bottom: 10px;
     font-size: 26px;
     text-transform: uppercase;
   }
-
   .text-2 {
     font-size: 14px;
     text-align: justify;
     margin-bottom: 5px;
     font-family: $font_1;
   }
-
   .text-3 {
     font-family: $font_4;
     font-size: 19px;
   }
-
   /* main text block */
   .main-text-block {
     text-align: center;
@@ -302,16 +314,15 @@ export default {
       font-size: 13px;
     }
   }
-
   /* cover */
   .cover {
+    width: 50%;
     position: relative;
 
     .cta {
       position: absolute;
-      bottom: 2%;
+      bottom: 10%;
       width: 100%;
-
       .action {
         width: 38%;
         padding: 2% 5%;
@@ -320,22 +331,39 @@ export default {
         border: 2px solid #ffffff;
         color: #fff;
       }
-    }
-  }
 
-  .blocks {
-    .block {
-      .text-1 {
+      @media (max-width: 768px) {
+        bottom: 2%;
       }
+    }
+
+    @media (max-width: 768px) {
+      width: 100%;
     }
   }
 
   .bounipun-lab {
+    width: 100%;
+
     .cover {
-      width: 100vw;
-      height: 100vw;
+      width: 50%;
+      height: 50vh;
       background-size: cover;
       background-position: center;
+    }
+    .text {
+      width: 50%;
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      .cover {
+        width: 100vw;
+        height: 50vw;
+      }
+      .text {
+        width: 100%;
+      }
     }
   }
 }

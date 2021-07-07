@@ -71,12 +71,19 @@ export default {
             type: Boolean,
             default: true
         },
-        slideWidth: {
+        mSlideWidth: {
             type: Number,
             default: 100
-
         },
-        slideHeight: {
+        dSlideWidth: {
+            type: Number,
+            default: 100
+        },
+        mSlideHeight: {
+            type: String,
+            default: '100vw'
+        },
+        dSlideHeight: {
             type: String,
             default: '100vw'
         }
@@ -91,6 +98,12 @@ export default {
     computed: {
         singleImage() {
             return this.images.length === 1;
+        },
+        slideHeight() {
+            return this.windowWidth > 768 ? this.dSlideHeight : this.mSlideHeight;
+        },
+        slideWidth() {
+            return this.windowWidth > 768 ? this.dSlideWidth : this.mSlideWidth;
         }
     },
     methods: {
@@ -164,10 +177,11 @@ export default {
     .slideshow {
         display: flex;
         overflow-x: auto;
+        justify-content: flex-start;
 
-        @media screen and (min-width: 768px) {
-            justify-content: center;
-        }
+        // @media screen and (min-width: 768px) {
+        //     justify-content: center;
+        // }
 
         &::-webkit-scrollbar {
             display: none;

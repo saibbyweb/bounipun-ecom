@@ -7,7 +7,7 @@
         :images="images[activeColorIndex]"
         :slideshowOptions="{ thumbnails: true }"
         :customText="activeDisclaimerText"
-        :slideHeight="'60vh'"
+        :mSlideHeight="'60vh'"
         :size="'cover'"
       />
 
