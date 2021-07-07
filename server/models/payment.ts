@@ -41,7 +41,17 @@ type RazorpayOrder = {
 /* stripe intent details */
 type StripeDetails = {
     amount: number,
-    currency: string
+    currency: string,
+    description: string,
+    // shipping: {
+    //     name: string,
+    //     address: {
+    //         line1: string,
+    //         postal_code: string,
+    //         city: string,
+    //         country: string
+    //     }
+    // }
 }
 
 /* helper methods */

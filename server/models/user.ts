@@ -471,7 +471,17 @@ export const methods = {
         else {
             const stripePaymentIntent = await paymentMethods.createStripePaymentIntent({
                 amount: grandTotal * 100,
-                currency: "usd"
+                currency: "usd",
+                description: 'Bounipun Payment',
+                // shipping: {
+                //     name: deliveryAddress.firstName + " " + deliveryAddress.surName,
+                //     address: {
+                //         line1: deliveryAddress.addressLine1,
+                //         postal_code: deliveryAddress.postalCode,
+                //         city: deliveryAddress.city,
+                //         country: 'US'
+                //     }
+                // }
             });
 
             gatewayToken = stripePaymentIntent.client_secret;

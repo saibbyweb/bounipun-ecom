@@ -4,7 +4,7 @@
       <!-- country region -->
       <h2 class="title">Country/Region</h2>
       <!-- country selection -->
-      <CountrySelect v-model="selectedCountryCodex" />
+      <CountrySelect v-model="selectedCountryCode" @setCountryIsoCode="countryIsoCode = $event"/>
 
       <!-- show addresses from address book -->
       <h2 class="title">Shipping Address</h2>
@@ -18,7 +18,7 @@
         @input="field.error.status = false"
         :isMobileNumber="key === 'mobileNumber'"
         :maxLength="key === 'addressLine1' || key === 'addressLine2' ? 60 : 100"
-        :countryCode="selectedCountryCodex"
+        :countryCode="selectedCountryCode"
       />
       <!-- consent for adding address to address book -->
       <Checkbox label="Save address for later use." v-model="saveNewAddress" />
@@ -34,41 +34,19 @@
 </template>
 
 <script>
-import countryData from "@/helpers/countryCodes.js";
 import validate from "@/helpers/validate.js";
 
 export default {
   data() {
     return {
       formData: this.createFormData(),
-      countryCodes: countryData,
-      selectedCountryIndex: 98,
-      countrySearchTerm: "",
+      countryIsoCode: "",
       showCountrySelect: false,
-      selectedCountryCodex: "",
       saveNewAddress: true
     };
   },
   computed: {
-    selectedCountry() {
-      if (this.matchedCountries.length === 0) return "";
-      return this.matchedCountries[this.selectedCountryIndex];
-    },
-    selectedCountryCode() {
-      if (this.matchedCountries.length === 0) return "";
-      return this.matchedCountries[this.selectedCountryIndex].dialCode;
-    },
-    matchedCountries() {
-      if (this.countrySearchTerm === "") return this.countryCodes;
 
-      this.selectedCountryIndex = 0;
-
-      return this.countryCodes.filter(country => {
-        return country.name
-          .toUpperCase()
-          .startsWith(this.countrySearchTerm.toUpperCase());
-      });
-    }
   },
   async mounted() {
       this.prefillForm();
@@ -223,6 +201,8 @@ export default {
       Object.keys(this.formData).forEach(key => {
         deliveryAddress[key] = this.formData[key].value;
       });
+
+      deliveryAddress.countryIsoCode = this.countryIsoCode;
       this.$router.push({ name: "Checkout", params: { deliveryAddress } });
     }
   }

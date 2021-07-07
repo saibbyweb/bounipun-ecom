@@ -48,6 +48,9 @@
      
       <h2 v-if="gatewayName === 'stripe'" class="payment-title">Payment Information</h2>
       <div v-if="gatewayName === 'stripe'" id="stripe-mount" />
+
+      <!-- payment error -->
+      <p v-if="paymentError.status" class="msg error"> {{ paymentError.msg }} </p>
    
     </div>
 
@@ -99,7 +102,8 @@ const demoDeliveryAddress = {
   addressLine1: "H.no 54, Chinar Enclave",
   addressLine2: "Rawalpora, Near Masjid",
   city: "Srinagar",
-  postalCode: "190005"
+  postalCode: "190005",
+  countryIsoCode: "IN"
 };
 
 export default {
@@ -133,6 +137,12 @@ export default {
       remoteCartItems: this.$store.state.customer.globalRemoteCart,
       razorpayCheckout: null,
       stripe: null,
+      paymentIntentId: "",
+      paymentError: {
+        status: false,
+        msg: ""
+      },
+      gatewayToken: "",
       enableCheckout: false,
       elements: null,
       orderDetails: {},
@@ -157,6 +167,27 @@ export default {
     },
     gatewayName() {
       return this.currency.trim() === "INR" ? "razorpay" : "stripe";
+    },
+    stripeBillingAddress() {
+      return {
+        name: this.deliveryAddress.firstName + " " + this.deliveryAddress.surName,
+        email: this.deliveryAddress.email,
+        address: {
+          city: this.deliveryAddress.city,
+          line1: this.deliveryAddress.addressLine1 + " | " + this.deliveryAddress.addressLine2,
+          postal_code: this.deliveryAddress.postalCode,
+          country: this.deliveryAddress.countryIsoCode
+        }
+      }
+    },
+    stripeShippingObject() {
+      return {
+        address : {
+          line1: this.deliveryAddress.addressLine1 + " " + this.deliveryAddress.addressLine2,
+          country: this.deliveryAddress.countryIsoCode
+        },
+        name: this.deliveryAddress.firstName + " " + this.deliveryAddress.surName
+      }
     }
   },
   methods: {
@@ -170,9 +201,11 @@ export default {
       this.elements = this.stripe.elements();
       const element = this.elements.create("card", { hidePostalCode: true });
       element.on("change", event => {
+        this.paymentError.status = false;
         if (event.complete) this.enableCheckout = true;
         else this.enableCheckout = false;
       });
+
       element.mount("#stripe-mount");
     },
     async fetchRazorpayOrderId() {
@@ -192,6 +225,7 @@ export default {
     onPaymentIntentCreated(details) {
       /* save payment intent id */
       this.paymentIntentId = details.intentId;
+      this.gatewayToken = details.gatewayToken;
       
       /* act according to gateway */
       if(this.gatewayName === "razorpay")
@@ -258,6 +292,41 @@ export default {
     },
     async stripeCheckout() {
       console.log('do the stripe routine');
+      const cardElement = this.elements.getElement("card");
+
+      /*  */
+      const { paymentMethod, error: pmError } = await this.stripe.createPaymentMethod({
+        type: "card",
+        card: cardElement,
+        billing_details: this.stripeBillingAddress
+      });
+      
+      /* if error occured while generating payment method */
+      if(pmError) {
+        console.log('could not process payment method request');
+        this.paymentError.msg = "Could not process payment. Kindly try after sometime.";
+        this.paymentError.status = true;
+        return;
+      }
+
+      console.log(paymentMethod);
+
+      /*  */
+      const { error }  = await this.stripe.confirmCardPayment(this.gatewayToken, {
+        payment_method: paymentMethod.id,
+        shipping: this.stripeShippingObject
+      });
+
+      if(error) {
+        console.log('could not process STRIPE PAYMENT')
+        console.log(error);
+        this.paymentError.msg = "We are facing some technical difficulties at the moment. Kindly, try again after sometime.";
+        this.paymentError.status = true;
+        return;
+      }
+      
+      alert('PAYMENT_PROCEESED_SUCCESSFULLY');
+
     },
 
   }
@@ -311,6 +380,10 @@ export default {
     font-size: 12px;
     font-family: $font_1;
     // margin-top: 10px;
+  }
+
+  .error {
+    width: 80%;
   }
 
   .payment-title {
