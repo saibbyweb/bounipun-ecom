@@ -1,5 +1,5 @@
 <template>
-  <div v-if="productFetched" class="product-page">
+  <div v-if="productFetched" class="product-page flex start">
     <div ref="productImages" class="product-images">
       <!-- product image slideshow container with thumbnails  -->
       <slideshow
@@ -7,8 +7,10 @@
         :images="images[activeColorIndex]"
         :slideshowOptions="{ thumbnails: true }"
         :customText="activeDisclaimerText"
-        :mSlideHeight="'60vh'"
-        :size="'cover'"
+        mSlideHeight="60vh"
+        dSlideHeight="515px"
+        :dSlideWidth="40"
+        size="cover"
       />
 
       <span class="collection-vertical"> Bounipun Escape </span>
@@ -40,289 +42,288 @@
           <img src="/icons/dark/social/pinterest.png" />
           <img src="/icons/dark/social/instagram.png" />
           <a :href="whatsAppShareLink" target="_blank">
-          <img src="/icons/dark/social/whatsapp.png" />
+            <img src="/icons/dark/social/whatsapp.png" />
           </a>
         </div>
       </div>
     </div>
 
     <!-- product text details (product name, collection, base price -->
-    <div v-if="true">
-      <div class="product-details">
-        <div ref="details" class="details" :class="{ sticky: sticky }">
-          <!-- header -->
-          <div class="header">
-            <span class="collection" v-if="!thirdPartyProduct">
-              Bounipun {{ collectionName }}
-            </span>
-            <span class="gender"> {{ preferredGender }} </span>
-          </div>
 
-          <div class="og-details">
-            <div class="section-1">
-              <div class="main-details">
-                <h3>
-                  {{
-                    bounipunColors
-                      ? product.colors[activeColorIndex].name
-                      : product.name
-                  }}
-                </h3>
-                <p v-if="!thirdPartyProduct && !readyToShip" class="variant">
-                  {{ variants[activeVariantIndex].name }}
-                </p>
-                <!-- fabric -->
-                <p v-if="!thirdPartyProduct && !readyToShip">
-                  {{ selectedFabric.name }}
-                </p>
-                <p v-if="!thirdPartyProduct && !readyToShip">
-                  {{ selectedFabric.info1 }}
-                </p>
-                <p>{{ product.styleId }}</p>
-              </div>
-              <!-- quantity picker and size chart-->
-              <div class="quantity-and-size">
-                <div class="quantity-picker">
-                  <button @click="quantity > 1 && quantity--">-</button>
-                  <button class="qty">{{ quantity }}</button>
-                  <button @click="quantity < stockLimit && quantity++">
-                    +
-                  </button>
-                </div>
-                <!-- <button class="clear"> Size Chart </button> -->
-              </div>
+    <div class="product-details">
+      <div ref="details" class="details" :class="{ sticky: sticky }">
+        <!-- header -->
+        <div class="header">
+          <span class="collection" v-if="!thirdPartyProduct">
+            Bounipun {{ collectionName }}
+          </span>
+          <span class="gender"> {{ preferredGender }} </span>
+        </div>
+
+        <div class="og-details">
+          <div class="section-1">
+            <div class="main-details">
+              <h3>
+                {{
+                  bounipunColors
+                    ? product.colors[activeColorIndex].name
+                    : product.name
+                }}
+              </h3>
+              <p v-if="!thirdPartyProduct && !readyToShip" class="variant">
+                {{ variants[activeVariantIndex].name }}
+              </p>
+              <!-- fabric -->
+              <p v-if="!thirdPartyProduct && !readyToShip">
+                {{ selectedFabric.name }}
+              </p>
+              <p v-if="!thirdPartyProduct && !readyToShip">
+                {{ selectedFabric.info1 }}
+              </p>
+              <p>{{ product.styleId }}</p>
             </div>
-            <!-- price and add to cart -->
-            <div class="price-and-actions">
-              <div class="price">
-                <h5>
-                  {{ currency }}
-                  {{
-                    thirdPartyProduct || readyToShip
-                      ? adjustPrice(product.directPrice)
-                      : adjustPrice(
-                          variants[activeVariantIndex].fabrics[
-                            activeFabricIndex
-                          ].price
-                        )
-                  }}
-                </h5>
-                <p>Taxes and Shipping Included</p>
-              </div>
-
-              <!-- add to cart -->
-              <div class="add-to-cart">
-                <button @click="addToCart">
-                  {{ alreadyInCart ? "View Bag" : "Place in Bag" }}
+            <!-- quantity picker and size chart-->
+            <div class="quantity-and-size">
+              <div class="quantity-picker">
+                <button @click="quantity > 1 && quantity--">-</button>
+                <button class="qty">{{ quantity }}</button>
+                <button @click="quantity < stockLimit && quantity++">
+                  +
                 </button>
-                <button class="arrow">></button>
               </div>
-              <span style="font-size: 9px;"> Standard Shipping: 4 weeks </span>
+              <!-- <button class="clear"> Size Chart </button> -->
             </div>
           </div>
+          <!-- price and add to cart -->
+          <div class="price-and-actions">
+            <div class="price">
+              <h5>
+                {{ currency }}
+                {{
+                  thirdPartyProduct || readyToShip
+                    ? adjustPrice(product.directPrice)
+                    : adjustPrice(
+                        variants[activeVariantIndex].fabrics[activeFabricIndex]
+                          .price
+                      )
+                }}
+              </h5>
+              <p>Taxes and Shipping Included</p>
+            </div>
+
+            <!-- add to cart -->
+            <div class="add-to-cart">
+              <button @click="addToCart">
+                {{ alreadyInCart ? "View Bag" : "Place in Bag" }}
+              </button>
+              <button class="arrow">></button>
+            </div>
+            <span style="font-size: 9px;"> Standard Shipping: 4 weeks </span>
+          </div>
         </div>
+      </div>
 
-        <div class="other-details">
-          <!-- bounipun colors  -->
-          <div v-if="bounipunColors" class="colors">
-            <h4 class="section-heading">
-              Select Color: ({{ product.colors.length }})
-            </h4>
+      <div class="other-details">
+        <!-- bounipun colors  -->
+        <div v-if="bounipunColors" class="colors">
+          <h4 class="section-heading">
+            Select Color: ({{ product.colors.length }})
+          </h4>
 
-            <!-- color category -->
-            <div
-              class="color-category"
-              v-for="(value, name, index) in product.colorData"
-              :key="index"
-            >
-              <div v-if="value.length !== 0">
-                <!-- sub color heading -->
-                <Accordion
-                  :heading="value.name"
-                  :expanded="ifActiveColorInCategory(value.colors)"
-                >
-                  <div class="color-boxes">
-                    <!-- color box (loop) -->
+          <!-- color category -->
+          <div
+            class="color-category"
+            v-for="(value, name, index) in product.colorData"
+            :key="index"
+          >
+            <div v-if="value.length !== 0">
+              <!-- sub color heading -->
+              <Accordion
+                :heading="value.name"
+                :expanded="ifActiveColorInCategory(value.colors)"
+              >
+                <div class="color-boxes">
+                  <!-- color box (loop) -->
+                  <div
+                    class="box-container center-col"
+                    v-for="(color, colorIndex) in value.colors"
+                    :key="colorIndex"
+                    @click="setActiveColor(colorIndex, color._id)"
+                  >
                     <div
-                      class="box-container center-col"
-                      v-for="(color, colorIndex) in value.colors"
-                      :key="colorIndex"
-                      @click="setActiveColor(colorIndex, color._id)"
-                    >
-                      <div
-                        class="box"
-                        :style="getMainImageCSS(color)"
-                        :class="{ active: isActiveBounipunColor(color._id) }"
-                      ></div>
-                      <span class="name"> {{ color.name }} </span>
-                    </div>
+                      class="box"
+                      :style="getMainImageCSS(color)"
+                      :class="{ active: isActiveBounipunColor(color._id) }"
+                    ></div>
+                    <span class="name"> {{ color.name }} </span>
                   </div>
-                </Accordion>
+                </div>
+              </Accordion>
 
-                <!-- <h5 class="category-heading"> {{ value.name }} </h5> -->
-              </div>
+              <!-- <h5 class="category-heading"> {{ value.name }} </h5> -->
             </div>
-          </div>
-
-          <!-- custom colors -->
-          <div v-if="!bounipunColors" class="colors">
-            <h4 class="section-heading">
-              Select Color ({{ product.colors.length }}) :
-            </h4>
-
-            <div class="color-boxes">
-              <div
-                v-for="(color, index) in product.colors"
-                :key="index"
-                class="box-container center-col"
-                @click="setActiveColor(index)"
-              >
-                <div
-                  class="box"
-                  :style="getMainImageCSS(color)"
-                  :class="{ active: activeColorIndex === index }"
-                ></div>
-                <span class="name"> {{ color.name }} </span>
-              </div>
-            </div>
-          </div>
-
-          <!-- divider -->
-          <div v-if="!bounipunColors && multiPriced" class="divider"></div>
-
-          <!-- dynamic variant populate -->
-
-          <div
-            v-if="!thirdPartyProduct && multiPriced && !readyToShip"
-            class="variants-available"
-          >
-            <h4 class="section-heading">
-              Select Variant:
-            </h4>
-            <p class="section-paragraph">
-              {{ variantNote }}
-            </p>
-            <!-- variants container -->
-            <div class="variants-container">
-              <div
-                @click="setActiveVariant(index)"
-                v-for="(variant, index) in variants"
-                :key="index"
-                class="variant center-col"
-              >
-                <!-- image -->
-                <img
-                  class="illustration"
-                  :class="{ active: activeVariantIndex === index }"
-                  :src="getVariantImage(variant.image)"
-                />
-                <!-- variant name -->
-                <span class="name"> {{ variant.name }} </span>
-                <!-- info 1 -->
-                <span class="info"> {{ variant.info1 }} </span>
-                <!-- info 2 -->
-                <span class="info"> {{ variant.info2 }} </span>
-              </div>
-            </div>
-          </div>
-
-          <!-- divider -->
-          <div class="divider"></div>
-
-          <!-- dynamic fabric -->
-          <div
-            v-if="!thirdPartyProduct && multiPriced && !readyToShip"
-            class="fabrics-available"
-          >
-            <h4 class="section-heading">Select Fabric:</h4>
-
-            <!-- fabrics available -->
-            <div class="fabrics-container">
-              <!-- fabric -->
-              <div
-                @click="setActiveFabric(index)"
-                v-for="(fabric, index) in variants[activeVariantIndex].fabrics"
-                :key="index"
-                class="fabric center-col"
-                :style="setVariantColorToActiveFabric(index)"
-              >
-                <span class="name"> {{ fabric.name }} </span>
-                <span class="info"> {{ fabric.info1 }} </span>
-                <span class="price">
-                  {{ currency }} {{ adjustPrice(fabric.price) }}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <!-- accordions -->
-          <div class="accordions">
-            <!-- detailed features -->
-            <Accordion heading="Detailed Features">
-              <!-- variant -->
-              <!-- <p> Variant Specific Details</p> -->
-              <ul v-if="!thirdPartyProduct">
-                <li v-for="(point, index) in variantDescription" :key="index">
-                  <span class="desc"> {{ point }} </span>
-                </li>
-              </ul>
-
-              <!-- design specific -->
-              <!-- <p> Design Specific Details</p> -->
-              <ul>
-                <li v-for="(point, index) in productDescription" :key="index">
-                  <span class="desc"> {{ point }} </span>
-                </li>
-              </ul>
-
-              <!-- fabric -->
-              <ul v-if="!thirdPartyProduct">
-                <li v-for="(point, index) in fabricDescription" :key="index">
-                  <span class="desc"> {{ point }} </span>
-                </li>
-              </ul>
-            </Accordion>
-
-            <!-- about fabric -->
-            <Accordion
-              v-if="!thirdPartyProduct && !readyToShip"
-              heading="About Fabric"
-            >
-              <ul>
-                <li v-for="(point, index) in fabricWriteUp" :key="index">
-                  <span class="desc"> {{ point }} </span>
-                </li>
-              </ul>
-            </Accordion>
-
-            <!-- details and care -->
-            <Accordion
-              v-if="!thirdPartyProduct && !readyToShip"
-              heading="Details And Care"
-            >
-              <ul>
-                <li v-for="(point, index) in detailsAndCare" :key="index">
-                  <span class="desc"> {{ point }} </span>
-                </li>
-              </ul>
-            </Accordion>
-
-            <!-- about collection -->
-            <Accordion
-              v-if="!thirdPartyProduct"
-              :heading="`About ${product.bounipun_collection.name}`"
-            >
-              <span class="desc">
-                {{ product.bounipun_collection.description }}
-              </span>
-            </Accordion>
-
-            <Accordion heading="Shipping & Returns" />
           </div>
         </div>
 
-        <!-- related products -->
-        <!-- <div class="related-products">
+        <!-- custom colors -->
+        <div v-if="!bounipunColors" class="colors">
+          <h4 class="section-heading">
+            Select Color ({{ product.colors.length }}) :
+          </h4>
+
+          <div class="color-boxes">
+            <div
+              v-for="(color, index) in product.colors"
+              :key="index"
+              class="box-container center-col"
+              @click="setActiveColor(index)"
+            >
+              <div
+                class="box"
+                :style="getMainImageCSS(color)"
+                :class="{ active: activeColorIndex === index }"
+              ></div>
+              <span class="name"> {{ color.name }} </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- divider -->
+        <div v-if="!bounipunColors && multiPriced" class="divider"></div>
+
+        <!-- dynamic variant populate -->
+
+        <div
+          v-if="!thirdPartyProduct && multiPriced && !readyToShip"
+          class="variants-available"
+        >
+          <h4 class="section-heading">
+            Select Variant:
+          </h4>
+          <p class="section-paragraph">
+            {{ variantNote }}
+          </p>
+          <!-- variants container -->
+          <div class="variants-container">
+            <div
+              @click="setActiveVariant(index)"
+              v-for="(variant, index) in variants"
+              :key="index"
+              class="variant center-col"
+            >
+              <!-- image -->
+              <img
+                class="illustration"
+                :class="{ active: activeVariantIndex === index }"
+                :src="getVariantImage(variant.image)"
+              />
+              <!-- variant name -->
+              <span class="name"> {{ variant.name }} </span>
+              <!-- info 1 -->
+              <span class="info"> {{ variant.info1 }} </span>
+              <!-- info 2 -->
+              <span class="info"> {{ variant.info2 }} </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- divider -->
+        <div class="divider"></div>
+
+        <!-- dynamic fabric -->
+        <div
+          v-if="!thirdPartyProduct && multiPriced && !readyToShip"
+          class="fabrics-available"
+        >
+          <h4 class="section-heading">Select Fabric:</h4>
+
+          <!-- fabrics available -->
+          <div class="fabrics-container">
+            <!-- fabric -->
+            <div
+              @click="setActiveFabric(index)"
+              v-for="(fabric, index) in variants[activeVariantIndex].fabrics"
+              :key="index"
+              class="fabric center-col"
+              :style="setVariantColorToActiveFabric(index)"
+            >
+              <span class="name"> {{ fabric.name }} </span>
+              <span class="info"> {{ fabric.info1 }} </span>
+              <span class="price">
+                {{ currency }} {{ adjustPrice(fabric.price) }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- accordions -->
+        <div class="accordions">
+          <!-- detailed features -->
+          <Accordion heading="Detailed Features">
+            <!-- variant -->
+            <!-- <p> Variant Specific Details</p> -->
+            <ul v-if="!thirdPartyProduct">
+              <li v-for="(point, index) in variantDescription" :key="index">
+                <span class="desc"> {{ point }} </span>
+              </li>
+            </ul>
+
+            <!-- design specific -->
+            <!-- <p> Design Specific Details</p> -->
+            <ul>
+              <li v-for="(point, index) in productDescription" :key="index">
+                <span class="desc"> {{ point }} </span>
+              </li>
+            </ul>
+
+            <!-- fabric -->
+            <ul v-if="!thirdPartyProduct">
+              <li v-for="(point, index) in fabricDescription" :key="index">
+                <span class="desc"> {{ point }} </span>
+              </li>
+            </ul>
+          </Accordion>
+
+          <!-- about fabric -->
+          <Accordion
+            v-if="!thirdPartyProduct && !readyToShip"
+            heading="About Fabric"
+          >
+            <ul>
+              <li v-for="(point, index) in fabricWriteUp" :key="index">
+                <span class="desc"> {{ point }} </span>
+              </li>
+            </ul>
+          </Accordion>
+
+          <!-- details and care -->
+          <Accordion
+            v-if="!thirdPartyProduct && !readyToShip"
+            heading="Details And Care"
+          >
+            <ul>
+              <li v-for="(point, index) in detailsAndCare" :key="index">
+                <span class="desc"> {{ point }} </span>
+              </li>
+            </ul>
+          </Accordion>
+
+          <!-- about collection -->
+          <Accordion
+            v-if="!thirdPartyProduct"
+            :heading="`About ${product.bounipun_collection.name}`"
+          >
+            <span class="desc">
+              {{ product.bounipun_collection.description }}
+            </span>
+          </Accordion>
+
+          <Accordion heading="Shipping & Returns" />
+        </div>
+      </div>
+
+      <!-- related products -->
+      <!-- <div class="related-products">
                 <h4 class="section-heading"> Related Products </h4>
                 <div class="scrollable-list">
                     <div class="list">
@@ -339,8 +340,7 @@
                 </div>
             </div> -->
 
-        <!-- <inner-image-zoom class="product-image" :src="images[0]" :zoomSrc="images[0]" /> -->
-      </div>
+      <!-- <inner-image-zoom class="product-image" :src="images[0]" :zoomSrc="images[0]" /> -->
     </div>
   </div>
 </template>
@@ -493,10 +493,10 @@ export default {
         : true;
     },
     whatsAppShareLink() {
-      const BASE_SHARE_URL = 'https://wa.me/?text=';
-      let msg = `Check out this Bounipun special: ${location.host}/products?_id=${this.product._id}`
+      const BASE_SHARE_URL = "https://wa.me/?text=";
+      let msg = `Check out this Bounipun special: ${location.host}/products?_id=${this.product._id}`;
       msg = encodeURI(msg);
-      return BASE_SHARE_URL + msg
+      return BASE_SHARE_URL + msg;
     }
   },
   methods: {
@@ -506,6 +506,11 @@ export default {
     },
     handleScroll(event) {
       // console.log(this.$store.getters['customer/alreadyInCart'], );
+      if (this.windowWidth > 768) {
+        // this.sticky = window.scrollY > 100;
+        return;
+      }
+
       const scrolled = screen.height + window.scrollY;
       this.sticky = window.scrollY > 25;
       return;
@@ -721,11 +726,15 @@ export default {
 <style lang="scss" scoped>
 .product-page {
   margin-top: 10vh;
-  background-color: #f4f5f7;
+  padding: 2%;
+  // position: relative;
+  // flex-direction: row-reverse;
 
   .product-images {
+    width: 40%;
     position: relative;
 
+    // background-color: rgba(165, 42, 42, 0.545);
     /* collection name, vertical */
     .collection-vertical {
       display: none;
@@ -831,19 +840,29 @@ export default {
   }
 
   .product-details {
+    width: 60%;
+    padding: 2%;
+    box-sizing: border-box;
+
     /* sticky details */
     .details {
-      margin-top: 10px;
 
       &.sticky {
         position: fixed;
-        bottom: 0;
-        left: 0;
+       bottom: 0;
+          left: 0;
         width: 100%;
         background-color: white;
         transition: span 0.3s ease-in-out;
         z-index: 2;
         box-shadow: 0px -4px 23px -13px rgba(38, 38, 38, 0.24);
+
+        @media(max-width: 768px) {
+         
+        }
+      }
+      @media(max-width: 768px) {
+        margin-top: 10px;
       }
     }
 
@@ -1022,13 +1041,22 @@ export default {
           flex-wrap: wrap;
 
           .box-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
             margin: 5px;
+            height: 7vw;
+            width: 7vw;
 
             .box {
-              height: 20vw;
-              width: 20vw;
+              height: 80%;
+              width: 100%;
               background-size: contain;
               background-position: center;
+              background-repeat: no-repeat;
+              cursor: pointer;
 
               &.active {
                 border: 1px solid #bfbfbf;
@@ -1039,6 +1067,18 @@ export default {
               margin-top: 5px;
               font-size: 8px;
               letter-spacing: 0.4px;
+              text-align: center;
+              height: 20%;
+            }
+
+            @media (max-width: 768px) {
+              width: 25vw;
+              height: 25vw;
+
+              // .box {
+              //   width: 20vw;
+              //   height: 20vw;
+              // }
             }
           }
         }
@@ -1074,12 +1114,13 @@ export default {
           justify-content: space-around;
 
           .variant {
+            cursor: pointer;
+
             .illustration {
               filter: grayscale(100%);
-              // height: 60%;
               margin-bottom: 3px;
               transition: all 0.3s ease-in-out;
-              width: 12vw;
+              width: 4vw;
               opacity: 0.5;
 
               &.active {
@@ -1098,6 +1139,12 @@ export default {
               font-family: $font_2;
               font-size: 9px;
               color: $gray;
+            }
+
+            @media(max-width: 768px) {
+              .illustration {
+                width: 12vw;
+              }
             }
           }
         }
@@ -1170,6 +1217,18 @@ export default {
           font-size: 12px;
         }
       }
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding: 0;
+
+    .product-images {
+      width: 100%;
+    }
+    .product-details {
+      width: 100%;
     }
   }
 }
