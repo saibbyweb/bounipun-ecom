@@ -1,15 +1,16 @@
 <template>
-  <div class="cart page -wh">
+  <div class="checkout-page page -wh">
     <!-- checkout header -->
     <div class="page-header center">
       <h2 class="title">Checkout</h2>
     </div>
 
     <!-- order overview -->
-    <div class="order-overview">
+    <div class="order-overview flex center">
       <!-- cart items -->
+      <div class="cart-items flex center col">
       <h3 class="section-heading">Products</h3>
-      <div class="cart-items">
+
         <CartItem
           v-for="(item, index) in $store.state.customer.globalRemoteCart"
           :item="item"
@@ -17,52 +18,72 @@
           :allowUpdate="false"
         />
       </div>
-      <!-- delivery address -->
-      <h3 class="section-heading">Delivery Address</h3>
-      <div class="delivery-address">
-        <span class="name">
-          {{ deliveryAddress.firstName }} {{ deliveryAddress.surName }}
-        </span>
-        <span> {{ deliveryAddress.mobileNumber }} </span>
-        <!-- <span> {{ deliveryAddress.email }} </span> -->
-        <span> {{ deliveryAddress.addressLine1 }}</span>
-        <span> {{ deliveryAddress.addressLine2 }} </span>
-        <span> {{ deliveryAddress.city }} </span>
-        <span> {{ deliveryAddress.postalCode }} </span>
+
+      <!-- delivery address and order total and payment specific-->
+      <div class="d-o-p flex center col">
+        <h3 class="section-heading">Delivery Address</h3>
+
+        <!-- delivery address -->
+        <div class="delivery-address">
+          <span class="name">
+            {{ deliveryAddress.firstName }} {{ deliveryAddress.surName }}
+          </span>
+          <span> {{ deliveryAddress.mobileNumber }} </span>
+          <!-- <span> {{ deliveryAddress.email }} </span> -->
+          <span> {{ deliveryAddress.addressLine1 }}</span>
+          <span> {{ deliveryAddress.addressLine2 }} </span>
+          <span> {{ deliveryAddress.city }} </span>
+          <span> {{ deliveryAddress.postalCode }} </span>
+        </div>
+
+        <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
+        <!-- TODO: show user consent checkbox for combined delivery for all items -->
+        <div class="order-total-container">
+
+          <OrderTotal
+            v-if="!cartEmpty"
+            :deliveryAddress="deliveryAddress"
+            :initializeCheckout="true"
+            @paymentIntentCreated="onPaymentIntentCreated"
+          />
+        </div>
+
+        <!-- payment specific -->
+        <div class="payment-specific flex center col">
+          <!-- shipping note -->
+          <p class="note">Standard shipping 4 weeks</p>
+          <!-- consent for combined delivery -->
+          <div class="pad-10">
+            <Checkbox
+              label="I would like receive all items in the order as a single package."
+              v-model="combinedDeliveryConsent"
+            />
+          </div>
+
+          <!-- TODO: START_FROM_HERE stripe card payment -->
+
+          <h2 v-if="gatewayName === 'stripe'" class="payment-title">
+            Payment Information
+          </h2>
+          <div v-if="gatewayName === 'stripe'" id="stripe-mount" />
+
+          <!-- payment error -->
+          <p v-if="paymentError.status" class="msg error">
+            {{ paymentError.msg }}
+          </p>
+
+          <!-- proceed to checkout -->
+
+          <button
+            :class="{ disabled: !enableCheckout }"
+            @click="placeOrder"
+            class="action checkout-btn"
+          >
+            Place Order
+          </button>
+
+        </div>
       </div>
-
-      <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
-      <!-- TODO: show user consent checkbox for combined delivery for all items -->
-
-      <OrderTotal v-if="!cartEmpty" :deliveryAddress="deliveryAddress" :initializeCheckout="true" @paymentIntentCreated="onPaymentIntentCreated" />
-
-       <!-- consent for combined delivery -->
-       <div class="pad-10">
-        <Checkbox label="I would like receive all items in the order as a single package." v-model="combinedDeliveryConsent" />
-       </div>
-
-      <!-- shipping note -->
-      <p class="note">Standard shipping 4 weeks</p>
-
-      <!-- TODO: START_FROM_HERE stripe card payment -->
-     
-      <h2 v-if="gatewayName === 'stripe'" class="payment-title">Payment Information</h2>
-      <div v-if="gatewayName === 'stripe'" id="stripe-mount" />
-
-      <!-- payment error -->
-      <p v-if="paymentError.status" class="msg error"> {{ paymentError.msg }} </p>
-   
-    </div>
-
-    <!-- proceed to checkout -->
-    <div class="pad-10">
-      <button
-        :class="{ disabled: !enableCheckout }"
-        @click="placeOrder"
-        class="action checkout-btn"
-      >
-        Place Order
-      </button>
     </div>
   </div>
 </template>
@@ -113,13 +134,13 @@ export default {
     /* fetch updated cart from user account */
     this.$store.dispatch("customer/fetchCart");
     this.$store.dispatch("customer/fetchCoupon", this.coupon.code);
-    this.$store.dispatch('customer/fetchGlobalConfig');
-    
+    this.$store.dispatch("customer/fetchGlobalConfig");
+
     /* decide which gateway is to be used */
 
     /* if cart is empty redirect to cart | homepage */
-    if(this.cartEmpty) {
-      this.$router.push('/');
+    if (this.cartEmpty) {
+      this.$router.push("/");
       return;
     }
     /* create payment intent */
@@ -147,7 +168,7 @@ export default {
       elements: null,
       orderDetails: {},
       combinedDeliveryConsent: false
-    }
+    };
   },
   computed: {
     currency() {
@@ -162,7 +183,7 @@ export default {
         item => this.adjustPrice(item.price) * item.quantity
       );
     },
-      coupon() {
+    coupon() {
       return this.$store.state.customer.coupon;
     },
     gatewayName() {
@@ -170,24 +191,32 @@ export default {
     },
     stripeBillingAddress() {
       return {
-        name: this.deliveryAddress.firstName + " " + this.deliveryAddress.surName,
+        name:
+          this.deliveryAddress.firstName + " " + this.deliveryAddress.surName,
         email: this.deliveryAddress.email,
         address: {
           city: this.deliveryAddress.city,
-          line1: this.deliveryAddress.addressLine1 + " | " + this.deliveryAddress.addressLine2,
+          line1:
+            this.deliveryAddress.addressLine1 +
+            " | " +
+            this.deliveryAddress.addressLine2,
           postal_code: this.deliveryAddress.postalCode,
           country: this.deliveryAddress.countryIsoCode
         }
-      }
+      };
     },
     stripeShippingObject() {
       return {
-        address : {
-          line1: this.deliveryAddress.addressLine1 + " " + this.deliveryAddress.addressLine2,
+        address: {
+          line1:
+            this.deliveryAddress.addressLine1 +
+            " " +
+            this.deliveryAddress.addressLine2,
           country: this.deliveryAddress.countryIsoCode
         },
-        name: this.deliveryAddress.firstName + " " + this.deliveryAddress.surName
-      }
+        name:
+          this.deliveryAddress.firstName + " " + this.deliveryAddress.surName
+      };
     }
   },
   methods: {
@@ -226,11 +255,10 @@ export default {
       /* save payment intent id */
       this.paymentIntentId = details.intentId;
       this.gatewayToken = details.gatewayToken;
-      
+
       /* act according to gateway */
-      if(this.gatewayName === "razorpay")
+      if (this.gatewayName === "razorpay")
         this.setupRazorpayOrder(details.gatewayToken, details.amount);
-      
     },
     setupRazorpayOrder(orderId, amount) {
       let options = {
@@ -249,7 +277,7 @@ export default {
             razorpay_payment_id,
             razorpay_signature
           } = response;
-        
+
           /* complete checkout routine */
           const completeCheckout = await this.$post("/completeCheckout", {
             gateway: "razorpay",
@@ -291,20 +319,24 @@ export default {
       return;
     },
     async stripeCheckout() {
-      console.log('do the stripe routine');
+      console.log("do the stripe routine");
       const cardElement = this.elements.getElement("card");
 
       /*  */
-      const { paymentMethod, error: pmError } = await this.stripe.createPaymentMethod({
+      const {
+        paymentMethod,
+        error: pmError
+      } = await this.stripe.createPaymentMethod({
         type: "card",
         card: cardElement,
         billing_details: this.stripeBillingAddress
       });
-      
+
       /* if error occured while generating payment method */
-      if(pmError) {
-        console.log('could not process payment method request');
-        this.paymentError.msg = "Could not process payment. Kindly try after sometime.";
+      if (pmError) {
+        console.log("could not process payment method request");
+        this.paymentError.msg =
+          "Could not process payment. Kindly try after sometime.";
         this.paymentError.status = true;
         return;
       }
@@ -312,43 +344,77 @@ export default {
       console.log(paymentMethod);
 
       /*  */
-      const { error }  = await this.stripe.confirmCardPayment(this.gatewayToken, {
-        payment_method: paymentMethod.id,
-        shipping: this.stripeShippingObject
-      });
+      const { error } = await this.stripe.confirmCardPayment(
+        this.gatewayToken,
+        {
+          payment_method: paymentMethod.id,
+          shipping: this.stripeShippingObject
+        }
+      );
 
-      if(error) {
-        console.log('could not process STRIPE PAYMENT')
+      if (error) {
+        console.log("could not process STRIPE PAYMENT");
         console.log(error);
-        this.paymentError.msg = "We are facing some technical difficulties at the moment. Kindly, try again after sometime.";
+        this.paymentError.msg =
+          "We are facing some technical difficulties at the moment. Kindly, try again after sometime.";
         this.paymentError.status = true;
         return;
       }
-      
-      alert('PAYMENT_PROCEESED_SUCCESSFULLY');
 
-    },
-
+      alert("PAYMENT_PROCEESED_SUCCESSFULLY");
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+.checkout-page {
+  
+  margin-top:12vh;
+
+  .title {
+  font-size: 30px !important;
+}
+}
+
 .order-overview {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  justify-content: space-around;
+  align-items: flex-start;
 
   .cart-items {
-    width: 90%;
+    width: 50%;
+  }
+
+  .d-o-p {
+    width: 30%;
+    .delivery-address {
+      width: 100%;
+    }
+    .order-total-container {
+      width: 100%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    .cart-items {
+      width: 100%;
+    }
+    .d-o-p {
+      width: 100%;
+       padding: 0 20px;
+      .order-total-container {
+       
+      }
+    }
   }
 
   .section-heading {
     text-transform: uppercase;
     font-family: $font_2;
-    font-size: 15px;
+    font-size: 20px;
+    margin: 10px 0;
   }
 
   .delivery-address {
@@ -380,6 +446,7 @@ export default {
     font-size: 12px;
     font-family: $font_1;
     // margin-top: 10px;
+    text-align: center;
   }
 
   .error {
@@ -392,13 +459,15 @@ export default {
 
   #stripe-mount {
     margin-top: 20px;
-    width: 80%;
+    width: 100%;
     background-color: white;
     box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
     padding: 3%;
   }
 }
 .checkout-btn {
+  width: 100%;
+  margin-top:20px;
   &.disabled {
     background-color: gray;
   }

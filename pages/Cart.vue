@@ -49,7 +49,9 @@
         </div>
 
         <!-- order total -->
-        <OrderTotal v-if="!cartEmpty" />
+        <div class="order-total-container">
+          <OrderTotal v-if="!cartEmpty" />
+        </div>
 
         <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
 
@@ -181,10 +183,10 @@ export default {
 
 <style lang="scss" scoped>
 .cart {
-  margin-top:10vh;
+  margin-top:12vh;
 
   .title {
-    font-size: 30px !important;
+    font-size: 25px !important;
   }
 }
 .cart-container {
@@ -205,6 +207,7 @@ export default {
     }
     .actions {
       width: 100%;
+      padding: 0 20px;
     }
   }
 }
@@ -221,6 +224,10 @@ export default {
         width: 30%;
         font-size: 12px;
       }
+    }
+
+    @media(max-width: 768px) {
+      width: 90%;
     }
   }
 }

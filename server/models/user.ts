@@ -443,7 +443,7 @@ export const methods = {
 
         const { subTotal, discountValue, shippingCharge, tax, grandTotal } = orderTotal;
 
-        console.log('GRAND TOTAL-->', orderTotal.grandTotal, grandTotal);
+        console.log('GRAND TOTAL-->', orderTotal.grandTotal, grandTotal, amountToBeCharged);
 
         /* if amount doesn't match */
         if (grandTotal !== amountToBeCharged) {

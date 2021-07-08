@@ -167,8 +167,9 @@ export default {
 <style lang="scss" scoped>
 .order-total {
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
-  margin: 5%;
+  margin: 5% 0;
   padding: 10px;
+  box-sizing: border-box;
 
   .data-point {
     margin: 3px 0;

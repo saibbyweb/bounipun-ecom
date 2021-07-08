@@ -6,7 +6,7 @@
         <h2 class="title">Country/Region</h2>
         <!-- country selection -->
         <CountrySelect
-          v-model="selectedCountryCode"
+          v-model="countryDialCode"
           @setCountryIsoCode="countryIsoCode = $event"
         />
 
@@ -24,7 +24,7 @@
           :maxLength="
             key === 'addressLine1' || key === 'addressLine2' ? 60 : 100
           "
-          :countryCode="selectedCountryCode"
+          :countryCode="countryDialCode"
         />
         <!-- consent for adding address to address book -->
         <Checkbox
@@ -55,6 +55,7 @@ export default {
     return {
       formData: this.createFormData(),
       countryIsoCode: "",
+      countryDialCode: "",
       showCountrySelect: false,
       saveNewAddress: true
     };
@@ -241,6 +242,7 @@ export default {
     .order-total-container {
       width: 30%;
       margin-top:10%;
+    
     }
     @media (max-width: 768px) {
       flex-direction: column;
@@ -257,6 +259,7 @@ export default {
       .order-total-container {
         width: 100%;
         margin-top:0;
+        padding: 0 20px;
       }
     }
   }
