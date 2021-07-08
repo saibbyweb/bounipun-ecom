@@ -159,8 +159,14 @@ export default {
     }
 
     img {
-      width: 10%;
+      width: 4%;
       margin-right: 10px;
+    }
+
+    @media(max-width: 768px) {
+      img {
+        width:10%;
+      }
     }
   }
 

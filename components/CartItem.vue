@@ -93,15 +93,16 @@ export default {
   display: flex;
   align-items: center;
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
-  margin: 20px;
+  margin: 5px;
   position: relative;
-  height: 250px;
-  width: 50%;
+  height: 200px;
+  width: 80%;
   overflow: hidden;
 
   @media (max-width: 768px) {
     width: 90%;
     height: 45vw;
+    margin: 10px;
   }
 
   /* cart item thumbnail/image */
@@ -109,7 +110,7 @@ export default {
     width: 35%;
     height: 90%;
     background-size: cover;
-    background-position: center;
+    background-position: center top;
     background-repeat: no-repeat;
     img {
       width: 100%;

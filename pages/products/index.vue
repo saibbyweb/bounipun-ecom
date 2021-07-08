@@ -1165,7 +1165,8 @@ export default {
             width: 49%;
             margin: 0.5%;
             transition: all 0.2s cubic-bezier(0.215, 0.61, 0.355, 1);
-
+            cursor: pointer;
+            
             span {
               color: white;
               text-align: center;

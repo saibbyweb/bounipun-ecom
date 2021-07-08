@@ -1,27 +1,41 @@
 <template>
-  <div class="cart page -wh">
-    <div class="delivery-address">
-      <!-- country region -->
-      <h2 class="title">Country/Region</h2>
-      <!-- country selection -->
-      <CountrySelect v-model="selectedCountryCode" @setCountryIsoCode="countryIsoCode = $event"/>
+  <div class="delivery-page page -wh">
+    <div class="flex container around">
+      <div class="delivery-address flex col center">
+        <!-- country region -->
+        <h2 class="title">Country/Region</h2>
+        <!-- country selection -->
+        <CountrySelect
+          v-model="selectedCountryCode"
+          @setCountryIsoCode="countryIsoCode = $event"
+        />
 
-      <!-- show addresses from address book -->
-      <h2 class="title">Shipping Address</h2>
-      <!-- delivery input fields -->
-      <DeliveryInput
-        v-for="(field, key, index) in formData"
-        :key="index"
-        v-model="field.value"
-        :error="field.error"
-        :label="field.label"
-        @input="field.error.status = false"
-        :isMobileNumber="key === 'mobileNumber'"
-        :maxLength="key === 'addressLine1' || key === 'addressLine2' ? 60 : 100"
-        :countryCode="selectedCountryCode"
-      />
-      <!-- consent for adding address to address book -->
-      <Checkbox label="Save address for later use." v-model="saveNewAddress" />
+        <!-- show addresses from address book -->
+        <h2 class="title">Shipping Address</h2>
+        <!-- delivery input fields -->
+        <DeliveryInput
+          v-for="(field, key, index) in formData"
+          :key="index"
+          v-model="field.value"
+          :error="field.error"
+          :label="field.label"
+          @input="field.error.status = false"
+          :isMobileNumber="key === 'mobileNumber'"
+          :maxLength="
+            key === 'addressLine1' || key === 'addressLine2' ? 60 : 100
+          "
+          :countryCode="selectedCountryCode"
+        />
+        <!-- consent for adding address to address book -->
+        <Checkbox
+          label="Save address for later use."
+          v-model="saveNewAddress"
+        />
+      </div>
+
+      <div class="order-total-container">
+        <OrderTotal />
+      </div>
     </div>
 
     <!-- proceed to checkout -->
@@ -45,22 +59,21 @@ export default {
       saveNewAddress: true
     };
   },
-  computed: {
-
-  },
+  computed: {},
   async mounted() {
-      this.prefillForm();
+    this.prefillForm();
     this.fetchAddressBook();
   },
   methods: {
     prefillForm() {
-        this.formData.firstName.value = "Suhaib"
-        this.formData.surName.value = "Khan"
-        this.formData.mobileNumber.value = "9906697711"
-        this.formData.email.value = "hello@saibbyweb.com"
-        this.formData.addressLine1.value = "H.no 54, Chinar Enclave, Rawalpora, Srinagar, Jammu & Kashmir"
-        this.formData.city.value = "Srinagar"
-        this.formData.postalCode.value = "190005"
+      this.formData.firstName.value = "Suhaib";
+      this.formData.surName.value = "Khan";
+      this.formData.mobileNumber.value = "9906697711";
+      this.formData.email.value = "hello@saibbyweb.com";
+      this.formData.addressLine1.value =
+        "H.no 54, Chinar Enclave, Rawalpora, Srinagar, Jammu & Kashmir";
+      this.formData.city.value = "Srinagar";
+      this.formData.postalCode.value = "190005";
     },
     async fetchAddressBook() {
       const request = await this.$post("/fetchCustomerDataPoints", {
@@ -210,113 +223,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.delivery-address {
-  // margin: 4%;
-  padding: 10% 0;
-  // box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  .title {
-    font-size: 22px;
-    font-family: $font_1;
-    color: $dark_gray;
-    text-transform: uppercase;
-    align-self: flex-start;
-    margin: 7% 5%;
-    margin-right: 0;
-  }
-
-  .country-select {
-    border: none;
-    border-radius: 0;
-    width: 90%;
-    // padding: 2%;
-    background-color: white;
-    border-bottom: 2px solid #e7e7e7;
-    transition: all 0.2s ease-in-out;
-    position: relative;
-
-    .selected-country {
-      background-color: #e7e7e7;
-      // background-color: $dark_gray;
-      // border-bottom: 2px solid $dark_gray;
-      border-bottom: 2px solid #e7e7e7;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      padding: 2%;
-      width: 100%;
-
-      span {
-        font-size: 14px;
-        font-family: $font_2;
-        // color:white;
-      }
-
-      &.focused {
-        border-bottom: 2px solid $dark_gray;
-      }
-
-      img {
-        width: 10%;
-        margin-right: 10px;
+.delivery-page {
+  .container {
+    .delivery-address {
+      width: 50%;
+      margin-top: 10px;
+      .title {
+        font-size: 22px;
+        font-family: $font_1;
+        color: $dark_gray;
+        text-transform: uppercase;
+        align-self: flex-start;
+        margin: 2%;
+        margin-right: 0;
       }
     }
+    .order-total-container {
+      width: 30%;
+      margin-top:10%;
+    }
+    @media (max-width: 768px) {
+      flex-direction: column;
 
-    .country-list {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      min-height: 100px;
-      max-height: 300px;
-      overflow-y: scroll;
-      background-color: #e7e7e7e2;
-      z-index: 1;
-      border: 2px solid $dark_gray;
-      border-top: none;
-      width: 100%;
+      .delivery-address {
+        width: 100%;
+        padding: 10% 0;
+        margin-top:0;
 
-      /* search */
-      .search {
-        .field {
-          width: 100%;
-          border: none;
-          padding: 10px;
-          border-bottom: 1px solid #e7e7e7;
-          font-size: 14px;
+        .title {
+            margin: 7% 5%;
         }
       }
-
-      .item {
-        border-bottom: 2px solid #e7e7e7;
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        padding: 2%;
-        // background-color: #e7e7e7;
-
-        img {
-          width: 7%;
-          margin-right: 10px;
-        }
-
-        span {
-          font-family: $font_2;
-        }
-      }
-
-      .no-results {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-        span {
-          margin-top: 10px;
-          font-size: 14px;
-        }
+      .order-total-container {
+        width: 100%;
+        margin-top:0;
       }
     }
   }

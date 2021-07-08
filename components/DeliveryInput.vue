@@ -49,7 +49,11 @@ export default {
   display: flex;
   flex-direction: column-reverse;
   width: 90%;
-  margin: 2% 0;
+  margin: 10px 0;
+
+  @media(max-width: 768px) {
+    margin: 2% 0;
+  }
 
   .label {
     font-size: 12px;

@@ -4,59 +4,62 @@
       <h2 class="title">Shopping Bag</h2>
     </div>
 
-    <!-- cart items -->
-    <div class="cart-items flex center col">
-      <CartItem
-        v-for="(item, index) in $store.state.customer.globalRemoteCart"
-        :item="item"
-        :key="index"
-        @updateQuantity="updateQuantity"
-        @removeItem="removeItem"
-      />
-    </div>
-
-    <!-- coupon box -->
-    <div v-if="!cartEmpty" class="coupon-box flex col center">
-      <div class="input flex center col">
-        <!-- code input box -->
-        <InputCredential
-          v-model="couponCode"
-          label="Enter Coupon Code (optional)"
-          :uppercase="true"
-          :checked="couponApplied"
-          :disabled="couponApplied"
-          @input="couponError.status = false"
+    <div class="cart-container flex">
+      <!-- cart items -->
+      <div class="cart-items flex center col">
+        <CartItem
+          v-for="(item, index) in $store.state.customer.globalRemoteCart"
+          :item="item"
+          :key="index"
+          @updateQuantity="updateQuantity"
+          @removeItem="removeItem"
         />
-
-        <!-- apply button -->
-        <button
-          @click="applyCoupon"
-          class="action apply"
-          :class="{ applied: couponApplied }"
-        >
-          {{ couponApplied ? "Remove" : "Apply Coupon" }}
-        </button>
       </div>
+      <!-- actions -->
+      <div class="actions">
+        <!-- coupon box -->
+        <div v-if="!cartEmpty" class="coupon-box flex col center">
+          <div class="input flex center col">
+            <!-- code input box -->
+            <InputCredential
+              v-model="couponCode"
+              label="Enter Promo Code (optional)"
+              :uppercase="true"
+              :checked="couponApplied"
+              :disabled="couponApplied"
+              @input="couponError.status = false"
+            />
 
-      <!-- coupon applied -->
-      <div class="applied"></div>
-      <!-- coupon error -->
-      <p v-if="couponError.status" class="error msg">
-        {{ couponError.message }}
-      </p>
-    </div>
+            <!-- apply button -->
+            <button
+              @click="applyCoupon"
+              class="action apply"
+              :class="{ applied: couponApplied }"
+            >
+              {{ couponApplied ? "Remove" : "Apply Promo Code" }}
+            </button>
+          </div>
 
-    <!-- order total -->
-    <OrderTotal v-if="!cartEmpty" />
+          <!-- coupon applied -->
+          <div class="applied"></div>
+          <!-- coupon error -->
+          <p v-if="couponError.status" class="error msg">
+            {{ couponError.message }}
+          </p>
+        </div>
 
-    <!-- TODO: show grand total (with coupon discount) -->
-    <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
+        <!-- order total -->
+        <OrderTotal v-if="!cartEmpty" />
 
-    <!-- proceed to address page-->
-    <div v-if="!cartEmpty" class="pad-10">
-      <button @click="$router.push('/delivery-address')" class="action">
-        Proceed To Buy
-      </button>
+        <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
+
+        <!-- proceed to address page-->
+        <div v-if="!cartEmpty" class="pad-10">
+          <button @click="$router.push('/delivery-address')" class="action">
+            Proceed To Buy
+          </button>
+        </div>
+      </div>
     </div>
 
     <div v-if="cartEmpty" class="side-pad">
@@ -98,7 +101,7 @@ export default {
       this.couponCode = this.coupon.code;
       this.$store.dispatch("customer/fetchCart");
       this.$store.dispatch("customer/fetchCoupon", this.coupon.code);
-        this.$store.dispatch('customer/fetchGlobalConfig');
+      this.$store.dispatch("customer/fetchGlobalConfig");
     }, 300);
   },
   computed: {
@@ -177,8 +180,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.cart-items {
- 
+.cart {
+  margin-top:10vh;
+
+  .title {
+    font-size: 30px !important;
+  }
+}
+.cart-container {
+  width: 100%;
+  justify-content: space-around;
+
+  .cart-items {
+    width: 50%;
+    
+  }
+  .actions {
+    width: 30%;
+  }
+  @media(max-width: 768px) {
+    flex-direction: column;
+    .cart-items {
+      width: 100%;
+    }
+    .actions {
+      width: 100%;
+    }
+  }
 }
 /* coupon box */
 .coupon-box {
