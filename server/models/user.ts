@@ -213,7 +213,7 @@ export const methods = {
             const fetchProduct = db.model('products')
                 .findOne({ _id: productId, status: true })
                 .populate('bounipun_collection', { _id: 0, name: 1 })
-                .populate('variants._id', { name: 1 })
+                .populate('variants._id', { name: 1, hsnCode:1 , gstPercentage: 1 })
                 .populate('variants.fabrics._id', { name: 1, info1: 1 })
                 .populate('colors._id', { name: 1 })
                 .select('name styleId type availabilityType directPrice variants.fabrics.price colors.name colors.code colors.images')
@@ -242,6 +242,8 @@ export const methods = {
                 mainImage: '',
                 collectionName: '',
                 variantName: '',
+                hsnCode: '',
+                gstPercentage: '',
                 fabricName: '',
                 fabricInfo1: '',
                 price: 0,
@@ -300,6 +302,9 @@ export const methods = {
                 /* variant name (if made to order) */
                 const selectedVariant = product.variants.find(variant => variant._id._id.toString() === item.variant.toString())
                 cartItem.variantName = selectedVariant._id.name;
+                cartItem.hsnCode = selectedVariant._id.hsnCode;
+                cartItem.gstPercentage = selectedVariant._id.gstPercentage;
+                console.log('I WAS HERE BROO', cartItem)
 
                 /* fabric name (if made to order) */
                 const selectedFabric = selectedVariant.fabrics.find(fabric => fabric._id._id.toString() === item.fabric.toString());
