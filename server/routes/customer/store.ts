@@ -96,8 +96,10 @@ router.post('/processStripePayment', userAuth('customer'), async (req, res) => {
 });
 
 /*  stripe webhooks */
-router.post('/stripeWebhooks', async (req, res) => {
+router.post('/stripeWebhook', async (req, res) => {
     const event = req.body;
+
+    /* TODO: dude, verify the signature first */
     console.log(event);
     const amount = event.data.object.amount;
     const currency = event.data.object.currency;
@@ -105,9 +107,12 @@ router.post('/stripeWebhooks', async (req, res) => {
     switch (event.type) {
         case "payment_intent.succeeded":
             const paymentIntent = event.data.object;
+            console.log('CLIENT_SECRET', paymentIntent.client_secret);
             // paymentSucceeded()
             break;
     }
+
+    res.send('okay')
 
 });
 export default router;

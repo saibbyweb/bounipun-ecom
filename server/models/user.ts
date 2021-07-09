@@ -377,10 +377,12 @@ export const methods = {
 
     },
     adjustPrice(currency, price, globalConfig) {
-        if(currency === "INR")
+        if (currency === "INR")
             return price
-        else
-            return (price * globalConfig.currencyMultiplier) / globalConfig.dollarValue;
+        else {
+            const inflatedPrice = (price * globalConfig.currencyMultiplier) / globalConfig.dollarValue;
+            return inflatedPrice.toFixed(2);
+        }
     },
     /* calculate grand total */
     async calculateOrderTotal(cartItems, totalOrderQuantity, currency, couponCode) {
@@ -392,7 +394,10 @@ export const methods = {
             return false;
 
         /* cart total */
-        const cartTotal = sumBy(cartItems, item => this.adjustPrice(currency,item.price,globalConfig) * item.quantity);
+        let cartTotal = sumBy(cartItems, item => this.adjustPrice(currency, item.price, globalConfig) * item.quantity);
+        cartTotal = cartTotal.toFixed(2);
+
+        console.log('CART_TOTAL --> ', cartTotal);
 
         let discountValue: any = 0;
         let subTotal;
@@ -402,13 +407,14 @@ export const methods = {
         /* validate couponCode if provided */
         if (couponCode !== "") {
             discountValue = await this.calculateCouponDiscountValue(cartTotal, couponCode, currency)
-            ;
+                ;
             /* if coupon not valid, stop execution */
             if (discountValue === false)
                 return false;
         }
         /* calculate sub-total */
         subTotal = cartTotal - discountValue;
+
         /* shipping charge */
         shippingCharge = this.calculateShippingCharge(totalOrderQuantity, currency, globalConfig);
         /* taxes */
@@ -417,7 +423,7 @@ export const methods = {
         const grandTotal = parseFloat(subTotal) + parseFloat(shippingCharge) + parseFloat(taxes);
 
         return {
-            subTotal,
+            subTotal: subTotal.toFixed(2),
             discountValue,
             shippingCharge,
             tax: {
@@ -505,6 +511,13 @@ export const methods = {
         }
 
         return orderPayload;
+    },
+    async placeOrder(gatewayToken) {
+        /* verify token is valid */
+        /* if valid, check if any dublicate already exists or not */
+        /* if validated, proceed with save order details in db */
+        /* do the order placing routine */
+        /* notify the interested parties */
     }
 }
 

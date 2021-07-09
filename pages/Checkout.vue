@@ -319,10 +319,9 @@ export default {
       return;
     },
     async stripeCheckout() {
-      console.log("do the stripe routine");
       const cardElement = this.elements.getElement("card");
 
-      /*  */
+      /* create payment methods from card details  */
       const {
         paymentMethod,
         error: pmError
@@ -343,7 +342,7 @@ export default {
 
       console.log(paymentMethod);
 
-      /*  */
+      /* process card payment */
       const { error } = await this.stripe.confirmCardPayment(
         this.gatewayToken,
         {
@@ -351,12 +350,12 @@ export default {
           shipping: this.stripeShippingObject
         }
       );
-
+      
+      /* if error occurred while processing card payment */
       if (error) {
         console.log("could not process STRIPE PAYMENT");
         console.log(error);
-        this.paymentError.msg =
-          "We are facing some technical difficulties at the moment. Kindly, try again after sometime.";
+        this.paymentError.msg = "We are facing some technical difficulties at the moment. Kindly, try again after sometime.";
         this.paymentError.status = true;
         return;
       }
