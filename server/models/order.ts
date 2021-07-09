@@ -1,7 +1,8 @@
-import { mongoose } from "@helpers/essentials";
+import { mongoose, ObjectId } from "@helpers/essentials";
 
 /* schema */
 const schema = new mongoose.Schema({
+    paymentIntent: { type: ObjectId, ref: 'paymentIntents'},
     number: String,
     paymentGateway: String,
     gatewayResponse: Object,

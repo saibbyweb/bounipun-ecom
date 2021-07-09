@@ -407,8 +407,15 @@ export const methods = {
         if (!globalConfig)
             return false;
 
+        cartItems.forEach(item => {
+            item.price = this.adjustPrice(currency, item.price, globalConfig);
+        });
+
+        let cartTotal = sumBy(cartItems, item => item.price * item.quantity);
+
         /* cart total */
-        let cartTotal = sumBy(cartItems, item => this.adjustPrice(currency, item.price, globalConfig) * item.quantity);
+        // let cartTotal = sumBy(cartItems, item => this.adjustPrice(currency, item.price, globalConfig) * item.quantity);
+
         cartTotal = cartTotal.toFixed(2);
 
         console.log('CART_TOTAL --> ', cartTotal);
@@ -525,6 +532,7 @@ export const methods = {
             subTotal: subTotal * 100,
             shippingCharge: shippingCharge * 100,
             /* TODO: need to check tax.value [may toFixed(2) will fix it] */
+            /* TODO: get frontend and backend value EQUAL */
             tax: {
                 percentage: tax.percentage,
                 value: tax.value * 100
@@ -554,25 +562,43 @@ export const methods = {
         /* if validated, proceed with save order details in db */
 
         /* do the order placing routine */
+        const { deliveryAddress, cartItems, discountValue } = paymentIntent.payload;
+
         const orderDetails = {
+            paymentIntent: paymentIntent._id,
             number: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
             paymentGateway: gateway,
             gatewayResponse,
             transactionId,
             amount: paymentIntent.amount,
             currency: paymentIntent.currency,
-            deliveryAddress: paymentIntent.payload.deliveryAddress,
-            items: paymentIntent.payload.cartItems.map(item => (
-                {
+            deliveryAddress,
+            /* add shipping and taxes here */
+            items: cartItems.map(item => {
+                let itemAmount: any = item.price * item.quantity;
+                itemAmount = itemAmount.toFixed(2);
+
+                let discountPerItem: any = (discountValue/100/cartItems.length);
+                discountPerItem = discountPerItem.toFixed(2);
+
+                let taxableAmount: any = itemAmount - discountPerItem;
+                taxableAmount = taxableAmount.toFixed(2);
+
+
+               return {
                     _id: mongoose.Types.ObjectId(),
                     ...item,
+                    /* TODO: needs to be figured out */
+                    itemAmount,
+                    taxableAmount,
                     status: 'pending',
                     timeline: [],
                     trackingId: '',
                     trackingUrl: '',
                     delivered: ''
                 }
-            )),
+            }
+            ),
         }
 
         console.log(orderDetails);
