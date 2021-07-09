@@ -10,6 +10,7 @@ const twilioServiceId = process.env.TWILIO_VERIFY_SERVICE_ID
 import { methods as couponMethods } from "@models/coupon";
 import { methods as globalConfigMethods } from "@models/globalConfig";
 import payment, { methods as paymentMethods } from "@models/payment";
+import { methods as paymentIntentMethods } from "@models/paymentIntent";
 
 /* validate session */
 const { validateSession } = sessionMethods;
@@ -352,11 +353,19 @@ export const methods = {
             case "percentage":
                 discountValue = cartTotal * (coupon.value / 100);
                 break;
-            case "directDiscount":
+            case "direct-discount":
                 discountValue = coupon.value;
                 break;
         }
-        return discountValue.toFixed(2);
+
+        return {
+            coupon: {
+                code: coupon.code,
+                type: coupon.type,
+                value: coupon.value,
+            },
+            discountValue: discountValue.toFixed(2)
+        }
     },
     /* calculate shipping charge */
     calculateShippingCharge(totalOrderQuantity, currency, globalConfig) {
@@ -399,6 +408,7 @@ export const methods = {
 
         console.log('CART_TOTAL --> ', cartTotal);
 
+        let coupon: any = {};
         let discountValue: any = 0;
         let subTotal;
         let shippingCharge;
@@ -406,11 +416,14 @@ export const methods = {
 
         /* validate couponCode if provided */
         if (couponCode !== "") {
-            discountValue = await this.calculateCouponDiscountValue(cartTotal, couponCode, currency)
-                ;
-            /* if coupon not valid, stop execution */
-            if (discountValue === false)
+            const couponDetails = await this.calculateCouponDiscountValue(cartTotal, couponCode, currency);
+            if (couponDetails === false)
                 return false;
+
+            /* coupon */
+            coupon = couponDetails.coupon;
+            /* set discount value */
+            discountValue = couponDetails.discountValue;
         }
         /* calculate sub-total */
         subTotal = cartTotal - discountValue;
@@ -425,6 +438,7 @@ export const methods = {
         return {
             subTotal: subTotal.toFixed(2),
             discountValue,
+            coupon,
             shippingCharge,
             tax: {
                 percentage: currency === "INR"
@@ -447,7 +461,8 @@ export const methods = {
         if (orderTotal == false)
             return;
 
-        const { subTotal, discountValue, shippingCharge, tax, grandTotal } = orderTotal;
+        /* extracting details */
+        const { subTotal, coupon, discountValue, shippingCharge, tax, grandTotal } = orderTotal;
 
         console.log('GRAND TOTAL-->', orderTotal.grandTotal, grandTotal, amountToBeCharged);
 
@@ -494,14 +509,17 @@ export const methods = {
         }
 
         /* TODO: check finesse and mbm purchasing routine */
+        
+
         /* construct order details */
         const orderPayload = {
             deliveryAddress,
             cartItems: cartItems,
-            couponCode,
+            coupon,
             discountValue: discountValue * 100,
             subTotal: subTotal * 100,
             shippingCharge: shippingCharge * 100,
+            /* TODO: need to check tax.value [may toFixed(2) will fix it] */
             tax: {
                 percentage: tax.percentage,
                 value: tax.value * 100
@@ -512,11 +530,18 @@ export const methods = {
 
         return orderPayload;
     },
-    async placeOrder(gatewayToken) {
+    async verifyGatewayToken() {
+
+    },
+    async placeOrder(gatewayToken, gateway) {
         /* verify token is valid */
+        const paymentIntent = await paymentIntentMethods.fetchPaymentIntent(gatewayToken);
+        if (paymentIntent === false)
+            return false;
         /* if valid, check if any dublicate already exists or not */
         /* if validated, proceed with save order details in db */
         /* do the order placing routine */
+        
         /* notify the interested parties */
     }
 }

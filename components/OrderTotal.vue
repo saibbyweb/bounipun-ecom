@@ -96,7 +96,7 @@ export default {
         case "percentage":
           discountValue = this.cartTotal * (this.coupon.value / 100);
           break;
-        case "directDiscount":
+        case "direct-discount":
           discountValue = this.coupon.value;
           break;
       }

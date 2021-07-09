@@ -12,6 +12,12 @@
     <InputBox v-model="doc.code" label="Bounipun Code" :internal="true" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
+    
+    <!-- hsnCode -->
+    <InputBox v-model="doc.hsnCode" label="HSN Code" />
+    <!-- gstPercentage -->
+    <InputBox v-model="doc.gstPercentage" label="GST Percentage" />
+
     <!-- info #1 -->
     <InputBox v-model="doc.info1" label="Info #1" />
     <!-- info #2 -->
@@ -62,6 +68,8 @@ export default {
                 description: "",
                 info1: "",
                 info2: "",
+                hsnCode: "",
+                gstPercentage: "",
                 image: "",
                 hex: "",
                 status: false
@@ -114,6 +122,8 @@ export default {
                 description,
                 info1,
                 info2,
+                hsnCode,
+                gstPercentage,
                 image,
                 hex,
                 status
@@ -126,6 +136,8 @@ export default {
                 description,
                 info1,
                 info2,
+                hsnCode,
+                gstPercentage,
                 image,
                 hex,
                 status
@@ -140,6 +152,7 @@ export default {
             this.$refs.imageUploader.clearFileSelection();
 
             this.populateForm({
+
                 _id: "",
                 name: "",
                 category: "",
@@ -147,10 +160,14 @@ export default {
                 description: "",
                 info1: "",
                 info2: "",
+                hsnCode: "",
+                gstPercentage: "",
                 image: "",
                 hex: "",
                 status: false
+
             });
+
             this.editMode = false;
         }
     }

@@ -14,7 +14,7 @@ const router = server.express.Router();
 router.post('/fetchGlobalConfig', async (req, res) => {
     let response = { resolved: false, globalConfig: {} }
     const fetchGlobalConfig: any = db.model('globalConfig').findOne({ bounipun_id: "saibbyweb" }).select('currencyMultiplier dollarValue domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage');
-    
+
     /* config */
     const { response: config, error } = await task(fetchGlobalConfig);
 
@@ -46,21 +46,21 @@ router.post('/fetchCoupon', userAuth('customer', false), async (req, res) => {
 
 /* create payment intent order */
 router.post('/createPaymentIntent', userAuth('customer'), async (req, res) => {
-    const response = { resolved: false, intentId: "", gatewayToken: "", amount: 0};
-    
+    const response = { resolved: false, intentId: "", gatewayToken: "", amount: 0 };
+
     /* TODO: verify gateway */
     const { user, intentType, amountToBeCharged, currency, gateway, couponCode, deliveryAddress } = req.body;
-    
+
     /* payload (can be for order or anything) */
     let payload;
 
     switch (intentType) {
         case "order":
             /* create order payload */
-            payload = await userMethods.createOrderPayload(user.cart, amountToBeCharged,currency,couponCode, deliveryAddress);
-            
+            payload = await userMethods.createOrderPayload(user.cart, amountToBeCharged, currency, couponCode, deliveryAddress);
+
             /* if verification failed, stop execution */
-            if(payload === false) {
+            if (payload === false) {
                 res.send(response);
                 return;
             }
@@ -92,7 +92,7 @@ router.post('/createPaymentIntent', userAuth('customer'), async (req, res) => {
 
 /* process stripe payment */
 router.post('/processStripePayment', userAuth('customer'), async (req, res) => {
-       
+
 });
 
 /*  stripe webhooks */
@@ -109,6 +109,7 @@ router.post('/stripeWebhook', async (req, res) => {
             const paymentIntent = event.data.object;
             console.log('CLIENT_SECRET', paymentIntent.client_secret);
             // paymentSucceeded()
+            await userMethods.placeOrder(paymentIntent.client_secret, 'stripe');
             break;
     }
 

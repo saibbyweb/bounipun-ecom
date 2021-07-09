@@ -34,8 +34,9 @@ export const methods = {
         const newPaymentIntent = await new model(options).save();
         return newPaymentIntent;
     },
-    async capturePaymentIntent(details) {
-        
+    async fetchPaymentIntent(gatewayToken) {
+        const paymentIntent = await model.findOne({'payload.gatewatToken': gatewayToken });
+        return paymentIntent !== null ? paymentIntent : false;
     },
     stripePaymentSucceeded(intentId, amount, currency) {
         /* get stripe intent id from db */

@@ -11,6 +11,8 @@ const schema = new mongoose.Schema({
     description: { type: String, default: '' },
     info1: { type: String, default: '' },
     info2: { type: String, default: '' },
+    hsnCode: String,
+    gstPercentage: Number,
     image: String,
     hex: String,
     order: Number,

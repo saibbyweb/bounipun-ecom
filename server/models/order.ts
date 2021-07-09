@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
     currency: String,
     deliveryAddress: Object,
     items: Array,
-    /* all four field below are sub-orders as well */
+    /* all four field below are for sub-orders as well */
     status: String,
     delivered: Date,
     trackingId: String,
