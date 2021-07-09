@@ -100,16 +100,16 @@ router.post('/stripeWebhook', async (req, res) => {
     const event = req.body;
 
     /* TODO: dude, verify the signature first */
-    console.log(event);
+    // console.log(event);
     const amount = event.data.object.amount;
     const currency = event.data.object.currency;
 
     switch (event.type) {
         case "payment_intent.succeeded":
             const paymentIntent = event.data.object;
-            console.log('CLIENT_SECRET', paymentIntent.client_secret);
-            // paymentSucceeded()
-            await userMethods.placeOrder(paymentIntent.client_secret, 'stripe');
+            // console.log('CLIENT_SECRET', paymentIntent.client_secret);
+            const { id: transactionId, client_secret } = paymentIntent;
+            await userMethods.placeOrder(client_secret, transactionId, 'stripe');
             break;
     }
 

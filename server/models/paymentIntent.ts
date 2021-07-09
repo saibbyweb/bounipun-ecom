@@ -9,7 +9,11 @@ const schema = new mongoose.Schema({
     amount: Number,
     currency: String,
     gateway: String,
-    payload: mongoose.Schema.Types.Mixed
+    payload: mongoose.Schema.Types.Mixed,
+    valid: {
+        type: Boolean,
+        default: true
+    }
 }, {
     timestamps: true
 });
@@ -35,7 +39,7 @@ export const methods = {
         return newPaymentIntent;
     },
     async fetchPaymentIntent(gatewayToken) {
-        const paymentIntent = await model.findOne({'payload.gatewatToken': gatewayToken });
+        const paymentIntent = await model.findOne({'payload.gatewatToken': gatewayToken, status: true });
         return paymentIntent !== null ? paymentIntent : false;
     },
     stripePaymentSucceeded(intentId, amount, currency) {

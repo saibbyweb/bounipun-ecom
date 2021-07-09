@@ -538,7 +538,11 @@ export const methods = {
     async verifyGatewayToken() {
 
     },
-    async placeOrder(gatewayToken, gateway) {
+    async placeOrder(gatewayToken, transactionId, gateway) {
+        console.log(gatewayToken);
+        console.log(transactionId);
+        console.log(gateway);
+
         /* verify token is valid */
         const paymentIntent = await paymentIntentMethods.fetchPaymentIntent(gatewayToken);
         if (paymentIntent === false)
@@ -546,7 +550,7 @@ export const methods = {
         /* if valid, check if any dublicate already exists or not */
         /* if validated, proceed with save order details in db */
         /* do the order placing routine */
-        
+        /* mark payment intent as invalid */
         /* notify the interested parties */
     }
 }
