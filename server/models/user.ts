@@ -213,7 +213,7 @@ export const methods = {
             const fetchProduct = db.model('products')
                 .findOne({ _id: productId, status: true })
                 .populate('bounipun_collection', { _id: 0, name: 1 })
-                .populate('variants._id', { name: 1, hsnCode:1 , gstPercentage: 1 })
+                .populate('variants._id', { name: 1, hsnCode: 1, gstPercentage: 1 })
                 .populate('variants.fabrics._id', { name: 1, info1: 1 })
                 .populate('colors._id', { name: 1 })
                 .select('name styleId type availabilityType directPrice variants.fabrics.price colors.name colors.code colors.images')
@@ -304,7 +304,7 @@ export const methods = {
                 cartItem.variantName = selectedVariant._id.name;
                 cartItem.hsnCode = selectedVariant._id.hsnCode;
                 cartItem.gstPercentage = selectedVariant._id.gstPercentage;
-                console.log('I WAS HERE BROO', cartItem)
+                
 
                 /* fabric name (if made to order) */
                 const selectedFabric = selectedVariant.fabrics.find(fabric => fabric._id._id.toString() === item.fabric.toString());
@@ -514,7 +514,7 @@ export const methods = {
         }
 
         /* TODO: check finesse and mbm purchasing routine */
-        
+
 
         /* construct order details */
         const orderPayload = {
@@ -538,19 +538,54 @@ export const methods = {
     async verifyGatewayToken() {
 
     },
-    async placeOrder(gatewayToken, transactionId, gateway) {
+    async placeOrder(gatewayToken, transactionId, gateway, gatewayResponse) {
         console.log(gatewayToken);
         console.log(transactionId);
         console.log(gateway);
 
         /* verify token is valid */
-        const paymentIntent = await paymentIntentMethods.fetchPaymentIntent(gatewayToken);
+        const paymentIntent: any = await paymentIntentMethods.fetchPaymentIntent(gatewayToken);
+
+        console.log(paymentIntent);
+
         if (paymentIntent === false)
             return false;
         /* if valid, check if any dublicate already exists or not */
         /* if validated, proceed with save order details in db */
+
         /* do the order placing routine */
+        const orderDetails = {
+            number: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
+            paymentGateway: gateway,
+            gatewayResponse,
+            transactionId,
+            amount: paymentIntent.amount,
+            currency: paymentIntent.currency,
+            deliveryAddress: paymentIntent.payload.deliveryAddress,
+            items: paymentIntent.payload.cartItems.map(item => (
+                {
+                    _id: mongoose.Types.ObjectId(),
+                    ...item,
+                    status: 'pending',
+                    timeline: [],
+                    trackingId: '',
+                    trackingUrl: '',
+                    delivered: ''
+                }
+            )),
+        }
+
+        console.log(orderDetails);
+        return;
+
+        /* save processed order in database */
+        const ordersCollection = db.model('orders');
+        /* save order details to database */
+        const orderSaved = await new ordersCollection(orderDetails).save();
+        /* save order id to user account */
+        const userOrdersUpdated = await db.model('users').findOneAndUpdate({ _id: paymentIntent.createdBy }, { $push: { orders: orderSaved._id } });
         /* mark payment intent as invalid */
+        await paymentIntentMethods.setIntentAsInvalid(paymentIntent._id);
         /* notify the interested parties */
     }
 }

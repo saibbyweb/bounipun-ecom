@@ -75,6 +75,7 @@ router.post('/createPaymentIntent', userAuth('customer'), async (req, res) => {
     /* save payment intent in database */
     const paymentIntent = await paymentIntentMethods.createNew({
         intentType,
+        createdBy: user._id,
         amount: amountToBeCharged * 100,
         currency,
         gateway,
@@ -109,7 +110,7 @@ router.post('/stripeWebhook', async (req, res) => {
             const paymentIntent = event.data.object;
             // console.log('CLIENT_SECRET', paymentIntent.client_secret);
             const { id: transactionId, client_secret } = paymentIntent;
-            await userMethods.placeOrder(client_secret, transactionId, 'stripe');
+            await userMethods.placeOrder(client_secret, transactionId, 'stripe', {});
             break;
     }
 

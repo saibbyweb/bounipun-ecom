@@ -6,6 +6,7 @@ const schema = new mongoose.Schema({
         type: String,
         enum: ['order','giftcard']
     },
+    createdBy: { type: ObjectId, ref: 'users' },
     amount: Number,
     currency: String,
     gateway: String,
@@ -25,6 +26,7 @@ const model = mongoose.model(modelName, schema);
 /* intent options type */
 type IntentOptions = {
     intentType: string,
+    createdBy: string,
     amount: number,
     currency: string,
     gateway: string,
@@ -39,8 +41,11 @@ export const methods = {
         return newPaymentIntent;
     },
     async fetchPaymentIntent(gatewayToken) {
-        const paymentIntent = await model.findOne({'payload.gatewatToken': gatewayToken, status: true });
+        const paymentIntent = await model.findOne({'payload.gatewayToken': gatewayToken, valid: true });
         return paymentIntent !== null ? paymentIntent : false;
+    },
+    async setIntentAsInvalid(_id) {
+       return await model.findOneAndUpdate({ _id }, { status: false });
     },
     stripePaymentSucceeded(intentId, amount, currency) {
         /* get stripe intent id from db */
