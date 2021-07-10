@@ -46,8 +46,22 @@
       <!-- label order items -->
       <label class="label"> Ordered Item(s): </label>
       <div class="item" v-for="(subOrder, index) in doc.items" :key="index">
-        <OrderItem :orderId="doc._id" :item="subOrder" :allowUpdate="false" />
+        <OrderItem
+          :orderId="doc._id"
+          :item="subOrder"
+          :allowUpdate="false"
+          @subOrderUpdated="refetchDoc"
+        />
       </div>
+    </div>
+
+    <!-- shipping charges -->
+    <div class="extra-charges">
+      <p>Cart Total: {{ doc.currency }} {{ cartTotal }}</p>
+      <p>Subtotal: {{ doc.currency }} {{ doc.subTotal / 100 }}</p>
+      <p>Discount: {{ doc.currency }} {{ doc.discountValue / 100 }}</p>
+      <p>Shipping: {{ doc.currency }} {{ doc.shippingCharge / 100 }}</p>
+      <p>Grand Total: {{ doc.currency }} {{ doc.amount / 100 }}</p>
     </div>
 
     <!-- update order status -->
@@ -84,6 +98,10 @@ const baseDoc = () => ({
   paymentGateway: "",
   transactionId: "",
   amount: "",
+  currency: "",
+  subTotal: "",
+  discountValue: "",
+  shippingCharge: "",
   deliveryAddress: {
     firstName: "",
     surName: "",
@@ -112,6 +130,13 @@ export default {
   mounted() {
     // this.fetchAllProductLists();
   },
+  computed: {
+    cartTotal() {
+      return (
+        (parseInt(this.doc.subTotal) + parseInt(this.doc.discountValue)) / 100
+      );
+    }
+  },
   methods: {
     async updateDocument() {
       this.loading = true;
@@ -121,7 +146,7 @@ export default {
         this.editMode
       );
       this.loading = false;
-
+      console.log(result.doc);
       if (!result.updated) return;
 
       this.$emit("updated");
@@ -139,27 +164,48 @@ export default {
       this.resetForm();
       this.$flash(this);
     },
+    async refetchDoc() {
+      const result = await this.$fetchDocument('orders', this.doc._id, "admin");
+
+      if (!result.fetched) {
+        return;
+      }
+      console.log(result,'--FROM REFETCH DOC')
+      this.populateForm(result.doc);
+
+    },
     populateForm(details) {
+      console.log("POPULATE WAS CALLED");
       const {
         _id,
         items,
         number,
         paymentGateway,
         transactionId,
+        currency,
         amount,
+        subTotal,
+        discountValue,
+        shippingCharge,
         deliveryAddress,
         status
       } = details;
+
       this.doc = {
         _id,
         items,
         number,
         paymentGateway,
+        currency,
         transactionId,
         amount,
+        subTotal,
+        shippingCharge,
+        discountValue,
         deliveryAddress
       };
       this.editMode = true;
+      this.$forceUpdate();
     },
     closeForm() {
       this.resetForm();
@@ -209,6 +255,6 @@ export default {
 }
 
 .items {
-    margin-top:10px;
+  margin-top: 10px;
 }
 </style>

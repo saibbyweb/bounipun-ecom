@@ -257,7 +257,7 @@ router.get('/test', async (req, res) => {
     res.send('bro');
 })
 
-/* update order */
+/* update order (of lists in admin panel) */
 router.post('/updateOrder', async (req, res) => {
 
     const { model, newList } = req.body;
@@ -275,9 +275,9 @@ router.post('/updateOrderItemDetails', async (req, res) => {
     console.log('req received:')
     console.log(req.body);
     const { orderId, subOrderId, status, trackingId, trackingUrl } = req.body;
-    // const filter = { _id: orderId, 'items._id': mongoose.Types.ObjectId(subOrderId) };
+    const filter = { _id: orderId, 'items._id': mongoose.Types.ObjectId(subOrderId) };
 
-    const filter = { _id: orderId, 'items._id': subOrderId };
+    // const filter = { id: orderId, 'items._id': subOrderId };
 
 
     /* update order with new details */
@@ -289,10 +289,12 @@ router.post('/updateOrderItemDetails', async (req, res) => {
         }
     });
 
-    // console.log(originalOrder);
+    console.log(filter);
 
     /* find sub-order */
     let subOrder = originalOrder.items.find(item => item._id.toString() === subOrderId.toString());
+
+    console.log(subOrder, status);
 
     /* if sub order status changed, update timeline */
     if (subOrder.status !== status) {

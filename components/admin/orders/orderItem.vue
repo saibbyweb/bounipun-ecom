@@ -46,13 +46,26 @@
         label="Tracking URL"
         v-model="localItem.trackingUrl"
       />
-      <!-- update status -->
+
+      <!-- order timeline -->
+      <div class="timeline flex center">
+        <p class="label"> Timeline: </p>
+        <div class="list flex col">
+          <span v-for="(event, index) in localItem.timeline" :key="index"> 
+            {{ event.status }} --- {{ $formatDate(event.updatedAt) }} 
+            </span>
+        </div>
+
+      </div>
+
+            <!-- update status -->
       <SelectBox
         class="status"
         :options="allStatusUpdates"
         v-model="localItem.status"
         label="Set Order Status:"
       />
+
 
       <button class="update" @click="updateOrder">Update Order</button>
 
@@ -116,6 +129,7 @@ export default {
         }
 
         this.updated = true;
+        this.$emit('subOrderUpdated');
         setTimeout(() => this.updated = false, 1300)
         
     }
@@ -243,6 +257,20 @@ export default {
     .status {
       width: 60%;
       margin-left: 10px;
+    }
+    .timeline {
+      width:100%;
+      .label {
+        width:20%;
+      }
+      .list {
+        width:70%;
+        span {
+          font-size:12px;
+          border:1px dashed #efefef;
+          text-transform: capitalize;
+        }
+      }
     }
 
     .update {

@@ -202,29 +202,62 @@ export default (context, inject) => {
     $store.commit("admin/setLoading", false);
 
     /* if error occurred */
-    if(error) {
+    if (error) {
       return { response, resolved: false };
     }
 
     if (response.resolved === false) {
-      if(response.resolved === false) {
-        console.log(`%c Request not resolved: ${endpoint} with payload: ${JSON.stringify(payload)}`, 'color: red');
+      if (response.resolved === false) {
+        console.log(
+          `%c Request not resolved: ${endpoint} with payload: ${JSON.stringify(
+            payload
+          )}`,
+          "color: red"
+        );
       }
-      return { response, resolved: false }
+      return { response, resolved: false };
     }
-
 
     /* if request resolved */
     return { response, resolved: true };
   };
 
   /* vibrate device */
-  const vibrateDevice = (duration) => {
-    if("vibrate" in navigator) {
+  const vibrateDevice = duration => {
+    if ("vibrate" in navigator) {
       navigator.vibrate(duration);
-      console.log('vibrate device')
+      console.log("vibrate device");
     }
-  }
+  };
+
+  /* format date */
+  const formatDate = function(date) {
+    date = new Date(date);
+    const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ];
+    return (
+      date.getDate() +
+      " " +
+      months[date.getMonth()] +
+      ", " +
+      date.getFullYear() +
+      " - " +
+      date.toLocaleTimeString()
+      + " IST"
+    );
+  };
 
   inject("fetchCollection", fetchCollection);
   inject("fetchPaginatedResults", fetchPaginatedResults);
@@ -236,4 +269,5 @@ export default (context, inject) => {
   inject("flash", flash);
   inject("post", httpPostRequest);
   inject("vibrateDevice", vibrateDevice);
+  inject("formatDate", formatDate);
 };

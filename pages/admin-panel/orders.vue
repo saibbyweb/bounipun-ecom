@@ -15,7 +15,7 @@
         :list="list"
         :model="model"
         :headings="headings"
-        custom_css="10% 60% 20% 10%"
+        custom_css="10% 40% 20% 10% 20%"
         :sortByFields="sortByFields"
         @documentFetched="documentFetched"
         @sortToggled="sortToggled"
@@ -62,7 +62,7 @@ export default {
       },
       list: [],
       sortByFields: ["number, status"],
-      headings: ["_id", "number", "amount", "status"]
+      headings: ["_id", "number", "amount", "currency", "createdAt"]
     };
   },
   methods: {
@@ -88,12 +88,13 @@ export default {
       }
 
       /* extract list */
-      this.list = result.docs.map(({ _id, number, amount, status }) => {
+      this.list = result.docs.map(({ _id, number, amount, currency, createdAt }) => {
         return {
           _id,
           number,
-          amount,
-          status
+          amount: amount/100,
+          currency,
+          createdAt: this.$formatDate(createdAt)
         };
       });
     }
