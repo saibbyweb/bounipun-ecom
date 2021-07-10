@@ -546,7 +546,7 @@ export const methods = {
     async verifyGatewayToken() {
 
     },
-    async placeOrder(gatewayToken, transactionId, gateway, gatewayResponse) {
+    async placeOrder(gatewayToken, transactionId, gateway) {
         console.log(gatewayToken);
         console.log(transactionId);
         console.log(gateway);
@@ -568,7 +568,6 @@ export const methods = {
             paymentIntent: paymentIntent._id,
             number: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
             paymentGateway: gateway,
-            gatewayResponse,
             transactionId,
             amount: paymentIntent.amount,
             currency: paymentIntent.currency,

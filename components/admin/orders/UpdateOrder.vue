@@ -51,6 +51,7 @@
           :item="subOrder"
           :allowUpdate="false"
           @subOrderUpdated="refetchDoc"
+          :currency="doc.currency"
         />
       </div>
     </div>

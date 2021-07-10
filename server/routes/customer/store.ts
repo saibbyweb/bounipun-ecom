@@ -110,12 +110,20 @@ router.post('/stripeWebhook', async (req, res) => {
             const paymentIntent = event.data.object;
             // console.log('CLIENT_SECRET', paymentIntent.client_secret);
             const { id: transactionId, client_secret } = paymentIntent;
-            await userMethods.placeOrder(client_secret, transactionId, 'stripe', {});
+            await userMethods.placeOrder(client_secret, transactionId, 'stripe');
             break;
     }
 
     res.send({ resolved: true })
 
+});
+
+/* razorpay payment success */
+router.post('/razorpayPaymentSuccess', async(req, res) => {
+    const { razorpay_order_id, transactionId } = req.body;
+    console.log(req.body);
+    await userMethods.placeOrder(razorpay_order_id, transactionId, 'razorpay');
+    res.send({ resolved: true });
 });
 
 export default router;

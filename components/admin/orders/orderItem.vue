@@ -24,13 +24,14 @@
         <!-- fabric info 1-->
         <span class="fabric"> {{ localItem.fabricInfo1 }} </span>
         <!-- price -->
-        <span class="price"> INR {{ localItem.price }} </span>
+        <span class="price"> {{ currency }} {{ localItem.price }} </span>
         <!-- quantity -->
         <span class="quantity"> Quantity: {{ localItem.quantity }} </span>
       </div>
 
       <!-- total product price -->
-      <p class="total-product-price">INR {{ localItem.quantity * localItem.price }}</p>
+      <!-- <p class="total-product-price">INR {{ localItem.quantity * localItem.price }}</p> -->
+       <p class="total-product-price"> {{ currency }}  {{ localItem.itemTotal }}</p>
     </div>
     <!-- actions -->
     <div class="actions flex wrap v-center">
@@ -78,7 +79,11 @@
 export default {
   props: {
     orderId: String,
-    item: Object
+    item: Object,
+    currency: {
+      type: String,
+      default: ''
+    }
   },
   watch: {
     item(newVal) {

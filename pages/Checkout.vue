@@ -9,7 +9,7 @@
     <div class="order-overview flex center">
       <!-- cart items -->
       <div class="cart-items flex center col">
-      <h3 class="section-heading">Products</h3>
+        <h3 class="section-heading">Products</h3>
 
         <CartItem
           v-for="(item, index) in $store.state.customer.globalRemoteCart"
@@ -39,7 +39,6 @@
         <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
         <!-- TODO: show user consent checkbox for combined delivery for all items -->
         <div class="order-total-container">
-
           <OrderTotal
             v-if="!cartEmpty"
             :deliveryAddress="deliveryAddress"
@@ -81,7 +80,6 @@
           >
             Place Order
           </button>
-
         </div>
       </div>
     </div>
@@ -146,8 +144,8 @@ export default {
     /* create payment intent */
 
     /* according to currency, setup payment options */
-
-    this.initializeStripe();
+    if(this.currency.trim() !== "INR")
+      this.initializeStripe();
     // if (this.currency.trim() === "INR") this.fetchRazorpayOrderId();
     // else this.initializeStripe();
   },
@@ -237,20 +235,6 @@ export default {
 
       element.mount("#stripe-mount");
     },
-    async fetchRazorpayOrderId() {
-      const razorpayOrder = await this.$post("/createRazorpayOrder", {
-        amountToBeCharged: this.subTotal,
-        deliveryAddress: this.deliveryAddress
-      });
-
-      if (razorpayOrder.resolved === false) return;
-
-      console.log(razorpayOrder);
-
-      this.setupRazorpayOrder(razorpayOrder.response.razorpayOrderId);
-      /* save payment intent id */
-      this.paymentIntentId = razorpayOrder.response.paymentIntentId;
-    },
     onPaymentIntentCreated(details) {
       /* save payment intent id */
       this.paymentIntentId = details.intentId;
@@ -278,15 +262,10 @@ export default {
             razorpay_signature
           } = response;
 
-          /* complete checkout routine */
-          const completeCheckout = await this.$post("/completeCheckout", {
-            gateway: "razorpay",
-            gatewayResponse: {
-              razorpay_order_id,
-              razorpay_payment_id,
-              razorpay_signature
-            },
-            paymentIntentId: this.paymentIntentId
+          // /* complete checkout routine */
+          const completeCheckout = await this.$post("/razorpayPaymentSuccess", {
+            razorpay_order_id,
+            transactionId: razorpay_payment_id,
           });
 
           if (completeCheckout.resolved === false) {
@@ -350,16 +329,17 @@ export default {
           shipping: this.stripeShippingObject
         }
       );
-      
+
       /* if error occurred while processing card payment */
       if (error) {
         console.log("could not process STRIPE PAYMENT");
         console.log(error);
-        this.paymentError.msg = "We are facing some technical difficulties at the moment. Kindly, try again after sometime.";
+        this.paymentError.msg =
+          "We are facing some technical difficulties at the moment. Kindly, try again after sometime.";
         this.paymentError.status = true;
         return;
       }
-      
+
       /* move to order placed page */
       this.$router.push("/order-placed-successfully");
     }
@@ -369,12 +349,11 @@ export default {
 
 <style lang="scss" scoped>
 .checkout-page {
-  
-  margin-top:12vh;
+  margin-top: 12vh;
 
   .title {
-  font-size: 30px !important;
-}
+    font-size: 30px !important;
+  }
 }
 
 .order-overview {
@@ -403,9 +382,8 @@ export default {
     }
     .d-o-p {
       width: 100%;
-       padding: 0 20px;
+      padding: 0 20px;
       .order-total-container {
-       
       }
     }
   }
@@ -467,7 +445,7 @@ export default {
 }
 .checkout-btn {
   width: 100%;
-  margin-top:20px;
+  margin-top: 20px;
   &.disabled {
     background-color: gray;
   }
