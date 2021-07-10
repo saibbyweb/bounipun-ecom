@@ -359,8 +359,9 @@ export default {
         this.paymentError.status = true;
         return;
       }
-
-      alert("PAYMENT_PROCEESED_SUCCESSFULLY");
+      
+      /* move to order placed page */
+      this.$router.push("/order-placed-successfully");
     }
   }
 };

@@ -27,6 +27,8 @@
       <span class="fabric"> {{ item.fabricInfo1 }} </span>
       <!-- price -->
       <span class="price"> {{ currency }} {{ adjustPrice(item.price) }} </span>
+      <!-- qty -->
+      <span v-if="!allowUpdate" class="qty"> Qty: {{ item.quantity }} </span>
 
       <!-- quantity picker -->
       <div v-if="allowUpdate" class="quantity-picker">
@@ -34,6 +36,7 @@
         <button class="qty">{{ item.quantity }}</button>
         <button @click.stop="emitUpdateQuantity(item, 'increase')">+</button>
       </div>
+
     </div>
     <!-- remove item -->
     <img

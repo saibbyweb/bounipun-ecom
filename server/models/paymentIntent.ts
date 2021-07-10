@@ -45,7 +45,7 @@ export const methods = {
         return paymentIntent !== null ? paymentIntent : false;
     },
     async setIntentAsInvalid(_id) {
-       return await model.findOneAndUpdate({ _id }, { status: false });
+       return await model.findOneAndUpdate({ _id }, { valid: false });
     },
     stripePaymentSucceeded(intentId, amount, currency) {
         /* get stripe intent id from db */

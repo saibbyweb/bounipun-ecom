@@ -562,7 +562,7 @@ export const methods = {
         /* if validated, proceed with save order details in db */
 
         /* do the order placing routine */
-        const { deliveryAddress, cartItems, discountValue } = paymentIntent.payload;
+        const { deliveryAddress, cartItems, subTotal, discountValue, shippingCharge } = paymentIntent.payload;
 
         const orderDetails = {
             paymentIntent: paymentIntent._id,
@@ -573,6 +573,9 @@ export const methods = {
             amount: paymentIntent.amount,
             currency: paymentIntent.currency,
             deliveryAddress,
+            subTotal,
+            discountValue,
+            shippingCharge,
             /* add shipping and taxes here */
             items: cartItems.map(item => {
                 let itemAmount: any = item.price * item.quantity;
@@ -581,8 +584,8 @@ export const methods = {
                 let discountPerItem: any = (discountValue/100/cartItems.length);
                 discountPerItem = discountPerItem.toFixed(2);
 
-                let taxableAmount: any = itemAmount - discountPerItem;
-                taxableAmount = taxableAmount.toFixed(2);
+                let itemTotal: any = itemAmount - discountPerItem;
+                itemTotal = itemTotal.toFixed(2);
 
 
                return {
@@ -590,7 +593,7 @@ export const methods = {
                     ...item,
                     /* TODO: needs to be figured out */
                     itemAmount,
-                    taxableAmount,
+                    itemTotal,
                     status: 'pending',
                     timeline: [],
                     trackingId: '',
@@ -601,9 +604,6 @@ export const methods = {
             ),
         }
 
-        console.log(orderDetails);
-        return;
-
         /* save processed order in database */
         const ordersCollection = db.model('orders');
         /* save order details to database */
@@ -613,6 +613,7 @@ export const methods = {
         /* mark payment intent as invalid */
         await paymentIntentMethods.setIntentAsInvalid(paymentIntent._id);
         /* notify the interested parties */
+        return true;
     }
 }
 

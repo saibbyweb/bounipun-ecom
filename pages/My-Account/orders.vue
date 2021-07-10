@@ -26,8 +26,11 @@
           <span class="fabric"> Fabric: {{ subOrder.fabricName }} </span>
           <span class="fabric"> {{ subOrder.fabricInfo1 }} </span>
           <span class="quantity"> Quantity: {{ subOrder.quantity }} </span>
-          <span class="price">
+          <!-- <span class="price">
             Amount Paid: <b>  {{ order.currency }} {{ subOrder.quantity * subOrder.price }} </b>
+          </span> -->
+          <span class="price">
+            Amount Paid: <b>  {{ order.currency }} {{ subOrder.itemTotal }} </b>
           </span>
         </div>
       </div>

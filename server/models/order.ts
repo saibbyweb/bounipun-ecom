@@ -10,6 +10,9 @@ const schema = new mongoose.Schema({
     amount: String,
     currency: String,
     deliveryAddress: Object,
+    subTotal: String,
+    discountValue: String,
+    shippingCharge: String,
     items: Array,
     /* all four field below are for sub-orders as well */
     status: String,

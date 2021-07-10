@@ -114,7 +114,8 @@ router.post('/stripeWebhook', async (req, res) => {
             break;
     }
 
-    res.send('okay')
+    res.send({ resolved: true })
 
 });
+
 export default router;

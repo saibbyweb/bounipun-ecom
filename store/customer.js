@@ -161,6 +161,19 @@ export const getters = {
       item => getters.adjustPrice(item.price) * item.quantity
     );
   },
+  /* discount amount per item */
+  getDiscountAmountPerItem() {
+    let discountPerItem = (discountValue/100/cartItems.length);
+    return discountPerItem.toFixed(2);
+  },
+  /* applied with discount */
+  getSubTotal(state, getters) {
+    return sumBy(state.globalRemoteCart, (item) => {
+      const itemAmount = getters.adjustPrice(item.price) * item.quantity;
+     
+
+    })
+  },
   getTotalCartItems(state) {
     return sumBy(state.globalRemoteCart, item => item.quantity)
   },
