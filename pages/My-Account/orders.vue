@@ -1,53 +1,7 @@
 <template>
   <div class="page orders">
-    <!-- cancellation form -->
-    <div class="cancellation-form shadow">
-      <!-- title -->
-      <div class="title flex between v-center">
-        <h1 class="">Cancel Order</h1>
-        <img class="close" src="/icons/light/close.png" @click="orderCancelled = false"/>
-      </div>
-
-      <!-- reason -->
-      <div v-if="!orderCancelled" class="cancellation-box">
-        <!-- reasons -->
-        <div
-          class="reason"
-          v-for="(reason, index) in cancellationReasons"
-          :key="index"
-        >
-          <label>
-            <input
-              class="radio"
-              type="radio"
-              name="reason"
-              :value="reason"
-              v-model="selectedReason"
-            />
-            {{ reason }}
-          </label>
-          <br />
-        </div>
-
-        <!-- custom reason text -->
-        <InputBox label="Cancellation Reason" v-model="selectedReason" />
-
-        <div class="actions flex around">
-          <button class="action confirm-cancel" @click="orderCancelled = true">Confirm Cancellation</button>
-          <button class="action dont-cancel">
-            I don't want to cancel
-          </button>
-        </div>
-      </div>
-
-      <!-- cacellation confirmation -->
-      <div v-if="orderCancelled" class="cancelled">
-        <p> Your cancellation request has been successfully processed. Refund has
-        been initiated against the payment method used for this order. Please
-        note that it can take upto 7-15 business days for money to reflect in
-        your account.</p>
-      </div>
-    </div>
+    
+    <CancelOrder v-if="showCancellationForm" @hideForm="showCancellationForm = false"/>
 
     <!-- loop through every order -->
     <div v-for="order in orders" :key="order._id">
@@ -80,6 +34,7 @@
             <span class="fabric"> Fabric: {{ subOrder.fabricName }} </span>
             <span class="fabric"> {{ subOrder.fabricInfo1 }} </span>
             <span class="quantity"> Quantity: {{ subOrder.quantity }} </span>
+            <span class="ordered-at"> {{ $formatDate(order.createdAt) }} </span>
             <!-- <span class="price">
             Amount Paid: <b>  {{ order.currency }} {{ subOrder.quantity * subOrder.price }} </b>
           </span> -->
@@ -98,7 +53,7 @@
           <!-- pre delivery -->
           <div class="pre-delivery">
             <button>Track</button>
-            <button :disabled="true">Cancel</button>
+            <button @click="showCancellationForm = true">Cancel</button>
             <button>Help</button>
           </div>
           <!-- post delivery -->
@@ -116,12 +71,7 @@ export default {
   data() {
     return {
       orders: [],
-      cancellationReasons: [
-        "I have purchased the wrong item",
-        "I found the price compartively higher"
-      ],
-      selectedReason: "",
-      orderCancelled: false
+      showCancellationForm: false
     };
   },
   mounted() {
@@ -143,55 +93,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.cancellation-form {
-  .title {
-    background-color: $dark_gray;
-    padding: 10px;
-
-    h1 {
-      font-size: 22px;
-      color: white;
-    }
-
-    .close {
-      width: 20px;
-      height:20px;
-    }
-  }
-  .cancellation-box {
-    padding: 10px;
-
-    .reason {
-      label {
-        cursor: pointer;
-        font-size: 13px;
-        .radio {
-        }
-      }
-    }
-    .actions {
-      button {
-        font-size: 9px;
-        padding:3% 1%;
-
-        &.confirm-cancel {
-          width: 42%;
-          background-color: $gray;
-        }
-
-        &.dont-cancel {
-          width: 55%;
-        }
-      }
-    }
-  }
-  .cancelled {
-    padding:10px;
-    p {
-      font-size:13px;
-    }
-  }
-}
 .orders {
   .order-item {
     width: 100%;
