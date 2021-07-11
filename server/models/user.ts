@@ -11,6 +11,7 @@ import { methods as couponMethods } from "@models/coupon";
 import { methods as globalConfigMethods } from "@models/globalConfig";
 import payment, { methods as paymentMethods } from "@models/payment";
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
+import { methods as productMethods} from "@models/product";
 
 /* validate session */
 const { validateSession } = sessionMethods;
@@ -304,7 +305,7 @@ export const methods = {
                 cartItem.variantName = selectedVariant._id.name;
                 cartItem.hsnCode = selectedVariant._id.hsnCode;
                 cartItem.gstPercentage = selectedVariant._id.gstPercentage;
-                
+
 
                 /* fabric name (if made to order) */
                 const selectedFabric = selectedVariant.fabrics.find(fabric => fabric._id._id.toString() === item.fabric.toString());
@@ -476,7 +477,7 @@ export const methods = {
         /* extracting details */
         const { subTotal, coupon, discountValue, shippingCharge, tax, grandTotal } = orderTotal;
 
-        console.log('GRAND TOTAL-->', orderTotal.grandTotal, grandTotal, amountToBeCharged);
+        console.log('GRAND TOTAL-->', grandTotal, amountToBeCharged);
 
         /* if amount doesn't match */
         if (grandTotal !== amountToBeCharged) {
@@ -486,11 +487,15 @@ export const methods = {
 
         /* according to gateway, generate token/order id */
         let gatewayToken;
+        
+        /* set amount for gateway (as a whole number) */
+        let amount: any = (grandTotal * 100).toFixed(2);
+        amount = parseInt(amount)
 
         if (currency === "INR") {
             /* create razorpay order */
             const razorpayOrder = await paymentMethods.createRazorpayOrder({
-                amount: grandTotal * 100,
+                amount,
                 currency: "INR",
                 receipt: "Bounipun Test",
             });
@@ -502,19 +507,12 @@ export const methods = {
         }
         /* generate stripe token */
         else {
+            console.log(grandTotal, '-- ORDER_TOTAL_FROM_STRIPE', (grandTotal * 100).toFixed(2))
+
             const stripePaymentIntent = await paymentMethods.createStripePaymentIntent({
-                amount: grandTotal * 100,
+                amount,
                 currency: "usd",
                 description: 'Bounipun Payment',
-                // shipping: {
-                //     name: deliveryAddress.firstName + " " + deliveryAddress.surName,
-                //     address: {
-                //         line1: deliveryAddress.addressLine1,
-                //         postal_code: deliveryAddress.postalCode,
-                //         city: deliveryAddress.city,
-                //         country: 'US'
-                //     }
-                // }
             });
 
             gatewayToken = stripePaymentIntent.client_secret;
@@ -529,7 +527,7 @@ export const methods = {
             cartItems: cartItems,
             coupon,
             discountValue: discountValue * 100,
-            subTotal: subTotal * 100,
+            subTotal: parseInt((subTotal * 100).toFixed(2)),
             shippingCharge: shippingCharge * 100,
             /* TODO: need to check tax.value [may toFixed(2) will fix it] */
             /* TODO: get frontend and backend value EQUAL */
@@ -537,7 +535,7 @@ export const methods = {
                 percentage: tax.percentage,
                 value: tax.value * 100
             },
-            grandTotal: grandTotal * 100,
+            grandTotal: amount,
             gatewayToken
         }
 
@@ -556,13 +554,19 @@ export const methods = {
 
         console.log(paymentIntent);
 
-        if (paymentIntent === false)
+        if (paymentIntent === false) {
+            console.log('PAYMENT INTENT INVALID')
             return false;
+        }
         /* if valid, check if any dublicate already exists or not */
         /* if validated, proceed with save order details in db */
 
         /* do the order placing routine */
         const { deliveryAddress, cartItems, subTotal, discountValue, shippingCharge } = paymentIntent.payload;
+
+        /* discount per item */
+        let discountPerItem: any = (discountValue / 100 / cartItems.length);
+        discountPerItem = discountPerItem.toFixed(2);
 
         const orderDetails = {
             paymentIntent: paymentIntent._id,
@@ -574,20 +578,18 @@ export const methods = {
             deliveryAddress,
             subTotal,
             discountValue,
+            discountPerItem,
             shippingCharge,
             /* add shipping and taxes here */
             items: cartItems.map(item => {
                 let itemAmount: any = item.price * item.quantity;
                 itemAmount = itemAmount.toFixed(2);
 
-                let discountPerItem: any = (discountValue/100/cartItems.length);
-                discountPerItem = discountPerItem.toFixed(2);
-
                 let itemTotal: any = itemAmount - discountPerItem;
                 itemTotal = itemTotal.toFixed(2);
 
 
-               return {
+                return {
                     _id: mongoose.Types.ObjectId(),
                     ...item,
                     /* TODO: needs to be figured out */
@@ -607,11 +609,18 @@ export const methods = {
         const ordersCollection = db.model('orders');
         /* save order details to database */
         const orderSaved = await new ordersCollection(orderDetails).save();
+        console.log('Order Saved in DB');
         /* save order id to user account */
         const userOrdersUpdated = await db.model('users').findOneAndUpdate({ _id: paymentIntent.createdBy }, { $push: { orders: orderSaved._id } });
         /* mark payment intent as invalid */
         await paymentIntentMethods.setIntentAsInvalid(paymentIntent._id);
+        console.log('PAYMENT intentse set as Invalid')
+        /* update stock if ready to ship */
+        const listOfProducts = orderDetails.items.map(item => ({_id: item.productId, quantity: item.quantity }));
+
+        await productMethods.updateStock(listOfProducts);
         /* notify the interested parties */
+        console.log('order placing complete');
         return true;
     }
 }

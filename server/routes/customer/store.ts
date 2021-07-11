@@ -79,7 +79,8 @@ router.post('/createPaymentIntent', userAuth('customer'), async (req, res) => {
         amount: amountToBeCharged * 100,
         currency,
         gateway,
-        payload
+        payload,
+        valid: true
     });
 
     response.gatewayToken = payload.gatewayToken;
@@ -107,6 +108,8 @@ router.post('/stripeWebhook', async (req, res) => {
 
     switch (event.type) {
         case "payment_intent.succeeded":
+            console.log('WEBHOOK CALLED, PAYMENT SUCCEEDED')
+
             const paymentIntent = event.data.object;
             // console.log('CLIENT_SECRET', paymentIntent.client_secret);
             const { id: transactionId, client_secret } = paymentIntent;

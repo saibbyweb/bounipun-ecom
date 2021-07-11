@@ -1,4 +1,5 @@
 import { mongoose, ObjectId, task } from "@helpers/essentials"
+// mongoose.set('debug', true);
 
 /* schema */
 const schema = new mongoose.Schema({
@@ -13,7 +14,6 @@ const schema = new mongoose.Schema({
     payload: mongoose.Schema.Types.Mixed,
     valid: {
         type: Boolean,
-        default: true
     }
 }, {
     timestamps: true
@@ -31,7 +31,8 @@ type IntentOptions = {
     currency: string,
     gateway: string,
     /* can be an order or a gift card */
-    payload: any
+    payload: any,
+    valid: boolean
 }
 
 export const methods = {
@@ -41,10 +42,13 @@ export const methods = {
         return newPaymentIntent;
     },
     async fetchPaymentIntent(gatewayToken) {
+        /* TODO: check the validity */
         const paymentIntent = await model.findOne({'payload.gatewayToken': gatewayToken, valid: true });
+        console.log(paymentIntent, '--from fetch intent')
         return paymentIntent !== null ? paymentIntent : false;
     },
     async setIntentAsInvalid(_id) {
+        console.log('SET_INTENT_AS_INVALID - CALLED')
        return await model.findOneAndUpdate({ _id }, { valid: false });
     },
     stripePaymentSucceeded(intentId, amount, currency) {

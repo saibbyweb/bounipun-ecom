@@ -12,6 +12,7 @@ const schema = new mongoose.Schema({
     deliveryAddress: Object,
     subTotal: String,
     discountValue: String,
+    discountPerItem: String,
     shippingCharge: String,
     // items: Array,
     items: [{
