@@ -2,6 +2,7 @@ import { server, db, mongoose } from "@helpers/essentials";
 import admin from "@helpers/admin";
 import { uploader, methods as imageHelper } from "@models/imageUpload";
 import { register } from "@models";
+import { methods as userMethods } from "@models/user";
 register();
 
 /* creating express router */
@@ -323,5 +324,13 @@ router.post('/updateOrderItemDetails', async (req, res) => {
     res.send('broo');
 });
 
+/* cancel sub order */
+router.post('/cancelSubOrder', async(req, res) => {
+    let response = { resolved: true }
+    const { orderId, subOrderId, reason } = req.body;
+    const cancelOrder = await userMethods.cancelOrder(orderId, subOrderId, reason, false);
+    response.resolved = !(cancelOrder === false)
+    res.send(response);
+});
 
 export default router;

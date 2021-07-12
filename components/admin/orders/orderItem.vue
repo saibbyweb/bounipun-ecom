@@ -1,11 +1,69 @@
 <template>
   <div class="order-item-wrapper">
-    <div v-if="cancelled" class="cancelled flex around v-center">
-      <span> Cancelled </span>
-      <div class="flex col">
-      <span> By: {{ localItem.cancellation.by }}</span>
-      <span> Reason: {{ localItem.cancellation.reason }} </span>
+    <!-- if order is cancelled -->
+    <div v-if="cancelled" class="cancelled flex between v-center">
+      <span class="status"> Cancelled </span>
+      <div class="details flex col">
+        <span class="by"> By: {{ localItem.cancellation.by }}</span>
+        <span class="reason"> Reason: {{ localItem.cancellation.reason }} </span>
       </div>
+    </div>
+
+    <!-- TODO: cancellation form -->
+    <div
+      v-if="showCancellationForm && !orderCancelled"
+      class="cancellation-form"
+    >
+      <!-- title -->
+      <h3 class="title">Cancel Order</h3>
+
+      <!-- reasons -->
+      <div
+        class="reason"
+        v-for="(reason, index) in cancellationReasons"
+        :key="index"
+      >
+        <label>
+          <input
+            class="radio"
+            type="radio"
+            name="reason"
+            :value="reason"
+            v-model="selectedReason"
+          />
+          {{ reason }}
+        </label>
+        <br />
+      </div>
+
+      <!-- custom reason text -->
+      <InputBox label="Cancellation Reason" v-model="selectedReason" />
+
+      <!-- actions (confirm or discard) -->
+      <div class="actions flex around">
+        <!-- confirm cancel -->
+        <button class="action confirm-cancel" @click="confirmCancelOrder">
+          Confirm Cancel
+        </button>
+
+        <!-- discard  -->
+        <button
+          class="action discard-cancel"
+          @click="showCancellationForm = false"
+        >
+          Discard Cancellation
+        </button>
+      </div>
+    </div>
+
+    <!-- cacellation confirmation -->
+    <div v-if="orderCancelled" class="cancellation-msg">
+      <p>
+        Your cancellation request has been successfully processed. Refund has
+        been initiated against the payment method used for this order. Please
+        note that it can take upto 7-15 business days for money to reflect in
+        your account.
+      </p>
     </div>
 
     <div class="order-item">
@@ -44,7 +102,7 @@
       </p>
     </div>
     <!-- actions -->
-    <div class="actions flex wrap v-center">
+    <div v-if="!orderCancelled" class="actions flex wrap v-center">
       <!-- tracking id -->
       <InputBox
         v-if="!cancelled"
@@ -84,6 +142,15 @@
 
       <Toast :show="updated" msg="Order Updated" />
     </div>
+
+    <!--TODO: cancel button -->
+    <button
+      v-if="!cancelled && !showCancellationForm"
+      class="action cancel-btn"
+      @click="showCancellationForm = true"
+    >
+      Cancel Order
+    </button>
   </div>
 </template>
 
@@ -132,7 +199,14 @@ export default {
           value: "delivered"
         }
       ],
-      updated: false
+      updated: false,
+      showCancellationForm: false,
+      cancellationReasons: [
+        "Communicated by customer via phone / email / whatsapp",
+        "Cannot be fulfilled"
+      ],
+      selectedReason: "",
+      orderCancelled: false
     };
   },
   methods: {
@@ -153,6 +227,18 @@ export default {
       this.updated = true;
       this.$emit("subOrderUpdated");
       setTimeout(() => (this.updated = false), 1300);
+    },
+    async confirmCancelOrder() {
+      const canceOrderRequest = await this.$post("/cancelSubOrder", {
+        orderId: this.orderId,
+        subOrderId: this.localItem._id,
+        reason: this.selectedReason
+      })
+
+      if (canceOrderRequest.resolved === false) return;
+
+      this.orderCancelled = true;
+      this.$emit("orderCancelled")
     }
   }
 };
@@ -163,15 +249,78 @@ export default {
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
   margin: 20px;
   padding-bottom: 10px;
+  position: relative;
 
   .cancelled {
     background-color: rgba(201, 34, 34, 0.829);
     width: 100%;
     padding: 3px;
 
+    .status {
+      width: 10%;
+      padding-left:5px;
+    }
+    .details {
+      width: 70%;
+    }
+
     span {
       color: white;
       font-size: 12px;
+    }
+
+  }
+
+  .cancellation-msg {
+    font-size: 12px;
+    padding:10px;
+  }
+
+  .cancel-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 9px;
+    background-color: rgb(176, 58, 58);
+  }
+
+  .cancellation-form {
+    width: 100%;
+    padding: 5px;
+    border-bottom: 2px solid $dark_gray;
+
+    .title {
+      background-color: $dark_gray;
+      color: white;
+      width: 100%;
+      font-size: 15px;
+      padding: 2px 10px;
+      margin-bottom: 10px;
+    }
+
+    .reason {
+      label {
+        width: 100%;
+        cursor: pointer;
+        font-size: 11px;
+        .radio {
+        }
+      }
+    }
+
+    .actions {
+      button {
+        font-size: 11px;
+        &.discard-cancel {
+          background-color: rgb(30, 139, 104);
+          width: 55%;
+        }
+
+        &.confirm-cancel {
+          width: 35%;
+          background-color: rgb(180, 39, 39);
+        }
+      }
     }
   }
 

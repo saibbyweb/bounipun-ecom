@@ -84,7 +84,7 @@ export default {
       ],
       selectedReason: "",
       orderCancelled: false
-    };
+    }
   },
   methods: {
     async confirmCancellation() {

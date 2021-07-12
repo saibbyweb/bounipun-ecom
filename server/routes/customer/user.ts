@@ -418,7 +418,7 @@ router.post('/confirmOrderCancellation', userAuth('customer'), async(req, res) =
     let response = { resolved: false }
     const { orderId, subOrderId, reason, user } = req.body;
     console.log(user._id, orderId, subOrderId, reason);
-    const cancelOrder = await userMethods.cancelOrder(user._id, orderId, subOrderId, reason);
+    const cancelOrder = await userMethods.cancelOrder(orderId, subOrderId, reason, user._id);
     response.resolved = !(cancelOrder === false)
     res.send(response);
 });
