@@ -623,13 +623,21 @@ export const methods = {
         console.log('order placing complete');
         return true;
     },
+    async orderBelongsToUser(userId, orderId) {
+        const orderBelongsToUser = await db.model('users').findOne({ _id: userId, orders: orderId }).select('_id')
+        return orderBelongsToUser === null ? false : true;
+    },
     async cancelOrder(userId, orderId, subOrderId, reason) {
         const subOrderFilter = {
             _id: orderId,
             'items._id': subOrderId
         }
-
+        
         /* check if the order belongs to the user id or not */
+        const orderIdValid = await this.orderBelongsToUser(userId, orderId);
+        if(orderIdValid === false)
+            return;
+
         /* if exists, check the existing status (if already cancelled or delivered, return) */
         
         /* change the order status to cancelled, update timeline as well */

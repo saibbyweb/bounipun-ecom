@@ -415,10 +415,12 @@ router.post('/logoutCustomer', userAuth('customer'), async (req, res) => {
 
 /* cancel sub order */
 router.post('/confirmOrderCancellation', userAuth('customer'), async(req, res) => {
+    let response = { resolved: false }
     const { orderId, subOrderId, reason, user } = req.body;
     console.log(user._id, orderId, subOrderId, reason);
-    await userMethods.cancelOrder(user._id, orderId, subOrderId, reason);
-    res.send('okay');
+    const cancelOrder = await userMethods.cancelOrder(user._id, orderId, subOrderId, reason);
+    response.resolved = !(cancelOrder === false)
+    res.send(response);
 });
 
 export default router;

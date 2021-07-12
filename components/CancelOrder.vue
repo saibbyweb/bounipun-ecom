@@ -89,18 +89,18 @@ export default {
   methods: {
     async confirmCancellation() {
     //   this.$store.commit("customer/setLoading", true);
-        await this.$post('/confirmOrderCancellation', {
+    const canceOrderRequest = await this.$post('/confirmOrderCancellation', {
             orderId: this.orderId,
             subOrderId: this.subOrderId,
             reason: this.selectedReason
-        });
+    });
 
-    //    this.$store.commit("customer/setLoading", false);
+    if(canceOrderRequest.resolved === false)
+        return;
+        
+    this.orderCancelled = true;
+    this.$emit('orderCancelled');
 
-    //   setTimeout(() => {
-    //       this.orderCancelled = true;
-       
-    //   }, 1600);
     }
   }
 };

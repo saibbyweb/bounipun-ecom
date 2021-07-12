@@ -1,7 +1,12 @@
 <template>
   <div class="page orders">
-    
-    <CancelOrder :orderId="selectedOrderId" :subOrderId="selectedSubOrderId" v-if="showCancellationForm" @hideForm="showCancellationForm = false"/>
+    <CancelOrder
+      :orderId="selectedOrderId"
+      :subOrderId="selectedSubOrderId"
+      v-if="showCancellationForm"
+      @hideForm="showCancellationForm = false"
+      @orderCancelled="fetchOrders"
+    />
 
     <!-- loop through every order -->
     <div v-for="order in orders" :key="order._id">
@@ -51,9 +56,11 @@
         <!-- actions -->
         <div class="actions">
           <!-- pre delivery -->
-          <div class="pre-delivery">
+          <div v-if="subOrder.status !== 'cancelled'" class="pre-delivery">
             <button>Track</button>
-            <button @click="setCancellationOrder(order._id, subOrder._id)">Cancel</button>
+            <button @click="setCancellationOrder(order._id, subOrder._id)">
+              Cancel
+            </button>
             <button>Help</button>
           </div>
           <!-- post delivery -->
@@ -63,6 +70,7 @@
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
