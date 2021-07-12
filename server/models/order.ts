@@ -32,11 +32,16 @@ const schema = new mongoose.Schema({
         itemAmount: Number,
         itemTotal: Number,
         status: String,
+        cancellation: {
+            by: String,
+            reason: String
+        },
         timeline: Array,
         trackingId: String,
         trackingUrl: String,
         delivered: String
     }],
+
     /* all four field below are for sub-orders as well */
     status: String,
     delivered: Date,

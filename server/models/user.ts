@@ -624,10 +624,32 @@ export const methods = {
         return true;
     },
     async cancelOrder(userId, orderId, subOrderId, reason) {
+        const subOrderFilter = {
+            _id: orderId,
+            'items._id': subOrderId
+        }
+
         /* check if the order belongs to the user id or not */
         /* if exists, check the existing status (if already cancelled or delivered, return) */
+        
         /* change the order status to cancelled, update timeline as well */
+        const cancelSubOrder = await db.model('orders').findOneAndUpdate(subOrderFilter, {
+            $set: {
+                "items.$.status": "cancelled",
+                "items.$.cancellation": {
+                    by: 'customer',
+                    reason
+                }
+            },
+            $push: {
+                "items.$.timeline": {
+                    status: "cancelled",
+                    updatedAt: new Date()
+                }
+            }
+        });
         /* return with response */
+        return cancelSubOrder === null ? false : cancelSubOrder;
     }
 }
 

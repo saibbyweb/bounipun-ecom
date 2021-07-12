@@ -1,5 +1,13 @@
 <template>
   <div class="order-item-wrapper">
+    <div v-if="cancelled" class="cancelled flex around v-center">
+      <span> Cancelled </span>
+      <div class="flex col">
+      <span> By: {{ localItem.cancellation.by }}</span>
+      <span> Reason: {{ localItem.cancellation.reason }} </span>
+      </div>
+    </div>
+
     <div class="order-item">
       <!-- main image -->
       <div
@@ -31,18 +39,22 @@
 
       <!-- total product price -->
       <!-- <p class="total-product-price">INR {{ localItem.quantity * localItem.price }}</p> -->
-       <p class="total-product-price"> {{ currency }}  {{ localItem.itemTotal }}</p>
+      <p class="total-product-price">
+        {{ currency }} {{ localItem.itemTotal }}
+      </p>
     </div>
     <!-- actions -->
     <div class="actions flex wrap v-center">
       <!-- tracking id -->
       <InputBox
+        v-if="!cancelled"
         class="tracking-id"
         label="Tracking ID"
         v-model="localItem.trackingId"
       />
       <!-- tracking url -->
       <InputBox
+        v-if="!cancelled"
         class="tracking-url"
         label="Tracking URL"
         v-model="localItem.trackingUrl"
@@ -50,25 +62,25 @@
 
       <!-- order timeline -->
       <div class="timeline flex center">
-        <p class="label"> Timeline: </p>
+        <p class="label">Timeline:</p>
         <div class="list flex col">
-          <span v-for="(event, index) in localItem.timeline" :key="index"> 
-            {{ event.status }} --- {{ $formatDate(event.updatedAt) }} 
-            </span>
+          <span v-for="(event, index) in localItem.timeline" :key="index">
+            {{ event.status }} --- {{ $formatDate(event.updatedAt) }}
+          </span>
         </div>
-
       </div>
 
-            <!-- update status -->
-      <SelectBox
-        class="status"
-        :options="allStatusUpdates"
-        v-model="localItem.status"
-        label="Set Order Status:"
-      />
+      <div v-if="!cancelled" class="update-box flex between">
+        <!-- update status -->
+        <SelectBox
+          class="status"
+          :options="allStatusUpdates"
+          v-model="localItem.status"
+          label="Set Order Status:"
+        />
 
-
-      <button class="update" @click="updateOrder">Update Order</button>
+        <button class="update" @click="updateOrder">Update Order</button>
+      </div>
 
       <Toast :show="updated" msg="Order Updated" />
     </div>
@@ -82,12 +94,17 @@ export default {
     item: Object,
     currency: {
       type: String,
-      default: ''
+      default: ""
     }
   },
   watch: {
     item(newVal) {
-        this.localItem = newVal
+      this.localItem = newVal;
+    }
+  },
+  computed: {
+    cancelled() {
+      return this.localItem.status === "cancelled";
     }
   },
   data() {
@@ -120,23 +137,22 @@ export default {
   },
   methods: {
     async updateOrder() {
-        const pushUpdate = await this.$post('/updateOrderItemDetails', {
-            orderId: this.orderId,
-            subOrderId: this.item._id,
-            status: this.localItem.status,
-            trackingId: this.localItem.trackingId,
-            trackingUrl: this.localItem.trackingUrl
-        });
+      const pushUpdate = await this.$post("/updateOrderItemDetails", {
+        orderId: this.orderId,
+        subOrderId: this.item._id,
+        status: this.localItem.status,
+        trackingId: this.localItem.trackingId,
+        trackingUrl: this.localItem.trackingUrl
+      });
 
-        /* if request not resolved */
-        if(pushUpdate.resolved === false) {
-             return;
-        }
+      /* if request not resolved */
+      if (pushUpdate.resolved === false) {
+        return;
+      }
 
-        this.updated = true;
-        this.$emit('subOrderUpdated');
-        setTimeout(() => this.updated = false, 1300)
-        
+      this.updated = true;
+      this.$emit("subOrderUpdated");
+      setTimeout(() => (this.updated = false), 1300);
     }
   }
 };
@@ -147,6 +163,18 @@ export default {
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
   margin: 20px;
   padding-bottom: 10px;
+
+  .cancelled {
+    background-color: rgba(201, 34, 34, 0.829);
+    width: 100%;
+    padding: 3px;
+
+    span {
+      color: white;
+      font-size: 12px;
+    }
+  }
+
   .order-item {
     display: flex;
     align-items: center;
@@ -264,15 +292,15 @@ export default {
       margin-left: 10px;
     }
     .timeline {
-      width:100%;
+      width: 100%;
       .label {
-        width:20%;
+        width: 20%;
       }
       .list {
-        width:70%;
+        width: 70%;
         span {
-          font-size:12px;
-          border:1px dashed #efefef;
+          font-size: 12px;
+          border: 1px dashed #efefef;
           text-transform: capitalize;
         }
       }

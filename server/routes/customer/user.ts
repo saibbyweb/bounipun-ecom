@@ -418,7 +418,7 @@ router.post('/confirmOrderCancellation', userAuth('customer'), async(req, res) =
     const { orderId, subOrderId, reason, user } = req.body;
     console.log(user._id, orderId, subOrderId, reason);
     await userMethods.cancelOrder(user._id, orderId, subOrderId, reason);
-
+    res.send('okay');
 });
 
 export default router;
