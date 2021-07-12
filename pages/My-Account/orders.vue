@@ -1,7 +1,7 @@
 <template>
   <div class="page orders">
     
-    <CancelOrder v-if="showCancellationForm" @hideForm="showCancellationForm = false"/>
+    <CancelOrder :orderId="selectedOrderId" :subOrderId="selectedSubOrderId" v-if="showCancellationForm" @hideForm="showCancellationForm = false"/>
 
     <!-- loop through every order -->
     <div v-for="order in orders" :key="order._id">
@@ -53,7 +53,7 @@
           <!-- pre delivery -->
           <div class="pre-delivery">
             <button>Track</button>
-            <button @click="showCancellationForm = true">Cancel</button>
+            <button @click="setCancellationOrder(order._id, subOrder._id)">Cancel</button>
             <button>Help</button>
           </div>
           <!-- post delivery -->
@@ -71,6 +71,8 @@ export default {
   data() {
     return {
       orders: [],
+      selectedOrderId: "",
+      selectedSubOrderId: "",
       showCancellationForm: false
     };
   },
@@ -78,6 +80,11 @@ export default {
     this.fetchOrders();
   },
   methods: {
+    setCancellationOrder(orderId, subOrderId) {
+      this.selectedOrderId = orderId;
+      this.selectedSubOrderId = subOrderId;
+      this.showCancellationForm = true;
+    },
     async fetchOrders() {
       const { response, resolved } = await this.$post("/fetchProfile");
 

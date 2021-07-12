@@ -16,8 +16,8 @@
       <div v-if="!orderCancelled" class="cancellation-box">
         <!--  -->
         <p class="notice">
-          This cancellation window will only be available for 24 hours from the time
-          of ordering.
+          This cancellation window will only be available for 24 hours from the
+          time of ordering.
         </p>
         <!-- reasons -->
         <div
@@ -42,7 +42,7 @@
         <InputBox label="Cancellation Reason" v-model="selectedReason" />
 
         <div class="actions flex around">
-          <button class="action confirm-cancel" @click="orderCancelled = true">
+          <button class="action confirm-cancel" @click="confirmCancellation">
             Confirm Cancellation
           </button>
           <button class="action dont-cancel">
@@ -66,6 +66,16 @@
 
 <script>
 export default {
+  props: {
+    orderId: {
+      type: String,
+      default: ""
+    },
+    subOrderId: {
+      type: String,
+      default: ""
+    }
+  },
   data() {
     return {
       cancellationReasons: [
@@ -75,6 +85,23 @@ export default {
       selectedReason: "",
       orderCancelled: false
     };
+  },
+  methods: {
+    async confirmCancellation() {
+    //   this.$store.commit("customer/setLoading", true);
+        await this.$post('/confirmOrderCancellation', {
+            orderId: this.orderId,
+            subOrderId: this.subOrderId,
+            reason: this.selectedReason
+        });
+
+    //    this.$store.commit("customer/setLoading", false);
+
+    //   setTimeout(() => {
+    //       this.orderCancelled = true;
+       
+    //   }, 1600);
+    }
   }
 };
 </script>
@@ -88,7 +115,7 @@ export default {
   height: 100%;
   padding: 0 3%;
   background-color: rgba(0, 0, 0, 0.593);
-  z-index: 4;
+  z-index: 1;
 }
 .cancellation-form {
   background-color: white;

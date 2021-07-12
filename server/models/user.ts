@@ -622,6 +622,12 @@ export const methods = {
         /* notify the interested parties */
         console.log('order placing complete');
         return true;
+    },
+    async cancelOrder(userId, orderId, subOrderId, reason) {
+        /* check if the order belongs to the user id or not */
+        /* if exists, check the existing status (if already cancelled or delivered, return) */
+        /* change the order status to cancelled, update timeline as well */
+        /* return with response */
     }
 }
 

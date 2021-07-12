@@ -303,50 +303,6 @@ router.post('/cartActions', userAuth('customer'), async (req, res) => {
 
 });
 
-/* checkout */
-router.post('/orderCheckout', userAuth('customer'), async (req, res) => {
-    let response = { resolved: false, message: '' }
-    const { user, orderCartItems, deliveryAddress, amountToBeCharged } = req.body;
-    // console.log(orderCartItems);
-    /* TODO: to be supa sure, i can match the received cart items to the one in the db */
-    const cartItems = await userMethods.getCartItems(user.cart);
-    const cartTotal = sumBy(cartItems, item => item.price * item.quantity);
-
-    /* if amount doesn't match */
-    if (cartTotal !== amountToBeCharged) {
-        console.log('Amount doesnt match');
-        res.send(response);
-        return;
-    }
-
-    /* TODO: check finesse and mbm purchasing routine */
-
-    /* construct order details */
-    const orderDetails = {
-        number: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
-        paymentGateway: 'razorpay',
-        transactionId: '',
-        amount: amountToBeCharged,
-        deliveryAddress,
-        items: cartItems.map(item => ({ _id: mongoose.Types.ObjectId(), ...item, status: 'pending', timeline: [], trackingId: '', trackingUrl: '', delivered: '' })),
-        status: 'pending'
-    }
-
-    // console.log(deliveryAddress);
-    // console.log(orderDetails);
-    const ordersCollection = db.model('orders');
-    /* save order details to database */
-    const orderSaved = await new ordersCollection(orderDetails).save();
-    /* save order id to user account */
-    const userOrdersUpdated = await db.model('users').findOneAndUpdate({ _id: user._id }, { $push: { orders: orderSaved._id } });
-
-    console.log(userOrdersUpdated);
-
-    response.resolved = true;
-
-    res.send(response);
-});
-
 /* fetch customer profile */
 router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
     const { user } = req.body;
@@ -401,58 +357,6 @@ router.post('/updateProfile', userAuth('customer'), async (req, res) => {
     res.send('done');
 });
 
-/* TODO: make it a function so that hooks work -- complete checkout */
-router.post('/completeCheckout', userAuth('customer'), async (req, res) => {
-    /* response */
-    let response = { resolved: false };
-    /* extract body */
-    const { user, gateway, gatewayResponse, paymentIntentId } = req.body;
-
-    /* common transaction id | RAZORPAY - STRIPE */
-    let transactionId;
-
-    /* fetch payment intent details */
-    const paymentIntentDetails: any = await db.model('paymentIntents').findOne({ _id: paymentIntentId });
-
-    /* act according to gateway */
-    switch (gateway) {
-        case 'razorpay':
-            /* match order id, only then proceed */
-            if (paymentIntentDetails.payload.gatewayToken !== gatewayResponse.razorpay_order_id) {
-                console.log('payment verification failed');
-                res.send(response);
-                return;
-            }
-            /* add transaction id */
-            transactionId = gatewayResponse.razorpay_payment_id;
-            break;
-        case 'stripe':
-            /* payment routine might be processed here only */
-            break;
-    }
-
-    /* give order shape */
-    const orderDetails = {
-        number: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
-        paymentGateway: gateway,
-        gatewayResponse,
-        transactionId,
-        amount: paymentIntentDetails.amount,
-        currency: paymentIntentDetails.currency,
-        deliveryAddress: paymentIntentDetails.payload.deliveryAddress,
-        items: paymentIntentDetails.payload.cartItems.map(item => ({ _id: mongoose.Types.ObjectId(), ...item, status: 'pending', timeline: [], trackingId: '', trackingUrl: '', delivered: '' })),
-    }
-
-    /* save processed order in database */
-    const ordersCollection = db.model('orders');
-    /* save order details to database */
-    const orderSaved = await new ordersCollection(orderDetails).save();
-    /* save order id to user account */
-    const userOrdersUpdated = await db.model('users').findOneAndUpdate({ _id: user._id }, { $push: { orders: orderSaved._id } });
-
-    response.resolved = true;
-    res.send(response);
-});
 /* set cookie demo */
 router.post('/setCookie', (req, res) => {
 
@@ -508,4 +412,13 @@ router.post('/logoutCustomer', userAuth('customer'), async (req, res) => {
     await sessionMethods.invalidateSession(user._id, token);
     res.send('logout called');
 });
+
+/* cancel sub order */
+router.post('/confirmOrderCancellation', userAuth('customer'), async(req, res) => {
+    const { orderId, subOrderId, reason, user } = req.body;
+    console.log(user._id, orderId, subOrderId, reason);
+    await userMethods.cancelOrder(user._id, orderId, subOrderId, reason);
+
+});
+
 export default router;
