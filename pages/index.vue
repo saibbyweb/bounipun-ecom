@@ -1,14 +1,25 @@
 <template>
   <div class="homepage" v-if="layout !== null">
-    <!-- slidehshow -->
+    <!-- slidehshow (MOBILE)-->
     <slideshow
-      v-if="layout.mainSlideshow.visible"
+      v-if="layout.mainSlideshow.visible && isMobile"
       size="cover"
       :images="fetchSlideshow(layout.mainSlideshow.slides)"
       mSlideHeight="120vw"
       dSlideHeight="90vh"
       :dSlideWidth="100"
     />
+
+    <!-- slideshow (DESKTOP) -->
+    <slideshow
+      v-if="layout.desktopMainSlideshow.visible && !isMobile"
+      size="cover"
+      :images="fetchSlideshow(layout.desktopMainSlideshow.slides)"
+      mSlideHeight="120vw"
+      dSlideHeight="90vh"
+      :dSlideWidth="100"
+    />
+
     <!-- main text block -->
     <div
       v-if="layout.mainTextBlock.visible"
@@ -102,49 +113,46 @@
     </div>
 
     <div class="press-and-quote flex">
-
-    <!-- quote -->
-    <div class="quote" v-if="layout.quote.visible">
-      <!-- logo -->
-      <div
-        class="logo"
-        :style="`background-image: url(${$getImagePath(layout.quote.logo)})`"
-      ></div>
-      <div class="text pad">
-        <h2 class="head text-1">{{ layout.quote.heading }}</h2>
-        <p class="paragraph text-2">{{ layout.quote.paragraph }}</p>
+      <!-- quote -->
+      <div class="quote" v-if="layout.quote.visible">
+        <!-- logo -->
+        <div
+          class="logo"
+          :style="`background-image: url(${$getImagePath(layout.quote.logo)})`"
+        ></div>
+        <div class="text pad">
+          <h2 class="head text-1">{{ layout.quote.heading }}</h2>
+          <p class="paragraph text-2">{{ layout.quote.paragraph }}</p>
+        </div>
       </div>
-    </div>
 
-    <!-- press -->
-    <div
-      class="press"
-      v-if="layout.press.visible"
-      @click="$router.push('/press')"
-    >
-      <!-- logo -->
+      <!-- press -->
       <div
-        class="logo"
-        :style="`background-image: url(${$getImagePath(layout.press.logo)})`"
-      ></div>
+        class="press"
+        v-if="layout.press.visible"
+        @click="$router.push('/press')"
+      >
+        <!-- logo -->
+        <div
+          class="logo"
+          :style="`background-image: url(${$getImagePath(layout.press.logo)})`"
+        ></div>
 
-      <div class="scrollable-list">
-        <div class="list">
-          <!-- image list -->
-          <div class="image-list">
-            <div
-              class="image-box"
-              v-for="(image, index) in layout.press.imageList"
-              :key="index"
-              :style="`background-image: url(${$getImagePath(image.path)})`"
-            ></div>
+        <div class="scrollable-list">
+          <div class="list">
+            <!-- image list -->
+            <div class="image-list">
+              <div
+                class="image-box"
+                v-for="(image, index) in layout.press.imageList"
+                :key="index"
+                :style="`background-image: url(${$getImagePath(image.path)})`"
+              ></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
-    </div>
-
   </div>
 </template>
 
@@ -159,6 +167,11 @@ export default {
   },
   mounted() {
     this.fetchHomepageLayout();
+  },
+  computed: {
+    isMobile() {
+      return this.windowWidth < 768
+    }
   },
   methods: {
     async fetchHomepageLayout() {
@@ -244,7 +257,7 @@ export default {
   }
 
   .press-and-quote {
-    @media(max-width: 768px) {
+    @media (max-width: 768px) {
       flex-direction: column;
     }
   }
@@ -286,13 +299,11 @@ export default {
     }
   }
 
-
   .press {
     display: flex;
     width: 50%;
     height: 40vw;
     position: relative;
-
 
     .logo {
       width: 40%;

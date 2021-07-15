@@ -5,6 +5,8 @@ const schema = new mongoose.Schema({
     name: String,
     /* main slideshow */
     mainSlideshow: { slides : [{ _id: ObjectId, mainImage: Boolean, path: String }], visible: Boolean },
+    /* desktop main slideshow */
+    desktopMainSlideshow: { slides : [{ _id: ObjectId, mainImage: Boolean, path: String }], visible: Boolean },
     /* text block 1 */
     mainTextBlock: {
         text1: String, text2: String, text3: String, author: String, visible: Boolean

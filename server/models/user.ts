@@ -223,8 +223,14 @@ export const methods = {
         }
 
         /* wait for all promises to resolve */
-        const allProducts = await Promise.all(allProductPromises);
+        let allProducts: any = await Promise.all(allProductPromises);
 
+        allProducts = allProducts.filter(prod => prod !== null);
+
+        if(allProducts.length === 0) {
+            return false;
+        }
+        
         /* TODO: you should clear cart from user database and return */
 
 
