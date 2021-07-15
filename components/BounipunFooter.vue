@@ -10,7 +10,11 @@
           :expanded="true"
         >
           <div class="flex col start">
-            <Button class="item" v-for="item in importantLinks" :key="item.name">
+            <Button
+              class="item"
+              v-for="item in importantLinks"
+              :key="item.name"
+            >
               {{ item.name }}
             </Button>
           </div>
@@ -19,17 +23,19 @@
 
       <!-- find us on -->
       <div class="container">
-        <Accordion
+        <!-- <Accordion
           heading="Find Us On"
           :light="true"
           :noMargin="true"
           :expanded="true"
         >
-          <div class="find-us-on flex">
-            <img src="/icons/light/instagram.png" />
-            <img src="/icons/light/facebook.png" />
-          </div>
-        </Accordion>
+  
+        </Accordion> -->
+
+        <div class="find-us-on flex center">
+          <img src="/icons/light/instagram.png" />
+          <img src="/icons/light/facebook.png" />
+        </div>
       </div>
     </div>
 
@@ -109,11 +115,11 @@ export default {
       width: 40%;
     }
 
-    @media(max-width: 768px) {
-        flex-direction: column;
-        .container {
-            width: 100%;
-        }
+    @media (max-width: 768px) {
+      // flex-direction: column;
+      .container {
+        width: 50%;
+      }
     }
   }
 
@@ -152,6 +158,8 @@ export default {
 
   .find-us-on {
     margin-bottom: 20px;
+    height: 100%;
+    width: 100%;
     img {
       width: 27px;
       margin: 7px;
