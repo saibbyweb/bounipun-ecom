@@ -23,6 +23,7 @@ const schema = new mongoose.Schema({
     productListBlocks: [{
         productList: { type: ObjectId, ref: 'product_lists' },
         imageList: [{ _id: ObjectId, mainImage: Boolean, path: String }],
+        moodImage: String,
         text1: String, 
         text2: String,
         buttonText: String,

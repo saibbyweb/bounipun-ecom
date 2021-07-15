@@ -16,7 +16,7 @@
       size="cover"
       :images="fetchSlideshow(layout.desktopMainSlideshow.slides)"
       mSlideHeight="120vw"
-      dSlideHeight="80vh"
+      dSlideHeight="90vh"
       :dSlideWidth="100"
     />
 
@@ -67,9 +67,9 @@
     </div>
 
     <!-- product list block -->
-    <div class="product-blocks blocks section">
+    <div class="product-list-blocks flex wrap col section">
       <div
-        class="block flex center"
+        class="p-block flex center"
         v-for="(block, index) in layout.productListBlocks"
         :key="index"
       >
@@ -80,7 +80,7 @@
             :images="fetchSlideshow(block.imageList)"
             mSlideHeight="120vw"
             dSlideHeight="30vw"
-            :dSlideWidth="50"
+            :dSlideWidth="30"
             :dots="true"
           />
 
@@ -88,6 +88,16 @@
             <button class="action">{{ block.buttonText }}</button>
           </div>
         </div>
+
+        <!-- mood image -->
+        <div
+          class="mood"
+          v-if="block.visible"
+          :style="
+            `background-image: url(${$getImagePath(block.moodImage)})`
+          "
+        ></div>
+
         <div class="pad center-col text" v-if="block.visible">
           <h2 class="text-1">{{ block.text1 }}</h2>
           <p class="text-2">{{ block.text2 }}</p>
@@ -226,46 +236,16 @@ export default {
 <style lang="scss">
 .homepage {
   // margin-top: 10vh;
-
+  /* mainly collection blocks */
   .blocks {
     padding: 0 1%;
     justify-content: center;
     .block {
       width: 30%;
-      margin:5px;
+      margin: 5px;
       margin-bottom: 20px;
       overflow: hidden;
       justify-content: flex-start;
-      
-
-      /* cover */
-      .cover {
-        height:60vh;
-        width: 100%;
-        position: relative;
-        // background-color:blue;
-        .cta {
-          position: absolute;
-          bottom: 10%;
-          width: 100%;
-          .action {
-            width: 38%;
-            padding: 2% 5%;
-            // filter: blur(1px);
-            background-color: #ffffff00;
-            border: 2px solid #ffffff;
-            color: #fff;
-          }
-
-          @media (max-width: 768px) {
-            bottom: 2%;
-          }
-        }
-
-        @media (max-width: 768px) {
-          width: 100%;
-        }
-      }
 
       .text {
         // background-color: red;
@@ -279,10 +259,64 @@ export default {
         flex-direction: column;
         height: auto;
         margin: 0;
-
+        width: 100%;
         .text {
           width: 100%;
         }
+      }
+    }
+  }
+  /* cover */
+  .cover {
+    height: 60vh;
+    width: 100%;
+    position: relative;
+    // background-color:blue;
+    .cta {
+      position: absolute;
+      bottom: 10%;
+      width: 100%;
+      .action {
+        width: 38%;
+        padding: 2% 5%;
+        // filter: blur(1px);
+        background-color: #ffffff00;
+        border: 2px solid #ffffff;
+        color: #fff;
+      }
+
+      @media (max-width: 768px) {
+        bottom: 2%;
+      }
+    }
+
+    @media (max-width: 768px) {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  .product-list-blocks {
+    .p-block {
+      width: 100%;
+
+      .cover {
+        background: red;
+        width: 30%;
+        margin:5px;
+      }
+      .mood {
+        width: 30%;
+        height: 30vw;
+        background-size: cover;
+        background-position: center;
+        margin:5px;
+
+      }
+      .text {
+        width: 30%;
+        margin:5px;
+
       }
     }
   }

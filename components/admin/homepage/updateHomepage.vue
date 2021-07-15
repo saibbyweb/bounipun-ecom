@@ -138,6 +138,8 @@
         </button>
       </div>
     </div>
+
+    
     <!-- product list block -->
     <div class="product-list-blocks section">
       <label class="head"> Product List Blocks: </label>
@@ -170,9 +172,18 @@
         <!-- set product list image -->
         <UploadImage
           ref="imageUploader_productList"
-          label="Set Product List Image"
+          label="Set Product List Images"
           @updated="imageListUpdated($event, 'productListBlock', index)"
         />
+
+        <!-- set product list mood image -->
+        <UploadImage
+          :multiple="false"
+          ref="imageUploader_productListMood"
+          label="Set Product List Mood Image"
+          @updated="imageListUpdated($event, 'productListBlockMood', index)"
+        />
+
         <!-- text 1 -->
         <InputBox label="Text 1" v-model="block.text1" />
         <!-- text 2 -->
@@ -374,6 +385,7 @@ const baseDocument = {
         // path: ""
         // }
       ],
+      moodImage: "",
       text1: "",
       text2: "",
       buttonText: "",
@@ -452,9 +464,13 @@ export default {
         case "collectionBlock":
           this.doc.collectionBlocks[index].slideshow = list;
           break;
-        /* single [indexed] */
+        /* multiple [indexed] */
         case "productListBlock":
           this.doc.productListBlocks[index].imageList = list;
+          break;
+        case "productListBlockMood":
+          this.doc.productListBlocks[index].moodImage =
+            list.length > 0 ? list[0].path : "";
           break;
         /* single */
         case "bounipunLab":
@@ -530,6 +546,7 @@ export default {
             path: ""
           }
         ],
+        moodImage: "",
         text1: "",
         text2: "",
         buttonText: "",
