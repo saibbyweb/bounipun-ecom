@@ -114,7 +114,7 @@
           <button class="action">{{ layout.bounipunLab.buttonText }}</button>
         </div>
       </div>
-      <div class="pad center-col text">
+      <div class="center-col text">
         <h2 class="head text-1">{{ layout.bounipunLab.heading }}</h2>
         <p class="paragraph text-2">{{ layout.bounipunLab.paragraph }}</p>
       </div>
@@ -248,6 +248,7 @@ export default {
       .text {
         // background-color: red;
         // height: 40vh;
+        align-items: center;
         width: 100%;
       }
     }
@@ -299,7 +300,6 @@ export default {
       width: 100%;
 
       .cover {
-        background: red;
         width: 30%;
         margin: 5px;
       }
@@ -346,9 +346,11 @@ export default {
   .quote {
     display: flex;
     width: 100%;
-    height: 20vw;
+    height: 15vw;
     justify-content: center;
     padding: 5px;
+    // background-color: blue;
+
     .logo {
       width: 20%;
       // height: 40vw;
@@ -373,11 +375,13 @@ export default {
 
     @media (max-width: 768px) {
       width: 100%;
+      height: 40vw;
       .logo {
         width: 40vw;
         height: 40vw;
       }
       .text {
+        width: 60vw;
         .text-2 {
           font-size: 18px;
         }
@@ -425,7 +429,14 @@ export default {
 
       .logo {
         width: 40vw;
+        height: 40vw;
+        background-size: cover;
       }
+
+      .scrollable-list {
+        width: 60vw;
+      }
+
     }
   }
   .text-1 {
@@ -452,7 +463,7 @@ export default {
       font-size: 13px;
     }
   }
-
+/* bounipun lab */
   .bounipun-lab {
     width: 100%;
   
@@ -465,6 +476,7 @@ export default {
     }
     .text {
       width: 100%;
+      padding: 1% 5%;
     }
 
     @media (max-width: 768px) {
@@ -475,6 +487,8 @@ export default {
       }
       .text {
         width: 100%;
+        padding: 5%;
+
       }
     }
   }
