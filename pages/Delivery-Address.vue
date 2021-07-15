@@ -226,6 +226,9 @@ export default {
 <style lang="scss" scoped>
 .delivery-page {
   .container {
+    justify-content: flex-start;
+    padding: 2% 5%;
+
     .delivery-address {
       width: 50%;
       margin-top: 10px;
@@ -241,24 +244,31 @@ export default {
     }
     .order-total-container {
       width: 30%;
-      margin-top:10%;
-    
+      margin-top: 10%;
+      @media (min-width: 769px) {
+        position: fixed;
+        right: 5%;
+        top: 10vh;
+        height: 100%;
+      }
     }
     @media (max-width: 768px) {
       flex-direction: column;
+      padding: 0%;
+      justify-content: center;
 
       .delivery-address {
         width: 100%;
         padding: 10% 0;
-        margin-top:0;
+        margin-top: 0;
 
         .title {
-            margin: 7% 5%;
+          margin: 7% 5%;
         }
       }
       .order-total-container {
         width: 100%;
-        margin-top:0;
+        margin-top: 0;
         padding: 0 20px;
       }
     }
