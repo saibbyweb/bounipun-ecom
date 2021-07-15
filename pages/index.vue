@@ -103,7 +103,7 @@
       </div>
     </div>
     <!-- bounipun lab -->
-    <div class="bounipun-lab center" v-if="layout.bounipunLab.visible">
+    <div class="bounipun-lab col" v-if="layout.bounipunLab.visible">
       <div
         class="cover"
         :style="
@@ -455,15 +455,16 @@ export default {
 
   .bounipun-lab {
     width: 100%;
-
+  
     .cover {
-      width: 50%;
-      height: 50vh;
+      width: 100%;
+      height: 70vh;
       background-size: cover;
+      background-repeat: no-repeat;
       background-position: center;
     }
     .text {
-      width: 50%;
+      width: 100%;
     }
 
     @media (max-width: 768px) {
