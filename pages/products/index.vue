@@ -149,11 +149,12 @@
                     v-for="(color, colorIndex) in value.colors"
                     :key="colorIndex"
                     @click="setActiveColor(colorIndex, color._id)"
+                    :class="{ active: isActiveBounipunColor(color._id) }"
                   >
                     <div
                       class="box"
                       :style="getMainImageCSS(color)"
-                      :class="{ active: isActiveBounipunColor(color._id) }"
+                      
                     ></div>
                     <span class="name"> {{ color.name }} </span>
                   </div>
@@ -680,6 +681,7 @@ export default {
       }
       this.activeColorIndex = activeIndex;
       this.$refs.slideshow.setActiveImage(0);
+      window.scroll({top: 0, behavior: "smooth"})
     },
     isActiveBounipunColor(colorId) {
       const colorIndex = this.product.colors.findIndex(
@@ -846,22 +848,20 @@ export default {
 
     /* sticky details */
     .details {
-
       &.sticky {
         position: fixed;
-       bottom: 0;
-          left: 0;
+        bottom: 0;
+        left: 0;
         width: 100%;
         background-color: white;
         transition: span 0.3s ease-in-out;
         z-index: 2;
         box-shadow: 0px -4px 23px -13px rgba(38, 38, 38, 0.24);
 
-        @media(max-width: 768px) {
-         
+        @media (max-width: 768px) {
         }
       }
-      @media(max-width: 768px) {
+      @media (max-width: 768px) {
         margin-top: 10px;
       }
     }
@@ -1049,18 +1049,20 @@ export default {
             margin: 5px;
             height: 7vw;
             width: 7vw;
+              transition: all 0.3s ease-in-out;
+
+            &.active {
+              // border: 1px solid #bfbfbf;
+              box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.16);
+            }
 
             .box {
-              height: 80%;
-              width: 100%;
+              height: 5.5vw;
+              width: 5.5vw;
               background-size: contain;
               background-position: center;
               background-repeat: no-repeat;
               cursor: pointer;
-
-              &.active {
-                border: 1px solid #bfbfbf;
-              }
             }
 
             .name {
@@ -1075,10 +1077,10 @@ export default {
               width: 25vw;
               height: 25vw;
 
-              // .box {
-              //   width: 20vw;
-              //   height: 20vw;
-              // }
+              .box {
+                width: 20vw;
+                height: 20vw;
+              }
             }
           }
         }
@@ -1141,7 +1143,7 @@ export default {
               color: $gray;
             }
 
-            @media(max-width: 768px) {
+            @media (max-width: 768px) {
               .illustration {
                 width: 12vw;
               }
@@ -1166,7 +1168,7 @@ export default {
             margin: 0.5%;
             transition: all 0.2s cubic-bezier(0.215, 0.61, 0.355, 1);
             cursor: pointer;
-            
+
             span {
               color: white;
               text-align: center;
