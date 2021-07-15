@@ -1,15 +1,15 @@
 <template>
   <div v-if="productFetched" class="product-page flex start">
     <div ref="productImages" class="product-images">
-      <!-- product image slideshow container with thumbnails  -->
+      <!-- product image slideshow container with thumbnails (515px DEFAULT HEIGHT, 40 WIDTH)  -->
       <slideshow
         ref="slideshow"
         :images="images[activeColorIndex]"
         :slideshowOptions="{ thumbnails: true }"
         :customText="activeDisclaimerText"
         mSlideHeight="60vh"
-        dSlideHeight="515px"
-        :dSlideWidth="40"
+        dSlideHeight="65vh"
+        :dSlideWidth="30"
         size="cover"
       />
 
@@ -50,8 +50,8 @@
 
     <!-- product text details (product name, collection, base price -->
 
-    <div class="product-details">
-      <div ref="details" class="details" :class="{ sticky: sticky }">
+    <div ref="details" class="product-details" @scroll="detailsSectionScrolled" :class="{desktopSticky}">
+      <div class="details" :class="{ sticky: sticky, desktopSticky }">
         <!-- header -->
         <div class="header">
           <span class="collection" v-if="!thirdPartyProduct">
@@ -141,6 +141,7 @@
               <Accordion
                 :heading="value.name"
                 :expanded="ifActiveColorInCategory(value.colors)"
+                :noMargin="true"
               >
                 <div class="color-boxes">
                   <!-- color box (loop) -->
@@ -151,11 +152,7 @@
                     @click="setActiveColor(colorIndex, color._id)"
                     :class="{ active: isActiveBounipunColor(color._id) }"
                   >
-                    <div
-                      class="box"
-                      :style="getMainImageCSS(color)"
-                      
-                    ></div>
+                    <div class="box" :style="getMainImageCSS(color)"></div>
                     <span class="name"> {{ color.name }} </span>
                   </div>
                 </div>
@@ -374,7 +371,6 @@ export default {
     const slug = this.$route.query._id;
     this.fetchProduct(slug);
     setTimeout(() => {
-      this.scrollPosition = this.$refs.details.getBoundingClientRect().bottom;
       console.log(this.scrollPosition, "scroll position");
     }, 300);
   },
@@ -400,7 +396,8 @@ export default {
       productFetched: false,
       stockLimit: 3,
       scrollPosition: 0,
-      sticky: false
+      sticky: false,
+      desktopSticky: false
     };
   },
   computed: {
@@ -504,6 +501,11 @@ export default {
     adjustPrice(price) {
       price = parseInt(price);
       return this.$store.getters["customer/adjustPrice"](price);
+    },
+    detailsSectionScrolled(event) {
+      if (this.windowWidth < 768) return;
+
+      this.desktopSticky = event.target.scrollTop > 160;
     },
     handleScroll(event) {
       // console.log(this.$store.getters['customer/alreadyInCart'], );
@@ -681,7 +683,9 @@ export default {
       }
       this.activeColorIndex = activeIndex;
       this.$refs.slideshow.setActiveImage(0);
-      window.scroll({top: 0, behavior: "smooth"})
+      /* scroll page to top */
+      if (this.windowWidth < 768) window.scroll({ top: 0, behavior: "smooth" });
+      else this.$refs.details.scroll({ top: 0, behavior: "smooth" });
     },
     isActiveBounipunColor(colorId) {
       const colorIndex = this.product.colors.findIndex(
@@ -728,13 +732,18 @@ export default {
 <style lang="scss" scoped>
 .product-page {
   margin-top: 10vh;
-  padding: 2%;
-  // position: relative;
+  padding: 2.5%;
+  position: relative;
+  height: 90vh;
+  // overflow: hidden;
+  // background:red;
   // flex-direction: row-reverse;
 
   .product-images {
-    width: 40%;
+    width: 30%;
     position: relative;
+    // top:0;
+    // left:0;
 
     // background-color: rgba(165, 42, 42, 0.545);
     /* collection name, vertical */
@@ -842,51 +851,119 @@ export default {
   }
 
   .product-details {
-    width: 60%;
+    width: 70%;
     padding: 2%;
     box-sizing: border-box;
+    height: 90vh;
+    overflow-y: scroll;
+    position: relative;
+    z-index: 1;
 
+    &.desktopSticky {
+      margin-top:4vh;
+    }
+
+    @media (min-width: 769px) {
+      // padding-top: 13vw;
+    }
     /* sticky details */
     .details {
-      &.sticky {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        background-color: white;
-        transition: span 0.3s ease-in-out;
-        z-index: 2;
-        box-shadow: 0px -4px 23px -13px rgba(38, 38, 38, 0.24);
+      /* only desktop */
+      transition: span 0.3s ease-in-out;
 
-        @media (max-width: 768px) {
+      &.desktopSticky {
+        position: fixed;
+        width: 70%;
+        right: 0;
+        top: 10vh;
+        // height:21vh;
+        background-color: white;
+        overflow:hidden;
+        box-shadow: 20px 0px 15px rgba(0,0,0,0.16);
+        z-index: 2;
+
+        .header {
+          display: none;
+        }
+
+        .og-details {
+          .section-1 {
+            display: flex;
+            // justify-content: center;
+            align-items: center;
+            .main-details {
+              h3 {
+                font-size: 15px;
+              }
+              p {
+                  font-size: 10px;
+              }
+            }
+          }
+
+          .price-and-actions {
+            .price {
+              h5 {
+                font-size: 15px;
+              }
+            }
+            .add-to-cart {
+              button {
+                font-size: 12px;
+              }
+            }
+          }
         }
       }
+
       @media (max-width: 768px) {
         margin-top: 10px;
+        &.sticky {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          background-color: white;
+          transition: span 0.3s ease-in-out;
+          z-index: 2;
+          box-shadow: 0px -4px 23px -13px rgba(38, 38, 38, 0.24);
+        }
       }
     }
 
     .header {
       width: 100%;
-      background-color: $dark_gray;
       // height:20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 2% 4%;
+      padding: 1% 4%;
 
       span {
-        color: white;
+        color: $dark_gray;
 
         &.collection {
           text-transform: uppercase;
-          font-size: 13px;
+          font-size: 17px;
           font-family: $font_2;
         }
 
         &.gender {
-          font-size: 12px;
-          // font-style:  italic;
+          font-size: 14px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        padding: 2% 4%;
+        background-color: $dark_gray;
+        .span {
+          color: white;
+          &.collection {
+            font-size: 13px;
+          }
+          &.gender {
+            font-size: 12px;
+          }
         }
       }
     }
@@ -1049,7 +1126,7 @@ export default {
             margin: 5px;
             height: 7vw;
             width: 7vw;
-              transition: all 0.3s ease-in-out;
+            transition: all 0.3s ease-in-out;
 
             &.active {
               // border: 1px solid #bfbfbf;
@@ -1226,12 +1303,14 @@ export default {
   @media (max-width: 768px) {
     flex-direction: column;
     padding: 0;
+    height: auto;
 
     .product-images {
       width: 100%;
     }
     .product-details {
       width: 100%;
+      height: auto;
     }
   }
 }

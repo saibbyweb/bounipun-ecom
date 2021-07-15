@@ -98,6 +98,8 @@ export default {
   background-color: $primary_dark;
   width: 100%;
   padding: 2% 3%;
+  position: relative;
+  z-index: 2;
 
   .accordions {
     justify-content: space-around;
