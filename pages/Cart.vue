@@ -183,7 +183,7 @@ export default {
 
 <style lang="scss" scoped>
 .cart {
-  margin-top:12vh;
+  margin-top: 12vh;
 
   .title {
     font-size: 25px !important;
@@ -191,17 +191,26 @@ export default {
 }
 .cart-container {
   width: 100%;
-  justify-content: space-around;
+  justify-content: flex-start;
+  padding-left: 5%;
 
   .cart-items {
     width: 50%;
-    
+    // overflow-y: scroll;
   }
   .actions {
     width: 30%;
+    @media (min-width: 769px) {
+      position: fixed;
+      right: 5%;
+      top: 15vh;
+      height: 100%;
+    }
+    // background: red;
   }
-  @media(max-width: 768px) {
+  @media (max-width: 768px) {
     flex-direction: column;
+    padding-left: 0%;
     .cart-items {
       width: 100%;
     }
@@ -226,7 +235,7 @@ export default {
       }
     }
 
-    @media(max-width: 768px) {
+    @media (max-width: 768px) {
       width: 90%;
     }
   }
