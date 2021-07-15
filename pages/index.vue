@@ -16,7 +16,7 @@
       size="cover"
       :images="fetchSlideshow(layout.desktopMainSlideshow.slides)"
       mSlideHeight="120vw"
-      dSlideHeight="90vh"
+      dSlideHeight="80vh"
       :dSlideWidth="100"
     />
 
@@ -112,7 +112,7 @@
       </div>
     </div>
 
-    <div class="press-and-quote flex">
+    <div class="press-and-quote flex col">
       <!-- quote -->
       <div class="quote" v-if="layout.quote.visible">
         <!-- logo -->
@@ -264,26 +264,26 @@ export default {
 
   .quote {
     display: flex;
-    width: 50%;
-    height: 40vw;
-    justify-content: space-between;
+    width: 100%;
+    height: 20vw;
+    justify-content: center;
     padding: 5px;
     .logo {
-      width: 40%;
+      width: 20%;
       // height: 40vw;
       background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
     }
     .text {
-      width: 60%;
+      // width: 80%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       .text-2 {
         font-family: $font_4;
         line-height: 30px;
-        font-size: 18px;
+        font-size: 25px;
       }
       .head {
         text-align: center;
@@ -296,18 +296,23 @@ export default {
         width: 40vw;
         height: 40vw;
       }
+      .text {
+        .text-2 {
+          font-size: 18px;
+        }
+      }
     }
   }
-
+/* press */
   .press {
     display: flex;
-    width: 50%;
-    height: 40vw;
+    width: 100%;
+    height: 20vw;
     position: relative;
 
     .logo {
-      width: 40%;
-      height: 40vw;
+      width: 20%;
+      height: 20vw;
       background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
@@ -315,18 +320,20 @@ export default {
 
     .scrollable-list {
       justify-content: flex-start;
-      width: 60%;
+      width: 80%;
     }
 
     .image-list {
       // width: 70%;
       height: 100%;
       display: flex;
+      justify-content: flex-start;
       .image-box {
-        width: 25vw;
+        width: 20vw;
         height: 100%;
-        background-size: contain;
+        background-size: cover;
         background-position: center;
+        cursor: pointer;
         background-repeat: no-repeat;
       }
     }
