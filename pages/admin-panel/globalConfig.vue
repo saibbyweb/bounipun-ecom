@@ -3,39 +3,41 @@
     <!-- currency multiplier -->
     <InputBox
       type="number"
-      label="Currency Multiplier"
+      label="Currency Multiplier (e.g 1.2 means 20% increment)"
       v-model="doc.currencyMultiplier"
     />
     <!-- dollar value -->
     <InputBox
       type="number"
-      label="Normalized Dollar Value"
+      label="Normalized Dollar Value (in INR)"
       v-model="doc.dollarValue"
     />
     <!-- domestic shipping charge -->
     <InputBox
       type="number"
-      label="Domestic Shipping Charge"
+      label="Domestic Shipping Charge per Item (INR)"
       v-model="doc.domesticShippingCharge"
     />
     <!-- international shipping charge -->
     <InputBox
       type="number"
-      label="International Shipping Charge"
+      label="International Shipping Charge per Item (USD)"
       v-model="doc.internationalShippingCharge"
     />
     <!-- gst percentage -->
 
     <InputBox
       type="number"
-      label="GST Percentage"
+      label="GST Percentage (N/A)"
       v-model="doc.gstPercentage"
+      :disabled="true"
     />
     <!-- international tax percentage -->
     <InputBox
       type="number"
-      label="International Tax Percentage"
+      label="International Tax Percentage (N/A)"
       v-model="doc.internationalTaxPercentage"
+      :disabled="true"
     />
     
     <!-- actions -->

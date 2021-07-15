@@ -89,7 +89,7 @@ export default {
                     desc: 'Manage Homepage Layouts'
                 },
                 {
-                    name: 'Global Config',
+                    name: 'Configuration',
                     path: '/admin-panel/globalConfig',
                     desc: '...'
                 }

@@ -3,11 +3,6 @@
     class="page -broad center-col search-results-page"
     style="padding-top:3%;"
   >
-    <p>
-      Showing {{ totalMatches }} results for
-      <i> "{{ $route.query.searchTerm }}" </i>
-    </p>
-
     <!-- offcanvas filters -->
     <div class="offcanvas-filters shadow" :class="{ visible: filtersOpen }">
       <div style="position: relative;">
@@ -164,21 +159,28 @@
     </div>
 
     <!-- filter and sort -->
-    <div class="filters-and-sort">
-      <!-- filter -->
-      <button class="action" @click="filtersOpen = true">
-        Filters
-        <img class="arrow-bottom" src="/icons/arrow_bottom.png" />
-      </button>
+    <div class="fs-wrapper flex center col">
+      <p>
+        Showing {{ totalMatches }} results for
+        <i> "{{ $route.query.searchTerm }}" </i>
+      </p>
 
-      <!-- center pipe -->
-      <span class="pipe"> | </span>
+      <div class="filters-and-sort">
+        <!-- filter -->
+        <button class="action" @click="filtersOpen = true">
+          Filters
+          <img class="arrow-bottom" src="/icons/arrow_bottom.png" />
+        </button>
 
-      <!-- sort -->
-      <button class="action" @click="sortOpen = true">
-        Sort
-        <img class="arrow-bottom" src="/icons/arrow_bottom.png" />
-      </button>
+        <!-- center pipe -->
+        <span class="pipe"> | </span>
+
+        <!-- sort -->
+        <button class="action" @click="sortOpen = true">
+          Sort
+          <img class="arrow-bottom" src="/icons/arrow_bottom.png" />
+        </button>
+      </div>
     </div>
 
     <div class="search-results">
@@ -582,9 +584,24 @@ export default {
 <style lang="scss" scoped>
 .search-results-page {
   // background-color: #f4f5f7;
+
+  position: relative;
 }
+
+.fs-wrapper {
+  padding-top:10px;
+  position: fixed;
+  top: 10vh;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  background-color: white;
+  box-shadow: 20px 0px 15px rgba(0,0,0,0.16);
+
+}
+
 .filters-and-sort {
-  margin-top: 10px;
+  // margin-top: 10px;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -703,7 +720,9 @@ export default {
 .search-results {
   display: flex;
   flex-wrap: wrap;
-  margin-top: 5vw;
+  // margin-top: 5vw;
+
+  margin-top:10vh;
 }
 
 .pagination-bar {
