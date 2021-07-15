@@ -389,7 +389,7 @@ export default {
   padding: 1vw;
   margin: 5px 0;
   position: relative;
-  border: 1px dashed #efefef;
+  // border: 1px dashed #efefef;
   cursor: pointer;
 
 

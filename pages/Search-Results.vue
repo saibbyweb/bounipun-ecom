@@ -73,14 +73,18 @@
             v-for="(color, index) in filterData.baseColors"
             :key="index"
           >
-            <label class="label">
+            <label class="label flex start center">
+
               <input
                 type="checkbox"
                 name="baseColor"
                 :value="color.value"
                 v-model="color.checked"
               />
+
               {{ color.name }}
+              <div style="width:10px; height: 10px; margin-left:5px;" :style="`background: ${color.hex}`"> </div>
+
             </label>
           </div>
         </Accordion>
