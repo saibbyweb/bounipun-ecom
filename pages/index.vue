@@ -93,9 +93,7 @@
         <div
           class="mood"
           v-if="block.visible"
-          :style="
-            `background-image: url(${$getImagePath(block.moodImage)})`
-          "
+          :style="`background-image: url(${$getImagePath(block.moodImage)})`"
         ></div>
 
         <div class="pad center-col text" v-if="block.visible">
@@ -303,20 +301,34 @@ export default {
       .cover {
         background: red;
         width: 30%;
-        margin:5px;
+        margin: 5px;
       }
       .mood {
         width: 30%;
         height: 30vw;
         background-size: cover;
         background-position: center;
-        margin:5px;
-
+        margin: 5px;
       }
       .text {
         width: 30%;
-        margin:5px;
+        margin: 5px;
+      }
+    }
 
+    @media (max-width: 768px) {
+      
+      .p-block {
+        flex-direction: column;
+        .cover {
+          width: 100%;
+        }
+        .mood {
+          display: none;
+        }
+        .text {
+          width: 100%;
+        }
       }
     }
   }
