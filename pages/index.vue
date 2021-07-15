@@ -32,9 +32,9 @@
     </div>
 
     <!-- collection blocks -->
-    <div class="collection-blocks blocks section">
+    <div class="collection-blocks blocks section flex wrap">
       <div
-        class="block flex center"
+        class="block flex col"
         v-for="(block, index) in layout.collectionBlocks"
         :key="index"
       >
@@ -44,8 +44,8 @@
             size="cover"
             :images="fetchSlideshow(block.slideshow)"
             mslideHeight="120vw"
-            dSlideHeight="50vh"
-            :dSlideWidth="50"
+            dSlideHeight="60vh"
+            :dSlideWidth="30"
             :dots="true"
           />
           <div class="cta center">
@@ -58,7 +58,7 @@
           </div>
         </div>
         <!-- text block width heading and description -->
-        <div v-if="block.visible" class="pad center-col text">
+        <div v-if="block.visible" class="pad flex col text">
           <h2 class="text-1">{{ block.text1 }}</h2>
           <p class="text-2">{{ block.text2 }}</p>
           <p class="text-3">{{ block.text3 }}</p>
@@ -170,7 +170,7 @@ export default {
   },
   computed: {
     isMobile() {
-      return this.windowWidth < 768
+      return this.windowWidth < 768;
     }
   },
   methods: {
@@ -229,13 +229,48 @@ export default {
 
   .blocks {
     padding: 0 1%;
+    justify-content: center;
     .block {
-      height: 50vh;
+      width: 30%;
+      margin:5px;
       margin-bottom: 20px;
       overflow: hidden;
+      justify-content: flex-start;
+      
+
+      /* cover */
+      .cover {
+        height:60vh;
+        width: 100%;
+        position: relative;
+        // background-color:blue;
+        .cta {
+          position: absolute;
+          bottom: 10%;
+          width: 100%;
+          .action {
+            width: 38%;
+            padding: 2% 5%;
+            // filter: blur(1px);
+            background-color: #ffffff00;
+            border: 2px solid #ffffff;
+            color: #fff;
+          }
+
+          @media (max-width: 768px) {
+            bottom: 2%;
+          }
+        }
+
+        @media (max-width: 768px) {
+          width: 100%;
+        }
+      }
 
       .text {
-        width: 50%;
+        // background-color: red;
+        // height: 40vh;
+        width: 100%;
       }
     }
     @media (max-width: 768px) {
@@ -303,7 +338,7 @@ export default {
       }
     }
   }
-/* press */
+  /* press */
   .press {
     display: flex;
     width: 100%;
@@ -369,33 +404,6 @@ export default {
     .author {
       font-family: $font_2;
       font-size: 13px;
-    }
-  }
-  /* cover */
-  .cover {
-    width: 50%;
-    position: relative;
-
-    .cta {
-      position: absolute;
-      bottom: 10%;
-      width: 100%;
-      .action {
-        width: 38%;
-        padding: 2% 5%;
-        // filter: blur(1px);
-        background-color: #ffffff00;
-        border: 2px solid #ffffff;
-        color: #fff;
-      }
-
-      @media (max-width: 768px) {
-        bottom: 2%;
-      }
-    }
-
-    @media (max-width: 768px) {
-      width: 100%;
     }
   }
 
