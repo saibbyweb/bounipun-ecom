@@ -29,6 +29,8 @@
       <span class="price"> {{ currency }} {{ adjustPrice(item.price) }} </span>
       <!-- qty -->
       <span v-if="!allowUpdate" class="qty"> Qty: {{ item.quantity }} </span>
+       <!-- shipping time -->
+      <span v-if="!allowUpdate" class="qty"> Standard Shipping: 4 weeks </span>
 
       <!-- quantity picker -->
       <div v-if="allowUpdate" class="quantity-picker">

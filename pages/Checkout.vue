@@ -50,7 +50,7 @@
         <!-- payment specific -->
         <div class="payment-specific flex center col">
           <!-- shipping note -->
-          <p class="note">Standard shipping 4 weeks</p>
+          <p v-if="combinedDeliveryConsent" class="note">Combined Standard shipping for the whole order: 4 weeks</p>
           <!-- consent for combined delivery -->
           <div class="pad-10">
             <Checkbox
@@ -144,8 +144,7 @@ export default {
     /* create payment intent */
 
     /* according to currency, setup payment options */
-    if(this.currency.trim() !== "INR")
-      this.initializeStripe();
+    if (this.currency.trim() !== "INR") this.initializeStripe();
     // if (this.currency.trim() === "INR") this.fetchRazorpayOrderId();
     // else this.initializeStripe();
   },
@@ -165,7 +164,7 @@ export default {
       enableCheckout: false,
       elements: null,
       orderDetails: {},
-      combinedDeliveryConsent: false
+      combinedDeliveryConsent: true
     };
   },
   computed: {
@@ -265,7 +264,7 @@ export default {
           // /* complete checkout routine */
           const completeCheckout = await this.$post("/razorpayPaymentSuccess", {
             razorpay_order_id,
-            transactionId: razorpay_payment_id,
+            transactionId: razorpay_payment_id
           });
 
           if (completeCheckout.resolved === false) {
@@ -367,6 +366,14 @@ export default {
 
   .d-o-p {
     width: 30%;
+
+    // @media (min-width: 769px) {
+    //   position: fixed;
+    //   right: 5%;
+    //   top: 10vh;
+    //   height: 90vh;
+    // }
+
     .delivery-address {
       width: 100%;
     }
