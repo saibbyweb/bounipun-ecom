@@ -43,9 +43,9 @@
           <slideshow
             size="cover"
             :images="fetchSlideshow(block.slideshow)"
-            mslideHeight="120vw"
-            dSlideHeight="60vh"
-            :dSlideWidth="30"
+            mSlideHeight="130vw"
+            dSlideHeight="70vh"
+            :dSlideWidth="27"
             :dots="true"
           />
           <div class="cta center">
@@ -69,7 +69,7 @@
     <!-- product list block -->
     <div class="product-list-blocks flex wrap col section">
       <div
-        class="p-block flex center"
+        class="p-block flex"
         v-for="(block, index) in layout.productListBlocks"
         :key="index"
       >
@@ -78,9 +78,9 @@
           <slideshow
             size="cover"
             :images="fetchSlideshow(block.imageList)"
-            mSlideHeight="120vw"
-            dSlideHeight="30vw"
-            :dSlideWidth="30"
+            mSlideHeight="130vw"
+            dSlideHeight="70vh"
+            :dSlideWidth="27"
             :dots="true"
           />
 
@@ -237,9 +237,9 @@ export default {
   /* mainly collection blocks */
   .blocks {
     padding: 0 1%;
-    justify-content: center;
+    justify-content: space-evenly;
     .block {
-      width: 30%;
+      width: 27%;
       margin: 5px;
       margin-bottom: 20px;
       overflow: hidden;
@@ -267,16 +267,16 @@ export default {
   }
   /* cover */
   .cover {
-    height: 60vh;
+    height: 70vh;
     width: 100%;
     position: relative;
     // background-color:blue;
     .cta {
       position: absolute;
-      bottom: 10%;
+      bottom: 5%;
       width: 100%;
       .action {
-        width: 38%;
+        width: 48%;
         padding: 2% 5%;
         // filter: blur(1px);
         background-color: #ffffff00;
@@ -285,43 +285,49 @@ export default {
       }
 
       @media (max-width: 768px) {
-        bottom: 2%;
+        bottom: 4%;
       }
     }
 
     @media (max-width: 768px) {
       width: 100%;
-      height: auto;
+      height: 130vw;
     }
   }
 
   .product-list-blocks {
     .p-block {
+      padding: 0 1%;
       width: 100%;
-
+      justify-content: space-evenly;
+      margin-bottom: 10px;
       .cover {
-        width: 30%;
+        width: 27%;
         margin: 5px;
       }
       .mood {
-        width: 30%;
-        height: 30vw;
+        width: 27%;
+        height: 70vh;
         background-size: cover;
         background-position: center;
         margin: 5px;
       }
       .text {
-        width: 30%;
+        width: 27%;
         margin: 5px;
       }
+
     }
 
     @media (max-width: 768px) {
       
       .p-block {
         flex-direction: column;
+        justify-content: center;
+        padding:0%;
         .cover {
           width: 100%;
+          margin:0px;
         }
         .mood {
           display: none;

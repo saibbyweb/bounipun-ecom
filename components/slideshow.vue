@@ -202,10 +202,6 @@ export default {
     overflow-x: auto;
     justify-content: flex-start;
 
-    // @media screen and (min-width: 768px) {
-    //     justify-content: center;
-    // }
-
     &::-webkit-scrollbar {
       display: none;
     }
@@ -219,9 +215,6 @@ export default {
       transition: all 0.4s ease-in-out;
 
       .product-image {
-        // height:120vw;
-        // width: 100vw;
-
         overflow: hidden;
         background-position: center;
         background-repeat: no-repeat;
@@ -289,7 +282,7 @@ export default {
     align-items: center;
     box-sizing: border-box;
     position: absolute;
-    bottom: 2%;
+    bottom: 1px;
     left: 0;
     width: 100%;
     margin: -1%;
