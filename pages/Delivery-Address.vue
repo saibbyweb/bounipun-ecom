@@ -26,11 +26,11 @@
           "
           :countryCode="countryDialCode"
         />
-        <!-- consent for adding address to address book -->
-        <Checkbox
+        <!-- TODO: consent for adding address to address book -->
+        <!-- <Checkbox
           label="Save address for later use."
           v-model="saveNewAddress"
-        />
+        /> -->
       </div>
 
       <div class="order-total-container">
@@ -209,6 +209,17 @@ export default {
     },
     proceedToCheckout() {
       if (!this.validateForm()) return;
+
+      /* check if user is logged in */
+      if (!this.$store.state.customer.authorized) {
+        alert("not logged in");
+        /* TODO: DO_IT -> You Can */
+        /* at this point, you need to push an sms to the phone number provided above */
+        /* on successful otp verification, register the user name with first name, surname, mobile number */
+        /* and do the required stuff and move to checkout */
+      }
+
+      return;
 
       /* collect delivery address */
       let deliveryAddress = {};

@@ -1,5 +1,5 @@
 <template>
-  <div class="order-total" @click="createPaymentIntent">
+  <div class="order-total">
     <!-- cart total -->
     <div class="data-point flex between">
       <p class="name">
