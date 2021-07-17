@@ -50,7 +50,12 @@
 
     <!-- product text details (product name, collection, base price -->
 
-    <div ref="details" class="product-details" @scroll="detailsSectionScrolled" :class="{desktopSticky}">
+    <div
+      ref="details"
+      class="product-details"
+      @scroll="detailsSectionScrolled"
+      :class="{ desktopSticky }"
+    >
       <div class="details" :class="{ sticky: sticky, desktopSticky }">
         <!-- header -->
         <div class="header">
@@ -150,9 +155,12 @@
                     v-for="(color, colorIndex) in value.colors"
                     :key="colorIndex"
                     @click="setActiveColor(colorIndex, color._id)"
-                    :class="{ active: isActiveBounipunColor(color._id) }"
                   >
-                    <div class="box" :style="getMainImageCSS(color)"></div>
+                    <div
+                      class="box"
+                      :style="getMainImageCSS(color)"
+                      :class="{ active: isActiveBounipunColor(color._id) }"
+                    ></div>
                     <span class="name"> {{ color.name }} </span>
                   </div>
                 </div>
@@ -742,6 +750,7 @@ export default {
   .product-images {
     width: 30%;
     position: relative;
+    overflow: hidden;
     // top:0;
     // left:0;
 
@@ -852,7 +861,7 @@ export default {
 
   .product-details {
     width: 70%;
-    padding: 2%;
+    // padding: 2%;
     box-sizing: border-box;
     height: 90vh;
     overflow-y: scroll;
@@ -860,7 +869,7 @@ export default {
     z-index: 1;
 
     &.desktopSticky {
-      margin-top:4vh;
+      margin-top: 4vh;
     }
 
     @media (min-width: 769px) {
@@ -872,14 +881,16 @@ export default {
       transition: span 0.3s ease-in-out;
 
       &.desktopSticky {
+        overflow-x: hidden;
+
         position: fixed;
-        width: 70%;
+        width: 69%;
         right: 0;
         top: 10vh;
         // height:21vh;
         background-color: white;
-        overflow:hidden;
-        box-shadow: 20px 0px 15px rgba(0,0,0,0.16);
+        overflow: hidden;
+        box-shadow: 20px 0px 15px rgba(0, 0, 0, 0.16);
         z-index: 2;
 
         .header {
@@ -896,7 +907,7 @@ export default {
                 font-size: 15px;
               }
               p {
-                  font-size: 10px;
+                font-size: 10px;
               }
             }
           }
@@ -1128,11 +1139,6 @@ export default {
             width: 7vw;
             transition: all 0.3s ease-in-out;
 
-            &.active {
-              // border: 1px solid #bfbfbf;
-              box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.16);
-            }
-
             .box {
               height: 5.5vw;
               width: 5.5vw;
@@ -1140,6 +1146,10 @@ export default {
               background-position: center;
               background-repeat: no-repeat;
               cursor: pointer;
+
+              &.active {
+                box-shadow: 1px 1px 4px 0px rgba(0, 0, 0, 0.16);
+              }
             }
 
             .name {

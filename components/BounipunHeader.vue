@@ -59,23 +59,23 @@
 <script>
 export default {
   created() {
-    if (process.client) {
-      window.addEventListener("scroll", this.handleScroll);
-    }
-    if (this.$route.name !== "index") {
-      this.darkMode = true;
-      return;
-    }
+    // if (process.client) {
+    //   window.addEventListener("scroll", this.handleScroll);
+    // }
+    // if (this.$route.name !== "index") {
+    //   this.darkMode = true;
+    //   return;
+    // }
   },
   destroyed() {
-    if (process.client) {
-      window.removeEventListener("scroll", this.handleScroll);
-    }
+    // if (process.client) {
+    //   window.removeEventListener("scroll", this.handleScroll);
+    // }
   },
   data() {
     return {
-      darkMode: this.$route.name === "products-collection" ? true : false
-      // darkMode: true
+      // darkMode: this.$route.name === "products-collection" ? true : false
+      darkMode: true
     };
   },
   computed: {
@@ -92,7 +92,7 @@ export default {
   watch: {
     $route(to, from) {
       console.log(to.name);
-      this.darkMode = to.name !== "index";
+      // this.darkMode = to.name !== "index";
     }
   },
   methods: {
@@ -173,6 +173,8 @@ export default {
     width: 1.7vw;
     margin: 4%;
     position: relative;
+      margin-left: 10px;
+
 
     .cart-count {
       background: #c54343;
@@ -188,6 +190,9 @@ export default {
 
     img {
       width: 100%;
+    }
+
+    &.whatsapp {
     }
 
     @media (max-width: $breakpoint-tablet) {

@@ -275,14 +275,13 @@ export default {
 
   /* indicator dots */
   .dots {
-    // width: 100vw;
     height: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
     position: absolute;
-    bottom: 1px;
+    bottom: 7px;
     left: 0;
     width: 100%;
     margin: -1%;
@@ -294,16 +293,11 @@ export default {
     .dot {
       height: 2px;
       width: 19px;
-      // border-radius: 50%;
       background-color: #ffffffba;
-
-      // border:1px solid #6a6a6a;
       margin: 0 0 5px;
       transition: all 0.3s ease-in-out;
-      // border: 1px solid rgb(106, 106, 106);
 
       &.active {
-        // background-color: $dark_gray;
         background-color: #7d7d7d;
       }
     }

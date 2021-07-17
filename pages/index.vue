@@ -233,7 +233,7 @@ export default {
 
 <style lang="scss">
 .homepage {
-  // margin-top: 10vh;
+  margin-top: 10vh;
   /* mainly collection blocks */
   .blocks {
     padding: 0 1%;
@@ -472,6 +472,13 @@ export default {
 /* bounipun lab */
   .bounipun-lab {
     width: 100%;
+
+    .cta {
+      .action {
+        width: auto;
+        padding: 1% 2.5%;
+      }
+    }
   
     .cover {
       width: 100%;
