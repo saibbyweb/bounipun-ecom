@@ -68,24 +68,28 @@
 
         <!-- base color options -->
         <Accordion heading="Base Color" :expanded="true">
-          <div
-            class="option"
-            v-for="(color, index) in filterData.baseColors"
-            :key="index"
-          >
-            <label class="label flex start center">
+          <div class="flex wrap colors">
+            <div
+              class="option flex col center"
+              v-for="(color, index) in filterData.baseColors"
+              :key="index"
+            >
+              <div class="color-box shadow" :style="`background: ${color.hex}`"></div>
 
-              <input
-                type="checkbox"
-                name="baseColor"
-                :value="color.value"
-                v-model="color.checked"
-              />
+              <label class="label flex start center">
+     
 
-              {{ color.name }}
-              <div style="width:10px; height: 10px; margin-left:5px;" :style="`background: ${color.hex}`"> </div>
+                {{ color.name }}
+              </label>
+                         <input
+                  class="color-check"
+                  type="checkbox"
+                  name="baseColor"
+                  :value="color.value"
+                  v-model="color.checked"
+                />
 
-            </label>
+            </div>
           </div>
         </Accordion>
 
@@ -593,15 +597,41 @@ export default {
 }
 
 .fs-wrapper {
-  padding-top:10px;
+  padding-top: 10px;
   position: fixed;
   top: 10vh;
   left: 0;
   z-index: 2;
   width: 100%;
   background-color: white;
-  box-shadow: 20px 0px 15px rgba(0,0,0,0.16);
+  box-shadow: 20px 0px 15px rgba(0, 0, 0, 0.16);
+}
 
+.colors {
+  .option {
+    margin:5px;
+    .color-box {
+      height: 50px;
+      width: 50px;
+      margin-left: 5px;
+    }
+    .label {
+      margin-top:10px;
+    }
+
+    @media(max-width: 768px) {
+      width: 25%;
+      .color-box {
+        height:30px;
+        width: 30px;
+        margin: 10px;
+      }
+
+      .label {
+        font-size:10px;
+      }
+    }
+  }
 }
 
 .filters-and-sort {
@@ -726,7 +756,7 @@ export default {
   flex-wrap: wrap;
   // margin-top: 5vw;
 
-  margin-top:10vh;
+  margin-top: 10vh;
 }
 
 .pagination-bar {

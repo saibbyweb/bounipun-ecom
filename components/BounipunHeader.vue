@@ -192,9 +192,6 @@ export default {
       width: 100%;
     }
 
-    &.whatsapp {
-    }
-
     @media (max-width: $breakpoint-tablet) {
       width: 4vw;
       margin: 6%;
