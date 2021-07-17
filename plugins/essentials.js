@@ -128,10 +128,9 @@ export default (context, inject) => {
     result.fetched = true;
     result.doc = response;
     setTimeout(() => console.log(result.doc, "-FROM ESSENTIALS"), 2000);
-    // console.log(result.doc, '-FROM ESSENTIALS');
 
     return result;
-  };
+  }
 
   /* fetch DOCUMENT(s) / CUSTOMER ONLY */
   const fetchData = async (model, filters, multiple = false) => {

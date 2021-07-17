@@ -63,8 +63,13 @@ export default {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  padding: 5%;
   width: 100%;
+  padding:2% 5%;
+
+  @media(max-width: 768px) {
+  padding: 5%;
+
+  }
 
   .label {
     font-family: $font_2_bold;
@@ -96,10 +101,10 @@ export default {
 
     .checked {
       position: absolute;
-      width:15%;
+      width: 15%;
       height: 100%;
       right: 0;
-      top:0;
+      top: 0;
 
       img {
         height: 20px;

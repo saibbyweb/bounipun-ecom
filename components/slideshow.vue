@@ -21,6 +21,7 @@
       <div
         v-if="dots && !singleImage"
         class="dots"
+        :class="{main}"
         :style="{ width: slideWidth }"
       >
         <div
@@ -111,6 +112,10 @@ export default {
     dSlideHeight: {
       type: String,
       default: "100vw"
+    },
+    main: {
+      type:Boolean,
+      default: false
     }
   },
   data() {
@@ -281,13 +286,22 @@ export default {
     align-items: center;
     box-sizing: border-box;
     position: absolute;
-    bottom: 7px;
+    bottom: 1px;
     left: 0;
     width: 100%;
     margin: -1%;
 
+    &.main {
+      bottom: 7px;
+    }
+
     @media (max-width: 768px) {
       bottom: 0;
+
+      &.main {
+        bottom: 0;
+      }
+
     }
 
     .dot {

@@ -35,13 +35,13 @@
         />
       </div>
 
-      <div class="action-icon">
+      <!-- <div class="action-icon">
         <img
           class=""
           :src="getIconPath('heart.png')"
           @click="$router.push('/wishlist')"
         />
-      </div>
+      </div> -->
 
       <div class="action-icon">
         <!-- cart count -->
@@ -83,7 +83,7 @@ export default {
       return this.$store.getters["customer/getCartCount"];
     },
     whatsAppShareLink() {
-      const BASE_SHARE_URL = "https://wa.me/918082007711?text=";
+      const BASE_SHARE_URL = "https://wa.me/919103077655?text=";
       let msg = `Hi! Could you help me with a few queries!`;
       msg = encodeURI(msg);
       return BASE_SHARE_URL + msg;
@@ -147,6 +147,7 @@ export default {
 
   .logo {
     height: inherit;
+    cursor: pointer;
 
     img {
       height: 50%;
@@ -174,6 +175,7 @@ export default {
     margin: 4%;
     position: relative;
       margin-left: 10px;
+      cursor: pointer;
 
 
     .cart-count {

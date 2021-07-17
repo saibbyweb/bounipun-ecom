@@ -1,51 +1,70 @@
 <template>
-  <div class="page center-col">
-    <h3 class="heading">Create new account</h3>
-    <!-- country select -->
-    <CountrySelect v-model="countryDialCode" @setCountryIsoCode="countryIsoCode = $event" />
-    <!-- first name -->
-    <InputCredential
-      label="First Name"
-      v-model="firstName"
-      :disabled="otpSent"
-    />
-    <!-- surname -->
-    <InputCredential label="Sur Name" v-model="surName" :disabled="otpSent" />
-    <!-- TODO: country selector should be independent component -->
-    <!-- phone number -->
-    <InputCredential
-      type="number"
-      label="Phone Number"
-      v-model="phoneNumber"
-      :disabled="otpSent"
-      :isMobileNumber="true"
-      :countryDialCode="countryDialCode"
-    />
-    <!-- otp -->
-    <InputCredential label="One Time Password" v-model="otp" v-if="otpSent" />
+  <div class="page flex">
+    <div class="section-one flex center col">
+      <h3 class="heading">Create new account</h3>
+      <!-- country select -->
+      <CountrySelect
+        v-model="countryDialCode"
+        @setCountryIsoCode="countryIsoCode = $event"
+      />
+      <!-- first name -->
+      <InputCredential
+        label="First Name"
+        v-model="firstName"
+        :disabled="otpSent"
+      />
+      <!-- surname -->
+      <InputCredential label="Sur Name" v-model="surName" :disabled="otpSent" />
+      <!-- TODO: country selector should be independent component -->
+      <!-- phone number -->
+      <InputCredential
+        type="number"
+        label="Phone Number"
+        v-model="phoneNumber"
+        :disabled="otpSent"
+        :isMobileNumber="true"
+        :countryDialCode="countryDialCode"
+      />
+      <!-- otp -->
+      <InputCredential label="One Time Password" v-model="otp" v-if="otpSent" />
 
-    <!-- form error -->
-    <p v-if="error.status" class="msg error">{{ error.message }}</p>
+      <!-- form error -->
+      <p v-if="error.status" class="msg error">{{ error.message }}</p>
 
-    <!-- otp sent message -->
-    <p class="msg success" v-if="otpSent">
-      A one time password has been sent to your mobile number.
-    </p>
-    <!-- send otp -->
-    <button v-if="!otpSent" class="action" @click="sendOtp()">Continue</button>
-    <!-- register -->
-    <button v-if="otpSent" class="action" @click="registerAndLogin()">
-      Register
-    </button>
+      <!-- otp sent message -->
+      <p class="msg success" v-if="otpSent">
+        A one time password has been sent to your mobile number.
+      </p>
+          
+      <br>
 
-    <h3 id="already" class="heading">Already Have An Account?</h3>
-    <p class="desc">
-      Access your order history, personal information and receive our digital
-      communications
-    </p>
-    <button id="access-account" class="action" @click="$router.push('/login')">
-      Access My Bounipun Account
-    </button>
+      <!-- send otp -->
+      <button v-if="!otpSent" class="action" @click="sendOtp()">
+        Continue
+      </button>
+
+      <!-- register -->
+      <button v-if="otpSent" class="action" @click="registerAndLogin()">
+        Register
+      </button>
+    </div>
+
+    <div class="section-two flex center col">
+      <h3 id="already" class="heading">Already Have An Account?</h3>
+      <p class="desc">
+        Access your order history, personal information and receive our digital
+        communications
+      </p>
+
+
+      <button
+        id="access-account"
+        class="action"
+        @click="$router.push('/login')"
+      >
+        Access My Bounipun Account
+      </button>
+    </div>
   </div>
 </template>
 
@@ -123,7 +142,7 @@ export default {
       /* TODO: should work but not tested */
       this.shiftCart();
       /* fetch profile */
-      this.$store.dispatch('customer/fetchProfile');
+      this.$store.dispatch("customer/fetchProfile");
       /* and move back to homepage */
       this.$store.commit("customer/setAuthorization", true);
       /* navigate homepage */
@@ -151,18 +170,20 @@ export default {
   font-family: $font_1_bold;
   text-transform: uppercase;
   color: $dark_gray;
-  align-self: flex-start;
-  text-align: center;
+  align-self: center;
+  margin-bottom: 20px;
+
 
   &#already {
     align-self: center;
-    margin-top: 20%;
+    margin-top: 10%;
   }
 }
 
 .desc {
   font-size: 10px;
   padding: 3%;
+  text-align: center;
 
   &.otp-sent {
     text-align: center;
@@ -182,5 +203,24 @@ export default {
 
 #access-account {
   margin-bottom: 10%;
+}
+
+.page {
+  min-height: 65vh;
+  .section-one {
+    width: 50%;
+  }
+  .section-two {
+    width: 50%;
+  }
+  @media (max-width: 768px) {
+    flex-direction: column;
+    .section-one {
+      width: 100%;
+    }
+    .section-two {
+      width: 100%;
+    }
+  }
 }
 </style>

@@ -18,6 +18,8 @@
       mSlideHeight="120vw"
       dSlideHeight="90vh"
       :dSlideWidth="100"
+      :main="true"
+
     />
 
     <!-- main text block -->

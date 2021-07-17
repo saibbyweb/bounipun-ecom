@@ -244,7 +244,7 @@ export default {
     }
     .order-total-container {
       width: 30%;
-      margin-top: 10%;
+      margin-top: 3%;
       @media (min-width: 769px) {
         position: fixed;
         right: 5%;

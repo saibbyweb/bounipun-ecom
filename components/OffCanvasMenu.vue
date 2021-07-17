@@ -11,14 +11,19 @@
               : ""
           }}
         </h4>
-        <!-- <img class="close" src="/icons/light/close.png" @click="$emit('closeMenu')"> -->
+
+        <img
+          class="close"
+          src="/icons/light/close.png"
+          @click="$emit('closeMenu')"
+        />
 
         <h4
           v-if="!$store.state.customer.authorized"
-          class="white"
+          class="white login-reg"
           @click="navigate('/login')"
         >
-          Login/Register
+          Login / Register
         </h4>
       </div>
 
@@ -35,8 +40,8 @@
         {{ collection.name }}
       </button>
       <!-- <button class="clear item"> Categories </button> -->
-      <button class="clear item">The Bounipun Lab</button>
-      <button class="clear item">Story</button>
+      <!-- <button class="clear item">The Bounipun Lab</button> -->
+      <!-- <button class="clear item">Story</button> -->
 
       <div v-if="$store.state.customer.authorized">
         <!-- acc items -->
@@ -46,38 +51,49 @@
         <button @click="navigate('/my-account/orders')" class="clear item acc">
           Orders
         </button>
-        <button
+        <!-- TODO: address book  pening-->
+        <!-- <button
           @click="navigate('/my-account/address-book')"
           class="clear item acc"
         >
           Address Book
-        </button>
+        </button> -->
+
         <button
           @click="navigate('/my-account/profile-details')"
           class="clear item acc"
         >
           Profile Details
         </button>
-        <button
+
+        <!-- TODO: gift cards pending -->
+        <!-- <button
           @click="navigate('/my-account/gift-cards')"
           class="clear item acc"
         >
           Gift Cards
-        </button>
+        </button> -->
       </div>
 
       <br />
+      <br />
       <!-- links -->
-      <button class="clear link" @click="$router.push('/faqs')">FAQs</button>
-      <button class="clear link">Help</button>
-      <button class="clear link">About Us</button>
+      <!-- <button class="clear link" @click="$router.push('/faqs')">FAQs</button> -->
+      <!-- <button class="clear link">Help</button> -->
+      <!-- <button class="clear link">About Us</button> -->
       <button class="clear link">Terms of Use</button>
       <button class="clear link">Privacy Policy</button>
 
       <br />
 
       <!-- logout -->
-      <button v-if="$store.state.customer.authorized" @click="logout()" class="clear link logout">Logout</button>
+      <button
+        v-if="$store.state.customer.authorized"
+        @click="logout()"
+        class="clear link logout"
+      >
+        Logout
+      </button>
     </div>
     <div class="place-holder" @click="$emit('closeMenu')"></div>
   </div>
@@ -126,17 +142,17 @@ export default {
       this.collections = collections.docs;
     },
     async logout() {
-      const { resolved, response }  = await this.$post('/logoutCustomer');
-      
+      const { resolved, response } = await this.$post("/logoutCustomer");
+
       /* set user as logged off */
       this.$store.commit("customer/unauthorize");
-      this.$router.push('/');
+      this.$router.push("/");
       await this.$store.dispatch("customer/fetchCart");
       this.$forceUpdate();
       this.$emit("closeMenu");
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -160,6 +176,10 @@ export default {
     background-color: white;
     position: relative;
 
+    @media (min-width: 769px) {
+      width: 30%;
+    }
+
     .header {
       background: $primary_dark;
       height: 10vh;
@@ -172,8 +192,27 @@ export default {
       box-sizing: border-box;
 
       .close {
-        height: 5vw;
-        width: 5vw;
+        height: 25px;
+        width: 25px;
+        position: absolute;
+        top: 3%;
+        right: 3%;
+        transition: all 0.4s ease-in-out;
+        cursor: pointer;
+
+        &:hover {
+          transform: rotate(70deg);
+        }
+
+        @media (max-width: 768px) {
+          display: none;
+        }
+      }
+      .login-reg {
+        width:100%;
+        cursor: pointer;
+        text-align: center;
+        text-transform: uppercase;
       }
     }
 
@@ -195,6 +234,9 @@ export default {
       &.sub-item {
         font-size: 11px;
       }
+      @media (min-width: 769px) {
+        padding: 10px;
+      }
     }
 
     .link {
@@ -204,7 +246,7 @@ export default {
       width: 100%;
       text-align: left;
       padding: 2%;
-      margin-left: 5px;
+      margin-left: 2px;
       opacity: 0.8;
     }
 

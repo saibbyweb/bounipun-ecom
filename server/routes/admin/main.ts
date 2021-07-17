@@ -23,6 +23,7 @@ router.post('/uploadImage', uploader.single('productImage'), async (req: any, re
 /* get document route */
 router.post('/getDocument', async (req, res) => {
     const { model, _id, requestedBy } = req.body;
+    console.log(_id, '-fetch doc called')
     const collection = db.model(model);
     let document: any = collection.findOne({ _id }).lean()
 
@@ -110,7 +111,7 @@ router.post('/getDocument', async (req, res) => {
         }
     }
     document = await document;
-    console.log(document);
+    // console.log(document);
     res.json(document);
 });
 

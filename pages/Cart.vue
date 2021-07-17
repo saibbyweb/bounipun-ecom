@@ -184,6 +184,7 @@ export default {
 <style lang="scss" scoped>
 .cart {
   margin-top: 12vh;
+  min-height: 70vh;
 
   .title {
     font-size: 25px !important;

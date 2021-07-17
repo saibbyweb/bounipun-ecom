@@ -1,40 +1,31 @@
 <template>
-  <div class="footer-new">
+  <div class="footer">
     <div class="flex accordions">
       <!-- important links -->
-      <div class="container">
-        <Accordion
-          heading="Important Links"
-          :light="true"
-          :noMargin="true"
-          :expanded="true"
-        >
-          <div class="flex col start">
-            <Button
-              class="item"
-              v-for="item in importantLinks"
-              :key="item.name"
-            >
-              {{ item.name }}
-            </Button>
-          </div>
-        </Accordion>
+      <div class="container center">
+        <div class="flex col center">
+          <Button
+            @click="$router.push(item.path)"
+            class="item"
+            v-for="item in importantLinks"
+            :key="item.name"
+          >
+            {{ item.name }}
+          </Button>
+        </div>
       </div>
 
       <!-- find us on -->
-      <div class="container">
-        <!-- <Accordion
-          heading="Find Us On"
-          :light="true"
-          :noMargin="true"
-          :expanded="true"
-        >
-  
-        </Accordion> -->
-
+      <div class="container find-us center">
         <div class="find-us-on flex center">
-          <img src="/icons/light/instagram.png" />
-          <img src="/icons/light/facebook.png" />
+          <!-- instagram -->
+          <a target="_blank" href="https://instagram.com/bounipun">
+            <img src="/icons/light/instagram.png" />
+          </a>
+          <!-- facebook -->
+          <a target="_blank" href="https://facebook.com/bounipun">
+            <img src="/icons/light/facebook.png" />
+          </a>
         </div>
       </div>
     </div>
@@ -89,9 +80,9 @@ export default {
         "Terms & Conditions"
       ],
       importantLinks: [
-        { name: "Contact Us", path: "" },
+        { name: "Contact Us", path: "/contact-us" },
         { name: "Shipping & Returns", path: "" },
-        { name: "Terms & Conditions", path: "" },
+        { name: "Terms & Conditions", path: "/terms" },
         { name: "Privacy Policy", path: "" }
       ]
     };
@@ -100,7 +91,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.footer-new {
+.footer {
   background-color: $primary_dark;
   width: 100%;
   padding: 2% 3%;
@@ -113,12 +104,17 @@ export default {
 
     .container {
       width: 40%;
+
+      &.find-us {
+        margin-top: 15px;
+      }
     }
 
     @media (max-width: 768px) {
-      // flex-direction: column;
+      flex-direction: column;
+      align-items: center;
       .container {
-        width: 50%;
+        width: 100%;
       }
     }
   }
@@ -134,7 +130,7 @@ export default {
   @media (max-width: 768px) {
     padding: 7% 3%;
     .logo {
-      margin-top: 40px;
+      margin-top: 10px;
       img {
         width: 40%;
       }
@@ -147,12 +143,12 @@ export default {
     color: white;
     padding: 0;
     margin: 7px 0;
-    font-size: 13px;
+    font-size: 15px;
     color: #efefef;
     font-family: $font_1;
 
     @media (max-width: $breakpoint-tablet) {
-      font-size: 13px;
+      font-size: 15px;
     }
   }
 
@@ -177,124 +173,6 @@ export default {
       color: white;
       font-size: 10px;
       font-family: $font_2;
-    }
-  }
-}
-.footer {
-  background-color: $primary_dark;
-  width: 100%;
-  display: grid;
-  grid-template-columns: 33.33% auto 33.33%;
-  grid-template-rows: auto auto auto;
-  padding: 1% 0 2% 0;
-  box-sizing: border-box;
-
-  @media (max-width: $breakpoint-tablet) {
-    grid-template-columns: 50% 50%;
-    padding: 2% 0 5% 0;
-  }
-
-  .center {
-    align-items: flex-start;
-  }
-
-  .section {
-    // border: 1px solid #efefef;
-    display: flex;
-    box-sizing: border-box;
-
-    @media (max-width: $breakpoint-tablet) {
-      padding: 8%;
-    }
-
-    /* help, find us on, company */
-    &#help,
-    &#find-us-on,
-    &#company {
-      padding: 2%;
-      flex-direction: column;
-      align-items: flex-start;
-
-      h3 {
-        color: white;
-        margin: 6px 0;
-        text-transform: uppercase;
-        font-family: $font_2_semibold;
-        font-weight: 900;
-        letter-spacing: 2px;
-        font-size: 1.5vw;
-
-        @media (max-width: $breakpoint-tablet) {
-          font-size: 4vw;
-        }
-      }
-
-      .item {
-        background: transparent;
-        border: none;
-        color: white;
-        padding: 0;
-        margin: 3px 0;
-        font-size: 1vw;
-        color: #efefef;
-
-        @media (max-width: $breakpoint-tablet) {
-          font-size: 2.8vw;
-        }
-      }
-    }
-
-    /* card symbols */
-    &#card-symbols {
-      grid-area: 2 / 1 / 2 / 4;
-      align-items: center;
-      justify-content: center;
-      padding: 0%;
-      display: grid;
-      grid-template-columns: 30% 30%;
-      grid-template-rows: 30% 30%;
-
-      img {
-        width: 80px;
-        margin: 1%;
-
-        &:nth-child(1) {
-          justify-self: center;
-          align-self: center;
-        }
-
-        &:nth-child(2) {
-          justify-self: center;
-          align-self: center;
-        }
-
-        &:nth-child(3) {
-          justify-self: center;
-          align-self: center;
-        }
-
-        &:nth-child(4) {
-          justify-self: center;
-          align-self: center;
-        }
-      }
-
-      @media (max-width: $breakpoint-tablet) {
-        grid-area: auto;
-
-        img {
-          width: 85%;
-        }
-      }
-    }
-
-    .last-footer-item {
-      color: white;
-      font-size: 15px;
-
-      @media (max-width: $breakpoint-tablet) {
-        font-size: 2.8vw;
-      }
     }
   }
 }

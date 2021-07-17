@@ -1,52 +1,54 @@
 <template>
-  <div class="page center-col">
-    <h3 class="heading">Member Sign In</h3>
-    <!-- country select -->
-    <CountrySelect v-model="countryDialCode" @setCountryIsoCode="countryIsoCode = $event" />
+  <div class="page flex">
+    <div class="section-one flex center col">
+      <h3 class="heading">Member Sign In</h3>
+      <!-- country select -->
+      <CountrySelect
+        v-model="countryDialCode"
+        @setCountryIsoCode="countryIsoCode = $event"
+        :lock="false"
+      />
 
-    <!-- phone number -->
-    <!-- <InputCredential
-      label="Phone Number"
-      v-model="phoneNumber"
-      :disabled="otpSent"
-    /> -->
+      <!-- phone number -->
+      <InputCredential
+        type="number"
+        label="Phone Number"
+        v-model="phoneNumber"
+        :disabled="otpSent"
+        :isMobileNumber="true"
+        :countryDialCode="countryDialCode"
+      />
 
-       <!-- phone number -->
-    <InputCredential
-      type="number"
-      label="Phone Number"
-      v-model="phoneNumber"
-      :disabled="otpSent"
-      :isMobileNumber="true"
-      :countryDialCode="countryDialCode"
-    />
+      <!-- one time password -->
+      <InputCredential label="One Time Password" v-model="otp" v-if="otpSent" />
+      <!-- form error -->
+      <p v-if="error.status" class="msg error">{{ error.message }}</p>
 
-    <!-- one time password -->
-    <InputCredential label="One Time Password" v-model="otp" v-if="otpSent" />
-    <!-- form error -->
-    <p v-if="error.status" class="msg error">{{ error.message }}</p>
-
-    <!-- otp sent message -->
-    <p class="msg success" v-if="otpSent">
-      A one time password has been sent to your mobile number.
-    </p>
-    <!-- send otp -->
-    <button v-if="!otpSent" class="action" @click="sendOtp()">Continue</button>
-    <!-- login -->
-    <button v-if="otpSent" class="action" @click="login()">Login</button>
-
-    <h3 id="already" class="heading">Don't Have An Account Yet?</h3>
-    <p class="desc">
-      Access your order history, personal information and receive our digital
-      communications
-    </p>
-    <button
-      id="access-account"
-      class="action"
-      @click="$router.push('/registration')"
-    >
-      Create Bounipun Account
-    </button>
+      <!-- otp sent message -->
+      <p class="msg success" v-if="otpSent">
+        A one time password has been sent to your mobile number.
+      </p>
+      <!-- send otp -->
+      <button v-if="!otpSent" class="action" @click="sendOtp()">
+        Continue
+      </button>
+      <!-- login -->
+      <button v-if="otpSent" class="action" @click="login()">Login</button>
+    </div>
+    <div class="section-two flex center col">
+      <h3 id="already" class="heading">Don't Have An Account Yet?</h3>
+      <p class="desc">
+        Access your order history, personal information and receive our digital
+        communications
+      </p>
+      <button
+        id="access-account"
+        class="action"
+        @click="$router.push('/registration')"
+      >
+        Create Bounipun Account
+      </button>
+    </div>
   </div>
 </template>
 
@@ -121,11 +123,11 @@ export default {
       this.$store.commit("customer/setAuthorization", true);
 
       /* fetch profile */
-      this.$store.dispatch('customer/fetchProfile');
+      this.$store.dispatch("customer/fetchProfile");
 
       /* update store location */
-      this.$store.dispatch('customer/fetchStoreLocation');
-      
+      this.$store.dispatch("customer/fetchStoreLocation");
+
       /* navigate homepage */
       this.$router.push("/");
     },
@@ -151,17 +153,20 @@ export default {
   font-family: $font_1_bold;
   text-transform: uppercase;
   color: $dark_gray;
-  align-self: flex-start;
+  align-self: center;
+  margin-bottom: 20px;
+  // text-align: center;
 
   &#already {
     align-self: center;
-    margin-top: 20%;
+    margin-top: 10%;
     text-align: center;
   }
 }
 .desc {
   font-size: 10px;
   padding: 3%;
+  text-align: center;
   &.otp-sent {
     text-align: center;
     padding: 1% 2%;
@@ -169,6 +174,25 @@ export default {
     background: rgb(67, 176, 67);
     color: white;
     margin-bottom: 10px;
+  }
+}
+
+.page {
+  min-height: 65vh;
+  .section-one {
+    width: 50%;
+  }
+  .section-two {
+    width: 50%;
+  }
+  @media (max-width: 768px) {
+    flex-direction: column;
+    .section-one {
+      width: 100%;
+    }
+    .section-two {
+      width: 100%;
+    }
   }
 }
 </style>
