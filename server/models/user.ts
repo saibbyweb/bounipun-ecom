@@ -12,6 +12,7 @@ import { methods as globalConfigMethods } from "@models/globalConfig";
 import payment, { methods as paymentMethods } from "@models/payment";
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
 import { methods as productMethods } from "@models/product";
+import { methods as couponMethods } from "@models/coupon";
 
 /* validate session */
 const { validateSession } = sessionMethods;
@@ -573,7 +574,7 @@ export const methods = {
         /* if validated, proceed with save order details in db */
 
         /* do the order placing routine */
-        const { deliveryAddress, cartItems, subTotal, discountValue, shippingCharge, combinedDeliveryConsent } = paymentIntent.payload;
+        const { deliveryAddress, cartItems, subTotal, discountValue, shippingCharge, combinedDeliveryConsent, coupon } = paymentIntent.payload;
 
         /* discount per item */
         let discountPerItem: any = (discountValue / 100 / cartItems.length);
@@ -620,17 +621,22 @@ export const methods = {
         /* save processed order in database */
         const ordersCollection = db.model('orders');
         /* save order details to database */
-        const orderSaved = await new ordersCollection(orderDetails).save();
+        const orderSaved: any = await new ordersCollection(orderDetails).save();
         console.log('Order Saved in DB');
         /* save order id to user account */
         const userOrdersUpdated = await db.model('users').findOneAndUpdate({ _id: paymentIntent.createdBy }, { $push: { orders: orderSaved._id } });
         /* mark payment intent as invalid */
         await paymentIntentMethods.setIntentAsInvalid(paymentIntent._id);
-        console.log('PAYMENT intentse set as Invalid')
         /* update stock if ready to ship */
         const listOfProducts = orderDetails.items.map(item => ({ _id: item.productId, quantity: item.quantity }));
-
+        /* update stock */
         await productMethods.updateStock(listOfProducts);
+        /* update coupon log if needed */
+        if(coupon !== undefined) {
+            await couponMethods.updateCouponLog(coupon.code, paymentIntent.currency,orderSaved.number);
+        }
+        else
+        console.log('COUPON_NOT_APPLIED')
         /* notify the interested parties */
         console.log('order placing complete');
         return true;

@@ -35,10 +35,26 @@
     <!-- validity range -->
     <label class="label"> Validity Range </label>
     <client-only>
-      <v-datepicker color="blue" is-range v-model="doc.validityRange" :from-date="doc.validityRange.start" />
+      <v-datepicker
+        color="blue"
+        is-range
+        v-model="doc.validityRange"
+        :from-date="doc.validityRange.start"
+      />
     </client-only>
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
+
+    <!-- log -->
+    <div class="log">
+      <label class="label"> Usage Log </label>
+      <div class="flex center col">
+        <div class="item flex around" v-for="(item, index) in doc.log" :key="index">
+          <span> Redeemed on: <br> {{ $formatDate(item.usedOn) }}</span>
+          <span> Order Number: <br> {{ item.order }}</span>
+        </div>
+      </div>
+    </div>
 
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
@@ -81,9 +97,10 @@ export default {
         currency: "",
         validity: "",
         validityRange: {
-            start: new Date(),
-            end: new Date()
+          start: new Date(),
+          end: new Date()
         },
+        log: [],
         description: "",
         status: false
       },
@@ -158,6 +175,7 @@ export default {
         currency,
         validity,
         validityRange,
+        log,
         description,
         status
       } = details;
@@ -169,6 +187,7 @@ export default {
         currency,
         validity: validity.toString(),
         validityRange,
+        log,
         description,
         status
       };
@@ -187,9 +206,10 @@ export default {
         currency: "",
         validity: "",
         validityRange: {
-            start: new Date(),
-            end: new Date()
+          start: new Date(),
+          end: new Date()
         },
+        log: [],
         description: "",
         status: false
       });
@@ -216,5 +236,19 @@ export default {
   padding: 2%;
   margin-left: 5px;
   font-weight: 900;
+}
+
+.log {
+  .item {
+    border:1px dashed #efefef;
+    width: 100%;
+    span {
+      font-size:11px;
+      background-color: $dark_gray;
+      color:white;
+      padding:2px;
+      margin:5px;
+    }
+  }
 }
 </style>

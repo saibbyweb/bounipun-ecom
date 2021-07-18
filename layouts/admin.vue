@@ -143,6 +143,7 @@ export default {
                 box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
                 width: 35%;
                 padding: 1%;
+                z-index: 2;
 
                 .action {
                     background-color: rgb(35, 142, 90);
