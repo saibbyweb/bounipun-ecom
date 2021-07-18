@@ -412,13 +412,13 @@ router.get('/ipLookup', userAuth('customer', false), async (req, res) => {
     // }
 
     /* if match found */
-    // if (lookupResponse.data.location.country.code) {
-    //     response.dump = lookupResponse;
-    //     console.log('IP Looked-Up');
-    //     // response.countryCode = lookupResponse.data.location.country.code;
-    //     response.countryCode = "IN"
-    //     response.resolved = true;
-    // }
+    if (lookupResponse.data.location.country.code) {
+        response.dump = lookupResponse.data.location.country;
+        console.log('IP Looked-Up');
+        // response.countryCode = lookupResponse.data.location.country.code;
+        // response.countryCode = "IN"
+        response.resolved = true;
+    }
 
     res.send(response);
 
