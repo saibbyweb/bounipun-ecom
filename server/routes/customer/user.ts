@@ -405,11 +405,11 @@ router.get('/ipLookup', userAuth('customer', false), async (req, res) => {
     // console.log('REQUEST IP: --> ', req.ip);
 
     /* if error */
-    // if (error) {
-    //     response.dump = error;
-    //     res.send(response);
-    //     return;
-    // }
+    if (error) {
+        response.dump = {error: true};
+        res.send(response);
+        return;
+    }
 
     /* if match found */
     if (lookupResponse.data.location.country.code) {
