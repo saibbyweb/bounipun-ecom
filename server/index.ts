@@ -7,6 +7,12 @@ const history = require('connect-history-api-fallback');
 const { app } = server;
 app.set('trust proxy', true);
 server.enableCorsIfNeeded();
+
+app.use('/', mainRoutes);
+app.use('/', customerRoutes.endpoints);
+app.use('/', customerRoutes.user);
+app.use('/', customerRoutes.storeEndpoints);
+
 server.applyStaticMiddleware('/frontend');
 app.use(history({
     disableDotRule: true,
@@ -14,10 +20,6 @@ app.use(history({
   }));
 server.applyStaticMiddleware('/frontend');
 
-app.use('/', mainRoutes);
-app.use('/', customerRoutes.endpoints);
-app.use('/', customerRoutes.user);
-app.use('/', customerRoutes.storeEndpoints);
 
 /* connect to mongodb */
 dbConnect();

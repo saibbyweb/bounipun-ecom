@@ -372,7 +372,7 @@ router.post('/setCookie', (req, res) => {
 });
 
 /* ip lookup */
-router.post('/ipLookup', userAuth('customer', false), async (req, res) => {
+router.get('/ipLookup', userAuth('customer', false), async (req, res) => {
     /* response to be sent back */
     let response = { resolved: false, countryCode: 'IN', dump: '' };
 
