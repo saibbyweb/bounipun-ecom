@@ -2,7 +2,7 @@ import { mongoose, aws } from "@helpers/essentials";
 import multer from "multer";
 import multerS3 from "multer-s3";
 import crypto from "crypto";
-import sharp from "sharp";
+// import sharp from "sharp";
 import path from "path";
 
 /* schema */
