@@ -67,6 +67,8 @@ export default {
                 _id: this.variant._id,
                 fabrics: this.selectedFabrics
             });
+            this.$forceUpdate();
+
         }
     },
     data() {

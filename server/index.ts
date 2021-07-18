@@ -17,7 +17,7 @@ server.applyStaticMiddleware('/frontend');
 app.use(history({
     disableDotRule: true,
     verbose: true
-  }));
+}));
 server.applyStaticMiddleware('/frontend');
 
 

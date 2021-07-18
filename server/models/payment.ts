@@ -1,19 +1,18 @@
 import { mongoose, ObjectId, task } from "@helpers/essentials"
 import Razorpay from "razorpay";
-// const stripe = require("stripe")(process.env.STRIPE_SK);
 import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SK, {
     apiVersion: '2020-08-27'
 });
 
-/* razorpay test key */
-const razorpayTestKey = {
-    key_id: "rzp_test_LnJPEC0MOtvlSn",
-    key_secret: "6Id7cNKHdDIJ2PwWi7g9TPHl"
+/* razorpay key */
+const razorpayKey = {
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET
 }
 
 /* razorpay instance */
-const razorpayInstance = new Razorpay(razorpayTestKey);
+const razorpayInstance = new Razorpay(razorpayKey);
 
 /* schema */
 const schema = new mongoose.Schema({
@@ -43,15 +42,6 @@ type StripeDetails = {
     amount: number,
     currency: string,
     description: string,
-    // shipping: {
-    //     name: string,
-    //     address: {
-    //         line1: string,
-    //         postal_code: string,
-    //         city: string,
-    //         country: string
-    //     }
-    // }
 }
 
 /* helper methods */
