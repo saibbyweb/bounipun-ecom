@@ -372,7 +372,7 @@ router.post('/setCookie', (req, res) => {
 });
 
 /* ip lookup */
-router.get('/ipLookup', userAuth('customer', false), async (req, res) => {
+router.post('/ipLookup', userAuth('customer', false), async (req, res) => {
     /* response to be sent back */
     let response = { resolved: false, countryCode: 'IN', dump: {} };
 
@@ -408,7 +408,7 @@ router.get('/ipLookup', userAuth('customer', false), async (req, res) => {
 
     /* if match found */
     if (lookupResponse.data.location.country.code) {
-        response.dump = lookupResponse.data.location.country;
+        // response.dump = lookupResponse.data.location.country;
         console.log('IP Looked-Up');
         response.countryCode = lookupResponse.data.location.country.code;
         // response.countryCode = "IN"
