@@ -14,6 +14,16 @@
     </div>
 </template>
 
+<script>
+export default {
+    head() {
+        return {
+            title: 'Search for Products | Bounipun Kashmir'
+        }
+    }
+}
+</script>
+
 <style lang="scss" scoped>
 @keyframes showUp {
     0% {

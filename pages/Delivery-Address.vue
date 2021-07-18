@@ -71,6 +71,11 @@
 import validate from "@/helpers/validate.js";
 
 export default {
+      head() {
+    return {
+      title: "Delivery Address | Bounipun Kashmir"
+    }
+  },
   data() {
     return {
       formData: this.createFormData(),
@@ -284,7 +289,7 @@ export default {
       });
 
       deliveryAddress.countryIsoCode = this.countryIsoCode;
-      this.$router.push({ name: "Checkout", params: { deliveryAddress } });
+      this.$router.push({ name: "checkout", params: { deliveryAddress } });
     },
     async shiftCart() {
       const { resolved, response } = await this.$post("/shiftCart", {
@@ -322,7 +327,7 @@ export default {
       });
 
       deliveryAddress.countryIsoCode = this.countryIsoCode;
-      this.$router.push({ name: "Checkout", params: { deliveryAddress } });
+      this.$router.push({ name: "checkout", params: { deliveryAddress } });
     }
   }
 };

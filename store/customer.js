@@ -149,6 +149,9 @@ export const mutations = {
 
 export const getters = {
   alreadyInCart: state => cartItem => {
+    if(state.globalRemoteCart === false)
+      return false;
+      
     const localCart = state.globalRemoteCart.map(item => item.cartEntry);
     return findCartItem(localCart, cartItem) !== false;
   },

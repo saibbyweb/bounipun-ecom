@@ -76,6 +76,11 @@
 
 <script>
 export default {
+      head() {
+    return {
+      title: "My Orders | Bounipun Kashmir"
+    }
+  },
   data() {
     return {
       orders: [],

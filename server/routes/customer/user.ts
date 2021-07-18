@@ -374,7 +374,7 @@ router.post('/setCookie', (req, res) => {
 /* ip lookup */
 router.post('/ipLookup', userAuth('customer', false), async (req, res) => {
     /* response to be sent back */
-    let response = { resolved: false, countryCode: 'IN' };
+    let response = { resolved: false, countryCode: 'IN', dump: '' };
 
     const { user } = req.body;
 
@@ -387,17 +387,30 @@ router.post('/ipLookup', userAuth('customer', false), async (req, res) => {
         return;
     }
 
+    /* validate ip */
+    if(req.ip === '::1') {
+        response.resolved = true;
+        res.send(response);
+        return;
+    }
+
     /* otherwise do an country lookup */
-    const ipLookup = axios.get(`https://api.ipregistry.co/?key=${ipRegistryKey}`);
+    const ipLookup = axios.get(`https://api.ipregistry.co/${req.ip}?key=${ipRegistryKey}`);
+    
+    // console.log('REQUEST IP: --> ', req.ip);
+
     const { response: lookupResponse, error } = await task(ipLookup);
+
     /* if error */
     if (error) {
+        response.dump = error;
         res.send(response);
         return;
     }
 
     /* if match found */
     if (lookupResponse.data.location.country.code) {
+        response.dump = lookupResponse;
         console.log('IP Looked-Up');
         // response.countryCode = lookupResponse.data.location.country.code;
         response.countryCode = "IN"

@@ -71,6 +71,11 @@
 <script>
 import CountrySelect from "../components/countrySelect.vue";
 export default {
+    head() {
+    return {
+      title: "Registration | Bounipun Kashmir"
+    }
+  },
   data() {
     return {
       otpSent: false,

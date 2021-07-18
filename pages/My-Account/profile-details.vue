@@ -31,6 +31,11 @@
 import { getCountry } from "@/helpers/countryCodes.js";
 
 export default {
+    head() {
+    return {
+      title: "My Profile | Bounipun Kashmir"
+    }
+  },
     data() {
         return {
             profile: {

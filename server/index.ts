@@ -4,6 +4,7 @@ require('../helpers/validate.js');
 import customerRoutes from "@routes/customer";
 
 const { app } = server;
+app.set('trust proxy', true);
 server.enableCorsIfNeeded();
 server.applyStaticMiddleware('/frontend');
 app.use('/', mainRoutes);

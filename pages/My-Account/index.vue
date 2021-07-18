@@ -42,6 +42,11 @@
 
 <script>
 export default {
+    head() {
+    return {
+      title: "My Account | Bounipun Kashmir"
+    }
+  },
     data() {
         return {
             pages: [{
@@ -49,22 +54,28 @@ export default {
                 description: "Track your orders",
                 icon: "orders.png",
                 path: 'orders'
-            }, {
-                name: "Address Book",
-                description: "Save addresses for quick checkouts",
-                icon: "address.png",
-                path: "address-book"
-            }, {
+            },
+            
+            // {
+            //     name: "Address Book",
+            //     description: "Save addresses for quick checkouts",
+            //     icon: "address.png",
+            //     path: "address-book"
+            // },
+            
+            {
                 name: "Profile Details",
                 description: "View or manage your profile",
                 icon: "profile.png",
                 path: "profile-details"
-            },{
-                name: "Gift Cards",
-                description: "Redeem of send gift cards.",
-                icon: "giftcards.png",
-                path: "gift-cards"
-            }]
+            }
+            // ,{
+            //     name: "Gift Cards",
+            //     description: "Redeem of send gift cards.",
+            //     icon: "giftcards.png",
+            //     path: "gift-cards"
+            // }
+            ]
         }
     }
 }

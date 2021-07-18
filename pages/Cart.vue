@@ -4,7 +4,7 @@
       <h2 class="title">Shopping Bag</h2>
     </div>
 
-    <div class="cart-container flex">
+    <div v-if="!cartEmpty" class="cart-container flex">
       <!-- cart items -->
       <div class="cart-items flex center col">
         <CartItem
@@ -95,6 +95,11 @@ import sumBy from "lodash/sumBy";
 // import colorPickerVue from "../components/admin/colors/colorPicker.vue";
 // import InputBox from "../components/admin/input/InputBox.vue";
 export default {
+  head() {
+    return {
+      title: "Cart | Bounipun Kashmir"
+    };
+  },
   data() {
     return {
       cartDetails: [],
@@ -131,6 +136,8 @@ export default {
   },
   computed: {
     maximumShippingTime() {
+      if(!this.cartEmpty)
+        return 1;
       const allTimes = this.$store.state.customer.globalRemoteCart.map(
         item => item.shippingTime
       );
@@ -141,7 +148,10 @@ export default {
       return this.$store.state.customer.currency + " ";
     },
     cartEmpty: function() {
-      return this.$store.state.customer.globalRemoteCart.length === 0;
+      return this.$store.state.customer.globalRemoteCart === false || this.$store.state.customer.globalRemoteCart.length === 0
+    },
+    cartLength() {
+      return this.$store.state.customer.globalRemoteCart
     },
     coupon() {
       return this.$store.state.customer.coupon;

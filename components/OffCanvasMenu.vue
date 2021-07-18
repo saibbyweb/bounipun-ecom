@@ -116,7 +116,7 @@ export default {
         // const slug = '/collections?slug=' + route.slug
         // this.$router.push(slug, { collectionId: route._id });
         this.$router.push({
-          name: "Collections",
+          name: "collections",
           query: {
             slug: route.slug
           },

@@ -54,6 +54,11 @@
 
 <script>
 export default {
+    head() {
+    return {
+      title: "Login | Bounipun Kashmir"
+    }
+  },
   data() {
     return {
       otpSent: false,

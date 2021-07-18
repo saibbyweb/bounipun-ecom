@@ -12,6 +12,11 @@
 
 <script>
 export default {
+    head() {
+    return {
+      title: "Press | Bounipun Kashmir"
+    }
+  },
     mounted() {
         this.fetchPressImages();
     },

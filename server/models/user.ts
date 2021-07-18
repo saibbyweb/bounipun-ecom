@@ -343,6 +343,8 @@ export const methods = {
         /* if cart empty */
         if (cart.length === 0) return false;
 
+        console.log(cart, cartItem);
+
         let foundIndex = cart.findIndex(item => {
             /* common params to match */
             let paramsToBeMatched = item.product.toString() === cartItem.product.toString() && item.colorCode === cartItem.colorCode;

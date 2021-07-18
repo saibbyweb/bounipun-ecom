@@ -122,6 +122,11 @@ const demoDeliveryAddress = {
 };
 
 export default {
+  head() {
+    return {
+      title: "Checkout | Bounipun Kashmir"
+    }
+  },
   mounted() {
     /* this page should not be accessible to guest */
     if (!this.$store.state.customer.authorized) return;

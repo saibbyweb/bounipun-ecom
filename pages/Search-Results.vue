@@ -217,6 +217,11 @@
 
 <script>
 export default {
+  head() {
+    return {
+      title: `${this.rawCriterion.search.term} | Search Results | Bounipun Kashmir` 
+    }
+  },
   computed: {
     searchTerm() {
       return this.$route.query.searchTerm;

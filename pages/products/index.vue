@@ -359,6 +359,11 @@ import InnerImageZoom from "vue-inner-image-zoom";
 import colorsVue from "../admin-panel/colors.vue";
 
 export default {
+  head() {
+    return {
+      title: `${this.product.name} | Bounipun Kashmir`
+    }
+  },
   created() {
     if (process.client) {
       window.addEventListener("scroll", this.handleScroll);

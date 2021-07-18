@@ -168,6 +168,11 @@
 
 <script>
 export default {
+  head() {
+    return {
+      title: "Bounipun Kashmir | Luxury Store | Shawls, Stoles and Squares"
+    }
+  },
   data() {
     return {
       layout: null,
@@ -219,7 +224,7 @@ export default {
       console.log(sections);
     },
     navigateToCollection(bounipun_collection) {
-      this.$router.push("/Collections?slug=" + bounipun_collection.slug);
+      this.$router.push("/collections?slug=" + bounipun_collection.slug);
     },
     setSlideshow(images) {
       this.mainSlideshowImages = images.map(
