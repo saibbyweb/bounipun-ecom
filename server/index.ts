@@ -2,11 +2,18 @@ import { server, port, environment, dbConnect } from "@helpers/essentials";
 import mainRoutes from "@routes/admin/main";
 require('../helpers/validate.js');
 import customerRoutes from "@routes/customer";
+const history = require('connect-history-api-fallback');
 
 const { app } = server;
 app.set('trust proxy', true);
 server.enableCorsIfNeeded();
 server.applyStaticMiddleware('/frontend');
+app.use(history({
+    disableDotRule: true,
+    verbose: true
+  }));
+server.applyStaticMiddleware('/frontend');
+
 app.use('/', mainRoutes);
 app.use('/', customerRoutes.endpoints);
 app.use('/', customerRoutes.user);
