@@ -237,7 +237,7 @@ export default {
       const { response, resolved } = await this.$post("/sendOtp", {
         countryDialCode: this.countryDialCode,
         phoneNumber: this.formData.mobileNumber.value,
-        purpose: 'registration-on-checkout'
+        purpose: "registration-on-checkout"
       });
 
       /* if req not resolved */
@@ -276,8 +276,15 @@ export default {
       this.$store.dispatch("customer/fetchProfile");
       /* and move back to homepage */
       this.$store.commit("customer/setAuthorization", true);
-      /* navigate homepage */
-      this.$router.push("/");
+      
+      /* collect delivery address */
+      let deliveryAddress = {};
+      Object.keys(this.formData).forEach(key => {
+        deliveryAddress[key] = this.formData[key].value;
+      });
+
+      deliveryAddress.countryIsoCode = this.countryIsoCode;
+      this.$router.push({ name: "Checkout", params: { deliveryAddress } });
     },
     async shiftCart() {
       const { resolved, response } = await this.$post("/shiftCart", {
@@ -297,7 +304,7 @@ export default {
 
       /* if user is guest */
       if (!this.$store.state.customer.authorized) {
-        switch(this.otpSent) {
+        switch (this.otpSent) {
           case false:
             await this.sendOtp();
             break;
