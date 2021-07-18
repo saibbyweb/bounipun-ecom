@@ -249,19 +249,64 @@ export default {
       /* map otp sent response */
       this.otpSent = response.otpSent === true;
     },
+    async registerAndLogin() {
+      console.log("register called");
+      /* clear error */
+      this.otpError.status = false;
+
+      const { response, resolved } = await this.$post("/registerCustomer", {
+        countryDialCode: this.countryDialCode,
+        countryIsoCode: this.countryIsoCode,
+        phoneNumber: this.formData.mobileNumber.value,
+        otp: this.otp,
+        firstName: this.formData.firstName.value,
+        surName: this.formData.surName.value,
+        platform: "web"
+      });
+
+      /* if req not resolved, map error message */
+      if (resolved === false) {
+        this.otpError.msg = response.message;
+        this.otpError.status = true;
+        return;
+      }
+      /* TODO: should work but not tested */
+      this.shiftCart();
+      /* fetch profile */
+      this.$store.dispatch("customer/fetchProfile");
+      /* and move back to homepage */
+      this.$store.commit("customer/setAuthorization", true);
+      /* navigate homepage */
+      this.$router.push("/");
+    },
+    async shiftCart() {
+      const { resolved, response } = await this.$post("/shiftCart", {
+        cart: this.$store.state.customer.cart
+      });
+
+      /* clear local cart if cart shifted */
+      if (resolved && response.shifted === true) {
+        this.$store.commit("customer/clearCart");
+      }
+
+      /* refetch cart */
+      await this.$store.dispatch("customer/fetchCart");
+    },
     async proceedToCheckout() {
       if (!this.validateForm()) return;
 
-      /* check if user is logged in */
+      /* if user is guest */
       if (!this.$store.state.customer.authorized) {
-        await this.sendOtp();
-        /* TODO: DO_IT -> You Can */
-        /* at this point, you need to push an sms to the phone number provided above */
-        /* on successful otp verification, register the user name with first name, surname, mobile number */
-        /* and do the required stuff and move to checkout */
+        switch(this.otpSent) {
+          case false:
+            await this.sendOtp();
+            break;
+          case true:
+            await this.registerAndLogin();
+            break;
+        }
+        return;
       }
-
-      return;
 
       /* collect delivery address */
       let deliveryAddress = {};

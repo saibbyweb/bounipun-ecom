@@ -62,14 +62,6 @@ router.post("/registerCustomer", async (req, res) => {
         platform
     } = req.body;
 
-    /* check if user already exists (by phone number) */
-    if ((await userMethods.getUser({ countryDialCode, phoneNumber })) !== null) {
-        response.message = 'Customer with this phone number already exists';
-        response.numberAlreadyRegistered = true;
-        console.log('phone number exists');
-        res.send(response);
-        return;
-    }
 
     /* otp verified status */
     let otpVerified = false;
@@ -88,6 +80,18 @@ router.post("/registerCustomer", async (req, res) => {
     }
     /* mark otp as verified */
     response.otpVerified = true;
+
+
+
+    /* check if user already exists (by phone number) */
+    if ((await userMethods.getUser({ countryDialCode, phoneNumber })) !== null) {
+        response.message = 'Customer with this phone number already exists';
+        response.numberAlreadyRegistered = true;
+        console.log('phone number exists');
+        res.send(response);
+        return;
+    }
+
     /* register customer  */
     const userRegistered = await userMethods.registerUser({
         firstName,
@@ -414,7 +418,7 @@ router.post('/logoutCustomer', userAuth('customer'), async (req, res) => {
 });
 
 /* cancel sub order */
-router.post('/confirmOrderCancellation', userAuth('customer'), async(req, res) => {
+router.post('/confirmOrderCancellation', userAuth('customer'), async (req, res) => {
     let response = { resolved: false }
     const { orderId, subOrderId, reason, user } = req.body;
     console.log(user._id, orderId, subOrderId, reason);
