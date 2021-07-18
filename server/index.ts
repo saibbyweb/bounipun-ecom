@@ -13,7 +13,7 @@ app.use('/', customerRoutes.endpoints);
 app.use('/', customerRoutes.user);
 app.use('/', customerRoutes.storeEndpoints);
 
-// server.applyStaticMiddleware('/frontend');
+server.applyStaticMiddleware('/frontend');
 app.use(history({
     disableDotRule: true,
     verbose: true
