@@ -60,7 +60,7 @@
     <div class="proceed flex center">
       <button @click="proceedToCheckout" class="action">
         {{
-          otpSent ? "Continue to Checkout" : "Verify Phone Number and Continue"
+          (otpSent == true || $store.state.customer.authorized) ? "Continue to Checkout" : "Verify Phone Number and Continue"
         }}
       </button>
     </div>
@@ -276,7 +276,7 @@ export default {
       this.$store.dispatch("customer/fetchProfile");
       /* and move back to homepage */
       this.$store.commit("customer/setAuthorization", true);
-      
+
       /* collect delivery address */
       let deliveryAddress = {};
       Object.keys(this.formData).forEach(key => {

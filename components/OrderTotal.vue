@@ -147,7 +147,8 @@ export default {
         currency: this.currency.trim(),
         gateway: this.gatewayName,
         couponCode: this.coupon.code,
-        deliveryAddress: this.deliveryAddress
+        deliveryAddress: this.deliveryAddress,
+        combinedDeliveryConsent: this.$store.state.customer.combinedDeliveryConsent
       });
 
       console.log(paymentIntentFetch);

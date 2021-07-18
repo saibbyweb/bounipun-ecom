@@ -49,17 +49,13 @@
 
         <!-- payment specific -->
         <div class="payment-specific flex center col">
-          <!-- shipping note -->
-          <p v-if="combinedDeliveryConsent" class="note">Combined Standard shipping for the whole order: 4 weeks</p>
-          <!-- consent for combined delivery -->
-          <div class="pad-10">
-            <Checkbox
-              label="I would like receive all items in the order as a single package."
-              v-model="combinedDeliveryConsent"
-            />
-          </div>
-
           <!-- TODO: START_FROM_HERE stripe card payment -->
+          
+          <!-- shipping note -->
+          <p v-if="$store.state.customer.combinedDeliveryConsent" class="note">
+            Combined Standard shipping for the whole order:
+            {{ maximumShippingTime }} weeks
+          </p>
 
           <h2 v-if="gatewayName === 'stripe'" class="payment-title">
             Payment Information
@@ -128,6 +124,7 @@ const demoDeliveryAddress = {
 export default {
   mounted() {
     /* this page should not be accessible to guest */
+    if (!this.$store.state.customer.authorized) return;
 
     /* fetch updated cart from user account */
     this.$store.dispatch("customer/fetchCart");
@@ -214,6 +211,13 @@ export default {
         name:
           this.deliveryAddress.firstName + " " + this.deliveryAddress.surName
       };
+    },
+    maximumShippingTime() {
+      const allTimes = this.$store.state.customer.globalRemoteCart.map(
+        item => item.shippingTime
+      );
+      const maximumShippingTime = Math.max(...allTimes);
+      return maximumShippingTime;
     }
   },
   methods: {
@@ -449,6 +453,10 @@ export default {
     box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
     padding: 3%;
   }
+}
+
+.payment-specific {
+  width: 100%;
 }
 .checkout-btn {
   width: 100%;

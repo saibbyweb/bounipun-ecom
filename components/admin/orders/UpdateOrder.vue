@@ -41,6 +41,13 @@
       <p>{{ doc.deliveryAddress.postalCode }}</p>
     </div>
 
+    <!-- combined delivery consent -->
+    <br>
+    <div class="combined-delivery-consent">
+      <label class="label"> Combined Delivery Consent: </label>
+      <span class="note"> {{ doc.combinedDeliveryConsent ? 'Opted for combined delivery' : 'Individual Deliveries preferred.'}} </span>
+    </div>
+
     <!-- order items -->
     <div class="items">
       <!-- label order items -->
@@ -103,6 +110,7 @@ const baseDoc = () => ({
   subTotal: "",
   discountValue: "",
   shippingCharge: "",
+  combinedDeliveryConsent: false,
   deliveryAddress: {
     firstName: "",
     surName: "",
@@ -186,6 +194,7 @@ export default {
         currency,
         amount,
         subTotal,
+        combinedDeliveryConsent,
         discountValue,
         shippingCharge,
         deliveryAddress,
@@ -201,6 +210,7 @@ export default {
         transactionId,
         amount,
         subTotal,
+        combinedDeliveryConsent,
         shippingCharge,
         discountValue,
         deliveryAddress
@@ -252,6 +262,16 @@ export default {
       font-size: 15px;
       color: rgba(0, 0, 0, 0.651);
     }
+  }
+}
+.combined-delivery-consent {
+  display:flex;
+  
+  .note {
+    background-color: rgb(73, 73, 159);
+    color: white;
+    padding: 5px 10px;
+    font-size: 11px;
   }
 }
 

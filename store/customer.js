@@ -11,6 +11,7 @@ export const state = () => ({
   globalConfig: {},
   user: {},
   currency: "INR",
+  combinedDeliveryConsent: false,
   coupon: {
     applied: false,
     code: ""
@@ -65,6 +66,9 @@ export const mutations = {
     /* check for session cookie */
     state.authorized = cookies.get("swecom_bounipun") !== undefined;
     state.persistedStateLoaded = true;
+  },
+  setCombinedDeliveryConsent(state, value) {
+    state.combinedDeliveryConsent = value;
   },
   setLoading(state, value) {
     state.loading = value;

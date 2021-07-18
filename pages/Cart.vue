@@ -55,8 +55,23 @@
 
         <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
 
+        <div class="delivery-specific">
+          <!-- shipping note -->
+          <p v-if="$store.state.customer.combinedDeliveryConsent" class="note">
+            Combined Standard shipping for the whole order:
+            {{ maximumShippingTime }} weeks
+          </p>
+          <!-- consent for combined delivery -->
+          <div class="pad-10">
+            <Checkbox
+              label="I would like receive all items in the order as a single package."
+              v-model="combinedDeliveryConsent"
+            />
+          </div>
+        </div>
+
         <!-- proceed to address page-->
-        <div v-if="!cartEmpty" class="pad-10">
+        <div v-if="!cartEmpty" class="proceed flex center">
           <button @click="$router.push('/delivery-address')" class="action">
             Proceed To Buy
           </button>
@@ -88,12 +103,20 @@ export default {
         status: false,
         message: "This coupon code is not valid"
       },
-      remoteCartItems: this.$store.state.customer.globalRemoteCart
+      remoteCartItems: this.$store.state.customer.globalRemoteCart,
+      combinedDeliveryConsent: true
     };
   },
   watch: {
     $route(newVal) {
       console.log("movedd", newVal);
+    },
+    combinedDeliveryConsent: {
+      handler(newVal) {
+        console.log(newVal, "--well");
+        this.$store.commit("customer/setCombinedDeliveryConsent", newVal);
+      },
+      immediate: true
     }
   },
   mounted() {
@@ -107,6 +130,13 @@ export default {
     }, 300);
   },
   computed: {
+    maximumShippingTime() {
+      const allTimes = this.$store.state.customer.globalRemoteCart.map(
+        item => item.shippingTime
+      );
+      const maximumShippingTime = Math.max(...allTimes);
+      return maximumShippingTime;
+    },
     currency() {
       return this.$store.state.customer.currency + " ";
     },
@@ -273,5 +303,20 @@ export default {
       font-size: 17px;
     }
   }
+}
+.delivery-specific {
+  .note {
+    background-color: #32a77c;
+    color: white;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-family: $font_1;
+    // margin-top: 10px;
+    text-align: center;
+  }
+}
+
+.proceed {
+  width: 100%;
 }
 </style>

@@ -11,7 +11,7 @@ import { methods as couponMethods } from "@models/coupon";
 import { methods as globalConfigMethods } from "@models/globalConfig";
 import payment, { methods as paymentMethods } from "@models/payment";
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
-import { methods as productMethods} from "@models/product";
+import { methods as productMethods } from "@models/product";
 
 /* validate session */
 const { validateSession } = sessionMethods;
@@ -213,7 +213,7 @@ export const methods = {
         for (const productId of allUniqueProducts) {
             const fetchProduct = db.model('products')
                 .findOne({ _id: productId, status: true })
-                .populate('bounipun_collection', { _id: 0, name: 1 })
+                .populate('bounipun_collection', { _id: 0, name: 1, edt: 1 })
                 .populate('variants._id', { name: 1, hsnCode: 1, gstPercentage: 1 })
                 .populate('variants.fabrics._id', { name: 1, info1: 1 })
                 .populate('colors._id', { name: 1 })
@@ -227,10 +227,10 @@ export const methods = {
 
         allProducts = allProducts.filter(prod => prod !== null);
 
-        if(allProducts.length === 0) {
+        if (allProducts.length === 0) {
             return false;
         }
-        
+
         /* TODO: you should clear cart from user database and return */
 
 
@@ -248,6 +248,7 @@ export const methods = {
                 colorName: '',
                 mainImage: '',
                 collectionName: '',
+                shippingTime: '4',
                 variantName: '',
                 hsnCode: '',
                 gstPercentage: '',
@@ -302,6 +303,9 @@ export const methods = {
             if (product.type === 'under-bounipun') {
                 /* collection name */
                 cartItem.collectionName = product.bounipun_collection.name;
+                /* shipping time */
+                cartItem.shippingTime = product.bounipun_collection.edt;
+                console.log(cartItem);
             }
 
             /* if under bounipun and made to order */
@@ -468,7 +472,7 @@ export const methods = {
             grandTotal: grandTotal.toFixed(2),
         }
     },
-    async createOrderPayload(cart, amountToBeCharged, currency, couponCode, deliveryAddress) {
+    async createOrderPayload(cart, amountToBeCharged, currency, couponCode, deliveryAddress, combinedDeliveryConsent) {
         const cartItems = await this.getCartItems(cart);
         /* total order quantity */
         const totalOrderQuantity = sumBy(cart, item => item.quantity);
@@ -493,7 +497,7 @@ export const methods = {
 
         /* according to gateway, generate token/order id */
         let gatewayToken;
-        
+
         /* set amount for gateway (as a whole number) */
         let amount: any = (grandTotal * 100).toFixed(2);
         amount = parseInt(amount)
@@ -535,6 +539,7 @@ export const methods = {
             discountValue: discountValue * 100,
             subTotal: parseInt((subTotal * 100).toFixed(2)),
             shippingCharge: shippingCharge * 100,
+            combinedDeliveryConsent,
             /* TODO: need to check tax.value [may toFixed(2) will fix it] */
             /* TODO: get frontend and backend value EQUAL */
             tax: {
@@ -568,7 +573,7 @@ export const methods = {
         /* if validated, proceed with save order details in db */
 
         /* do the order placing routine */
-        const { deliveryAddress, cartItems, subTotal, discountValue, shippingCharge } = paymentIntent.payload;
+        const { deliveryAddress, cartItems, subTotal, discountValue, shippingCharge, combinedDeliveryConsent } = paymentIntent.payload;
 
         /* discount per item */
         let discountPerItem: any = (discountValue / 100 / cartItems.length);
@@ -581,6 +586,7 @@ export const methods = {
             transactionId,
             amount: paymentIntent.amount,
             currency: paymentIntent.currency,
+            combinedDeliveryConsent: combinedDeliveryConsent,
             deliveryAddress,
             subTotal,
             discountValue,
@@ -622,7 +628,7 @@ export const methods = {
         await paymentIntentMethods.setIntentAsInvalid(paymentIntent._id);
         console.log('PAYMENT intentse set as Invalid')
         /* update stock if ready to ship */
-        const listOfProducts = orderDetails.items.map(item => ({_id: item.productId, quantity: item.quantity }));
+        const listOfProducts = orderDetails.items.map(item => ({ _id: item.productId, quantity: item.quantity }));
 
         await productMethods.updateStock(listOfProducts);
         /* notify the interested parties */
@@ -637,14 +643,14 @@ export const methods = {
 
 
         /* check if the order belongs to the user id or not */
-        if(userId !== false) {
+        if (userId !== false) {
             const orderIdValid = await this.orderBelongsToUser(userId, orderId);
-            if(orderIdValid === false)
+            if (orderIdValid === false)
                 return;
         }
 
         /* if exists, check the existing status (if already cancelled or delivered, return) */
-        
+
         /* change the order status to cancelled, update timeline as well */
         const subOrderFilter = {
             _id: orderId,

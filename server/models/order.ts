@@ -14,6 +14,7 @@ const schema = new mongoose.Schema({
     discountValue: String,
     discountPerItem: String,
     shippingCharge: String,
+    combinedDeliveryConsent: Boolean,
     // items: Array,
     items: [{
         _id: ObjectId,

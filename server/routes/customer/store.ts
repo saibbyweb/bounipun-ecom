@@ -49,7 +49,11 @@ router.post('/createPaymentIntent', userAuth('customer'), async (req, res) => {
     const response = { resolved: false, intentId: "", gatewayToken: "", amount: 0 };
 
     /* TODO: verify gateway */
-    const { user, intentType, amountToBeCharged, currency, gateway, couponCode, deliveryAddress } = req.body;
+    const { user, intentType, amountToBeCharged, currency, gateway, couponCode, deliveryAddress, combinedDeliveryConsent } = req.body;
+
+
+    console.log('COMBINED_DELIVERY_CONSENT', combinedDeliveryConsent);
+
 
     /* payload (can be for order or anything) */
     let payload;
@@ -57,7 +61,7 @@ router.post('/createPaymentIntent', userAuth('customer'), async (req, res) => {
     switch (intentType) {
         case "order":
             /* create order payload */
-            payload = await userMethods.createOrderPayload(user.cart, amountToBeCharged, currency, couponCode, deliveryAddress);
+            payload = await userMethods.createOrderPayload(user.cart, amountToBeCharged, currency, couponCode, deliveryAddress, combinedDeliveryConsent);
 
             /* if verification failed, stop execution */
             if (payload === false) {
@@ -122,7 +126,7 @@ router.post('/stripeWebhook', async (req, res) => {
 });
 
 /* razorpay payment success */
-router.post('/razorpayPaymentSuccess', async(req, res) => {
+router.post('/razorpayPaymentSuccess', async (req, res) => {
     const { razorpay_order_id, transactionId } = req.body;
     console.log(req.body);
     await userMethods.placeOrder(razorpay_order_id, transactionId, 'razorpay');
