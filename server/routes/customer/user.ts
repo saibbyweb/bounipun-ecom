@@ -378,6 +378,8 @@ router.get('/ipLookup', userAuth('customer', false), async (req, res) => {
 
     const { user } = req.body;
 
+    console.log(req.ip);
+
     /* if user is logged in, fetch country code from account */
     if (user.status === true) {
         console.log('LOGGED IN, IP fetched from account')
@@ -395,11 +397,9 @@ router.get('/ipLookup', userAuth('customer', false), async (req, res) => {
     }
 
     /* otherwise do an country lookup */
-    const ipLookup = axios.get(`https://api.ipregistry.co/${req.ip}?key=${ipRegistryKey}`);
+    const { response: lookupResponse, error } = await task(axios.get(`https://api.ipregistry.co/${req.ip}?key=${ipRegistryKey}`));
     
     // console.log('REQUEST IP: --> ', req.ip);
-
-    const { response: lookupResponse, error } = await task(ipLookup);
 
     /* if error */
     if (error) {
