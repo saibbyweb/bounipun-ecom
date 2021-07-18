@@ -25,12 +25,30 @@
             key === 'addressLine1' || key === 'addressLine2' ? 60 : 100
           "
           :countryCode="countryDialCode"
+          :disabled="otpSent"
         />
         <!-- TODO: consent for adding address to address book -->
         <!-- <Checkbox
           label="Save address for later use."
           v-model="saveNewAddress"
         /> -->
+
+        <!-- divider -->
+        <hr
+          v-if="otpSent"
+          style="border-bottom: 1px solid #efefef; width: 85%;"
+        />
+
+        <!-- otp -->
+        <InputCredential
+          label="One Time Password"
+          v-model="otp"
+          v-if="otpSent"
+        />
+
+        <p v-if="otpSent && otpError.status" class="msg error">
+          {{ otpError.msg }}
+        </p>
       </div>
 
       <div class="order-total-container">
@@ -39,9 +57,11 @@
     </div>
 
     <!-- proceed to checkout -->
-    <div class="pad-10">
+    <div class="proceed flex center">
       <button @click="proceedToCheckout" class="action">
-        Continue to Checkout
+        {{
+          otpSent ? "Continue to Checkout" : "Verify Phone Number and Continue"
+        }}
       </button>
     </div>
   </div>
@@ -57,7 +77,13 @@ export default {
       countryIsoCode: "",
       countryDialCode: "",
       showCountrySelect: false,
-      saveNewAddress: true
+      saveNewAddress: true,
+      otp: "",
+      otpSent: false,
+      otpError: {
+        status: false,
+        msg: ""
+      }
     };
   },
   computed: {},
@@ -207,12 +233,28 @@ export default {
 
       return validated;
     },
-    proceedToCheckout() {
+    async sendOtp() {
+      const { response, resolved } = await this.$post("/sendOtp", {
+        countryDialCode: this.countryDialCode,
+        phoneNumber: this.formData.mobileNumber.value,
+        purpose: 'registration-on-checkout'
+      });
+
+      /* if req not resolved */
+      if (resolved === false) {
+        console.log("send otp not resolved");
+        return;
+      }
+
+      /* map otp sent response */
+      this.otpSent = response.otpSent === true;
+    },
+    async proceedToCheckout() {
       if (!this.validateForm()) return;
 
       /* check if user is logged in */
       if (!this.$store.state.customer.authorized) {
-        alert("not logged in");
+        await this.sendOtp();
         /* TODO: DO_IT -> You Can */
         /* at this point, you need to push an sms to the phone number provided above */
         /* on successful otp verification, register the user name with first name, surname, mobile number */
@@ -270,7 +312,7 @@ export default {
 
       .delivery-address {
         width: 100%;
-        padding: 10% 0;
+        padding: 10% 0 2% 0;
         margin-top: 0;
 
         .title {
@@ -281,6 +323,15 @@ export default {
         width: 100%;
         margin-top: 0;
         padding: 0 20px;
+      }
+    }
+  }
+  .proceed {
+    width: 50%;
+    @media (max-width: 768px) {
+      width: 100%;
+      .action {
+        width: auto;
       }
     }
   }

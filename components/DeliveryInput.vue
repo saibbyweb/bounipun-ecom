@@ -12,6 +12,7 @@
         autocomplete="new-password"
         :maxlength="maxLength"
         :class="{ error: error.status, isMobileNumber }"
+        :disabled="disabled"
       />
     </div>
     <label class="label" :class="{ error: error.status }"> {{ label }} </label>
@@ -31,6 +32,10 @@ export default {
     maxLength: {
       type: Number,
       default: 100
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     },
     error: {
       status: Boolean,

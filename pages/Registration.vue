@@ -132,7 +132,6 @@ export default {
         platform: "web"
       });
 
-      console.log(response);
       /* if req not resolved, map error message */
       if (resolved === false) {
         this.error.message = response.message;
