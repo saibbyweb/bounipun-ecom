@@ -7,7 +7,6 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilio = require('twilio')(accountSid, authToken);
 const twilioServiceId = process.env.TWILIO_VERIFY_SERVICE_ID
-import { methods as couponMethods } from "@models/coupon";
 import { methods as globalConfigMethods } from "@models/globalConfig";
 import payment, { methods as paymentMethods } from "@models/payment";
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
@@ -556,6 +555,26 @@ export const methods = {
     async verifyGatewayToken() {
 
     },
+    /* get next sequence */
+    async getNextSequence() {
+        /* generate new id  */
+        const nextDoc: any = db.model('orderSequence').findOneAndUpdate({ seqId: "sw-seq" }, {
+            $inc: { sequence: 1 }
+        }, { upsert: true, returnOriginal: false });
+
+        /* wait for query to process */
+        const { response, error } = await task(nextDoc);
+
+        if(response === null || error) {
+            return '..';
+        }
+
+        let str = "" + response.sequence;
+        let pad = "0000"
+        let ans = pad.substring(0, pad.length - str.length) + str;
+
+        return ans;
+    },
     async placeOrder(gatewayToken, transactionId, gateway) {
         console.log(gatewayToken);
         console.log(transactionId);
@@ -582,7 +601,8 @@ export const methods = {
 
         const orderDetails = {
             paymentIntent: paymentIntent._id,
-            number: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
+            // number: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
+            number: 'BP-ORDER-' + await this.getNextSequence(),
             paymentGateway: gateway,
             transactionId,
             amount: paymentIntent.amount,
@@ -632,11 +652,11 @@ export const methods = {
         /* update stock */
         await productMethods.updateStock(listOfProducts);
         /* update coupon log if needed */
-        if(coupon !== undefined) {
-            await couponMethods.updateCouponLog(coupon.code, paymentIntent.currency,orderSaved.number);
+        if (coupon !== undefined) {
+            await couponMethods.updateCouponLog(coupon.code, paymentIntent.currency, orderSaved.number);
         }
         else
-        console.log('COUPON_NOT_APPLIED')
+            console.log('COUPON_NOT_APPLIED')
         /* notify the interested parties */
         console.log('order placing complete');
         return true;
@@ -682,5 +702,13 @@ export const methods = {
         return cancelSubOrder === null ? false : cancelSubOrder;
     }
 }
+
+// setTimeout(() => {
+//     methods.getNextSequence().then(_ => {
+
+//         console.log(_);
+//     });
+
+// }, 300)
 
 export default { model, methods }
