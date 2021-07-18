@@ -379,23 +379,23 @@ router.get('/ipLookup', userAuth('customer', false), async (req, res) => {
     const { user } = req.body;
 
     console.log(req.ip, typeof req.ip);
-    response.dump = { ip: req.ip, type: typeof req.ip }
+            response.dump = { ip: req.ip, type: typeof req.ip }
 
     /* if user is logged in, fetch country code from account */
-    // if (user.status === true) {
-    //     console.log('LOGGED IN, IP fetched from account')
-    //     response.countryCode = user.countryIsoCode;
-    //     response.resolved = true;
-    //     res.send(response);
-    //     return;
-    // }
+    if (user.status === true) {
+        console.log('LOGGED IN, IP fetched from account')
+        response.countryCode = user.countryIsoCode;
+        response.resolved = true;
+        res.send(response);
+        return;
+    }
 
     /* validate ip */
-    // if(req.ip === '::1') {
-    //     response.resolved = true;
-    //     res.send(response);
-    //     return;
-    // }
+    if(req.ip === '::1') {
+        response.resolved = true;
+        res.send(response);
+        return;
+    }
 
     /* otherwise do an country lookup */
     // const { response: lookupResponse, error } = await task(axios.get(`https://api.ipregistry.co/${req.ip}?key=${ipRegistryKey}`));
