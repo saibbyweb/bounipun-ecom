@@ -33,14 +33,16 @@
 
       <!-- share icon -->
       <div class="share-icons">
-        <div class="toggle">
+        <div class="toggle" @click="showShareIcons = !showShareIcons">
           <img src="/icons/dark/share.png" />
         </div>
 
-        <div class="social">
+        <div :class="{ active: showShareIcons }" class="social">
+          <a :href="facebookShareLink" target="_blank">
           <img src="/icons/dark/social/facebook.png" />
-          <img src="/icons/dark/social/pinterest.png" />
-          <img src="/icons/dark/social/instagram.png" />
+          </a>
+          <!-- <img src="/icons/dark/social/pinterest.png" /> -->
+          <!-- <img src="/icons/dark/social/instagram.png" /> -->
           <a :href="whatsAppShareLink" target="_blank">
             <img src="/icons/dark/social/whatsapp.png" />
           </a>
@@ -384,6 +386,7 @@ export default {
   },
   data() {
     return {
+      showShareIcons: false,
       showSlideshow: false,
       slideshowOptions: {
         dots: true,
@@ -503,6 +506,11 @@ export default {
       let msg = `Check out this Bounipun special: ${location.host}/products?_id=${this.product._id}`;
       msg = encodeURI(msg);
       return BASE_SHARE_URL + msg;
+    },
+    facebookShareLink() {
+      const BASE_SHARE_URL = "https://www.facebook.com/sharer/sharer.php?u=";
+      const link = BASE_SHARE_URL + `${location.host}/products?_id=${this.product._id}`;
+      return link;
     }
   },
   methods: {
@@ -751,10 +759,6 @@ export default {
     width: 30%;
     position: relative;
     overflow: hidden;
-    // top:0;
-    // left:0;
-
-    // background-color: rgba(165, 42, 42, 0.545);
     /* collection name, vertical */
     .collection-vertical {
       display: none;
@@ -833,7 +837,7 @@ export default {
       }
 
       .social {
-        display: none;
+        // display: none;
         margin-bottom: 15px;
         opacity: 0;
         display: flex;
@@ -850,12 +854,20 @@ export default {
           border-radius: 1px 1px;
           box-sizing: content-box;
           padding: 4px;
+          transition: all 0.3s ease-in-out;
+          &:hover {
+          transform: scale(1.1);
+          }
+        }
+
+        &.active {
+          opacity: 0.95;
         }
       }
 
-      .toggle:hover ~ .social {
-        opacity: 0.95;
-      }
+      // .toggle:hover ~ .social {
+      //   opacity: 0.95;
+      // }
     }
   }
 
