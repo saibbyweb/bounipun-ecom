@@ -82,9 +82,9 @@ export default {
       importantLinks: [
         { name: "Contact Us", path: "/contact-us" },
         { name: "About Us", path: "/about-us"},
-        { name: "Shipping & Returns", path: "" },
+        // { name: "Shipping & Returns", path: "" },
         { name: "Terms & Conditions", path: "/terms" },
-        { name: "Privacy Policy", path: "" }
+        { name: "Privacy Policy", path: "/privacy-policy" }
       ]
     };
   }

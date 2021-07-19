@@ -38,21 +38,21 @@
         /delivery time is an approximate time mentioned by the vendor against
         each product. Bounipun Kashmir shall not be liable for any delay /
         non-delivery of purchased goods by flood, fire, wars, acts of God or any
-        cause that is beyond the control of Bounipun Kashmir. The user must agree to
-        provide authentic and true information, to avoid any kind of delay or
-        loss of merchandise. Bounipun Kashmir reserves the right to confirm and
-        validate the information and other details provided by the user at any
-        point of time. If upon confirmation, such user details are found not
-        true (wholly or partly), Bounipun Kashmir has the right in its sole discretion
-        to reject the registration and debar the user from using the services
-        available at this website, and / or other affiliated websites without
-        prior intimation whatsoever. Delivery of orders would be done address
-        specific not person specific. Octroi charges may be levied on few
-        destinations (mostly in Maharashtra) displayed on the site .These
-        charges are not refundable and shall be borne by the customer. In the
-        event of cancellation of the order the Octroi charges levied shall not
-        be refunded. All Duties and taxes for international shipping shall be
-        borne by the customer. Bounipun Kashmir is not liable to pay any
+        cause that is beyond the control of Bounipun Kashmir. The user must
+        agree to provide authentic and true information, to avoid any kind of
+        delay or loss of merchandise. Bounipun Kashmir reserves the right to
+        confirm and validate the information and other details provided by the
+        user at any point of time. If upon confirmation, such user details are
+        found not true (wholly or partly), Bounipun Kashmir has the right in its
+        sole discretion to reject the registration and debar the user from using
+        the services available at this website, and / or other affiliated
+        websites without prior intimation whatsoever. Delivery of orders would
+        be done address specific not person specific. Octroi charges may be
+        levied on few destinations (mostly in Maharashtra) displayed on the site
+        .These charges are not refundable and shall be borne by the customer. In
+        the event of cancellation of the order the Octroi charges levied shall
+        not be refunded. All Duties and taxes for international shipping shall
+        be borne by the customer. Bounipun Kashmir is not liable to pay any
         Duties or Taxes for International Shipping.
       </Accordion>
 
@@ -78,9 +78,63 @@
         the customer themselves. Bounipun Kashmir will only bear the expenses of
         the transaction after the repair of the merchandise.
       </Accordion>
+
+      <!-- cancellation -->
+      <Accordion heading="Cancellation/Refunds">
+        After having placed their order, customers will have a window of 24
+        hours to cancel their order either from the "My Orders" section on the
+        website or by contacting us via email. In that case, the amount deducted
+        for the order will be refunded within 7-8 working days to their original
+        payment method. Customers may cancel their order only if the order has
+        not been dispatched yet. We do not accept any cancellation on orders
+        after the product has been dispatched from our warehouse. No refund or
+        exchange will be entertained for custom made orders.
+      </Accordion>
+
+      <!-- Intellectual Property & Trademarks -->
+      <Accordion heading="Intellectual Property">
+        Bounipun Kashmir is the owner and authorized user of all intellectual
+        property including but not limited to trade marks, logos, names and
+        designs, whether registered or unregistered, and other marks that are
+        otherwise owned or licensed to Bounipun Kashmir in and associated with
+        this website (collectively “intellectual property”), and any
+        improvements or modifications to such intellectual property. The use or
+        misuse of any of Bounipun Kashmir’s intellectual property is prohibited
+        without the prior written permission of Bounipun Kashmir, New Colony
+        Nigeen, Hazratbal, Srinagar, Jammu and Kashmir – 190006, India .Nothing
+        contained in this website should be construed as giving you any right or
+        license to any of the intellectual property on or associated with this
+        website.
+      </Accordion>
+
+      <!-- copyright -->
+      <Accordion heading="Copyright">
+        This website and its contents are the property of Bounipun Kashmir and
+        are subject to copyright. The contents of our website and the website as
+        a whole are intended solely for your personal, non-commercial use. Any
+        use of our website and its content for purposes other than personal and
+        non-commercial use, or for any other use, including the modification,
+        reproduction, distribution, transmission, republication, display or
+        performance, of the content of this website, is prohibited and protected
+        under the copyright act , and any such case or person can be prosecuted
+        by law.
+      </Accordion>
+
+      <p style="text-align: center;"> Last updated: 19th July, 2021 </p>
+
     </div>
   </div>
 </template>
+
+<script>
+export default {
+       head() {
+    return {
+      title: "Terms & Conditions | Bounipun Kashmir"
+    }
+  },
+}
+</script>
 
 <style lang="scss" scoped>
 .article {
@@ -102,6 +156,12 @@
 .wrapper {
   h1 {
     text-align: center;
+  }
+
+  @media(max-width: 768px) {
+      h1 {
+          margin-bottom: 40px;
+      }
   }
 }
 </style>
