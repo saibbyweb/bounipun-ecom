@@ -1,7 +1,7 @@
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: "bounipun-ecom",
+    title: "Bounipun Kashmir",
     htmlAttrs: {
       lang: "en"
     },
@@ -51,7 +51,9 @@ export default {
     baseAWSURL: "https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/",
     BASE_URL: process.env.BASE_URL,
     STRIPE_PK: process.env.STRIPE_PK,
-    RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID
+    RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID,
+    RAZORPAY_KEY_ID_TEST: process.env.RAZORPAY_KEY_ID_TEST,
+    RAZORPAY_KEY_ID_PROD: process.env.RAZORPAY_KEY_ID_PROD
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
@@ -61,6 +63,9 @@ export default {
         ? process.env.BASE_URL
         : "/",
       credentials: true
+  },
+  publicRuntimeConfig: {
+    apiSecret: process.env.API_SECRET_BOSS
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},

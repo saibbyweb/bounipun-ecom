@@ -130,6 +130,9 @@ export default {
   mounted() {
     /* this page should not be accessible to guest */
     if (!this.$store.state.customer.authorized) return;
+    
+    /* set keys according to environment */
+    this.setKeys();
 
     /* fetch updated cart from user account */
     this.$store.dispatch("customer/fetchCart");
@@ -166,7 +169,8 @@ export default {
       enableCheckout: false,
       elements: null,
       orderDetails: {},
-      combinedDeliveryConsent: true
+      combinedDeliveryConsent: true,
+      razorpayKeyId: ""
     };
   },
   computed: {
@@ -226,6 +230,25 @@ export default {
     }
   },
   methods: {
+    setKeys() {
+      /* if environment is dev, use test keys */
+      if(process.env.NODE_ENV === 'development') {
+        this.razorpayKeyId = process.env.RAZORPAY_KEY_ID_TEST;
+        return;
+      }
+      
+      /* if environment is production, set live key only on main domain */
+      if(process.env.NODE_ENV === 'production') {
+        switch(window.location.hostname) {
+          case 'bounipun.in':
+            this.razorpayKeyId = process.env.RAZORPAY_KEY_ID_PROD
+            break;
+          default:
+            this.razorpayKeyId = process.env.RAZORPAY_KEY_ID_TEST
+            break;
+        }
+      }
+    },
     adjustPrice(price) {
       price = parseInt(price);
       return this.$store.getters["customer/adjustPrice"](price);
@@ -254,7 +277,7 @@ export default {
     },
     setupRazorpayOrder(orderId, amount) {
       let options = {
-        key: process.env.RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
+        key: this.razorpayKeyId, // Enter the Key ID generated from the Dashboard
         amount: amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
         currency: "INR",
         name: "Bounipun Ecom",

@@ -1,7 +1,7 @@
 <template>
   <div class="cart page -wh">
     <div class="page-header center">
-      <h2 class="title">Shopping Bag</h2>
+      <h2 class="title" @click="test">Shopping Bag</h2>
     </div>
 
     <div v-if="!cartEmpty" class="cart-container flex">
@@ -127,6 +127,7 @@ export default {
   mounted() {
     console.log("mounted");
 
+
     setTimeout(() => {
       this.couponCode = this.coupon.code;
       this.$store.dispatch("customer/fetchCart");
@@ -164,6 +165,14 @@ export default {
     }
   },
   methods: {
+    test() {
+      console.log(process.env.RAZORPAY_KEY_ID_TEST);
+      console.log(process.env.RAZORPAY_KEY_ID_PROD);
+      console.log(process.env.NODE_ENV)
+        // if(process.env.NODE_ENV === 'production') {
+        console.log(window.host);
+      // }
+    },
     async applyCoupon() {
       if (this.couponApplied === false) {
         const couponDetails = await this.$store.dispatch(
