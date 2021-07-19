@@ -2,6 +2,8 @@ import { server, db, mongoose, task } from "@helpers/essentials";
 import { methods as userMethods } from "@models/user";
 import { methods as couponMethods } from "@models/coupon";
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
+import { methods as messageMethods } from "@models/message";
+
 import Stripe from "stripe";
 
 /* user auth middleware */
@@ -9,6 +11,14 @@ const { userAuth } = userMethods;
 
 /* creating express router */
 const router = server.express.Router();
+
+/* send message (contact form) */
+router.post('/sendMessage', async(req, res) => {
+    let response = { resolved: true }
+    const { name, email, message } = req.body;
+    await messageMethods.saveMessage(name, email, message);
+    res.send(response);
+});
 
 /* fetch global config */
 router.post('/fetchGlobalConfig', async (req, res) => {

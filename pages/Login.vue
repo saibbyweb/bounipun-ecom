@@ -53,6 +53,8 @@
 </template>
 
 <script>
+import validate from "@/helpers/validate.js";
+
 export default {
     head() {
     return {
@@ -77,11 +79,11 @@ export default {
   methods: {
     validatePhoneNumber() {
       console.log("validate called");
-      if (this.phoneNumber.length !== 10) {
-        this.error.message = "Kindly enter a valid 10 digit mobile number";
-        this.error.status = true;
-        return false;
-      }
+      // if (this.phoneNumber.length !== 10) {
+      //   this.error.message = "Kindly enter a valid 10 digit mobile number";
+      //   this.error.status = true;
+      //   return false;
+      // }
       return true;
     },
     async sendOtp() {
