@@ -1,4 +1,7 @@
+const options = {path: '.env.prod'};
 require("dotenv").config();
+console.log(process.env.RAZORPAY_KEY_ID)
+
 import express from "express";
 import mongoose from "mongoose";
 import path from "path";
