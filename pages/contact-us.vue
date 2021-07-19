@@ -6,7 +6,7 @@
         <h2>Write to us</h2>
         <br />
         <!-- name -->
-        <InputCredential label="Name" v-model="name" :clearError="true"/>
+        <InputCredential label="Name" v-model="name" :clearError="true" />
         <!-- email -->
         <InputCredential label="Email" v-model="email" :clearError="true" />
         <!-- message -->
@@ -21,8 +21,8 @@
       <div class="address flex center col">
         <h2>or you can reach us at:</h2>
         <p>
-          New Colony Nigeen, Hazratbal, Srinagar, Jammu and Kashmir – 190006,
-          India
+          H-30 Integrated Textile and Handicraft Park Zakura, Srinagar, Jammu
+          and Kashmir, India, 190006
         </p>
         <p>care@bounipun.in</p>
         <p>+91-91030-77655</p>
@@ -73,18 +73,16 @@ export default {
         this.setError(true, "Name can only consist of numbers");
         return false;
       }
-      
+
       /* email should be in correct format */
       const emailValidated = this.email.isValidEmail();
 
-      if(!emailValidated) {
-          this.setError(true, "Please enter a valid email address");
-          return false;
+      if (!emailValidated) {
+        this.setError(true, "Please enter a valid email address");
+        return false;
       }
 
       return true;
-
-
     },
     async sendMessage() {
       if (!this.validateForm()) return;

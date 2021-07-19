@@ -37,7 +37,7 @@
         </div>
 
         <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
-        <!-- TODO: show user consent checkbox for combined delivery for all items -->
+       
         <div class="order-total-container">
           <OrderTotal
             v-if="!cartEmpty"
@@ -50,7 +50,7 @@
         <!-- payment specific -->
         <div class="payment-specific flex center col">
           <!-- TODO: START_FROM_HERE stripe card payment -->
-          
+
           <!-- shipping note -->
           <p v-if="$store.state.customer.combinedDeliveryConsent" class="note">
             Combined Standard shipping for the whole order:
@@ -125,7 +125,7 @@ export default {
   head() {
     return {
       title: "Checkout | Bounipun Kashmir"
-    }
+    };
   },
   mounted() {
     /* this page should not be accessible to guest */
@@ -152,8 +152,8 @@ export default {
   },
   data() {
     return {
-      deliveryAddress: demoDeliveryAddress,
-      // deliveryAddress: this.$route.params.deliveryAddress,
+      // deliveryAddress: demoDeliveryAddress,
+      deliveryAddress: this.$route.params.deliveryAddress,
       remoteCartItems: this.$store.state.customer.globalRemoteCart,
       razorpayCheckout: null,
       stripe: null,
@@ -202,7 +202,7 @@ export default {
           postal_code: this.deliveryAddress.postalCode,
           country: this.deliveryAddress.countryIsoCode
         }
-      };
+      }
     },
     stripeShippingObject() {
       return {
