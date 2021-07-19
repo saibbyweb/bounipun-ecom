@@ -50,7 +50,8 @@ export default {
   env: {
     baseAWSURL: "https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/",
     BASE_URL: process.env.BASE_URL,
-    STRIPE_PK: process.env.STRIPE_PK
+    STRIPE_PK: process.env.STRIPE_PK,
+    RAZORPAY_KEY_ID:  process.env.NODE_ENV === "development" ? process.env.RAZORPAY_KEY_ID : process.env.RAZORPAY_LIVE_KEY_ID
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {

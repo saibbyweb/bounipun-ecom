@@ -254,7 +254,7 @@ export default {
     },
     setupRazorpayOrder(orderId, amount) {
       let options = {
-        key: "rzp_test_LnJPEC0MOtvlSn", // Enter the Key ID generated from the Dashboard
+        key: process.env.RAZORPAY_KEY_ID, // Enter the Key ID generated from the Dashboard
         amount: amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
         currency: "INR",
         name: "Bounipun Ecom",
