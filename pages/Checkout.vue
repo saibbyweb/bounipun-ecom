@@ -258,7 +258,6 @@ export default {
       return this.$store.getters["customer/adjustPrice"](price);
     },
     async initializeStripe() {
-      console.log();
       this.stripe = await loadStripe(this.stripePK);
       this.elements = this.stripe.elements();
       const element = this.elements.create("card", { hidePostalCode: true });
