@@ -8,8 +8,8 @@
     "frontend:build": "nuxt build --spa",
     "dev:server": "NODE_ENV=development nodemon --watch server --exec ts-eager server/index.ts",
     "server:build": "NODE_ENV=production node serverBundle.js",
-    "build": "yarn run frontend:build && yarn run server:build",
-    "buildx": "yarn run server:build",
+    "buildx": "yarn run frontend:build && yarn run server:build",
+    "build": "yarn run server:build",
     "start": "NODE_ENV=production node dist/server.js",
     "start:dev": "yarn run frontend:dev && yarn run server:dev",
     "up": "yarn run build && yarn run start"
