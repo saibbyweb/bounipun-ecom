@@ -17,7 +17,7 @@
         :value="value"
         @input="emitInput"
         :disabled="disabled"
-        :class="{ isMobileNumber, uppercase }"
+        :class="{ isMobileNumber, uppercase, textarea }"
       />
     </div>
   </div>
@@ -37,6 +37,7 @@ export default {
       type: Boolean,
       default: false
     },
+    textarea: { type: Boolean, default: false},
     countryDialCode: String,
     error: {
       status: Boolean,
@@ -128,6 +129,10 @@ export default {
 
       &.isMobileNumber {
         text-indent: 16%;
+      }
+
+      &.textarea {
+        height: 200px;
       }
     }
   }
