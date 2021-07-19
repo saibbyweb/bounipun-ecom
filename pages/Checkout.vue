@@ -170,7 +170,8 @@ export default {
       elements: null,
       orderDetails: {},
       combinedDeliveryConsent: true,
-      razorpayKeyId: ""
+      razorpayKeyId: "",
+      stripePK: ""
     };
   },
   computed: {
@@ -234,6 +235,7 @@ export default {
       /* if environment is dev, use test keys */
       if(process.env.NODE_ENV === 'development') {
         this.razorpayKeyId = process.env.RAZORPAY_KEY_ID_TEST;
+        this.stripePK = process.env.STRIPE_PK_TEST;
         return;
       }
       
@@ -242,9 +244,11 @@ export default {
         switch(window.location.hostname) {
           case 'bounipun.in':
             this.razorpayKeyId = process.env.RAZORPAY_KEY_ID_PROD
+            this.stripePK = process.env.STRIPE_PK_PROD;
             break;
           default:
             this.razorpayKeyId = process.env.RAZORPAY_KEY_ID_TEST
+            this.stripePK = process.env.STRIPE_PK_TEST;
             break;
         }
       }
@@ -255,7 +259,7 @@ export default {
     },
     async initializeStripe() {
       console.log();
-      this.stripe = await loadStripe(process.env.STRIPE_PK);
+      this.stripe = await loadStripe(this.stripePK);
       this.elements = this.stripe.elements();
       const element = this.elements.create("card", { hidePostalCode: true });
       element.on("change", event => {
