@@ -81,7 +81,7 @@
 
       <!-- cancellation -->
       <Accordion heading="Cancellation/Refunds">
-        After having placed their order, customers will have a window of 24
+        After having placed their order, customers will have a window of 48
         hours to cancel their order either from the "My Orders" section on the
         website or by contacting us via email. In that case, the amount deducted
         for the order will be refunded within 7-8 working days to their original

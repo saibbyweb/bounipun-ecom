@@ -39,5 +39,13 @@ export default {
         cursor: pointer;
 
     }
+
+    @media(max-width: 768px) {
+        .checkbox {
+            height:25px;
+            width:25px;
+            margin-right:10px;
+        }
+    }
 }
 </style>

@@ -106,7 +106,7 @@ export default {
 
   @media (max-width: 768px) {
     width: 90%;
-    height: 45vw;
+    height: 68vw;
     margin: 10px;
   }
 
@@ -117,6 +117,7 @@ export default {
     background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;
+
     img {
       width: 100%;
     }
@@ -124,6 +125,7 @@ export default {
   /* cart item details and quantity input */
   .details-and-quantity {
     width: 65%;
+    padding-left:4px;
     display: flex;
     flex-direction: column;
     justify-content: center;

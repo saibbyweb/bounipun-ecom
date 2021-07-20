@@ -44,6 +44,10 @@ export default {
         if(this.expanded && this.$refs.content !== undefined) {
             this.active = true;
         }
+        if(this.heading === "Base Color") {
+            this.toggle();
+            setTimeout(() => this.toggle(), 600);
+        }
     },
     computed: {
         maxHeight() {

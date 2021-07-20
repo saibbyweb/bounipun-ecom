@@ -81,8 +81,8 @@
       <!-- <button class="clear link" @click="$router.push('/faqs')">FAQs</button> -->
       <!-- <button class="clear link">Help</button> -->
       <!-- <button class="clear link">About Us</button> -->
-      <button class="clear link">Terms of Use</button>
-      <button class="clear link">Privacy Policy</button>
+      <button class="clear link" @click="navigate('/terms')">Terms of Use</button>
+      <button class="clear link" @click="navigate('/privacy-policy')">Privacy Policy</button>
 
       <br />
 

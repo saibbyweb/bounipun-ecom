@@ -45,7 +45,7 @@
           <button class="action confirm-cancel" @click="confirmCancellation">
             Confirm Cancellation
           </button>
-          <button class="action dont-cancel">
+          <button class="action dont-cancel" @click="$emit('hideForm')">
             I don't want to cancel
           </button>
         </div>
@@ -80,7 +80,7 @@ export default {
     return {
       cancellationReasons: [
         "I have purchased the wrong item",
-        "I found the price compartively higher"
+        "I accidently bought the same item twice"
       ],
       selectedReason: "",
       orderCancelled: false
@@ -120,6 +120,10 @@ export default {
 .cancellation-form {
   background-color: white;
   width: 100%;
+
+  @media(min-width: 769px) {
+    width: 60%;
+  }
   .title {
     background-color: $dark_gray;
     padding: 10px;
@@ -165,6 +169,13 @@ export default {
           width: 55%;
         }
       }
+
+      @media(min-width: 769px) {
+        button {
+          font-size:14px;
+          padding:10px 25px;
+        }
+      }
     }
   }
   .cancelled {
@@ -173,5 +184,7 @@ export default {
       font-size: 13px;
     }
   }
+
+
 }
 </style>

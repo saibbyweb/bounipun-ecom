@@ -233,7 +233,7 @@ export default {
 <style lang="scss" scoped>
 .cart {
   margin-top: 12vh;
-  min-height: 70vh;
+  min-height: 85vh;
 
   .title {
     font-size: 25px !important;
@@ -250,11 +250,15 @@ export default {
   }
   .actions {
     width: 30%;
+    background-color:white;
     @media (min-width: 769px) {
       position: fixed;
       right: 5%;
       top: 15vh;
-      height: 100%;
+      height: 81vh;
+      z-index: 4;
+      overflow: hidden;
+      padding:1%;
     }
     // background: red;
   }

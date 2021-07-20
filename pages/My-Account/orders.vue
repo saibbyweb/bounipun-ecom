@@ -1,5 +1,6 @@
 <template>
-  <div class="page orders">
+  <div class="page orders flex center">
+
     <CancelOrder
       :orderId="selectedOrderId"
       :subOrderId="selectedSubOrderId"
@@ -57,11 +58,11 @@
         <div class="actions">
           <!-- pre delivery -->
           <div v-if="subOrder.status !== 'cancelled'" class="pre-delivery">
-            <button>Track</button>
-            <button @click="setCancellationOrder(order._id, subOrder._id)">
+            <!-- <button>Track</button> -->
+            <button v-if="checkIfCancellable(order.createdAt)" @click="setCancellationOrder(order._id, subOrder._id)">
               Cancel
             </button>
-            <button>Help</button>
+            <!-- <button>Help</button> -->
           </div>
           <!-- post delivery -->
           <div class="post-delivery">
@@ -90,9 +91,18 @@ export default {
     };
   },
   mounted() {
+        setTimeout(() => {
+      if (!this.$store.state.customer.authorized) this.$router.push("/login");
+    }, 400);
     this.fetchOrders();
   },
   methods: {
+    checkIfCancellable(orderedAt) {
+      orderedAt = new Date(orderedAt)
+      const now = new Date();
+      const oneday = 60 * 60 * 24 * 1000;
+      return (now - orderedAt) < (oneday * 2);
+    },
     setCancellationOrder(orderId, subOrderId) {
       this.selectedOrderId = orderId;
       this.selectedSubOrderId = subOrderId;
@@ -105,7 +115,7 @@ export default {
         return;
       }
 
-      const orders = response.orders;
+      const orders = response.orders.reverse();
       this.orders = orders;
     }
   }
@@ -114,11 +124,20 @@ export default {
 
 <style lang="scss" scoped>
 .orders {
+  flex-wrap: wrap;
+  width: 100%;
+  @media(max-width: 768px) {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+  // width:100%;
   .order-item {
-    width: 100%;
     box-shadow: 1px 1px 15px rgba(51, 51, 51, 0.16);
-    margin: 20px 0;
-    // height:40vh;
+    margin: 20px;
+    height: 300px;
+    overflow:hidden;
+    width: 40vw;
+   
 
     /* status bar */
     .status-bar {
@@ -127,7 +146,7 @@ export default {
       justify-content: space-between;
       background-color: #333333;
       width: 100%;
-      padding: 3% 4%;
+      padding: 2% 2%;
 
       /* status text */
       .status {
@@ -144,11 +163,12 @@ export default {
 
     /* details */
     .details {
+      // height: 100%;
       display: flex;
 
       .image-box {
         width: 30%;
-        height: 30vw;
+        height: 15vw;
         background-size: cover;
         background-position: top;
 
@@ -160,9 +180,11 @@ export default {
       .text-details {
         width: 70%;
         display: flex;
+        height:100%;
         justify-content: center;
         flex-direction: column;
-        padding-top: 10px;
+        padding:2%;
+        padding-top: 2%;
 
         span {
           font-size: 10px;
@@ -195,6 +217,27 @@ export default {
       }
     }
 
+
+   @media(max-width: 768px) {
+    height: 65vw;
+    width:90vw;
+    margin: 20px 0;
+    
+    .status-bar {
+      padding: 3% 4%;
+    }
+    .details {
+      .image-box {
+        height: 36vw;
+
+      }
+      .text-details {
+          padding:0%;
+          padding-top: 10px;
+          height:auto;
+      }
+    }
+   }
     /* divider */
     .divider {
       margin: 10px 0;

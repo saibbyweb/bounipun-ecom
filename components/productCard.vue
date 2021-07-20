@@ -7,7 +7,7 @@
     }"
   >
     <!-- wishlist icon -->
-    <img
+    <!-- <img
       @click.stop="toggleWishlist"
       :class="[{ added: addedToWishlist }, 'wishlist']"
       :src="
@@ -15,7 +15,7 @@
           ? '/icons/dark/wishlist-filled.png'
           : '/icons/dark/wishlist.png'
       "
-    />
+    /> -->
 
     <!-- main image container -->
     <div class="main-image-container center">

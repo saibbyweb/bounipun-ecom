@@ -21,7 +21,7 @@
       </div>
 
       <!-- wishlist icon -->
-      <img
+      <!-- <img
         @click="addedToWishlist = !addedToWishlist"
         :class="[{ added: addedToWishlist }, 'wishlist']"
         :src="
@@ -29,7 +29,7 @@
             ? '/icons/dark/wishlist-filled.png'
             : '/icons/dark/wishlist.png'
         "
-      />
+      /> -->
 
       <!-- share icon -->
       <div class="share-icons">
@@ -326,7 +326,7 @@
             </span>
           </Accordion>
 
-          <Accordion heading="Shipping & Returns" />
+          <!-- <Accordion heading="Shipping & Returns" /> -->
         </div>
       </div>
 
@@ -1305,6 +1305,9 @@ export default {
       /* description */
       .accordions {
         margin-top: 20px;
+        @media(min-width: 768px) {
+          padding-bottom:200px;
+        }
         text-align: justify;
 
         ul {

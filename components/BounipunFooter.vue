@@ -46,7 +46,7 @@
 
       <!-- crafted in kashmir -->
       <div id="crafted-in-kashmir" class="section">
-        <span class="last-footer-item"> Crafted with ❤ in Kashmir </span>
+        <span class="last-footer-item"> Crafted with ♡ in Kashmir </span>
       </div>
     </div>
   </div>
