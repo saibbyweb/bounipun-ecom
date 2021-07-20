@@ -1,5 +1,17 @@
 <template>
   <div class="homepage" v-if="layout !== null">
+  
+    <!-- coming soon -->
+    <div v-if="inProduction && locked" class="coming-soon flex center">
+
+      <div class="banner">
+      </div>
+
+      <!-- close button -->
+      <div class="close" @click="locked =false">
+      </div>
+    </div>
+
     <!-- slidehshow (MOBILE)-->
     <slideshow
       v-if="layout.mainSlideshow.visible && isMobile"
@@ -177,7 +189,8 @@ export default {
     return {
       layout: null,
       mainSlideshowImages: [],
-      sections: []
+      sections: [],
+      locked: true
     };
   },
   mounted() {
@@ -186,9 +199,15 @@ export default {
   computed: {
     isMobile() {
       return this.windowWidth < 768;
+    },
+    inProduction() {
+      return process.env.NODE_ENV === 'production'
     }
   },
   methods: {
+    async toggleLock() {
+      this.locked = !this.locked;
+    },
     async fetchHomepageLayout() {
       const layout = await this.$fetchData("homepages", {
         status: true
@@ -241,6 +260,34 @@ export default {
 <style lang="scss">
 .homepage {
   margin-top: 10vh;
+  position:relative;
+
+  .coming-soon {
+    position: fixed;
+    top:0;
+    left:0;
+    height:100%;
+    width:100%;
+    background-color: white;
+    z-index: 4;
+
+    .banner {
+      width: 300px;
+      height: 533px;
+      background-image: url('/launch-image.jpeg');
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    .close {
+      position: absolute;
+      top:0;
+      right:0;
+      width:100px;
+      height:100px;
+    }
+  }
+
   /* mainly collection blocks */
   .blocks {
     padding: 0 1%;
