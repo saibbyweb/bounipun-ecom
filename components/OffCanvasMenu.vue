@@ -4,7 +4,7 @@
       <!-- header -->
       <div class="header">
         <h4 v-if="$store.state.customer.authorized" class="white">
-          Good Afternoon,<br />
+          {{ greeting }},<br />
           {{
             $store.state.customer.user !== undefined
               ? $store.state.customer.user.firstName
@@ -109,6 +109,21 @@ export default {
   mounted() {
     this.fetchCollections();
   },
+  computed: {
+    greeting() {
+      const time = new Date().getHours();
+      let greeting;
+      if (time < 12) {
+        greeting = "Good morning";
+      } else if (time < 17) {
+        greeting = "Good Afternoon";
+      } else {
+        greeting = "Good Evening";
+      }
+
+      return greeting;
+    }
+  },
   methods: {
     navigate(route, type) {
       this.$emit("closeMenu");
@@ -148,6 +163,8 @@ export default {
       this.$store.commit("customer/unauthorize");
       this.$router.push("/");
       await this.$store.dispatch("customer/fetchCart");
+      await this.$store.dispatch("customer/fetchStoreLocation");
+      await this.$store.dispatch("customer/fetchGlobalConfig");
       this.$forceUpdate();
       this.$emit("closeMenu");
     }
@@ -209,7 +226,7 @@ export default {
         }
       }
       .login-reg {
-        width:100%;
+        width: 100%;
         cursor: pointer;
         text-align: center;
         text-transform: uppercase;

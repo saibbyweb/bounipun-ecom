@@ -82,9 +82,9 @@ export const mutations = {
   },
   /* unauthorize */
   unauthorize(state) {
+    cookies.remove("swecom_bounipun");
     state.authorized = false;
     state.user = {};
-    cookies.remove("swecom_bounipun");
   },
   setUser(state, user) {
     state.user = user;

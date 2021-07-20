@@ -120,7 +120,7 @@ router.post("/registerCustomer", async (req, res) => {
     /* mark as logged in */
     if (platform === 'web') {
         console.log('setting cookie...');
-        res.cookie('swecom_bounipun', loginAttempt.token, { maxAge: 2592000000, httpOnly: false, sameSite: 'none', secure: true });
+        res.cookie('swecom_bounipun', loginAttempt.token, { maxAge: 15552000000, httpOnly: false, sameSite: 'none', secure: true });
     }
 
     response.loggedIn = true;
@@ -203,7 +203,7 @@ router.post('/loginCustomer', async (req, res) => {
     /* mark as logged in */
     if (platform === 'web') {
         console.log('setting cookie...');
-        res.cookie('swecom_bounipun', loginAttempt.token, { maxAge: 2592000000, httpOnly: false, sameSite: 'none', secure: true });
+        res.cookie('swecom_bounipun', loginAttempt.token, { maxAge: 15552000000, httpOnly: false, sameSite: 'none', secure: true });
     }
 
     response.loggedIn = true;

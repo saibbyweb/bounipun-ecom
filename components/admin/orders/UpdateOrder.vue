@@ -83,11 +83,11 @@
       <img v-if="updated" class="action-complete" src="/complete.gif" />
       <!-- update document -->
       <button @click="updateDocument" class="action" :disabled="loading">
-        {{ editMode ? "Edit" : "Add" }} Order
+        {{ editMode ? "Update" : "Add" }} Order
       </button>
       <!-- delete document -->
       <button
-        v-if="editMode"
+        v-if="editMode && inDevelopment"
         @click="deleteDocument"
         class="action delete"
         :disabled="loading"
@@ -144,6 +144,9 @@ export default {
       return (
         (parseInt(this.doc.subTotal) + parseInt(this.doc.discountValue)) / 100
       );
+    },
+    inDevelopment() {
+      return process.env.NODE_ENV === 'development'
     }
   },
   methods: {

@@ -338,6 +338,9 @@ export const methods = {
 
         return cartItems;
     },
+    async clearUserCart(userId) {
+        await model.findOneAndUpdate({_id: userId }, { cart: []});
+    },
     /* find cartItem helper  */
     findCartItem(cart, cartItem) {
         /* if cart empty */
@@ -649,6 +652,8 @@ export const methods = {
         const userOrdersUpdated = await db.model('users').findOneAndUpdate({ _id: paymentIntent.createdBy }, { $push: { orders: orderSaved._id } });
         /* mark payment intent as invalid */
         await paymentIntentMethods.setIntentAsInvalid(paymentIntent._id);
+        /* clear user cart */
+        await this.clearUserCart(paymentIntent.createdBy);
         /* update stock if ready to ship */
         const listOfProducts = orderDetails.items.map(item => ({ _id: item.productId, quantity: item.quantity }));
         /* update stock */

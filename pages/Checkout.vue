@@ -307,6 +307,7 @@ export default {
           }
 
           /* move to order placed page */
+          this.$store.dispatch('customer/fetchCart');
           this.$router.push("/order-placed-successfully");
         },
         prefill: {
@@ -375,6 +376,7 @@ export default {
       }
 
       /* move to order placed page */
+      this.$store.dispatch('customer/fetchCart');
       this.$router.push("/order-placed-successfully");
     }
   }

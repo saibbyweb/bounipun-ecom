@@ -137,7 +137,8 @@ export default {
             background-color: white;
             padding: 15px 10px;
             border-bottom: 1px solid rgba(51, 51, 51, 0.1);
-
+            cursor: pointer;
+            
             .icon-box {
                 width: 20vw;
 

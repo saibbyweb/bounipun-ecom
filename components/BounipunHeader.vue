@@ -5,7 +5,7 @@
       <img class="action-icon" :src="getIconPath('menu.png')" />
 
       <img
-        @click.stop="$store.commit('customer/switchCurrency')"
+        @click.stop="$router.push('/my-account')"
         v-if="$store.state.customer.authorized"
         class="action-icon account"
         :src="getIconPath('account.png')"
