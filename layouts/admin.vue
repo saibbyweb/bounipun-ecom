@@ -3,13 +3,40 @@
     <div class="loading center" v-if="$store.state.admin.loading">
       <img src="/loading.gif" />
     </div>
+    <!-- local login -->
+    <div v-if="!$store.state.admin.localAuthorized" class="local-login flex center col">
+      <div class="box flex center col">
+        <img class="logo" src="/icons/light/logo.png" />
+      <InputCredential label="PIN" v-model="pin"/>
+      <button class="action" @click="authorizeLocal"> Authorize </button>
+      </div>
+    </div>
     <AdminHeader />
     <Nuxt />
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      pin: ""
+    }
+  },
+  watch: {
+    $route(to, from) {
+      console.log(to.path);
+      if(this.$store.state.admin.localAuthorized === false)
+        this.$router.push('/admin-panel')
+    }
+  },
+  methods: {
+    authorizeLocal() {
+      if(this.pin === "7711")
+        this.$store.commit('admin/setLocalAuthorized', true)
+    }
+  }
+};
 </script>
 
 <style lang="scss">
@@ -24,6 +51,23 @@ export default {};
 
   img {
     width: 50px;
+  }
+}
+
+.local-login {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background-color: $dark_gray;
+  z-index: 2;
+  .logo {
+    width: 30vw;
+  }
+  .box {
+    width: 50%;
+    height: 50%;
   }
 }
 
