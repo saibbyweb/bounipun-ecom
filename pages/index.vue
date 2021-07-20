@@ -19,6 +19,7 @@
       :images="fetchSlideshow(layout.mainSlideshow.slides)"
       mSlideHeight="120vw"
       dSlideHeight="90vh"
+      :autoplay="true"
       :dSlideWidth="100"
     />
 
@@ -30,6 +31,7 @@
       mSlideHeight="120vw"
       dSlideHeight="90vh"
       :dSlideWidth="100"
+      :autoplay="true"
       :main="true"
 
     />

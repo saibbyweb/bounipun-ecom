@@ -77,6 +77,10 @@ export default {
         };
       }
     },
+    autoplay: {
+      type: Boolean,
+      default: false
+    },
     images: {
       type: Array,
       default: () => ["/demo_images/slider/desk1.png"]
@@ -122,7 +126,8 @@ export default {
     return {
       slideMargin: 0,
       activeIndex: 0,
-      thumbnailsMargin: 0
+      thumbnailsMargin: 0,
+      autoplayInterval: {}
     };
   },
   computed: {
@@ -135,6 +140,10 @@ export default {
     slideWidth() {
       return this.windowWidth > 768 ? this.dSlideWidth : this.mSlideWidth;
     }
+  },
+  mounted() {
+    if(this.autoplay)
+      this.setAutoplayRoutine();
   },
   methods: {
     setActiveImage(index) {
@@ -166,6 +175,11 @@ export default {
       console.log(this.$refs.thumbnails.scrollLeft);
     },
     onSwipe(data) {
+
+      if(data.autoMode === undefined) {
+        this.clearAutoplayRoutine();
+      }
+
       const threshold = this.images.length - 1;
       switch (data.direction) {
         /* swiped left */
@@ -173,7 +187,11 @@ export default {
           console.log("swiped left");
 
           /* stop at the last slide */
-          if (this.slideMargin === threshold * (-1 * this.slideWidth)) return;
+          if (this.slideMargin === threshold * (-1 * this.slideWidth)) {
+            this.slideMargin = 0;
+            this.activeIndex = 0;
+            return;
+          }
 
           this.slideMargin -= this.slideWidth;
           this.activeIndex += 1;
@@ -193,6 +211,12 @@ export default {
       TweenLite.to(this.$refs.thumbnails, 0.3, {
         scrollLeft: this.activeIndex * 40
       });
+    },
+    setAutoplayRoutine() {
+      this.autoplayInterval = setInterval(() => this.onSwipe({direction: 2, autoMode: true}), 5000);
+    },
+    clearAutoplayRoutine() {
+      clearInterval(this.autoplayInterval);
     }
   }
 };
