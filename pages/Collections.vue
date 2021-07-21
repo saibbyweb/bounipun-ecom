@@ -176,9 +176,11 @@ export default {
         return;
       }
 
+
       /* filter out inactive colors */
       products.docs.forEach(product => {
         product.colors = product.colors.filter(color => color.status === true);
+        product.variants.sort((a,b) => a._id.order - b._id.order);
       });
 
       /* filter out products with no active colors */

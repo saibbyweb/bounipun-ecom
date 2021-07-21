@@ -36,7 +36,7 @@
     <!-- product colors [images] -->
     <div
       class="center-col color-previews"
-      v-if="!(collectionName === 'Escape' && $route.name === 'Collections')"
+      v-if="!(collectionName === 'Escape' && $route.name === 'collections')"
     >
       <div class="base-color-boxes">
         <div
@@ -184,7 +184,12 @@ export default {
         return this.product.variantData.map(variant => variant.name);
       }
 
-      if (this.product.variantNames) return this.product.variantNames;
+      // if(this.product.variants) {
+      //   this.product.variants.sort((a,b) => a._id.order - b._id.order);
+      //   return this.product.variants.map(variant => variant._id.name);
+      // }
+
+      // if (this.product.variantNames) return this.product.variantNames;
       return this.product.variants.map(variant => variant._id.name);
     },
     baseColorsBoxes() {
