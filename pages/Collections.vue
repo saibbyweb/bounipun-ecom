@@ -36,7 +36,7 @@
         :product="product"
       />
       <h3 v-if="products.length === 0">
-        No Products found for {{ collection.name }}
+        fetching products for {{ collection.name }}
       </h3>
     </div>
 
