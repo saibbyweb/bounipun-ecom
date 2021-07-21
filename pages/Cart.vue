@@ -125,6 +125,7 @@ export default {
     }
   },
   mounted() {
+    this.$ga.page('/cart');
     console.log("mounted");
 
 
@@ -233,7 +234,7 @@ export default {
 <style lang="scss" scoped>
 .cart {
   margin-top: 12vh;
-  min-height: 85vh;
+  min-height: 89vh;
 
   .title {
     font-size: 25px !important;
@@ -254,8 +255,8 @@ export default {
     @media (min-width: 769px) {
       position: fixed;
       right: 5%;
-      top: 15vh;
-      height: 81vh;
+      top: 11vh;
+      height: 88vh;
       z-index: 4;
       overflow: hidden;
       padding:1%;

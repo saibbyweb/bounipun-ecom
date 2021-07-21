@@ -24,6 +24,10 @@
 <script>
 export default {
   mounted() {
+    // this.$ga.page(this.$router)
+    this.$ga.page('/');
+    console.log(this.$ga,'---google analytic');
+
     /* load persisted state */
     this.$store.commit("customer/loadPersistedState");
     /* listen for all mutations */

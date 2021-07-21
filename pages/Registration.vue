@@ -6,6 +6,7 @@
       <CountrySelect
         v-model="countryDialCode"
         @setCountryIsoCode="countryIsoCode = $event"
+        :lock="false"
       />
       <!-- first name -->
       <InputCredential

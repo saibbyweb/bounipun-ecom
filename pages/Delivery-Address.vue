@@ -8,6 +8,7 @@
         <CountrySelect
           v-model="countryDialCode"
           @setCountryIsoCode="countryIsoCode = $event"
+          :lock="decideCountryLock"
         />
 
         <!-- show addresses from address book -->
@@ -91,9 +92,13 @@ export default {
       }
     };
   },
-  computed: {},
+  computed: {
+    decideCountryLock() {
+      return this.$store.state.customer.authorized ? true : false
+    }
+  },
   async mounted() {
-    this.prefillForm();
+    // this.prefillForm();
     this.fetchAddressBook();
   },
   methods: {
