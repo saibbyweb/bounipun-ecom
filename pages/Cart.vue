@@ -125,7 +125,7 @@ export default {
     }
   },
   mounted() {
-    this.$ga.page('/cart');
+    // this.$ga.page('/cart');
     console.log("mounted");
 
 

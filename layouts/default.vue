@@ -24,9 +24,9 @@
 <script>
 export default {
   mounted() {
-    // this.$ga.page(this.$router)
-    this.$ga.page('/');
-    console.log(this.$ga,'---google analytic');
+    this.$ga.page(this.$router)
+    // this.$ga.page('/');
+    // console.log(this.$ga,'---google analytic');
 
     /* load persisted state */
     this.$store.commit("customer/loadPersistedState");
@@ -80,7 +80,7 @@ export default {
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 2;
+  z-index: 5;
   background-color: #3333335b;
 
   img {
