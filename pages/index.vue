@@ -2,7 +2,9 @@
   <div class="homepage" v-if="layout !== null">
   
     <!-- coming soon -->
-    <div v-if="inProduction && locked" class="coming-soon flex center">
+    <!-- <div v-if="inProduction && locked" class="coming-soon flex center"> -->
+    <div v-if="false" class="coming-soon flex center">
+
 
       <div class="banner">
       </div>
