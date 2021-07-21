@@ -475,13 +475,13 @@ export default {
     }
 
     .product-name {
-      font-size: 12px;
+      font-size: 10px;
       text-transform: uppercase;
       font-weight: 900;
       text-align: center;
 
       .name {
-        font-size: 12px;
+        font-size: 10px;
         font-family: $font_2_semibold;
         font-weight: 900;
       }
