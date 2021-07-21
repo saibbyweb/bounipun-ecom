@@ -493,7 +493,7 @@ export default {
     }
 
     .price {
-      font-size: 13px;
+      font-size: 11px;
       font-weight: 900;
       color: $gray;
     }
