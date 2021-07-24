@@ -461,7 +461,7 @@ export default {
         segregated = [...segregated, ...matchedColors];
       });
 
-      console.log(segregated, segregated.length);
+      console.log(segregated, segregated.length,'-- WATCH');
 
       this.products = segregated;
       this.totalMatches = segregated.length;
@@ -472,15 +472,25 @@ export default {
     },
     findMatchedColors(product) {
       console.log(product, "matched");
+
+      // return [{ color: product, actualIndex: -1 }];
       /* product name or base colors matches the color filter (if provided) */
       // const product = {...bounipunProduct};
 
       let matchedColors = [];
-
+      
+      /* filter out colors which are inactive */
       product.colors = product.colors.filter(color => color.status === true);
 
       /* what are the color filter */
       product.colors.forEach((color, index) => {
+
+        // matchedColors.push({ color: product, actualIndex: index });
+        // return;
+
+        // console.log('I AM RUNNING - WATCH')
+    
+
         // console.log(color.name, index);
         const colorNameMatch = this.searchTermRegex.test(color.name);
         const baseColorMatch = this.searchTermRegex.test(color.baseColor);
@@ -518,7 +528,6 @@ export default {
           additionalColor2FilterMatch !== -1;
 
         /* make sure the color is active */
-
         if ((textMatch || filterMatch) && color.status === true) {
           const colorProduct = { ...product };
           console.log("COLOR MATCHED", color.name, product.bounipun_collection);
@@ -536,13 +545,15 @@ export default {
       });
 
       /* if no color matched, return as it is */
-      console.log(product.name, matchedColors.length);
-      if (matchedColors.length === 0)
+      console.log(product.name, matchedColors.length, '--WATCH');
+      if (matchedColors.length === 0) {
         matchedColors = [{ color: product, actualIndex: -1 }];
+      }
 
       return matchedColors;
     },
     resultsFetched(result) {
+      console.log('AM I BEING WATCH')
       if (result.docs.length === 0) {
         this.products = [];
         return;

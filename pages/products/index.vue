@@ -999,7 +999,8 @@ export default {
       @media (max-width: 768px) {
         padding: 2% 4%;
         background-color: $dark_gray;
-        .span {
+        
+        span {
           color: white;
           &.collection {
             font-size: 13px;
