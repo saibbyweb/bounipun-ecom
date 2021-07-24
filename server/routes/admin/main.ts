@@ -32,7 +32,7 @@ router.post('/getDocument', async (req, res) => {
             /* products */
             case 'products':
                 document = await document
-                    .populate('bounipun_collection', 'name description variantNote')
+                    .populate('bounipun_collection', 'name description variantNote edt')
                     .populate('variants._id')
                     .populate('variants.fabrics._id')
                     .populate('colors._id', 'name category image')

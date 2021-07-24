@@ -132,7 +132,7 @@
                 </button>
                 <button class="arrow">></button>
               </div>
-              <span style="font-size: 9px;"> Standard Shipping: 4 weeks </span>
+              <span style="font-size: 9px;"> Standard Shipping: {{ shippingTime }} weeks </span>
             </div>
           </div>
         </div>
@@ -525,6 +525,11 @@ export default {
       const link =
         BASE_SHARE_URL + `${location.host}/products?_id=${this.product._id}`;
       return link;
+    },
+    shippingTime() {
+      if(this.product.type === "under-bounipun")
+        return this.product.bounipun_collection.edt;
+      else "4";
     }
   },
   methods: {
