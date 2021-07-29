@@ -40,13 +40,13 @@
       <!-- copyright -->
       <div id="copyright" class="section">
         <span class="last-footer-item">
-          Copyright © 2021 Bounipun Kashmir. All Rights Reserved.</span
+          Copyright © 2021 Bounipun. All Rights Reserved.</span
         >
       </div>
 
       <!-- crafted in kashmir -->
       <div id="crafted-in-kashmir" class="section">
-        <span class="last-footer-item"> Crafted with ♡ in Kashmir </span>
+        <span class="last-footer-item flex center"> Crafted with <img src="/icons/light/heart-filled-white.png" />  in Kashmir </span>
       </div>
     </div>
   </div>
@@ -107,7 +107,8 @@ export default {
       width: 40%;
 
       &.find-us {
-        margin-top: 15px;
+        margin-top: 20px;
+        margin-bottom: -13px;
       }
     }
 
@@ -116,6 +117,16 @@ export default {
       align-items: center;
       .container {
         width: 100%;
+      }
+    }
+  }
+
+  #crafted-in-kashmir {
+    .last-footer-item {
+      img {
+        width: 10px;
+        height: 10px;
+        margin: 0 3px;
       }
     }
   }
@@ -164,8 +175,9 @@ export default {
   }
 
   .text {
-    @media (max-width: 768px) {
       flex-direction: column;
+    @media (max-width: 768px) {
+    
     }
   }
 

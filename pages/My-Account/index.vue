@@ -90,7 +90,7 @@ export default {
         // },
 
         {
-          name: "Profile Details",
+          name: "My Profile",
           description: "View or manage your profile",
           icon: "profile.png",
           path: "profile-details"

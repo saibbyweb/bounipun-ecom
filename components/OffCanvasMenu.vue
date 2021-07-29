@@ -43,13 +43,13 @@
       <!-- <button class="clear item">The Bounipun Lab</button> -->
       <!-- <button class="clear item">Story</button> -->
 
-      <div v-if="$store.state.customer.authorized">
+      <div v-if="$store.state.customer.authorized" style="margin-bottom: 10px;">
         <!-- acc items -->
         <button @click="navigate('/my-account')" class="clear item">
           My Account
         </button>
         <button @click="navigate('/my-account/orders')" class="clear item acc">
-          Orders
+          My Orders
         </button>
         <!-- TODO: address book  pening-->
         <!-- <button
@@ -63,7 +63,7 @@
           @click="navigate('/my-account/profile-details')"
           class="clear item acc"
         >
-          Profile Details
+          My Profile
         </button>
 
         <!-- TODO: gift cards pending -->
@@ -75,8 +75,7 @@
         </button> -->
       </div>
 
-      <br />
-      <br />
+    
       <!-- links -->
       <!-- <button class="clear link" @click="$router.push('/faqs')">FAQs</button> -->
       <!-- <button class="clear link">Help</button> -->

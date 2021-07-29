@@ -1,6 +1,5 @@
 <template>
   <div class="page orders flex center">
-
     <CancelOrder
       :orderId="selectedOrderId"
       :subOrderId="selectedSubOrderId"
@@ -59,7 +58,10 @@
           <!-- pre delivery -->
           <div v-if="subOrder.status !== 'cancelled'" class="pre-delivery">
             <!-- <button>Track</button> -->
-            <button v-if="checkIfCancellable(order.createdAt)" @click="setCancellationOrder(order._id, subOrder._id)">
+            <button
+              v-if="checkIfCancellable(order.createdAt)"
+              @click="setCancellationOrder(order._id, subOrder._id)"
+            >
               Cancel
             </button>
             <!-- <button>Help</button> -->
@@ -71,16 +73,24 @@
         </div>
       </div>
     </div>
-
+    <!-- no orders -->
+    <div v-if="noOrders" class="side-pad">
+      <ActionResponse
+        icon="/icons/cart_empty.png"
+        title="No Orders found"
+        message="You haven't placed any orders yet!"
+        action="Continue Shopping"
+      />
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-      head() {
+  head() {
     return {
       title: "My Orders | Bounipun Kashmir"
-    }
+    };
   },
   data() {
     return {
@@ -91,17 +101,22 @@ export default {
     };
   },
   mounted() {
-        setTimeout(() => {
+    setTimeout(() => {
       if (!this.$store.state.customer.authorized) this.$router.push("/login");
     }, 400);
     this.fetchOrders();
   },
+  computed: {
+    noOrders() {
+      return this.orders.length !== 0;
+    }
+  },
   methods: {
     checkIfCancellable(orderedAt) {
-      orderedAt = new Date(orderedAt)
+      orderedAt = new Date(orderedAt);
       const now = new Date();
       const oneday = 60 * 60 * 24 * 1000;
-      return (now - orderedAt) < (oneday * 2);
+      return now - orderedAt < oneday * 2;
     },
     setCancellationOrder(orderId, subOrderId) {
       this.selectedOrderId = orderId;
@@ -126,7 +141,7 @@ export default {
 .orders {
   flex-wrap: wrap;
   width: 100%;
-  @media(max-width: 768px) {
+  @media (max-width: 768px) {
     flex-direction: column;
     flex-wrap: nowrap;
   }
@@ -135,9 +150,8 @@ export default {
     box-shadow: 1px 1px 15px rgba(51, 51, 51, 0.16);
     margin: 20px;
     height: 300px;
-    overflow:hidden;
+    overflow: hidden;
     width: 40vw;
-   
 
     /* status bar */
     .status-bar {
@@ -180,10 +194,10 @@ export default {
       .text-details {
         width: 70%;
         display: flex;
-        height:100%;
+        height: 100%;
         justify-content: center;
         flex-direction: column;
-        padding:2%;
+        padding: 2%;
         padding-top: 2%;
 
         span {
@@ -217,27 +231,25 @@ export default {
       }
     }
 
+    @media (max-width: 768px) {
+      height: 65vw;
+      width: 90vw;
+      margin: 20px 0;
 
-   @media(max-width: 768px) {
-    height: 65vw;
-    width:90vw;
-    margin: 20px 0;
-    
-    .status-bar {
-      padding: 3% 4%;
-    }
-    .details {
-      .image-box {
-        height: 36vw;
-
+      .status-bar {
+        padding: 3% 4%;
       }
-      .text-details {
-          padding:0%;
+      .details {
+        .image-box {
+          height: 36vw;
+        }
+        .text-details {
+          padding: 0%;
           padding-top: 10px;
-          height:auto;
+          height: auto;
+        }
       }
     }
-   }
     /* divider */
     .divider {
       margin: 10px 0;
