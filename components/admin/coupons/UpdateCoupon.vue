@@ -114,7 +114,7 @@ export default {
           value: "percentage"
         },
         {
-          name: "Direct Discount",
+          name: "Cash Discount",
           value: "direct-discount"
         }
       ],

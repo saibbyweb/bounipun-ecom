@@ -138,7 +138,7 @@ export default {
   },
   computed: {
     maximumShippingTime() {
-      if(!this.cartEmpty)
+      if(this.cartEmpty)
         return 1;
       const allTimes = this.$store.state.customer.globalRemoteCart.map(
         item => item.shippingTime
@@ -281,7 +281,7 @@ export default {
     width: 70%;
     .apply {
       width: 70%;
-      background-color: rgb(86, 152, 86);
+      background-color: #32a77c;
 
       &.applied {
         background-color: rgb(188, 34, 34);

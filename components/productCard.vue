@@ -59,7 +59,7 @@
       </span>
 
       <!-- ready to ship -->
-      <span v-if="readyToShip" class="additional-colors">
+      <span v-if="readyToShip" class="additional-colors rts">
               {{
             readyToShip ? 'Ready To Ship' : ''
         }}
@@ -452,6 +452,11 @@ export default {
     .additional-colors {
       font-size: 10px;
       color: $gray;
+    }
+
+    .rts {
+      color: #32a77c;
+      margin-top: 1px;
     }
 
     @media(max-width: 768px) {

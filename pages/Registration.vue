@@ -36,11 +36,17 @@
       <p class="msg success" v-if="otpSent">
         A one time password has been sent to your mobile number.
       </p>
-          
-      <br>
+
+      <br />
+
+      <Checkbox
+        label="I accept terms and conditions"
+        v-model="consent"
+      />
+         <br />
 
       <!-- send otp -->
-      <button v-if="!otpSent" class="action" @click="sendOtp()">
+      <button v-if="!otpSent" class="action" @click="sendOtp()" :disabled="!consent">
         Continue
       </button>
 
@@ -57,7 +63,6 @@
         communications
       </p>
 
-
       <button
         id="access-account"
         class="action"
@@ -72,10 +77,10 @@
 <script>
 import CountrySelect from "../components/countrySelect.vue";
 export default {
-    head() {
+  head() {
     return {
       title: "Registration | Bounipun Kashmir"
-    }
+    };
   },
   data() {
     return {
@@ -87,6 +92,7 @@ export default {
       purpose: "registration",
       phoneNumber: "",
       otp: "",
+      consent: false,
       error: {
         status: false,
         message: "Could not sent otp"
@@ -177,7 +183,6 @@ export default {
   color: $dark_gray;
   align-self: center;
   margin-bottom: 20px;
-
 
   &#already {
     align-self: center;
