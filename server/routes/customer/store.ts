@@ -15,8 +15,8 @@ const router = server.express.Router();
 /* send message (contact form) */
 router.post('/sendMessage', async(req, res) => {
     let response = { resolved: true }
-    const { name, email, message } = req.body;
-    await messageMethods.saveMessage(name, email, message);
+    const { name, subject, email, message } = req.body;
+    await messageMethods.saveMessage(name, subject, email, message);
     res.send(response);
 });
 

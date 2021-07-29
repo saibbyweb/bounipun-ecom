@@ -213,7 +213,7 @@ export default {
       });
     },
     setAutoplayRoutine() {
-      this.autoplayInterval = setInterval(() => this.onSwipe({direction: 2, autoMode: true}), 5000);
+      this.autoplayInterval = setInterval(() => this.onSwipe({direction: 2, autoMode: true}), 3000);
     },
     clearAutoplayRoutine() {
       clearInterval(this.autoplayInterval);

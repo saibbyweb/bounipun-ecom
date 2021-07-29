@@ -3,6 +3,7 @@ import { mongoose, ObjectId, task } from "@helpers/essentials";
 /* schema */
 const schema = new mongoose.Schema({
     name: String,
+    subject: String,
     email: String,
     message: String,
     read: {
@@ -24,9 +25,9 @@ export const methods = {
     register() {
         console.log('registered ', modelName);
     },
-    async saveMessage(name, email,message) {
+    async saveMessage(name, subject, email,message) {
         const newMessage = new model({
-            name, email , message
+            name, subject, email , message
         });
 
         const saveMessage = await newMessage.save();
