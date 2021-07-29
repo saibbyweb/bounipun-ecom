@@ -8,14 +8,14 @@
         @click.stop="$router.push('/my-account')"
         v-if="$store.state.customer.authorized"
         class="action-icon account"
-        :src="getIconPath('account.png')"
+        :src="getIconPath('account-new.png')"
       />
       <!-- whatsapp -->
       <!-- <router-link> -->
       <img
         @click="openInNewTab(whatsAppShareLink)"
         class="action-icon whatsapp"
-        :src="getIconPath('whatsapp.png')"
+        :src="getIconPath('whatsapp-aa.svg')"
       />
       <!-- </router-link> -->
     </div>
@@ -142,6 +142,9 @@ export default {
 
     @media (max-width: $breakpoint-tablet) {
       padding-left: 25%;
+      .account {
+        width: 3.8vw;
+      }
     }
   }
 
@@ -151,7 +154,7 @@ export default {
 
     img {
       height: 50%;
-      filter: grayscale(100%);
+      filter: contrast(3);
 
       @media (max-width: $breakpoint-tablet) {
         height: 45%;
@@ -194,6 +197,11 @@ export default {
       width: 100%;
     }
 
+    &.whatsapp {
+      width: 2.3vw;
+      filter: contrast(7);
+    }
+
     @media (max-width: $breakpoint-tablet) {
       width: 4vw;
       margin: 6%;
@@ -201,8 +209,8 @@ export default {
       /* whatsapp */
       &.whatsapp {
         width: 5.5vw;
-        margin-left: 5px;
-        opacity: 0.7;
+        margin-left: 8px;
+        opacity: 1;
       }
     }
   }
