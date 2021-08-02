@@ -7,6 +7,8 @@ const schema = new mongoose.Schema({
     dollarValue: Number,
     domesticShippingCharge: Number,
     internationalShippingCharge: Number,
+    shippingDisclaimerDomestic: String,
+    shippingDisclaimerInternational: String,
     gstPercentage: Number,
     internationalTaxPercentage: Number
 },
@@ -42,7 +44,7 @@ export const methods = {
         });
     },
     async getGlobalConfig() {
-        const config = await model.findOne({ bounipun_id: "saibbyweb" }).select('currencyMultiplier dollarValue domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage');
+        const config = await model.findOne({ bounipun_id: "saibbyweb" }).select('currencyMultiplier dollarValue domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage shippingDisclaimerDomestic shippingDisclaimerInternational');
 
         // console.log(config);
 

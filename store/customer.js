@@ -10,7 +10,7 @@ export const state = () => ({
   globalRemoteCart: [],
   globalConfig: {},
   user: {},
-  currency: "INR",
+  currency: "USD",
   combinedDeliveryConsent: false,
   coupon: {
     applied: false,
@@ -251,7 +251,7 @@ export const actions = {
     /* extract global config */
     console.log(fetchConfigRequest.response, "--genius");
     const { globalConfig } = fetchConfigRequest.response;
-    console.log(globalConfig, "--again genius");
+    // console.log(globalConfig, "--again genius");
     /* set config in vuex */
     commit("setGlobalConfig", { ...globalConfig });
   },

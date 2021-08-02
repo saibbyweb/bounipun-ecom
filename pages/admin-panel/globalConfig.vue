@@ -24,22 +24,39 @@
       label="International Shipping Charge per Item (USD)"
       v-model="doc.internationalShippingCharge"
     />
+
+    <!-- shipping disclaimer (domestic) -->
+    <TextBox
+      label="Shipping Disclaimer (Domestic)"
+      v-model="doc.shippingDisclaimerDomestic"
+    />
+
+    <!-- shipping disclaimer (international) -->
+    <TextBox
+      label="Shipping Disclaimer (International)"
+      v-model="doc.shippingDisclaimerInternational"
+    />
+
+
+    
     <!-- gst percentage -->
 
-    <InputBox
+    <!-- <InputBox
       type="number"
       label="GST Percentage (N/A)"
       v-model="doc.gstPercentage"
       :disabled="true"
-    />
+    /> -->
+
+
     <!-- international tax percentage -->
-    <InputBox
+    <!-- <InputBox
       type="number"
       label="International Tax Percentage (N/A)"
       v-model="doc.internationalTaxPercentage"
       :disabled="true"
-    />
-    
+    /> -->
+
     <!-- actions -->
     <div class="actions">
       <!-- action complete gif -->
@@ -67,12 +84,14 @@ export default {
         dollarValue: "",
         domesticShippingCharge: "",
         internationalShippingCharge: "",
+        shippingDisclaimerDomestic: "",
+        shippingDisclaimerInternational: "",
         gstPercentage: "",
         internationalTaxPercentage: ""
       },
       loading: true,
       updated: false
-    }
+    };
   },
   methods: {
     async fetchConfig() {
@@ -90,12 +109,13 @@ export default {
         dollarValue: doc.dollarValue,
         domesticShippingCharge: doc.domesticShippingCharge,
         internationalShippingCharge: doc.internationalShippingCharge,
+        shippingDisclaimerDomestic: doc.shippingDisclaimerDomestic,
+        shippingDisclaimerInternational: doc.shippingDisclaimerInternational,
         gstPercentage: doc.gstPercentage,
         internationalTaxPercentage: doc.internationalTaxPercentage
-      }
+      };
     },
     async updateDocument() {
-  
       const result = await this.$updateDocument(this.model, this.doc, true);
 
       if (!result.updated) return;

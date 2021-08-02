@@ -13,7 +13,7 @@ const { userAuth } = userMethods;
 const router = server.express.Router();
 
 /* send message (contact form) */
-router.post('/sendMessage', async(req, res) => {
+router.post('/sendMessage', async (req, res) => {
     let response = { resolved: true }
     const { name, subject, email, message } = req.body;
     await messageMethods.saveMessage(name, subject, email, message);
@@ -23,7 +23,7 @@ router.post('/sendMessage', async(req, res) => {
 /* fetch global config */
 router.post('/fetchGlobalConfig', async (req, res) => {
     let response = { resolved: false, globalConfig: {} }
-    const fetchGlobalConfig: any = db.model('globalConfig').findOne({ bounipun_id: "saibbyweb" }).select('currencyMultiplier dollarValue domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage');
+    const fetchGlobalConfig: any = db.model('globalConfig').findOne({ bounipun_id: "saibbyweb" }).select('currencyMultiplier dollarValue domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage shippingDisclaimerDomestic shippingDisclaimerInternational');
 
     /* config */
     const { response: config, error } = await task(fetchGlobalConfig);

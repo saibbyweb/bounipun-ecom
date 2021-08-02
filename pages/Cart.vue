@@ -61,6 +61,10 @@
             Combined Standard shipping for the whole order:
             {{ maximumShippingTime }} weeks
           </p>
+          
+          <!-- shipping disclaimer -->
+          <p class="note"> {{ shippingDisclaimer }} </p>
+
           <!-- consent for combined delivery -->
           <div class="pad-10">
             <Checkbox
@@ -145,6 +149,12 @@ export default {
       );
       const maximumShippingTime = Math.max(...allTimes);
       return maximumShippingTime;
+    },
+    shippingDisclaimer() {
+      if(this.$store.state.customer.currency === "INR")
+        return this.$store.state.customer.globalConfig.shippingDisclaimerDomestic
+      else
+        return this.$store.state.customer.globalConfig.shippingDisclaimerInternational
     },
     currency() {
       return this.$store.state.customer.currency + " ";
