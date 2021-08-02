@@ -49,6 +49,7 @@ const schema = new mongoose.Schema({
     press: {
         logo: String,
         imageList: [{ _id: ObjectId, path: String, mainImage: Boolean }],
+        captions: [{ heading: String, paragraph: String }],
         visible: Boolean
     },
     /* instagram */

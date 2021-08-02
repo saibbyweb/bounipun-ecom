@@ -275,6 +275,7 @@ export default {
     }
   }
 }
+
 /* coupon box */
 .coupon-box {
   .input {
@@ -295,6 +296,7 @@ export default {
     }
   }
 }
+
 .sub-total {
   display: flex;
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);

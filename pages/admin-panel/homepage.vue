@@ -205,6 +205,11 @@ export default {
           press.imageList
         );
       }
+
+      /* assign press image captions */
+      if(press.captions === undefined) {
+          updateComponent.doc.press.captions = [];
+      }
     },
     resultsFetched(result) {
       if (result.docs.length === 0) {

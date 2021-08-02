@@ -139,7 +139,6 @@
       </div>
     </div>
 
-    
     <!-- product list block -->
     <div class="product-list-blocks section">
       <label class="head"> Product List Blocks: </label>
@@ -276,6 +275,31 @@
         label="Set Press Image List"
         @updated="imageListUpdated($event, 'press')"
       />
+      <!-- caption box -->
+      <div class="captions">
+        <div
+          class="caption-box flex center"
+          v-for="(caption, index) in doc.press.captions"
+          :key="caption.key"
+        >
+          <!-- heading -->
+          <InputBox label="Caption Heading" v-model="caption.heading" />
+          <!-- paragraph -->
+          <InputBox label="Caption Paragraph" v-model="caption.paragraph" />
+
+          <img
+            class="close"
+            src="/icons/dark/close.png"
+            @click="removeCaption(index)"
+          />
+        </div>
+        <!-- add caption box -->
+        <div class="add-new-caption flex center">
+          <button class="action" @click="addNewCaptionBox">
+            + Add New Caption
+          </button>
+        </div>
+      </div>
       <!-- visiblity toggle -->
       <Toggle
         v-model="doc.press.visible"
@@ -415,6 +439,13 @@ const baseDocument = {
       //     mainImage: false
       // }
     ],
+    captions: [
+      {
+        heading: "",
+        paragraph: "",
+        key: uuidv4()
+      }
+    ],
     visible: false
   },
   instagram: {
@@ -487,8 +518,23 @@ export default {
         /* multiple */
         case "press":
           this.doc.press.imageList = list;
+          /* update captions list */
           break;
       }
+    },
+    /* add caption box */
+    addNewCaptionBox() {
+      this.doc.press.captions.push({
+        heading: "",
+        caption: "",
+        key: uuidv4()
+      });
+      this.$forceUpdate();
+    },
+    removeCaption(key) {
+      if (this.doc.press.captions.length < 2) return;
+      this.doc.press.captions.splice(key, 1);
+      this.$forceUpdate();
     },
     async fetchAllCollections() {
       const result = await this.$fetchCollection("collections");
@@ -678,6 +724,23 @@ export default {
     background-color: rgb(24, 105, 24);
     color: white;
     margin: 10px 0;
+  }
+
+  &.press {
+    .captions {
+      .caption-box {
+        padding: 0 4px;
+        .close {
+          width: 20px;
+          height: 20px;
+          transition: all 0.3s ease-in-out;
+          cursor: pointer;
+          &:hover {
+            transform: rotate(40deg);
+          }
+        }
+      }
+    }
   }
 }
 </style>
