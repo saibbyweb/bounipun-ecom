@@ -145,6 +145,14 @@ export default {
     if(this.autoplay)
       this.setAutoplayRoutine();
   },
+  watch:{
+    activeIndex: {
+      handler(newVal) {
+          this.$emit('slideChanged', newVal);
+      },
+      immediate: true
+    }
+  },
   methods: {
     setActiveImage(index) {
       this.activeIndex = index;

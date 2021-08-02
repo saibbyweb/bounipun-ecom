@@ -1,5 +1,6 @@
 <template>
-  <div class="press flex center">
+  <div class="press">
+    <div class="press-box flex center">
     <slideshow
       ref="slideshow"
       :images="pressImageList"
@@ -7,12 +8,21 @@
       :dSlideHeight="'75vh'"
       :dSlideWidth="35"
       :size="'cover'"
+      @slideChanged="slideChanged"
     />
     <!-- main text block -->
-    <div class="main-text-block center-col">
-      <h2 class="text-1">Bounipun in Press</h2>
+    <div v-if="captionsList.length !== 0" class="main-text-block center-col">
+
+
+      <h2 class="text-1">{{ captionsList[activeCaptionIndex].heading }}</h2>
       <p class="text-2"></p>
-      <p class="text-3">"without emotions there’s no beauty"</p>
+      <p class="text-3">{{ captionsList[activeCaptionIndex].paragraph }}</p>
+
+
+    </div>
+    </div>
+    <div class="flex center">
+    <h1 class="title"> Bounipun in Press </h1>
     </div>
   </div>
 </template>
@@ -29,10 +39,16 @@ export default {
   },
   data() {
     return {
-      pressImageList: []
+      pressImageList: [],
+      captionsList: [],
+      activeCaptionIndex: 0
     };
   },
   methods: {
+    slideChanged(index) {
+      if(index <= this.captionsList.length -1)
+      this.activeCaptionIndex = index;
+    },
     async fetchPressImages() {
       /* fetch active homepage layout */
       const layout = await this.$fetchData("homepages", {
@@ -47,17 +63,26 @@ export default {
       this.pressImageList = layout.doc.press.imageList.map(image =>
         this.$getImagePath(image.path)
       );
+
+      this.captionsList = layout.doc.press.captions;
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
-.press {
+.press-box {
   margin-top: 10vh;
   @media(max-width: 768px) {
       flex-direction: column;
   }
+}
+
+.title {
+  font-family: $font_2_bold;
+  text-transform: uppercase;
+  margin:40px 0;
+  font-size: 35px;
 }
 
 .main-text-block {
