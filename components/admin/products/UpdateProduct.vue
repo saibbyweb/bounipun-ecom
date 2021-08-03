@@ -65,6 +65,22 @@
     <!-- description -->
     <TextBox v-model="doc.description" label="Design Description" />
 
+        <!-- rts variant and fabric -->
+    <div v-if="rtsAndUnderBounipun" class="rts-variant-and-fabric">
+      <!-- select direct variant for rts -->
+      <SelectBox
+        :options="variants"
+        v-model="doc.rtsDirectVariant"
+        label="Select Variant:"
+      />
+      <!-- select fabric for rts -->
+      <SelectBox
+        :options="getRTSFabrics(doc.rtsDirectVariant)"
+        v-model="doc.rtsDirectFabric"
+        label="Select Fabric:"
+      />
+    </div>
+
     <!-- color source -->
     <!-- <SelectBox v-if="!thirdPartyProduct" :options="colorSources" v-model="doc.colorSource" label="Select Color Source" /> -->
 
@@ -274,21 +290,7 @@
       v-model="doc.stock"
     />
 
-    <!-- rts variant and fabric -->
-    <div v-if="rtsAndUnderBounipun" class="rts-variant-and-fabric">
-      <!-- select direct variant for rts -->
-      <SelectBox
-        :options="variants"
-        v-model="doc.rtsDirectVariant"
-        label="Select Variant:"
-      />
-      <!-- select fabric for rts -->
-      <SelectBox
-        :options="getRTSFabrics(doc.rtsDirectVariant)"
-        v-model="doc.rtsDirectFabric"
-        label="Select Fabric:"
-      />
-    </div>
+
 
     <!-- estimated delivery time -->
     <!-- <InputBox label="Estimated Delivery Time (in weeks)" v-model="doc.etd" type="number" /> -->

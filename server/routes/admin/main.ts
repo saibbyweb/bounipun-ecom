@@ -36,6 +36,9 @@ router.post('/getDocument', async (req, res) => {
                     .populate('variants._id')
                     .populate('variants.fabrics._id')
                     .populate('colors._id', 'name category image')
+                    .populate('rtsDirectVariant')
+                    .populate('rtsDirectFabric')
+
 
 
 

@@ -301,7 +301,7 @@
 
             <!-- about fabric -->
             <Accordion
-              v-if="!thirdPartyProduct && !readyToShip"
+              v-if="!thirdPartyProduct"
               heading="About Fabric"
             >
               <ul>
@@ -458,7 +458,15 @@ export default {
       ].description.split("\n");
     },
     fabricWriteUp() {
+      /* if rts and under bounipun */
+      if(this.rtsAndUnderBounipun) {
+        return this.product.rtsDirectFabric.writeUp.split("\n");
+      }
+
       if (this.variants.length === 0) return [];
+
+
+
       return this.variants[this.activeVariantIndex].fabrics[
         this.activeFabricIndex
       ].writeUp.split("\n");
@@ -481,6 +489,9 @@ export default {
     },
     thirdPartyProduct() {
       return this.product.type === "third-party";
+    },
+    rtsAndUnderBounipun() {
+        return this.readyToShip && !this.thirdPartyProduct;
     },
     multiPriced() {
       return this.product.type === "third-party"

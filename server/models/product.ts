@@ -50,9 +50,9 @@ const schema = new mongoose.Schema({
     },
     priceRange: { startsAt: Number, endsAt: Number },
     /* rts direct variant */
-    rtsDirectVariant: { type: String, default: ""},
+    rtsDirectVariant: { type: ObjectId, ref: 'variants' },
     /* rts direct fabric */
-    rtsDirectFabric: { type: String, default: ""},
+    rtsDirectFabric: { type: ObjectId, ref: 'fabrics' },
     /* meta */
     meta: String,
     /* estimated time of delivery */

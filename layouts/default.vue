@@ -26,11 +26,6 @@
 
 <script>
 export default {
-  data() {
-    return {
-      fakeLoaded: false,
-    }
-  },
   mounted() {
     this.$ga.page(this.$router)
     // this.$ga.page('/');
@@ -63,7 +58,8 @@ export default {
     return {
       searchOpen: false,
       menuOpen: false,
-      unsubscribe: null
+      unsubscribe: null,
+       fakeLoaded: false,
     };
   },
   methods: {
