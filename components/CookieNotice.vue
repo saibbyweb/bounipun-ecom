@@ -49,6 +49,9 @@ export default {
     padding: 15px 20px;
     position: relative;
 
+
+  
+
     .close {
         position:absolute;
         right:2%;
@@ -62,6 +65,16 @@ export default {
             transform: rotate(10deg);
         }
     }
+
+      @media(max-width: 768px) {
+        width: 80%;
+
+        .close {
+            top:4%;
+            right: 4%;
+        }
+    }
+
     .title {
         font-family: $font_2_bold;
     }
