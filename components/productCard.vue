@@ -35,9 +35,11 @@
 
     <!-- product colors [images] -->
     <div
-      class="center-col color-previews"
+      class="flex v-center evenly col color-previews" :style="readyToShip ? `align-items: center;justify-content: flex-end;` : ''"
       v-if="!(collectionName === 'Escape' && $route.name === 'collections')"
     >
+
+    <div class="flex center">
       <div class="base-color-boxes">
         <div
           @click.stop="setActiveBaseColor(index)"
@@ -50,13 +52,24 @@
       </div>
 
       <!-- additional colors -->
-      <span v-if="!readyToShip" class="additional-colors">
+      <p v-if="!readyToShip" class="additional-colors" style="display:block; margin-left:3px;">
+        
+        <span>
+        
         {{
           baseColorImagesPreview.additional > 0
-            ? `+ ${baseColorImagesPreview.additional} color(s)`
+            ? `+ ${baseColorImagesPreview.additional}`
             : "&nbsp;"
         }}
-      </span>
+
+        </span>
+
+        <br/>
+
+        <span v-if="baseColorImagesPreview.additional > 0"> color(s) </span>
+      </p>
+
+    </div>
 
       <!-- ready to ship -->
       <span v-if="readyToShip" class="additional-colors rts">
@@ -433,7 +446,7 @@ export default {
       display: flex;
       justify-content: center;
       align-items: center;
-      width: 100%;
+      width: fit-content;
       margin-bottom: 0px;
 
       .color-image {

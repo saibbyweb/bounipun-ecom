@@ -332,6 +332,10 @@ p {
     align-items: center;
   }
 
+  &.j-center {
+    justify-content: center;
+  }
+
   &.start {
     justify-content: flex-start;
     align-items: flex-start;

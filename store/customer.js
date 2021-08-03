@@ -10,7 +10,7 @@ export const state = () => ({
   globalRemoteCart: [],
   globalConfig: {},
   user: {},
-  currency: "USD",
+  currency: "INR",
   combinedDeliveryConsent: false,
   coupon: {
     applied: false,
