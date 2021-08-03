@@ -25,9 +25,12 @@
 </template>
 
 <script>
-import CookieNotice from '../components/CookieNotice.vue';
 export default {
-  components: { CookieNotice },
+  data() {
+    return {
+      fakeLoaded: false,
+    }
+  },
   mounted() {
     this.$ga.page(this.$router)
     // this.$ga.page('/');

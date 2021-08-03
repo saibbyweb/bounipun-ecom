@@ -49,6 +49,10 @@ const schema = new mongoose.Schema({
         type: String, default: ''
     },
     priceRange: { startsAt: Number, endsAt: Number },
+    /* rts direct variant */
+    rtsDirectVariant: { type: String, default: ""},
+    /* rts direct fabric */
+    rtsDirectFabric: { type: String, default: ""},
     /* meta */
     meta: String,
     /* estimated time of delivery */

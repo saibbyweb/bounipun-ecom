@@ -1,30 +1,63 @@
 <template>
-<div class="contents">
+  <div class="contents">
     <CancelUpdate @close="closeForm" />
-    <h2 class="heading"> {{ editMode ? 'Update' : 'Add New' }} Product </h2>
+    <h2 class="heading">{{ editMode ? "Update" : "Add New" }} Product</h2>
 
     <!-- preview link -->
     <div class="center">
-        <a v-if="editMode" :href="`/products?_id=${doc._id}`" target="_blank">
-            <span style="background:#333; text-align:center; color:white; font-size: 12px; padding:2px 4px; border-radius:2px;"> Preview Product ➚
-            </span>
-        </a>
+      <a v-if="editMode" :href="`/products?_id=${doc._id}`" target="_blank">
+        <span
+          style="background:#333; text-align:center; color:white; font-size: 12px; padding:2px 4px; border-radius:2px;"
+        >
+          Preview Product ➚
+        </span>
+      </a>
     </div>
 
     <!-- product id -->
-    <InputBox v-if="editMode" label="Product ID" v-model="doc._id" disabled :internal="true" />
+    <InputBox
+      v-if="editMode"
+      label="Product ID"
+      v-model="doc._id"
+      disabled
+      :internal="true"
+    />
     <!-- type of product -->
-    <SelectBox :options="types" v-model="doc.type" label="Select Product Type" :internal="true" />
+    <SelectBox
+      :options="types"
+      v-model="doc.type"
+      label="Select Product Type"
+      :internal="true"
+    />
     <!-- gender -->
-    <SelectBox :options="genders" v-model="doc.gender" label="Select Preferred Gender" />
+    <SelectBox
+      :options="genders"
+      v-model="doc.gender"
+      label="Select Preferred Gender"
+    />
     <!-- availability type -->
-    <SelectBox :options="availabilityTypes" v-model="doc.availabilityType" label="Select Availablity Type" :internal="true" />
+    <SelectBox
+      :options="availabilityTypes"
+      v-model="doc.availabilityType"
+      label="Select Availablity Type"
+      :internal="true"
+    />
     <!-- collections -->
-    <SelectBox v-if="!thirdPartyProduct" :options="collections" v-model="doc.bounipun_collection" label="Select Collection" />
+    <SelectBox
+      v-if="!thirdPartyProduct"
+      :options="collections"
+      v-model="doc.bounipun_collection"
+      label="Select Collection"
+    />
     <!-- bounipun style id -->
     <InputBox label="Bounipun Style ID" v-model="doc.styleId" />
     <!-- bounipun print number -->
-    <InputBox v-if="underAutograph" label="Bounipun Print No." v-model="doc.printNo" :internal="true" />
+    <InputBox
+      v-if="underAutograph"
+      label="Bounipun Print No."
+      v-model="doc.printNo"
+      :internal="true"
+    />
     <!-- product name -->
     <InputBox label="Product Name" v-model="doc.name" />
     <!-- alias -->
@@ -36,87 +69,226 @@
     <!-- <SelectBox v-if="!thirdPartyProduct" :options="colorSources" v-model="doc.colorSource" label="Select Color Source" /> -->
 
     <!-- alias -->
-    <InputBox v-if="!thirdPartyProduct" label="Color Source" v-model="doc.colorSource" :disabled="true" />
+    <InputBox
+      v-if="!thirdPartyProduct"
+      label="Color Source"
+      v-model="doc.colorSource"
+      :disabled="true"
+    />
 
     <!-- bounipun color picker -->
-    <ColorPicker ref="colorPicker" v-show="doc.colorSource === 'bounipun-colors'" @colorAdded="addNewColor" @colorRemoved="colorDeselected" />
+    <ColorPicker
+      ref="colorPicker"
+      v-show="doc.colorSource === 'bounipun-colors'"
+      @colorAdded="addNewColor"
+      @colorRemoved="colorDeselected"
+    />
     <!-- add colors -->
-    <div v-if="doc.colorSource !== ''" class="colors" style="width:100%; position:relative;">
-        <div class="color-box" :class="{'main-color': color.mainColor}" v-for="(color, index) in doc.colors" :key="color.key">
-            <!-- color selector (if color source is bounipun) -->
-            <div class="color-details-1">
-                <!-- color name -->
-                <InputBox label="Color Name" v-model="color.name" :disabled="bounipunColors" class="name" />
-                <!-- color name -->
-                <InputBox label="Code" v-model="color.code" :disabled="bounipunColors" class="code" />
+    <div
+      v-if="doc.colorSource !== ''"
+      class="colors"
+      style="width:100%; position:relative;"
+    >
+      <div
+        class="color-box"
+        :class="{ 'main-color': color.mainColor }"
+        v-for="(color, index) in doc.colors"
+        :key="color.key"
+      >
+        <!-- color selector (if color source is bounipun) -->
+        <div class="color-details-1">
+          <!-- color name -->
+          <InputBox
+            label="Color Name"
+            v-model="color.name"
+            :disabled="bounipunColors"
+            class="name"
+          />
+          <!-- color name -->
+          <InputBox
+            label="Code"
+            v-model="color.code"
+            :disabled="bounipunColors"
+            class="code"
+          />
 
-                <div class="center color-bases">
-                    <!-- select base color -->
-                    <SelectBox :options="baseColors" v-model="color.baseColor" label="Base Color" :disabled="bounipunColors" class="base-color" :slim="true" />
-                    <!-- select additional color 1 -->
-                    <SelectBox :options="baseColors" v-model="color.additionalColor1" label="CLR #1" :disabled="bounipunColors" class="base-color" :slim="true" />
-                    <!-- select additional color 2 -->
-                    <SelectBox :options="baseColors" v-model="color.additionalColor2" label="ClR #2" :disabled="bounipunColors" class="base-color" :slim="true" />
-                </div>
-
-            </div>
-
-            <!-- color images -->
-            <UploadImage ref="imageUploader" label="Upload Images" @updated="imageListUpdated($event, index)" />
-            <!-- remove color -->
-            <button class="action delete" style="font-size:9px; position: absolute; top:0; right:0;" @click="removeColor(index, true)"> Remove Color </button>
-
-            <!-- check box -->
-            <div class="set-main">
-                <img @click="setMainColor(index)" :class="{'active-color' : isActiveColor(index)}" src="/icons/green_check.png" />
-                <span> Main Color </span>
-            </div>
-
-            <div class="center-col" style="align-items:flex-end; width: 100%">
-                <!-- disclaimer box -->
-                <InputBox label="Disclaimer" v-model="color.disclaimer" />
-
-                <div style="width:100%; display:flex; justify-content: space-between; align-items: center;">
-                    <!-- publish toggle for color -->
-                    <Toggle v-model="color.status" label="Status" activeText="Live" inactiveText="Hidden" width="100px" :disabled="isActiveColor(index)" />
-                    <!-- mark as ready to ship -->
-                    <button v-if="doc.availabilityType === 'made-to-order'" class="action" style="font-size:10px; width:70%;background-color: orange;" @click="toggleRTSPanel(color)"> {{ color.showRTSPanel ? 'Hide' : 'Show'}} RTS PANEL </button>
-                </div>
-                <!-- ready to ship picker -->
-                <div v-if="color.showRTSPanel" class="ready-to-ship-marker" style="width:100%; border:1px dashed orange;">
-                    <!-- select variant -->
-                    <SelectBox :options="variants" v-model="color.rtsVariant" label="Select Variant:" />
-                    <!-- select fabric -->
-                    <SelectBox :options="getRTSFabrics(color.rtsVariant)" v-model="color.rtsFabric" label="Select Fabric:" />
-                    <div class="center">
-                        <!-- stock -->
-                        <InputBox label="Stock:" v-model="color.rtsStock" />
-                        <!-- direct price -->
-                        <InputBox label="Direct Price:" v-model="color.rtsDirectPrice" />
-                    </div>
-                    <!-- add new RTS entry -->
-                    <div class="center">
-                        <button @click="addNewRTSEntry(color)" class="action" style="font-size:12px; margin:10px 0px;"> Add New RTS Entry </button>
-                    </div>
-                </div>
-            </div>
+          <div class="center color-bases">
+            <!-- select base color -->
+            <SelectBox
+              :options="baseColors"
+              v-model="color.baseColor"
+              label="Base Color"
+              :disabled="bounipunColors"
+              class="base-color"
+              :slim="true"
+            />
+            <!-- select additional color 1 -->
+            <SelectBox
+              :options="baseColors"
+              v-model="color.additionalColor1"
+              label="CLR #1"
+              :disabled="bounipunColors"
+              class="base-color"
+              :slim="true"
+            />
+            <!-- select additional color 2 -->
+            <SelectBox
+              :options="baseColors"
+              v-model="color.additionalColor2"
+              label="ClR #2"
+              :disabled="bounipunColors"
+              class="base-color"
+              :slim="true"
+            />
+          </div>
         </div>
-        <button v-if="doc.colorSource !== 'bounipun-colors'" class="action" style="font-size:9px; position: absolute; bottom: -30px;  right:10px;" @click="addNewColor({_id: null, name:'', code: ''})"> Add Color </button>
+
+        <!-- color images -->
+        <UploadImage
+          ref="imageUploader"
+          label="Upload Images"
+          @updated="imageListUpdated($event, index)"
+        />
+        <!-- remove color -->
+        <button
+          class="action delete"
+          style="font-size:9px; position: absolute; top:0; right:0;"
+          @click="removeColor(index, true)"
+        >
+          Remove Color
+        </button>
+
+        <!-- check box -->
+        <div class="set-main">
+          <img
+            @click="setMainColor(index)"
+            :class="{ 'active-color': isActiveColor(index) }"
+            src="/icons/green_check.png"
+          />
+          <span> Main Color </span>
+        </div>
+
+        <div class="center-col" style="align-items:flex-end; width: 100%">
+          <!-- disclaimer box -->
+          <InputBox label="Disclaimer" v-model="color.disclaimer" />
+
+          <div
+            style="width:100%; display:flex; justify-content: space-between; align-items: center;"
+          >
+            <!-- publish toggle for color -->
+            <Toggle
+              v-model="color.status"
+              label="Status"
+              activeText="Live"
+              inactiveText="Hidden"
+              width="100px"
+              :disabled="isActiveColor(index)"
+            />
+            <!-- mark as ready to ship -->
+            <button
+              v-if="doc.availabilityType === 'made-to-order'"
+              class="action"
+              style="font-size:10px; width:70%;background-color: orange;"
+              @click="toggleRTSPanel(color)"
+            >
+              {{ color.showRTSPanel ? "Hide" : "Show" }} RTS PANEL
+            </button>
+          </div>
+          <!-- ready to ship picker -->
+          <div
+            v-if="color.showRTSPanel"
+            class="ready-to-ship-marker"
+            style="width:100%; border:1px dashed orange;"
+          >
+            <!-- select variant -->
+            <SelectBox
+              :options="variants"
+              v-model="color.rtsVariant"
+              label="Select Variant:"
+            />
+            <!-- select fabric -->
+            <SelectBox
+              :options="getRTSFabrics(color.rtsVariant)"
+              v-model="color.rtsFabric"
+              label="Select Fabric:"
+            />
+            <div class="center">
+              <!-- stock -->
+              <InputBox label="Stock:" v-model="color.rtsStock" />
+              <!-- direct price -->
+              <InputBox label="Direct Price:" v-model="color.rtsDirectPrice" />
+            </div>
+            <!-- add new RTS entry -->
+            <div class="center">
+              <button
+                @click="addNewRTSEntry(color)"
+                class="action"
+                style="font-size:12px; margin:10px 0px;"
+              >
+                Add New RTS Entry
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        v-if="doc.colorSource !== 'bounipun-colors'"
+        class="action"
+        style="font-size:9px; position: absolute; bottom: -30px;  right:10px;"
+        @click="addNewColor({ _id: null, name: '', code: '' })"
+      >
+        Add Color
+      </button>
     </div>
 
     <!-- variations (checkboxes) -->
-    <c-boxes v-if="!thirdPartyProduct && !readyToShip" :options="variants" label="Variants" />
+    <c-boxes
+      v-if="!thirdPartyProduct && !readyToShip"
+      :options="variants"
+      label="Variants"
+    />
 
     <!-- fabric selector -->
     <div v-if="!thirdPartyProduct && !readyToShip">
-        <fabric-selector :ref="'fabricSelector'+variant._id" :label="variant.name" v-for="(variant) in selectedVariantsWithFabricOptions" :key="variant._id" :variant="variant" @fabricSelectionUpdated="fabricSelectionUpdated" />
+      <fabric-selector
+        :ref="'fabricSelector' + variant._id"
+        :label="variant.name"
+        v-for="variant in selectedVariantsWithFabricOptions"
+        :key="variant._id"
+        :variant="variant"
+        @fabricSelectionUpdated="fabricSelectionUpdated"
+      />
     </div>
 
     <!-- direct price -->
-    <InputBox v-if="thirdPartyProduct || readyToShip" label="Direct Price" v-model="doc.directPrice" />
+    <InputBox
+      v-if="thirdPartyProduct || readyToShip"
+      label="Direct Price"
+      v-model="doc.directPrice"
+    />
 
-    <!-- direct price -->
-    <InputBox v-if="thirdPartyProduct || readyToShip" label="Stock" v-model="doc.stock" />
+    <!-- stock -->
+    <InputBox
+      v-if="thirdPartyProduct || readyToShip"
+      label="Stock"
+      v-model="doc.stock"
+    />
+
+    <!-- rts variant and fabric -->
+    <div v-if="rtsAndUnderBounipun" class="rts-variant-and-fabric">
+      <!-- select direct variant for rts -->
+      <SelectBox
+        :options="variants"
+        v-model="doc.rtsDirectVariant"
+        label="Select Variant:"
+      />
+      <!-- select fabric for rts -->
+      <SelectBox
+        :options="getRTSFabrics(doc.rtsDirectVariant)"
+        v-model="doc.rtsDirectFabric"
+        label="Select Fabric:"
+      />
+    </div>
 
     <!-- estimated delivery time -->
     <!-- <InputBox label="Estimated Delivery Time (in weeks)" v-model="doc.etd" type="number" /> -->
@@ -126,586 +298,627 @@
 
     <!-- update button -->
     <div class="center-space">
-        <!-- loading bar -->
-        <img v-if="loading" class="loading" src="/loading.gif" />
-        <!-- action complete gif -->
-        <img v-if="updated" class="action-complete" src="/complete.gif" />
-        <!-- update document -->
-        <button @click="updateDocument" class="action" :disabled="loading"> {{ editMode ? "Apply Changes" : "Add Product" }} </button>
-        <!-- delete document -->
-        <button v-if="editMode" @click="deleteDocument" class="action delete" :disabled="loading"> Delete </button>
+      <!-- loading bar -->
+      <img v-if="loading" class="loading" src="/loading.gif" />
+      <!-- action complete gif -->
+      <img v-if="updated" class="action-complete" src="/complete.gif" />
+      <!-- update document -->
+      <button @click="updateDocument" class="action" :disabled="loading">
+        {{ editMode ? "Apply Changes" : "Add Product" }}
+      </button>
+      <!-- delete document -->
+      <button
+        v-if="editMode"
+        @click="deleteDocument"
+        class="action delete"
+        :disabled="loading"
+      >
+        Delete
+      </button>
     </div>
-    <br>
+    <br />
     <div class="center">
-        <p v-if="error.status" class="error"> {{ error.msg }} </p>
+      <p v-if="error.status" class="error">{{ error.msg }}</p>
     </div>
-
-</div>
+  </div>
 </template>
 
 <script>
-import {
-    v4 as uuidv4
-} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 export default {
-    props: {
-        model: String,
-        collections: Array,
-        variants: Array,
-        fabrics: Array
+  props: {
+    model: String,
+    collections: Array,
+    variants: Array,
+    fabrics: Array
+  },
+  watch: {
+    selectedVariantsWithFabricOptions(newVal) {
+      // console.log('changed', newVal);
     },
-    watch: {
-        selectedVariantsWithFabricOptions(newVal) {
-            // console.log('changed', newVal);
-        },
-        doc: {
-            handler(newVal) {
-                if (newVal.type === 'third-party') {
-                    this.doc.colorSource = 'custom';
-                }
-
-                /* if not under escape */
-                if (!this.underEscape)
-                    this.doc.colorSource = 'custom'
-            },
-            deep: true
-        },
-        /* update colors array according to collection selection */
-        underEscape(newVal, oldVal) {
-            // if(!oldVal && !newVal) {
-            //     console.log('do nothin');
-            //     this.doc.colorSource = 'custom';
-            // }
-            if (newVal) {
-                this.doc.colorSource = 'bounipun-colors';
-                // this.doc.colorSource = '';
-                // this.doc.colors = []
-            } else if (!newVal) {
-                this.doc.colorSource = 'custom';
-            }
+    doc: {
+      handler(newVal) {
+        if (newVal.type === "third-party") {
+          this.doc.colorSource = "custom";
         }
+
+        /* if not under escape */
+        if (!this.underEscape) this.doc.colorSource = "custom";
+      },
+      deep: true
     },
-    computed: {
-        bounipunColors() {
-            return this.doc.colorSource === 'bounipun-colors';
-        },
-        colorSources() {
-            /* show color sources according to collection selection */
-            if (!this.underEscape)
-                return this.colorSourceTypes.filter(source => source.value !== 'bounipun-colors')
-            else return this.colorSourceTypes.filter(source => source.value !== 'custom')
-        },
-        selectedVariants() {
-            const selectedVariants = this.variants.filter(variant => variant.checked);
-
-            /* update doc.variants accordingly */
-            console.log(this.doc.variants.length, selectedVariants.length)
-
-            /* if there's any variant which is not in the selected variants,, remove it */
-            let deselectedVariantId = null;
-            this.doc.variants.forEach(variant => {
-                /* check if its in the selected list */
-                let foundVariant = selectedVariants.find(sVariant => sVariant._id === variant._id);
-
-                /* if found */
-                if (foundVariant === undefined) {
-                    deselectedVariantId = variant._id
-                    return;
-                }
-            });
-
-            /*  remove deselected variant from doc.variants */
-            if (deselectedVariantId !== null) {
-                let foundIndex = this.doc.variants.findIndex(variant => variant._id === deselectedVariantId);
-
-                if (foundIndex !== -1)
-                    this.doc.variants.splice(foundIndex, 1);
-            }
-
-            return selectedVariants;
-        },
-        selectedVariantsWithFabricOptions() {
-            return this.selectedVariants.map(variant => {
-                return {
-                    _id: variant._id,
-                    name: variant.name,
-                    code: variant.code,
-                    fabrics: this.fabrics.filter(fabric => fabric.code.startsWith(variant.code)),
-                    // key: uuidv4()
-                    // fabrics: this.fabrics
-                }
-            })
-        },
-        thirdPartyProduct() {
-            return this.doc.type === 'third-party'
-        },
-        readyToShip() {
-            return this.doc.availabilityType === 'ready-to-ship';
-        },
-        underAutograph() {
-            /* TODO: should first fetch the _id of the autograph doc in collections and then compare */
-            return this.doc.bounipun_collection === '60523a3648d11650a841b82a' && this.doc.type !== "third-party"
-        },
-        underEscape() {
-            return this.doc.bounipun_collection === '60522ab3be493200150ff835' && this.doc.type !== "third-party"
-        }
-    },
-    data() {
-        return {
-            editMode: false,
-            doc: {
-                _id: "",
-                styleId: "",
-                printNo: "",
-                gender: "",
-                name: "",
-                alias: "",
-                slug: "",
-                description: "",
-                type: "",
-                availabilityType: "",
-                bounipun_collection: null,
-                /* new types */
-                colorSource: "",
-                variants: [],
-                colors: [],
-                directPrice: "",
-                stock: "",
-                // etd: "",
-                status: false,
-            },
-            types: [{
-                    name: 'Select Type',
-                    value: null
-                },
-                {
-                    name: 'Under Bounipun',
-                    value: 'under-bounipun'
-                },
-                {
-                    name: 'Third Party',
-                    value: 'third-party'
-                }
-            ],
-            availabilityTypes: [{
-                    name: 'Select Availablity Type',
-                    value: ''
-                },
-                {
-                    name: 'Made To Order',
-                    value: 'made-to-order'
-                },
-                {
-                    name: 'Ready To Ship',
-                    value: 'ready-to-ship'
-                }
-            ],
-            colorSourceTypes: [{
-                    name: 'Select Source',
-                    value: ''
-                },
-                {
-                    name: 'Bounipun Colors',
-                    value: 'bounipun-colors'
-                },
-                {
-                    name: 'Custom',
-                    value: 'custom'
-                },
-            ],
-            genders: [{
-                    name: 'Select Preferred Gender',
-                    value: ''
-                },
-                {
-                    name: 'For Her',
-                    value: 'for-her'
-                },
-                {
-                    name: 'For Him',
-                    value: 'for-him'
-                },
-                {
-                    name: 'For Him & Her',
-                    value: 'for-him-and-her'
-                },
-                {
-                    name: 'N/A',
-                    value: 'na'
-                },
-            ],
-            baseColors: [],
-            loading: false,
-            updated: false,
-            error: {
-                status: false,
-                msg: ""
-            }
-        }
-    },
-    mounted() {
-        this.fetchBaseColors();
-    },
-    methods: {
-        async addNewRTSEntry(color) {
-            const selectedVariant = this.variants.find((variant) => variant.value === color.rtsVariant);
-            if(selectedVariant === undefined)
-                return;
-            const selectedFabric = this.fabrics.find((fabric) => fabric.value === color.rtsFabric);
-            if(selectedFabric === undefined)
-                return;
-            
-            /* constructed style id */
-            const constructedStyleId = this.doc.styleId + '/' + selectedVariant.code + '/' + selectedFabric.code;
-            /* rts product */
-            const rtsProduct = {
-                alias: '',
-                availabilityType: 'ready-to-ship',
-                bounipun_collection: this.doc.bounipun_collection,
-                /* need to check for escape */
-                colorSource: 'custom',
-                colors: [color],
-                description: this.doc.description,
-                directPrice: color.rtsDirectPrice,
-                stock: color.rtsStock,
-                gender: this.doc.gender,
-                name: `${this.doc.name} - ${color.name}`,
-                printNo: this.doc.printNo,
-                slug: '',
-                status: true,
-                styleId: constructedStyleId,
-                type: 'under-bounipun',
-                variants: [],
-                _id: ''
-            }
-
-            this.loading = true;
-            const result = await this.$updateDocument(this.model, rtsProduct, false);
-            this.loading = false;
-
-            if (!result.updated)
-                return;
-
-            this.$emit('updated');
-            // color.showRTSPanel = false;
-            color.rtsDirectPrice = "ADDED"
-            color.rtsStock = "ADDED"
-
-        },
-        getRTSFabrics(variantId) {
-            /* fetch variant code */
-            const selectedVariant = this.variants.find((variant) => variant.value === variantId);
-            if (selectedVariant === undefined)
-                return {
-                    name: 'Select Variant First',
-                    value: ''
-                };
-
-            const filteredFabrics = this.fabrics.filter(fabric => {
-                return fabric.code.startsWith(selectedVariant.code)
-            });
-
-            return filteredFabrics.map(fab => {
-                fab.name = `${fab.code}`;
-                return fab
-            })
-        },
-        toggleRTSPanel(color) {
-            color.showRTSPanel = !color.showRTSPanel;
-            this.$forceUpdate();
-        },
-        setMainColor(index) {
-            /* if value set to true, turn all other main image flags off */
-
-            for (let i = 0; i < this.doc.colors.length; i++) {
-                this.doc.colors[i].mainColor = false;
-            }
-
-            setTimeout(() => {
-                this.doc.colors[index].mainColor = true
-                this.doc.colors[index].status = true;
-                this.$forceUpdate();
-            }, 100);
-
-        },
-        isActiveColor(index) {
-            return this.doc.colors[index].mainColor;
-        },
-        async fetchBaseColors() {
-            const result = await this.$fetchCollection('base_colors');
-            if (!result.fetched || result.docs.length === 0) {
-                return;
-            }
-
-            /* base colors array */
-            this.baseColors = result.docs.map(color => {
-                return {
-                    name: color.name.toUpperCase(),
-                    value: color.name
-                }
-            });
-
-            this.baseColors.unshift({
-                name: "Select Color",
-                value: ""
-            });
-
-        },
-        /* populateVariant */
-        populateVariants(variants) {
-            console.log(this.$refs.collections, 'collections')
-            variants.forEach(variant => {
-                let match = this.variants.find(({
-                    _id
-                }) => _id === variant._id);
-                match.checked = true;
-            })
-        },
-        /* image list updated */
-        imageListUpdated(list, index) {
-            // console.log(list, index);
-            this.doc.colors[index].images = list;
-            console.log(list, 'image list updated');
-        },
-        /* add new color */
-        addNewColor(color) {
-            // console.log(color);
-            this.doc.colors.push({
-                _id: color._id,
-                name: color.name,
-                code: color.code,
-                images: [],
-                disclaimer: "",
-                mainColor: false,
-                status: false,
-                key: uuidv4()
-            });
-        },
-        colorDeselected(color) {
-            /* find key of the deselected color */
-            const foundIndex = this.doc.colors.findIndex(col => col._id === color._id);
-            console.log(color, foundIndex, 'DESELECTED');
-            /* remove color */
-            this.removeColor(foundIndex);
-        },
-        /* remove color */
-        removeColor(key, direct = false) {
-            // if (this.doc.colors.length === 1)
-            //     return;
-            const tobeRemoved = this.doc.colors[key];
-            this.doc.colors.splice(key, 1);
-            if (this.bounipunColors && direct)
-                this.$refs.colorPicker.deselectColor(tobeRemoved);
-        },
-        /* fabric selection */
-        fabricSelectionUpdated(variant) {
-            let details = {
-                _id: variant._id,
-                fabrics: variant.fabrics
-            };
-
-            console.log(details);
-
-            /* check if variant already exists in the array */
-            let foundIndex = this.doc.variants.findIndex(element => element._id === variant._id);
-
-            /* if not found  */
-            if (foundIndex === -1)
-                this.doc.variants.push(details);
-            else
-                this.doc.variants[foundIndex] = details;
-
-            console.log(foundIndex !== -1)
-
-            this.doc.variants = this.doc.variants.filter(variant => variant.fabrics.length !== 0)
-
-            console.log(this.doc.variants);
-        },
-        async updateDocument() {
-            console.log('PRODUCT TO BE UPDATED!:');
-            console.log(this.doc);
-
-            // const variantionsCheck = this.doc.variants.length === this.selectedVariants.length;
-
-            // if(!variantionsCheck) {
-            //     this.error.msg = "Please re-verify variants and fabric selection";
-            //     this.error.status = true;
-            //     return;
-            // }
-
-            // return;
-            // return;
-
-            this.loading = true;
-            const result = await this.$updateDocument(this.model, this.doc, this.editMode);
-            this.loading = false;
-
-            if (!result.updated)
-                return;
-
-            this.$emit('updated');
-            // this.populateForm(result.doc);
-            this.doc._id = result.doc._id;
-            this.editMode = true;
-            this.$flash(this);
-
-        },
-        async deleteDocument() {
-            this.loading = true;
-            const result = await this.$deleteDocument(this.model, this.doc._id);
-            this.loading = false;
-
-            if (!result.deleted)
-                return;
-
-            this.$emit('updated');
-            this.resetForm();
-            this.$flash(this);
-        },
-        populateForm(details) {
-            const {
-                _id,
-                styleId,
-                printNo,
-                gender,
-                name,
-                alias,
-                slug,
-                description,
-                type,
-                availabilityType,
-                bounipun_collection,
-                colorSource,
-                variants,
-                colors,
-                directPrice,
-                stock,
-                // etd,
-                status
-            } = details;
-            this.doc = {
-                _id,
-                styleId,
-                printNo,
-                gender,
-                name,
-                alias,
-                slug,
-                description,
-                type,
-                availabilityType,
-                bounipun_collection,
-                colorSource,
-                variants,
-                colors,
-                directPrice,
-                stock: stock === undefined ? "" : stock,
-                // etd: etd === null ? "" : etd.toString(),
-                status
-            };
-            this.editMode = true;
-        },
-        closeForm() {
-            this.resetForm();
-            this.$emit('resetVariants');
-            this.$emit('close');
-        },
-        resetForm() {
-            this.populateForm({
-                _id: "",
-                styleId: "",
-                printNo: "",
-                gender: "",
-                name: "",
-                alias: "",
-                slug: "",
-                description: "",
-                type: "",
-                availabilityType: "",
-                bounipun_collection: null,
-                colorSource: "",
-                variants: [],
-                colors: [],
-                directPrice: "",
-                stock: "",
-                // etd: "",
-                status: false
-            });
-            this.editMode = false;
-        }
+    /* update colors array according to collection selection */
+    underEscape(newVal, oldVal) {
+      // if(!oldVal && !newVal) {
+      //     console.log('do nothin');
+      //     this.doc.colorSource = 'custom';
+      // }
+      if (newVal) {
+        this.doc.colorSource = "bounipun-colors";
+        // this.doc.colorSource = '';
+        // this.doc.colors = []
+      } else if (!newVal) {
+        this.doc.colorSource = "custom";
+      }
     }
-}
+  },
+  computed: {
+    bounipunColors() {
+      return this.doc.colorSource === "bounipun-colors";
+    },
+    colorSources() {
+      /* show color sources according to collection selection */
+      if (!this.underEscape)
+        return this.colorSourceTypes.filter(
+          source => source.value !== "bounipun-colors"
+        );
+      else
+        return this.colorSourceTypes.filter(
+          source => source.value !== "custom"
+        );
+    },
+    selectedVariants() {
+      const selectedVariants = this.variants.filter(variant => variant.checked);
+
+      /* update doc.variants accordingly */
+      console.log(this.doc.variants.length, selectedVariants.length);
+
+      /* if there's any variant which is not in the selected variants,, remove it */
+      let deselectedVariantId = null;
+      this.doc.variants.forEach(variant => {
+        /* check if its in the selected list */
+        let foundVariant = selectedVariants.find(
+          sVariant => sVariant._id === variant._id
+        );
+
+        /* if found */
+        if (foundVariant === undefined) {
+          deselectedVariantId = variant._id;
+          return;
+        }
+      });
+
+      /*  remove deselected variant from doc.variants */
+      if (deselectedVariantId !== null) {
+        let foundIndex = this.doc.variants.findIndex(
+          variant => variant._id === deselectedVariantId
+        );
+
+        if (foundIndex !== -1) this.doc.variants.splice(foundIndex, 1);
+      }
+
+      return selectedVariants;
+    },
+    selectedVariantsWithFabricOptions() {
+      return this.selectedVariants.map(variant => {
+        return {
+          _id: variant._id,
+          name: variant.name,
+          code: variant.code,
+          fabrics: this.fabrics.filter(fabric =>
+            fabric.code.startsWith(variant.code)
+          )
+          // key: uuidv4()
+          // fabrics: this.fabrics
+        };
+      });
+    },
+    thirdPartyProduct() {
+      return this.doc.type === "third-party";
+    },
+    readyToShip() {
+      return this.doc.availabilityType === "ready-to-ship";
+    },
+    rtsAndUnderBounipun() {
+        return this.readyToShip && !this.thirdPartyProduct;
+    },
+    underAutograph() {
+      /* TODO: should first fetch the _id of the autograph doc in collections and then compare */
+      return (
+        this.doc.bounipun_collection === "60523a3648d11650a841b82a" &&
+        this.doc.type !== "third-party"
+      );
+    },
+    underEscape() {
+      return (
+        this.doc.bounipun_collection === "60522ab3be493200150ff835" &&
+        this.doc.type !== "third-party"
+      );
+    }
+  },
+  data() {
+    return {
+      editMode: false,
+      doc: {
+        _id: "",
+        styleId: "",
+        printNo: "",
+        gender: "",
+        name: "",
+        alias: "",
+        slug: "",
+        description: "",
+        type: "",
+        availabilityType: "",
+        bounipun_collection: null,
+        /* new types */
+        colorSource: "",
+        variants: [],
+        colors: [],
+        directPrice: "",
+        stock: "",
+        rtsDirectVariant: "",
+        rtsDirectFabric: "",
+        // etd: "",
+        status: false
+      },
+      types: [
+        {
+          name: "Select Type",
+          value: null
+        },
+        {
+          name: "Under Bounipun",
+          value: "under-bounipun"
+        },
+        {
+          name: "Third Party",
+          value: "third-party"
+        }
+      ],
+      availabilityTypes: [
+        {
+          name: "Select Availablity Type",
+          value: ""
+        },
+        {
+          name: "Made To Order",
+          value: "made-to-order"
+        },
+        {
+          name: "Ready To Ship",
+          value: "ready-to-ship"
+        }
+      ],
+      colorSourceTypes: [
+        {
+          name: "Select Source",
+          value: ""
+        },
+        {
+          name: "Bounipun Colors",
+          value: "bounipun-colors"
+        },
+        {
+          name: "Custom",
+          value: "custom"
+        }
+      ],
+      genders: [
+        {
+          name: "Select Preferred Gender",
+          value: ""
+        },
+        {
+          name: "For Her",
+          value: "for-her"
+        },
+        {
+          name: "For Him",
+          value: "for-him"
+        },
+        {
+          name: "For Him & Her",
+          value: "for-him-and-her"
+        },
+        {
+          name: "N/A",
+          value: "na"
+        }
+      ],
+      baseColors: [],
+      loading: false,
+      updated: false,
+      error: {
+        status: false,
+        msg: ""
+      }
+    };
+  },
+  mounted() {
+    this.fetchBaseColors();
+  },
+  methods: {
+    async addNewRTSEntry(color) {
+      const selectedVariant = this.variants.find(
+        variant => variant.value === color.rtsVariant
+      );
+      if (selectedVariant === undefined) return;
+      const selectedFabric = this.fabrics.find(
+        fabric => fabric.value === color.rtsFabric
+      );
+      if (selectedFabric === undefined) return;
+
+      /* constructed style id */
+      const constructedStyleId =
+        this.doc.styleId +
+        "/" +
+        selectedVariant.code +
+        "/" +
+        selectedFabric.code;
+      /* rts product */
+      const rtsProduct = {
+        alias: "",
+        availabilityType: "ready-to-ship",
+        bounipun_collection: this.doc.bounipun_collection,
+        /* need to check for escape */
+        colorSource: "custom",
+        colors: [color],
+        description: this.doc.description,
+        directPrice: color.rtsDirectPrice,
+        stock: color.rtsStock,
+        gender: this.doc.gender,
+        name: `${this.doc.name} - ${color.name}`,
+        printNo: this.doc.printNo,
+        slug: "",
+        status: true,
+        styleId: constructedStyleId,
+        type: "under-bounipun",
+        variants: [],
+        _id: ""
+      };
+
+      this.loading = true;
+      const result = await this.$updateDocument(this.model, rtsProduct, false);
+      this.loading = false;
+
+      if (!result.updated) return;
+
+      this.$emit("updated");
+      // color.showRTSPanel = false;
+      color.rtsDirectPrice = "ADDED";
+      color.rtsStock = "ADDED";
+    },
+    getRTSFabrics(variantId) {
+      /* fetch variant code */
+      const selectedVariant = this.variants.find(
+        variant => variant.value === variantId
+      );
+      if (selectedVariant === undefined)
+        return {
+          name: "Select Variant First",
+          value: ""
+        };
+
+      const filteredFabrics = this.fabrics.filter(fabric => {
+        return fabric.code.startsWith(selectedVariant.code);
+      });
+
+      return filteredFabrics.map(fab => {
+        fab.name = `${fab.code}`;
+        return fab;
+      });
+    },
+    toggleRTSPanel(color) {
+      color.showRTSPanel = !color.showRTSPanel;
+      this.$forceUpdate();
+    },
+    setMainColor(index) {
+      /* if value set to true, turn all other main image flags off */
+
+      for (let i = 0; i < this.doc.colors.length; i++) {
+        this.doc.colors[i].mainColor = false;
+      }
+
+      setTimeout(() => {
+        this.doc.colors[index].mainColor = true;
+        this.doc.colors[index].status = true;
+        this.$forceUpdate();
+      }, 100);
+    },
+    isActiveColor(index) {
+      return this.doc.colors[index].mainColor;
+    },
+    async fetchBaseColors() {
+      const result = await this.$fetchCollection("base_colors");
+      if (!result.fetched || result.docs.length === 0) {
+        return;
+      }
+
+      /* base colors array */
+      this.baseColors = result.docs.map(color => {
+        return {
+          name: color.name.toUpperCase(),
+          value: color.name
+        };
+      });
+
+      this.baseColors.unshift({
+        name: "Select Color",
+        value: ""
+      });
+    },
+    /* populateVariant */
+    populateVariants(variants) {
+      console.log(this.$refs.collections, "collections");
+      variants.forEach(variant => {
+        let match = this.variants.find(({ _id }) => _id === variant._id);
+        match.checked = true;
+      });
+    },
+    /* image list updated */
+    imageListUpdated(list, index) {
+      // console.log(list, index);
+      this.doc.colors[index].images = list;
+      console.log(list, "image list updated");
+    },
+    /* add new color */
+    addNewColor(color) {
+      // console.log(color);
+      this.doc.colors.push({
+        _id: color._id,
+        name: color.name,
+        code: color.code,
+        images: [],
+        disclaimer: "",
+        mainColor: false,
+        status: false,
+        key: uuidv4()
+      });
+    },
+    colorDeselected(color) {
+      /* find key of the deselected color */
+      const foundIndex = this.doc.colors.findIndex(
+        col => col._id === color._id
+      );
+      console.log(color, foundIndex, "DESELECTED");
+      /* remove color */
+      this.removeColor(foundIndex);
+    },
+    /* remove color */
+    removeColor(key, direct = false) {
+      // if (this.doc.colors.length === 1)
+      //     return;
+      const tobeRemoved = this.doc.colors[key];
+      this.doc.colors.splice(key, 1);
+      if (this.bounipunColors && direct)
+        this.$refs.colorPicker.deselectColor(tobeRemoved);
+    },
+    /* fabric selection */
+    fabricSelectionUpdated(variant) {
+      let details = {
+        _id: variant._id,
+        fabrics: variant.fabrics
+      };
+
+      console.log(details);
+
+      /* check if variant already exists in the array */
+      let foundIndex = this.doc.variants.findIndex(
+        element => element._id === variant._id
+      );
+
+      /* if not found  */
+      if (foundIndex === -1) this.doc.variants.push(details);
+      else this.doc.variants[foundIndex] = details;
+
+      console.log(foundIndex !== -1);
+
+      this.doc.variants = this.doc.variants.filter(
+        variant => variant.fabrics.length !== 0
+      );
+
+      console.log(this.doc.variants);
+    },
+    async updateDocument() {
+      console.log("PRODUCT TO BE UPDATED!:");
+      console.log(this.doc);
+
+      // const variantionsCheck = this.doc.variants.length === this.selectedVariants.length;
+
+      // if(!variantionsCheck) {
+      //     this.error.msg = "Please re-verify variants and fabric selection";
+      //     this.error.status = true;
+      //     return;
+      // }
+
+      // return;
+      // return;
+
+      this.loading = true;
+      const result = await this.$updateDocument(
+        this.model,
+        this.doc,
+        this.editMode
+      );
+      this.loading = false;
+
+      if (!result.updated) return;
+
+      this.$emit("updated");
+      // this.populateForm(result.doc);
+      this.doc._id = result.doc._id;
+      this.editMode = true;
+      this.$flash(this);
+    },
+    async deleteDocument() {
+      this.loading = true;
+      const result = await this.$deleteDocument(this.model, this.doc._id);
+      this.loading = false;
+
+      if (!result.deleted) return;
+
+      this.$emit("updated");
+      this.resetForm();
+      this.$flash(this);
+    },
+    populateForm(details) {
+      const {
+        _id,
+        styleId,
+        printNo,
+        gender,
+        name,
+        alias,
+        slug,
+        description,
+        type,
+        availabilityType,
+        bounipun_collection,
+        colorSource,
+        variants,
+        colors,
+        directPrice,
+        stock,
+        rtsDirectVariant,
+        rtsDirectFabric,
+        // etd,
+        status
+      } = details;
+      this.doc = {
+        _id,
+        styleId,
+        printNo,
+        gender,
+        name,
+        alias,
+        slug,
+        description,
+        type,
+        availabilityType,
+        bounipun_collection,
+        colorSource,
+        variants,
+        colors,
+        directPrice,
+        rtsDirectVariant,
+        rtsDirectFabric,
+        stock: stock === undefined ? "" : stock,
+        // etd: etd === null ? "" : etd.toString(),
+        status
+      };
+      this.editMode = true;
+    },
+    closeForm() {
+      this.resetForm();
+      this.$emit("resetVariants");
+      this.$emit("close");
+    },
+    resetForm() {
+      this.populateForm({
+        _id: "",
+        styleId: "",
+        printNo: "",
+        gender: "",
+        name: "",
+        alias: "",
+        slug: "",
+        description: "",
+        type: "",
+        availabilityType: "",
+        bounipun_collection: null,
+        colorSource: "",
+        variants: [],
+        colors: [],
+        directPrice: "",
+        rtsDirectVariant: "",
+        rtsDirectFabric: "",
+        stock: "",
+        // etd: "",
+        status: false
+      });
+      this.editMode = false;
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
 .colors {
-    .color-box {
-        position: relative;
-        margin: 14px 0px;
-        padding: 25px 5px 5px 5px;
-        border-radius: 3px;
-        box-shadow: 1px 1px 15px #e6e6e6;
-        transition: all 0.2s ease-in-out;
-        // overflow: hidden;
+  .color-box {
+    position: relative;
+    margin: 14px 0px;
+    padding: 25px 5px 5px 5px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 15px #e6e6e6;
+    transition: all 0.2s ease-in-out;
+    // overflow: hidden;
 
-        &.main-color {
-            background-color: #2582252e;
-        }
-
-        .color-details-1 {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: baseline;
-            width: 100%;
-
-            .name {
-                width: 44%;
-            }
-
-            .code {
-                width: 20%;
-            }
-
-            .color-bases {
-                padding: 10px 0px;
-            }
-
-        }
-
-        .set-main {
-            display: flex;
-            align-items: center;
-            font-size: 10px;
-            padding: 5px;
-            position: absolute;
-            top: -5%;
-            left: -5%;
-            width: 35%;
-            cursor: pointer;
-
-            opacity: 0.7;
-
-            img {
-                transition: all 0.2s ease-in-out;
-                width: 25%;
-                filter: grayscale(100%);
-
-                &.active-color {
-                    filter: grayscale(0%);
-                    width: 30%;
-                }
-            }
-
-            span {
-                font-size: 12px;
-                background-color: #2582252e;
-                padding: 3px 6px;
-                border-radius: 4px;
-
-            }
-        }
-
+    &.main-color {
+      background-color: #2582252e;
     }
+
+    .color-details-1 {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      width: 100%;
+
+      .name {
+        width: 44%;
+      }
+
+      .code {
+        width: 20%;
+      }
+
+      .color-bases {
+        padding: 10px 0px;
+      }
+    }
+
+    .set-main {
+      display: flex;
+      align-items: center;
+      font-size: 10px;
+      padding: 5px;
+      position: absolute;
+      top: -5%;
+      left: -5%;
+      width: 35%;
+      cursor: pointer;
+
+      opacity: 0.7;
+
+      img {
+        transition: all 0.2s ease-in-out;
+        width: 25%;
+        filter: grayscale(100%);
+
+        &.active-color {
+          filter: grayscale(0%);
+          width: 30%;
+        }
+      }
+
+      span {
+        font-size: 12px;
+        background-color: #2582252e;
+        padding: 3px 6px;
+        border-radius: 4px;
+      }
+    }
+  }
 }
 </style>
