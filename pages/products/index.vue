@@ -313,7 +313,7 @@
 
             <!-- details and care -->
             <Accordion
-              v-if="!thirdPartyProduct && !readyToShip"
+              v-if="!thirdPartyProduct"
               heading="Details And Care"
             >
               <ul>
@@ -448,10 +448,20 @@ export default {
       return this.product.description.split("\n");
     },
     variantDescription() {
+            /* if rts and under bounipun */
+      if(this.rtsAndUnderBounipun) {
+        return this.product.rtsDirectVariant.description.split("\n");
+      }
+
       if (this.variants.length === 0) return [];
       return this.variants[this.activeVariantIndex].description.split("\n");
     },
     fabricDescription() {
+                  /* if rts and under bounipun */
+      if(this.rtsAndUnderBounipun) {
+        return this.product.rtsDirectFabric.description.split("\n");
+      }
+
       if (this.variants.length === 0) return [];
       return this.variants[this.activeVariantIndex].fabrics[
         this.activeFabricIndex
@@ -472,6 +482,12 @@ export default {
       ].writeUp.split("\n");
     },
     detailsAndCare() {
+                  /* if rts and under bounipun */
+      if(this.rtsAndUnderBounipun) {
+        const detailsAndCare = this.product.rtsDirectFabric.detailsAndCare;
+        return detailsAndCare !== undefined ? detailsAndCare.split("\n") : ""
+      }
+
       if (this.variants.length === 0) return "";
       const detailsAndCare = this.variants[this.activeVariantIndex].fabrics[
         this.activeFabricIndex
@@ -972,6 +988,10 @@ export default {
               }
             }
           }
+
+           .quantity-and-size {
+            margin-left:10px;
+           }
         }
       }
 
