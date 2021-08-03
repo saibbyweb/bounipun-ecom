@@ -1,5 +1,8 @@
 <template>
   <div>
+    
+    <CookieNotice v-if="!$store.state.customer.cookieConsent && fakeLoaded && $route.path !== '/privacy-policy'"/>
+
     <div class="loading center" v-if="$store.state.customer.loading">
       <img src="/loading.gif" />
     </div>
@@ -22,7 +25,9 @@
 </template>
 
 <script>
+import CookieNotice from '../components/CookieNotice.vue';
 export default {
+  components: { CookieNotice },
   mounted() {
     this.$ga.page(this.$router)
     // this.$ga.page('/');
@@ -48,6 +53,7 @@ export default {
         this.$store.dispatch('customer/fetchProfile');
         this.$store.dispatch('customer/fetchStoreLocation');
         this.$store.dispatch('customer/fetchGlobalConfig');
+        this.fakeLoaded = true;
     }, 100)
   },
   data() {

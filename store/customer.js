@@ -3,6 +3,7 @@ import { getCountryIndex } from "../helpers/countryCodes";
 import sumBy from "lodash/sumBy";
 
 export const state = () => ({
+  cookieConsent: false,
   persistedStateLoaded: false,
   loading: false,
   authorized: false,
@@ -49,6 +50,9 @@ const findCartItem = (cart, cartItem) => {
 };
 
 export const mutations = {
+  setCookieConsent(state, value) {
+    state.cookieConsent = value;
+  },
   /* load state from local storage */
   loadPersistedState(state) {
     let persistedState = window.localStorage.getItem("persistedState");
