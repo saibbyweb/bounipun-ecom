@@ -217,7 +217,9 @@ export const methods = {
                 .populate('variants._id', { name: 1, hsnCode: 1, gstPercentage: 1 })
                 .populate('variants.fabrics._id', { name: 1, info1: 1 })
                 .populate('colors._id', { name: 1 })
-                .select('name styleId type availabilityType directPrice variants.fabrics.price colors.name colors.code colors.images')
+                .populate('rtsDirectVariant', { name: 1 })
+                .populate('rtsDirectFabric', {name: 1})
+                .select('name styleId type availabilityType directPrice variants.fabrics.price colors.name colors.code colors.images rtsDirectVaraint rtsDirectFabric')
                 .lean();
             allProductPromises.push(fetchProduct);
         }
@@ -330,6 +332,8 @@ export const methods = {
             /* if under bounipun and ready to ship */
             if (product.type === 'under-bounipun' && product.availabilityType === 'ready-to-ship') {
                 /* set variant and fabric name from style id */
+                cartItem.variantName = product.rtsDirectVariant.name;
+                cartItem.fabricName = product.rtsDirectFabric.name;
             }
 
             return cartItem;
