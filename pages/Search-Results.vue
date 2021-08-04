@@ -438,11 +438,22 @@ export default {
 
       /* attach collection name */
       response.docs.forEach(product => {
+
         const foundCollection = this.filterData.collections.find(
           collection => collection.value === product.bounipun_collection
         );
         if (foundCollection !== undefined)
           product.bounipun_collection = foundCollection.name;
+
+        /* attach variant data to rts and under bounipun products */
+        if(product.availabilityType === 'ready-to-ship' && product.type !== 'third-party') {
+            const foundVariant = this.filterData.variants.find(
+              variant => variant.value === product.rtsDirectVariant
+            )
+            if(foundVariant !== undefined)
+            product.rtsDirectVariant = foundVariant.name;
+        }
+
       });
 
       /* process color segregation */
