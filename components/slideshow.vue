@@ -141,6 +141,10 @@ export default {
       return this.windowWidth > 768 ? this.dSlideWidth : this.mSlideWidth;
     }
   },
+  destroyed() {
+    // alert('UNMOUNTED')
+    this.clearAutoplayRoutine();
+  },
   mounted() {
     if(this.autoplay)
       this.setAutoplayRoutine();
