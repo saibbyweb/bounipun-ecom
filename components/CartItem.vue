@@ -30,7 +30,7 @@
       <!-- qty -->
       <span v-if="!allowUpdate" class="qty"> Qty: {{ item.quantity }} </span>
        <!-- shipping time -->
-      <span class="shippingTime"> Standard Shipping: {{ item.shippingTime}} weeks </span>
+      <span class="shippingTime"> Standard Shipping: {{ item.shippingTime}} week(s) </span>
 
       <!-- quantity picker -->
       <div v-if="allowUpdate" class="quantity-picker">

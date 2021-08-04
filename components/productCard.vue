@@ -204,8 +204,9 @@ export default {
         }
       /* TODO: what is this? */
       if (this.product.variantData) {
-        this.product.variantData.sort((a, b) => a.order - b.order);
-        return this.product.variantData.map(variant => variant.name);
+        let temp = JSON.parse(JSON.stringify(this.product.variantData));
+        temp.sort((a, b) => a.order - b.order);
+        return temp.map(variant => variant.name);
       }
 
       // if(this.product.variants) {

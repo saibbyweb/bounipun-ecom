@@ -331,9 +331,10 @@ export const methods = {
 
             /* if under bounipun and ready to ship */
             if (product.type === 'under-bounipun' && product.availabilityType === 'ready-to-ship') {
-                /* set variant and fabric name from style id */
+                /* set variant and fabric name */
                 cartItem.variantName = product.rtsDirectVariant.name;
                 cartItem.fabricName = product.rtsDirectFabric.name;
+                cartItem.shippingTime = '1';
             }
 
             return cartItem;

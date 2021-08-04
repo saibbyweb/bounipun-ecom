@@ -29,6 +29,17 @@
                 </div>
 
             </Accordion> -->
+
+        <!-- availability type options -->
+        <Accordion heading="Availability" :expanded="true">
+                <div class="option" v-for="(type, index) in filterData.availabilityTypes" :key="index">
+                    <label class="label">
+                        <input type="checkbox" name="type" :value="type.value" v-model="type.checked" />
+                        {{ type.name }}</label>
+                </div>
+
+            </Accordion>
+
         <!-- variant options -->
         <Accordion heading="Variants" :expanded="true">
           <div
@@ -296,6 +307,16 @@ export default {
             checked: false
           }
         ],
+        availabilityTypes: [{
+          name: 'Ready To Ship',
+          value: 'ready-to-ship',
+          checkd: false
+        }, {
+          name: 'Made to Order',
+          value: 'made-to-order',
+          checkd: false
+        }
+        ],
         priceRanges: [
           {
             name: "Under ₹ 9999",
@@ -387,7 +408,7 @@ export default {
     async fetchResults() {
       /* keep only the checked ones from (type, variants, collection) */
       let filters = {};
-      filters.type = this.getCheckedOnes(this.filterData.types);
+      filters.availabilityType = this.getCheckedOnes(this.filterData.availabilityTypes);
       filters.bounipun_collection = this.getCheckedOnes(
         this.filterData.collections
       );
