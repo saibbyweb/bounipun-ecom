@@ -79,7 +79,6 @@
 </template>
 
 <script>
-import { Document } from "mongoose";
 import productCard from "../components/productCard.vue";
 
 export default {
@@ -187,6 +186,12 @@ export default {
       products.docs = products.docs.filter(
         product => product.colors.length > 0
       );
+
+      products.docs.forEach(product => {
+        if(product.availabilityType === 'ready-to-ship' && product.type !== 'third-party') {
+          product.rtsDirectVariant = product.rtsDirectVariant.name;
+        }
+      })
 
       this.products = products.docs;
 

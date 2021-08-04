@@ -63,7 +63,8 @@ router.post('/findDocuments', async (req, res) => {
             documentFetch
                 .populate('variants._id')
                 .populate('bounipun_collection')
-                .populate('colors._id');
+                .populate('colors._id')
+                .populate('rtsDirectVariant')
             break;
 
         case 'collections':
