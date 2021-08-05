@@ -234,40 +234,52 @@ router.post('/fetchCartDetails', async (req, res) => {
 
 /* fetch related products */
 router.get('/fetchRelatedProducts', async (req, res) => {
-    const limit = 6;
+    let response = { resolved: false, products: []}
+    const limit = 3;
 
     let { currentProductId, currentProductDate } = req.body;
-    currentProductId = '610959579ebf5e3c45386044';
-    currentProductDate = '2021-08-03T14:57:27.186+00:00';
+    // currentProductId = '60fe5049ab93f400158ed562';
+    // currentProductDate = '2021-07-26T06:03:53.692+00:00';
+
+    console.log(currentProductId, currentProductDate);
+
+    /* check if current product id and current product date is not provided */
+    if(currentProductId === undefined || currentProductDate === undefined) {
+        res.send(response);
+        return;
+    }
+
 
 
     /* fetch products added after the  current product */
     let relatedProducts: any = await db.model('products')
-    .find({ _id: { $ne: currentProductId }, createdAt: { $lte: currentProductDate }, status: true })
-    .sort({ createdAt: -1 })
-    .limit(3)
+    .find({ _id: { $ne: currentProductId }, createdAt: { $gte: currentProductDate }, status: true })
+    .sort({ createdAt: 1 })
+    .limit(limit)
+    .populate('variants._id')
+    .populate('bounipun_collection', 'name')
+    .populate('colors._id')
+    .populate('rtsDirectVariant')
 
-     console.log(relatedProducts);
-    /* if related prdocucts are lesser than x, fetch related products added before the current product */
+     console.log(relatedProducts.length);
+    /* if related prdocucts are lesser than limit, fetch related products added before the current product */
     if(relatedProducts.length < limit) {
-
+        relatedProducts = await db.model('products')
+        .find({ _id: { $ne: currentProductId }, createdAt: { $lte: currentProductDate }, status: true })
+        .sort({ createdAt: -1 })
+        .limit(limit)
+        .populate('variants._id')
+        .populate('bounipun_collection')
+        .populate('colors._id')
+        .populate('rtsDirectVariant')
     }
+    
+    response.products = relatedProducts;
 
-    relatedProducts.forEach(async element => {
-       const pro = await element.populate('variants._id').execPopulate()
-       console.log(pro);
-    });
+    const names = relatedProducts.map((product: any) => product.name);
+    console.log(names);
 
-    // const finalFetch = await relatedProducts
-    // .populate('variants._id')
-    // .populate('bounipun_collection')
-    // .populate('colors._id')
-    // .populate('rtsDirectVariant')
-    // .execPopulate()
-
-    // const names = finalFetch.map((product: any) => product.name)
-
-    res.send(relatedProducts);
+    res.send(response);
 });
 /* fetch recently viewed products */
 

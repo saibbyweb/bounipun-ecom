@@ -428,7 +428,7 @@ export default {
       if (this.sortData.priceRange !== "") {
         this.rawCriterion.sortBy = {
           "priceRange.startsAt": parseInt(this.sortData.priceRange)
-        };
+        }
       } else this.rawCriterion.sortBy = {};
 
       /* post raw criterion to the server */

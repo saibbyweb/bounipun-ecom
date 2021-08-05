@@ -102,7 +102,6 @@ export default {
   },
   watch: {
     $route(to, from) {
-      console.log(to);
       this.products = [];
       this.escapeProduct = [];
       this.colorCategories = [];
@@ -186,7 +185,8 @@ export default {
       products.docs = products.docs.filter(
         product => product.colors.length > 0
       );
-
+      
+      /* set rts direct variant */
       products.docs.forEach(product => {
         if(product.availabilityType === 'ready-to-ship' && product.type !== 'third-party') {
           product.rtsDirectVariant = product.rtsDirectVariant.name;
@@ -230,7 +230,7 @@ export default {
       return this.$getImagePath(image);
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
