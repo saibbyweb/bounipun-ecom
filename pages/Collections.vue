@@ -115,7 +115,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.$route);
     this.fetchCollectionProducts(this.$route.query.slug);
   },
   methods: {

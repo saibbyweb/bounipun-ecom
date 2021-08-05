@@ -10,8 +10,8 @@
         >
           <div
             class="product-image"
-            :key="index"
-            v-for="(image, index) in images"
+            :key="image"
+            v-for="(image) in images"
             :style="getBackgroundImage(image)"
           ></div>
         </div>
@@ -155,6 +155,9 @@ export default {
           this.$emit('slideChanged', newVal);
       },
       immediate: true
+    },
+    images() {
+     
     }
   },
   methods: {

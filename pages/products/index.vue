@@ -382,6 +382,15 @@ export default {
       console.log(this.scrollPosition, "scroll position");
     }, 300);
   },
+  watch: {
+    $route(newVal) {
+      this.productFetched = false;
+       const slug = newVal.query._id;
+      //  this.$router.go()
+       this.images = [];
+       this.fetchProduct(slug);
+    }
+  },
   data() {
     return {
       showShareIcons: false,
@@ -670,6 +679,8 @@ export default {
       );
 
       if (mainColorIndex !== -1) this.activeColorIndex = mainColorIndex;
+
+
     },
     setVariants() {
       const variants = this.product.variants.map(variant => {
@@ -754,6 +765,8 @@ export default {
 
         this.images.push(images);
       });
+
+      this.$forceUpdate()
     },
     getMainImageCSS(color) {
       const images = color.images;

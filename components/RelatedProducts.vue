@@ -48,7 +48,17 @@ export default {
 
       if (relatedProducts.resolved === false) return;
 
+      const { products } = relatedProducts.response;
+      products.forEach(product => {
+          if(product.rtsDirectVariant !== undefined || product.rtsDirectVariant === '')
+            product.rtsDirectVariant = product.rtsDirectVariant.name;
+      });
+
       this.relatedProducts = relatedProducts.response.products;
+        
+       
+
+
     }
   }
 };
