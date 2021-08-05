@@ -233,7 +233,7 @@ router.post('/fetchCartDetails', async (req, res) => {
 });
 
 /* fetch related products */
-router.get('/fetchRelatedProducts', async (req, res) => {
+router.post('/fetchRelatedProducts', async (req, res) => {
     let response = { resolved: false, products: []}
     const limit = 3;
 
@@ -275,6 +275,7 @@ router.get('/fetchRelatedProducts', async (req, res) => {
     }
     
     response.products = relatedProducts;
+    response.resolved = true;
 
     const names = relatedProducts.map((product: any) => product.name);
     console.log(names);

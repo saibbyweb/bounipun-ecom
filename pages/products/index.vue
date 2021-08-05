@@ -338,22 +338,7 @@
         </div>
 
         <!-- related products -->
-        <!-- <div class="related-products">
-                <h4 class="section-heading"> Related Products </h4>
-                <div class="scrollable-list">
-                    <div class="list">
-                        <product-card :details="{name: 'Khatamband Cashmere',
-                    collection: 'Bounipun Karakul',
-                    price: 'INR 20000'}" product="auto_2" :variants="{shawl: true, stole: true}" />
-
-                        <product-card :details="{name: 'Kani Shawl',
-                    collection: 'Bounipun Adore',
-                    price: 'INR 15000'}" product="auto_5" :variants="{square: true, stole: true}" />
-
-                        <product-card product="kara_3" :variants="{stole: true}" />
-                    </div>
-                </div>
-            </div> -->
+        <RelatedProducts :currentProductId="product._id" :currentProductDate="product.createdAt" />
 
         <!-- <inner-image-zoom class="product-image" :src="images[0]" :zoomSrc="images[0]" /> -->
       </div>
