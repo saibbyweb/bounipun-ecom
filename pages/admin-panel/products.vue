@@ -86,8 +86,8 @@ export default {
                 limit: 10
             },
             list: [],
-            headings: ['_id', 'styleId', 'name', 'Slug', 'type', 'Collection', 'status'],
-            sortByFields: ['name', 'styleId', 'type', 'status'],
+            headings: ['_id', 'styleId', 'name', 'Slug', 'availabilityType', 'Collection', 'status'],
+            sortByFields: ['name', 'styleId', 'availabilityType', 'status'],
             collections: [],
             variants: [],
             fabrics: []
@@ -250,7 +250,7 @@ export default {
                 styleId,
                 name,
                 slug,
-                type,
+                availabilityType,
                 bounipun_collection,
                 status
             }) => {
@@ -267,9 +267,9 @@ export default {
                     styleId,
                     name,
                     slug,
-                    type,
+                    availabilityType,
                     // bounipun_collection: foundCollection !== undefined ? foundCollection.name : "Third Party",
-                    bounipun_collection: type !== "third-party" ? bounipun_collection : "N/A",
+                    bounipun_collection: bounipun_collection !== "" && bounipun_collection !== undefined ? bounipun_collection : "N/A",
                     status
                 }
             });

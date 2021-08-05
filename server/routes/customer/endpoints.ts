@@ -27,7 +27,7 @@ router.post('/findDocument', async (req, res) => {
             });
             break;
         case 'homepages':
-            documentFetch.populate('collectionBlocks.bounipun_collection','name slug');
+            documentFetch.populate('collectionBlocks.bounipun_collection', 'name slug');
             break;
         default:
             break;
@@ -44,10 +44,7 @@ router.post('/findDocument', async (req, res) => {
         return {};
     }
 
-
-
     res.send(document);
-
 });
 
 /* get document with any filter */
@@ -66,17 +63,13 @@ router.post('/findDocuments', async (req, res) => {
                 .populate('colors._id')
                 .populate('rtsDirectVariant')
             break;
-
         case 'collections':
             console.log('hey col')
             documentFetch.sort('order');
             break;
-
         case 'color_categories':
             documentFetch.sort('order');
             break;
-
-
         default:
             break;
     }
@@ -177,7 +170,7 @@ router.post('/searchProducts', async (req, res) => {
     // filters = {...filters, status: true, 'colors.status': true }
     /* gold */
     rawCriterion.search.term = admin.convertSearchTermToRegEx(rawCriterion.search.term)
-    
+
     /* text match + filters */
     criterion.match = {
         status: true,
@@ -209,36 +202,74 @@ router.post('/searchProducts', async (req, res) => {
 });
 
 /* fetch cart items */
-router.post('/fetchCartDetails', async(req, res) => {
-    let response = { resolved: false, cartDetails: [], variants: [], fabrics: []}
+router.post('/fetchCartDetails', async (req, res) => {
+    let response = { resolved: false, cartDetails: [], variants: [], fabrics: [] }
     const { listOfProductIds } = req.body;
-    
-    if(listOfProductIds.length === 0) {
+
+    if (listOfProductIds.length === 0) {
         res.send(response);
         return;
     }
-    
+
     /* fetch product details from ids */
-    const productDetailsFetch : any = db.model('products')
-    .find({_id: { $in: listOfProductIds }})
-    .populate('bounipun_collection','name')
-    .populate('variants._id','name')
-    .populate('variants.fabrics._id', 'name info1')
-    .lean()
+    const productDetailsFetch: any = db.model('products')
+        .find({ _id: { $in: listOfProductIds } })
+        .populate('bounipun_collection', 'name')
+        .populate('variants._id', 'name')
+        .populate('variants.fabrics._id', 'name info1')
+        .lean()
     const { response: details, error } = await task(productDetailsFetch);
 
     /* if error occurred */
-    if(error) {
+    if (error) {
         res.send(response);
         return;
     }
-    
+
     response.cartDetails = details;
 
     res.send(response);
 
 });
 
+/* fetch related products */
+router.get('/fetchRelatedProducts', async (req, res) => {
+    const limit = 6;
+
+    let { currentProductId, currentProductDate } = req.body;
+    currentProductId = '610959579ebf5e3c45386044';
+    currentProductDate = '2021-08-03T14:57:27.186+00:00';
+
+
+    /* fetch products added after the  current product */
+    let relatedProducts: any = await db.model('products')
+    .find({ _id: { $ne: currentProductId }, createdAt: { $lte: currentProductDate }, status: true })
+    .sort({ createdAt: -1 })
+    .limit(3)
+
+     console.log(relatedProducts);
+    /* if related prdocucts are lesser than x, fetch related products added before the current product */
+    if(relatedProducts.length < limit) {
+
+    }
+
+    relatedProducts.forEach(async element => {
+       const pro = await element.populate('variants._id').execPopulate()
+       console.log(pro);
+    });
+
+    // const finalFetch = await relatedProducts
+    // .populate('variants._id')
+    // .populate('bounipun_collection')
+    // .populate('colors._id')
+    // .populate('rtsDirectVariant')
+    // .execPopulate()
+
+    // const names = finalFetch.map((product: any) => product.name)
+
+    res.send(relatedProducts);
+});
+/* fetch recently viewed products */
 
 
 export default router;

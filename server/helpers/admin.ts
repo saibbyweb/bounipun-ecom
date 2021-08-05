@@ -51,6 +51,7 @@ export default {
         return new RegExp(exp);
     },
     async getPaginationResults(model, criterion) {
+        console.log(criterion.sort)
         let paginatedResults = { docs: [], totalMatches: 0, fetched: false }
         /* collection */
         const collection = db.model(model);
