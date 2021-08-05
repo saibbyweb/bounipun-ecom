@@ -235,7 +235,7 @@ router.post('/fetchCartDetails', async (req, res) => {
 /* fetch related products */
 router.post('/fetchRelatedProducts', async (req, res) => {
     let response = { resolved: false, products: []}
-    const limit = 3;
+    const limit = 4;
 
     let { currentProductId, currentProductDate } = req.body;
     // currentProductId = '60fe5049ab93f400158ed562';

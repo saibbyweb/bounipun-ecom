@@ -1,6 +1,15 @@
 <template>
   <div class="related-products">
-    <h2>Related Products</h2>
+    <h2 class="title">You may also like</h2>
+    <div class="flex center">
+    <div class="flex wrap">
+      <product-card
+        v-for="(product, index) in relatedProducts"
+        :key="index"
+        :product="product"
+      />
+    </div>
+    </div>
   </div>
 </template>
 
@@ -25,7 +34,9 @@ export default {
     }
   },
   data() {
-    return {};
+    return {
+      relatedProducts: []
+    };
   },
   methods: {
     async fetchRelatedProducts() {
@@ -36,7 +47,20 @@ export default {
       });
 
       if (relatedProducts.resolved === false) return;
+
+      this.relatedProducts = relatedProducts.response.products;
     }
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.related-products {
+    // padding: 10%;
+    .title {
+        padding: 0 3%;
+        font-family: $font_1_bold;
+        text-transform: uppercase;
+    }
+}
+</style>

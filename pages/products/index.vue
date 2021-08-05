@@ -785,12 +785,9 @@ export default {
 }
 .product-page {
   margin-top: 10vh;
-  padding: 2.5%;
+  // padding: 2.5%;
   position: relative;
   min-height: 90vh;
-  // overflow: hidden;
-  // background:red;
-  // flex-direction: row-reverse;
 
   .product-images {
     width: 30%;
@@ -910,7 +907,7 @@ export default {
 
   .product-details {
     width: 70%;
-    // padding: 2%;
+   
     box-sizing: border-box;
     height: 90vh;
     overflow-y: scroll;
@@ -922,7 +919,7 @@ export default {
     }
 
     @media (min-width: 769px) {
-      // padding-top: 13vw;
+       padding: 3% 4%;
     }
     /* sticky details */
     .details {
@@ -1001,7 +998,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1% 4%;
+      padding: 1% 2%;
 
       span {
         color: $dark_gray;
@@ -1034,7 +1031,7 @@ export default {
     }
 
     .og-details {
-      padding: 2% 4%;
+      padding: 1% 2%;
       width: 100%;
       display: flex;
       justify-content: space-between;
@@ -1343,7 +1340,7 @@ export default {
       .accordions {
         margin-top: 20px;
         @media (min-width: 768px) {
-          padding-bottom: 200px;
+          // padding-bottom: 200px;
         }
         text-align: justify;
 
