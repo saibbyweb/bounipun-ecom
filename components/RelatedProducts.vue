@@ -50,7 +50,7 @@ export default {
 
       const { products } = relatedProducts.response;
       products.forEach(product => {
-          if(product.rtsDirectVariant !== undefined || product.rtsDirectVariant === '')
+          if(product.rtsDirectVariant !== undefined || product.rtsDirectVariant !== '')
             product.rtsDirectVariant = product.rtsDirectVariant.name;
       });
 
