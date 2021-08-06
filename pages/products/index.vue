@@ -132,7 +132,9 @@
                 </button>
                 <button class="arrow">></button>
               </div>
-              <span style="font-size: 9px;"> Standard Shipping: {{ shippingTime }} weeks </span>
+              <span style="font-size: 9px;">
+                Standard Shipping: {{ shippingTime }} weeks
+              </span>
             </div>
           </div>
         </div>
@@ -300,10 +302,7 @@
             </Accordion>
 
             <!-- about fabric -->
-            <Accordion
-              v-if="!thirdPartyProduct"
-              heading="About Fabric"
-            >
+            <Accordion v-if="!thirdPartyProduct" heading="About Fabric">
               <ul>
                 <li v-for="(point, index) in fabricWriteUp" :key="index">
                   <span class="desc"> {{ point }} </span>
@@ -312,10 +311,7 @@
             </Accordion>
 
             <!-- details and care -->
-            <Accordion
-              v-if="!thirdPartyProduct"
-              heading="Details And Care"
-            >
+            <Accordion v-if="!thirdPartyProduct" heading="Details And Care">
               <ul>
                 <li v-for="(point, index) in detailsAndCare" :key="index">
                   <span class="desc"> {{ point }} </span>
@@ -338,7 +334,10 @@
         </div>
 
         <!-- related products -->
-        <RelatedProducts :currentProductId="product._id" :currentProductDate="product.createdAt" />
+        <RelatedProducts
+          :currentProductId="product._id"
+          :currentProductDate="product.createdAt"
+        />
 
         <!-- <inner-image-zoom class="product-image" :src="images[0]" :zoomSrc="images[0]" /> -->
       </div>
@@ -385,10 +384,10 @@ export default {
   watch: {
     $route(newVal) {
       this.productFetched = false;
-       const slug = newVal.query._id;
+      const slug = newVal.query._id;
       //  this.$router.go()
-       this.images = [];
-       this.fetchProduct(slug);
+      this.images = [];
+      this.fetchProduct(slug);
     }
   },
   data() {
@@ -442,8 +441,8 @@ export default {
       return this.product.description.split("\n");
     },
     variantDescription() {
-            /* if rts and under bounipun */
-      if(this.rtsAndUnderBounipun) {
+      /* if rts and under bounipun */
+      if (this.rtsAndUnderBounipun) {
         return this.product.rtsDirectVariant.description.split("\n");
       }
 
@@ -451,8 +450,8 @@ export default {
       return this.variants[this.activeVariantIndex].description.split("\n");
     },
     fabricDescription() {
-                  /* if rts and under bounipun */
-      if(this.rtsAndUnderBounipun) {
+      /* if rts and under bounipun */
+      if (this.rtsAndUnderBounipun) {
         return this.product.rtsDirectFabric.description.split("\n");
       }
 
@@ -463,23 +462,21 @@ export default {
     },
     fabricWriteUp() {
       /* if rts and under bounipun */
-      if(this.rtsAndUnderBounipun) {
+      if (this.rtsAndUnderBounipun) {
         return this.product.rtsDirectFabric.writeUp.split("\n");
       }
 
       if (this.variants.length === 0) return [];
-
-
 
       return this.variants[this.activeVariantIndex].fabrics[
         this.activeFabricIndex
       ].writeUp.split("\n");
     },
     detailsAndCare() {
-                  /* if rts and under bounipun */
-      if(this.rtsAndUnderBounipun) {
+      /* if rts and under bounipun */
+      if (this.rtsAndUnderBounipun) {
         const detailsAndCare = this.product.rtsDirectFabric.detailsAndCare;
-        return detailsAndCare !== undefined ? detailsAndCare.split("\n") : ""
+        return detailsAndCare !== undefined ? detailsAndCare.split("\n") : "";
       }
 
       if (this.variants.length === 0) return "";
@@ -501,7 +498,7 @@ export default {
       return this.product.type === "third-party";
     },
     rtsAndUnderBounipun() {
-        return this.readyToShip && !this.thirdPartyProduct;
+      return this.readyToShip && !this.thirdPartyProduct;
     },
     multiPriced() {
       return this.product.type === "third-party"
@@ -548,12 +545,19 @@ export default {
       return link;
     },
     shippingTime() {
-      if(this.product.type === "under-bounipun")
+      if (this.product.type === "under-bounipun")
         return this.product.bounipun_collection.edt;
       else "4";
     }
   },
   methods: {
+    addToRecentlyViewed() {
+      this.$store.commit("customer/addToRecentlyViewed", {
+        product: this.product._id,
+        name: this.product.name,
+        colorCode: this.product.colors[this.activeColorIndex].code
+      });
+    },
     adjustPrice(price) {
       price = parseInt(price);
       return this.$store.getters["customer/adjustPrice"](price);
@@ -661,6 +665,9 @@ export default {
 
       this.product = result.doc;
       this.productFetched = true;
+      
+      /* add product to recently viewed */
+      this.addToRecentlyViewed()
 
       this.setImages();
       this.setVariants();
@@ -679,8 +686,6 @@ export default {
       );
 
       if (mainColorIndex !== -1) this.activeColorIndex = mainColorIndex;
-
-
     },
     setVariants() {
       const variants = this.product.variants.map(variant => {
@@ -766,7 +771,7 @@ export default {
         this.images.push(images);
       });
 
-      this.$forceUpdate()
+      this.$forceUpdate();
     },
     getMainImageCSS(color) {
       const images = color.images;
@@ -791,9 +796,9 @@ export default {
 
 <style lang="scss" scoped>
 .whole-page {
-  min-height:90vh;
+  min-height: 90vh;
   .placeholder {
-    height:90vh;
+    height: 90vh;
   }
 }
 .product-page {
@@ -920,7 +925,7 @@ export default {
 
   .product-details {
     width: 70%;
-   
+
     box-sizing: border-box;
     height: 90vh;
     overflow-y: scroll;
@@ -932,7 +937,7 @@ export default {
     }
 
     @media (min-width: 769px) {
-       padding: 3% 4%;
+      padding: 3% 4%;
     }
     /* sticky details */
     .details {
@@ -984,9 +989,9 @@ export default {
             }
           }
 
-           .quantity-and-size {
-            margin-left:10px;
-           }
+          .quantity-and-size {
+            margin-left: 10px;
+          }
         }
       }
 
@@ -1030,7 +1035,7 @@ export default {
       @media (max-width: 768px) {
         padding: 2% 4%;
         background-color: $dark_gray;
-        
+
         span {
           color: white;
           &.collection {

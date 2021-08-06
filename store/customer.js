@@ -18,6 +18,7 @@ export const state = () => ({
     code: ""
     /* more props added after fetching from server */
   },
+  recentlyViewed: [],
   countryIndex: 0,
   currencyMultiplier: 1.3
 });
@@ -50,6 +51,23 @@ const findCartItem = (cart, cartItem) => {
 };
 
 export const mutations = {
+  addToRecentlyViewed(state, value) {
+    /* value contains product id and color id */
+    if(state.recentlyViewed === undefined)
+      state.recentlyViewed = []
+
+    /* check if entry is already in array or not */
+    const previousEntry = state.recentlyViewed.findIndex(entry => entry.product === value.product)
+    /* if yes, remove that entry  */
+    if(previousEntry !== -1) {
+      state.recentlyViewed.splice(previousEntry, 1);
+    }
+    /* add new entry to array */
+    state.recentlyViewed.push(value)
+    /* if array is greater than 10, remove the oldest entry */
+    if(state.recentlyViewed.length > 10)
+      state.recentlyViewed.shift();
+  },
   setCookieConsent(state, value) {
     state.cookieConsent = value;
   },
