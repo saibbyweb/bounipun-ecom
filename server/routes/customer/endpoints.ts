@@ -1,4 +1,4 @@
-import { server, db, task } from "@helpers/essentials";
+import { server, db, task, mongoose } from "@helpers/essentials";
 import admin from "@helpers/admin";
 import customer from "@helpers/customer";
 
@@ -234,17 +234,17 @@ router.post('/fetchCartDetails', async (req, res) => {
 
 /* fetch related products */
 router.post('/fetchRelatedProducts', async (req, res) => {
-    let response = { resolved: false, products: []}
+    let response = { resolved: false, products: [] }
     const limit = 4;
 
     let { currentProductId, currentProductDate } = req.body;
     // currentProductId = '60fe5049ab93f400158ed562';
     // currentProductDate = '2021-07-26T06:03:53.692+00:00';
 
-    console.log(currentProductId, currentProductDate);
+    // console.log(currentProductId, currentProductDate);
 
     /* check if current product id and current product date is not provided */
-    if(currentProductId === undefined || currentProductDate === undefined) {
+    if (currentProductId === undefined || currentProductDate === undefined) {
         res.send(response);
         return;
     }
@@ -253,36 +253,69 @@ router.post('/fetchRelatedProducts', async (req, res) => {
 
     /* fetch products added after the  current product */
     let relatedProducts: any = await db.model('products')
-    .find({ _id: { $ne: currentProductId }, createdAt: { $gte: currentProductDate }, status: true })
-    .sort({ createdAt: 1 })
-    .limit(limit)
-    .populate('variants._id')
-    .populate('bounipun_collection', 'name')
-    .populate('colors._id')
-    .populate('rtsDirectVariant')
-
-     console.log(relatedProducts.length);
-    /* if related prdocucts are lesser than limit, fetch related products added before the current product */
-    if(relatedProducts.length < limit) {
-        relatedProducts = await db.model('products')
-        .find({ _id: { $ne: currentProductId }, createdAt: { $lte: currentProductDate }, status: true })
-        .sort({ createdAt: -1 })
+        .find({ _id: { $ne: currentProductId }, createdAt: { $gte: currentProductDate }, status: true })
+        .sort({ createdAt: 1 })
         .limit(limit)
         .populate('variants._id')
-        .populate('bounipun_collection')
+        .populate('bounipun_collection', 'name')
         .populate('colors._id')
         .populate('rtsDirectVariant')
+
+    //  console.log(relatedProducts.length);
+    /* if related prdocucts are lesser than limit, fetch related products added before the current product */
+    if (relatedProducts.length < limit) {
+        relatedProducts = await db.model('products')
+            .find({ _id: { $ne: currentProductId }, createdAt: { $lte: currentProductDate }, status: true })
+            .sort({ createdAt: -1 })
+            .limit(limit)
+            .populate('variants._id')
+            .populate('bounipun_collection')
+            .populate('colors._id')
+            .populate('rtsDirectVariant')
     }
-    
+
     response.products = relatedProducts;
     response.resolved = true;
 
     const names = relatedProducts.map((product: any) => product.name);
-    console.log(names);
+    // console.log(names);
 
     res.send(response);
 });
-/* fetch recently viewed products */
+
+
+router.post('/fetchRecentlyViewed', async (req, res) => {
+    let response = { resolved: false, products: [] };
+    const limit = 4;
+
+    let { entries } = req.body;
+
+    if (entries.length === 0 || entries === undefined) {
+        res.send(response);
+        return;
+    }
+
+    // console.log(entries);
+
+    /* productids */
+    const productIds = entries.map(entry => new mongoose.Types.ObjectId(entry.product));
+    // console.log(productIds);
+
+    let recentlyViewedProducts: any = await db.model('products').find({ _id: { $in: [...productIds] }, status: true }).limit(limit).populate('variants._id')
+    .populate('bounipun_collection', 'name')
+    .populate('colors._id')
+    .populate('rtsDirectVariant')
+
+    if(recentlyViewedProducts.length === 0) {
+        res.send(response);
+        return;
+    }
+
+    response.products = recentlyViewedProducts;
+    response.resolved = true;
+
+    res.send(response);
+});
 
 
 export default router;

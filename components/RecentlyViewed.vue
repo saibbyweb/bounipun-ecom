@@ -15,6 +15,12 @@
 
 <script>
 export default {
+  props: {
+    currentProductId: {
+      type: String,
+      default: ""
+    }
+  },
   watch: {
     currentProductId: {
       handler(newVal) {
@@ -34,29 +40,33 @@ export default {
       if (entries === undefined || entries.length === 0) return;
 
       /* remove active product */
-      const filteredEntries = entries.filter(
-        entry => entry.product !== this.currentProductId
-      );
+      let filteredEntries = entries.filter(entry => {
+        return entry.product !== this.currentProductId;
+      });
 
-      const recentlyViewedProducts = await this.$post("/fetchRecentyViewed", {
+      /* reverse the order */
+    //   filteredEntries = filteredEntries.reverse();
+
+      const recentlyViewedProducts = await this.$post("/fetchRecentlyViewed", {
         entries: filteredEntries
       });
 
       if (recentlyViewedProducts.resolved === false) return;
 
       const { products } = recentlyViewedProducts.response;
+
       products.forEach(product => {
         if (
           product.rtsDirectVariant !== undefined ||
-          product.rtsDirectVariant !== ""
+          product.rtsDirectVariant === ""
         )
           product.rtsDirectVariant = product.rtsDirectVariant.name;
       });
 
-      this.recentlyViewedProducts = relatedProducts.response.products;
+      this.recentlyViewedProducts = recentlyViewedProducts.response.products;
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

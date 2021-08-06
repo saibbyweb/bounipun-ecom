@@ -63,10 +63,10 @@ export const mutations = {
       state.recentlyViewed.splice(previousEntry, 1);
     }
     /* add new entry to array */
-    state.recentlyViewed.push(value)
+    state.recentlyViewed.unshift(value)
     /* if array is greater than 10, remove the oldest entry */
-    if(state.recentlyViewed.length > 10)
-      state.recentlyViewed.shift();
+    if(state.recentlyViewed.length > 5)
+      state.recentlyViewed.pop();
   },
   setCookieConsent(state, value) {
     state.cookieConsent = value;

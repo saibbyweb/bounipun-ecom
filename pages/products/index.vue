@@ -333,6 +333,11 @@
           </div>
         </div>
 
+        <!-- recently viewed -->
+            <RecentlyViewed
+          :currentProductId="product._id"
+        />
+
         <!-- related products -->
         <RelatedProducts
           :currentProductId="product._id"
@@ -665,7 +670,7 @@ export default {
 
       this.product = result.doc;
       this.productFetched = true;
-      
+
       /* add product to recently viewed */
       this.addToRecentlyViewed()
 
