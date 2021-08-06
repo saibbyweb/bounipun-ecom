@@ -344,6 +344,9 @@
           :currentProductDate="product.createdAt"
         />
 
+        <br />
+        <br />
+
         <!-- <inner-image-zoom class="product-image" :src="images[0]" :zoomSrc="images[0]" /> -->
       </div>
     </div>
