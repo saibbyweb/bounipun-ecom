@@ -10,8 +10,8 @@
         >
           <div
             class="product-image"
-            :key="image"
-            v-for="(image) in images"
+            :key="index"
+            v-for="(image, index) in onDemandImages"
             :style="getBackgroundImage(image)"
           ></div>
         </div>
@@ -127,7 +127,8 @@ export default {
       slideMargin: 0,
       activeIndex: 0,
       thumbnailsMargin: 0,
-      autoplayInterval: {}
+      autoplayInterval: {},
+      interacted: false
     };
   },
   computed: {
@@ -139,6 +140,20 @@ export default {
     },
     slideWidth() {
       return this.windowWidth > 768 ? this.dSlideWidth : this.mSlideWidth;
+    },
+    onDemandImages() {
+      // return this.images;
+      if(this.interacted)
+        return this.images;
+
+      if(this.images.length > 2) {
+        /* replace al images after second image a default bounipun image (a static asset) */
+        return this.images.map((image, index) => {
+          return index < 1 ? image : '/loading.gif'
+        })
+      }
+
+      return this.images;
     }
   },
   destroyed() {
@@ -190,6 +205,8 @@ export default {
       console.log(this.$refs.thumbnails.scrollLeft);
     },
     onSwipe(data) {
+
+      this.interacted = true;
 
       if(data.autoMode === undefined) {
         this.clearAutoplayRoutine();
