@@ -45,7 +45,7 @@
 
       <div class="action-icon">
         <!-- cart count -->
-        <span v-if="cartCount !== 0" class="cart-count"> {{ cartCount }} </span>
+        <span v-if="cartCount !== 0 && cartCount !== undefined" class="cart-count"> {{ cartCount }} </span>
         <img
           class="bag"
           :src="getIconPath('bag.png')"

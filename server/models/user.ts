@@ -225,7 +225,7 @@ export const methods = {
                 .populate('colors._id', { name: 1 })
                 .populate('rtsDirectVariant', { name: 1 })
                 .populate('rtsDirectFabric', {name: 1})
-                .select('name styleId type availabilityType directPrice variants.fabrics.price colors.name colors.code colors.images rtsDirectVaraint rtsDirectFabric')
+                .select('name styleId type availabilityType directPrice variants.fabrics.price colors.name colors.code colors.images colors.status rtsDirectVaraint rtsDirectFabric')
                 .lean();
             allProductPromises.push(fetchProduct);
         }
@@ -238,6 +238,13 @@ export const methods = {
         if (allProducts.length === 0) {
             return false;
         }
+
+        /* remove all inactive colors */
+        allProducts.forEach(product => {
+            /* filter out inactive colors */
+            console.log(product.name, product.colors)
+            product.colors = product.colors.filter(color => color.status === true);
+        });
 
         /* TODO: you should clear cart from user database and return */
 
@@ -278,7 +285,7 @@ export const methods = {
             mark this as item to be removed */
             if (product === undefined) {
                 itemsToBeRemoved.push(item);
-                return cartItem;
+                return false;
             }
 
             /* find selected color */
@@ -288,7 +295,7 @@ export const methods = {
             mark this as item to be removed */
             if (selectedColor === undefined) {
                 itemsToBeRemoved.push(item);
-                return;
+                return false;
             }
 
             /* product name */
@@ -347,6 +354,8 @@ export const methods = {
 
         });
 
+        cartItems = cartItems.filter(item => item !== false)
+        // console.log(itemsToBeRemoved)
         return cartItems;
     },
     async clearUserCart(userId) {
