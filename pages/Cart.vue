@@ -1,7 +1,7 @@
 <template>
   <div class="cart page -wh">
     <div class="page-header center">
-      <h2 class="title" @click="test">Shopping Bag</h2>
+      <h2 class="title">Shopping Bag</h2>
     </div>
 
     <div v-if="!cartEmpty" class="cart-container flex">

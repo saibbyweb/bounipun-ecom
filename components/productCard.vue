@@ -166,10 +166,6 @@ export default {
       type: String,
       default: "product1.png"
     },
-    inWishlist: {
-      type: Boolean,
-      default: false
-    },
     activeColor: {
       type: Number,
       default: -1
@@ -384,6 +380,8 @@ export default {
         return true;
       }
 
+      return false;
+
     }
   },
   mounted() {
@@ -415,7 +413,7 @@ export default {
       }
 
       /* set action according to state */
-      const action = this.addedToWishlist ? 'remove-from-wishlist' : 'add-to-wishlist';
+      const action = this.inWishlist ? 'remove-from-wishlist' : 'add-to-wishlist';
       
       /* take item to wishlist */
       const addToWishlist = await this.$post('/wishlistActions', {

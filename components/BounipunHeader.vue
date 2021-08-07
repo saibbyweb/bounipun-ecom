@@ -35,13 +35,13 @@
         />
       </div>
 
-      <!-- <div class="action-icon">
+      <div class="action-icon">
         <img
           class=""
           :src="getIconPath('heart.png')"
           @click="$router.push('/wishlist')"
         />
-      </div> -->
+      </div>
 
       <div class="action-icon">
         <!-- cart count -->

@@ -1,3 +1,4 @@
+
 import { server, db, task, mongoose } from "@helpers/essentials";
 import admin from "@helpers/admin";
 import customer from "@helpers/customer";
@@ -302,11 +303,11 @@ router.post('/fetchRecentlyViewed', async (req, res) => {
     // console.log(productIds);
 
     let recentlyViewedProducts: any = await db.model('products').find({ _id: { $in: [...productIds] }, status: true }).limit(limit).populate('variants._id')
-    .populate('bounipun_collection', 'name')
-    .populate('colors._id')
-    .populate('rtsDirectVariant')
+        .populate('bounipun_collection', 'name')
+        .populate('colors._id')
+        .populate('rtsDirectVariant')
 
-    if(recentlyViewedProducts.length === 0) {
+    if (recentlyViewedProducts.length === 0) {
         res.send(response);
         return;
     }

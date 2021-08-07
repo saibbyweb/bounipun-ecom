@@ -262,6 +262,26 @@ router.post('/fetchLocalCart', async (req, res) => {
     res.send(cartItems);
 });
 
+/* detch wishlist */
+router.post('/fetchWishlist', userAuth('customer'), async (req, res) => {
+    let response = { resolved: false, products: [] }
+
+    const details: any = await db.model('users').findOne({ _id: req.body.user._id }).select('name wishlist').populate({
+        path: 'wishlist.product',
+        populate: {
+            path: 'bounipun_collection colors._id rtsDirectVariant variants._id',
+        }
+    });
+
+    let products = details.wishlist.map(item => item.product)
+    /* filter products which are inactive */
+    products = products.filter(product => product.status)
+
+
+    response.products = products;
+    response.resolved = true;
+    res.send(response);
+});
 /* cart actions */
 router.post('/cartActions', userAuth('customer'), async (req, res) => {
     const { user, action, cartItem } = req.body;
@@ -314,7 +334,7 @@ router.post('/wishlistActions', userAuth('customer'), async (req, res) => {
     let { wishlist } = user;
 
     let search: any = false;
-    console.log(action, product, colorCode, wishlist);
+    console.log(action);
 
     /* check if product already exists or not */
     let foundIndex: any = false;
@@ -330,7 +350,7 @@ router.post('/wishlistActions', userAuth('customer'), async (req, res) => {
                 wishlist.push({ product, colorCode });
             break;
         case 'remove-from-wishlist':
-            if(foundIndex !== false && foundIndex !== -1)
+            if (foundIndex !== false && foundIndex !== -1)
                 wishlist.splice(foundIndex, 1)
             break;
     }
