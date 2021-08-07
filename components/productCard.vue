@@ -432,7 +432,8 @@ export default {
       this.addedToWishlist = !this.addedToWishlist;
 
       /* refetch wishlist */
-
+          /* fetch profile */
+      this.$store.dispatch("customer/fetchProfile");
     },
     navigateToProductPage() {
       let query = {
