@@ -98,7 +98,7 @@ export default {
     }
   },
   async mounted() {
-    // this.prefillForm();
+    this.prefillForm();
     this.fetchAddressBook();
   },
   methods: {

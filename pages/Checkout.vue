@@ -171,7 +171,8 @@ export default {
       orderDetails: {},
       combinedDeliveryConsent: true,
       razorpayKeyId: "",
-      stripePK: ""
+      stripePK: "",
+      processingStripe: false
     };
   },
   computed: {
@@ -333,8 +334,12 @@ export default {
       return;
     },
     async stripeCheckout() {
-      const cardElement = this.elements.getElement("card");
+      if(this.processingStripe) return;
 
+      this.processingStripe = true;
+      
+      const cardElement = this.elements.getElement("card");
+      this.$store.commit('customer/setLoading', true);
       /* create payment methods from card details  */
       const {
         paymentMethod,
@@ -344,6 +349,8 @@ export default {
         card: cardElement,
         billing_details: this.stripeBillingAddress
       });
+      this.$store.commit('customer/setLoading', false);
+
 
       /* if error occured while generating payment method */
       if (pmError) {
@@ -351,12 +358,15 @@ export default {
         this.paymentError.msg =
           "Could not process payment. Kindly try after sometime.";
         this.paymentError.status = true;
+        this.processingStripe = false;
         return;
       }
 
       console.log(paymentMethod);
 
       /* process card payment */
+      this.$store.commit('customer/setLoading', true);
+
       const { error } = await this.stripe.confirmCardPayment(
         this.gatewayToken,
         {
@@ -364,6 +374,9 @@ export default {
           shipping: this.stripeShippingObject
         }
       );
+      this.$store.commit('customer/setLoading', false);
+      this.processingStripe = false;
+
 
       /* if error occurred while processing card payment */
       if (error) {
