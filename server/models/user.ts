@@ -580,7 +580,7 @@ export const methods = {
         }
 
         let str = "" + response.sequence;
-        let pad = "0000"
+        let pad = "000"
         let ans = pad.substring(0, pad.length - str.length) + str;
 
         return ans;
@@ -612,7 +612,7 @@ export const methods = {
         const orderDetails = {
             paymentIntent: paymentIntent._id,
             // number: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
-            number: 'BP-ORDER-' + await this.getNextSequence(),
+            number: 'BOOK_2_INVOICE_' + await this.getNextSequence(),
             paymentGateway: gateway,
             transactionId,
             amount: paymentIntent.amount,
