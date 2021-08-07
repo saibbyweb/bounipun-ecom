@@ -394,10 +394,13 @@ export default {
         this.$router.push('/login');
         return;
       }
+
+      /* set action according to state */
+      const action = this.addedToWishlist ? 'remove-from-wishlist' : 'add-to-wishlist';
       
       /* take item to wishlist */
       const addToWishlist = await this.$post('/wishlistActions', {
-        action: 'add-to-wishlist',
+        action,
         product: this.product._id,
         colorCode: this.activeColorCode
       });
