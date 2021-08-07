@@ -52,6 +52,8 @@ export default {
     }
   },
   mounted() {
+      if(!this.$store.state.customer.authorized)
+        this.$router.push('/login');
     this.fetchWishlistItems();
   },
   methods: {
