@@ -339,7 +339,8 @@ router.post('/wishlistActions', userAuth('customer'), async (req, res) => {
     /* check if product already exists or not */
     let foundIndex: any = false;
     if (wishlist !== undefined) {
-        foundIndex = wishlist.findIndex(entry => entry.product.toString() === product && entry.colorCode === colorCode)
+        // foundIndex = wishlist.findIndex(entry => entry.product.toString() === product && entry.colorCode === colorCode)
+        foundIndex = wishlist.findIndex(entry => entry.product.toString() === product)
     }
     else
         wishlist = []

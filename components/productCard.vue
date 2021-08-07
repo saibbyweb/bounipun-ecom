@@ -374,7 +374,10 @@ export default {
         return false;
 
       /* check if product is in wishlist */
-      const foundIndex = wishlist.findIndex(entry => entry.product === this.product._id && entry.colorCode === this.activeColorCode);
+      // const foundIndex = wishlist.findIndex(entry => entry.product === this.product._id && entry.colorCode === this.activeColorCode);
+
+        const foundIndex = wishlist.findIndex(entry => entry.product === this.product._id);
+
 
       if(foundIndex !== -1) {
         return true;
@@ -425,9 +428,6 @@ export default {
       /* if request failed */
       if(addToWishlist.resolved === false)
         return;
-      
-      /* toggle heart color */
-      this.addedToWishlist = !this.addedToWishlist;
 
       /* refetch wishlist */
           /* fetch profile */

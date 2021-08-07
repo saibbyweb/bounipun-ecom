@@ -4,12 +4,14 @@
       <h2 class="title">Wishlist</h2>
     </div>
 
-    <div class="wishlist-items">
-      <product-card
-        v-for="(product, index) in wishlistItems"
-        :key="index"
-        :product="product"
-      />
+    <div class="flex center">
+      <div class="wishlist-items flex center wrap">
+        <product-card
+          v-for="(product, index) in wishlistItems"
+          :key="index"
+          :product="product"
+        />
+      </div>
     </div>
 
     <div v-if="wishlistEmpty" class="side-pad">
@@ -31,24 +33,22 @@ export default {
     };
   },
   computed: {
-      wishlistEmpty() {
-        return this.wishlistItems.length === 0
-      },
-      rawWishlist() {
-          const customer = this.$store.state.customer;
-          if(!customer.authorized)
-            return [];
+    wishlistEmpty() {
+      return this.wishlistItems.length === 0;
+    },
+    rawWishlist() {
+      const customer = this.$store.state.customer;
+      if (!customer.authorized) return [];
 
-          if(customer.wishlist === undefined)
-            return [];
+      if (customer.wishlist === undefined) return [];
 
-          return this.$store.state.customer.user.wishlist;
-      }
+      return this.$store.state.customer.user.wishlist;
+    }
   },
   watch: {
     rawWishlist() {
-        console.log('wishlist updated')
-        this.fetchWishlistItems()
+      console.log("wishlist updated");
+      this.fetchWishlistItems();
     }
   },
   mounted() {
@@ -60,9 +60,13 @@ export default {
 
       if (wishlistItems.resolved === false) return;
 
-      const { products } = wishlistItems.response;
+      let { products } = wishlistItems.response;
 
       products.forEach(product => {
+        /* filter out inactive colors */
+        product.colors = product.colors.filter(color => color.status === true);
+        product.variants.sort((a, b) => a._id.order - b._id.order);
+
         if (
           product.rtsDirectVariant !== undefined ||
           product.rtsDirectVariant === ""
@@ -70,8 +74,11 @@ export default {
           product.rtsDirectVariant = product.rtsDirectVariant.name;
       });
 
-      this.wishlistItems = wishlistItems.response.products;
-      this.$forceUpdate()
+      /* filter out products with no active colors */
+      products = products.filter(product => product.colors.length > 0);
+
+      this.wishlistItems = products;
+      this.$forceUpdate();
     }
   }
 };
@@ -80,16 +87,15 @@ export default {
 <style lang="scss" scoped>
 //
 .wishlist-items {
-  display: flex;
-  flex-wrap: wrap;
+
 }
 
 .wishlist {
-    margin-top:10vh;
+  margin-top: 10vh;
 
-    .title {
-        padding-top:10px;
-        font-size: 25px !important;
-    }
+  .title {
+    padding-top: 10px;
+    font-size: 25px !important;
+  }
 }
 </style>

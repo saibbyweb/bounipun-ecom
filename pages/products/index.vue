@@ -27,15 +27,15 @@
         </div>
 
         <!-- wishlist icon -->
-        <!-- <img
-        @click="addedToWishlist = !addedToWishlist"
-        :class="[{ added: addedToWishlist }, 'wishlist']"
+        <img
+        @click="toggleWishlist"
+        :class="[{ added: inWishlist }, 'wishlist']"
         :src="
-          addedToWishlist
+          inWishlist
             ? '/icons/dark/wishlist-filled.png'
             : '/icons/dark/wishlist.png'
         "
-      /> -->
+      />
 
         <!-- share icon -->
         <div class="share-icons">
@@ -334,9 +334,7 @@
         </div>
 
         <!-- recently viewed -->
-            <RecentlyViewed
-          :currentProductId="product._id"
-        />
+        <RecentlyViewed :currentProductId="product._id" />
 
         <!-- related products -->
         <RelatedProducts
@@ -556,9 +554,56 @@ export default {
       if (this.product.type === "under-bounipun")
         return this.product.bounipun_collection.edt;
       else "4";
+    },
+    inWishlist() {
+      /* if customer is not logged in, return  */
+      const customer = this.$store.state.customer;
+      if (customer.authorized === false) return false;
+
+      /* if wishlist is undefined, return */
+      const wishlist = customer.user.wishlist;
+      if (wishlist === undefined) return false;
+
+      /* check if product is in wishlist */
+      // const foundIndex = wishlist.findIndex(entry => entry.product === this.product._id && entry.colorCode === this.activeColorCode);
+
+      const foundIndex = wishlist.findIndex(
+        entry => entry.product === this.product._id
+      );
+
+      if (foundIndex !== -1) {
+        return true;
+      }
+
+      return false;
     }
   },
   methods: {
+    async toggleWishlist() {
+   
+      /* if user is not logged in, move to login page */
+      if (!this.$store.state.customer.authorized) {
+        this.$router.push('/login');
+        return;
+      }
+
+      /* set action according to state */
+      const action = this.inWishlist ? 'remove-from-wishlist' : 'add-to-wishlist';
+      
+      /* take item to wishlist */
+      const addToWishlist = await this.$post('/wishlistActions', {
+        action,
+        product: this.product._id,
+        colorCode: this.activeColorCode
+      });
+
+      /* if request failed */
+      if(addToWishlist.resolved === false)
+        return;
+
+      /* refetch wishlist */
+      this.$store.dispatch("customer/fetchProfile");
+    },
     addToRecentlyViewed() {
       this.$store.commit("customer/addToRecentlyViewed", {
         product: this.product._id,
@@ -675,7 +720,7 @@ export default {
       this.productFetched = true;
 
       /* add product to recently viewed */
-      this.addToRecentlyViewed()
+      this.addToRecentlyViewed();
 
       this.setImages();
       this.setVariants();
