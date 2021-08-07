@@ -9,9 +9,9 @@
     <!-- wishlist icon -->
     <img
       @click.stop="toggleWishlist"
-      :class="[{ added: addedToWishlist }, 'wishlist']"
+      :class="[{ added: inWishlist }, 'wishlist']"
       :src="
-        addedToWishlist
+        inWishlist
           ? '/icons/dark/wishlist-filled.png'
           : '/icons/dark/wishlist.png'
       "
@@ -365,6 +365,25 @@ export default {
     activeColorCode() {
       const index = this.activeColorIndex === -1 ? 0: this.activeColorIndex;
       return this.product.colors[index].code;
+    },
+    inWishlist() {
+      /* if customer is not logged in, return  */
+      const customer = this.$store.state.customer;
+      if(customer.authorized === false)
+        return false;
+      
+      /* if wishlist is undefined, return */
+      const wishlist = customer.user.wishlist;
+      if(wishlist === undefined)
+        return false;
+
+      /* check if product is in wishlist */
+      const foundIndex = wishlist.findIndex(entry => entry.product === this.product._id && entry.colorCode === this.activeColorCode);
+
+      if(foundIndex !== -1) {
+        return true;
+      }
+
     }
   },
   mounted() {
@@ -411,6 +430,7 @@ export default {
       
       /* toggle heart color */
       this.addedToWishlist = !this.addedToWishlist;
+
       /* refetch wishlist */
 
     },

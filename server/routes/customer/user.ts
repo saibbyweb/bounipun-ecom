@@ -344,7 +344,7 @@ router.post('/wishlistActions', userAuth('customer'), async (req, res) => {
 /* fetch customer profile */
 router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
     const { user } = req.body;
-    let fields = 'firstName surName phoneNumber countryDialCode countryIsoCode profession cart orders';
+    let fields = 'firstName surName phoneNumber countryDialCode countryIsoCode profession cart orders wishlist';
 
     const profile = await db
         .model('users')
