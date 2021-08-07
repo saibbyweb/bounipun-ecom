@@ -606,7 +606,7 @@ export default {
         cartItem: this.newCartItem
       });
 
-      /* remote add to cart */
+      /* if request failed */
       if (remoteAddToCart.resolved === false) {
         return;
       }

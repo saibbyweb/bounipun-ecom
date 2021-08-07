@@ -5,6 +5,7 @@ import sumBy from "lodash/sumBy";
 import { methods as paymentMethods } from "@models/payment"
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
 import axios from "axios";
+import { response } from "express";
 
 /* ipregistry key */
 const ipRegistryKey = process.env.IP_REGISTRY_KEY;
@@ -307,6 +308,39 @@ router.post('/cartActions', userAuth('customer'), async (req, res) => {
 
 });
 
+/* wishlist actions */
+router.post('/wishlistActions', userAuth('customer'), async (req, res) => {
+    const { user, action, product, colorCode } = req.body;
+    let { wishlist } = user;
+
+    let search: any = false;
+    console.log(action, product, colorCode, wishlist);
+
+    /* check if product already exists or not */
+    let foundIndex: any = false;
+    if (wishlist !== undefined) {
+        foundIndex = wishlist.findIndex(entry => entry.product.toString() === product && entry.colorCode === colorCode)
+    }
+    else
+        wishlist = []
+
+    switch (action) {
+        case 'add-to-wishlist':
+            if (foundIndex === false || foundIndex === -1)
+                wishlist.push({ product, colorCode });
+            break;
+        case 'remove-from-wishlist':
+            if(foundIndex !== false && foundIndex !== -1)
+                wishlist.splice(foundIndex, 1)
+            break;
+    }
+
+    /* save wishlist back to database */
+    await db.model('users').findOneAndUpdate({ _id: user._id }, { wishlist })
+
+    res.send('wishlist-updated');
+});
+
 /* fetch customer profile */
 router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
     const { user } = req.body;
@@ -391,7 +425,7 @@ router.post('/ipLookup', userAuth('customer', false), async (req, res) => {
     }
 
     /* validate ip */
-    if(req.ip === '::1') {
+    if (req.ip === '::1') {
         response.resolved = true;
         res.send(response);
         return;

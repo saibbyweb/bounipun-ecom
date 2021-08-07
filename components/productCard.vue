@@ -7,7 +7,7 @@
     }"
   >
     <!-- wishlist icon -->
-    <!-- <img
+    <img
       @click.stop="toggleWishlist"
       :class="[{ added: addedToWishlist }, 'wishlist']"
       :src="
@@ -15,7 +15,7 @@
           ? '/icons/dark/wishlist-filled.png'
           : '/icons/dark/wishlist.png'
       "
-    /> -->
+    />
 
     <!-- main image container -->
     <div class="main-image-container center">
@@ -362,6 +362,10 @@ export default {
     rtsAndUnderBounipun() {
         return this.readyToShip && !this.thirdPartyProduct;
     },
+    activeColorCode() {
+      const index = this.activeColorIndex === -1 ? 0: this.activeColorIndex;
+      return this.product.colors[index].code;
+    }
   },
   mounted() {
     this.activeColorIndex = this.activeColor;
@@ -383,8 +387,29 @@ export default {
       price = parseInt(price);
       return this.$store.getters["customer/adjustPrice"](price);
     },
-    toggleWishlist() {
+    async toggleWishlist() {
+   
+      /* if user is not logged in, move to login page */
+      if (!this.$store.state.customer.authorized) {
+        this.$router.push('/login');
+        return;
+      }
+      
+      /* take item to wishlist */
+      const addToWishlist = await this.$post('/wishlistActions', {
+        action: 'add-to-wishlist',
+        product: this.product._id,
+        colorCode: this.activeColorCode
+      });
+
+      /* if request failed */
+      if(addToWishlist.resolved === false)
+        return;
+      
+      /* toggle heart color */
       this.addedToWishlist = !this.addedToWishlist;
+      /* refetch wishlist */
+
     },
     navigateToProductPage() {
       let query = {
@@ -437,7 +462,7 @@ export default {
     top: 10%;
     right: 10%;
     transition: transform 0.3s ease-in-out;
-
+    z-index: 1;
     &.added {
       transform: scale(1.2);
     }

@@ -8,6 +8,7 @@ export const state = () => ({
   loading: false,
   authorized: false,
   cart: [],
+  wishlist:[],
   globalRemoteCart: [],
   globalConfig: {},
   user: {},

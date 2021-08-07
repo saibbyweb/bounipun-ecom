@@ -59,6 +59,12 @@ const schema = new mongoose.Schema({
             fabric: { type: ObjectId, ref: 'fabrics' }
         }
     ],
+    wishlist: [
+        {
+            product: { type: ObjectId, ref: 'products' },
+            colorCode: String,
+        }
+    ],
     /* orders */
     orders: [
         { type: ObjectId, ref: 'orders' }
