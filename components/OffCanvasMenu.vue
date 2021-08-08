@@ -51,13 +51,13 @@
         <button @click="navigate('/my-account/orders')" class="clear item acc">
           My Orders
         </button>
-        <!-- TODO: address book  pening-->
-        <!-- <button
+        <!-- address book -->
+        <button
           @click="navigate('/my-account/address-book')"
           class="clear item acc"
         >
-          Address Book
-        </button> -->
+          My Address Book
+        </button>
 
         <button
           @click="navigate('/my-account/profile-details')"

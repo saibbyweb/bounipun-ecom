@@ -349,6 +349,8 @@ export default {
         action: 'save-address',
         address
       });
+        /* fetch profile */
+      this.$store.dispatch("customer/fetchProfile");
     }
   }
 };

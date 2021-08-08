@@ -391,7 +391,7 @@ router.post('/addressBookActions', userAuth('customer'), async(req, res) => {
 /* fetch customer profile */
 router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
     const { user } = req.body;
-    let fields = 'firstName surName phoneNumber countryDialCode countryIsoCode profession cart orders wishlist';
+    let fields = 'firstName surName phoneNumber countryDialCode countryIsoCode profession cart orders wishlist addressBook';
 
     const profile = await db
         .model('users')
