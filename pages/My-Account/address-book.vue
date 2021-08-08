@@ -14,31 +14,53 @@
         {{ updating ? "Updating" : "New" }} Address
       </span>
     </div>
+    
+    <!-- saved addresses -->
+    <div v-if="!addressListEmpty">
+      <br />
+      <br />
+      <h3 class="sub-heading">Saved Address</h3>
+      <!-- divider -->
+      <hr class="divider" />
 
-    <!-- address card -->
-    <div class="flex center">
-    <div v-if="!showAddressForm" class="saved-addresses flex wrap">
-      <div
-        @click="selectAddress(address)"
-        class="address-card details"
-        v-for="(address, index) in addressList"
-        :key="index"
-      >
-        <span class="name">
-          {{ address.firstName }} {{ address.surName }}
-        </span>
-        <span>
-          {{ address.countryDialCode }} - {{ address.mobileNumber }}
-        </span>
-        <span> {{ address.addressLine1 }} </span>
-        <span> {{ address.addressLine2 }} </span>
-        <span> {{ address.email }} </span>
-        <span> {{ address.city }} </span>
-        <span> {{ address.postalCode }} </span>
+      <!-- address card -->
+
+      <div class="flex center">
+        <div v-if="!showAddressForm" class="saved-addresses flex wrap">
+          <div
+            @click="selectAddress(address)"
+            class="address-card details"
+            v-for="(address, index) in addressList"
+            :key="index"
+          >
+            <span class="name">
+              {{ address.firstName }} {{ address.surName }}
+            </span>
+            <span>
+              {{ address.countryDialCode }} - {{ address.mobileNumber }}
+            </span>
+            <span> {{ address.addressLine1 }} </span>
+            <span> {{ address.addressLine2 }} </span>
+            <span> {{ address.email }} </span>
+            <span> {{ address.city }} </span>
+            <span> {{ address.postalCode }} </span>
+          </div>
+        </div>
       </div>
     </div>
+
+    <!-- if address list is empty -->
+    <div v-if="addressListEmpty" class="flex center">
+        <br/><br/>  <br/><br/>
+        <span> No saved addresses found </span>
     </div>
 
+    <br />
+    <br />
+    <h3 class="sub-heading">New Address</h3>
+    <!-- divider -->
+    <hr class="divider" />
+    <br />
     <!-- add new address card -->
     <div v-if="!showAddressForm" class="address-card center">
       <div @click="showAddressForm = true" class="add-new center-col">
@@ -71,9 +93,13 @@ export default {
   },
   computed: {
     addressList() {
+        return []
       const customer = this.$store.state.customer;
       if (customer.user.addressBook === undefined) return [];
       return customer.user.addressBook;
+    },
+    addressListEmpty() {
+      return this.addressList.length == 0;
     }
   },
   mounted() {
@@ -103,6 +129,16 @@ export default {
   padding: 2% 2%;
   min-height: 80vh;
 
+  .sub-heading {
+    font-family: $font_2_bold;
+    margin-left: 3%;
+  }
+
+  .divider {
+    border-bottom: 1px solid #efefef;
+    width: 95%;
+  }
+
   .indicator {
     width: 100%;
     background-color: $primary_dark;
@@ -129,7 +165,6 @@ export default {
   }
 
   .saved-addresses {
-
     margin-top: 10px;
   }
 
@@ -142,7 +177,6 @@ export default {
     min-height: 200px;
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.16);
     margin: 1.5%;
-
 
     /* add new card */
     .add-new {
@@ -162,14 +196,13 @@ export default {
       }
     }
 
-
     @media (max-width: 768px) {
       width: 47%;
       min-height: 50vw;
       .add-new {
-          .label {
-              font-size:12px;
-          }
+        .label {
+          font-size: 12px;
+        }
       }
     }
 
