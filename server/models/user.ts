@@ -41,14 +41,14 @@ const schema = new mongoose.Schema({
     addressBook: [{
         firstName: String,
         surName: String,
-        phoneNumber: String,
+        mobileNumber: String,
         email: String,
         countryDialCode: String,
         countryIsoCode: String,
         addressLine1: String,
         addressLine2: String,
         city: String,
-        pincode: String
+        postalCode: String
     }],
     cart: [
         {

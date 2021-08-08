@@ -362,6 +362,32 @@ router.post('/wishlistActions', userAuth('customer'), async (req, res) => {
     res.send('wishlist-updated');
 });
 
+/* address book action */
+router.post('/addressBookActions', userAuth('customer'), async(req, res) => {
+    const { user, action, address } = req.body;
+    console.log(address, action)
+    
+    let { addressBook } = user;
+
+    if(addressBook === undefined)
+        addressBook = [];
+    
+    switch(action) {
+        case 'save-address':
+            addressBook.push(address);
+            break;
+        case 'update-address':
+            break;
+        case 'delete-address':
+            break;
+    }
+
+    /* save address book back to database */
+    await db.model('users').findOneAndUpdate({_id: user._id}, { addressBook });
+    res.send('addressbook-updated');
+
+});
+
 /* fetch customer profile */
 router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
     const { user } = req.body;

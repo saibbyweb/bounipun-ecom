@@ -29,10 +29,10 @@
           :disabled="otpSent"
         />
         <!-- TODO: consent for adding address to address book -->
-        <!-- <Checkbox
+        <Checkbox
           label="Save address for later use."
           v-model="saveNewAddress"
-        /> -->
+        />
 
         <!-- divider -->
         <hr
@@ -294,6 +294,11 @@ export default {
       });
 
       deliveryAddress.countryIsoCode = this.countryIsoCode;
+      deliveryAddress.countryDialCode = this.countryDialCode;
+
+      if(this.saveNewAddress)
+        await this.saveAddressToProfile(deliveryAddress);
+
       this.$router.push({ name: "checkout", params: { deliveryAddress } });
     },
     async shiftCart() {
@@ -332,7 +337,18 @@ export default {
       });
 
       deliveryAddress.countryIsoCode = this.countryIsoCode;
+      deliveryAddress.countryDialCode = this.countryDialCode;
+
+      if(this.saveNewAddress)
+        await this.saveAddressToProfile(deliveryAddress);
+
       this.$router.push({ name: "checkout", params: { deliveryAddress } });
+    },
+    async saveAddressToProfile(address) {
+      const saveAddress = await this.$post('/addressBookActions', {
+        action: 'save-address',
+        address
+      });
     }
   }
 };
