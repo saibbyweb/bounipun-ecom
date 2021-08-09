@@ -371,16 +371,25 @@ router.post('/addressBookActions', userAuth('customer'), async(req, res) => {
 
     if(addressBook === undefined)
         addressBook = [];
+
+    let foundIndex = -1;
     
     switch(action) {
         case 'save-address':
             addressBook.push(address);
             break;
         case 'update-address':
+            foundIndex = addressBook.findIndex(add => add._id.toString() === address._id);
+            if(foundIndex !== -1) {
+                console.log('address found', foundIndex, address.postalCode)
+                addressBook[foundIndex] = address;
+            }
             break;
         case 'delete-address':
             break;
     }
+
+    console.log(addressBook[foundIndex].postalCode)
 
     /* save address book back to database */
     await db.model('users').findOneAndUpdate({_id: user._id}, { addressBook });

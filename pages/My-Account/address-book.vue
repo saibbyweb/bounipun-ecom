@@ -114,6 +114,7 @@ export default {
         this.showAddressForm = true;
         this.activeAddress = {};
         this.activeAddress.countryDialCode = this.$store.state.customer.user.countryDialCode;
+        this.activeAddress.countryIsoCode = this.$store.state.customer.user.countryIsoCode;
     }
   }
 };

@@ -1,6 +1,5 @@
 <template>
   <div class="address-details flex col center">
-    
     <div class="center indicator">
       <div @click="$emit('goBack')" class="back-icon center">
         <img src="/icons/light/back.png" />
@@ -46,9 +45,6 @@ export default {
       type: Boolean,
       default: false
     },
-    addressId: {
-      type: String
-    },
     addressDetails: {
       type: Object
     }
@@ -82,6 +78,7 @@ export default {
     createFormData() {
       /* form fields */
       const fields = {
+        _id: "",
         firstName: "First Name",
         surName: "Sur Name",
         mobileNumber: "Mobile Number",
@@ -111,9 +108,27 @@ export default {
     fetchAddressDetails() {
       this.deliveryAddress = this.addressDetails;
     },
-    updateAddress() {
-      this.updated = true;
-      setTimeout(() => (this.updated = false), 3000);
+    async updateAddress() {
+      //   this.updated = true;
+      //   setTimeout(() => (this.updated = false), 3000);
+
+      /* collect delivery address */
+      let deliveryAddress = {};
+      Object.keys(this.formData).forEach(key => {
+        deliveryAddress[key] = this.formData[key].value;
+      });
+
+      deliveryAddress.countryDialCode = this.addressDetails.countryDialCode;
+      deliveryAddress.countryIsoCode = this.addressDetails.countryIsoCode;
+
+      const updateAddress = await this.$post("/addressBookActions", {
+        action: this.updating ? "update-address" : "save-address",
+        address: deliveryAddress
+      });
+      /* fetch profile */
+      this.$store.dispatch("customer/fetchProfile");
+      /* need address id and details */
+      /* match address id in current users address book in db */
     }
   }
 };
@@ -136,17 +151,17 @@ export default {
 }
 
 .address-details {
-    margin-top:20px;
+  margin-top: 20px;
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
-  background-color:white;
+  background-color: white;
   width: 40%;
-//   height: 80vh;
-  overflow-y:scroll;
-  @media(max-width: 768px) {
-      width:90%;
+  //   height: 80vh;
+  overflow-y: scroll;
+  @media (max-width: 768px) {
+    width: 90%;
   }
 
-   .indicator {
+  .indicator {
     width: 100%;
     background-color: $primary_dark;
     padding: 3%;
@@ -159,6 +174,7 @@ export default {
       left: 2%;
       height: 100%;
       width: 10%;
+      cursor: pointer;
 
       img {
         height: 40%;
