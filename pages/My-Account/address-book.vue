@@ -4,73 +4,64 @@
       <h2 class="title">Address Book</h2>
     </div>
 
-    <!-- indicator -->
-    <div v-if="showAddressForm" class="center indicator">
-      <div @click="hideAddressForm" class="back-icon center">
-        <img src="/icons/light/back.png" />
+    <div v-if="!showAddressForm">
+      <!-- saved addresses -->
+      <div v-if="!addressListEmpty">
+        <br />
+        <br />
+        <h3 class="sub-heading">Saved Address</h3>
+        <!-- divider -->
+        <hr class="divider" />
+
+        <!-- address card -->
+        <div class="flex center">
+          <div v-if="!showAddressForm" class="saved-addresses flex wrap">
+            <div
+              @click="selectAddress(address)"
+              class="address-card details"
+              v-for="(address, index) in addressList"
+              :key="index"
+            >
+              <span class="name">
+                {{ address.firstName }} {{ address.surName }}
+              </span>
+              <span>
+                {{ address.countryDialCode }} - {{ address.mobileNumber }}
+              </span>
+              <span> {{ address.addressLine1 }} </span>
+              <span> {{ address.addressLine2 }} </span>
+              <span> {{ address.email }} </span>
+              <span> {{ address.city }} </span>
+              <span> {{ address.postalCode }} </span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <span class="activity">
-        {{ updating ? "Updating" : "New" }} Address
-      </span>
-    </div>
-    
-    <!-- saved addresses -->
-    <div v-if="!addressListEmpty">
+      <!-- if address list is empty -->
+      <div v-if="addressListEmpty" class="flex center">
+        <br /><br />
+        <br /><br />
+        <span> No saved addresses found </span>
+      </div>
+
       <br />
       <br />
-      <h3 class="sub-heading">Saved Address</h3>
+      <h3 class="sub-heading">New Address</h3>
       <!-- divider -->
       <hr class="divider" />
-
-      <!-- address card -->
-
-      <div class="flex center">
-        <div v-if="!showAddressForm" class="saved-addresses flex wrap">
-          <div
-            @click="selectAddress(address)"
-            class="address-card details"
-            v-for="(address, index) in addressList"
-            :key="index"
-          >
-            <span class="name">
-              {{ address.firstName }} {{ address.surName }}
-            </span>
-            <span>
-              {{ address.countryDialCode }} - {{ address.mobileNumber }}
-            </span>
-            <span> {{ address.addressLine1 }} </span>
-            <span> {{ address.addressLine2 }} </span>
-            <span> {{ address.email }} </span>
-            <span> {{ address.city }} </span>
-            <span> {{ address.postalCode }} </span>
-          </div>
+      <br />
+      <!-- add new address card -->
+      <div v-if="!showAddressForm" class="address-card center">
+        <div @click="addNewAddress" class="add-new center-col">
+          <span class="icon"> + </span>
+          <span class="label"> Add New Address </span>
         </div>
       </div>
     </div>
 
-    <!-- if address list is empty -->
-    <div v-if="addressListEmpty" class="flex center">
-        <br/><br/>  <br/><br/>
-        <span> No saved addresses found </span>
-    </div>
-
-    <br />
-    <br />
-    <h3 class="sub-heading">New Address</h3>
-    <!-- divider -->
-    <hr class="divider" />
-    <br />
-    <!-- add new address card -->
-    <div v-if="!showAddressForm" class="address-card center">
-      <div @click="showAddressForm = true" class="add-new center-col">
-        <span class="icon"> + </span>
-        <span class="label"> Add New Address </span>
-      </div>
-    </div>
-
     <!-- update address -->
-    <div v-if="showAddressForm" class="update-address">
+    <div v-if="showAddressForm" class="update-address-wrapper flex center">
       <UpdateAddress
         :updating="updating"
         :addressDetails="activeAddress"
@@ -92,7 +83,7 @@ export default {
   },
   computed: {
     addressList() {
-        // return []
+      // return []
       const customer = this.$store.state.customer;
       if (customer.user.addressBook === undefined) return [];
       return customer.user.addressBook;
@@ -108,8 +99,8 @@ export default {
   },
   methods: {
     selectAddress(address) {
-
-    //   this.activeAddressId = address._id;
+      //   this.activeAddressId = address._id;
+      window.scroll({ top: 0, behavior: "smooth" });
       this.activeAddress = address;
       this.updating = true;
       this.showAddressForm = true;
@@ -117,9 +108,15 @@ export default {
     hideAddressForm() {
       this.updating = false;
       this.showAddressForm = false;
+    },
+    addNewAddress() {
+        window.scroll({ top: 0, behavior: "smooth" });
+        this.showAddressForm = true;
+        this.activeAddress = {};
+        this.activeAddress.countryDialCode = this.$store.state.customer.user.countryDialCode;
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -127,6 +124,16 @@ export default {
   margin-top: 13vh;
   padding: 2% 2%;
   min-height: 80vh;
+
+  .update-address-wrapper {
+    //   position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    //   height:100vh;
+    // background-color: rgba(0, 0, 0, 0.593);
+    z-index: 6;
+  }
 
   .sub-heading {
     font-family: $font_2_bold;
@@ -138,36 +145,8 @@ export default {
     width: 95%;
   }
 
-  .indicator {
-    width: 100%;
-    background-color: $primary_dark;
-    padding: 3%;
-    margin-top: 10px;
-    position: relative;
-
-    .back-icon {
-      position: absolute;
-      top: 0;
-      left: 2%;
-      height: 100%;
-      width: 10%;
-
-      img {
-        height: 40%;
-      }
-    }
-
-    .activity {
-      color: white;
-      font-size: 13px;
-    }
-  }
-
   .saved-addresses {
     margin-top: 10px;
-  }
-
-  .update-address {
   }
 
   .address-card {
@@ -176,6 +155,20 @@ export default {
     min-height: 200px;
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.16);
     margin: 1.5%;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        background-color: rgba(82, 156, 117, 0.634);
+        .add-new {
+            .icon {
+                color:white;
+            }
+            .label {
+                color:white;
+            }
+        }
+    }
 
     /* add new card */
     .add-new {
@@ -186,12 +179,16 @@ export default {
         font-size: 12vw;
         color: $gray;
         line-height: 10vw;
+    transition: all 0.3s ease-in-out;
+
       }
 
       .label {
         font-size: 20px;
         font-family: $font_1_bold;
         color: $dark_gray;
+    transition: all 0.3s ease-in-out;
+
       }
     }
 

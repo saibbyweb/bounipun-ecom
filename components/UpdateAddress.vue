@@ -1,5 +1,16 @@
 <template>
-  <div class="address-details center-col">
+  <div class="address-details flex col center">
+    
+    <div class="center indicator">
+      <div @click="$emit('goBack')" class="back-icon center">
+        <img src="/icons/light/back.png" />
+      </div>
+
+      <span class="activity">
+        {{ updating ? "Updating" : "New" }} Address
+      </span>
+    </div>
+
     <!-- delivery input fields -->
     <DeliveryInput
       v-for="(field, key, index) in formData"
@@ -19,6 +30,8 @@
         {{ updating ? "Update" : "Add" }} Address
       </button>
     </div>
+
+    <br />
 
     <!-- <div class="response"> -->
     <Toast :show="updated" msg="Address Updated" />
@@ -123,7 +136,40 @@ export default {
 }
 
 .address-details {
+    margin-top:20px;
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
+  background-color:white;
+  width: 40%;
+//   height: 80vh;
+  overflow-y:scroll;
+  @media(max-width: 768px) {
+      width:90%;
+  }
+
+   .indicator {
+    width: 100%;
+    background-color: $primary_dark;
+    padding: 3%;
+    // margin-top: 10px;
+    position: relative;
+
+    .back-icon {
+      position: absolute;
+      top: 0;
+      left: 2%;
+      height: 100%;
+      width: 10%;
+
+      img {
+        height: 40%;
+      }
+    }
+
+    .activity {
+      color: white;
+      font-size: 13px;
+    }
+  }
 }
 .response {
   position: relative;
