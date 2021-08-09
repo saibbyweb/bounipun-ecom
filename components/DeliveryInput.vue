@@ -1,7 +1,7 @@
 <template>
   <!-- delivery address field -->
   <div class="delivery-input">
-    <p v-if="error.status" class="error-msg"> {{ error.msg }} </p>
+    <p v-if="error.status" class="error-msg">{{ error.msg }}</p>
     <div class="input-box">
       <div v-if="isMobileNumber" class="country-code">{{ countryCode }}</div>
       <input
@@ -38,8 +38,11 @@ export default {
       default: false
     },
     error: {
-      status: Boolean,
-      msg: String
+      type: Object,
+      default: {
+        status: Boolean,
+        msg: String
+      }
     }
   },
   data() {
@@ -56,7 +59,7 @@ export default {
   width: 90%;
   margin: 10px 0;
 
-  @media(max-width: 768px) {
+  @media (max-width: 768px) {
     margin: 2% 0;
   }
 
@@ -78,8 +81,8 @@ export default {
   .error-msg {
     text-align: center;
     font-size: 11px;
-    width:100%;
-    margin-top:10px;
+    width: 100%;
+    margin-top: 10px;
     color: #a93737;
     background-color: white;
   }

@@ -72,7 +72,7 @@
 import validate from "@/helpers/validate.js";
 
 export default {
-      head() {
+  head() {
     return {
       title: "Delivery Address | Bounipun Kashmir"
     }

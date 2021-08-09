@@ -73,7 +73,6 @@
     <div v-if="showAddressForm" class="update-address">
       <UpdateAddress
         :updating="updating"
-        :addressId="activeAddressId"
         :addressDetails="activeAddress"
         @goBack="hideAddressForm"
       />
@@ -93,7 +92,7 @@ export default {
   },
   computed: {
     addressList() {
-        return []
+        // return []
       const customer = this.$store.state.customer;
       if (customer.user.addressBook === undefined) return [];
       return customer.user.addressBook;
@@ -109,8 +108,8 @@ export default {
   },
   methods: {
     selectAddress(address) {
-      return;
-      this.activeAddressId = address._id;
+
+    //   this.activeAddressId = address._id;
       this.activeAddress = address;
       this.updating = true;
       this.showAddressForm = true;
@@ -120,7 +119,7 @@ export default {
       this.showAddressForm = false;
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
