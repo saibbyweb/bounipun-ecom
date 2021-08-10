@@ -1,7 +1,7 @@
 <template>
   <div class="delivery-page page -wh">
     <!-- saved addresses -->
-    <div v-if="loggedIn" class="saved-addresses flex center col">
+    <div v-if="loggedIn && !addressListEmpty" class="saved-addresses flex center col">
       <br />
       <!-- country region -->
       <h2 class="title">Saved Addresses ({{ addressList.length }})</h2>
@@ -136,12 +136,15 @@ export default {
       if (customer.user.addressBook === undefined) return [];
       return customer.user.addressBook;
     },
+    addressListEmpty() {
+    return this.addressList.length === 0
+    },
     loggedIn() {
       return this.$store.state.customer.authorized;
     }
   },
   async mounted() {
-    // this.prefillForm();
+    this.prefillForm();
     // this.fetchAddressBook();
   },
   methods: {
