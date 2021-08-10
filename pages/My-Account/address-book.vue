@@ -14,8 +14,8 @@
         <hr class="divider" />
 
         <!-- address card -->
-        <div class="flex center">
-          <div v-if="!showAddressForm" class="saved-addresses flex wrap">
+        <div class="flex center" style="width: 100%;">
+          <div v-if="!showAddressForm" class="saved-addresses flex center wrap">
             <div
               @click="selectAddress(address)"
               class="address-card details"
@@ -117,13 +117,14 @@ export default {
         this.activeAddress.countryIsoCode = this.$store.state.customer.user.countryIsoCode;
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
 .address-book {
   margin-top: 13vh;
   padding: 2% 2%;
+  width: 100%;
   min-height: 80vh;
 
   .update-address-wrapper {
@@ -148,12 +149,13 @@ export default {
 
   .saved-addresses {
     margin-top: 10px;
+    width: 100%;
   }
 
   .address-card {
     border-radius: 5px;
-    width: 30%;
-    min-height: 200px;
+    width: 25%;
+    height: 200px;
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.16);
     margin: 1.5%;
     cursor: pointer;
@@ -185,7 +187,7 @@ export default {
       }
 
       .label {
-        font-size: 20px;
+        font-size: 17px;
         font-family: $font_1_bold;
         color: $dark_gray;
     transition: all 0.3s ease-in-out;

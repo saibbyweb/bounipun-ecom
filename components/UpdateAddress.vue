@@ -11,8 +11,9 @@
     </div>
 
     <!-- delivery input fields -->
+
     <DeliveryInput
-      v-for="(field, key, index) in formData"
+     v-for="(field, key, index) in formData"
       :key="index"
       v-model="field.value"
       :error="field.error"
@@ -23,10 +24,16 @@
       :countryCode="addressDetails.countryDialCode"
       :disabled="false"
     />
+ 
     <br />
     <div class="actions center">
+      <!-- add or update address -->
       <button class="action" @click="updateAddress">
         {{ updating ? "Update" : "Add" }} Address
+      </button>
+      <!-- delete address -->
+      <button class="action remove" @click="deleteAddress">
+        delete Address
       </button>
     </div>
 
@@ -78,7 +85,6 @@ export default {
     createFormData() {
       /* form fields */
       const fields = {
-        _id: "",
         firstName: "First Name",
         surName: "Sur Name",
         mobileNumber: "Mobile Number",
@@ -109,15 +115,15 @@ export default {
       this.deliveryAddress = this.addressDetails;
     },
     async updateAddress() {
-      //   this.updated = true;
-      //   setTimeout(() => (this.updated = false), 3000);
+
 
       /* collect delivery address */
       let deliveryAddress = {};
       Object.keys(this.formData).forEach(key => {
         deliveryAddress[key] = this.formData[key].value;
       });
-
+      
+      deliveryAddress._id = this.addressDetails._id;
       deliveryAddress.countryDialCode = this.addressDetails.countryDialCode;
       deliveryAddress.countryIsoCode = this.addressDetails.countryIsoCode;
 
@@ -127,8 +133,21 @@ export default {
       });
       /* fetch profile */
       this.$store.dispatch("customer/fetchProfile");
-      /* need address id and details */
-      /* match address id in current users address book in db */
+      this.updated = true;
+      setTimeout(() => (this.updated = false), 3000);
+    },
+    async deleteAddress() {
+      const deliveryAddress = { _id: this.addressDetails._id }
+
+      const deleteAddress = await this.$post("/addressBookActions", {
+        action: 'delete-address',
+        address: deliveryAddress
+      });
+
+      this.$emit('goBack');
+      window.scroll({ top: 0, behavior: "smooth" });
+      /* fetch profile */
+      this.$store.dispatch("customer/fetchProfile");
     }
   }
 };
@@ -154,7 +173,7 @@ export default {
   margin-top: 20px;
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
   background-color: white;
-  width: 40%;
+  width: 50%;
   //   height: 80vh;
   overflow-y: scroll;
   @media (max-width: 768px) {
@@ -185,6 +204,22 @@ export default {
       color: white;
       font-size: 13px;
     }
+  }
+
+  .actions {
+      .action {
+          margin: 0 8px;
+          &.remove {
+              background-color: rgb(157, 36, 36);
+              
+          }
+      }
+
+      @media(max-width: 768px) {
+          .action {
+            font-size: 11px;
+          }
+      }
   }
 }
 .response {

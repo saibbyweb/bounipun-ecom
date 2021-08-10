@@ -363,36 +363,37 @@ router.post('/wishlistActions', userAuth('customer'), async (req, res) => {
 });
 
 /* address book action */
-router.post('/addressBookActions', userAuth('customer'), async(req, res) => {
+router.post('/addressBookActions', userAuth('customer'), async (req, res) => {
     const { user, action, address } = req.body;
     console.log(address, action)
-    
+
     let { addressBook } = user;
 
-    if(addressBook === undefined)
+    if (addressBook === undefined)
         addressBook = [];
 
     let foundIndex = -1;
-    
-    switch(action) {
+
+    switch (action) {
         case 'save-address':
             addressBook.push(address);
             break;
         case 'update-address':
             foundIndex = addressBook.findIndex(add => add._id.toString() === address._id);
-            if(foundIndex !== -1) {
-                console.log('address found', foundIndex, address.postalCode)
+            if (foundIndex !== -1) {
                 addressBook[foundIndex] = address;
             }
             break;
         case 'delete-address':
+            foundIndex = addressBook.findIndex(add => add._id.toString() === address._id);
+            if (foundIndex !== -1) {
+                addressBook.splice(foundIndex, 1)
+            }
             break;
     }
 
-    console.log(addressBook[foundIndex].postalCode)
-
     /* save address book back to database */
-    await db.model('users').findOneAndUpdate({_id: user._id}, { addressBook });
+    await db.model('users').findOneAndUpdate({ _id: user._id }, { addressBook });
     res.send('addressbook-updated');
 
 });
