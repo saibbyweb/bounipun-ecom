@@ -16,24 +16,8 @@
         <!-- address card -->
         <div class="flex center" style="width: 100%;">
           <div v-if="!showAddressForm" class="saved-addresses flex center wrap">
-            <div
-              @click="selectAddress(address)"
-              class="address-card details"
-              v-for="(address, index) in addressList"
-              :key="index"
-            >
-              <span class="name">
-                {{ address.firstName }} {{ address.surName }}
-              </span>
-              <span>
-                {{ address.countryDialCode }} - {{ address.mobileNumber }}
-              </span>
-              <span> {{ address.addressLine1 }} </span>
-              <span> {{ address.addressLine2 }} </span>
-              <span> {{ address.email }} </span>
-              <span> {{ address.city }} </span>
-              <span> {{ address.postalCode }} </span>
-            </div>
+            <AddressCard  v-for="(address, index) in addressList"
+              :key="index" :address="address" @addressSelected="selectAddress"/>
           </div>
         </div>
       </div>

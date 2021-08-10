@@ -1,6 +1,36 @@
 <template>
   <div class="delivery-page page -wh">
-    <div class="flex container around">
+    <!-- saved addresses -->
+    <div class="saved-addresses flex center col">
+      <br />
+      <!-- country region -->
+      <h2 class="title">Saved Addresses ({{ addressList.length }}) </h2>
+      <p> Click to pre-fill address details </p>
+      <!-- <Accordion :heading="`Saved Addresses (${addressList.length})`"> -->
+      <div class="flex wrap center" style="width:100%;">
+        <AddressCard
+          v-for="(address, index) in addressList"
+          :key="index"
+          :address="address"
+          :onDeliveryPage="true"
+          :active="activeAddressIndex === index"
+          @addressSelected="selectAddress($event,  index)"
+        />
+      </div>
+      <!-- </Accordion> -->
+          <br />
+      <!-- divider -->
+      <hr class="divider" />
+  
+      <!-- <button v-if="!showAddNewAddress" class="action" @click="showAddNewAddress = true">
+        Enter New Address
+      </button> -->
+    </div>
+
+    <div class="flex start col"></div>
+
+    <div ref="newAddress" class="flex container around">
+    
       <div class="delivery-address flex col center">
         <!-- country region -->
         <h2 class="title">Country/Region</h2>
@@ -61,7 +91,9 @@
     <div class="proceed flex center">
       <button @click="proceedToCheckout" class="action">
         {{
-          (otpSent == true || $store.state.customer.authorized) ? "Continue to Checkout" : "Verify Phone Number and Continue"
+          otpSent == true || $store.state.customer.authorized
+            ? "Continue to Checkout"
+            : "Verify Phone Number and Continue"
         }}
       </button>
     </div>
@@ -75,7 +107,7 @@ export default {
   head() {
     return {
       title: "Delivery Address | Bounipun Kashmir"
-    }
+    };
   },
   data() {
     return {
@@ -84,6 +116,8 @@ export default {
       countryDialCode: "",
       showCountrySelect: false,
       saveNewAddress: true,
+      showAddNewAddress: false,
+      activeAddressIndex: -1,
       otp: "",
       otpSent: false,
       otpError: {
@@ -94,14 +128,24 @@ export default {
   },
   computed: {
     decideCountryLock() {
-      return this.$store.state.customer.authorized ? true : false
+      return this.$store.state.customer.authorized ? true : false;
+    },
+    addressList() {
+      // return []
+      const customer = this.$store.state.customer;
+      if (customer.user.addressBook === undefined) return [];
+      return customer.user.addressBook;
     }
   },
   async mounted() {
-    this.prefillForm();
-    this.fetchAddressBook();
+    // this.prefillForm();
+    // this.fetchAddressBook();
   },
   methods: {
+    selectAddress(address, index) {
+        this.activeAddressIndex = index;
+        this.$refs.newAddress.scrollIntoView({behavior: "smooth"});
+    },
     prefillForm() {
       this.formData.firstName.value = "Suhaib";
       this.formData.surName.value = "Khan";
@@ -296,8 +340,7 @@ export default {
       deliveryAddress.countryIsoCode = this.countryIsoCode;
       deliveryAddress.countryDialCode = this.countryDialCode;
 
-      if(this.saveNewAddress)
-        await this.saveAddressToProfile(deliveryAddress);
+      if (this.saveNewAddress) await this.saveAddressToProfile(deliveryAddress);
 
       this.$router.push({ name: "checkout", params: { deliveryAddress } });
     },
@@ -339,17 +382,16 @@ export default {
       deliveryAddress.countryIsoCode = this.countryIsoCode;
       deliveryAddress.countryDialCode = this.countryDialCode;
 
-      if(this.saveNewAddress)
-        await this.saveAddressToProfile(deliveryAddress);
+      if (this.saveNewAddress) await this.saveAddressToProfile(deliveryAddress);
 
       this.$router.push({ name: "checkout", params: { deliveryAddress } });
     },
     async saveAddressToProfile(address) {
-      const saveAddress = await this.$post('/addressBookActions', {
-        action: 'save-address',
+      const saveAddress = await this.$post("/addressBookActions", {
+        action: "save-address",
         address
       });
-        /* fetch profile */
+      /* fetch profile */
       this.$store.dispatch("customer/fetchProfile");
     }
   }
@@ -358,9 +400,16 @@ export default {
 
 <style lang="scss" scoped>
 .delivery-page {
+  .divider {
+    border-bottom: 1px solid #efefef;
+    width: 100%;
+  }
+
   .container {
     justify-content: flex-start;
-    padding: 2% 5%;
+    padding: 0% 5%;
+    padding-top:10vh;
+    // width:100%;
 
     .delivery-address {
       width: 50%;
@@ -404,6 +453,15 @@ export default {
         margin-top: 0;
         padding: 0 20px;
       }
+    }
+  }
+
+  .saved-addresses {
+    width: 50%;
+    padding: 2% 5%;
+
+    @media (max-width: 768px) {
+      width: 100%;
     }
   }
   .proceed {
