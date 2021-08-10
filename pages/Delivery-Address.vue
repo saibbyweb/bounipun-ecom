@@ -1,11 +1,11 @@
 <template>
   <div class="delivery-page page -wh">
     <!-- saved addresses -->
-    <div class="saved-addresses flex center col">
+    <div v-if="loggedIn" class="saved-addresses flex center col">
       <br />
       <!-- country region -->
-      <h2 class="title">Saved Addresses ({{ addressList.length }}) </h2>
-      <p> Click to pre-fill address details </p>
+      <h2 class="title">Saved Addresses ({{ addressList.length }})</h2>
+      <p>Click to pre-fill address details</p>
       <!-- <Accordion :heading="`Saved Addresses (${addressList.length})`"> -->
       <div class="flex wrap center" style="width:100%;">
         <AddressCard
@@ -14,23 +14,20 @@
           :address="address"
           :onDeliveryPage="true"
           :active="activeAddressIndex === index"
-          @addressSelected="selectAddress($event,  index)"
+          @addressSelected="selectAddress($event, index)"
         />
       </div>
       <!-- </Accordion> -->
-          <br />
+      <br />
       <!-- divider -->
       <hr class="divider" />
-  
+
       <!-- <button v-if="!showAddNewAddress" class="action" @click="showAddNewAddress = true">
         Enter New Address
       </button> -->
     </div>
 
-    <div class="flex start col"></div>
-
     <div ref="newAddress" class="flex container around">
-    
       <div class="delivery-address flex col center">
         <!-- country region -->
         <h2 class="title">Country/Region</h2>
@@ -58,11 +55,6 @@
           :countryCode="countryDialCode"
           :disabled="otpSent"
         />
-        <!-- TODO: consent for adding address to address book -->
-        <Checkbox
-          label="Save address for later use."
-          v-model="saveNewAddress"
-        />
 
         <!-- divider -->
         <hr
@@ -88,7 +80,15 @@
     </div>
 
     <!-- proceed to checkout -->
-    <div class="proceed flex center">
+    <div class="proceed flex center col">
+              <!-- TODO: consent for adding address to address book -->
+        <Checkbox
+        v-if="activeAddressIndex === -1"
+          label="Save address for later use."
+          v-model="saveNewAddress"
+        />
+<br>
+
       <button @click="proceedToCheckout" class="action">
         {{
           otpSent == true || $store.state.customer.authorized
@@ -115,7 +115,7 @@ export default {
       countryIsoCode: "",
       countryDialCode: "",
       showCountrySelect: false,
-      saveNewAddress: true,
+      saveNewAddress: false,
       showAddNewAddress: false,
       activeAddressIndex: -1,
       otp: "",
@@ -135,6 +135,9 @@ export default {
       const customer = this.$store.state.customer;
       if (customer.user.addressBook === undefined) return [];
       return customer.user.addressBook;
+    },
+    loggedIn() {
+      return this.$store.state.customer.authorized;
     }
   },
   async mounted() {
@@ -143,8 +146,12 @@ export default {
   },
   methods: {
     selectAddress(address, index) {
-        this.activeAddressIndex = index;
-        this.$refs.newAddress.scrollIntoView({behavior: "smooth"});
+      this.activeAddressIndex = index;
+      this.$refs.newAddress.scrollIntoView({ behavior: "smooth" });
+      // let deliveryAddress = {};
+      Object.keys(this.formData).forEach(key => {
+        this.formData[key].value = address[key]
+      });
     },
     prefillForm() {
       this.formData.firstName.value = "Suhaib";
@@ -408,7 +415,7 @@ export default {
   .container {
     justify-content: flex-start;
     padding: 0% 5%;
-    padding-top:10vh;
+    padding-top: 10vh;
     // width:100%;
 
     .delivery-address {
