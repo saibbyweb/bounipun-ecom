@@ -196,7 +196,7 @@ export default {
     variantsAvailable() {
 
         if(this.rtsAndUnderBounipun) {
-            return [this.product.rtsVariant]
+            return [this.product.rtsDirectVariant]
         }
       /* TODO: what is this? */
       if (this.product.variantData) {

@@ -17,7 +17,7 @@ router.post('/uploadImage', uploader.single('productImage'), async (req: any, re
 
     switch (uploadType) {
         case 'product':
-            await imageHelper.createProductImageVariants(fileName);
+            // await imageHelper.createProductImageVariants(fileName);
             break;
     }
 
@@ -49,7 +49,6 @@ router.post('/getDocument', async (req, res) => {
                     .populate('colors._id', 'name category image')
                     .populate('rtsDirectVariant')
                     .populate('rtsDirectFabric')
-                    .populate('rtsVariant')
                     .populate('rtsFabric')
 
 

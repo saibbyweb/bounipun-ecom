@@ -63,7 +63,6 @@ router.post('/findDocuments', async (req, res) => {
                 .populate('bounipun_collection')
                 .populate('colors._id')
                 .populate('rtsDirectVariant')
-                .populate('rtsVariant');
             break;
         case 'collections':
             console.log('hey col')
@@ -262,7 +261,6 @@ router.post('/fetchRelatedProducts', async (req, res) => {
         .populate('bounipun_collection', 'name')
         .populate('colors._id')
         .populate('rtsDirectVariant')
-        .populate('rtsVariant');
 
     //  console.log(relatedProducts.length);
     /* if related prdocucts are lesser than limit, fetch related products added before the current product */
@@ -275,7 +273,6 @@ router.post('/fetchRelatedProducts', async (req, res) => {
             .populate('bounipun_collection')
             .populate('colors._id')
             .populate('rtsDirectVariant')
-            .populate('rtsVariant');
     }
 
     response.products = relatedProducts;
@@ -309,7 +306,6 @@ router.post('/fetchRecentlyViewed', async (req, res) => {
         .populate('bounipun_collection', 'name')
         .populate('colors._id')
         .populate('rtsDirectVariant')
-        .populate('rtsVariant');
 
     if (recentlyViewedProducts.length === 0) {
         res.send(response);

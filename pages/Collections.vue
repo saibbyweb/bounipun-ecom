@@ -187,9 +187,8 @@ export default {
       
       /* set rts direct variant */
       products.docs.forEach(product => {
-        if(product.availabilityType === 'ready-to-ship' && product.type !== 'third-party' && product.rtsVariant !== undefined) {
-          product.rtsVariant = product.rtsVariant.name;
-          
+        if(product.availabilityType === 'ready-to-ship' && product.type !== 'third-party' && product.rtsDirectVariant !== undefined) {
+          product.rtsDirectVariant = product.rtsDirectVariant.name;
         }
       })
 
