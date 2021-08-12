@@ -1,4 +1,4 @@
-<template>
+\<template>
   <div
     @click="navigateToProductPage"
     class="product-card"
@@ -196,7 +196,7 @@ export default {
     variantsAvailable() {
 
         if(this.rtsAndUnderBounipun) {
-            return [this.product.rtsDirectVariant]
+            return [this.product.rtsVariant]
         }
       /* TODO: what is this? */
       if (this.product.variantData) {

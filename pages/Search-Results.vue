@@ -467,12 +467,12 @@ export default {
           product.bounipun_collection = foundCollection.name;
 
         /* attach variant data to rts and under bounipun products */
-        if(product.availabilityType === 'ready-to-ship' && product.type !== 'third-party') {
+        if(product.availabilityType === 'ready-to-ship' && product.type !== 'third-party' && product.rtsVariant !== undefined) {
             const foundVariant = this.filterData.variants.find(
-              variant => variant.value === product.rtsDirectVariant
+              variant => variant.value === product.rtsVariant
             )
             if(foundVariant !== undefined)
-            product.rtsDirectVariant = foundVariant.name;
+            product.rtsVariant = foundVariant.name;
         }
 
       });

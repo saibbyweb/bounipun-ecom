@@ -70,13 +70,13 @@
       <!-- select direct variant for rts -->
       <SelectBox
         :options="variants"
-        v-model="doc.rtsDirectVariant"
+        v-model="doc.rtsVariant"
         label="Select Variant:"
       />
       <!-- select fabric for rts -->
       <SelectBox
-        :options="getRTSFabrics(doc.rtsDirectVariant)"
-        v-model="doc.rtsDirectFabric"
+        :options="getRTSFabrics(doc.rtsVariant)"
+        v-model="doc.rtsFabric"
         label="Select Fabric:"
       />
     </div>
@@ -472,7 +472,9 @@ export default {
         directPrice: "",
         stock: "",
         rtsDirectVariant: "",
+        rtsVariant: "",
         rtsDirectFabric: "",
+        rtsFabric: "",
         // etd: "",
         status: false
       },
@@ -609,10 +611,10 @@ export default {
         variant => variant.value === variantId
       );
       if (selectedVariant === undefined)
-        return {
+        return [{
           name: "Select Variant First",
           value: ""
-        };
+        }]
 
       const filteredFabrics = this.fabrics.filter(fabric => {
         return fabric.code.startsWith(selectedVariant.code);
@@ -795,7 +797,9 @@ export default {
         directPrice,
         stock,
         rtsDirectVariant,
+        rtsVariant,
         rtsDirectFabric,
+        rtsFabric,
         // etd,
         status
       } = details;
@@ -815,6 +819,8 @@ export default {
         variants,
         colors,
         directPrice,
+        rtsVariant,
+        rtsFabric,
         rtsDirectVariant,
         rtsDirectFabric,
         stock: stock === undefined ? "" : stock,
@@ -846,7 +852,9 @@ export default {
         colors: [],
         directPrice: "",
         rtsDirectVariant: "",
+        rtsVariant: "",
         rtsDirectFabric: "",
+        rtsFabric: "",
         stock: "",
         // etd: "",
         status: false
