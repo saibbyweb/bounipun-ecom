@@ -50,6 +50,10 @@ export default {
             type: Boolean,
             default: true
         },
+        uploadType: {
+            type: String,
+            default: "non-product"
+        },
         uploaded: Array
     },
     data() {
@@ -150,6 +154,7 @@ export default {
             let formData = new FormData();
             /* appending file to form data */
             formData.append('productImage', imageObject.file);
+            formData.append('uploadType', this.uploadType);
             /* configuring upload request  */
             const uploadConfig = this.setUploadConfig(imageObject);
             /* making upload request to the server */

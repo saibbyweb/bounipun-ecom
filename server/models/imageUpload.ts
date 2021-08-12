@@ -43,6 +43,8 @@ let awsStorage = multerS3({
     }
 });
 
+
+
 /* multer uploader */
 export const uploader = multer({ storage: awsStorage });
 

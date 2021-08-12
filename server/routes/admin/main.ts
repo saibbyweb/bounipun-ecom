@@ -12,8 +12,18 @@ const router = server.express.Router();
 router.post('/uploadImage', uploader.single('productImage'), async (req: any, res) => {
 
     console.log(req.file);
+    const { uploadType } = req.body;
+
+    switch (uploadType) {
+        case 'product':
+            console.log('do the magic here');
+            break;
+    }
+
     /* save image details to database */
     const imageDetails = { name: req.file.key.replace('original/', ''), size: req.file.size };
+
+
 
     const uploadedImageDetails = await imageHelper.saveImageDetails(imageDetails);
 
@@ -311,7 +321,7 @@ router.post('/updateOrderItemDetails', async (req, res) => {
                 }
             }
         });
-        
+
         /* if delivered */
         if (status === 'delivered') {
             await db.model('orders').findOneAndUpdate(filter, {
@@ -329,7 +339,7 @@ router.post('/updateOrderItemDetails', async (req, res) => {
 });
 
 /* cancel sub order */
-router.post('/cancelSubOrder', async(req, res) => {
+router.post('/cancelSubOrder', async (req, res) => {
     let response = { resolved: true }
     const { orderId, subOrderId, reason } = req.body;
     const cancelOrder = await userMethods.cancelOrder(orderId, subOrderId, reason, false);
