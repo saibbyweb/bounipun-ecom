@@ -21,6 +21,7 @@ import globalConfig from "./globalConfig";
 import orderSequence from "./orderSequence";
 
 const register = function () {
+    imageUpload.methods.register();
     fabric.methods.register();
     collection.methods.register();
     colorCategory.methods.register();

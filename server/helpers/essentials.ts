@@ -22,6 +22,9 @@ aws.config.update({
     region: "ap-south-1"
 });
 
+/* S3 instances */
+export const s3 = new aws.S3();
+
 /* environment */
 export const environment = process.env.NODE_ENV;
 
