@@ -2,6 +2,11 @@
   "name": "bounipun-ecom",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": "12.19.0",
+    "npm": "6.14.8",
+    "yarn": "1.22.5"
+  },
   "scripts": {
     "frontend:generate": "nuxt generate",
     "dev:nuxt": "NUXT_HOST=0.0.0.0 NUXT_PORT=8080 nuxt",
