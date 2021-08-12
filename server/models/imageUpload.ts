@@ -81,16 +81,26 @@ export const resizeS3Image = async (fileName, resize: Number, newDirectory) => {
 
 }
 
+/* create image variants */
+
 /* helper methods */
 export const methods = {
     async register() {
       console.log('registered model:','ImageUploads')
-      await resizeS3Image('084b050e85f617cb0c72901c35a43fea.jpg', 25, 'chips');
+    //   await resizeS3Image('084b050e85f617cb0c72901c35a43fea.jpg', 25, 'chips');
     },
     doSomething: () => { console.log('something done'); },
     saveImageDetails: async (image) => {
         const uploadedImageDetails = await new model(image).save();
         return uploadedImageDetails;
+    },
+    createProductImageVariants: async(fileName: String) => {
+        /* create chips */
+        await resizeS3Image(fileName, 25, 'chips');
+        /* create product card image */
+        await resizeS3Image(fileName, 500, 'productCards');
+        /* product page */
+        await resizeS3Image(fileName, 1024,'productPages');
     }
 }
 

@@ -163,6 +163,7 @@
         <UploadImage
           ref="imageUploader"
           label="Upload Images"
+          uploadType="product"
           @updated="imageListUpdated($event, index)"
         />
         <!-- remove color -->

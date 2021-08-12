@@ -12,16 +12,17 @@ const router = server.express.Router();
 router.post('/uploadImage', uploader.single('productImage'), async (req: any, res) => {
 
     console.log(req.file);
+    const fileName = req.file.key.replace('original/', '');
     const { uploadType } = req.body;
 
     switch (uploadType) {
         case 'product':
-            console.log('do the magic here');
+            await imageHelper.createProductImageVariants(fileName);
             break;
     }
 
     /* save image details to database */
-    const imageDetails = { name: req.file.key.replace('original/', ''), size: req.file.size };
+    const imageDetails = { name: fileName, size: req.file.size };
 
 
 
