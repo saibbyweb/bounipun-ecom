@@ -17,7 +17,7 @@ router.post('/uploadImage', uploader.single('productImage'), async (req: any, re
 
     switch (uploadType) {
         case 'product':
-            // await imageHelper.createProductImageVariants(fileName);
+            await imageHelper.createProductImageVariants(fileName);
             break;
     }
 

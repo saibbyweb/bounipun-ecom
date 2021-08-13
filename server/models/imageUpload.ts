@@ -2,7 +2,7 @@ import { mongoose, aws, s3, task } from "@helpers/essentials";
 import multer from "multer";
 import multerS3 from "multer-s3";
 import crypto from "crypto";
-// import sharp from "sharp";
+import sharp from "sharp";
 import path from "path";
 
 /* schema */
@@ -64,10 +64,10 @@ export const resizeS3Image = async (fileName, resize: Number, newDirectory) => {
     console.log(s3Image,'--get object')
 
     /* resize image */
-    // const resizedImage = await sharp(s3Image.Body).resize(resize).toBuffer();
+    const resizedImage = await sharp(s3Image.Body).resize(resize).toBuffer();
 
-    const resizedImage = {};
-
+    // const resizedImage = {};
+// 
     console.log(resizedImage, '--resized image')
 
     /* upload resized image to s3 */
@@ -83,7 +83,13 @@ export const resizeS3Image = async (fileName, resize: Number, newDirectory) => {
 
 }
 
-/* create image variants */
+export const createImageVariantsForExistingProducts = async() => {
+    /* fetch all products */
+    /* loop through all colors */
+    /* loop through every image of the color and create variants */
+}
+
+
 
 /* helper methods */
 export const methods = {
@@ -96,6 +102,7 @@ export const methods = {
         const uploadedImageDetails = await new model(image).save();
         return uploadedImageDetails;
     },
+    /* create image variants */
     createProductImageVariants: async(fileName: String) => {
         /* create chips */
         await resizeS3Image(fileName, 25, 'chips');
