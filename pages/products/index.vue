@@ -493,9 +493,14 @@ export default {
       return detailsAndCare.split("\n");
     },
     selectedFabric() {
-      return this.variants[this.activeVariantIndex].fabrics[
+      const selectedFabric = this.variants[this.activeVariantIndex].fabrics[
         this.activeFabricIndex
       ];
+
+      if(selectedFabric === undefined)
+        return { name: '', info1: ''};
+
+      return selectedFabric;
     },
     variantNote() {
       return this.product.bounipun_collection.variantNote;
