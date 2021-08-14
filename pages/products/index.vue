@@ -812,13 +812,13 @@ export default {
     setImages() {
       this.product.colors.forEach(color => {
         let images = color.images.map(
-          image => process.env.baseAWSURL + image.path
+          image => process.env.baseS3URL + '/productPages/' + image.path
         );
 
         if (images.length === 0 && color._id !== null) {
           console.log("No image found");
           images = [];
-          images.push(process.env.baseAWSURL + color.image);
+          images.push(process.env.baseS3URL + '/productPages/' + color.image);
         }
 
         this.images.push(images);
@@ -831,13 +831,13 @@ export default {
 
       if (images.length === 0) {
         return {
-          backgroundImage: `url(${process.env.baseAWSURL}${color.image})`
+          backgroundImage: `url(${process.env.baseS3URL + '/productPages/'}${color.image})`
         };
       }
 
       let mainImage = images.find(image => image.main === true);
       mainImage = mainImage === undefined ? images[0] : mainImage;
-      const mainImagePath = process.env.baseAWSURL + mainImage.path;
+      const mainImagePath = process.env.baseS3URL + '/productPages/' + mainImage.path;
       const mainImageCSS = {
         backgroundImage: `url(${mainImagePath})`
       };

@@ -254,7 +254,7 @@ export default {
         }
 
         return {
-          path: process.env.baseAWSURL + images[images.length - 1].path,
+          path: process.env.baseS3URL + '/chips/' + images[images.length - 1].path,
           actualIndex: index
         };
       });
@@ -333,7 +333,7 @@ export default {
         if (mImages.length === 0) {
           return ["/default-image.png"];
         }
-        return mImages.map(image => process.env.baseAWSURL + image.path);
+        return mImages.map(image => process.env.baseS3URL + '/productCards/' + image.path);
       }
 
       /* find main color */
@@ -347,7 +347,7 @@ export default {
       } else mainImages = this.product.colors[0].images;
 
       /* fetch main image */
-      return mainImages.map(image => process.env.baseAWSURL + image.path);
+      return mainImages.map(image => process.env.baseS3URL +'/productCards/' + image.path);
     },
     readyToShip() {
       return this.product.availabilityType === "ready-to-ship";

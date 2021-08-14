@@ -52,6 +52,7 @@ export default {
   },
   env: {
     baseAWSURL: "https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/",
+    baseS3URL: "https://bounipun-ecom.s3.ap-south-1.amazonaws.com",
     BASE_URL: process.env.BASE_URL,
     RAZORPAY_KEY_ID_TEST: process.env.RAZORPAY_KEY_ID_TEST,
     RAZORPAY_KEY_ID_PROD: process.env.RAZORPAY_KEY_ID_PROD,

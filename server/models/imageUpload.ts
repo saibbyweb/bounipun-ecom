@@ -1,4 +1,4 @@
-import { mongoose, aws, s3, task } from "@helpers/essentials";
+import { mongoose, db, s3, task } from "@helpers/essentials";
 import multer from "multer";
 import multerS3 from "multer-s3";
 import crypto from "crypto";
@@ -56,19 +56,19 @@ export const resizeS3Image = async (fileName, resize: Number, newDirectory) => {
 
     const { response: s3Image, error } = await task(s3ImageFetch)
 
-    if(error) {
+    if (error) {
         console.log('ERROR WHILE FETCHING')
         return;
     }
 
-    console.log(s3Image,'--get object')
+    // console.log(s3Image, '--get object')
 
     /* resize image */
     const resizedImage = await sharp(s3Image.Body).resize(resize).toBuffer();
 
     // const resizedImage = {};
-// 
-    console.log(resizedImage, '--resized image')
+    // 
+    // console.log(resizedImage, '--resized image')
 
     /* upload resized image to s3 */
     const saveResizedImage = await s3.putObject({
@@ -79,14 +79,40 @@ export const resizeS3Image = async (fileName, resize: Number, newDirectory) => {
         CacheControl: 'public, max-age=86400'
     }).promise();
 
-    console.log(saveResizedImage,'-- save resized image')
+    console.log(' ► resized image saved')
 
 }
 
-export const createImageVariantsForExistingProducts = async() => {
+export const createImageVariantsForExistingProducts = async () => {
     /* fetch all products */
-    /* loop through all colors */
-    /* loop through every image of the color and create variants */
+    const allProducts: any = await db.model('products').find({bounipun_collection: "60522ab3be493200150ff835"});
+
+    console.log(allProducts.length, '-- product found')
+    /* loop through all colors (leave products with no colors added */
+    let productsWithColor = allProducts.filter(product => product.colors.length !== 0 && product.colors !== undefined);
+    console.log(productsWithColor.length, '-- filtered colors found');
+
+    let totalColors = [];
+    productsWithColor.forEach(product => {
+        product.colors.forEach(color => totalColors.push(color));
+    });
+
+    console.log(totalColors.length, '-- total colors');
+
+    let totalImages = [];
+    
+    totalColors.forEach(color => {
+        color.images.forEach(image => totalImages.push(image));
+    });
+
+    console.log(totalImages.length, '-- total images');
+
+    let i = 0;
+    for(const image of totalImages) {
+        i++;
+        await methods.createProductImageVariants(image.path);
+        console.log(`✓ JOB ${i}: Complete`);
+    }
 }
 
 
@@ -94,8 +120,9 @@ export const createImageVariantsForExistingProducts = async() => {
 /* helper methods */
 export const methods = {
     async register() {
-      console.log('registered model:','ImageUploads')
-    //   await resizeS3Image('084b050e85f617cb0c72901c35a43fea.jpg', 25, 'chips');
+        console.log('registered model:', 'ImageUploads')
+        // createImageVariantsForExistingProducts();
+        //   await resizeS3Image('084b050e85f617cb0c72901c35a43fea.jpg', 25, 'chips');
     },
     doSomething: () => { console.log('something done'); },
     saveImageDetails: async (image) => {
@@ -103,13 +130,13 @@ export const methods = {
         return uploadedImageDetails;
     },
     /* create image variants */
-    createProductImageVariants: async(fileName: String) => {
+    createProductImageVariants: async (fileName: String) => {
         /* create chips */
         await resizeS3Image(fileName, 25, 'chips');
         /* create product card image */
         await resizeS3Image(fileName, 500, 'productCards');
         /* product page */
-        await resizeS3Image(fileName, 1024,'productPages');
+        await resizeS3Image(fileName, 1024, 'productPages');
     }
 }
 

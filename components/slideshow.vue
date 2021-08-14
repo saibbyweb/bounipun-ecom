@@ -177,6 +177,7 @@ export default {
   },
   methods: {
     setActiveImage(index) {
+      this.interacted = true;
       this.activeIndex = index;
       this.slideMargin = index * this.slideWidth * -1;
       TweenLite.to(this.$refs.thumbnails, 0.3, {
