@@ -237,7 +237,9 @@ export const actions = {
       cart: state.cart
     });
 
-    if (cartItems.resolved === false) return;
+    if (cartItems.resolved === false) {
+      return;
+    }
 
     commit("setGlobalRemoteCart", cartItems.response);
   },

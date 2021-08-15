@@ -6,7 +6,7 @@
     <!-- main image -->
     <div
       class="image-container"
-      :style="`background-image: url(${$getImagePath(item.mainImage)})`"
+      :style="`background-image: url(${getS3Path(item.mainImage)})`"
     >
       <!-- <img :src="item.mainImage" /> -->
     </div>
@@ -79,6 +79,9 @@ export default {
   },
   mounted() {},
   methods: {
+    getS3Path(fileName) {
+      return process.env.baseS3URL + '/productPages/' + fileName;
+    },
     adjustPrice(price) {
       price = parseInt(price);
       return this.$store.getters["customer/adjustPrice"](price);

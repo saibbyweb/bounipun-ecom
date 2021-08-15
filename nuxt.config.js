@@ -28,7 +28,8 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: "~/plugins/vue-hammer.js", mode: "client" },
-    "@/plugins/essentials.js"
+    "@/plugins/essentials.js",
+    '@/plugins/axios'
     // { src: "@/plugins/essentials.js", mode: "client" }
   ],
 
