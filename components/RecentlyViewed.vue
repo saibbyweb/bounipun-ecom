@@ -1,5 +1,5 @@
 <template>
-  <div class="recently-viewed">
+  <div v-if="!isEmpty" class="recently-viewed">
     <h2 class="title">Recently Viewed</h2>
     <div class="flex center">
       <div class="flex wrap">
@@ -34,6 +34,11 @@ export default {
       recentlyViewedProducts: []
     };
   },
+  computed: {
+    isEmpty() {
+      return this.recentlyViewedProducts.length === 0;
+    }
+  },
   methods: {
     async fetchRecentlyViewed() {
       const entries = this.$store.state.customer.recentlyViewed;
@@ -53,7 +58,7 @@ export default {
 
       if (recentlyViewedProducts.resolved === false) return;
 
-      const { products } = recentlyViewedProducts.response;
+      let { products } = recentlyViewedProducts.response;
 
       products.forEach(product => {
         if (
@@ -61,7 +66,16 @@ export default {
           product.rtsDirectVariant === ""
         )
           product.rtsDirectVariant = product.rtsDirectVariant.name;
+
+        /* filter out inactive colors */
+        product.colors = product.colors.filter(color => color.status === true);
+        product.variants.sort((a,b) => a._id.order - b._id.order);
       });
+
+      /* filter out products with no active colors */
+      products = products.filter(
+        product => product.colors.length > 0
+      );
 
       this.recentlyViewedProducts = recentlyViewedProducts.response.products;
     }

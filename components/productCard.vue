@@ -443,6 +443,7 @@ export default {
         path: "/products",
         query
       });
+      window.scroll({ top: 0, behavior: "smooth" });
     },
     getBaseColorPath(index) {
       if (this.baseColorImages[index] !== undefined) {

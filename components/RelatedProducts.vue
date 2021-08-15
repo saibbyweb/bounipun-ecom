@@ -2,13 +2,13 @@
   <div class="related-products">
     <h2 class="title">You may also like</h2>
     <div class="flex center">
-    <div class="flex wrap">
-      <product-card
-        v-for="(product, index) in relatedProducts"
-        :key="index"
-        :product="product"
-      />
-    </div>
+      <div class="flex wrap">
+        <product-card
+          v-for="(product, index) in relatedProducts"
+          :key="index"
+          :product="product"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -48,17 +48,23 @@ export default {
 
       if (relatedProducts.resolved === false) return;
 
-      const { products } = relatedProducts.response;
+      let { products } = relatedProducts.response;
       products.forEach(product => {
-          if(product.rtsDirectVariant !== undefined || product.rtsDirectVariant === '')
-            product.rtsDirectVariant = product.rtsDirectVariant.name;
+        if (
+          product.rtsDirectVariant !== undefined ||
+          product.rtsDirectVariant === ""
+        )
+          product.rtsDirectVariant = product.rtsDirectVariant.name;
+
+        /* filter out inactive colors */
+        product.colors = product.colors.filter(color => color.status === true);
+        product.variants.sort((a, b) => a._id.order - b._id.order);
       });
 
+      /* filter out products with no active colors */
+      products = products.filter(product => product.colors.length > 0);
+
       this.relatedProducts = relatedProducts.response.products;
-        
-       
-
-
     }
   }
 };
@@ -66,11 +72,11 @@ export default {
 
 <style lang="scss" scoped>
 .related-products {
-    // padding: 10%;
-    .title {
-        padding: 0 3%;
-        font-family: $font_1_bold;
-        text-transform: uppercase;
-    }
+  // padding: 10%;
+  .title {
+    padding: 0 3%;
+    font-family: $font_1_bold;
+    text-transform: uppercase;
+  }
 }
 </style>

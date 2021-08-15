@@ -28,14 +28,14 @@
 
         <!-- wishlist icon -->
         <img
-        @click="toggleWishlist"
-        :class="[{ added: inWishlist }, 'wishlist']"
-        :src="
-          inWishlist
-            ? '/icons/dark/wishlist-filled.png'
-            : '/icons/dark/wishlist.png'
-        "
-      />
+          @click="toggleWishlist"
+          :class="[{ added: inWishlist }, 'wishlist']"
+          :src="
+            inWishlist
+              ? '/icons/dark/wishlist-filled.png'
+              : '/icons/dark/wishlist.png'
+          "
+        />
 
         <!-- share icon -->
         <div class="share-icons">
@@ -84,7 +84,7 @@
                   }}
                 </h3>
                 <p v-if="!thirdPartyProduct && !readyToShip" class="variant">
-                  {{ variants[activeVariantIndex].name }}
+                  {{ selectedVariant.name }}
                 </p>
                 <!-- fabric -->
                 <p v-if="!thirdPartyProduct && !readyToShip">
@@ -492,13 +492,19 @@ export default {
       if (detailsAndCare === undefined) return "";
       return detailsAndCare.split("\n");
     },
+    selectedVariant() {
+      const selectedVariant = this.variants[this.activeVariantIndex];
+
+      if (selectedVariant === undefined) return { name: "" };
+
+      return selectedVariant;
+    },
     selectedFabric() {
       const selectedFabric = this.variants[this.activeVariantIndex].fabrics[
         this.activeFabricIndex
       ];
 
-      if(selectedFabric === undefined)
-        return { name: '', info1: ''};
+      if (selectedFabric === undefined) return { name: "", info1: "" };
 
       return selectedFabric;
     },
@@ -520,7 +526,8 @@ export default {
     },
     activeDisclaimerText() {
       if (this.product.colors.length === 0) return "";
-      return this.product.colors[this.activeColorIndex].disclaimer;
+      const activeColor = this.product.colors[this.activeColorIndex];
+      return activeColor === undefined ? "" : activeColor.disclaimer;
     },
     newCartItem() {
       return {
@@ -585,26 +592,26 @@ export default {
   },
   methods: {
     async toggleWishlist() {
-   
       /* if user is not logged in, move to login page */
       if (!this.$store.state.customer.authorized) {
-        this.$router.push('/login');
+        this.$router.push("/login");
         return;
       }
 
       /* set action according to state */
-      const action = this.inWishlist ? 'remove-from-wishlist' : 'add-to-wishlist';
-      
+      const action = this.inWishlist
+        ? "remove-from-wishlist"
+        : "add-to-wishlist";
+
       /* take item to wishlist */
-      const addToWishlist = await this.$post('/wishlistActions', {
+      const addToWishlist = await this.$post("/wishlistActions", {
         action,
         product: this.product._id,
         colorCode: this.activeColorCode
       });
 
       /* if request failed */
-      if(addToWishlist.resolved === false)
-        return;
+      if (addToWishlist.resolved === false) return;
 
       /* refetch wishlist */
       this.$store.dispatch("customer/fetchProfile");
@@ -817,13 +824,13 @@ export default {
     setImages() {
       this.product.colors.forEach(color => {
         let images = color.images.map(
-          image => process.env.baseS3URL + '/productPages/' + image.path
+          image => process.env.baseS3URL + "/productPages/" + image.path
         );
 
         if (images.length === 0 && color._id !== null) {
           console.log("No image found");
           images = [];
-          images.push(process.env.baseS3URL + '/productPages/' + color.image);
+          images.push(process.env.baseS3URL + "/productPages/" + color.image);
         }
 
         this.images.push(images);
@@ -836,13 +843,16 @@ export default {
 
       if (images.length === 0) {
         return {
-          backgroundImage: `url(${process.env.baseS3URL + '/productPages/'}${color.image})`
+          backgroundImage: `url(${process.env.baseS3URL + "/productPages/"}${
+            color.image
+          })`
         };
       }
 
       let mainImage = images.find(image => image.main === true);
       mainImage = mainImage === undefined ? images[0] : mainImage;
-      const mainImagePath = process.env.baseS3URL + '/productPages/' + mainImage.path;
+      const mainImagePath =
+        process.env.baseS3URL + "/productPages/" + mainImage.path;
       const mainImageCSS = {
         backgroundImage: `url(${mainImagePath})`
       };
