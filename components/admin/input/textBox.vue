@@ -8,7 +8,7 @@
       class="textarea-box"
       @input="$emit('input', $event.target.value)"
       :value="value"
-     
+     :disabled="disabled"
     >
     </textarea>
   </div>
@@ -24,6 +24,10 @@ export default {
       default: false
     },
     nonAdmin: {
+      type: Boolean,
+      default: false
+    },
+    disabled: {
       type: Boolean,
       default: false
     }
