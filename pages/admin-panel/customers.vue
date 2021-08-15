@@ -1,21 +1,21 @@
 <template>
-  <div class="messages crud">
+  <div class="users crud">
     <!-- filters -->
     <div :class="{ updating: showForm }" class="filters center">
       <input
         v-model="rawCriterion.search.term"
         class="search shadow"
         type="text"
-        placeholder="Search for Message"
+        placeholder="Search for User"
       />
     </div>
-    <!-- list of messages -->
+    <!-- list of users -->
     <div :class="{ updating: showForm }" class="list">
       <List
         :list="list"
         :model="model"
         :headings="headings"
-        custom_css="10% 30% 30% 20% 10%"
+        custom_css="10% 20% 20% 20% 20% 10%"
         :sortByFields="sortByFields"
         @documentFetched="documentFetched"
         @sortToggled="sortToggled"
@@ -31,16 +31,15 @@
         @resultsFetched="resultsFetched"
       />
     </div>
-    <!-- update message form -->
+    <!-- update user form -->
     <div :class="{ updating: showForm }" class="update">
-      <UpdateMessage
+      <!-- <UpdateMessage
         v-show="showForm"
         ref="updateComponent"
         @updated="updateList"
         :model="model"
         @close="showForm = false"
-      />
-
+      /> -->
     </div>
   </div>
 </template>
@@ -52,11 +51,11 @@ export default {
     return {
       showForm: false,
       loading: false,
-      model: "message",
+      model: "users",
       /* rawCriterion */
       rawCriterion: {
         search: {
-          key: "subject",
+          key: "firstName",
           term: ""
         },
         filters: {
@@ -66,8 +65,15 @@ export default {
         limit: 20
       },
       list: [],
-      sortByFields: ["name", "email", "read"],
-      headings: ["_id", "name", "email", "subject", "read"],
+      sortByFields: ["usergroup", "countryIsoCode", "status"],
+      headings: [
+        "_id",
+        "firstName",
+        "surName",
+        "usergroup",
+        "countryIsoCode",
+        "status"
+      ],
       dragEnabled: false
     };
   },
@@ -98,7 +104,6 @@ export default {
       this.showForm = true;
       this.editMode = true;
       this.$refs.updateComponent.populateForm(doc);
-
     },
     async resultsFetched(result) {
       if (result.docs.length === 0) {
@@ -107,16 +112,12 @@ export default {
       }
 
       /* extract list */
-      this.list = result.docs.map(({ _id, name, email, subject, read }) => {
-        return {
-          _id,
-          name,
-          email,
-          subject,
-          read
-        };
-      });
+      this.list = result.docs.map(
+        ({ _id, firstName, surName, usergroup, countryIsoCode, status }) => {
+          return { _id, firstName, surName, usergroup, countryIsoCode, status }
+        }
+      );
     }
   }
-};
+}
 </script>

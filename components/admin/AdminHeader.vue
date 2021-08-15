@@ -103,7 +103,12 @@ export default {
           name: "Messages",
           path: "/admin-panel/messages",
           desc: "..."
-        }
+        },
+         {
+          name: "Customers",
+          path: "/admin-panel/customers",
+          desc: "..."
+        },
       ],
       activeIndex: -1
     };
