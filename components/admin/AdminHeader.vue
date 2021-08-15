@@ -105,8 +105,8 @@ export default {
           desc: "..."
         },
          {
-          name: "Customers",
-          path: "/admin-panel/customers",
+          name: "Users",
+          path: "/admin-panel/users",
           desc: "..."
         },
       ],

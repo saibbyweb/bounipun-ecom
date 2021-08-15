@@ -21,7 +21,7 @@
         @sortToggled="sortToggled"
         @clearFilters="clearFilters"
         @refetchList="updateList()"
-        :isDraggable="true"
+        :isDraggable="false"
       />
 
       <Pagination
@@ -33,13 +33,13 @@
     </div>
     <!-- update user form -->
     <div :class="{ updating: showForm }" class="update">
-      <!-- <UpdateMessage
+      <UpdateUser
         v-show="showForm"
         ref="updateComponent"
         @updated="updateList"
         :model="model"
         @close="showForm = false"
-      /> -->
+      />
     </div>
   </div>
 </template>

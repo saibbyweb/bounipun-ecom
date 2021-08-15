@@ -21,7 +21,7 @@
         @sortToggled="sortToggled"
         @clearFilters="clearFilters"
         @refetchList="updateList()"
-        :isDraggable="true"
+        :isDraggable="false"
       />
 
       <Pagination
