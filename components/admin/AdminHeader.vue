@@ -109,6 +109,11 @@ export default {
           path: "/admin-panel/users",
           desc: "..."
         },
+        {
+          name: "Instagram",
+          path: "/admin-panel/instagram",
+          desc: "..."
+        },
       ],
       activeIndex: -1
     };
