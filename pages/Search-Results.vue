@@ -8,20 +8,33 @@
       <div style="position: relative;">
         <br />
         <br />
+        <!-- header -->
         <div
-          style="display:flex; align-items:center; justify-content: space-between;"
+          class="header shadow"
+          style="display:flex; align-items:center; justify-content: space-between; position: absolute; top:0; left:0; width:100%; height:10vh;"
         >
           <h3>Filters</h3>
+  
+          <!-- clear all applied filters -->
           <span
             style="font-size:12px; cursor:pointer;"
             @click="clearAllFilters"
-          >
-            Clear Selection
-          </span>
+          >Clear Selection</span>
+
+                <img
+            @click="filtersOpen = false"
+            class="close"
+            src="/icons/dark/close.png"
+          />
         </div>
+
         <br />
-        <!-- product type options -->
-        <!-- <Accordion heading="Product Type" :expanded="true">
+        <div
+          class="all-options"
+          style="height:80vh; overflow-y:scroll; margin-top:2vh;"
+        >
+          <!-- product type options -->
+          <!-- <Accordion heading="Product Type" :expanded="true">
                 <div class="option" v-for="(type, index) in filterData.types" :key="index">
                     <label class="label">
                         <input type="checkbox" name="type" :value="type.value" v-model="type.checked" />
@@ -30,104 +43,108 @@
 
             </Accordion> -->
 
-        <!-- availability type options -->
-        <Accordion heading="Availability" :expanded="true">
-                <div class="option" v-for="(type, index) in filterData.availabilityTypes" :key="index">
-                    <label class="label">
-                        <input type="checkbox" name="type" :value="type.value" v-model="type.checked" />
-                        {{ type.name }}</label>
-                </div>
-
-            </Accordion>
-
-        <!-- variant options -->
-        <Accordion heading="Variants" :expanded="true">
-          <div
-            class="option"
-            v-for="(variant, index) in filterData.variants"
-            :key="index"
-          >
-            <label class="label">
-              <input
-                type="checkbox"
-                name="variants"
-                :value="variant.value"
-                v-model="variant.checked"
-              />
-              {{ variant.name }}</label
-            >
-          </div>
-        </Accordion>
-        <!-- collection options -->
-        <Accordion heading="Collection" :expanded="true">
-          <div
-            class="option"
-            v-for="(collection, index) in filterData.collections"
-            :key="index"
-          >
-            <label class="label">
-              <input
-                type="checkbox"
-                name="collection"
-                :value="collection.value"
-                v-model="collection.checked"
-              />
-              {{ collection.name }}</label
-            >
-          </div>
-        </Accordion>
-
-        <!-- base color options -->
-        <Accordion heading="Base Color" :expanded="true">
-          <div class="flex wrap colors">
+          <!-- availability type options -->
+          <Accordion heading="Availability" :expanded="true">
             <div
-              class="option flex col center"
-              v-for="(color, index) in filterData.baseColors"
+              class="option"
+              v-for="(type, index) in filterData.availabilityTypes"
               :key="index"
             >
-              <div class="color-box shadow" :style="`background: ${color.hex}`"></div>
+              <label class="label">
+                <input
+                  type="checkbox"
+                  name="type"
+                  :value="type.value"
+                  v-model="type.checked"
+                />
+                {{ type.name }}</label
+              >
+            </div>
+          </Accordion>
 
-              <label class="label flex start center">
-     
+          <!-- variant options -->
+          <Accordion heading="Variants" :expanded="true">
+            <div
+              class="option"
+              v-for="(variant, index) in filterData.variants"
+              :key="index"
+            >
+              <label class="label">
+                <input
+                  type="checkbox"
+                  name="variants"
+                  :value="variant.value"
+                  v-model="variant.checked"
+                />
+                {{ variant.name }}</label
+              >
+            </div>
+          </Accordion>
+          <!-- collection options -->
+          <Accordion heading="Collection" :expanded="true">
+            <div
+              class="option"
+              v-for="(collection, index) in filterData.collections"
+              :key="index"
+            >
+              <label class="label">
+                <input
+                  type="checkbox"
+                  name="collection"
+                  :value="collection.value"
+                  v-model="collection.checked"
+                />
+                {{ collection.name }}</label
+              >
+            </div>
+          </Accordion>
 
-                {{ color.name }}
-              </label>
-                         <input
+          <!-- base color options -->
+          <Accordion heading="Base Color" :expanded="true">
+            <div class="flex wrap colors">
+              <div
+                class="option flex col center"
+                v-for="(color, index) in filterData.baseColors"
+                :key="index"
+              >
+                <div
+                  class="color-box shadow"
+                  :style="`background: ${color.hex}`"
+                ></div>
+
+                <label class="label flex start center">
+                  {{ color.name }}
+                </label>
+                <input
                   class="color-check"
                   type="checkbox"
                   name="baseColor"
                   :value="color.value"
                   v-model="color.checked"
                 />
-
+              </div>
             </div>
-          </div>
-        </Accordion>
+          </Accordion>
 
-        <!-- TODO: re-enable after verifying USD specific results price range options -->
-        <Accordion heading="Price Range" :expanded="true" v-if="false">
-          <div
-            class="option"
-            v-for="(range, index) in filterData.priceRanges"
-            :key="index"
-          >
-            <label class="label">
-              <input
-                type="radio"
-                name="priceRange"
-                :value="range.value"
-                v-model="filterData.selectedPriceRange"
-              />
-              {{ range.name }}
-            </label>
-          </div>
-        </Accordion>
-
-        <img
-          @click="filtersOpen = false"
-          class="close"
-          src="/icons/dark/close.png"
-        />
+          <!-- TODO: re-enable after verifying USD specific results price range options -->
+          <Accordion heading="Price Range" :expanded="true" v-if="false">
+            <div
+              class="option"
+              v-for="(range, index) in filterData.priceRanges"
+              :key="index"
+            >
+              <label class="label">
+                <input
+                  type="radio"
+                  name="priceRange"
+                  :value="range.value"
+                  v-model="filterData.selectedPriceRange"
+                />
+                {{ range.name }}
+              </label>
+            </div>
+          </Accordion>
+        </div>
       </div>
     </div>
 
@@ -230,8 +247,8 @@
 export default {
   head() {
     return {
-      title: `${this.rawCriterion.search.term} | Search Results | Bounipun Kashmir` 
-    }
+      title: `${this.rawCriterion.search.term} | Search Results | Bounipun Kashmir`
+    };
   },
   computed: {
     searchTerm() {
@@ -307,15 +324,17 @@ export default {
             checked: false
           }
         ],
-        availabilityTypes: [{
-          name: 'Ready To Ship',
-          value: 'ready-to-ship',
-          checkd: false
-        }, {
-          name: 'Made to Order',
-          value: 'made-to-order',
-          checkd: false
-        }
+        availabilityTypes: [
+          {
+            name: "Ready To Ship",
+            value: "ready-to-ship",
+            checkd: false
+          },
+          {
+            name: "Made to Order",
+            value: "made-to-order",
+            checkd: false
+          }
         ],
         priceRanges: [
           {
@@ -394,7 +413,7 @@ export default {
     /* clear all filters */
     clearAllFilters() {
       /* uncheck all filters */
-      const filterKeys = ["types", "collections", "variants", "baseColors"];
+      const filterKeys = ["availabilityTypes", "collections", "variants", "baseColors"];
       filterKeys.forEach(filterKey => {
         this.filterData[filterKey].forEach(option => (option.checked = false));
       });
@@ -408,7 +427,9 @@ export default {
     async fetchResults() {
       /* keep only the checked ones from (type, variants, collection) */
       let filters = {};
-      filters.availabilityType = this.getCheckedOnes(this.filterData.availabilityTypes);
+      filters.availabilityType = this.getCheckedOnes(
+        this.filterData.availabilityTypes
+      );
       filters.bounipun_collection = this.getCheckedOnes(
         this.filterData.collections
       );
@@ -428,7 +449,7 @@ export default {
       if (this.sortData.priceRange !== "") {
         this.rawCriterion.sortBy = {
           "priceRange.startsAt": parseInt(this.sortData.priceRange)
-        }
+        };
       } else this.rawCriterion.sortBy = {};
 
       /* post raw criterion to the server */
@@ -446,6 +467,9 @@ export default {
         console.log("Could not fetch documents");
         return;
       }
+        
+        /* scroll to top */
+       window.scroll({ top: 0, behavior: "smooth" });
 
       /* if no matches found, return */
       if (response.docs.length === 0) {
@@ -459,7 +483,6 @@ export default {
 
       /* attach collection name */
       response.docs.forEach(product => {
-
         const foundCollection = this.filterData.collections.find(
           collection => collection.value === product.bounipun_collection
         );
@@ -467,14 +490,17 @@ export default {
           product.bounipun_collection = foundCollection.name;
 
         /* attach variant data to rts and under bounipun products */
-        if(product.availabilityType === 'ready-to-ship' && product.type !== 'third-party' && product.rtsDirectVariant !== undefined) {
-            const foundVariant = this.filterData.variants.find(
-              variant => variant.value === product.rtsDirectVariant
-            )
-            if(foundVariant !== undefined)
+        if (
+          product.availabilityType === "ready-to-ship" &&
+          product.type !== "third-party" &&
+          product.rtsDirectVariant !== undefined
+        ) {
+          const foundVariant = this.filterData.variants.find(
+            variant => variant.value === product.rtsDirectVariant
+          );
+          if (foundVariant !== undefined)
             product.rtsDirectVariant = foundVariant.name;
         }
-
       });
 
       /* process color segregation */
@@ -493,7 +519,7 @@ export default {
         segregated = [...segregated, ...matchedColors];
       });
 
-      console.log(segregated, segregated.length,'-- WATCH');
+      console.log(segregated, segregated.length, "-- WATCH");
 
       this.products = segregated;
       this.totalMatches = segregated.length;
@@ -510,18 +536,16 @@ export default {
       // const product = {...bounipunProduct};
 
       let matchedColors = [];
-      
+
       /* filter out colors which are inactive */
       product.colors = product.colors.filter(color => color.status === true);
 
       /* what are the color filter */
       product.colors.forEach((color, index) => {
-
         // matchedColors.push({ color: product, actualIndex: index });
         // return;
 
         // console.log('I AM RUNNING - WATCH')
-    
 
         // console.log(color.name, index);
         const colorNameMatch = this.searchTermRegex.test(color.name);
@@ -577,7 +601,7 @@ export default {
       });
 
       /* if no color matched, return as it is */
-      console.log(product.name, matchedColors.length, '--WATCH');
+      console.log(product.name, matchedColors.length, "--WATCH");
       if (matchedColors.length === 0) {
         matchedColors = [{ color: product, actualIndex: -1 }];
       }
@@ -585,7 +609,7 @@ export default {
       return matchedColors;
     },
     resultsFetched(result) {
-      console.log('AM I BEING WATCH')
+      console.log("AM I BEING WATCH");
       if (result.docs.length === 0) {
         this.products = [];
         return;
@@ -657,26 +681,26 @@ export default {
 
 .colors {
   .option {
-    margin:5px;
+    margin: 5px;
     .color-box {
       height: 50px;
       width: 50px;
       margin-left: 5px;
     }
     .label {
-      margin-top:10px;
+      margin-top: 10px;
     }
 
-    @media(max-width: 768px) {
+    @media (max-width: 768px) {
       width: 25%;
       .color-box {
-        height:30px;
+        height: 30px;
         width: 30px;
         margin: 10px;
       }
 
       .label {
-        font-size:10px;
+        font-size: 10px;
       }
     }
   }
@@ -735,7 +759,6 @@ export default {
 
 .offcanvas-filters {
   position: fixed;
-  padding: 5%;
   top: 0;
   left: 0;
   background: #fffffff2;
@@ -745,6 +768,14 @@ export default {
   transition: all 0.4s ease-in-out;
   z-index: 3;
   overflow-y: scroll;
+
+  .header {
+    padding: 2% 3%;
+  }
+
+  .all-options {
+    padding: 5% 5% 0 5%;
+  }
 
   &.visible {
     margin-left: 0vw;
@@ -758,10 +789,15 @@ export default {
   }
 
   .close {
-    position: absolute;
-    top: 0;
-    right: 3%;
+    // position: absolute;
+    // top: 0;
+    // right: 3%;
     width: 3%;
+ transition: all 0.4s ease-in-out;
+        cursor: pointer;
+     &:hover {
+          transform: rotate(70deg);
+     }
 
     @media (max-width: 768px) {
       width: 7%;
@@ -792,10 +828,10 @@ export default {
   }
 
   .close {
-    position: absolute;
+    // position: absolute;
     top: 0;
-    right: 3%;
-    width: 7%;
+    // right: 3%;
+    // width: 7%;
   }
 }
 

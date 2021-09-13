@@ -133,7 +133,7 @@
                 <button class="arrow">></button>
               </div>
               <span style="font-size: 9px;">
-                Standard Shipping: {{ shippingTime }} weeks
+                Standard Shipping: {{ shippingTime }} week(s)
               </span>
             </div>
           </div>
@@ -563,7 +563,10 @@ export default {
       return link;
     },
     shippingTime() {
-      if (this.product.type === "under-bounipun")
+      if(this.product.availabilityType === 'ready-to-ship')
+        return "1";
+
+      if (this.product.type === "under-bounipun") 
         return this.product.bounipun_collection.edt;
       else "4";
     },
