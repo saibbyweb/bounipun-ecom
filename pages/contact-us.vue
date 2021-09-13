@@ -30,7 +30,7 @@
                 H-30 Integrated Textile and Handicraft Park Zakura, Srinagar, Jammu
                 and Kashmir, India, 190006
             </p>
-           <a href="mailto:someone@example.com"> <p>care@bounipun.in</p> </a>
+           <a href="mailto:care@bounipun.in"> <p>care@bounipun.in</p> </a>
            <a href="tel:+919103077655"> <p>+91-91030-77655 </p> </a>
            <a href="tel:+917889777377"> <p> +91-7889777377</p> </a>
         </div>
