@@ -9,19 +9,15 @@
         <br />
         <br />
         <!-- header -->
-        <div
-          class="header shadow"
-          style="display:flex; align-items:center; justify-content: space-between; position: absolute; top:0; left:0; width:100%; height:10vh;"
-        >
+        <div class="header shadow">
           <h3>Filters</h3>
-  
-          <!-- clear all applied filters -->
-          <span
-            style="font-size:12px; cursor:pointer;"
-            @click="clearAllFilters"
-          >Clear Selection</span>
 
-                <img
+          <!-- clear all applied filters -->
+          <span style="font-size:12px; cursor:pointer;" @click="clearAllFilters"
+            >Clear Selection</span
+          >
+
+          <img
             @click="filtersOpen = false"
             class="close"
             src="/icons/dark/close.png"
@@ -153,44 +149,49 @@
       <div style="position: relative;">
         <br />
         <br />
-        <div
-          style="display:flex; align-items:center; justify-content: space-between;"
-        >
+        <!-- header -->
+        <div class="header shadow">
           <h3>Sort</h3>
-          <span style="font-size:12px;" @click="clearSort"> Clear Sort </span>
+          <span style="font-size:12px; cursor:pointer;" @click="clearSort">
+            Clear Sort
+          </span>
+
+          <!-- close sort layout -->
+          <img
+            @click="sortOpen = false"
+            class="close"
+            src="/icons/dark/close.png"
+          />
         </div>
         <br />
-        <!-- price (high to low) -->
-        <div>
-          <label class="label">
-            <input
-              type="radio"
-              name="priceSort"
-              value="-1"
-              v-model="sortData.priceRange"
-            />
-            Price (High - Low)
-          </label>
-        </div>
+        <!-- all options -->
+        <div class="all-options">
+          <!-- price (high to low) -->
+          <div>
+            <label class="label">
+              <input
+                type="radio"
+                name="priceSort"
+                value="-1"
+                v-model="sortData.priceRange"
+              />
+              Price (High - Low)
+            </label>
+          </div>
 
-        <!-- price (low to high) -->
-        <div>
-          <label class="label">
-            <input
-              type="radio"
-              name="priceSort"
-              value="1"
-              v-model="sortData.priceRange"
-            />
-            Price (Low - High)
-          </label>
+          <!-- price (low to high) -->
+          <div>
+            <label class="label">
+              <input
+                type="radio"
+                name="priceSort"
+                value="1"
+                v-model="sortData.priceRange"
+              />
+              Price (Low - High)
+            </label>
+          </div>
         </div>
-        <!-- close sort layout -->
-        <img
-          @click="sortOpen = false"
-          class="close"
-          src="/icons/dark/close.png"
-        />
       </div>
     </div>
 
@@ -413,7 +414,12 @@ export default {
     /* clear all filters */
     clearAllFilters() {
       /* uncheck all filters */
-      const filterKeys = ["availabilityTypes", "collections", "variants", "baseColors"];
+      const filterKeys = [
+        "availabilityTypes",
+        "collections",
+        "variants",
+        "baseColors"
+      ];
       filterKeys.forEach(filterKey => {
         this.filterData[filterKey].forEach(option => (option.checked = false));
       });
@@ -467,9 +473,9 @@ export default {
         console.log("Could not fetch documents");
         return;
       }
-        
-        /* scroll to top */
-       window.scroll({ top: 0, behavior: "smooth" });
+
+      /* scroll to top */
+      window.scroll({ top: 0, behavior: "smooth" });
 
       /* if no matches found, return */
       if (response.docs.length === 0) {
@@ -762,19 +768,27 @@ export default {
   top: 0;
   left: 0;
   background: #fffffff2;
-  width: 60vw;
+  width: 40vw;
   height: 100vh;
   margin-left: -60vw;
   transition: all 0.4s ease-in-out;
   z-index: 3;
   overflow-y: scroll;
 
-  .header {
-    padding: 2% 3%;
+  @media (max-width: 768px) {
+    width: 60vw;
   }
 
-  .all-options {
-    padding: 5% 5% 0 5%;
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10vh;
+    padding: 2% 4%;
   }
 
   &.visible {
@@ -787,21 +801,24 @@ export default {
     font-size: 12px;
     cursor: pointer;
   }
+}
 
-  .close {
-    // position: absolute;
-    // top: 0;
-    // right: 3%;
-    width: 3%;
- transition: all 0.4s ease-in-out;
-        cursor: pointer;
-     &:hover {
-          transform: rotate(70deg);
-     }
+/* common all options */
+.all-options {
+  padding: 5% 5% 0 5%;
+}
 
-    @media (max-width: 768px) {
-      width: 7%;
-    }
+/* common close */
+.close {
+  width: 3%;
+  transition: all 0.4s ease-in-out;
+  cursor: pointer;
+  &:hover {
+    transform: rotate(70deg);
+  }
+
+  @media (max-width: 768px) {
+    width: 6%;
   }
 }
 
@@ -809,13 +826,29 @@ export default {
   position: fixed;
   top: 0;
   right: 0;
-  padding: 5%;
+  // padding: 5%;
   background: #fffffff2;
-  width: 60vw;
+  width: 40vw;
   height: 100vh;
   margin-right: -60vw;
   transition: all 0.4s ease-in-out;
   z-index: 3;
+
+  @media (max-width: 768px) {
+    width: 60vw;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10vh;
+    padding: 2% 3%;
+  }
 
   &.visible {
     margin-right: 0vw;
@@ -825,13 +858,6 @@ export default {
     font-family: $font_2;
     font-size: 12px;
     cursor: pointer;
-  }
-
-  .close {
-    // position: absolute;
-    top: 0;
-    // right: 3%;
-    // width: 7%;
   }
 }
 
