@@ -65,7 +65,7 @@ export default {
         limit: 20
       },
       list: [],
-      sortByFields: ["usergroup", "countryIsoCode", "status"],
+      sortByFields: ["firstName", "surName","usergroup", "countryIsoCode", "status"],
       headings: [
         "_id",
         "firstName",

@@ -37,16 +37,23 @@
         A one time password has been sent to your mobile number.
       </p>
 
-      <br />
+      <!-- <Checkbox label="I accept terms and conditions" v-model="consent" /> -->
 
-      <Checkbox
-        label="I accept terms and conditions"
-        v-model="consent"
-      />
-         <br />
+      <!-- disclaimer -->
+      <p class="disclaimer">
+        By clicking Continue, you agree to our <a target="_blank" href="/terms">Terms </a> and
+        <a target="_blank" href="/privacy-policy"> Privacy Policy </a>. You may receive SMS
+        notifications from us and can opt out at any time.
+      </p>
+      <br>
 
       <!-- send otp -->
-      <button v-if="!otpSent" class="action" @click="sendOtp()" :disabled="!consent">
+      <button
+        v-if="!otpSent"
+        class="action"
+        @click="sendOtp()"
+        :disabled="!consent"
+      >
         Continue
       </button>
 
@@ -92,7 +99,7 @@ export default {
       purpose: "registration",
       phoneNumber: "",
       otp: "",
-      consent: false,
+      consent: true,
       error: {
         status: false,
         message: "Could not sent otp"
@@ -187,6 +194,18 @@ export default {
   &#already {
     align-self: center;
     margin-top: 10%;
+  }
+}
+
+.disclaimer {
+  font-size: 11px;
+  margin: 0;
+  text-align: center;
+  padding: 3px 5%;
+  color: $gray;
+
+  a {
+    color: rgb(43, 43, 43);
   }
 }
 
