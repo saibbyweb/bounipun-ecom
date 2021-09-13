@@ -63,7 +63,7 @@
           </p>
           
           <!-- shipping disclaimer -->
-          <p class="note"> {{ shippingDisclaimer }} </p>
+          <p class="note disclaimer"> {{ shippingDisclaimer }} </p>
 
           <!-- consent for combined delivery -->
           <div class="pad-10">
@@ -349,6 +349,10 @@ export default {
     font-family: $font_1;
     // margin-top: 10px;
     text-align: center;
+    &.disclaimer {
+      color: #32a77c;
+      background-color: transparent;
+    }
   }
 }
 

@@ -331,11 +331,11 @@ export default {
             value: "ready-to-ship",
             checkd: false
           },
-          {
-            name: "Made to Order",
-            value: "made-to-order",
-            checkd: false
-          }
+          // {
+          //   name: "Made to Order",
+          //   value: "made-to-order",
+          //   checkd: false
+          // }
         ],
         priceRanges: [
           {
