@@ -48,7 +48,8 @@ const schema = new mongoose.Schema({
         addressLine1: String,
         addressLine2: String,
         city: String,
-        postalCode: String
+        postalCode: String,
+        type: String
     }],
     cart: [
         {

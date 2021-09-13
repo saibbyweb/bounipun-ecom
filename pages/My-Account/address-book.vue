@@ -15,7 +15,7 @@
 
         <!-- address card -->
         <div class="flex center" style="width: 100%;">
-          <div v-if="!showAddressForm" class="saved-addresses flex center wrap">
+          <div v-if="!showAddressForm" class="saved-addresses flex start wrap">
             <AddressCard  v-for="(address, index) in addressList"
               :key="index" :address="address" @addressSelected="selectAddress"/>
           </div>

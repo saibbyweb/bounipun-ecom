@@ -1,7 +1,12 @@
 <template>
   <div>
-    
-    <CookieNotice v-if="!$store.state.customer.cookieConsent && fakeLoaded && $route.path !== '/privacy-policy'"/>
+    <CookieNotice
+      v-if="
+        !$store.state.customer.cookieConsent &&
+          fakeLoaded &&
+          $route.path !== '/privacy-policy'
+      "
+    />
 
     <div class="loading center" v-if="$store.state.customer.loading">
       <img src="/loading.gif" />
@@ -27,7 +32,7 @@
 <script>
 export default {
   mounted() {
-    this.$ga.page(this.$router)
+    this.$ga.page(this.$router);
     // this.$ga.page('/');
     // console.log(this.$ga,'---google analytic');
 
@@ -47,19 +52,22 @@ export default {
     });
 
     setTimeout(() => {
-        this.$store.dispatch('customer/fetchCart');
-        this.$store.dispatch('customer/fetchProfile');
-        this.$store.dispatch('customer/fetchStoreLocation');
-        this.$store.dispatch('customer/fetchGlobalConfig');
-        this.fakeLoaded = true;
-    }, 100)
+      this.$store.dispatch("customer/fetchCart");
+      this.$store.dispatch("customer/fetchProfile");
+      this.$store.dispatch("customer/fetchStoreLocation");
+      this.$store.dispatch("customer/fetchGlobalConfig");
+    }, 100);
+
+    setTimeout(() => {
+      this.fakeLoaded = true;
+    }, 5000);
   },
   data() {
     return {
       searchOpen: false,
       menuOpen: false,
       unsubscribe: null,
-       fakeLoaded: false,
+      fakeLoaded: false
     };
   },
   methods: {
@@ -67,12 +75,10 @@ export default {
       console.log("yo bro");
     },
     async fetchProfile() {
-       const { response, resolved } = await this.$post('/fetchProfile');
-       if(resolved === false)
-        return;
+      const { response, resolved } = await this.$post("/fetchProfile");
+      if (resolved === false) return;
 
-        this.$store.commit('customer/setUser', response)
-    
+      this.$store.commit("customer/setUser", response);
     }
   }
 };

@@ -178,6 +178,9 @@
           </div>
         </div>
       </div>
+
+      <InstagramFeed />
+      
     </div>
   </div>
 </template>

@@ -67,7 +67,7 @@ export default {
         addressLine2: "",
         email: "",
         city: "",
-        postalCode: ""
+        postalCode: "",
       },
       formData: this.createFormData(),
       updated: false

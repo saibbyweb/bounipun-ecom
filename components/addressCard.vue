@@ -5,12 +5,13 @@
     :class="{ onDeliveryPage, active }"
   >
     <span class="name"> {{ address.firstName }} {{ address.surName }} </span>
-    <span> {{ address.countryDialCode }} - {{ address.mobileNumber }} </span>
+
     <span> {{ address.addressLine1 }} </span>
     <span> {{ address.addressLine2 }} </span>
-    <span> {{ address.email }} </span>
     <span> {{ address.city }} </span>
     <span> {{ address.postalCode }} </span>
+    <span> {{ address.email }} </span>
+    <span> {{ address.countryDialCode }} - {{ address.mobileNumber }} </span>
   </div>
 </template>
 
