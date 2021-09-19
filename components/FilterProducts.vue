@@ -319,6 +319,33 @@ export default {
   /* common all options */
   .all-options {
     padding: 5% 5% 0 5%;
+
+    .colors {
+  .option {
+    margin: 5px;
+    .color-box {
+      height: 50px;
+      width: 50px;
+      margin-left: 5px;
+    }
+    .label {
+      margin-top: 10px;
+    }
+
+    @media (max-width: 768px) {
+      width: 25%;
+      .color-box {
+        height: 30px;
+        width: 30px;
+        margin: 10px;
+      }
+
+      .label {
+        font-size: 10px;
+      }
+    }
+  }
+}
   }
 
   /* common close */

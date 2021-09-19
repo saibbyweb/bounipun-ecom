@@ -4,7 +4,7 @@
     style="padding-top:3%;"
   >
     <!-- offcanvas filters -->
-    <FilterProducts :filtersOpen="filtersOpen" @closeFilter="filtersOpen = false"/>
+    <FilterProducts :filtersOpen="filtersOpen" @closeFilter="filtersOpen = false" @updated="fetchResults"/>
 
     <!-- offcanvas sort -->
     <div class="offcanvas-sort shadow" :class="{ visible: sortOpen }">
@@ -142,14 +142,6 @@ export default {
       this.clearAllFilters();
       this.fetchResults();
     },
-    /* re-fetch results if raw criterion changed */
-    filterData: {
-      handler() {
-        this.rawCriterion.cursor = 1;
-        this.fetchResults();
-      },
-      deep: true
-    },
     sortData: {
       handler() {
         this.rawCriterion.cursor = 1;
@@ -179,6 +171,7 @@ export default {
       },
       sortOpen: false,
       products: [],
+      filterData: [],
       /* pagination config */
       //     cursor: 1,
       totalMatches: 0,
@@ -236,7 +229,9 @@ export default {
     clearSort() {
       this.sortData.priceRange = "";
     },
-    async fetchResults() {
+    async fetchResults(filterData) {
+      this.filterData = filterData;
+      
       /* keep only the checked ones from (type, variants, collection) */
       let filters = {};
       filters.availabilityType = this.getCheckedOnes(
