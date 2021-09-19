@@ -210,26 +210,11 @@ export default {
 
       return checkedOptions;
     },
-    /* clear all filters */
-    clearAllFilters() {
-      /* uncheck all filters */
-      const filterKeys = [
-        "availabilityTypes",
-        "collections",
-        "variants",
-        "baseColors"
-      ];
-      filterKeys.forEach(filterKey => {
-        this.filterData[filterKey].forEach(option => (option.checked = false));
-      });
-      /* reset selected price range */
-      this.filterData.selectedPriceRange = "";
-      this.clearSort();
-    },
     clearSort() {
       this.sortData.priceRange = "";
     },
     async fetchResults(filterData) {
+      this.rawCriterion.cursor = 1;
       this.filterData = filterData;
       
       /* keep only the checked ones from (type, variants, collection) */
@@ -529,9 +514,6 @@ export default {
     }
   }
 }
-
-
-
 /* common all options */
 .all-options {
   padding: 5% 5% 0 5%;

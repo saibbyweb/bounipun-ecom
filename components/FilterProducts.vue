@@ -235,10 +235,10 @@ export default {
       });
       /* reset selected price range */
       this.filterData.selectedPriceRange = "";
-     // this.clearSort();
-     this.$emit('clearSort');
+      // this.clearSort();
+      this.$emit("clearSort");
     },
-        async fetchFilterData() {
+    async fetchFilterData() {
       /* fetch type of products */
       /* fetch collections */
       /* fetch variants */
@@ -321,31 +321,31 @@ export default {
     padding: 5% 5% 0 5%;
 
     .colors {
-  .option {
-    margin: 5px;
-    .color-box {
-      height: 50px;
-      width: 50px;
-      margin-left: 5px;
-    }
-    .label {
-      margin-top: 10px;
-    }
+      .option {
+        margin: 5px;
+        .color-box {
+          height: 50px;
+          width: 50px;
+          margin-left: 5px;
+        }
+        .label {
+          margin-top: 10px;
+        }
 
-    @media (max-width: 768px) {
-      width: 25%;
-      .color-box {
-        height: 30px;
-        width: 30px;
-        margin: 10px;
-      }
+        @media (max-width: 768px) {
+          width: 25%;
+          .color-box {
+            height: 30px;
+            width: 30px;
+            margin: 10px;
+          }
 
-      .label {
-        font-size: 10px;
+          .label {
+            font-size: 10px;
+          }
+        }
       }
     }
-  }
-}
   }
 
   /* common close */
