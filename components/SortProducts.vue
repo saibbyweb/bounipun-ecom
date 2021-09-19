@@ -12,7 +12,7 @@
 
         <!-- close sort layout -->
         <img
-          @click="sortOpen = false"
+          @click="$emit('close')"
           class="close"
           src="/icons/dark/close.png"
         />
@@ -50,7 +50,37 @@
   </div>
 </template>
 
-
+<script>
+export default {
+  props: {
+    sortOpen: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      sortData: {
+        priceRange: ""
+      }
+    };
+  },
+  watch: {
+    sortData: {
+      handler(newValue) {
+        this.$emit('updated', newValue);
+      },
+      deep: true,
+      immediate: true
+    }
+  },
+  methods: {
+    clearSort() {
+      this.sortData.priceRange = "";
+    }
+  }
+};
+</script>
 
 <style lang="scss" scoped>
 .offcanvas-sort {
@@ -85,17 +115,22 @@
     margin-right: 0vw;
   }
 
+   .all-options {
+    padding: 5% 5% 0 5%;
+   }
+
   .label {
     font-family: $font_2;
     font-size: 12px;
     cursor: pointer;
   }
 
-    /* common close */
+  /* common close */
   .close {
     width: 3%;
     transition: all 0.4s ease-in-out;
     cursor: pointer;
+
     &:hover {
       transform: rotate(70deg);
     }

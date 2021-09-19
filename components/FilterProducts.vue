@@ -14,7 +14,7 @@
         >
 
         <img
-          @click="$emit('closeFilter')"
+          @click="$emit('close')"
           class="close"
           src="/icons/dark/close.png"
         />
@@ -217,7 +217,9 @@ export default {
       handler(newValue) {
         this.$emit("updated", newValue);
       },
-      deep: true
+      deep: true,
+      immediate: true
+
     }
   },
   methods: {
@@ -271,6 +273,8 @@ export default {
         value: variant._id,
         checked: false
       }));
+
+      this.$emit('dataFetched');
     }
   }
 };
