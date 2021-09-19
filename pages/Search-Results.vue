@@ -3,6 +3,17 @@
     class="page -broad center-col search-results-page"
     style="padding-top:3%;"
   >
+
+
+    <!-- filter sort toggles -->
+    <FilterSortToggles
+      :searchTerm="$route.query.searchTerm"
+      :totalMatches="totalMatches"
+      @openFilters="filtersOpen = true"
+      @openSort="sortOpen = true"
+    />
+
+
     <!-- offcanvas filters -->
     <FilterProducts
       ref="filters"
@@ -19,30 +30,7 @@
       @updated="sortUpdated"
     />
 
-    <!-- filter and sort -->
-    <div class="fs-wrapper flex center col">
-      <p>
-        Showing {{ totalMatches }} results for
-        <i> "{{ $route.query.searchTerm }}" </i>
-      </p>
 
-      <div class="filters-and-sort">
-        <!-- filter -->
-        <button class="action" @click="filtersOpen = true">
-          Filters
-          <img class="arrow-bottom" src="/icons/arrow_bottom.png" />
-        </button>
-
-        <!-- center pipe -->
-        <span class="pipe"> | </span>
-
-        <!-- sort -->
-        <button class="action" @click="sortOpen = true">
-          Sort
-          <img class="arrow-bottom" src="/icons/arrow_bottom.png" />
-        </button>
-      </div>
-    </div>
 
     <div class="search-results">
       <product-card
@@ -65,7 +53,6 @@
         {{ n }}
       </button>
     </div>
-
   </div>
 </template>
 
@@ -171,8 +158,7 @@ export default {
       return checkedOptions;
     },
     async fetchResults() {
-      if(this.filterDataFetched === false)
-        return;
+      if (this.filterDataFetched === false) return;
 
       this.rawCriterion.cursor = 1;
 
@@ -197,13 +183,15 @@ export default {
       this.rawCriterion.selectedPriceRange = this.filterData.selectedPriceRange;
 
       /* append sort by data */
-      console.log(this.sortData.priceRange,'--before hitting')
-      if (this.sortData.priceRange !== undefined && this.sortData.priceRange !== "") {
+      console.log(this.sortData.priceRange, "--before hitting");
+      if (
+        this.sortData.priceRange !== undefined &&
+        this.sortData.priceRange !== ""
+      ) {
         this.rawCriterion.sortBy = {
           "priceRange.startsAt": parseInt(this.sortData.priceRange)
         };
       } else this.rawCriterion.sortBy = {};
-
 
       console.log(this.rawCriterion.sortBy, this.sortData.priceRange);
 
@@ -391,69 +379,6 @@ export default {
   // background-color: #f4f5f7;
 
   position: relative;
-}
-
-.fs-wrapper1 {
-  padding-top: 10px;
-  position: fixed;
-  top: 10vh;
-  left: 0;
-  z-index: 2;
-  width: 100%;
-  background-color: white;
-  box-shadow: 20px 0px 15px rgba(0, 0, 0, 0.16);
-}
-
-
-.filters-and-sort {
-  // margin-top: 10px;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 95%;
-  background-color: white;
-
-  .action {
-    width: 50%;
-    font-size: 13px;
-    color: $dark_gray;
-    background-color: white;
-    // background-color: #f4f5f7;
-
-    // background-color: #bfbfbf80;
-    color: rgb(123, 123, 123);
-    // border: 1px solid #a8a8a8;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .arrow-bottom {
-      width: 5%;
-      margin-left: 5px;
-      opacity: 0.8;
-    }
-
-    &:hover {
-    }
-
-    &:first-child {
-      border-right: none;
-    }
-
-    font-family: $font_2_bold;
-  }
-
-  .pipe {
-    color: rgb(123, 123, 123);
-  }
-
-  @media (max-width: 768px) {
-    .action {
-      .arrow-bottom {
-        width: 15%;
-      }
-    }
-  }
 }
 
 .search-results {

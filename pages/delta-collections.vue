@@ -25,6 +25,13 @@
       <p class="text-3">{{ collection.mainTextBlock.text3 }}</p>
     </div>
 
+
+    <!-- filter sort toggles -->
+    <FilterSortToggles
+      @openFilters="filtersOpen = true"
+      @openSort="sortOpen = true"
+    />
+
     <!-- offcanvas filters -->
     <FilterProducts
       ref="filters"
@@ -142,6 +149,9 @@ export default {
   methods: {
     filtersUpdated(filterData) {
       this.filterData = filterData;
+      // TODO: MAKE SURE the collection id is always present (filterData.collections)
+
+      // can do that in fetch results method as well
       this.fetchResults();
     },
     sortUpdated(sortData) {
