@@ -137,7 +137,9 @@ export default (context, inject) => {
   /* fetch DOCUMENT(s) / CUSTOMER ONLY */
   const fetchData = async (model, filters, multiple = false) => {
     let result = { fetched: false };
+
     const endpoint = multiple ? "/findDocuments" : "/findDocument";
+
     const documentFetch = context.$axios.$post(endpoint, {
       model,
       filters

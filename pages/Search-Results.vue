@@ -393,7 +393,7 @@ export default {
   position: relative;
 }
 
-.fs-wrapper {
+.fs-wrapper1 {
   padding-top: 10px;
   position: fixed;
   top: 10vh;

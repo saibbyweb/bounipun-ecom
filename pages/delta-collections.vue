@@ -25,6 +25,22 @@
       <p class="text-3">{{ collection.mainTextBlock.text3 }}</p>
     </div>
 
+    <!-- offcanvas filters -->
+    <FilterProducts
+      ref="filters"
+      :filtersOpen="filtersOpen"
+      @close="filtersOpen = false"
+      @updated="filtersUpdated"
+      @dataFetched="filterDataFetched = true"
+    />
+
+    <!-- offcanvas sort -->
+    <SortProducts
+      :sortOpen="sortOpen"
+      @close="sortOpen = false"
+      @updated="sortUpdated"
+    />
+
     <!-- if collections is not escape -->
     <div
       v-if="!collectionLocked && collection.name !== 'Escape'"
@@ -94,8 +110,13 @@ export default {
     return {
       products: [],
       collection: {
-          name: 'fetching...'
+        name: "fetching..."
       },
+      filterData: [],
+      sortData: {},
+      filtersOpen: false,
+      sortOpen: false,
+      filterDataFetched: false,
       colorCategories: [],
       escapeProduct: []
     };
@@ -106,7 +127,8 @@ export default {
       this.escapeProduct = [];
       this.colorCategories = [];
       this.collection = {};
-      this.fetchCollectionProducts(to.query.slug);
+      // this.fetchCollectionProducts(to.query.slug);
+      this.fetchResults(to.query.slug);
     }
   },
   computed: {
@@ -115,9 +137,18 @@ export default {
     }
   },
   mounted() {
-    this.fetchCollectionProducts(this.$route.query.slug);
+    // this.fetchCollectionProducts(this.$route.query.slug);
   },
   methods: {
+    filtersUpdated(filterData) {
+      this.filterData = filterData;
+      this.fetchResults();
+    },
+    sortUpdated(sortData) {
+      this.sortData = sortData;
+      this.fetchResults();
+    },
+    async fetchResults() {},
     adjustProduct(product, cIndex) {
       let adjustedProduct = {
         ...product
@@ -151,6 +182,7 @@ export default {
         slug: collectionSlug,
         status: true
       });
+
       if (!collection.fetched) return;
 
       this.collection = collection.doc;
@@ -173,24 +205,27 @@ export default {
         return;
       }
 
-
       /* filter out inactive colors */
       products.docs.forEach(product => {
         product.colors = product.colors.filter(color => color.status === true);
-        product.variants.sort((a,b) => a._id.order - b._id.order);
+        product.variants.sort((a, b) => a._id.order - b._id.order);
       });
 
       /* filter out products with no active colors */
       products.docs = products.docs.filter(
         product => product.colors.length > 0
       );
-      
+
       /* set rts direct variant */
       products.docs.forEach(product => {
-        if(product.availabilityType === 'ready-to-ship' && product.type !== 'third-party' && product.rtsDirectVariant !== undefined) {
+        if (
+          product.availabilityType === "ready-to-ship" &&
+          product.type !== "third-party" &&
+          product.rtsDirectVariant !== undefined
+        ) {
           product.rtsDirectVariant = product.rtsDirectVariant.name;
         }
-      })
+      });
 
       this.products = products.docs;
 
@@ -229,7 +264,7 @@ export default {
       return this.$getImagePath(image);
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
