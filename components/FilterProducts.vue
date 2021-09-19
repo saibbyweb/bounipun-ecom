@@ -14,7 +14,7 @@
         >
 
         <img
-          @click="filtersOpen = false"
+          @click="$emit('closeFilter')"
           class="close"
           src="/icons/dark/close.png"
         />
@@ -209,13 +209,130 @@ export default {
       }
     };
   },
+  mounted() {
+    this.fetchFilterData();
+  },
   watch: {
     filterData: {
       handler(newValue) {
-        this.$emit('updated', newValue);
+        this.$emit("updated", newValue);
       },
       deep: true
+    }
+  },
+  methods: {
+    /* clear all filters */
+    clearAllFilters() {
+      /* uncheck all filters */
+      const filterKeys = [
+        "availabilityTypes",
+        "collections",
+        "variants",
+        "baseColors"
+      ];
+      filterKeys.forEach(filterKey => {
+        this.filterData[filterKey].forEach(option => (option.checked = false));
+      });
+      /* reset selected price range */
+      this.filterData.selectedPriceRange = "";
+     // this.clearSort();
+     this.$emit('clearSort');
+    },
+        async fetchFilterData() {
+      /* fetch type of products */
+      /* fetch collections */
+      /* fetch variants */
+      /* fetch base colors */
+      const filtersFetch = this.$axios.$get("/getSearchFilters");
+      /* wait for request to complete */
+      const { response, error } = await this.$task(filtersFetch);
+      /* if error occurred */
+      if (error || response.fetched === false) {
+        console.log("could not fetch search filters");
+        return;
+      }
+
+      this.filterData.collections = response.collections.map(collection => ({
+        ...collection,
+        value: collection._id,
+        checked: false
+      }));
+
+      /* set base colors (for product cards)*/
+      this.baseColors = response.baseColors;
+
+      this.filterData.baseColors = response.baseColors.map(color => ({
+        ...color,
+        value: color.name,
+        checked: false
+      }));
+      this.filterData.variants = response.variants.map(variant => ({
+        ...variant,
+        value: variant._id,
+        checked: false
+      }));
     }
   }
 };
 </script>
+
+<style lang="scss" scoped>
+.offcanvas-filters {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #fffffff2;
+  width: 40vw;
+  height: 100vh;
+  margin-left: -60vw;
+  transition: all 0.4s ease-in-out;
+  z-index: 3;
+  overflow-y: scroll;
+
+  @media (max-width: 768px) {
+    width: 60vw;
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 10vh;
+    padding: 2% 4%;
+  }
+
+  &.visible {
+    margin-left: 0vw;
+  }
+
+  .label {
+    font-family: $font_2;
+    text-transform: capitalize;
+    font-size: 12px;
+    cursor: pointer;
+  }
+
+  /* common all options */
+  .all-options {
+    padding: 5% 5% 0 5%;
+  }
+
+  /* common close */
+  .close {
+    width: 3%;
+    transition: all 0.4s ease-in-out;
+    cursor: pointer;
+    &:hover {
+      transform: rotate(70deg);
+    }
+
+    @media (max-width: 768px) {
+      width: 6%;
+    }
+  }
+}
+</style>
