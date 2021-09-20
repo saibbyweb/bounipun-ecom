@@ -1,7 +1,7 @@
 <template>
   <!-- filter and sort -->
   <div class="fs-wrapper flex center col">
-    <p>
+    <p v-if="!collectionView">
       Showing {{ totalMatches }} results for
       <i> "{{ searchTerm }}" </i>
     </p>
@@ -35,6 +35,10 @@ export default {
     totalMatches: {
       type: Number,
       defauly: 0
+    },
+    collectionView: {
+        type: Boolean,
+        default: false
     }
   }
 };

@@ -125,7 +125,7 @@ export const methods = {
         }
 
         /* if product is under bounipun, add meta data to the product (variant names ) */
-        if (details.type !== 'third-party') {
+        if (details.type !== 'third-party'&& details.availabilityType !== 'ready-to-ship') {
             let keywords = [];
             /* fetch variant names */
             for (const variant of details.variants) {

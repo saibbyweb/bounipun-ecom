@@ -244,7 +244,7 @@ export default {
         ) {
           const foundVariant = this.filterData.variants.find(
             variant => variant.value === product.rtsDirectVariant
-          );
+          )
           if (foundVariant !== undefined)
             product.rtsDirectVariant = foundVariant.name;
         }

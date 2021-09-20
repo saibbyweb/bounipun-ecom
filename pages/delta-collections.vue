@@ -29,12 +29,14 @@
     <FilterSortToggles
       @openFilters="filtersOpen = true"
       @openSort="sortOpen = true"
+      :collectionView="true"
     />
 
     <!-- offcanvas filters -->
     <FilterProducts
       ref="filters"
       :filtersOpen="filtersOpen"
+      :collectionView="true"
       @close="filtersOpen = false"
       @updated="filtersUpdated"
       @dataFetched="filterDataFetched = true"
@@ -52,11 +54,20 @@
       v-if="!collectionLocked && collection.name !== 'Escape'"
       class="collection-items"
     >
-      <product-card
+      <!-- <product-card
         v-for="(product, index) in products"
         :key="index"
         :product="product"
+      /> -->
+
+      <product-card
+        v-for="(product, index) in products"
+        :key="index"
+        :product="product.color"
+        :searchView="true"
+        :activeColor="product.actualIndex"
       />
+
       <h3 v-if="products.length === 0">
         fetching products for {{ collection.name }}
       </h3>
@@ -251,7 +262,108 @@ export default {
         return;
       }
 
+            /* attach collection name */
+      response.docs.forEach(product => {
+        const foundCollection = this.filterData.collections.find(
+          collection => collection.value === product.bounipun_collection
+        );
+        if (foundCollection !== undefined)
+          product.bounipun_collection = foundCollection.name;
+
+        /* attach variant data to rts and under bounipun products */
+        if (
+          product.availabilityType === "ready-to-ship" &&
+          product.type !== "third-party" &&
+          product.rtsDirectVariant !== undefined
+        ) {
+          const foundVariant = this.filterData.variants.find(
+            variant => variant.value === product.rtsDirectVariant
+          );
+          if (foundVariant !== undefined)
+            product.rtsDirectVariant = foundVariant.name;
+        }
+      });
+
+    /* process color segregation */
+      this.processColorSegregation(response.docs);
+      // this.products = response.docs;
+
       console.log(response.docs);
+    },
+    processColorSegregation(matchedProducts) {
+      /* figure out (guess) the number of color matches in the product */
+      let segregated = [];
+
+      matchedProducts.forEach(product => {
+        const matchedColors = this.findMatchedColors(product);
+        segregated = [...segregated, ...matchedColors];
+      });
+
+      console.log(segregated, segregated.length, "-- WATCH");
+
+      this.products = segregated;
+      // this.totalMatches = segregated.length;
+      /* figure out the color index of matched colors */
+      /* generate new array where each matched color is treated as a product */
+      /* send back the new product array */
+      /* update total matches */
+    },
+    findMatchedColors(product) {
+      console.log(product, "matched");
+
+      // return [{ color: product, actualIndex: -1 }];
+      /* product name or base colors matches the color filter (if provided) */
+      // const product = {...bounipunProduct};
+
+      let matchedColors = [];
+
+      /* filter out colors which are inactive */
+      product.colors = product.colors.filter(color => color.status === true);
+
+      /* what are the color filter */
+      product.colors.forEach((color, index) => {
+        /* color.baseColor is $in [colorFilters] */
+        const baseColorFilterMatch = this.rawCriterion.colors.findIndex(
+          col => col === color.baseColor
+        );
+        /* color.additionalColor1 is $in [colorFilters] */
+        const additionalColor1FilterMatch = this.rawCriterion.colors.findIndex(
+          col => col === color.additionalColor1
+        );
+        /* color.additionalColor2 is $in [colorFilters] */
+        const additionalColor2FilterMatch = this.rawCriterion.colors.findIndex(
+          col => col === color.additionalColor2
+        );
+
+        /* overall filter match */
+        const filterMatch =
+          baseColorFilterMatch !== -1 ||
+          additionalColor1FilterMatch !== -1 ||
+          additionalColor2FilterMatch !== -1;
+
+        /* make sure the color is active */
+        if (filterMatch && color.status === true) {
+          const colorProduct = { ...product };
+          console.log("COLOR MATCHED", color.name, product.bounipun_collection);
+          /* TODO: escape collection id should be global */
+          if (product.bounipun_collection.toUpperCase() === "ESCAPE") {
+            console.log("ESCAPE COLOR FOUND");
+            colorProduct.name = color.name;
+          }
+
+          matchedColors.push({ color: colorProduct, actualIndex: index });
+        }
+
+        /* which ever color matches this criteria, capture the index and treat it as individual product */
+        /* also if collection is escape, replace product name with color name */
+      });
+
+      /* if no color matched, return as it is */
+      if (matchedColors.length === 0) {
+        matchedColors = [{ color: product, actualIndex: -1 }];
+      }
+
+      return matchedColors;
     },
     adjustProduct(product, cIndex) {
       let adjustedProduct = {

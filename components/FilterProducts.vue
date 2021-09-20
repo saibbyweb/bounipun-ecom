@@ -73,7 +73,7 @@
           </div>
         </Accordion>
         <!-- collection options -->
-        <Accordion heading="Collection" :expanded="true">
+        <Accordion heading="Collection" :expanded="true" v-if="!collectionView">
           <div
             class="option"
             v-for="(collection, index) in filterData.collections"
@@ -147,6 +147,10 @@ export default {
     filtersOpen: {
       type: Boolean,
       default: false
+    },
+    collectionView: {
+        type: Boolean,
+        default: false
     }
   },
   data() {
