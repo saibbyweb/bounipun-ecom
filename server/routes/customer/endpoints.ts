@@ -101,7 +101,7 @@ router.get('/getSearchFilters', async (req, res) => {
 
     /* fetch all collections (active and unlocked) */
     let dataFetch = [];
-    dataFetch.push(db.model('collections').find({ status: true, lock: false }).select('name'))
+    dataFetch.push(db.model('collections').find({ status: true, lock: false }).select('name image mainTextBlock'))
     dataFetch.push(db.model('variants').find({ status: true }).select('name'))
     dataFetch.push(db.model('base_colors').find({ status: true }).sort('order').select('name hex'))
     const { response: resolvedData, error } = await task(Promise.all(dataFetch));
