@@ -26,7 +26,7 @@
       <!-- fabric info 1-->
       <span class="fabric"> {{ item.fabricInfo1 }} </span>
       <!-- price -->
-      <span class="price"> {{ currency }} {{ adjustPrice(item.price) }} </span>
+      <span class="price"> {{ currency }} {{ formatCurrency(adjustPrice(item.price)) }} </span>
       <!-- qty -->
       <span v-if="!allowUpdate" class="qty"> Qty: {{ item.quantity }} </span>
        <!-- shipping time -->
@@ -48,7 +48,7 @@
       src="/icons/dark/remove-cart-item.png"
     />
     <!-- total product price -->
-    <p class="total-product-price">{{ currency }} {{ item.quantity * adjustPrice(item.price) }}</p>
+    <p class="total-product-price">{{ currency }} {{ formatCurrency(item.quantity * adjustPrice(item.price)) }}</p>
   </div>
 </template>
 
@@ -85,6 +85,10 @@ export default {
     adjustPrice(price) {
       price = parseInt(price);
       return this.$store.getters["customer/adjustPrice"](price);
+    },
+    formatCurrency(adjustedPrice) {
+      adjustedPrice = parseFloat(adjustedPrice);
+      return this.$store.getters["customer/formatCurrency"](adjustedPrice);
     },
     emitUpdateQuantity(item, operation) {
       this.$emit("updateQuantity", { item: item.cartEntry, operation });

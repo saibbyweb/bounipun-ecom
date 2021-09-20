@@ -226,8 +226,20 @@ export const getters = {
       const inflatedPrice = (dbPrice * state.globalConfig.currencyMultiplier) / state.globalConfig.dollarValue;
       return inflatedPrice.toFixed(2);
     }
+  },
+  formatCurrency: state => adjustedPrice => {
+    let formattedNumber = adjustedPrice;
+       /* if currence is INR, return as is */
+       if (state.currency === "INR") {
+        formattedNumber = new Intl.NumberFormat('en-IN', { currency: 'INR' }).format(adjustedPrice)
+        return formattedNumber;
+      }
+      else {
+        formattedNumber = new Intl.NumberFormat('en-US', { currency: 'USD' }).format(adjustedPrice);
+        return formattedNumber;
+      }
   }
-};
+}
 
 export const actions = {
   async fetchCart({ state, commit }) {

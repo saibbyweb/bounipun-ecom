@@ -52,7 +52,7 @@
         Grand Total: <br />
         <!-- <span class="count"> {{ cartCount }} Items(s) </span> -->
       </p>
-      <span class="value"> {{ ` ${currency} ${grandTotal}` }} </span>
+      <span class="value"> {{ ` ${currency} ${formatCurrency(grandTotal)}` }} </span>
     </div>
   </div>
 </template>
@@ -140,6 +140,10 @@ export default {
     }
   },
   methods: {
+    formatCurrency(adjustedPrice) {
+      adjustedPrice = parseFloat(adjustedPrice);
+      return this.$store.getters["customer/formatCurrency"](adjustedPrice);
+    },
     async createPaymentIntent() {
       const paymentIntentFetch = await this.$post("/createPaymentIntent", {
         intentType: "order",

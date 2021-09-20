@@ -4,8 +4,6 @@ import { methods as couponMethods } from "@models/coupon";
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
 import { methods as messageMethods } from "@models/message";
 
-import Stripe from "stripe";
-
 /* user auth middleware */
 const { userAuth } = userMethods;
 

@@ -96,17 +96,17 @@
 
         <!-- if made on order and lowest and highest is not same -->
         <span v-if="!readyToShip && !lowestAndHighestPriceisSame" class="price">
-          {{ currency + "" + adjustPrice(lowestVariantPrice) }} -
-          {{ currency + "" + adjustPrice(highestVariantPirce) }}
+          {{ currency + "" + formatCurrency(adjustPrice(lowestVariantPrice)) }} -
+          {{ currency + "" + formatCurrency(adjustPrice(highestVariantPirce)) }}
         </span>
         <!-- if made on order and lowest and highest same -->
         <span v-if="!readyToShip && lowestAndHighestPriceisSame" class="price">
-          {{ currency + "" + adjustPrice(highestVariantPirce) }}
+          {{ currency + "" + formatCurrency(adjustPrice(highestVariantPirce)) }}
         </span>
 
         <!-- if ready to ship -->
         <span v-if="readyToShip" class="price">
-          {{ currency + "" + adjustPrice(product.directPrice) }}
+          {{ currency + "" + formatCurrency(adjustPrice(product.directPrice)) }}
         </span>
       </div>
     </div>
@@ -406,6 +406,10 @@ export default {
     adjustPrice(price) {
       price = parseInt(price);
       return this.$store.getters["customer/adjustPrice"](price);
+    },
+    formatCurrency(adjustedPrice) {
+      adjustedPrice = parseFloat(adjustedPrice);
+      return this.$store.getters["customer/formatCurrency"](adjustedPrice);
     },
     async toggleWishlist() {
    

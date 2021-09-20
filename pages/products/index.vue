@@ -114,12 +114,12 @@
                   {{ currency }}
                   {{
                     thirdPartyProduct || readyToShip
-                      ? adjustPrice(product.directPrice)
-                      : adjustPrice(
+                      ? formatCurrency(adjustPrice(product.directPrice))
+                      : formatCurrency(adjustPrice(
                           variants[activeVariantIndex].fabrics[
                             activeFabricIndex
                           ].price
-                        )
+                        ))
                   }}
                 </h5>
                 <p>Taxes and Shipping Included</p>
@@ -267,7 +267,7 @@
                 <span class="name"> {{ fabric.name }} </span>
                 <span class="info"> {{ fabric.info1 }} </span>
                 <span class="price">
-                  {{ currency }} {{ adjustPrice(fabric.price) }}
+                  {{ currency }} {{ formatCurrency(adjustPrice(fabric.price)) }}
                 </span>
               </div>
             </div>
@@ -629,6 +629,10 @@ export default {
     adjustPrice(price) {
       price = parseInt(price);
       return this.$store.getters["customer/adjustPrice"](price);
+    },
+    formatCurrency(adjustedPrice) {
+      adjustedPrice = parseFloat(adjustedPrice);
+      return this.$store.getters["customer/formatCurrency"](adjustedPrice);
     },
     detailsSectionScrolled(event) {
       if (this.windowWidth < 768) return;
