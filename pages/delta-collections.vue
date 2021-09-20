@@ -25,7 +25,6 @@
       <p class="text-3">{{ collection.mainTextBlock.text3 }}</p>
     </div>
 
-
     <!-- filter sort toggles -->
     <FilterSortToggles
       @openFilters="filtersOpen = true"
@@ -115,6 +114,17 @@ export default {
   },
   data() {
     return {
+      /* rawCriterion */
+      rawCriterion: {
+        search: {
+          key: "name",
+          term: ""
+        },
+        filters: {},
+        sortBy: {},
+        limit: 50,
+        cursor: 1
+      },
       products: [],
       collection: {
         name: "fetching..."
@@ -150,7 +160,7 @@ export default {
     filtersUpdated(filterData) {
       this.filterData = filterData;
       // TODO: MAKE SURE the collection id is always present (filterData.collections)
-
+      
       // can do that in fetch results method as well
       this.fetchResults();
     },
@@ -158,7 +168,91 @@ export default {
       this.sortData = sortData;
       this.fetchResults();
     },
-    async fetchResults() {},
+    getCheckedOnes(options) {
+      let checkedOptions = [];
+      let allOptions = {
+        ...options
+      };
+
+      const keys = Object.keys(allOptions);
+
+      /* omit unused filters */
+      keys.forEach(key => {
+        if (allOptions[key].checked === true)
+          checkedOptions.push(allOptions[key].value);
+      });
+
+      return checkedOptions;
+    },
+    async fetchResults() {
+      if (this.filterDataFetched === false) return;
+      console.log('results fetched')
+      this.rawCriterion.cursor = 1;
+
+      /* keep only the checked ones from (type, variants, collection) */
+      let filters = {};
+      filters.availabilityType = this.getCheckedOnes(
+        this.filterData.availabilityTypes
+      );
+
+      /* get bounipun collection id */
+      const bounipunCollection = this.filterData.collections.find(col => col.name.toUpperCase() == this.$route.query.slug.toUpperCase());
+      console.log(bounipunCollection);
+      filters.bounipun_collection = [bounipunCollection._id]
+
+      filters["variants._id"] = this.getCheckedOnes(this.filterData.variants);
+
+      /* send base colors once */
+      this.rawCriterion.colors = this.getCheckedOnes(
+        this.filterData.baseColors
+      );
+
+      /* append filters to raw criterion */
+      this.rawCriterion.filters = filters;
+      /* append selected price range to filters */
+      this.rawCriterion.selectedPriceRange = this.filterData.selectedPriceRange;
+
+      if (
+        this.sortData.priceRange !== undefined &&
+        this.sortData.priceRange !== ""
+      ) {
+        this.rawCriterion.sortBy = {
+          "priceRange.startsAt": parseInt(this.sortData.priceRange)
+        };
+      } else this.rawCriterion.sortBy = {};
+
+      /* post raw criterion to the server */
+      this.$store.commit("customer/setLoading", true);
+      const fetchPaginatedResults = this.$axios.$post("/searchProducts", {
+        rawCriterion: this.rawCriterion
+      });
+
+      /* wait for request to resolve */
+      const { response, error } = await this.$task(fetchPaginatedResults);
+      this.$store.commit("customer/setLoading", false);
+
+      /* if error occurred */
+      if (error) {
+        console.log("Could not fetch documents");
+        return;
+      }
+
+      /* scroll to top */
+      try {
+        window.scroll({ top: 0, behavior: "smooth" });
+      } catch (err) {
+        // console.log("Oops, `window` is not defined");
+      }
+
+      /* if no matches found, return */
+      if (response.docs.length === 0) {
+        console.log("No matches found");
+        this.products = [];
+        return;
+      }
+
+      console.log(response.docs);
+    },
     adjustProduct(product, cIndex) {
       let adjustedProduct = {
         ...product
