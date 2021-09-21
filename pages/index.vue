@@ -138,6 +138,8 @@
       </div>
     </div>
 
+          <InstagramFeed />
+
     <div class="press-and-quote flex col">
       <!-- quote -->
       <div class="quote" v-if="layout.quote.visible">
@@ -179,7 +181,7 @@
         </div>
       </div>
 
-      <InstagramFeed />
+
       
     </div>
   </div>

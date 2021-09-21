@@ -210,6 +210,10 @@ export default {
     };
   },
   methods: {
+    formatCurrency(adjustedPrice) {
+      adjustedPrice = parseFloat(adjustedPrice);
+      return this.$store.getters["customer/formatCurrency"](adjustedPrice);
+    },
     async updateOrder() {
       const pushUpdate = await this.$post("/updateOrderItemDetails", {
         orderId: this.orderId,

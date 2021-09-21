@@ -45,7 +45,7 @@
           </span> -->
             <span class="price">
               Amount Paid:
-              <b> {{ order.currency }} {{ subOrder.itemTotal }} </b>
+              <b> {{ order.currency }} {{ formatCurrency(subOrder.itemTotal) }} </b>
             </span>
           </div>
         </div>
@@ -108,10 +108,14 @@ export default {
   },
   computed: {
     noOrders() {
-      return this.orders.length !== 0;
+      return this.orders.length === 0;
     }
   },
   methods: {
+    formatCurrency(adjustedPrice) {
+      adjustedPrice = parseFloat(adjustedPrice);
+      return this.$store.getters["customer/formatCurrency"](adjustedPrice);
+    },
     checkIfCancellable(orderedAt) {
       orderedAt = new Date(orderedAt);
       const now = new Date();

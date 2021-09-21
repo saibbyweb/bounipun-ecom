@@ -8,7 +8,7 @@
 
     <div class="filters-and-sort">
       <!-- filter -->
-      <button class="action" @click="$emit('openFilters')">
+      <button class="action" @click="openFilters">
         Filters
         <img class="arrow-bottom" src="/icons/arrow_bottom.png" />
       </button>
@@ -17,7 +17,7 @@
       <span class="pipe"> | </span>
 
       <!-- sort -->
-      <button class="action" @click="$emit('openSort')">
+      <button class="action" @click="openSort">
         Sort
         <img class="arrow-bottom" src="/icons/arrow_bottom.png" />
       </button>
@@ -40,7 +40,15 @@ export default {
         type: Boolean,
         default: false
     }
-  }
+  },
+  methods: {
+    openFilters() {
+      this.$emit('openFilters');
+    },
+     openSort() {
+      this.$emit('openSort');
+     } 
+    }
 };
 </script>
 

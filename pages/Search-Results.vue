@@ -9,8 +9,8 @@
     <FilterSortToggles
       :searchTerm="$route.query.searchTerm"
       :totalMatches="totalMatches"
-      @openFilters="filtersOpen = true"
-      @openSort="sortOpen = true"
+      @openFilters="filtersOpen = true; sortOpen = false"
+      @openSort="sortOpen = true; filtersOpen = false"
     />
 
 

@@ -2,7 +2,8 @@
   <div class="instagram-feed">
     <!-- heading -->
     <div class="heading flex center">
-      <h3>{{ heading }}</h3>
+      <!-- <h3>{{ heading }}</h3> -->
+      <img class="instagram" src="/instagram-text.svg" />
     </div>
     <!-- posts grid -->
     <div class="posts-grid flex wrap center">
@@ -13,6 +14,12 @@
         :style="`background-image: url(${post})`"
       ></div>
     </div>
+    
+    <!-- loading icon -->
+    <div v-if="posts.length === 0" class="flex center">
+         <img width="100" src="/loading.gif" />
+    </div>
+
   </div>
 </template>
 
@@ -30,7 +37,8 @@ export default {
     };
   },
   mounted() {
-    this.fetchPosts();
+    setTimeout(() => this.fetchPosts(), 2000)
+    // this.fetchPosts();
   },
   methods: {
     async fetchPosts() {
@@ -63,13 +71,17 @@ export default {
   padding: 2% 0;
 
   @media (min-width: 769px) {
-    padding-top: 100px;
+    // padding-top: 100px;
   }
 
   //   background-color: $purple;
   .heading {
     // background-color: $green;
     padding: 1%;
+
+    .instagram {
+      width: 300px;
+    }
 
     h3 {
       // text-transform: uppercase;
@@ -85,11 +97,14 @@ export default {
       h3 {
         font-size: 30px;
       }
+          .instagram {
+      width: 200px;
+    }
     }
   }
 
   .posts-grid {
-    margin-top: 5%;
+    margin-top: 2%;
 
     .post {
       width: 28vw;
@@ -99,6 +114,8 @@ export default {
     }
 
     @media (max-width: 768px) {
+       margin-top: 5%;
+
       .post {
         width: 43vw;
         height: 43vw;

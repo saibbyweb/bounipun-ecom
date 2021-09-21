@@ -86,7 +86,7 @@
                 :value="collection.value"
                 v-model="collection.checked"
               />
-              {{ collection.name }}</label
+              {{ collection.name.toLowerCase() }}</label
             >
           </div>
         </Accordion>
@@ -105,8 +105,9 @@
               ></div>
 
               <label class="label flex start center">
-                {{ color.name }}
+                {{ color.name.toLowerCase() }}
               </label>
+              
               <input
                 class="color-check"
                 type="checkbox"
@@ -349,6 +350,7 @@ export default {
 
           .label {
             font-size: 10px;
+            text-transform: capitalize;
           }
         }
       }

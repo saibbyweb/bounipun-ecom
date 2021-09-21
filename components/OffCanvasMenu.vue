@@ -28,7 +28,7 @@
       </div>
 
       <!-- menu items -->
-      <button class="clear item">Collections</button>
+      <button class="sub-heading clear item">Collections</button>
       <!-- active collection list -->
       <button
         @click="navigate(collection, 'collection')"
@@ -45,7 +45,7 @@
 
       <div v-if="$store.state.customer.authorized" style="margin-bottom: 10px;">
         <!-- acc items -->
-        <button @click="navigate('/my-account')" class="clear item">
+        <button @click="navigate('/my-account')" class="sub-heading clear item">
           My Account
         </button>
         <button @click="navigate('/my-account/orders')" class="clear item acc">
@@ -241,6 +241,10 @@ export default {
       color: $gray;
       font-size: 14px;
       letter-spacing: 1px;
+
+      &.sub-heading {
+        color: black;
+      }
 
       &.acc {
         font-size: 10px;
