@@ -28,8 +28,8 @@
 
     <!-- filter sort toggles -->
     <FilterSortToggles
-      @openFilters="filtersOpen = true"
-      @openSort="sortOpen = true"
+   @openFilters="filtersOpen = true; sortOpen = false"
+      @openSort="sortOpen = true; filtersOpen = false"
       :collectionView="true"
     />
 
@@ -38,6 +38,7 @@
       ref="filters"
       :filtersOpen="filtersOpen"
       :collectionView="true"
+      :isEscape="isEscape"
       @close="filtersOpen = false"
       @updated="filtersUpdated"
       @dataFetched="filterDataFetched = true"
@@ -52,7 +53,7 @@
 
     <!-- if collections is not escape -->
     <div
-      v-if="!collectionLocked && collection.name !== 'Escape'"
+      v-if="(!collectionLocked && isEscape && !noFilterOrSortApplied) || (!collectionLocked  && !isEscape)"
       class="collection-items"
     >
       <!-- <product-card
@@ -75,7 +76,7 @@
     </div>
 
     <!-- if colllection is escape -->
-    <div v-if="!collectionLocked && collection.name === 'Escape'">
+    <div v-if="!collectionLocked && isEscape && noFilterOrSortApplied">
       <!-- color categories -->
       <div
         class="color-categories"
@@ -169,6 +170,21 @@ export default {
     },
     isEscape() {
       return this.$route.query.slug.toUpperCase() === "ESCAPE";
+    },
+    noFiltersApplied() {
+      if(Object.keys(this.rawCriterion.filters).length === 0)
+        return true;
+
+      return this.rawCriterion.colors.length === 0 &&
+        this.rawCriterion.filters.availabilityType.length === 0 &&
+        this.rawCriterion.filters["variants._id"].length === 0;
+
+    },
+    noFilterOrSortApplied() {
+      return (
+        this.noFiltersApplied &&
+        this.rawCriterion.sortBy["priceRange.startsAt"] === undefined
+      );
     }
   },
   mounted() {
@@ -208,9 +224,9 @@ export default {
       //   this.$route.query.slug.toUpperCase() === "ESCAPE"
       // )
       //   return;
-
-      if (this.filterDataFetched === false)
-          return;
+      this.escapeProduct = [];
+      this.products = [];
+      if (this.filterDataFetched === false) return;
 
       this.rawCriterion.cursor = 1;
 
@@ -247,6 +263,13 @@ export default {
           "priceRange.startsAt": parseInt(this.sortData.priceRange)
         };
       } else this.rawCriterion.sortBy = {};
+
+      console.log(this.rawCriterion, "--raw criterion");
+
+      /* if escape, no filter applied but sort applied, reset sort */
+      if(this.isEscape && this.noFiltersApplied && this.rawCriterion.sortBy["priceRange.startsAt"] !== undefined) {
+        this.rawCriterion.sortBy = {}
+      }
 
       /* post raw criterion to the server */
       this.$store.commit("customer/setLoading", true);
@@ -318,7 +341,7 @@ export default {
       });
 
       /* sort products if collection is escape */
-      if (this.collection.name === "Escape") {
+      if (this.isEscape && this.noFilterOrSortApplied) {
         this.products = response.docs;
         this.sortEscape(response.docs);
         return;
@@ -502,7 +525,6 @@ export default {
       }
     },
     async sortEscape(products) {
-    
       /* fetch color categories, if collection is escape */
       await this.fetchColorCategories();
 
@@ -510,10 +532,8 @@ export default {
       let groupedData = [];
 
       /* map color data to product colors */
-      for(let i = 0; i < product.colors.length; i++)
-        product.colors[i]._id = product.colorData[i]
-
-     
+      for (let i = 0; i < product.colors.length; i++)
+        product.colors[i]._id = product.colorData[i];
 
       this.colorCategories.forEach(category => {
         /* remove inactive colors */
@@ -522,7 +542,7 @@ export default {
         const colors = product.colors.filter(color => {
           /* attach actual index */
           color.actualIndex = product.colors.findIndex(
-             col => col._id === color._id
+            col => col._id === color._id
           );
           return color._id.category === category._id;
         });
@@ -534,7 +554,7 @@ export default {
         });
       });
 
-         console.log('sort escape called', product, groupedData)
+      console.log("sort escape called", product, groupedData);
 
       this.escapeProduct = groupedData;
     },

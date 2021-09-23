@@ -36,7 +36,7 @@
             </Accordion> -->
 
         <!-- availability type options -->
-        <Accordion heading="Availability" :expanded="true">
+        <Accordion v-if="!isEscape" heading="Availability" :expanded="true">
           <div
             class="option"
             v-for="(type, index) in filterData.availabilityTypes"
@@ -55,7 +55,7 @@
         </Accordion>
 
         <!-- variant options -->
-        <Accordion heading="Variants" :expanded="true">
+        <Accordion v-if="!isEscape" heading="Variants" :expanded="true">
           <div
             class="option"
             v-for="(variant, index) in filterData.variants"
@@ -152,6 +152,10 @@ export default {
     collectionView: {
         type: Boolean,
         default: false
+    },
+    isEscape: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
