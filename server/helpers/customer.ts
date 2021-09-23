@@ -26,6 +26,14 @@ export default {
                             variantNames: "$variantData.name"
                         }
                     },
+                    {
+                        $lookup: {
+                            from: 'colors',
+                            localField: 'colors._id',
+                            foreignField: '_id',
+                            as: 'colorData'
+                        }
+                    }
                     // {
                     //     $unset: ["variantData"]
                     // },

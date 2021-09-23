@@ -1,9 +1,9 @@
 <template>
-  <div class="center-col page -wh" >
+  <div class="center-col page -wh">
     <!-- collection header -->
     <div
       class="c-header center"
-      :class="{isEscape}"
+      :class="{ isEscape }"
       :style="{
         backgroundImage: `url(${getCollectionImage(collection.image)})`
       }"
@@ -28,7 +28,6 @@
 
     <!-- filter sort toggles -->
     <FilterSortToggles
-      v-if="!isEscape"
       @openFilters="filtersOpen = true"
       @openSort="sortOpen = true"
       :collectionView="true"
@@ -36,7 +35,6 @@
 
     <!-- offcanvas filters -->
     <FilterProducts
-      v-if="!isEscape"
       ref="filters"
       :filtersOpen="filtersOpen"
       :collectionView="true"
@@ -47,7 +45,6 @@
 
     <!-- offcanvas sort -->
     <SortProducts
-      v-if="!isEscape"
       :sortOpen="sortOpen"
       @close="sortOpen = false"
       @updated="sortUpdated"
@@ -159,10 +156,10 @@ export default {
       this.escapeProduct = [];
       this.colorCategories = [];
       this.collection = {};
-      if (this.isEscape) {
-        this.fetchCollectionProducts(this.$route.query.slug);
-        return;
-      }
+      // if (this.isEscape) {
+      //   this.fetchCollectionProducts(this.$route.query.slug);
+      //   return;
+      // }
       this.fetchResults(to.query.slug);
     }
   },
@@ -175,7 +172,7 @@ export default {
     }
   },
   mounted() {
-    if (this.isEscape) this.fetchCollectionProducts(this.$route.query.slug);
+    // if (this.isEscape) this.fetchCollectionProducts(this.$route.query.slug);
   },
   methods: {
     filtersUpdated(filterData) {
@@ -206,11 +203,15 @@ export default {
       return checkedOptions;
     },
     async fetchResults() {
-      if (
-        this.filterDataFetched === false ||
-        this.$route.query.slug.toUpperCase() === "ESCAPE"
-      )
-        return;
+      // if (
+      //   this.filterDataFetched === false ||
+      //   this.$route.query.slug.toUpperCase() === "ESCAPE"
+      // )
+      //   return;
+
+      if (this.filterDataFetched === false)
+          return;
+
       this.rawCriterion.cursor = 1;
 
       /* keep only the checked ones from (type, variants, collection) */
@@ -265,7 +266,10 @@ export default {
 
       /* scroll to top */
       try {
-        window.scroll({ top: 0, behavior: "smooth" });
+        window.scroll({
+          top: 0,
+          behavior: "smooth"
+        });
       } catch (err) {
         // console.log("Oops, `window` is not defined");
       }
@@ -313,6 +317,13 @@ export default {
         }
       });
 
+      /* sort products if collection is escape */
+      if (this.collection.name === "Escape") {
+        this.products = response.docs;
+        this.sortEscape(response.docs);
+        return;
+      }
+
       /* process color segregation */
       this.processColorSegregation(response.docs);
       // this.products = response.docs;
@@ -331,6 +342,7 @@ export default {
       console.log(segregated, segregated.length, "-- WATCH");
 
       this.products = segregated;
+
       // this.totalMatches = segregated.length;
       /* figure out the color index of matched colors */
       /* generate new array where each matched color is treated as a product */
@@ -372,7 +384,9 @@ export default {
 
         /* make sure the color is active */
         if (filterMatch && color.status === true) {
-          const colorProduct = { ...product };
+          const colorProduct = {
+            ...product
+          };
           console.log("COLOR MATCHED", color.name, product.bounipun_collection);
           /* TODO: escape collection id should be global */
           if (product.bounipun_collection.toUpperCase() === "ESCAPE") {
@@ -380,7 +394,10 @@ export default {
             colorProduct.name = color.name;
           }
 
-          matchedColors.push({ color: colorProduct, actualIndex: index });
+          matchedColors.push({
+            color: colorProduct,
+            actualIndex: index
+          });
         }
 
         /* which ever color matches this criteria, capture the index and treat it as individual product */
@@ -389,7 +406,12 @@ export default {
 
       /* if no color matched, return as it is */
       if (matchedColors.length === 0) {
-        matchedColors = [{ color: product, actualIndex: -1 }];
+        matchedColors = [
+          {
+            color: product,
+            actualIndex: -1
+          }
+        ];
       }
 
       return matchedColors;
@@ -479,18 +501,28 @@ export default {
         this.sortEscape(this.products);
       }
     },
-    sortEscape(products) {
-      const product = products[0];
+    async sortEscape(products) {
+    
+      /* fetch color categories, if collection is escape */
+      await this.fetchColorCategories();
+
+      let product = products[0];
       let groupedData = [];
+
+      /* map color data to product colors */
+      for(let i = 0; i < product.colors.length; i++)
+        product.colors[i]._id = product.colorData[i]
+
+     
+
       this.colorCategories.forEach(category => {
         /* remove inactive colors */
         product.colors = product.colors.filter(color => color.status === true);
-
         /* find all colors under this category */
         const colors = product.colors.filter(color => {
           /* attach actual index */
           color.actualIndex = product.colors.findIndex(
-            col => col._id === color._id
+             col => col._id === color._id
           );
           return color._id.category === category._id;
         });
@@ -501,6 +533,8 @@ export default {
           colors
         });
       });
+
+         console.log('sort escape called', product, groupedData)
 
       this.escapeProduct = groupedData;
     },
