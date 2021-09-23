@@ -7,12 +7,12 @@
     </div>
     <!-- posts grid -->
     <div class="posts-grid flex wrap center">
+      <a target="_blank" :href="post.permalink"  v-for="post in posts"  :key="post">
       <div
-        v-for="post in posts"
-        class="post shadow"
-        :key="post"
-        :style="`background-image: url(${post})`"
+      class="post shadow"
+        :style="`background-image: url(${post.imageLink})`"
       ></div>
+      </a>
     </div>
     
     <!-- loading icon -->
@@ -53,11 +53,11 @@ export default {
           if (index > 5) return;
 
           if (post.media_type === "VIDEO") {
-            posts.push(post.thumbnail_url);
+            posts.push({ imageLink: post.thumbnail_url, permalink: post.permalink });
             return;
           }
 
-          posts.push(post.media_url);
+          posts.push({ imageLink: post.media_url, permalink: post.permalink });
         });
         this.posts = posts;
       }
@@ -106,10 +106,13 @@ export default {
   .posts-grid {
     margin-top: 2%;
 
+    a {
+      margin: 1%;
+    }
+
     .post {
       width: 28vw;
       height: 28vw;
-      margin: 1%;
       background-size: cover;
     }
 
