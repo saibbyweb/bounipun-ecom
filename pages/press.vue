@@ -5,9 +5,10 @@
       ref="slideshow"
       :images="pressImageList"
       :slideshowOptions="{ thumbnails: true }"
-      :dSlideHeight="'75vh'"
+      dSlideHeight="70vh"
+      mSlideHeight="60vh"
       :dSlideWidth="35"
-      :size="'cover'"
+      size="contain"
       @slideChanged="slideChanged"
     />
     <!-- main text block -->
@@ -21,9 +22,9 @@
 
     </div>
     </div>
-    <div class="flex center">
+    <!-- <div class="flex center">
     <h1 class="title"> Bounipun in Press </h1>
-    </div>
+    </div> -->
   </div>
 </template>
 
