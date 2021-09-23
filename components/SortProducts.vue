@@ -72,6 +72,9 @@ export default {
       },
       deep: true,
       immediate: true
+    },
+    $route() {
+      this.clearSort();
     }
   },
   methods: {

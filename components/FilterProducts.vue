@@ -224,6 +224,9 @@ export default {
       },
       deep: true,
       immediate: true
+    },
+    $route() {
+      this.clearAllFilters();
     }
   },
   methods: {
