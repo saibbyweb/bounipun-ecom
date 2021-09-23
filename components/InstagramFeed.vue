@@ -80,7 +80,7 @@ export default {
     padding: 1%;
 
     .instagram {
-      width: 300px;
+      width: 230px;
     }
 
     h3 {
@@ -98,7 +98,7 @@ export default {
         font-size: 30px;
       }
           .instagram {
-      width: 200px;
+      width: 150px;
     }
     }
   }

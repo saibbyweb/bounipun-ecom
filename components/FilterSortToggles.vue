@@ -54,7 +54,7 @@ export default {
 
 <style lang="scss" scoped>
 .fs-wrapper {
-  padding-top: 10px;
+  padding: 5px;
   position: fixed;
   top: 10vh;
   left: 0;
