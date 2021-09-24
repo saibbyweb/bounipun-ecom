@@ -44,6 +44,7 @@
         <DeliveryInput
           v-for="(field, key, index) in formData"
           :key="index"
+          :type="field.type"
           v-model="field.value"
           :error="field.error"
           :label="field.label"
@@ -186,6 +187,7 @@ export default {
         surName: "Sur Name",
         mobileNumber: "Mobile Number",
         email: "Email",
+        addressType: "Address Type",
         addressLine1: "Address Line #1",
         addressLine2: "Address Line #2",
         city: "City",
@@ -200,12 +202,20 @@ export default {
         deliveryAddress[key] = {
           label: fields[key],
           value: "",
+          type: 'text',
           error: {
             status: false,
             msg: ""
           }
         };
+
+        if(key === 'addressType') {
+          deliveryAddress[key].value = 'Home'
+          deliveryAddress[key].type="select";
+        }
       }
+
+
       return deliveryAddress;
     },
     setError(key, flag, msg) {

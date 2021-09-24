@@ -5,6 +5,7 @@
     <div class="input-box">
       <div v-if="isMobileNumber" class="country-code">{{ countryCode }}</div>
       <input
+        v-if="type !== 'select'"
         class="field"
         type="text"
         :value="value"
@@ -14,6 +15,15 @@
         :class="{ error: error.status, isMobileNumber }"
         :disabled="disabled"
       />
+
+      <select class="selection field" v-if="label === 'Address Type'" @change="$emit('input', $event.target.value)" :value="value">
+        <option value="Home"> Home </option>
+        <option value="Office"> Office </option>
+        <option value="Other"> Other </option>
+      </select>
+      
+
+
     </div>
     <label class="label" :class="{ error: error.status }"> {{ label }} </label>
   </div>
@@ -24,6 +34,10 @@ export default {
   props: {
     label: String,
     value: String,
+    type: {
+      type: String,
+      default: 'text'
+    },
     isMobileNumber: {
       type: Boolean,
       default: false
