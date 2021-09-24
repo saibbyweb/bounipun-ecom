@@ -188,6 +188,7 @@ export default {
         mobileNumber: "Mobile Number",
         email: "Email",
         addressType: "Address Type",
+        state: 'State',
         addressLine1: "Address Line #1",
         addressLine2: "Address Line #2",
         city: "City",
@@ -211,6 +212,11 @@ export default {
 
         if(key === 'addressType') {
           deliveryAddress[key].value = 'Home'
+          deliveryAddress[key].type="select";
+        }
+
+        if(key === 'state') {
+          deliveryAddress[key].value = 'Andaman and Nicobar Islands'
           deliveryAddress[key].type="select";
         }
       }
