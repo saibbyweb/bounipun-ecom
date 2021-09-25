@@ -39,17 +39,19 @@ const schema = new mongoose.Schema({
     usergroup: String,
     /* address book */
     addressBook: [{
-        firstName: String,
-        surName: String,
-        mobileNumber: String,
-        email: String,
-        countryDialCode: String,
-        countryIsoCode: String,
-        addressLine1: String,
-        addressLine2: String,
-        city: String,
-        postalCode: String,
-        type: String
+        firstName:  { type: String },
+        surName:  { type: String },
+        mobileNumber:  { type: String },
+        email: { type: String },
+        addressType:  { type: String },
+        state:  { type: String },
+        countryDialCode:  { type: String },
+        countryIsoCode:  { type: String },
+        addressLine1:  { type: String },
+        addressLine2:  { type: String },
+        city:  { type: String },
+        postalCode:  { type: String },
+        type:  { type: String }
     }],
     cart: [
         {

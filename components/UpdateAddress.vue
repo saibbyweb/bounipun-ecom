@@ -15,6 +15,7 @@
     <DeliveryInput
       v-for="(field, key, index) in formData"
       :key="index"
+      :type="field.type"
       v-model="field.value"
       :error="field.error"
       :label="field.label"
@@ -62,12 +63,14 @@ export default {
       deliveryAddress: {
         firstName: "",
         surName: "",
+        state: "",
+        addressType: "",
         mobileNumber: "",
         addressLine1: "",
         addressLine2: "",
         email: "",
         city: "",
-        postalCode: "",
+        postalCode: ""
       },
       formData: this.createFormData(),
       updated: false
@@ -77,7 +80,7 @@ export default {
     if (this.updating) this.fetchAddressDetails();
   },
   watch: {
-    addressId: function(newVal, oldVal) {
+    addressDetails: function(newVal, oldVal) {
       if (newVal === null) this.resetForm();
       else this.fetchAddressDetails();
     }
@@ -90,6 +93,8 @@ export default {
         surName: "Sur Name",
         mobileNumber: "Mobile Number",
         email: "Email",
+        addressType: "Address Type",
+        state: "State",
         addressLine1: "Address Line #1",
         addressLine2: "Address Line #2",
         city: "City",
@@ -109,11 +114,22 @@ export default {
             msg: ""
           }
         };
+
+        if (key === "addressType") {
+          // deliveryAddress[key].value = "Home";
+          deliveryAddress[key].type = "select";
+        }
+
+        if (key === "state") {
+          // deliveryAddress[key].value = "Andaman and Nicobar Islands";
+          deliveryAddress[key].type = "select";
+        }
       }
       return deliveryAddress;
     },
     fetchAddressDetails() {
       this.deliveryAddress = this.addressDetails;
+      // this.formData = this.createFormData();
     },
     async updateAddress() {
       if (!this.validateForm()) return;
@@ -156,7 +172,7 @@ export default {
       /* fetch profile */
       this.$store.dispatch("customer/fetchProfile");
     },
-      setError(key, flag, msg) {
+    setError(key, flag, msg) {
       const field = this.formData[key];
       if (flag) {
         field.error = {
@@ -165,7 +181,7 @@ export default {
         };
       }
     },
-     validateForm() {
+    validateForm() {
       /* required fields */
       const requiredFields = [
         "firstName",
@@ -244,7 +260,7 @@ export default {
       console.log(validated, "--validated");
 
       return validated;
-    },
+    }
   }
 };
 </script>

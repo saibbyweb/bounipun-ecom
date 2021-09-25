@@ -393,6 +393,9 @@ router.post('/addressBookActions', userAuth('customer'), async (req, res) => {
     }
 
     /* save address book back to database */
+    
+    console.log(addressBook);
+
     await db.model('users').findOneAndUpdate({ _id: user._id }, { addressBook });
     res.send('addressbook-updated');
 

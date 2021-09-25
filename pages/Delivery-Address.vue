@@ -1,7 +1,10 @@
 <template>
   <div class="delivery-page page -wh">
     <!-- saved addresses -->
-    <div v-if="loggedIn && !addressListEmpty" class="saved-addresses flex center col">
+    <div
+      v-if="loggedIn && !addressListEmpty"
+      class="saved-addresses flex center col"
+    >
       <br />
       <!-- country region -->
       <h2 class="title">Saved Addresses ({{ addressList.length }})</h2>
@@ -82,13 +85,13 @@
 
     <!-- proceed to checkout -->
     <div class="proceed flex center col">
-              <!-- TODO: consent for adding address to address book -->
-        <Checkbox
+      <!-- TODO: consent for adding address to address book -->
+      <Checkbox
         v-if="activeAddressIndex === -1"
-          label="Save address for later use."
-          v-model="saveNewAddress"
-        />
-<br>
+        label="Save address for later use."
+        v-model="saveNewAddress"
+      />
+      <br />
 
       <button @click="proceedToCheckout" class="action">
         {{
@@ -138,7 +141,7 @@ export default {
       return customer.user.addressBook;
     },
     addressListEmpty() {
-    return this.addressList.length === 0
+      return this.addressList.length === 0;
     },
     loggedIn() {
       return this.$store.state.customer.authorized;
@@ -154,7 +157,7 @@ export default {
       this.$refs.newAddress.scrollIntoView({ behavior: "smooth" });
       // let deliveryAddress = {};
       Object.keys(this.formData).forEach(key => {
-        this.formData[key].value = address[key]
+        this.formData[key].value = address[key];
       });
     },
     prefillForm() {
@@ -188,7 +191,7 @@ export default {
         mobileNumber: "Mobile Number",
         email: "Email",
         addressType: "Address Type",
-        state: 'State',
+        state: "State",
         addressLine1: "Address Line #1",
         addressLine2: "Address Line #2",
         city: "City",
@@ -203,24 +206,23 @@ export default {
         deliveryAddress[key] = {
           label: fields[key],
           value: "",
-          type: 'text',
+          type: "text",
           error: {
             status: false,
             msg: ""
           }
         };
 
-        if(key === 'addressType') {
-          deliveryAddress[key].value = 'Home'
-          deliveryAddress[key].type="select";
+        if (key === "addressType") {
+          deliveryAddress[key].value = "Home";
+          deliveryAddress[key].type = "select";
         }
 
-        if(key === 'state') {
-          deliveryAddress[key].value = 'Andaman and Nicobar Islands'
-          deliveryAddress[key].type="select";
+        if (key === "state") {
+          deliveryAddress[key].value = "Andaman and Nicobar Islands";
+          deliveryAddress[key].type = "select";
         }
       }
-
 
       return deliveryAddress;
     },

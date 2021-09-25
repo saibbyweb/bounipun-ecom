@@ -8,6 +8,7 @@
 
     <span> {{ address.addressLine1 }} </span>
     <span> {{ address.addressLine2 }} </span>
+    <span> {{ address.state }} </span>
     <span> {{ address.city }} </span>
     <span> {{ address.postalCode }} </span>
     <span> {{ address.email }} </span>
@@ -28,6 +29,8 @@ export default {
         addressLine1: "",
         addressLine2: "",
         email: "",
+        addressType: "",
+        state: "",
         city: "",
         postalCode: ""
       }
