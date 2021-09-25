@@ -1,6 +1,6 @@
 <template>
 <!-- delivery address field -->
-<div class="delivery-input">
+<div v-if="!addressIsIndian && type !== 'select'" class="delivery-input">
     <p v-if="error.status" class="error-msg">{{ error.msg }}</p>
     <div class="input-box">
         <div v-if="isMobileNumber" class="country-code">{{ countryCode }}</div>
@@ -54,6 +54,11 @@ export default {
                 status: Boolean,
                 msg: String
             }
+        }
+    },
+    computed: {
+        addressIsIndian() {
+            return this.countryCode === 'IN'
         }
     },
     data() {

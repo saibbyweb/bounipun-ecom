@@ -115,6 +115,7 @@ export default {
           }
         };
 
+
         if (key === "addressType") {
           // deliveryAddress[key].value = "Home";
           deliveryAddress[key].type = "select";

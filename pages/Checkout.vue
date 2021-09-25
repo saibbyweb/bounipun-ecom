@@ -28,12 +28,14 @@
           <span class="name">
             {{ deliveryAddress.firstName }} {{ deliveryAddress.surName }}
           </span>
-          <span> {{ deliveryAddress.mobileNumber }} </span>
-          <!-- <span> {{ deliveryAddress.email }} </span> -->
           <span> {{ deliveryAddress.addressLine1 }}</span>
           <span> {{ deliveryAddress.addressLine2 }} </span>
+          <span> {{ deliveryAddress.state }} </span>
           <span> {{ deliveryAddress.city }} </span>
           <span> {{ deliveryAddress.postalCode }} </span>
+          <span> {{ deliveryAddress.mobileNumber }} </span>
+          <!-- <span> {{ deliveryAddress.email }} </span> -->
+  
         </div>
 
         <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
