@@ -70,7 +70,8 @@ export default {
         addressLine2: "",
         email: "",
         city: "",
-        postalCode: ""
+        postalCode: "",
+        countryDialCode: this.$store.state.customer.user.countryDialCode
       },
       formData: this.createFormData(),
       updated: false

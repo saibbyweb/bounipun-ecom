@@ -30,7 +30,7 @@
           </span>
           <span> {{ deliveryAddress.addressLine1 }}</span>
           <span> {{ deliveryAddress.addressLine2 }} </span>
-          <span> {{ deliveryAddress.state }} </span>
+          <span> {{ deliveryAddress.state || '' }} </span>
           <span> {{ deliveryAddress.city }} </span>
           <span> {{ deliveryAddress.postalCode }} </span>
           <span> {{ deliveryAddress.mobileNumber }} </span>

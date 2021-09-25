@@ -8,8 +8,8 @@
 
     <span> {{ address.addressLine1 }} </span>
     <span> {{ address.addressLine2 }} </span>
-    <span> {{ address.state }} </span>
-    <span> {{ address.city }} </span>
+    <span v-if="indianAddress"> {{ address.state }} </span>
+    <span v-if="indianAddress"> {{ address.city }} </span>
     <span> {{ address.postalCode }} </span>
     <span> {{ address.email }} </span>
     <span> {{ address.countryDialCode }} - {{ address.mobileNumber }} </span>
@@ -43,8 +43,13 @@ export default {
       type: Boolean,
       default: false
     }
+  },
+  computed: {
+    indianAddress() {
+      return this.$store.state.customer.user.countryDialCode === '+91'
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
