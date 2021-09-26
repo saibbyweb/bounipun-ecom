@@ -19,6 +19,7 @@ import payment from "./payment";
 import paymentIntent from "./paymentIntent";
 import globalConfig from "./globalConfig";
 import orderSequence from "./orderSequence";
+import faq from "./faq";
 
 const register = function () {
     imageUpload.methods.register();
@@ -42,6 +43,7 @@ const register = function () {
     paymentIntent.methods.register();
     globalConfig.methods.register();
     orderSequence.methods.register();
+    faq.methods.register();
 }
 
-export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage, user, session, order, payment, paymentIntent, globalConfig, orderSequence, register };
+export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage, user, session, order, payment, paymentIntent, globalConfig, orderSequence, faq, register };
