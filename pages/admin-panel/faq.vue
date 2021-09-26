@@ -86,6 +86,9 @@ export default {
     documentFetched(doc) {
       this.showForm = true;
       this.editMode = true;
+    
+      doc.questions = doc.questions.map(que => ({...que, key : uuidv4()}));
+
       this.$refs.updateComponent.populateForm(doc);
     },
     resultsFetched(result) {
