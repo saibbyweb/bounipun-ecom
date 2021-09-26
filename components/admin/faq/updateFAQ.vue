@@ -11,16 +11,18 @@
     
     <!-- questions -->
     <div class="questions">
+        <label class="label"> Questions: </label>
         <div class="question" v-for="(question,index) in doc.questions" :key="question.key">
+               <label class="label que"> Question #{{ index }} </label>
                <InputBox label="Title" v-model="question.title" />
-               <InputBox label="Answer" v-model="question.answer" />
+               <TextBox label="Answer" v-model="question.answer" />
                <!-- delete icon -->
-               <img src="/icons/dark/remove-cart-item.png" @click="removeQuestion(index)" />
+               <img class="delete" src="/icons/dark/remove-cart-item.png" @click="removeQuestion(index)" />
         </div>
     </div>
 
     <!-- add new question wrapper -->
-    <div class="add-new-question">
+    <div class="add-new-question flex center">
         <button class="action" @click="addNewQuestion"> Add New Question </button>
     </div>
 
@@ -159,6 +161,28 @@ export default {
     padding: 2%;
     margin-left: 5px;
     font-weight: 900;
+    &.que {
+        font-size: 13px;
+    }
+}
+
+.questions {
+    .question {
+        border: 2px dashed #efefef;
+        position: relative;
+
+        .delete {
+            position: absolute;
+            top:3px;
+            right:3px;
+            width: 25px;
+        }
+    }
+    margin-bottom: 10px;
+}
+
+.add-new-question {
+    padding-bottom: 10px;
 }
 
 </style>
