@@ -30,7 +30,7 @@
     </div>
     <!-- update faq form -->
     <div :class="{ updating: showForm }" class="update">
-      <UpdateSale
+        <update-faq
         v-show="showForm"
         ref="updateComponent"
         @updated="updateList"

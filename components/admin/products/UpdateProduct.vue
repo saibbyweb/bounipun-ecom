@@ -65,7 +65,7 @@
     <!-- description -->
     <TextBox v-model="doc.description" label="Design Description" />
 
-        <!-- rts variant and fabric -->
+    <!-- rts variant and fabric -->
     <div v-if="rtsAndUnderBounipun" class="rts-variant-and-fabric">
       <!-- select direct variant for rts -->
       <SelectBox
@@ -291,8 +291,6 @@
       v-model="doc.stock"
     />
 
-
-
     <!-- estimated delivery time -->
     <!-- <InputBox label="Estimated Delivery Time (in weeks)" v-model="doc.etd" type="number" /> -->
 
@@ -434,7 +432,7 @@ export default {
       return this.doc.availabilityType === "ready-to-ship";
     },
     rtsAndUnderBounipun() {
-        return this.readyToShip && !this.thirdPartyProduct;
+      return this.readyToShip && !this.thirdPartyProduct;
     },
     underAutograph() {
       /* TODO: should first fetch the _id of the autograph doc in collections and then compare */
@@ -609,10 +607,12 @@ export default {
         variant => variant.value === variantId
       );
       if (selectedVariant === undefined)
-        return [{
-          name: "Select Variant First",
-          value: ""
-        }]
+        return [
+          {
+            name: "Select Variant First",
+            value: ""
+          }
+        ];
 
       const filteredFabrics = this.fabrics.filter(fabric => {
         return fabric.code.startsWith(selectedVariant.code);

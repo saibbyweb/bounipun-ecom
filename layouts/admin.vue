@@ -4,7 +4,7 @@
       <img src="/loading.gif" />
     </div>
     <!-- local login -->
-    <div v-if="!$store.state.admin.localAuthorized" class="local-login flex center col">
+    <div v-if="$store.state.admin.localAuthorized" class="local-login flex center col">
       <div class="box flex center col">
         <img class="logo" src="/icons/light/logo.png" />
       <InputCredential label="PIN" v-model="pin"/>
@@ -25,9 +25,9 @@ export default {
   },
   watch: {
     $route(to, from) {
-      console.log(to.path);
-      if(this.$store.state.admin.localAuthorized === false)
-        this.$router.push('/admin-panel')
+      // console.log(to.path);
+      // if(this.$store.state.admin.localAuthorized === false)
+      //   this.$router.push('/admin-panel')
     }
   },
   methods: {
