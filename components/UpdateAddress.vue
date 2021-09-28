@@ -116,18 +116,15 @@ export default {
           }
         };
 
-
         if (key === "addressType") {
-          // deliveryAddress[key].value = "Home";
           deliveryAddress[key].type = "select";
+          if (!this.updating) deliveryAddress[key].value = "Home";
         }
 
-        if(key === "addressType" && !this.updating)
-          deliveryAddress[key].value="Home"
-
         if (key === "state") {
-          // deliveryAddress[key].value = "Andaman and Nicobar Islands";
           deliveryAddress[key].type = "select";
+          if (!this.updating)
+            deliveryAddress[key].value = "Andaman and Nicobar Islands";
         }
       }
       return deliveryAddress;
