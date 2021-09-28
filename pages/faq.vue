@@ -1,22 +1,59 @@
 <template>
-<div class="page -wh">
+  <div class="page">
     <div class="page-header center">
-        <h1 class="title"> Frequently Asked Questions </h1>
+     <h1>Frequently Asked Questions</h1>
     </div>
-    <div class="side-pad">
-        <h3 class="faq-topic"> Shipping </h3>
-        <faq-item question="Does Bounipun deliver internationally?" answer="Yes. It depends on various circumstances" />
-        <faq-item question="How do I return or exchange an item?" answer="Lorem ipsum and some other words...Lorem ipsum and some other words...Lorem ipsum and some other words...Lorem ipsum and some other words...Lorem ipsum and some other words...Lorem ipsum and some other words..." />
-    </div>
-</div>
+
+
+      <Accordion v-for="(question,index) in faqs" :key="index" :heading="question.title">
+        <p>  {{ question.answer }} </p>
+      </Accordion>
+  </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      faqs: []
+    };
+  },
+  mounted() {
+    this.fetchFAQs();
+  },
+  methods: {
+    async fetchFAQs() {
+      const faqs = await this.$fetchData("faq", {
+        status: true
+      });
+
+      if (!faqs.fetched) {
+        return;
+      }
+
+      this.faqs = faqs.doc.questions;
+    }
+  }
+};
+</script>
+
 <style lang="scss" scoped>
-.faq-topic {
-    background: $primary_dark;
-    color: white;
-    width: fit-content;
-    padding: 5px 10px;
-    font-size:13px;
-}
+  h1 {
+    text-align: center;
+  }
+  @media (max-width: 768px) {
+    h1 {
+      margin-bottom: 40px;
+    }
+  }
+  p {
+    font-family: $font_2;
+    font-size: 13px;
+    padding:5px;
+    color: #6a6a6a;
+    .bold {
+      font-weight: 900;
+      color: black;
+    }
+  }
 </style>

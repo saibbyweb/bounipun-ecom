@@ -1,5 +1,5 @@
 import { db, ObjectId, mongoose } from "@helpers/essentials"
-import { product, collection, homepageLayouts } from "@models"
+import { product, collection, homepageLayouts, faq } from "@models"
 
 export default {
     async specialUpdate(model, details, editMode) {
@@ -14,6 +14,9 @@ export default {
                 break;
             case 'homepage_layouts':
                 await homepageLayouts.methods.updateLayouts(details, editMode);
+                break;
+            case 'faq':
+                await faq.methods.updateFAQs(details, editMode);
                 break;
             default:
                 break;
