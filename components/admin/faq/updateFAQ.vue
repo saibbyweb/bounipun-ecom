@@ -25,30 +25,37 @@
                <img class="delete" src="/icons/dark/remove-cart-item.png" @click="removeQuestion(index)" />
         </div>
     </div> -->
-
+    <div class="flex around center" style="width:100%">
+   <label class="label"> Questions: </label>
+       <!-- drag toggle -->
+    <Toggle v-model="dragEnabled" label="Drag" width="90px" activeText="On" inactiveText="Off" />
+    </div>
+   <br>
     <!-- draggable questions -->
     <Draggable
       v-model="doc.questions"
       ghost-class="ghost"
       @end="onDragEnd"
-      :sort="true"
+      :sort="dragEnabled"
       class="questions"
     >
       <transition-group type="transition" name="flip-list">
-        <div
-          class="question item"
+        <Accordion
           v-for="(question, index) in doc.questions"
           :key="question.key"
+          :heading="`#${ index + 1 } - ${question.title}`"
         >
-          <label class="label que"> Question #{{ index + 1 }} </label>
-          <InputBox label="Title" v-model="question.title" />
-          <TextBox label="Answer" v-model="question.answer" />
-          <img
-            class="delete"
-            src="/icons/dark/remove-cart-item.png"
-            @click="removeQuestion(index)"
-          />
-        </div>
+          <div class="question item">
+            <!-- <label class="label que"> Question #{{ index + 1 }} </label> -->
+            <InputBox label="Title" v-model="question.title" />
+            <TextBox label="Answer" v-model="question.answer" />
+            <img
+              class="delete"
+              src="/icons/dark/remove-cart-item.png"
+              @click="removeQuestion(index)"
+            />
+          </div>
+        </Accordion>
       </transition-group>
     </Draggable>
 
@@ -70,13 +77,13 @@
         {{ editMode ? "Apply Changes" : "Add FAQ" }}
       </button>
       <!-- delete document -->
-      <button
+      <!-- <button
         v-if="editMode"
         @click="deleteDocument"
         class="action delete"
         :disabled="loading"
       >
-        Delete
+        Delete -->
       </button>
     </div>
   </div>
@@ -104,7 +111,7 @@ export default {
         ],
         status: false
       },
-      allProductLists: [],
+      dragEnabled: false,
       loading: false,
       updated: false
     };
@@ -134,6 +141,7 @@ export default {
       if (!result.updated) return;
 
       this.$emit("updated");
+      result.doc.questions = result.doc.questions.map(que => ({...que, key : uuidv4()}));
       this.populateForm(result.doc);
       this.$flash(this);
     },
