@@ -77,7 +77,7 @@
 
     
       <!-- links -->
-      <!-- <button class="clear link" @click="$router.push('/faqs')">FAQs</button> -->
+      <button class="clear link" @click="navigate('/faq')">FAQs</button>
       <!-- <button class="clear link">Help</button> -->
       <!-- <button class="clear link">About Us</button> -->
       <button class="clear link" @click="navigate('/terms')">Terms of Use</button>

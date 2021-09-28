@@ -77,13 +77,13 @@
         {{ editMode ? "Apply Changes" : "Add FAQ" }}
       </button>
       <!-- delete document -->
-      <!-- <button
+      <button
         v-if="editMode"
         @click="deleteDocument"
         class="action delete"
         :disabled="loading"
       >
-        Delete -->
+        Delete 
       </button>
     </div>
   </div>
