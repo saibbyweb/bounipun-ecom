@@ -1,13 +1,16 @@
 <template>
   <div class="page">
     <div class="page-header center">
-     <h1>Frequently Asked Questions</h1>
+      <h1>Frequently Asked Questions</h1>
     </div>
-
-
-      <Accordion v-for="(question,index) in faqs" :key="index" :heading="question.title">
-        <p>  {{ question.answer }} </p>
-      </Accordion>
+  <br><br>
+    <Accordion
+      v-for="(question, index) in faqs"
+      :key="index"
+      :heading="question.title"
+    >
+      <p>{{ question.answer }}</p>
+    </Accordion>
   </div>
 </template>
 
@@ -38,22 +41,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+h1 {
+  text-align: center;
+}
+@media (max-width: 768px) {
+  
+  // .page {
+  //   margin-bottom: 
+  // }
+
   h1 {
-    text-align: center;
+    margin-top: 20px;
+    font-size: 25px;
   }
-  @media (max-width: 768px) {
-    h1 {
-      margin-bottom: 40px;
-    }
+}
+p {
+  font-family: $font_2;
+  font-size: 13px;
+  padding: 5px;
+  color: #6a6a6a;
+  .bold {
+    font-weight: 900;
+    color: black;
   }
-  p {
-    font-family: $font_2;
-    font-size: 13px;
-    padding:5px;
-    color: #6a6a6a;
-    .bold {
-      font-weight: 900;
-      color: black;
-    }
-  }
+}
 </style>
