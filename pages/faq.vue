@@ -3,7 +3,7 @@
     <div class="page-header center">
       <h1>Frequently Asked Questions</h1>
     </div>
-  <br><br>
+    <br /><br />
     <Accordion
       v-for="(question, index) in faqs"
       :key="index"
@@ -45,11 +45,6 @@ h1 {
   text-align: center;
 }
 @media (max-width: 768px) {
-  
-  // .page {
-  //   margin-bottom: 
-  // }
-
   h1 {
     margin-top: 20px;
     font-size: 25px;
