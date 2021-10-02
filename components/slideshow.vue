@@ -3,7 +3,7 @@
     <div class="till-dots">
       <div class="slideshow">
         <!-- lens -->
-        <div v-show="true" class="lens" ref="lens"></div>
+        <div v-show="activeHover" class="lens" ref="lens"></div>
 
         <!-- slideshow images -->
         <div
@@ -43,7 +43,7 @@
     </div>
 
     <!-- zoomed in image -->
-    <div v-show="true" ref="zoomedIn" class="zoomed-in-image"></div>
+    <div v-show="activeHover" ref="zoomedIn" class="zoomed-in-image"></div>
 
     <!-- custom text -->
     <div v-if="customText !== ''" class="center">
@@ -298,14 +298,19 @@ export default {
       const activeImage = this.images[this.activeIndex];
 
       if (this.previousZoomedInImage !== activeImage) {
-        zoomedIn.style.backgroundImage = `url(${activeImage})`;
+        const originalImage = activeImage.replace('productPages','original')
+        zoomedIn.style.backgroundImage = `url(${originalImage})`;
         this.previousZoomedInImage = activeImage;
       }
       console.log(slidesContainer.offsetWidth, slidesContainer.offsetHeight, cx, cy)
      
-      console.log(slideWidth);
+      console.log(slideWidth, slidesContainer.offsetHeight);
+      // zoomedIn.style.backgroundSize = 'cover';
+      zoomedIn.style.backgroundSize = (slidesContainer.offsetHeight * cy) + "px " + (slidesContainer.offsetHeight * cy) + "px ";
+      // zoomedIn.style.backgroundSize = ((slideWidth * cx) / 1.5) + "px " + ((slideWidth * cx) / 1.5) + "px ";
 
-      zoomedIn.style.backgroundSize = (slideWidth * cx) + "px " + (slidesContainer.offsetHeight * cy) + "px";
+
+      // zoomedIn.style.backgroundSize = (slideWidth * cx) + "px " + (slidesContainer.offsetHeight * cy) + "px";
 
       pos = this.getCursorPosition(e, slidesContainer);
       /* Calculate the position of the lens: */
@@ -316,12 +321,12 @@ export default {
 
       x = x < 0 ? 0 : x;
       y = y < 0 ? 0 : y;
-      if (x > slidesContainer.width - lens.offsetWidth) {
-        x = slidesContainer.width - lens.offsetWidth;
+      if (x > slideWidth - lens.offsetWidth) {
+        x = slideWidth - lens.offsetWidth;
       }
 
-      if (y > slidesContainer.height - lens.offsetHeight) {
-        y = slidesContainer.height - lens.offsetHeight;
+      if (y > slidesContainer.offsetHeight - lens.offsetHeight) {
+        y = slidesContainer.offsetHeight - lens.offsetHeight;
       }
 
       this.$refs.lens.style.left = x + "px";
@@ -354,11 +359,13 @@ export default {
     z-index: 4;
     position: fixed;
     left: 35%;
-    top: 10vh;
+    top: 13vh;
     border: 1px solid #575757;
     width: 300px;
     height: 300px;
-    pointer-events: none;
+    background-repeat: no-repeat;
+    background-color:white;
+    // pointer-events: none;
     // background-size: contain;
   }
 
@@ -396,8 +403,9 @@ export default {
       border: 1px solid #d4d4d4;
       pointer-events: none;
       /*set the size of the lens:*/
-      width: 50px;
-      height: 87.7px;
+      width: 120px;
+      height:120px;
+      // height: 87.7px;
     }
   }
 
@@ -460,6 +468,7 @@ export default {
     left: 0;
     width: 100%;
     margin: -1%;
+    pointer-events: none;
 
     &.main {
       bottom: 7px;
