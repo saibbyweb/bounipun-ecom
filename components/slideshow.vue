@@ -3,14 +3,18 @@
     <div class="till-dots">
       <div class="slideshow">
         <!-- lens -->
-        <div v-show="activeHover" class="lens" ref="lens"></div>
+        <div
+          v-if="productPage"
+          v-show="activeHover"
+          class="lens"
+          ref="lens"
+        ></div>
 
         <!-- slideshow images -->
         <div
           @mousemove="trackMouse"
           @mouseleave="activeHover = false"
           ref="slidesContainer"
-          
         >
           <div
             v-hammer:swipe="onSwipe"
@@ -19,6 +23,7 @@
           >
             <div
               class="product-image"
+              :class="{ productPage }"
               :key="index"
               v-for="(image, index) in onDemandImages"
               :style="getBackgroundImage(image)"
@@ -43,7 +48,12 @@
     </div>
 
     <!-- zoomed in image -->
-    <div v-show="activeHover" ref="zoomedIn" class="zoomed-in-image"></div>
+    <div
+      v-if="productPage"
+      v-show="activeHover"
+      ref="zoomedIn"
+      class="zoomed-in-image shadow"
+    ></div>
 
     <!-- custom text -->
     <div v-if="customText !== ''" class="center">
@@ -131,6 +141,10 @@ export default {
       default: "100vw"
     },
     main: {
+      type: Boolean,
+      default: false
+    },
+    productPage: {
       type: Boolean,
       default: false
     }
@@ -262,7 +276,11 @@ export default {
     },
     setAutoplayRoutine() {
       this.autoplayInterval = setInterval(
-        () => this.onSwipe({ direction: 2, autoMode: true }),
+        () =>
+          this.onSwipe({
+            direction: 2,
+            autoMode: true
+          }),
         3000
       );
     },
@@ -270,8 +288,12 @@ export default {
       clearInterval(this.autoplayInterval);
     },
     trackMouse(e) {
+      if (!this.productPage || this.windowWidth < 768) return;
       e.preventDefault();
-      let pos = { x: 0, y: 0 },
+      let pos = {
+          x: 0,
+          y: 0
+        },
         x = 0,
         y = 0;
       let cx, cy;
@@ -280,14 +302,13 @@ export default {
       const lens = this.$refs.lens;
       const slidesContainer = this.$refs.slidesContainer;
       const zoomedIn = this.$refs.zoomedIn;
-      
-      const slideWidth = this.dSlideWidth / 100 * document.documentElement.clientWidth;
+
+      const slideWidth =
+        (this.dSlideWidth / 100) * document.documentElement.clientWidth;
       const slideHeight = slidesContainer.offsetHeight;
-  
 
       const lensRatio = slideHeight / slideWidth;
-      console.log(lensRatio, '--lens ratio')
-
+      console.log(lensRatio, "--lens ratio");
 
       /* Calculate the ratio between result DIV and lens: */
       cx = zoomedIn.offsetWidth / lens.offsetWidth;
@@ -298,19 +319,19 @@ export default {
       const activeImage = this.images[this.activeIndex];
 
       if (this.previousZoomedInImage !== activeImage) {
-        const originalImage = activeImage.replace('productPages','original')
+        const originalImage = activeImage.replace("productPages", "original");
         zoomedIn.style.backgroundImage = `url(${originalImage})`;
         this.previousZoomedInImage = activeImage;
       }
-      console.log(slidesContainer.offsetWidth, slidesContainer.offsetHeight, cx, cy)
-     
-      console.log(slideWidth, slidesContainer.offsetHeight);
-      // zoomedIn.style.backgroundSize = 'cover';
-      zoomedIn.style.backgroundSize = (slidesContainer.offsetHeight * cy) + "px " + (slidesContainer.offsetHeight * cy) + "px ";
-      // zoomedIn.style.backgroundSize = ((slideWidth * cx) / 1.5) + "px " + ((slideWidth * cx) / 1.5) + "px ";
 
+      const zoomedInHeight = slidesContainer.offsetHeight * cy;
+      const zoomedInWidth = slideWidth * cx;
 
-      // zoomedIn.style.backgroundSize = (slideWidth * cx) + "px " + (slidesContainer.offsetHeight * cy) + "px";
+      console.log(zoomedInHeight, zoomedInWidth)
+      const median = (zoomedInHeight + zoomedInWidth) / 2;
+
+      zoomedIn.style.backgroundSize =
+        zoomedInHeight + "px " + zoomedInHeight + "px ";
 
       pos = this.getCursorPosition(e, slidesContainer);
       /* Calculate the position of the lens: */
@@ -333,7 +354,8 @@ export default {
       this.$refs.lens.style.top = y + "px";
 
       /* Display what the lens "sees": */
-      zoomedIn.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
+      zoomedIn.style.backgroundPosition =
+        "-" + (x * cx + 20) + "px -" + y * cy + "px";
     },
     getCursorPosition(e, slidesContainer) {
       let x = 0,
@@ -346,7 +368,10 @@ export default {
       /* Consider any page scrolling: */
       x = x - window.pageXOffset;
       y = y - window.pageYOffset;
-      return { x, y };
+      return {
+        x,
+        y
+      };
     }
   }
 };
@@ -355,16 +380,27 @@ export default {
 <style lang="scss" scoped>
 .slideshow-container {
   overflow: hidden;
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
   .zoomed-in-image {
     z-index: 4;
     position: fixed;
-    left: 35%;
-    top: 13vh;
-    border: 1px solid #575757;
+    left: 32%;
+    top: 12vh;
+    border: 1px solid #efefef;
     width: 300px;
     height: 300px;
     background-repeat: no-repeat;
-    background-color:white;
+    background-color: white;
+    animation: fadeIn linear 0.3s;
     // pointer-events: none;
     // background-size: contain;
   }
@@ -392,6 +428,10 @@ export default {
         background-position: center;
         background-repeat: no-repeat;
 
+        &.productPage {
+          cursor: cell;
+        }
+
         @media screen and (min-width: 768px) {
           height: 90vw;
         }
@@ -402,9 +442,10 @@ export default {
       position: absolute;
       border: 1px solid #d4d4d4;
       pointer-events: none;
+
       /*set the size of the lens:*/
       width: 120px;
-      height:120px;
+      height: 120px;
       // height: 87.7px;
     }
   }
@@ -445,6 +486,7 @@ export default {
       &.active {
         transform: scale(1.1);
       }
+
       @media (max-width: 768px) {
         width: 19vw;
         height: 19vw;

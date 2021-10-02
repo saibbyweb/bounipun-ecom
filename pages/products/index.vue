@@ -16,6 +16,7 @@
           mSlideHeight="60vh"
           dSlideHeight="65vh"
           :dSlideWidth="30"
+          :productPage="true"
           size="cover"
         />
 
@@ -903,6 +904,7 @@ export default {
       width: 20px;
       top: 10%;
       right: 5%;
+      cursor: pointer;
       transition: transform 0.3s ease-in-out;
 
       &.added {
@@ -924,6 +926,7 @@ export default {
       justify-content: center;
       align-items: center;
       opacity: 0.7;
+      cursor: pointer;
 
       img {
         width: 27px;
@@ -938,6 +941,8 @@ export default {
       display: flex;
       width: 16%;
       flex-direction: column-reverse;
+      // pointer-events: none;
+      // cursor: pointer;
 
       .toggle {
         width: 100%;
@@ -945,6 +950,7 @@ export default {
         box-sizing: content-box;
         transform: rotate(0deg) scale(1);
         cursor: pointer;
+        
         background-color: white;
         display: flex;
         justify-content: center;
@@ -967,7 +973,8 @@ export default {
         // display: none;
         margin-bottom: 15px;
         opacity: 0;
-        display: flex;
+        // display: flex;
+        display: none;
         flex-direction: column-reverse;
         justify-content: center;
         align-items: center;
@@ -989,6 +996,7 @@ export default {
 
         &.active {
           opacity: 0.95;
+          display: flex;
         }
       }
 
