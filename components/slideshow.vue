@@ -3,23 +3,27 @@
     <div class="till-dots">
       <div class="slideshow">
         <!-- lens -->
-        <div v-show="activeHover" class="lens" ref="lens"></div>
+        <div v-show="true" class="lens" ref="lens"></div>
 
         <!-- slideshow images -->
         <div
           @mousemove="trackMouse"
           @mouseleave="activeHover = false"
-          ref="slideshowContainer"
-          v-hammer:swipe="onSwipe"
-          class="slides-container"
-          :style="'margin-left: ' + slideMargin + 'vw'"
+          ref="slidesContainer"
+          
         >
           <div
-            class="product-image"
-            :key="index"
-            v-for="(image, index) in onDemandImages"
-            :style="getBackgroundImage(image)"
-          ></div>
+            v-hammer:swipe="onSwipe"
+            class="slides-container"
+            :style="'margin-left: ' + slideMargin + 'vw'"
+          >
+            <div
+              class="product-image"
+              :key="index"
+              v-for="(image, index) in onDemandImages"
+              :style="getBackgroundImage(image)"
+            ></div>
+          </div>
         </div>
       </div>
 
@@ -37,6 +41,9 @@
         ></div>
       </div>
     </div>
+
+    <!-- zoomed in image -->
+    <div v-show="true" ref="zoomedIn" class="zoomed-in-image"></div>
 
     <!-- custom text -->
     <div v-if="customText !== ''" class="center">
@@ -139,7 +146,8 @@ export default {
       lensPosition: {
         x: 0,
         y: 0
-      }
+      },
+      previousZoomedInImage: ""
     };
   },
   computed: {
@@ -263,33 +271,69 @@ export default {
     },
     trackMouse(e) {
       e.preventDefault();
-      let pos = { x: 0, y: 0 },x=0,y=0;
+      let pos = { x: 0, y: 0 },
+        x = 0,
+        y = 0;
+      let cx, cy;
+
       this.activeHover = true;
-      pos = this.getCursorPosition(e);
+      const lens = this.$refs.lens;
+      const slidesContainer = this.$refs.slidesContainer;
+      const zoomedIn = this.$refs.zoomedIn;
+      
+      const slideWidth = this.dSlideWidth / 100 * document.documentElement.clientWidth;
+      const slideHeight = slidesContainer.offsetHeight;
+  
+
+      const lensRatio = slideHeight / slideWidth;
+      console.log(lensRatio, '--lens ratio')
+
+
+      /* Calculate the ratio between result DIV and lens: */
+      cx = zoomedIn.offsetWidth / lens.offsetWidth;
+      cy = zoomedIn.offsetHeight / lens.offsetHeight;
+      // cx = slideWidth / zoomedIn.offsetWidth;
+      // cy = slidesContainer.offsetHeight / zoomedIn.offsetHeight
+
+      const activeImage = this.images[this.activeIndex];
+
+      if (this.previousZoomedInImage !== activeImage) {
+        zoomedIn.style.backgroundImage = `url(${activeImage})`;
+        this.previousZoomedInImage = activeImage;
+      }
+      console.log(slidesContainer.offsetWidth, slidesContainer.offsetHeight, cx, cy)
+     
+      console.log(slideWidth);
+
+      zoomedIn.style.backgroundSize = (slideWidth * cx) + "px " + (slidesContainer.offsetHeight * cy) + "px";
+
+      pos = this.getCursorPosition(e, slidesContainer);
       /* Calculate the position of the lens: */
-      x = pos.x - this.$refs.lens.offsetWidth / 2;
-      y = pos.y - this.$refs.lens.offsetHeight / 2;
+      x = pos.x - lens.offsetWidth / 2;
+      y = pos.y - lens.offsetHeight / 2;
 
       /* Prevent the lens from being positioned outside the image: */
 
       x = x < 0 ? 0 : x;
       y = y < 0 ? 0 : y;
-      // if (x > img.width - lens.offsetWidth) {
-      //   x = img.width - lens.offsetWidth;
-      // }
+      if (x > slidesContainer.width - lens.offsetWidth) {
+        x = slidesContainer.width - lens.offsetWidth;
+      }
 
-      // if (y > img.height - lens.offsetHeight) {
-      //   y = img.height - lens.offsetHeight;
-      // }
-
+      if (y > slidesContainer.height - lens.offsetHeight) {
+        y = slidesContainer.height - lens.offsetHeight;
+      }
 
       this.$refs.lens.style.left = x + "px";
       this.$refs.lens.style.top = y + "px";
+
+      /* Display what the lens "sees": */
+      zoomedIn.style.backgroundPosition = "-" + (x * cx) + "px -" + (y * cy) + "px";
     },
-    getCursorPosition(e) {
+    getCursorPosition(e, slidesContainer) {
       let x = 0,
         y = 0;
-      let a = this.$refs.slideshowContainer.getBoundingClientRect();
+      const a = slidesContainer.getBoundingClientRect();
 
       /* Calculate the cursor's x and y coordinates, relative to the image: */
       x = e.pageX - a.left;
@@ -306,17 +350,23 @@ export default {
 <style lang="scss" scoped>
 .slideshow-container {
   overflow: hidden;
+  .zoomed-in-image {
+    z-index: 4;
+    position: fixed;
+    left: 35%;
+    top: 10vh;
+    border: 1px solid #575757;
+    width: 300px;
+    height: 300px;
+    pointer-events: none;
+    // background-size: contain;
+  }
 
   .slideshow {
     display: flex;
     overflow-x: auto;
     justify-content: flex-start;
     position: relative;
-
-    .zoomed-in-image {
-      width: 300px;
-      height: 300px;
-    }
 
     &::-webkit-scrollbar {
       display: none;
@@ -347,7 +397,7 @@ export default {
       pointer-events: none;
       /*set the size of the lens:*/
       width: 50px;
-      height: 50px;
+      height: 87.7px;
     }
   }
 
