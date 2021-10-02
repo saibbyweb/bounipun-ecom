@@ -2,8 +2,14 @@
   <div class="slideshow-container" :style="{ width: slideWidth + 'vw' }">
     <div class="till-dots">
       <div class="slideshow">
+        <!-- lens -->
+        <div v-show="activeHover" class="lens" ref="lens"></div>
+
         <!-- slideshow images -->
         <div
+          @mousemove="trackMouse"
+          @mouseleave="activeHover = false"
+          ref="slideshowContainer"
           v-hammer:swipe="onSwipe"
           class="slides-container"
           :style="'margin-left: ' + slideMargin + 'vw'"
@@ -21,7 +27,7 @@
       <div
         v-if="dots && !singleImage"
         class="dots"
-        :class="{main}"
+        :class="{ main }"
         :style="{ width: slideWidth }"
       >
         <div
@@ -118,7 +124,7 @@ export default {
       default: "100vw"
     },
     main: {
-      type:Boolean,
+      type: Boolean,
       default: false
     }
   },
@@ -128,7 +134,12 @@ export default {
       activeIndex: 0,
       thumbnailsMargin: 0,
       autoplayInterval: {},
-      interacted: false
+      interacted: false,
+      activeHover: false,
+      lensPosition: {
+        x: 0,
+        y: 0
+      }
     };
   },
   computed: {
@@ -143,14 +154,13 @@ export default {
     },
     onDemandImages() {
       // return this.images;
-      if(this.interacted)
-        return this.images;
+      if (this.interacted) return this.images;
 
-      if(this.images.length > 2) {
+      if (this.images.length > 2) {
         /* replace al images after second image a default bounipun image (a static asset) */
         return this.images.map((image, index) => {
-          return index < 1 ? image : '/loading.gif'
-        })
+          return index < 1 ? image : "/loading.gif";
+        });
       }
 
       return this.images;
@@ -161,19 +171,17 @@ export default {
     this.clearAutoplayRoutine();
   },
   mounted() {
-    if(this.autoplay)
-      this.setAutoplayRoutine();
+    if (this.autoplay) this.setAutoplayRoutine();
+    // setTimeout(() => this.imageZoom('slides-container','zoomed-in-image'),2000);
   },
-  watch:{
+  watch: {
     activeIndex: {
       handler(newVal) {
-          this.$emit('slideChanged', newVal);
+        this.$emit("slideChanged", newVal);
       },
       immediate: true
     },
-    images() {
-     
-    }
+    images() {}
   },
   methods: {
     setActiveImage(index) {
@@ -206,10 +214,9 @@ export default {
       console.log(this.$refs.thumbnails.scrollLeft);
     },
     onSwipe(data) {
-
       this.interacted = true;
 
-      if(data.autoMode === undefined) {
+      if (data.autoMode === undefined) {
         this.clearAutoplayRoutine();
       }
 
@@ -246,10 +253,51 @@ export default {
       });
     },
     setAutoplayRoutine() {
-      this.autoplayInterval = setInterval(() => this.onSwipe({direction: 2, autoMode: true}), 3000);
+      this.autoplayInterval = setInterval(
+        () => this.onSwipe({ direction: 2, autoMode: true }),
+        3000
+      );
     },
     clearAutoplayRoutine() {
       clearInterval(this.autoplayInterval);
+    },
+    trackMouse(e) {
+      e.preventDefault();
+      let pos = { x: 0, y: 0 },x=0,y=0;
+      this.activeHover = true;
+      pos = this.getCursorPosition(e);
+      /* Calculate the position of the lens: */
+      x = pos.x - this.$refs.lens.offsetWidth / 2;
+      y = pos.y - this.$refs.lens.offsetHeight / 2;
+
+      /* Prevent the lens from being positioned outside the image: */
+
+      x = x < 0 ? 0 : x;
+      y = y < 0 ? 0 : y;
+      // if (x > img.width - lens.offsetWidth) {
+      //   x = img.width - lens.offsetWidth;
+      // }
+
+      // if (y > img.height - lens.offsetHeight) {
+      //   y = img.height - lens.offsetHeight;
+      // }
+
+
+      this.$refs.lens.style.left = x + "px";
+      this.$refs.lens.style.top = y + "px";
+    },
+    getCursorPosition(e) {
+      let x = 0,
+        y = 0;
+      let a = this.$refs.slideshowContainer.getBoundingClientRect();
+
+      /* Calculate the cursor's x and y coordinates, relative to the image: */
+      x = e.pageX - a.left;
+      y = e.pageY - a.top;
+      /* Consider any page scrolling: */
+      x = x - window.pageXOffset;
+      y = y - window.pageYOffset;
+      return { x, y };
     }
   }
 };
@@ -263,6 +311,12 @@ export default {
     display: flex;
     overflow-x: auto;
     justify-content: flex-start;
+    position: relative;
+
+    .zoomed-in-image {
+      width: 300px;
+      height: 300px;
+    }
 
     &::-webkit-scrollbar {
       display: none;
@@ -285,6 +339,15 @@ export default {
           height: 90vw;
         }
       }
+    }
+
+    .lens {
+      position: absolute;
+      border: 1px solid #d4d4d4;
+      pointer-events: none;
+      /*set the size of the lens:*/
+      width: 50px;
+      height: 50px;
     }
   }
 
@@ -358,7 +421,6 @@ export default {
       &.main {
         bottom: 0;
       }
-
     }
 
     .dot {

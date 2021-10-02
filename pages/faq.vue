@@ -37,7 +37,7 @@ export default {
       this.faqs = faqs.doc.questions;
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
