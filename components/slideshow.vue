@@ -291,7 +291,7 @@ export default {
       if (!this.productPage || this.windowWidth < 768) return;
       e.preventDefault();
       /* product image dimensions (hxw) */
-      const productImageSize = 1024;
+      let productImageSize = 1024;
       /* cursor position */
       let pos = {
           x: 0,
@@ -313,6 +313,8 @@ export default {
 
       /* document width */
       const documentWidth = document.documentElement.clientWidth;
+      
+      productImageSize = documentWidth;
 
       /* calculating slidewidth  */
       const slideWidth = (this.dSlideWidth / 100) * documentWidth;
