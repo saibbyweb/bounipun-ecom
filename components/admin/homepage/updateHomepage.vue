@@ -678,7 +678,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .section {
   margin-top: 10px;
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);

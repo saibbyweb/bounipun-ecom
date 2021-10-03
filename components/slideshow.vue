@@ -290,72 +290,89 @@ export default {
     trackMouse(e) {
       if (!this.productPage || this.windowWidth < 768) return;
       e.preventDefault();
+      /* product image dimensions (hxw) */
+      const productImageSize = 1024;
+      /* cursor position */
       let pos = {
           x: 0,
           y: 0
-        },
-        x = 0,
-        y = 0;
-      let cx, cy;
-
+        };
+      
+      let x = 0;
+      let y = 0;
+      
+      /* set hover as active */
       this.activeHover = true;
+      
+      /* lens element */
       const lens = this.$refs.lens;
+      /* slides container element */
       const slidesContainer = this.$refs.slidesContainer;
+      /* zoomed in box element */
       const zoomedIn = this.$refs.zoomedIn;
 
-      const slideWidth =
-        (this.dSlideWidth / 100) * document.documentElement.clientWidth;
+      /* document width */
+      const documentWidth = document.documentElement.clientWidth;
+
+      /* calculating slidewidth  */
+      const slideWidth = (this.dSlideWidth / 100) * documentWidth;
       const slideHeight = slidesContainer.offsetHeight;
-
+    
+      // const widthPad = productImageSize / slideWidth;
+      // const heightPad = productImageSize / slidesContainer.offsetHeight;
+      
+      /* container ratio */
+      const containerRatio = slideWidth / slideHeight;
+      /* lens ration */
       const lensRatio = slideHeight / slideWidth;
-      console.log(lensRatio, "--lens ratio");
 
-      /* Calculate the ratio between result DIV and lens: */
-      cx = zoomedIn.offsetWidth / lens.offsetWidth;
-      cy = zoomedIn.offsetHeight / lens.offsetHeight;
-      // cx = slideWidth / zoomedIn.offsetWidth;
-      // cy = slidesContainer.offsetHeight / zoomedIn.offsetHeight
+      /* Calculate the ratio between zoomed-in box and lens: */
+      const cx = zoomedIn.offsetWidth / lens.offsetWidth;
+      const cy = zoomedIn.offsetHeight / lens.offsetHeight;
 
       const activeImage = this.images[this.activeIndex];
-
+      
+      /* only change zoomed-in image if slide changes */
       if (this.previousZoomedInImage !== activeImage) {
         const originalImage = activeImage.replace("productPages", "original");
         zoomedIn.style.backgroundImage = `url(${originalImage})`;
         this.previousZoomedInImage = activeImage;
       }
-
-      const zoomedInHeight = slidesContainer.offsetHeight * cy;
+      
+      /* get zoomed in box's height and width */
+      const zoomedInHeight = slideHeight * cy;
       const zoomedInWidth = slideWidth * cx;
-
-      console.log(zoomedInHeight, zoomedInWidth)
-      const median = (zoomedInHeight + zoomedInWidth) / 2;
-
+    
+      /* set background size for zoomed in box */
       zoomedIn.style.backgroundSize =
         zoomedInHeight + "px " + zoomedInHeight + "px ";
-
+      
+      /* get cursor position */
       pos = this.getCursorPosition(e, slidesContainer);
+
       /* Calculate the position of the lens: */
       x = pos.x - lens.offsetWidth / 2;
       y = pos.y - lens.offsetHeight / 2;
 
       /* Prevent the lens from being positioned outside the image: */
-
       x = x < 0 ? 0 : x;
       y = y < 0 ? 0 : y;
-      if (x > slideWidth - lens.offsetWidth) {
+      if (x > slideWidth - lens.offsetWidth)
         x = slideWidth - lens.offsetWidth;
-      }
 
-      if (y > slidesContainer.offsetHeight - lens.offsetHeight) {
+      if (y > slidesContainer.offsetHeight - lens.offsetHeight)
         y = slidesContainer.offsetHeight - lens.offsetHeight;
-      }
-
+      
+      /* map lens box center to cursor */
       this.$refs.lens.style.left = x + "px";
       this.$refs.lens.style.top = y + "px";
+      
+      /* calculate left side pixels that got cut due to background-size:cover on product image */
+      const leftPad = productImageSize * ((1 - containerRatio) / 2);
 
       /* Display what the lens "sees": */
       zoomedIn.style.backgroundPosition =
-        "-" + (x * cx + 20) + "px -" + y * cy + "px";
+        "-" + (x * cx + (leftPad + 10)) + "px -" + y * cy + "px";
     },
     getCursorPosition(e, slidesContainer) {
       let x = 0,

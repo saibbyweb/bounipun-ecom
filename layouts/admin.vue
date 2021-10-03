@@ -4,11 +4,14 @@
       <img src="/loading.gif" />
     </div>
     <!-- local login -->
-    <div v-if="$store.state.admin.localAuthorized" class="local-login flex center col">
+    <div
+      v-if="$store.state.admin.localAuthorized"
+      class="local-login flex center col"
+    >
       <div class="box flex center col">
         <img class="logo" src="/icons/light/logo.png" />
-      <InputCredential label="PIN" v-model="pin"/>
-      <button class="action" @click="authorizeLocal"> Authorize </button>
+        <InputCredential label="PIN" v-model="pin" />
+        <button class="action" @click="authorizeLocal">Authorize</button>
       </div>
     </div>
     <AdminHeader />
@@ -21,7 +24,7 @@ export default {
   data() {
     return {
       pin: ""
-    }
+    };
   },
   watch: {
     $route(to, from) {
@@ -32,8 +35,8 @@ export default {
   },
   methods: {
     authorizeLocal() {
-      if(this.pin === "7711")
-        this.$store.commit('admin/setLocalAuthorized', true)
+      if (this.pin === "7711")
+        this.$store.commit("admin/setLocalAuthorized", true);
     }
   }
 };
@@ -55,11 +58,11 @@ export default {
 }
 
 .local-login {
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background-color: $dark_gray;
   z-index: 2;
   .logo {
