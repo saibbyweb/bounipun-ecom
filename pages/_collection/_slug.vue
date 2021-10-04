@@ -380,8 +380,6 @@ export default {
     "inner-image-zoom": InnerImageZoom
   },
   mounted() {
-    // const slug = this.$route.params.slug;
-    console.log(this.$route,'--ROUTE')
     const slug = this.$route.params.collection + '/' + this.$route.params.slug;
     this.fetchProduct(slug);
     setTimeout(() => {
@@ -391,7 +389,7 @@ export default {
   watch: {
     $route(newVal) {
       this.productFetched = false;
-      const slug = newVal.path
+      // const slug = newVal.path
       //  this.$router.go()
       this.images = [];
       // this.fetchProduct(slug);
@@ -412,7 +410,9 @@ export default {
       slideMargin: 0,
       quantity: 1,
       addedToWishlist: false,
-      product: {},
+      product: {
+        name: 'loading...'
+      },
       variants: [],
       activeColorIndex: 0,
       activeVariantIndex: 0,
@@ -816,6 +816,8 @@ export default {
       this.$vibrateDevice(300);
     },
     setActiveColor(index, colorId = false) {
+      history.pushState({}, '', `${this.$route.path}?activeColor=${index}`);
+
       let activeIndex = index;
       if (colorId) {
         /* find index from actual color array */

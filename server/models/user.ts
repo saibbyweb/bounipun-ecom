@@ -228,7 +228,7 @@ export const methods = {
                 .populate('colors._id', { name: 1 })
                 .populate('rtsDirectVariant', { name: 1 })
                 .populate('rtsDirectFabric', {name: 1})
-                .select('name styleId type availabilityType directPrice variants.fabrics.price colors.name colors.code colors.images colors.status rtsDirectVaraint rtsDirectFabric')
+                .select('name slug styleId type availabilityType directPrice variants.fabrics.price colors.name colors.code colors.images colors.status rtsDirectVaraint rtsDirectFabric')
                 .lean();
             allProductPromises.push(fetchProduct);
         }
@@ -263,6 +263,7 @@ export const methods = {
             let cartItem = {
                 productId: item.product,
                 productName: '',
+                slug: '',
                 colorName: '',
                 mainImage: '',
                 collectionName: '',
@@ -303,6 +304,8 @@ export const methods = {
 
             /* product name */
             cartItem.productName = product.name;
+            /* slug */
+            cartItem.slug = product.slug;
             /* color name */
             cartItem.colorName = selectedColor.name;
 

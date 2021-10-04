@@ -1,8 +1,5 @@
 <template>
-  <div
-    @click="$router.push('/products?_id=' + item.productId)"
-    class="cart-item"
-  >
+  <div @click="navigateToProductPage(item)" class="cart-item">
     <!-- main image -->
     <div
       class="image-container"
@@ -26,11 +23,15 @@
       <!-- fabric info 1-->
       <span class="fabric"> {{ item.fabricInfo1 }} </span>
       <!-- price -->
-      <span class="price"> {{ currency }} {{ formatCurrency(adjustPrice(item.price)) }} </span>
+      <span class="price">
+        {{ currency }} {{ formatCurrency(adjustPrice(item.price)) }}
+      </span>
       <!-- qty -->
       <span v-if="!allowUpdate" class="qty"> Qty: {{ item.quantity }} </span>
-       <!-- shipping time -->
-      <span class="shippingTime"> Standard Shipping: {{ item.shippingTime}} week(s) </span>
+      <!-- shipping time -->
+      <span class="shippingTime">
+        Standard Shipping: {{ item.shippingTime }} week(s)
+      </span>
 
       <!-- quantity picker -->
       <div v-if="allowUpdate" class="quantity-picker">
@@ -38,7 +39,6 @@
         <button class="qty">{{ item.quantity }}</button>
         <button @click.stop="emitUpdateQuantity(item, 'increase')">+</button>
       </div>
-
     </div>
     <!-- remove item -->
     <img
@@ -48,7 +48,10 @@
       src="/icons/dark/remove-cart-item.png"
     />
     <!-- total product price -->
-    <p class="total-product-price">{{ currency }} {{ formatCurrency(item.quantity * adjustPrice(item.price)) }}</p>
+    <p class="total-product-price">
+      {{ currency }}
+      {{ formatCurrency(item.quantity * adjustPrice(item.price)) }}
+    </p>
   </div>
 </template>
 
@@ -79,8 +82,18 @@ export default {
   },
   mounted() {},
   methods: {
+    navigateToProductPage() {
+      // this.$router.push("/products?_id=" + this.item.productId);
+
+      this.$router.push({
+        path: `/${this.item.slug}`
+        // query
+      });
+
+      window.scroll({ top: 0, behavior: "smooth" });
+    },
     getS3Path(fileName) {
-      return process.env.baseS3URL + '/productPages/' + fileName;
+      return process.env.baseS3URL + "/productPages/" + fileName;
     },
     adjustPrice(price) {
       price = parseInt(price);
@@ -110,6 +123,7 @@ export default {
   height: 200px;
   width: 80%;
   overflow: hidden;
+  cursor: pointer;
 
   @media (max-width: 768px) {
     width: 90%;
@@ -132,7 +146,7 @@ export default {
   /* cart item details and quantity input */
   .details-and-quantity {
     width: 65%;
-    padding-left:4px;
+    padding-left: 4px;
     display: flex;
     flex-direction: column;
     justify-content: center;
