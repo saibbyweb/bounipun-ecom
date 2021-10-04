@@ -90,6 +90,54 @@ router.post('/findDocuments', async (req, res) => {
 
 });
 
+/* get product */
+router.post('/fetchProduct', async (req, res) => {
+    const { slug } = req.body;
+    const collection = db.model('products');
+    let document: any = collection.findOne({ slug }).lean();
+
+    document = await document
+        .populate('bounipun_collection', 'name description variantNote edt')
+        .populate('variants._id')
+        .populate('variants.fabrics._id')
+        .populate('colors._id', 'name category image')
+        .populate('rtsDirectVariant')
+        .populate('rtsDirectFabric')
+        .populate('rtsFabric')
+
+    /* if bounipun colors, get grouped color data */
+    if (document.colorSource === 'bounipun-colors') {
+        /* get color categories */
+        const colorCategories = await db.model('color_categories').find().sort('order');
+        /* grouped data array */
+        let groupedData = [];
+        colorCategories.forEach((category: any) => {
+            /* find all colors under this category */
+            const colors = document.colors.filter(color => {
+                return color._id.category.toString() === category._id.toString() && color.status === true
+            });
+            /* save colors */
+            groupedData.push({ name: category.name, description: category.description, colors })
+        });
+
+
+        /* add color data to document */
+        document.colorData = groupedData;
+    }
+
+    /* update color name for color list */
+    document.colors.forEach(color => {
+        const bounipunColor = color._id !== null;
+        color.name = bounipunColor ? color._id.name : color.name;
+        color.image = bounipunColor ? color._id.image : "";
+        color._id = bounipunColor ? color._id._id : null;
+    });
+
+    document = await document;
+    res.json(document);
+
+});
+
 /* get product search filters */
 router.get('/getSearchFilters', async (req, res) => {
     let response = {

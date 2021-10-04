@@ -1,4 +1,4 @@
-\<template>
+<template>
   <div
     @click="navigateToProductPage"
     class="product-card"
@@ -439,14 +439,16 @@ export default {
     },
     navigateToProductPage() {
       let query = {
-        _id: this.product._id
+        // _id: this.product._id
       };
       if (this.activeColorIndex !== -1)
         query.activeColor = this.activeColorIndex;
+
       this.$router.push({
-        path: "/products",
+        path: `/${this.product.slug}`,
         query
       });
+
       window.scroll({ top: 0, behavior: "smooth" });
     },
     getBaseColorPath(index) {
