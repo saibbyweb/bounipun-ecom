@@ -50,7 +50,7 @@ export default {
                             _id: color._id,
                             name: color.name,
                             code: color.code,
-                            image: import.meta.env.VITE_baseAWSURL + color.image
+                            image: this.$getOriginalPath(color.image)
                         }
                     })
                 })

@@ -57,7 +57,7 @@ export default {
             const thumbnail = mainImage !== undefined ? mainImage.path : mainImages[0].path
 
             // return 'abc';
-            return import.meta.env.VITE_baseAWSURL + thumbnail;
+            return this.$getOriginalPath(thumbnail);
         }
     }
 };

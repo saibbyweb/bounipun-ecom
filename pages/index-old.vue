@@ -90,7 +90,7 @@ export default {
             console.log(sections);
         },
         setSlideshow(images) {
-            this.slideshowImages = images.map(image => import.meta.env.VITE_baseAWSURL + image.path);
+            this.slideshowImages = images.map(image =>this.$getOriginalPath(image.path));
         }
     }
 }

@@ -832,13 +832,13 @@ export default {
     setImages() {
       this.product.colors.forEach(color => {
         let images = color.images.map(
-          image => import.meta.env.VITE_baseS3URL + "/productPages/" + image.path
+          image => this.$getImage(image,'productPages')
         );
 
         if (images.length === 0 && color._id !== null) {
           console.log("No image found");
           images = [];
-          images.push(import.meta.env.VITE_baseS3URL + "/productPages/" + color.image);
+          images.push(this.$getImage(color.image,'productImages'));
         }
 
         this.images.push(images);
@@ -851,16 +851,15 @@ export default {
 
       if (images.length === 0) {
         return {
-          backgroundImage: `url(${import.meta.env.VITE_baseS3URL + "/productPages/"}${
-            color.image
+          backgroundImage: `url(${this.$getImage(
+            color.image,'productPages')
           })`
         };
       }
 
       let mainImage = images.find(image => image.main === true);
       mainImage = mainImage === undefined ? images[0] : mainImage;
-      const mainImagePath =
-        import.meta.env.VITE_baseS3URL + "/productPages/" + mainImage.path;
+      const mainImagePath = this.$getImage(mainImage.path, 'productPages')
       const mainImageCSS = {
         backgroundImage: `url(${mainImagePath})`
       };
