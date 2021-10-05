@@ -1,3 +1,6 @@
+import path from "path";
+const pathSrc = path.resolve(__dirname, "./src");
+
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -19,12 +22,24 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
   },
   server: {
-    inline: false
+    inline: false,
+    port: 8080
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [],
-
+  // css: [],
+  vite: {
+    server: {
+      port: 8080
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: '@import "@/assets/scss/global.scss";',
+        },
+      },
+    },
+  },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: "~/plugins/vue-hammer.js", mode: "client" },
@@ -43,7 +58,7 @@ export default {
   ],
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: ['@nuxtjs/google-analytics'],
+  buildModules: ['@nuxtjs/google-analytics','nuxt-vite'],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [

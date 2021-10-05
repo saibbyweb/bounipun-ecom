@@ -8,7 +8,7 @@ const task = async promise => {
     error = e;
   }
   return { response, error };
-};
+}
 
 export default (context, inject) => {
   const $store = context.store;
@@ -162,8 +162,13 @@ export default (context, inject) => {
 
   /* get image path */
   const getImagePath = path => {
-    return process.env.baseAWSURL + path;
-  };
+    return process.env.VITE_baseAWSURL + path;
+  }
+
+  /* get original image base path */
+  const getOriginalPath = path => {
+    return import.meta.env.VITE_BASE_AWS_URL + path
+  }
 
   /* delete document api */
   const deleteDocument = async (model, _id) => {

@@ -840,13 +840,13 @@ export default {
     setImages() {
       this.product.colors.forEach(color => {
         let images = color.images.map(
-          image => process.env.baseS3URL + "/productPages/" + image.path
+          image => import.meta.env.VITE_baseS3URL + "/productPages/" + image.path
         );
 
         if (images.length === 0 && color._id !== null) {
           console.log("No image found");
           images = [];
-          images.push(process.env.baseS3URL + "/productPages/" + color.image);
+          images.push(import.meta.env.VITE_baseS3URL + "/productPages/" + color.image);
         }
 
         this.images.push(images);
@@ -859,7 +859,7 @@ export default {
 
       if (images.length === 0) {
         return {
-          backgroundImage: `url(${process.env.baseS3URL + "/productPages/"}${
+          backgroundImage: `url(${import.meta.env.VITE_baseS3URL + "/productPages/"}${
             color.image
           })`
         };
@@ -868,7 +868,7 @@ export default {
       let mainImage = images.find(image => image.main === true);
       mainImage = mainImage === undefined ? images[0] : mainImage;
       const mainImagePath =
-        process.env.baseS3URL + "/productPages/" + mainImage.path;
+        import.meta.env.VITE_baseS3URL + "/productPages/" + mainImage.path;
       const mainImageCSS = {
         backgroundImage: `url(${mainImagePath})`
       };

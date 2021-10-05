@@ -54,6 +54,9 @@
 
 <script>
 export default {
+  mounted() {
+      console.log(import.meta.env,'-- NUXT VITE ENV');
+  },
   data() {
     return {
       helpSection: [

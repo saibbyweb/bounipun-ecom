@@ -177,8 +177,6 @@ export default {
   },
   methods: {
     test() {
-      console.log(process.env.RAZORPAY_KEY_ID_TEST);
-      console.log(process.env.RAZORPAY_KEY_ID_PROD);
       console.log(process.env.NODE_ENV)
         // if(process.env.NODE_ENV === 'production') {
         console.log(window.host);

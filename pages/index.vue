@@ -256,11 +256,11 @@ export default {
     },
     setSlideshow(images) {
       this.mainSlideshowImages = images.map(
-        image => process.env.baseAWSURL + image.path
+        image => import.meta.env.VITE_baseAWSURL + image.path
       );
     },
     fetchSlideshow(images) {
-      return images.map(image => process.env.baseAWSURL + image.path);
+      return images.map(image => import.meta.env.VITE_baseAWSURL + image.path);
     }
   }
 };

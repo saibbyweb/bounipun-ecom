@@ -560,7 +560,8 @@ export default {
     },
     getCollectionImage(image) {
       if (image === undefined) return "/default-image.png";
-      return this.$getImagePath(image);
+      return import.meta.env.VITE_baseAWSURL + image
+      // return this.$getImagePath(image);
     }
   }
 };
