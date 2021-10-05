@@ -119,6 +119,11 @@ export default {
           path: "/admin-panel/faq",
           desc: "..."
         },
+        {
+          name: "Ticker",
+          path: "/admin-panel/ticker",
+          desc: "..."
+        }
       ],
       activeIndex: -1
     };
