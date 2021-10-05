@@ -7,7 +7,7 @@
     </div>
     <!-- posts grid -->
     <div class="posts-grid flex wrap center">
-      <a target="_blank" :href="post.permalink"  v-for="post in posts"  :key="post">
+      <a target="_blank" :href="post.permalink"  v-for="post in posts"  :key="post.permalink">
       <div
       class="post shadow"
         :style="`background-image: url(${post.imageLink})`"

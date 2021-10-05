@@ -111,7 +111,7 @@
         <div
           class="mood"
           v-if="block.visible"
-          :style="`background-image: url(${$getImagePath(block.moodImage)})`"
+          :style="`background-image: url(${getImagePath(block.moodImage)})`"
         ></div>
 
         <div class="pad center-col text" v-if="block.visible">
@@ -125,7 +125,7 @@
       <div
         class="cover"
         :style="
-          `background-image: url(${$getImagePath(layout.bounipunLab.image)})`
+          `background-image: url(${getImagePath(layout.bounipunLab.image)})`
         "
       >
         <div class="cta center">
@@ -146,7 +146,7 @@
         <!-- logo -->
         <div
           class="logo"
-          :style="`background-image: url(${$getImagePath(layout.quote.logo)})`"
+          :style="`background-image: url(${getImagePath(layout.quote.logo)})`"
         ></div>
         <div class="text pad">
           <h2 class="head text-1">{{ layout.quote.heading }}</h2>
@@ -163,7 +163,7 @@
         <!-- logo -->
         <div
           class="logo"
-          :style="`background-image: url(${$getImagePath(layout.press.logo)})`"
+          :style="`background-image: url(${getImagePath(layout.press.logo)})`"
         ></div>
 
         <div class="scrollable-list">
@@ -174,7 +174,7 @@
                 class="image-box"
                 v-for="(image, index) in layout.press.imageList"
                 :key="index"
-                :style="`background-image: url(${$getImagePath(image.path)})`"
+                :style="`background-image: url(${getImagePath(image.path)})`"
               ></div>
             </div>
           </div>
@@ -214,6 +214,9 @@ export default {
     }
   },
   methods: {
+    getImagePath(image) {
+      return import.meta.env.VITE_baseAWSURL + image;
+    },
     async toggleLock() {
       this.locked = !this.locked;
     },

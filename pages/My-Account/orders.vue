@@ -29,7 +29,7 @@
           <div
             class="image-box"
             :style="
-              `background-image: url(${$getImagePath(subOrder.mainImage)})`
+              `background-image: url(${getImagePath(subOrder.mainImage)})`
             "
           ></div>
           <!-- text details -->
@@ -112,6 +112,9 @@ export default {
     }
   },
   methods: {
+    getImagePath(image) {
+      return import.meta.env.VITE_baseS3URL + '/productPages/' + image;
+    },
     formatCurrency(adjustedPrice) {
       adjustedPrice = parseFloat(adjustedPrice);
       return this.$store.getters["customer/formatCurrency"](adjustedPrice);

@@ -695,7 +695,7 @@ export default {
     },
     getVariantImage(image) {
       if (image === undefined) return "/demo_images/variants/shawl.png";
-      return this.$getImagePath(image);
+      return import.meta.env.VITE_baseAWSURL + image;
     },
     async fetchProduct(slug) {
       const productFetch = this.$axios.post('/fetchProduct', { slug });

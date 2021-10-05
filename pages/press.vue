@@ -62,7 +62,8 @@ export default {
       }
       console.log(layout.doc.press.imageList);
       this.pressImageList = layout.doc.press.imageList.map(image =>
-        this.$getImagePath(image.path)
+        // this.$getImagePath(image.path)
+        import.meta.env.VITE_baseAWSURL + image.path
       );
 
       this.captionsList = layout.doc.press.captions;
