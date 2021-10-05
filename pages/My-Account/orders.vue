@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     getImagePath(image) {
-      return import.meta.env.VITE_baseS3URL + '/productPages/' + image;
+      return process.env.baseS3URL + '/productPages/' + image;
     },
     formatCurrency(adjustedPrice) {
       adjustedPrice = parseFloat(adjustedPrice);

@@ -215,7 +215,7 @@ export default {
   },
   methods: {
     getImagePath(image) {
-      return import.meta.env.VITE_baseAWSURL + image;
+      return process.env.baseAWSURL + image;
     },
     async toggleLock() {
       this.locked = !this.locked;
@@ -259,11 +259,11 @@ export default {
     },
     setSlideshow(images) {
       this.mainSlideshowImages = images.map(
-        image => import.meta.env.VITE_baseAWSURL + image.path
+        image => process.env.baseAWSURL + image.path
       );
     },
     fetchSlideshow(images) {
-      return images.map(image => import.meta.env.VITE_baseAWSURL + image.path);
+      return images.map(image => process.env.baseAWSURL + image.path);
     }
   }
 };

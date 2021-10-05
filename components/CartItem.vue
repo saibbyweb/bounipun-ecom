@@ -93,7 +93,7 @@ export default {
       window.scroll({ top: 0, behavior: "smooth" });
     },
     getS3Path(fileName) {
-      return import.meta.env.VITE_baseS3URL + "/productPages/" + fileName;
+      return process.env.baseS3URL + "/productPages/" + fileName;
     },
     adjustPrice(price) {
       price = parseInt(price);

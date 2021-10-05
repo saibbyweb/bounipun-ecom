@@ -695,7 +695,7 @@ export default {
     },
     getVariantImage(image) {
       if (image === undefined) return "/demo_images/variants/shawl.png";
-      return import.meta.env.VITE_baseAWSURL + image;
+      return process.env.baseAWSURL + image;
     },
     async fetchProduct(slug) {
       const productFetch = this.$axios.post('/fetchProduct', { slug });
@@ -840,13 +840,13 @@ export default {
     setImages() {
       this.product.colors.forEach(color => {
         let images = color.images.map(
-          image => import.meta.env.VITE_baseS3URL + "/productPages/" + image.path
+          image => process.env.baseS3URL + "/productPages/" + image.path
         );
 
         if (images.length === 0 && color._id !== null) {
           console.log("No image found");
           images = [];
-          images.push(import.meta.env.VITE_baseS3URL + "/productPages/" + color.image);
+          images.push(process.env.baseS3URL + "/productPages/" + color.image);
         }
 
         this.images.push(images);

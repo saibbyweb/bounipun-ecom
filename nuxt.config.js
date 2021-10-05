@@ -1,6 +1,6 @@
 import path from "path";
 const pathSrc = path.resolve(__dirname, "./src");
-
+import legacy from '@vitejs/plugin-legacy'
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -32,6 +32,7 @@ export default {
     server: {
       port: 8080
     },
+    build: false,
     css: {
       preprocessorOptions: {
         scss: {
@@ -39,12 +40,17 @@ export default {
         },
       },
     },
+    define: {
+      global: {
+        'process.env.': "import.meta.env.VITE_"
+      }
+  },
   },
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: "~/plugins/vue-hammer.js", mode: "client" },
     "@/plugins/essentials.js",
-    '@/plugins/axios'
+    '@/plugins/axios',
     // { src: "@/plugins/essentials.js", mode: "client" }
   ],
 
@@ -54,9 +60,8 @@ export default {
     {
       path: '~/components', // will get any components nested in let's say /components/test too
       pathPrefix: false,
-    },
+    }
   ],
-
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: ['@nuxtjs/google-analytics','nuxt-vite'],
 
@@ -94,7 +99,9 @@ export default {
     apiSecret: process.env.API_SECRET_BOSS
   },
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
+  // build: {
+  //   targets: ['es2015']
+  // },
   // router: {
   //   mode: 'hash'
   // },
