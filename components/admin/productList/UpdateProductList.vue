@@ -197,7 +197,7 @@ export default {
 }
 
 .contents {
-    /deep/ .autocomplete__box {
+     .autocomplete__box {
         padding: 10px 15px;
         border: none;
         -webkit-appearance: none;
@@ -206,10 +206,7 @@ export default {
         font-family: $font_2_semibold;
         letter-spacing: 1px;
     }
-
-    /deep/ .small {}
-
-    /deep/ .autocomplete__results {
+    .autocomplete__results {
         border:none;
         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
         .autocomplete__results__item {
