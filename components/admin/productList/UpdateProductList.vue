@@ -197,12 +197,8 @@ export default {
 }
 
 .contents {
-<<<<<<< HEAD
   .autocomplete__box {
     // /deep/ .autocomplete__box {
-=======
-     .autocomplete__box {
->>>>>>> c643553417fe489059eb74c45424e9f113b988ca
         padding: 10px 15px;
         border: none;
         -webkit-appearance: none;
@@ -211,15 +207,11 @@ export default {
         font-family: $font_2_semibold;
         letter-spacing: 1px;
     }
-<<<<<<< HEAD
 
     // /deep/ .small {}
 
     .autocomplete__results {
             // /deep/ .autocomplete__results {
-=======
-    .autocomplete__results {
->>>>>>> c643553417fe489059eb74c45424e9f113b988ca
         border:none;
         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
         .autocomplete__results__item {
