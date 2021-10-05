@@ -113,7 +113,7 @@ export default {
   },
   methods: {
     getImagePath(image) {
-      return process.env.baseS3URL + '/productPages/' + image;
+      return this.$getImage(image, 'productPages');
     },
     formatCurrency(adjustedPrice) {
       adjustedPrice = parseFloat(adjustedPrice);

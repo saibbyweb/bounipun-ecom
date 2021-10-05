@@ -236,9 +236,9 @@ export default {
   methods: {
     setKeys() {
       /* if environment is dev, use test keys */
-      if(process.env.NODE_ENV === 'development') {
-        this.razorpayKeyId = import.meta.env.VITE_RAZORPAY_KEY_ID_TEST;
-        this.stripePK = import.meta.env.VITE_STRIPE_PK_TEST;
+      if(process.env.NODE_ENV === 'development' || process.env.MODE === 'development') {
+        this.razorpayKeyId = process.env.VITE_RAZORPAY_KEY_ID_TEST;
+        this.stripePK = process.env.VITE_STRIPE_PK_TEST;
         return;
       }
       
@@ -246,12 +246,12 @@ export default {
       if(process.env.NODE_ENV === 'production') {
         switch(window.location.hostname) {
           case 'bounipun.in':
-            this.razorpayKeyId = import.meta.env.VITE_RAZORPAY_KEY_ID_PROD
-            this.stripePK = import.meta.env.VITE_STRIPE_PK_PROD;
+            this.razorpayKeyId = process.env.RAZORPAY_KEY_ID_PROD
+            this.stripePK = process.env.STRIPE_PK_PROD;
             break;
           default:
-            this.razorpayKeyId = import.meta.env.VITE_RAZORPAY_KEY_ID_TEST
-            this.stripePK = import.meta.env.VITE_STRIPE_PK_TEST;
+            this.razorpayKeyId = process.env.RAZORPAY_KEY_ID_TEST
+            this.stripePK = process.env.STRIPE_PK_TEST;
             break;
         }
       }

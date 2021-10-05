@@ -160,15 +160,27 @@ export default (context, inject) => {
     return result;
   };
 
-  /* get image path */
-  const getImagePath = path => {
-    return process.env.VITE_baseAWSURL + path;
+  /* get image base s3 path */
+  const getImageBaseS3Path = path => {
+    if(process.env.MODE === 'developement')
+      return process.env.VITE_baseS3URL;
+    return process.env.baseS3URL;
+  }
+
+  /* get specific image variant */
+  const getImage = (path, type) => {
+    if(process.env.MODE === 'development')
+      return process.env.VITE_baseS3URL + '/' + type +'/' + path;
+    return process.env.baseS3URL + '/' + type + '/' + path;
   }
 
   /* get original image base path */
   const getOriginalPath = path => {
-    return import.meta.env.VITE_BASE_AWS_URL + path
+    if(process.env.MODE === 'development')
+      return process.env.VITE_baseAWSURL + path;
+    return process.env.baseAWSURL + path;
   }
+
 
   /* delete document api */
   const deleteDocument = async (model, _id) => {
@@ -273,7 +285,9 @@ export default (context, inject) => {
   inject("fetchDocument", fetchDocument);
   inject("deleteDocument", deleteDocument);
   inject("fetchData", fetchData);
-  inject("getImagePath", getImagePath);
+  inject("getImage", getImage);
+  // inject("getImagePath", getImagePath);
+  inject("getOriginalPath", getOriginalPath);
   inject("flash", flash);
   inject("post", httpPostRequest);
   inject("vibrateDevice", vibrateDevice);

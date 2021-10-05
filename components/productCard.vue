@@ -191,7 +191,7 @@ export default {
         mainImage = mainColor.images[0].path;
       } else mainImage = this.product.colors[0].images;
 
-      return process.env.baseAWSURL + mainImage;
+      return this.$getImage(mainImage, 'productPages');
     },
     variantsAvailable() {
 
@@ -254,7 +254,7 @@ export default {
         }
 
         return {
-          path: process.env.baseS3URL + '/chips/' + images[images.length - 1].path,
+          path: this.$getImage(images[images.length - 1].path, 'chips'),
           actualIndex: index
         };
       });
@@ -333,7 +333,7 @@ export default {
         if (mImages.length === 0) {
           return ["/default-image.png"];
         }
-        return mImages.map(image => process.env.baseS3URL + '/productPages/' + image.path);
+        return mImages.map(image => this.$getImage(image.path, 'productPages'));
       }
 
       /* find main color */
@@ -347,7 +347,7 @@ export default {
       } else mainImages = this.product.colors[0].images;
 
       /* fetch main image */
-      return mainImages.map(image => process.env.baseS3URL +'/productPages/' + image.path);
+      return mainImages.map(image => this.$getImage(image.path,'productPages'));
     },
     readyToShip() {
       return this.product.availabilityType === "ready-to-ship";

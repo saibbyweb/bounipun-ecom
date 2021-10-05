@@ -412,7 +412,7 @@ export default {
 
       if (this.saveNewAddress) await this.saveAddressToProfile(deliveryAddress);
 
-      this.$router.push({ name: "checkout", params: { deliveryAddress } });
+      this.$router.push({ name: "Checkout", params: { deliveryAddress } });
     },
     async saveAddressToProfile(address) {
       const saveAddress = await this.$post("/addressBookActions", {

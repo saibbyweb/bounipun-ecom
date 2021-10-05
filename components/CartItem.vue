@@ -93,7 +93,7 @@ export default {
       window.scroll({ top: 0, behavior: "smooth" });
     },
     getS3Path(fileName) {
-      return process.env.baseS3URL + "/productPages/" + fileName;
+      return this.$getImage(fileName,'productPages');
     },
     adjustPrice(price) {
       price = parseInt(price);
