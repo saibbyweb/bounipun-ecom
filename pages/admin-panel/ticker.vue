@@ -30,14 +30,14 @@
     </div>
     <!-- update faq form -->
     <div :class="{ updating: showForm }" class="update">
-        <update-faq
+        <UpdateTicker
         v-show="showForm"
         ref="updateComponent"
         @updated="updateList"
         :model="model"
         @close="showForm = false"
       />
-      <AddNewItem v-if="!showForm" label="FAQ" @showForm="showForm = true" />
+      <AddNewItem v-if="!showForm" label="Ticker" @showForm="showForm = true" />
     </div>
   </div>
 </template>
@@ -87,7 +87,7 @@ export default {
       this.showForm = true;
       this.editMode = true;
     
-      doc.questions = doc.questions.map(que => ({...que, key : uuidv4()}));
+      doc.items = doc.items.map(item => ({...item, key : uuidv4()}));
 
       this.$refs.updateComponent.populateForm(doc);
     },
