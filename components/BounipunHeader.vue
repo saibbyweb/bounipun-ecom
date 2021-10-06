@@ -120,7 +120,8 @@ export default {
   width: 100%;
   height: 10vh;
   position: fixed;
-  z-index: 2;
+  margin-top:3vh;
+  z-index: 3;
   top: 0;
   left: 0;
   display: grid;

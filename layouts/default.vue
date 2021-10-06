@@ -11,6 +11,10 @@
     <div class="loading center" v-if="$store.state.customer.loading">
       <img src="/loading.gif" />
     </div>
+    
+    <!-- ticker -->
+    <Ticker />
+
     <BounipunHeader
       @showMenu="menuOpen = true"
       @showSearch="searchOpen = true"

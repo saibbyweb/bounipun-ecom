@@ -42,6 +42,11 @@
 import "@/helpers/validate.js";
 
 export default {
+      head() {
+    return {
+      title: "Contact Us - Bounipun Kashmir | Luxury Store | Shawls, Stoles and Squares"
+    }
+  },
     data() {
         return {
             firstName: "",
