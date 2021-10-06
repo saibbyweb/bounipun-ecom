@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import validate from "@/helpers/validate.js";
+import "@/helpers/validate.js";
 
 export default {
     head() {
