@@ -19,6 +19,8 @@ $font_3_bold: "Garamond-Bold";
 $font_4: "DancingScript-Regular";
 $font_4_bold: "Charmonman-Bold";
 
+$pageMarginTop: 13vh;
+
 @font-face {
   font-family: "SF-Pro";
   font-style: normal;
@@ -174,11 +176,11 @@ span {
 .page {
   min-height: 80vh;
   padding: 5%;
-  margin-top: 8vh;
+  margin-top: $pageMarginTop;
 
   @media (max-width: $breakpoint-tablet) {
     padding: 7%;
-    margin-top: 10vh;
+    margin-top: $pageMarginTop;
   }
 
   &.-wh {

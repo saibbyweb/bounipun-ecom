@@ -240,7 +240,8 @@ export default {
 
 <style lang="scss" scoped>
 .cart {
-  margin-top: 12vh;
+  margin-top: calc($pageMarginTop + 2vh); 
+  padding-top:6%;
   min-height: 89vh;
 
   .title {
@@ -252,6 +253,7 @@ export default {
   justify-content: flex-start;
   padding-left: 5%;
 
+
   .cart-items {
     width: 50%;
     // overflow-y: scroll;
@@ -262,7 +264,7 @@ export default {
     @media (min-width: 769px) {
       position: fixed;
       right: 5%;
-      top: 11vh;
+      top: calc($pageMarginTop + 1vh);
       height: 88vh;
       z-index: 4;
       overflow: hidden;

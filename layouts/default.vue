@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="{ blockScroll: searchOpen }">
     <CookieNotice
       v-if="
         !$store.state.customer.cookieConsent &&
@@ -11,7 +11,7 @@
     <div class="loading center" v-if="$store.state.customer.loading">
       <img src="/loading.gif" />
     </div>
-    
+
     <!-- ticker -->
     <Ticker />
 
@@ -102,7 +102,11 @@ export default {
     width: 50px;
   }
 }
-
+.blockScroll {
+  height:100vh;
+  width:100%;
+  overflow-y:hidden;
+}
 body {
   margin: 0px;
 }

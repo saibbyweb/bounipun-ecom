@@ -15,7 +15,7 @@
 
         <!-- indian state list -->
         <select class="field" v-if="label === 'State' && countryCode === '+91'" @change="$emit('input', $event.target.value)" :value="value">
-          <option v-for="(state, index) in indianStateList" :key="index" :value="state">
+          <option class="option" v-for="(state, index) in indianStateList" :key="index" :value="state">
             {{ state }}
           </option>
         </select>
@@ -132,6 +132,12 @@ export default {
             border-bottom: 2px solid #e7e7e7;
             transition: all 0.2s ease-in-out;
             font-family: $font_2;
+            -webkit-appearance:none;
+            color:black;
+
+            .option {
+                color: black;
+            }
 
             &:focus {
                 border-bottom: 2px solid $dark_gray;

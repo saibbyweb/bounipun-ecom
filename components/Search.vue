@@ -1,7 +1,6 @@
 <template>
-<div class="search">
+<div ref="searchPage" class="search">
     <button class="clear cancel-search" @click="$emit('closeSearch')"> Cancel Search <img class="icon" src="/icons/dark/close.png"> </button>
-    <!-- <br> -->
     <!-- search box -->
     <input ref="searchBox" class="search-box" type="text" placeholder="What are you looking for?" @keyup.enter="searchProducts" v-model="searchTerm" />
 
@@ -25,13 +24,32 @@ export default {
     data() {
         return {
             searchTerm: "",
-            previousVal: ""
+            previousVal: "",
+            focus: false
+        }
+    },
+    watch: {
+        focus(newVal) {
+            // if(newVal === true)
+            this.focusOnTextField();
         }
     },
     mounted() {
-        this.$refs.searchBox.focus();
+        this.$nextTick(() => {
+            this.$refs.searchBox.focus()
+        });
+
+        // setTimeout(() => window.scrollTo({
+        //     top: 0,
+        //     left: 0,
+        //     behavior: 'smooth'
+        // }),200);
+
     },
     methods: {
+        focusOnTextField() {
+            this.$refs.searchBox.focus()
+        },
         searchProducts() {
             this.$refs.searchBox.blur();
             /* if no search term  */
@@ -55,7 +73,7 @@ export default {
 <style lang="scss" scoped>
 @keyframes showUp {
     0% {
-        transform: translateY(100%);
+        transform: translateY(-100%);
     }
 
     100% {
@@ -66,7 +84,7 @@ export default {
 .search {
     opacity: 0;
     position: fixed;
-    padding:10% 6% 6% 6%;
+    padding: 10% 6% 6% 6%;
     top: 0;
     left: 0;
     background: rgba(255, 255, 255, 0.97);
@@ -88,8 +106,8 @@ export default {
         padding: 3% 0;
         color: $dark_gray;
         position: absolute;
-        right:0;
-        top:1%;
+        right: 0;
+        top: 1%;
     }
 
     .search-box {
@@ -97,7 +115,7 @@ export default {
         background: #656565;
         color: white;
         border: none;
-        margin-top:10px;
+        margin-top: 10px;
         padding: 3% 6%;
         box-sizing: border-box;
         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);

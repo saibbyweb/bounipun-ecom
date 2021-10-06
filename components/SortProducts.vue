@@ -19,7 +19,7 @@
       </div>
       <br />
       <!-- all options -->
-      <div class="all-options">
+      <div class="all-options" style="margin-top:4vh">
         <!-- price (high to low) -->
         <div>
           <label class="label">
@@ -110,7 +110,7 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
-    height: 10vh;
+    height: $pageMarginTop;
     padding: 2% 3%;
   }
 
@@ -139,7 +139,7 @@ export default {
     }
 
     @media (max-width: 768px) {
-      width: 6%;
+      width: 7%;
     }
   }
 }

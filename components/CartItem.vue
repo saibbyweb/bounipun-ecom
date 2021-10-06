@@ -189,6 +189,7 @@ export default {
         text-align: center;
         padding: 0px;
         font-size: 10px;
+        color:black;
 
         &:first-child {
           border-right: 1px solid #919191;

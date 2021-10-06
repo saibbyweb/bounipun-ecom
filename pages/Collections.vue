@@ -570,7 +570,7 @@ export default {
 <style lang="scss" scoped>
 .c-header {
   height: 40vw;
-  margin-top: 9vh;
+  margin-top: 6vh;
   // background: url("/demo_images/collection-header.png");
   background-size: cover;
   width: 100%;

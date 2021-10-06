@@ -23,7 +23,7 @@
       <br />
       <div
         class="all-options"
-        style="height:80vh; overflow-y:scroll; margin-top:2vh;"
+        style="height:80vh; overflow-y:scroll; margin-top:4vh;"
       >
         <!-- product type options -->
         <!-- <Accordion heading="Product Type" :expanded="true">
@@ -316,7 +316,7 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
-    height: 10vh;
+    height: $pageMarginTop;
     padding: 2% 4%;
   }
 

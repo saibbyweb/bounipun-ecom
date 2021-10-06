@@ -877,7 +877,7 @@ export default {
   }
 }
 .product-page {
-  margin-top: 10vh;
+  margin-top: $pageMarginTop;
   // padding: 2.5%;
   position: relative;
   min-height: 90vh;
@@ -1032,7 +1032,7 @@ export default {
         position: fixed;
         width: 69%;
         right: 0;
-        top: 10vh;
+        top: $pageMarginTop;
         // height:21vh;
         background-color: white;
         overflow: hidden;
@@ -1181,6 +1181,7 @@ export default {
               text-align: center;
               padding: 0px;
               font-size: 10px;
+              color:black;
 
               &:first-child {
                 border-right: 1px solid #919191;

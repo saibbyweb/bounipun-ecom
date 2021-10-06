@@ -68,7 +68,7 @@ export default {
   z-index: 2;
   top: 0;
   left: 0;
-  background-color: rgb(29, 29, 29);
+  background-color: #202020;
   transition: all 0.5s ease-in-out;
   .text {
     color: white;

@@ -106,7 +106,7 @@ export default {
 
 <style lang="scss" scoped>
 .address-book {
-  margin-top: 13vh;
+  margin-top: calc($pageMarginTop + 3vh);
   padding: 2% 2%;
   width: 100%;
   min-height: 80vh;

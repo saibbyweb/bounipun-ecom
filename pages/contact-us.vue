@@ -140,6 +140,8 @@ export default {
 
         h2 {
             margin-bottom: 10px;
+            text-align: center;
+    font-size: 23px;
         }
 
         p {

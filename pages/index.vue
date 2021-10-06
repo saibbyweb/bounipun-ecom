@@ -271,7 +271,7 @@ export default {
 
 <style lang="scss">
 .homepage {
-  margin-top: 10vh;
+  margin-top: $pageMarginTop;
   position:relative;
 
   .coming-soon {
