@@ -1,10 +1,17 @@
 <template>
-  <div class="page flex">
+  <div class="login-page flex">
     <!-- -->
-    <div class=""></div>
+    <div class="bg"></div>
 
     <!--  -->
-    <div class="login-form">
+    <div class="login-form flex col around v-center shadow">
+      <!-- heading  -->
+      <div>
+      <h1>Admin Panel <sup> 8.0 </sup></h1>
+      <h3> Crafted with <span> ❤ </span> in Kashmir by <a href="https://saibbyweb.com" target="_blank"> @saibbyweb </a> </h3>
+      </div>
+      <img class="logo" src="/icons/logo/black.png" />
+
       <!-- phone number -->
       <InputCredential
         type="number"
@@ -37,7 +44,7 @@
 import "@/helpers/validate.js";
 
 export default {
-  layout: 'admin',
+  layout: "admin",
   data() {
     return {
       otp: "",
@@ -86,3 +93,48 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.login-page {
+  padding: 0;
+  margin-top: 0;
+  min-height: 85vh;
+  background-image: url("/demo_images/maple.jpg");
+  background-size: cover;
+
+  h1 {
+    font-size: 17px;
+    font-family: $font_1;
+
+    sup {
+      font-size: 10px;
+    }
+  }
+
+  h3 {
+      font-size: 13px;
+      font-family: $font_2;
+      a {
+            color: rgb(172, 50, 50);
+            font-weight: 900;
+      }
+      span {
+          color: rgb(192, 19, 19);
+      }
+  }
+
+  .logo {
+    width: 50%;
+  }
+
+  .bg {
+    width: 65%;
+    background-size: cover;
+  }
+
+  .login-form {
+    width: 35%;
+    background-color: rgba(238, 238, 238, 0.829);
+  }
+}
+</style>

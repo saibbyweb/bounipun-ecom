@@ -15,7 +15,7 @@
         <button class="action" @click="authorizeLocal">Authorize</button>
       </div>
     </div>
-  
+
     <AdminHeader />
     <Nuxt />
   </div>
@@ -25,7 +25,8 @@
 export default {
   data() {
     return {
-      pin: ""
+      pin: "",
+      unsubscribe: null,
     };
   },
   watch: {
@@ -33,14 +34,34 @@ export default {
       // console.log(to.path);
       // if(this.$store.state.admin.localAuthorized === false)
       //   this.$router.push('/admin-panel')
-    }
+    },
+  },
+  mounted() {
+    /* load persisted state */
+    this.$store.commit("admin/loadPersistedState");
+    /* listen for all mutations */
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "admin/setLoading") return;
+
+      console.log(mutation);
+      console.log(state.admin);
+      /* save state in local storage */
+      window.localStorage.setItem(
+        "admin_persistedState",
+        JSON.stringify(state.admin)
+      );
+    });
+
+    setTimeout(() => {
+      this.$store.dispatch("admin/fetchProfile");
+    }, 100);
   },
   methods: {
     authorizeLocal() {
       if (this.pin === "7711")
         this.$store.commit("admin/setLocalAuthorized", true);
-    }
-  }
+    },
+  },
 };
 </script>
 
