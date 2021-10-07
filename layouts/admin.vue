@@ -4,18 +4,6 @@
       <img src="/loading.gif" />
     </div>
 
-    <!-- local login -->
-    <div
-      v-if="$store.state.admin.localAuthorized"
-      class="local-login flex center col"
-    >
-      <div class="box flex center col">
-        <img class="logo" src="/icons/light/logo.png" />
-        <InputCredential label="PIN" v-model="pin" />
-        <button class="action" @click="authorizeLocal">Authorize</button>
-      </div>
-    </div>
-
     <AdminHeader />
     <Nuxt />
   </div>
@@ -31,14 +19,17 @@ export default {
   },
   watch: {
     $route(to, from) {
-      // console.log(to.path);
-      // if(this.$store.state.admin.localAuthorized === false)
-      //   this.$router.push('/admin-panel')
+      if (this.$store.state.admin.authorized === false)
+        this.$router.push("/admin-panel/login");
     },
   },
   mounted() {
     /* load persisted state */
     this.$store.commit("admin/loadPersistedState");
+
+    if (this.$store.state.admin.authorized === false)
+      this.$router.push("/admin-panel/login");
+
     /* listen for all mutations */
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "admin/setLoading") return;

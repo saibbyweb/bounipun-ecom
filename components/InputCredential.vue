@@ -86,6 +86,7 @@ export default {
     position: relative;
     width: 100%;
 
+
     .country-code {
       position: absolute;
       width: 15%;
@@ -112,6 +113,11 @@ export default {
         width: 20px;
       }
     }
+    input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
     .field {
       width: 100%;

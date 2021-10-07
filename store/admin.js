@@ -20,7 +20,7 @@ export const mutations = {
     }
 
     /* check for session cookie */
-    state.authorized = cookies.get("swecom_bounipun_admin") !== undefined;
+    // state.authorized = cookies.get("swecom_bounipun_admin") !== undefined;
     state.persistedStateLoaded = true;
   },
   /* authorize user (admin) */
@@ -39,10 +39,10 @@ export const mutations = {
   },
 };
 
-export const action = {
+export const actions = {
   async fetchProfile({ state, commit }) {
-    const { response, resolved } = await this.$post("/fetchAdminProfile");
-    if (resolved == false) return;
-    commit("setAdmin", response);
+    // const { response, resolved } = await this.$post("/fetchAdminProfile");
+    // if (resolved == false) return;
+    // commit("setAdmin", response);
   }
 }

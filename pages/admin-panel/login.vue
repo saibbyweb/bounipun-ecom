@@ -7,8 +7,11 @@
     <div class="login-form flex col around v-center shadow">
       <!-- heading  -->
       <div>
-      <h1>Admin Panel <sup> 8.0 </sup></h1>
-      <h3> Crafted with <span> ❤ </span> in Kashmir by <a href="https://saibbyweb.com" target="_blank"> @saibbyweb </a> </h3>
+        <h1>Admin Panel <sup> 8.0 </sup></h1>
+        <h3>
+          Crafted with <span> ❤ </span> in Kashmir by
+          <a href="https://saibbyweb.com" target="_blank"> @saibbyweb </a>
+        </h3>
       </div>
       <img class="logo" src="/icons/logo/black.png" />
 
@@ -44,7 +47,7 @@
 import "@/helpers/validate.js";
 
 export default {
-  layout: "admin",
+  layout: "blank",
   data() {
     return {
       otp: "",
@@ -71,6 +74,9 @@ export default {
       /* validate form or atleast phone number */
       if (!this.validatePhoneNumber()) return;
 
+      this.otpSent = true;
+      return;
+
       const { response, resolved } = await this.$post("/sendOtp", {
         countryDialCode: this.countryDialCode,
         phoneNumber: this.phoneNumber,
@@ -89,6 +95,13 @@ export default {
     async login() {
       /* clear error */
       this.error.status = false;
+
+      /* and move back to homepage */
+      this.$store.commit("admin/setAuthorization", true);
+
+      /* navigate homepage */
+      setTimeout(() => this.$router.push("/admin-panel"), 1000);
+    //   this.$router.push("/admin-panel");
     },
   },
 };
@@ -98,7 +111,7 @@ export default {
 .login-page {
   padding: 0;
   margin-top: 0;
-  min-height: 85vh;
+  min-height: 100vh;
   background-image: url("/demo_images/maple.jpg");
   background-size: cover;
 
@@ -112,15 +125,15 @@ export default {
   }
 
   h3 {
-      font-size: 13px;
-      font-family: $font_2;
-      a {
-            color: rgb(172, 50, 50);
-            font-weight: 900;
-      }
-      span {
-          color: rgb(192, 19, 19);
-      }
+    font-size: 13px;
+    font-family: $font_2;
+    a {
+      color: rgb(172, 50, 50);
+      font-weight: 900;
+    }
+    span {
+      color: rgb(192, 19, 19);
+    }
   }
 
   .logo {
