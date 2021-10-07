@@ -3,6 +3,7 @@
     <div class="loading center" v-if="$store.state.admin.loading">
       <img src="/loading.gif" />
     </div>
+
     <!-- local login -->
     <div
       v-if="$store.state.admin.localAuthorized"
@@ -14,6 +15,7 @@
         <button class="action" @click="authorizeLocal">Authorize</button>
       </div>
     </div>
+  
     <AdminHeader />
     <Nuxt />
   </div>

@@ -146,7 +146,7 @@ router.post('/loginCustomer', async (req, res) => {
 
     console.log('login customer called');
 
-    /* TODO: add country ISO code | extract post data  */
+    /* extract post data  */
     const {
         countryDialCode,
         countryIsoCode,
@@ -214,7 +214,9 @@ router.post('/loginCustomer', async (req, res) => {
     /* revert with response */
     res.send(response);
 
-})
+});
+
+
 /* shitf local cart to user cart */
 router.post('/shiftCart', userAuth('customer'), async (req, res) => {
     let response = { resolved: true, shifted: false }
