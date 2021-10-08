@@ -3,6 +3,7 @@ import admin from "@helpers/admin";
 import { uploader, methods as imageHelper } from "@models/imageUpload";
 import { register } from "@models";
 import { methods as userMethods } from "@models/user";
+import { methods as adminMethods } from "@models/admin";
 register();
 
 /* creating express router */
@@ -354,7 +355,6 @@ router.post('/loginAdmin', async(req, res) => {
 
     let response = {
         resolved: false,
-        numberNotRegistered: false,
         incorrectOtp: false,
         otpVerified: false,
         loggedIn: false,
@@ -363,9 +363,41 @@ router.post('/loginAdmin', async(req, res) => {
     }
 
     /* extract post body */
-    const { phoneNumber, otp, platform } = req.body;
+    const { countryDialCode, phoneNumber, otp, platform } = req.body;
 
+    /* check if admin already exists (by phone number) */
+    const adminFound = await adminMethods.getAdmin({countryDialCode, phoneNumber});
     
+    /* if admin not found */
+    if(adminFound === null) {
+        response.message = "Phone number not linked to any admin account.";
+        console.log('number not registered');
+        res.send(response);
+        return;
+    }
+
+    let otpVerified = false;
+
+    if (countryDialCode === "+91")
+        otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp)
+    else
+        otpVerified = await userMethods.verifyInternationalOtp(countryDialCode, phoneNumber, otp)
+
+    /* if otp verification failed */
+    if (otpVerified === false) {
+        response.incorrectOtp = true;
+        response.message = 'Incorrect OTP entered.'
+        console.log('incorrect otp');
+        res.send(response);
+        return;
+    }
+
+    /* mark otp as verified */
+    response.otpVerified = true;
+
+
+
+
 
 
 

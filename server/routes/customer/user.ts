@@ -134,7 +134,7 @@ router.post("/registerCustomer", async (req, res) => {
 
 /* login customer */
 router.post('/loginCustomer', async (req, res) => {
-    
+
     let response = {
         resolved: false,
         numberNotRegistered: false,
@@ -160,7 +160,6 @@ router.post('/loginCustomer', async (req, res) => {
     if ((await userMethods.getUser({ countryDialCode, phoneNumber })) === null) {
         response.message = 'Phone number not registered.';
         response.numberNotRegistered = true;
-        console.log('phone number does not exist');
         res.send(response);
         return;
     }

@@ -4,6 +4,7 @@ import { model as session, methods as sessionMethods } from "./session";
 /* schema */
 const schema = new mongoose.Schema({
     name: String,
+    countryDialCode: String,
     phoneNumber: String,
     // super admin, manager, support
     access_level: String,
@@ -23,6 +24,7 @@ const model = mongoose.model('admin', schema);
 
 type Admin = {
     name: string,
+    countryDialCode: string,
     phoneNumber: string,
     access_level: string,
     email?: string,
@@ -43,14 +45,22 @@ export const methods = {
         return error ? false : response;
     },
     async updateAdmin(_id: string, details: Admin) {
-        const updateQuery = model.findOneAndUpdate({_id}, details);
+        const updateQuery = model.findOneAndUpdate({ _id }, details);
         const { response, error } = await task(updateQuery);
         return error ? false : response;
     },
     async permanentlyDeleteAdmin(_id: string) {
-        const deleteQuery = model.findOneAndDelete({_id});
-        const { response, error} = await task(deleteQuery);
+        const deleteQuery = model.findOneAndDelete({ _id });
+        const { response, error } = await task(deleteQuery);
         return error ? false : response;
+    },
+    /* get admin */
+    async getAdmin(criteria: any) {
+        const findAdmin: any = model.findOne(criteria)
+        const { response, error } = await task(findAdmin);
+        if (error)
+            return false;
+        return response;
     },
     async registerSession(adminId) {
         adminId = adminId.toString();
