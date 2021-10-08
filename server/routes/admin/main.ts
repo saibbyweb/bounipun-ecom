@@ -351,11 +351,10 @@ router.post('/cancelSubOrder', async (req, res) => {
 });
 
 /* admin login */
-router.post('/loginAdmin', async(req, res) => {
+router.post('/loginAdmin', async (req, res) => {
 
     let response = {
         resolved: false,
-        incorrectOtp: false,
         otpVerified: false,
         loggedIn: false,
         sessionToken: '',
@@ -366,10 +365,10 @@ router.post('/loginAdmin', async(req, res) => {
     const { countryDialCode, phoneNumber, otp, platform } = req.body;
 
     /* check if admin already exists (by phone number) */
-    const adminFound = await adminMethods.getAdmin({countryDialCode, phoneNumber});
-    
+    const adminFound = await adminMethods.getAdmin({ countryDialCode, phoneNumber });
+
     /* if admin not found */
-    if(adminFound === null) {
+    if (adminFound === null) {
         response.message = "Phone number not linked to any admin account.";
         console.log('number not registered');
         res.send(response);
@@ -385,7 +384,6 @@ router.post('/loginAdmin', async(req, res) => {
 
     /* if otp verification failed */
     if (otpVerified === false) {
-        response.incorrectOtp = true;
         response.message = 'Incorrect OTP entered.'
         console.log('incorrect otp');
         res.send(response);
@@ -395,11 +393,26 @@ router.post('/loginAdmin', async(req, res) => {
     /* mark otp as verified */
     response.otpVerified = true;
 
+    /* login admin */
+    const loginAttempt = await adminMethods.registerSession(adminFound._id);
 
+    if (loginAttempt === false) {
+        response.message = 'Session Generation failed'
+        res.send(response);
+        return;
+    }
+    /* mark as logged in */
+    if (platform === 'web') {
+        console.log('setting cookie...');
+        res.cookie('swecom_bounipun_admin', loginAttempt.token, { maxAge: 1209600000, httpOnly: false, sameSite: 'none', secure: true });
+    }
 
+    response.loggedIn = true;
+    response.sessionToken = loginAttempt.token;
+    response.resolved = true;
 
-
-
+    /* revert with response */
+    res.send(response);
 
 });
 
