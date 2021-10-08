@@ -361,6 +361,9 @@ router.post('/loginAdmin', async (req, res) => {
         message: ''
     }
 
+    console.log(req.body);
+    return;
+
     /* extract post body */
     const { countryDialCode, phoneNumber, otp, platform } = req.body;
 

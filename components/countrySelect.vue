@@ -4,7 +4,7 @@
     <div
       @click="showCountrySelectList"
       class="selected-country"
-      :class="{ focused: showCountrySelect }"
+      :class="{ focused: showCountrySelect, adminMode }"
     >
       <img :src="selectedCountry.flag" />
       <span> {{ selectedCountry.name }} </span>
@@ -58,6 +58,10 @@ export default {
     lock: {
       type: Boolean,
       default: true
+    },
+    adminMode: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -69,6 +73,14 @@ export default {
     }
   },
   mounted() {
+
+    if(this.adminMode) {
+      this.$emit("input", '+91');
+      this.$emit('setCountryIsoCode', 'IN');
+      this.selectedCountryIndex = 98;
+      return;
+    }
+      
     this.$emit("input", this.selectedCountryCode);
     this.$emit('setCountryIsoCode', this.selectedCountryIsoCode);
   },
@@ -139,14 +151,19 @@ export default {
 
   .selected-country {
     background-color: #e7e7e7;
-    // background-color: $dark_gray;
-    // border-bottom: 2px solid $dark_gray;
+    // background-color: white;
+    // border-bottom: 2px solid white;
     border-bottom: 2px solid #e7e7e7;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     padding: 2%;
     width: 100%;
+
+    &.adminMode {
+        background-color: white;
+    border-bottom: 2px solid white;
+    }
 
     span {
       font-size: 14px;

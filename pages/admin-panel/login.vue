@@ -15,15 +15,25 @@
       </div>
       <img class="logo" src="/icons/logo/black.png" />
 
-      <!-- phone number -->
-      <InputCredential
-        type="number"
-        label="Phone Number"
-        v-model="phoneNumber"
-        :disabled="otpSent"
-        :isMobileNumber="true"
-        :countryDialCode="countryDialCode"
-      />
+      <div class="flex col center" style="width: 90%">
+        <!-- country select -->
+        <CountrySelect
+          v-model="countryDialCode"
+          :adminMode="true"
+          :lock="false"
+        />
+
+        <!-- phone number -->
+        <InputCredential
+          type="number"
+          label="Phone Number"
+          v-model="phoneNumber"
+          :disabled="otpSent"
+          :isMobileNumber="true"
+          :countryDialCode="countryDialCode"
+        />
+      </div>
+
       <!-- one time password -->
       <InputCredential label="One Time Password" v-model="otp" v-if="otpSent" />
       <!-- form error -->
@@ -61,6 +71,7 @@ export default {
       },
     };
   },
+  mounted() {},
   methods: {
     validatePhoneNumber() {
       if (this.phoneNumber.length !== 10) {
@@ -74,8 +85,8 @@ export default {
       /* validate form or atleast phone number */
       if (!this.validatePhoneNumber()) return;
 
-      this.otpSent = true;
-      return;
+      // this.otpSent = true;
+      // return;
 
       const { response, resolved } = await this.$post("/sendOtp", {
         countryDialCode: this.countryDialCode,
@@ -96,12 +107,27 @@ export default {
       /* clear error */
       this.error.status = false;
 
+      const { response, resolved } = await this.$post("/loginAdmin", {
+        countryDialCode: this.countryDialCode,
+        phoneNumber: this.phoneNumber,
+        otp: this.otp,
+        platform: "web",
+      });
+
+ 
+      /* if req not resolved, map error message */
+      if (resolved === false) {
+        this.error.message = response.message;
+        this.error.status = true;
+        return;
+      }
+
       /* and move back to homepage */
       this.$store.commit("admin/setAuthorization", true);
 
       /* navigate homepage */
       setTimeout(() => this.$router.push("/admin-panel"), 1000);
-    //   this.$router.push("/admin-panel");
+      //   this.$router.push("/admin-panel");
     },
   },
 };
