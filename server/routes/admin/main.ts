@@ -349,4 +349,26 @@ router.post('/cancelSubOrder', async (req, res) => {
     res.send(response);
 });
 
+/* admin login */
+router.post('/loginAdmin', async(req, res) => {
+
+    let response = {
+        resolved: false,
+        numberNotRegistered: false,
+        incorrectOtp: false,
+        otpVerified: false,
+        loggedIn: false,
+        sessionToken: '',
+        message: ''
+    }
+
+    /* extract post body */
+    const { phoneNumber, otp, platform } = req.body;
+
+    
+
+
+
+});
+
 export default router;

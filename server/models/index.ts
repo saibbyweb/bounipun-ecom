@@ -21,6 +21,7 @@ import globalConfig from "./globalConfig";
 import orderSequence from "./orderSequence";
 import faq from "./faq";
 import ticker from "./ticker";
+import admin from "./admin";
 
 const register = function () {
     imageUpload.methods.register();
@@ -46,6 +47,7 @@ const register = function () {
     orderSequence.methods.register();
     faq.methods.register();
     ticker.methods.register();
+    admin.methods.register();
 }
 
-export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage, user, session, order, payment, paymentIntent, globalConfig, orderSequence, faq, ticker, register };
+export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage, user, session, order, payment, paymentIntent, globalConfig, orderSequence, faq, ticker, admin, register };

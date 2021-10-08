@@ -134,6 +134,7 @@ router.post("/registerCustomer", async (req, res) => {
 
 /* login customer */
 router.post('/loginCustomer', async (req, res) => {
+    
     let response = {
         resolved: false,
         numberNotRegistered: false,
