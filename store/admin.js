@@ -20,12 +20,17 @@ export const mutations = {
     }
 
     /* check for session cookie */
-    // state.authorized = cookies.get("swecom_bounipun_admin") !== undefined;
+    state.authorized = cookies.get("swecom_bounipun_admin") !== undefined;
     state.persistedStateLoaded = true;
   },
   /* authorize user (admin) */
   setAuthorization(state, value) {
     state.authorized = value;
+  },
+  /* unauthorize */
+  unauthorize(state) {
+    cookies.remove("swecom_bounipun_admin");
+    state.authorized = false;
   },
   setLoading(state, loading) {
     state.loading = loading;
@@ -44,5 +49,5 @@ export const actions = {
     // const { response, resolved } = await this.$post("/fetchAdminProfile");
     // if (resolved == false) return;
     // commit("setAdmin", response);
-  }
-}
+  },
+};

@@ -42,20 +42,15 @@ type Admin = {
     status: boolean
 }
 
-const adminExpressAuth = async (req, res, next, usergroup, strictMode) => {
+/* admin express auth */
+const adminExpressAuth = async (req, res, next, accessLevel) => {
     console.log('ADMIN_AUTH')
-    next()
-    return;
-
 
     req.body.admin = { status: false };
     /* no cookie is found, mark user as guest */
     if (req.cookies.swecom_bounipun_admin === undefined) {
-        if (strictMode) {
-            res.send({ adminNotAuthorized: true })
-        }
-        else
-            next();
+        console.log('ADMIN_COOKIE_NOT_PROVIDED');
+        res.send({ adminNotAuthorized: true })
         return;
     }
 
@@ -64,19 +59,22 @@ const adminExpressAuth = async (req, res, next, usergroup, strictMode) => {
     const session = await validateSession(token);
 
     /* if session is invalid */
-    if (session === false) {
+    if (session === false || session.valid === false) {
+        console.log('FALSE AAHGAYA')
         /* reset cookie */
-        if (strictMode)
-            res.send({ adminNotAuthorized: true });
-        else
-            next()
+        res.send({ adminNotAuthorized: true });
         return;
     }
-    
-    /* fetch admin details */
-    console.log(session,'-admin session');
 
-    next();
+    /* match access_level */
+    /*TODO: access level should either match or should be lower than the value */
+    if(session.admin.access_level === accessLevel) {
+        console.log('ADMIN_AUTH_PASSED')
+        next();
+        return;
+    }
+    else
+    res.send({ adminNotAuthorized: true });
 }
 
 /* helper methods */
@@ -121,15 +119,15 @@ export const methods = {
         /* save session token in db */
         const { response: newSession, error } = await task(new session({
             token,
-            user: adminId
+            admin: adminId
         }).save());
 
         return !error ? newSession : false;
     },
-    adminAuth: (usergroup, strictMode = true) => (...args) => {
-        return adminExpressAuth(...args, usergroup, strictMode)
+    adminAuth: (accessLevel) => (...args:[req: any, res:any, next:any]) => {
+        return adminExpressAuth(...args, accessLevel)
     }
-         
+
 }
 
 export default { model, methods };

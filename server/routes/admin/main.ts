@@ -228,7 +228,7 @@ router.post('/fetchPaginatedResults', async (req, res) => {
 });
 
 /* update api */
-router.post('/updateDocument', adminAuth(1), async (req, res) => {
+router.post('/updateDocument', adminAuth('1'), async (req, res) => {
     /* extracting query details */
     const { model, details, editMode } = req.body;
 
@@ -259,7 +259,7 @@ router.post('/updateDocument', adminAuth(1), async (req, res) => {
 });
 
 /* delete document */
-router.post('/deleteDocument', async (req, res) => {
+router.post('/deleteDocument', adminAuth('1'),async (req, res) => {
     const { model, _id } = req.body;
     const collection = db.model(model);
     console.log(_id, model);
@@ -396,6 +396,8 @@ router.post('/loginAdmin', async (req, res) => {
 
     /* mark otp as verified */
     response.otpVerified = true;
+
+    console.log(adminFound._id, '-ADMIN ID')
 
     /* login admin */
     const loginAttempt = await adminMethods.registerSession(adminFound._id);

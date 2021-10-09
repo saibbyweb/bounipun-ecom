@@ -6,6 +6,10 @@ const schema = new mongoose.Schema({
         type: ObjectId,
         ref: 'users'
     },
+    admin: {
+        type: ObjectId,
+        ref: 'admin'
+    },
     platform: {
         type: String,
         default: 'web'
@@ -25,7 +29,7 @@ export const methods = {
         console.log(`registered model: ${modelName}`);
     },
     async validateSession(token) {
-        const findSession = model.findOne({ token, valid: true }).populate('user').lean();
+        const findSession = model.findOne({ token, valid: true }).populate('user admin').lean();
         const { response: session, error } = await task(findSession as any);
         console.log(session,'--session found')
         return error || session === null ? false : session;

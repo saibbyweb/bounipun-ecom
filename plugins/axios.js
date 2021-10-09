@@ -6,14 +6,17 @@ export default function ({ $axios, store, router, redirect }) {
     // $axios.defaults.withCredentials = true;
 
     $axios.onResponse(response => {
+
+        console.log(response.data,'--ON RESPONSE')
         if(response.data.notAuthorized === true) {
             store.commit("customer/unauthorize");
             router.push('/');
         }
 
         if(response.data.adminNotAuthorized === true) {
-            store.commit("admin/setAuthorization", false);
-            router.push('/admin-panel')
+            store.commit("admin/unauthorize");
+            setTimeout(() => redirect('/'),1000);
+            // router.push('/admin-panel/login');
         }
     })
 

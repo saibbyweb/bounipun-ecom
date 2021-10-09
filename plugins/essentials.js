@@ -27,9 +27,9 @@ export default (context, inject) => {
     const { response, error } = await task(update);
     $store.commit("admin/setLoading", false);
 
-    /* if error occurred */
+    /* if error occurred (handle) */
     if (error) {
-      return results;
+      return result;
     }
 
     /* set documents */
@@ -129,7 +129,7 @@ export default (context, inject) => {
 
     result.fetched = true;
     result.doc = response;
-    setTimeout(() => console.log(result.doc, "-FROM ESSENTIALS"), 2000);
+    // setTimeout(() => console.log(result.doc, "-FROM ESSENTIALS"), 2000);
 
     return result;
   }
