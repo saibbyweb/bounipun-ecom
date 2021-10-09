@@ -126,8 +126,8 @@ export default {
       this.$store.commit("admin/setAuthorization", true);
 
       /* navigate homepage */
-      setTimeout(() => this.$router.push("/admin-panel"), 1000);
-      //   this.$router.push("/admin-panel");
+      setTimeout(() => this.$router.push("/admin-panel"), 500);
+      // this.$router.push("/");
     },
   },
 };

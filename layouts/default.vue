@@ -47,7 +47,7 @@ export default {
       if (mutation.type === "customer/setLoading") return;
 
       console.log(mutation);
-      console.log(state.customer.cart);
+      // console.log(state.customer.cart);
       /* save state in local storage */
       window.localStorage.setItem(
         "persistedState",

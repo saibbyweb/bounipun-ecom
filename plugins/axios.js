@@ -3,11 +3,15 @@ export default function ({ $axios, store, router, redirect }) {
     //   console.log('Making request to ' + config.url)
     // })
 
+    // $axios.defaults.withCredentials = true;
+
     $axios.onResponse(response => {
         if(response.data.notAuthorized === true) {
             store.commit("customer/unauthorize");
             router.push('/');
         }
     })
+
+
   
   }

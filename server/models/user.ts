@@ -91,8 +91,10 @@ const expressAuth = async (req, res, next, usergroup, strictMode) => {
     req.body.user = { status: false }
     /* no cookie is found, mark user as guest */
     if (req.cookies.swecom_bounipun === undefined) {
-        if (strictMode)
+        if (strictMode) {
+            console.log('No cookie found', '--strict mode');
             res.send({ notAuthorized: true })
+        }
         else
             next();
         return;

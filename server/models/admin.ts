@@ -1,6 +1,12 @@
 import { mongoose, task } from "@helpers/essentials";
 import bcrypt from "bcrypt";
 import { model as session, methods as sessionMethods } from "./session";
+
+const typeString = {
+    type: String,
+    default: ''
+}
+
 /* schema */
 const schema = new mongoose.Schema({
     name: String,
@@ -8,10 +14,10 @@ const schema = new mongoose.Schema({
     phoneNumber: String,
     // super admin, manager, support
     access_level: String,
-    email: String,
-    dob: String,
-    gender: String,
-    address: String,
+    email: typeString,
+    dob: Date,
+    gender: typeString,
+    address: typeString,
     status: Boolean
 },
     {
@@ -38,6 +44,13 @@ type Admin = {
 export const methods = {
     register() {
         console.log('admin registered');
+        // this.addNewAdmin({
+        //     name: "Suhaib Khan",
+        //     countryDialCode: '+91',
+        //     phoneNumber: '9906697711',
+        //     access_level: '1',
+        //     status: true
+        // });
     },
     async addNewAdmin(details: Admin) {
         const newAdmin = new model(details);

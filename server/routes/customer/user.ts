@@ -487,7 +487,7 @@ router.post('/ipLookup', userAuth('customer', false), async (req, res) => {
     }
 
     /* validate ip */
-    if (req.ip === '::1') {
+    if (req.ip === '::1' || req.ip.includes('::ffff')) {
         response.resolved = true;
         res.send(response);
         return;

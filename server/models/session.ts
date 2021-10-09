@@ -27,6 +27,7 @@ export const methods = {
     async validateSession(token) {
         const findSession = model.findOne({ token, valid: true }).populate('user').lean();
         const { response: session, error } = await task(findSession as any);
+        console.log(session,'--session found')
         return error || session === null ? false : session;
     },
     async invalidateSession(userId, token) {

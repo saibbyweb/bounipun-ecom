@@ -362,7 +362,7 @@ router.post('/loginAdmin', async (req, res) => {
     }
 
     console.log(req.body);
-    return;
+    // return;
 
     /* extract post body */
     const { countryDialCode, phoneNumber, otp, platform } = req.body;
@@ -406,7 +406,7 @@ router.post('/loginAdmin', async (req, res) => {
     }
     /* mark as logged in */
     if (platform === 'web') {
-        console.log('setting cookie...');
+        console.log('setting cookie...', loginAttempt.token);
         res.cookie('swecom_bounipun_admin', loginAttempt.token, { maxAge: 1209600000, httpOnly: false, sameSite: 'none', secure: true });
     }
 
