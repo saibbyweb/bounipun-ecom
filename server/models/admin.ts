@@ -1,6 +1,8 @@
 import { mongoose, task } from "@helpers/essentials";
 import bcrypt from "bcrypt";
 import { model as session, methods as sessionMethods } from "./session";
+/* validate session */
+const { validateSession } = sessionMethods;
 
 const typeString = {
     type: String,
@@ -38,6 +40,43 @@ type Admin = {
     gender?: string,
     address?: string,
     status: boolean
+}
+
+const adminExpressAuth = async (req, res, next, usergroup, strictMode) => {
+    console.log('ADMIN_AUTH')
+    next()
+    return;
+
+
+    req.body.admin = { status: false };
+    /* no cookie is found, mark user as guest */
+    if (req.cookies.swecom_bounipun_admin === undefined) {
+        if (strictMode) {
+            res.send({ adminNotAuthorized: true })
+        }
+        else
+            next();
+        return;
+    }
+
+    /* if cookie found, validate and return appropriate response */
+    const token = req.cookies.swecom_bounipun_admin;
+    const session = await validateSession(token);
+
+    /* if session is invalid */
+    if (session === false) {
+        /* reset cookie */
+        if (strictMode)
+            res.send({ adminNotAuthorized: true });
+        else
+            next()
+        return;
+    }
+    
+    /* fetch admin details */
+    console.log(session,'-admin session');
+
+    next();
 }
 
 /* helper methods */
@@ -86,7 +125,11 @@ export const methods = {
         }).save());
 
         return !error ? newSession : false;
+    },
+    adminAuth: (usergroup, strictMode = true) => (...args) => {
+        return adminExpressAuth(...args, usergroup, strictMode)
     }
+         
 }
 
 export default { model, methods };

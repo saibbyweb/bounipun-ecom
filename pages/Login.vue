@@ -56,10 +56,16 @@
 import "@/helpers/validate.js";
 
 export default {
-    head() {
+  head() {
     return {
-      title: "Login | Bounipun Kashmir"
-    }
+      title: "Login | Bounipun Kashmir",
+    };
+  },
+  mounted() {
+    setTimeout(() => {
+    if (this.$store.state.admin.authorized === true)
+      this.$router.push("/admin-panel");
+    },1000)
   },
   data() {
     return {
@@ -71,8 +77,8 @@ export default {
       purpose: "login",
       error: {
         status: false,
-        message: ""
-      }
+        message: "",
+      },
     };
   },
   mounted() {},
@@ -93,7 +99,7 @@ export default {
       const { response, resolved } = await this.$post("/sendOtp", {
         countryDialCode: this.countryDialCode,
         phoneNumber: this.phoneNumber,
-        purpose: this.purpose
+        purpose: this.purpose,
       });
 
       /* if req not resolved */
@@ -113,7 +119,7 @@ export default {
         countryIsoCode: this.countryIsoCode,
         phoneNumber: this.phoneNumber,
         otp: this.otp,
-        platform: "web"
+        platform: "web",
       });
 
       console.log(response);
@@ -140,7 +146,7 @@ export default {
     },
     async shiftCart() {
       const { resolved, response } = await this.$post("/shiftCart", {
-        cart: this.$store.state.customer.cart
+        cart: this.$store.state.customer.cart,
       });
 
       /* clear local cart if cart shifted */
@@ -150,8 +156,8 @@ export default {
 
       /* refetch cart */
       await this.$store.dispatch("customer/fetchCart");
-    }
-  }
+    },
+  },
 };
 </script>
 

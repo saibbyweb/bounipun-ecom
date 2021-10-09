@@ -69,9 +69,26 @@ export default {
         status: false,
         message: "",
       },
+      unsubscribe: null
     };
   },
-  mounted() {},
+  beforeUnmount() {
+    this.unsubscribe();
+  },
+  mounted() {
+        /* listen for all mutations */
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "admin/setLoading") return;
+
+      console.log(mutation);
+      /* save state in local storage */
+      window.localStorage.setItem(
+        "admin_persistedState",
+        JSON.stringify(state.admin)
+      );
+    });
+
+  },
   methods: {
     validatePhoneNumber() {
       if (this.phoneNumber.length !== 10) {

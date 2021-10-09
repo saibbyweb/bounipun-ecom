@@ -27,9 +27,6 @@ export default {
     /* load persisted state */
     this.$store.commit("admin/loadPersistedState");
 
-    if (this.$store.state.admin.authorized === false)
-      this.$router.push("/admin-panel/login");
-
     /* listen for all mutations */
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "admin/setLoading") return;
@@ -44,6 +41,8 @@ export default {
     });
 
     setTimeout(() => {
+      if (this.$store.state.admin.authorized === false)
+        this.$router.push("/admin-panel/login");
       this.$store.dispatch("admin/fetchProfile");
     }, 100);
   },

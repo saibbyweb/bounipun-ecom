@@ -738,12 +738,4 @@ export const methods = {
     }
 }
 
-// setTimeout(() => {
-//     methods.getNextSequence().then(_ => {
-
-//         console.log(_);
-//     });
-
-// }, 300)
-
 export default { model, methods }

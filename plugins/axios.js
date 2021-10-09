@@ -10,6 +10,11 @@ export default function ({ $axios, store, router, redirect }) {
             store.commit("customer/unauthorize");
             router.push('/');
         }
+
+        if(response.data.adminNotAuthorized === true) {
+            store.commit("admin/setAuthorization", false);
+            router.push('/admin-panel')
+        }
     })
 
 

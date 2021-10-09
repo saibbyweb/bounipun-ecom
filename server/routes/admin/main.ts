@@ -4,6 +4,7 @@ import { uploader, methods as imageHelper } from "@models/imageUpload";
 import { register } from "@models";
 import { methods as userMethods } from "@models/user";
 import { methods as adminMethods } from "@models/admin";
+const { adminAuth }  = adminMethods;
 register();
 
 /* creating express router */
@@ -227,7 +228,7 @@ router.post('/fetchPaginatedResults', async (req, res) => {
 });
 
 /* update api */
-router.post('/updateDocument', async (req, res) => {
+router.post('/updateDocument', adminAuth(1), async (req, res) => {
     /* extracting query details */
     const { model, details, editMode } = req.body;
 
