@@ -17,7 +17,6 @@ const schema = new mongoose.Schema({
     // super admin, manager, support
     access_level: String,
     email: typeString,
-    dob: Date,
     gender: typeString,
     address: typeString,
     status: Boolean

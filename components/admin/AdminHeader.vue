@@ -129,6 +129,11 @@ export default {
           path: "/admin-panel/ticker",
           desc: "...",
         },
+        {
+          name: "Admins",
+          path: "/admin-panel/admins",
+          desc: "...",
+        },
       ],
       activeIndex: -1,
     };
@@ -139,8 +144,8 @@ export default {
       this.$router.push(item.path);
     },
     async logoutAdmin() {
-      await this.$post('/logoutAdmin');
-    }
+      await this.$post("/logoutAdmin");
+    },
   },
 };
 </script>
@@ -152,8 +157,8 @@ export default {
   background-color: $dark_gray;
   height: 15vh;
   overflow: hidden;
-  padding:0;
-  margin:0;
+  padding: 0;
+  margin: 0;
 
   .logo {
     width: 12%;
@@ -165,14 +170,14 @@ export default {
 
   .logout-btn {
     background-color: rgb(201, 108, 108);
-    padding:2px 20px;
-    margin:0;
-    color:white;
+    padding: 2px 20px;
+    margin: 0;
+    color: white;
     border: none;
     transition: all 0.3s ease-in-out;
 
     &:hover {
-      background-color:  rgb(206, 66, 66);
+      background-color: rgb(206, 66, 66);
     }
   }
 
