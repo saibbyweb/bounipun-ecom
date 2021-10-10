@@ -18,20 +18,19 @@
       v-model="doc.access_level"
       label="Select Access Level"
     />
+
     <!-- email -->
-    <InputBox
+    <InputCredential
       label="Admin Phone Number"
       v-model="doc.phoneNumber"
       type="number"
+      :isMobileNumber="true"
+      :countryDialCode="doc.countryDialCode"
     />
     <!-- email -->
     <InputBox label="Admin Email" v-model="doc.email" type="email" />
     <!-- gender -->
-    <SelectBox
-      :options="allGenders"
-      v-model="doc.gender"
-      label="Gender"
-    />
+    <SelectBox :options="allGenders" v-model="doc.gender" label="Gender" />
     <!-- gender -->
     <TextBox v-model="doc.address" label="Address" :internal="true" />
     <!-- publish toggle -->
@@ -70,16 +69,16 @@ export default {
       doc: {
         _id: "",
         name: "",
-        countryDialCode: "",
+        countryDialCode: "+91",
         phoneNumber: "",
-        access_level: "",
+        access_level: "3",
         email: "",
-        gender: "",
+        gender: "male",
         address: "",
         status: false,
       },
       allAccessLevels: [
-           { name: "Super Admin", value: "1" },
+        { name: "Super Admin", value: "1" },
         { name: "Manager", value: "2" },
         { name: "Support Member", value: "3" },
       ],
@@ -144,7 +143,7 @@ export default {
         email,
         gender,
         address,
-        status
+        status,
       } = details;
       this.doc = {
         _id,
@@ -155,7 +154,7 @@ export default {
         email,
         gender,
         address,
-        status
+        status,
       };
       this.editMode = true;
     },
@@ -167,13 +166,13 @@ export default {
       this.populateForm({
         _id: "",
         name: "",
-        countryDialCode: "",
+        countryDialCode: "+91",
         phoneNumber: "",
-        access_level: "",
+        access_level: "3",
         email: "",
-        gender: "",
+        gender: "male",
         address: "",
-        status: false
+        status: false,
       });
       this.editMode = false;
     },
