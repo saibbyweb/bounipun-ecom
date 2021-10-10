@@ -34,8 +34,14 @@ export const methods = {
         console.log(session,'--session found')
         return error || session === null ? false : session;
     },
-    async invalidateSession(userId, token) {
-        const invalidateRequest: any = model.findOneAndUpdate({user: userId, token}, { valid: false });
+    async invalidateSession(userId, token, type='user') {
+
+        const filter: any = { token }
+        if(type === 'user') 
+            filter.user = userId;
+            
+        const invalidateRequest: any = model.findOneAndUpdate(filter, { valid: false });
+
         const { response, error } = await task(invalidateRequest);
         return error || response === null ? false : true;
     }

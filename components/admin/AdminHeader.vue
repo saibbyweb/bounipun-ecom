@@ -7,7 +7,7 @@
       </div>
 
       <!-- logout button -->
-      <button class="logout-btn">Logout</button>
+      <button class="logout-btn" @click="logoutAdmin">Logout</button>
     </div>
 
     <div class="menu-links flex wrap center">
@@ -138,6 +138,9 @@ export default {
       this.activeIndex = index;
       this.$router.push(item.path);
     },
+    async logoutAdmin() {
+      await this.$post('/logoutAdmin');
+    }
   },
 };
 </script>

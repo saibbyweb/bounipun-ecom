@@ -4,6 +4,7 @@ import { uploader, methods as imageHelper } from "@models/imageUpload";
 import { register } from "@models";
 import { methods as userMethods } from "@models/user";
 import { methods as adminMethods } from "@models/admin";
+import { methods as sessionMethods } from "@models/session";
 const { adminAuth }  = adminMethods;
 register();
 
@@ -422,4 +423,11 @@ router.post('/loginAdmin', async (req, res) => {
 
 });
 
+/* admin logout */
+router.post('/logoutAdmin', async(req, res) => {
+    console.log('admin logout called');
+    const { token } = req.body;
+    await sessionMethods.invalidateSession(false,token,'admin');
+    res.send({ adminNotAuthorized: true })
+});
 export default router;
