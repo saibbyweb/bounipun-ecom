@@ -5,7 +5,7 @@ import { register } from "@models";
 import { methods as userMethods } from "@models/user";
 import { methods as adminMethods } from "@models/admin";
 import { methods as sessionMethods } from "@models/session";
-const { adminAuth }  = adminMethods;
+const { adminAuth } = adminMethods;
 register();
 
 /* creating express router */
@@ -260,7 +260,7 @@ router.post('/updateDocument', adminAuth('1'), async (req, res) => {
 });
 
 /* delete document */
-router.post('/deleteDocument', adminAuth('1'),async (req, res) => {
+router.post('/deleteDocument', adminAuth('1'), async (req, res) => {
     const { model, _id } = req.body;
     const collection = db.model(model);
     console.log(_id, model);
@@ -424,10 +424,16 @@ router.post('/loginAdmin', async (req, res) => {
 });
 
 /* admin logout */
-router.post('/logoutAdmin', async(req, res) => {
+router.post('/logoutAdmin', async (req, res) => {
     console.log('admin logout called');
     const { token } = req.body;
-    await sessionMethods.invalidateSession(false,token,'admin');
+    await sessionMethods.invalidateSession(false, token, 'admin');
     res.send({ adminNotAuthorized: true })
+});
+
+/* fetch customer profile */
+router.post('/fetchAdminProfile', adminAuth('0', false), async (req, res) => {
+    const { admin } = req.body;
+    res.send(admin);
 });
 export default router;

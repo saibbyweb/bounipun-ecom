@@ -142,10 +142,13 @@ export default {
       /* and move back to homepage */
       this.$store.commit("admin/setAuthorization", true);
 
+            /* fetch profile */
+      this.$store.dispatch("admin/fetchProfile");
+
       /* navigate homepage */
       setTimeout(() => this.$router.push("/admin-panel"), 500);
       // this.$router.push("/");
-    },
+    }
   },
 };
 </script>

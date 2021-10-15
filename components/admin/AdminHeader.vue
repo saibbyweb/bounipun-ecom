@@ -15,7 +15,7 @@
         @click="setActive(item, index)"
         class="menu-item"
         :class="{ active: activeIndex === index }"
-        v-for="(item, index) in items"
+        v-for="(item, index) in authorizedPages"
         :key="index"
       >
         <span> {{ item.name }} </span>
@@ -137,6 +137,19 @@ export default {
       ],
       activeIndex: -1,
     };
+  },
+  computed: {
+    isSuperAdmin() {
+      return this.$store.state.admin.admin.access_level === "1";
+    },
+    authorizedPages() {
+      if (this.isSuperAdmin) return this.items;
+      /* filter out super admin pages for other access levels */
+      const superAdminPages = ["Coupons", "Configuration", "Users", "Admins"];
+      return this.items.filter(
+        (item) => superAdminPages.findIndex((page) => page === item.name) === -1
+      );
+    }
   },
   methods: {
     setActive(item, index) {

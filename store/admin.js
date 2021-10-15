@@ -41,13 +41,13 @@ export const mutations = {
   },
   setAdmin(state, admin) {
     state.admin = admin;
-  },
+  }
 };
 
 export const actions = {
   async fetchProfile({ state, commit }) {
-    // const { response, resolved } = await this.$post("/fetchAdminProfile");
-    // if (resolved == false) return;
-    // commit("setAdmin", response);
+    const { response, resolved } = await this.$post("/fetchAdminProfile");
+    if (resolved == false) return;
+    commit("setAdmin", response);
   },
 };

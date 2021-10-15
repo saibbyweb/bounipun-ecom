@@ -35,6 +35,9 @@
     <TextBox v-model="doc.address" label="Address" :internal="true" />
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
+
+    <br/>
+    
     <!-- update button -->
     <div class="center-space">
       <!-- loading bar -->
