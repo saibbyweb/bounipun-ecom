@@ -145,7 +145,7 @@ export default {
     authorizedPages() {
       if (this.isSuperAdmin) return this.items;
       /* filter out super admin pages for other access levels */
-      const superAdminPages = ["Coupons", "Configuration", "Users", "Admins"];
+      const superAdminPages = ["Coupons", "Configuration", "Sales", "Product Lists", "Users", "Admins"];
       return this.items.filter(
         (item) => superAdminPages.findIndex((page) => page === item.name) === -1
       );

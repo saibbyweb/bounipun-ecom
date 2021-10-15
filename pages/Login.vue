@@ -11,7 +11,7 @@
 
       <!-- phone number -->
       <InputCredential
-        type="number"
+        type="text"
         label="Phone Number"
         v-model="phoneNumber"
         :disabled="otpSent"
@@ -85,11 +85,20 @@ export default {
   methods: {
     validatePhoneNumber() {
       console.log("validate called");
-      // if (this.phoneNumber.length !== 10) {
-      //   this.error.message = "Kindly enter a valid 10 digit mobile number";
-      //   this.error.status = true;
-      //   return false;
-      // }
+    
+      /* check if number is empty */
+      if (this.phoneNumber.isEmpty()) {
+        this.error.message = "Phone number field cannot be left blank";
+        this.error.status = true;
+        return false;
+      }
+
+      if(!this.phoneNumber.hasOnlyNumbers()) {
+        this.error.message = "Kindly enter a valid phone number";
+        this.error.status = true;
+        return false;
+      }
+      
       return true;
     },
     async sendOtp() {
