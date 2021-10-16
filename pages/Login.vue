@@ -84,7 +84,6 @@ export default {
   mounted() {},
   methods: {
     validatePhoneNumber() {
-      console.log("validate called");
     
       /* check if number is empty */
       if (this.phoneNumber.isEmpty()) {
