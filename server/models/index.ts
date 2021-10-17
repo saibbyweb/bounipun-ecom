@@ -22,6 +22,7 @@ import orderSequence from "./orderSequence";
 import faq from "./faq";
 import ticker from "./ticker";
 import admin from "./admin";
+import notification from "./notification"
 
 const register = function () {
     imageUpload.methods.register();
@@ -48,6 +49,7 @@ const register = function () {
     faq.methods.register();
     ticker.methods.register();
     admin.methods.register();
+    notification.methods.register();
 }
 
-export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage, user, session, order, payment, paymentIntent, globalConfig, orderSequence, faq, ticker, admin, register };
+export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage, user, session, order, payment, paymentIntent, globalConfig, orderSequence, faq, ticker, admin, notification, register };
