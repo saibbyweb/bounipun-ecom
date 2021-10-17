@@ -1,6 +1,9 @@
 import { mongoose, ObjectId } from "@helpers/essentials";
-import sgMail from '@sendgrid/mail'
-sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+import sgMail, { MailDataRequired } from '@sendgrid/mail'
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+/* template id send grid */
+const templateIdSG = 'd-4d596c48997442849bc5e4358851973b';
 
 const typeString = {
     type: String,
@@ -10,7 +13,7 @@ const typeString = {
 /* schema */
 const schema = new mongoose.Schema({
     channel: String, // email or text
-    type: String, // registration, order
+    type: String, // registration, order update (confirm, shipped, delivered, delayed, cancelled)
     to: String, // admin, customer
     // related customer
     customer: {
@@ -30,6 +33,24 @@ const schema = new mongoose.Schema({
 
 /* model */
 const model = mongoose.model('notification', schema);
+
+type EmailNotification = {
+    to: string,
+    receipt: string,
+    subject: string,
+    templateId: string,
+    templateData: any,
+    emailProvider: string,
+    type: string,
+    customer?: string,
+}
+
+type TextNotification = {
+    receipt: string,
+    countryISOCode: string,
+    smsProvider: string,
+    templateId: string
+}
 
 /* helper methods */
 export const methods = {
@@ -55,24 +76,63 @@ export const methods = {
             })
     },
     sendTestDynamicMail() {
-        const msg = {
-            to: 'suhaibzreason@gmail.com',
-            from: 'noreply@bounipun.in',
-            templateId: 'd-4d596c48997442849bc5e4358851973b',
-            dynamicTemplateData: {
-                subject: 'Bounipun Order Update',
-                senderName: 'Suhaib Khan',
-                orderId: 'BP-001',
-            },
+
+    },
+    async sendDynamicEmailViaSendGrid(to:string, subject: string, templateId:string, dynamicTemplateData:any, from:string = 'noreply@bounipun.in') {
+        /* construct email data */
+        const emailData: MailDataRequired = {
+            to,
+            from,
+            subject,
+            templateId,
+            dynamicTemplateData
         }
-        sgMail
-        .send(msg)
-        .then(() => {
-            console.log('Email sent')
-        })
-        .catch((error) => {
-            console.error(error)
-        })
+            
+        /* email sending attempt */
+        let attempt: any = false;
+        
+        /* try sending with send grid */
+        try {
+            attempt = await sgMail.send(emailData);
+        }
+        /* if error occurred */
+        catch(e) {
+            console.log(e);
+            return false;
+        }
+
+        console.log('Email probably sent.');
+        console.log(attempt);
+        return true;
+
+    },
+    async sendEmailNotification(details: EmailNotification) {
+        const { to, receipt, subject, templateId, templateData, emailProvider, type, customer  } = details;
+
+        switch(details.emailProvider) {
+            case 'sendgrid':
+                this.sendDynamicEmailViaSendGrid(receipt, subject, templateId, templateData);
+                break;
+            default:
+                break;
+        }
+        
+        /* new notification */
+        const newNotification = new model({
+            channel: 'email',
+            type,
+            to,
+            customer,
+            receiptEmail: receipt,
+            emailProvider
+        });
+
+        await newNotification.save();
+
+
+    },
+    async sendTextNotification(details: TextNotification) {
+
     }
 }
 
