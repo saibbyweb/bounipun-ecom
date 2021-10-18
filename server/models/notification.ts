@@ -37,7 +37,7 @@ const model = mongoose.model('notification', schema);
 
 type EmailNotification = {
     to: string,
-    receipt: string,
+    receipt: string | Array<string>,
     subject: string,
     templateId: string,
     templateData: any,
@@ -75,7 +75,7 @@ export const methods = {
         console.log('notification registered');
         // this.sendTestDynamicMail();
     },
-    async sendDynamicEmailViaSendGrid(to: string, subject: string, templateId: string, dynamicTemplateData: any, from: string = 'noreply@bounipun.in') {
+    async sendDynamicEmailViaSendGrid(to: string | Array<string>, subject: string, templateId: string, dynamicTemplateData: any, from: string = 'noreply@bounipun.in') {
         /* construct email data */
         const emailData: MailDataRequired = {
             to,
@@ -99,9 +99,8 @@ export const methods = {
         }
 
         console.log('Email probably sent.');
-        console.log(attempt);
+        // console.log(attempt);
         return true;
-
     },
     async sendEmailNotification(details: EmailNotification) {
         const { to, receipt, subject, templateId, templateData, emailProvider, type, customer } = details;
@@ -120,7 +119,7 @@ export const methods = {
             type,
             to,
             customer,
-            receiptEmail: receipt,
+            receiptEmail: receipt.toString(),
             emailProvider
         });
 
@@ -134,7 +133,7 @@ export const methods = {
     async sendContactFormEmailToAdmin(details: ContactEmailTemplate) {
         await this.sendEmailNotification({
             to: 'admin',
-            receipt: 'hello@saibbyweb.com',
+            receipt: ['hello@saibbyweb.com','suhaibzreason@gmail.com'],
             subject: 'New Contact Request | Bounipun Ecom',
             templateId: contactEmailTemplateId,
             templateData: details,

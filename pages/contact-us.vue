@@ -107,7 +107,7 @@ export default {
                 response,
                 resolved
             } = await this.$post("/sendMessage", {
-                name: this.firstName + "" + this.surName,
+                name: this.firstName + " " + this.surName,
                 subject: this.subject,
                 email: this.email,
                 message: this.message
