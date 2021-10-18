@@ -4,7 +4,8 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 /* template id send grid */
 const templateIdSG = 'd-4d596c48997442849bc5e4358851973b';
-const contactEmailTemplateId  = 'd-7759ca45d9e54e08841cdddc3b2d427f'
+const contactEmailTemplateId  = 'd-7759ca45d9e54e08841cdddc3b2d427f';
+const customerRegistrationTemplateId = 'd-a3ec24c9d180470c955f0d62ef10b4a8'
 
 const typeString = {
     type: String,
@@ -61,6 +62,14 @@ type ContactEmailTemplate = {
     message: string
 }
 
+type CustomerRegistrationEmailTemplate = {
+    firstName: string,
+    surName: string,
+    phoneNumber: string,
+    countryDialCode: string,
+    countryIsoCode: string
+}
+
 // {
 //     "name": "Suhaib Khan",
 //     "timestamp":"2021-08-28T11:49:50.524+00:00",
@@ -84,6 +93,8 @@ export const methods = {
             templateId,
             dynamicTemplateData
         }
+
+        console.log(subject);
 
         /* email sending attempt */
         let attempt: any = false;
@@ -133,7 +144,7 @@ export const methods = {
     async sendContactFormEmailToAdmin(details: ContactEmailTemplate) {
         await this.sendEmailNotification({
             to: 'admin',
-            receipt: ['hello@saibbyweb.com','suhaibzreason@gmail.com'],
+            receipt: ['contact@bounipun.in','hello@saibbyweb.com','suhaibzreason@gmail.com'],
             subject: 'New Contact Request | Bounipun Ecom',
             templateId: contactEmailTemplateId,
             templateData: details,
@@ -141,6 +152,17 @@ export const methods = {
             type: 'contact-request'
         });
     },
+    async sendCustomerRegistrationEmailToAdmin(details: CustomerRegistrationEmailTemplate) {
+        await this.sendEmailNotification({
+            to: 'admin',
+            receipt: ['contact@bounipun.in','hello@saibbyweb.com'],
+            subject: 'New Customer Signup',
+            templateId: customerRegistrationTemplateId,
+            templateData: details,
+            emailProvider: 'sendgrid',
+            type: 'customer-signup'
+        })
+    }
 }
 
 export default { model, methods };

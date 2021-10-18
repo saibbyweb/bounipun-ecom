@@ -5,7 +5,10 @@ import sumBy from "lodash/sumBy";
 import { methods as paymentMethods } from "@models/payment"
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
 import axios from "axios";
-import { response } from "express";
+import { methods as notificationMethods } from "@models/notification";
+
+let { sendCustomerRegistrationEmailToAdmin } = notificationMethods;
+sendCustomerRegistrationEmailToAdmin = sendCustomerRegistrationEmailToAdmin.bind(notificationMethods);
 
 /* ipregistry key */
 const ipRegistryKey = process.env.IP_REGISTRY_KEY;
@@ -110,6 +113,16 @@ router.post("/registerCustomer", async (req, res) => {
     }
     /* mark user as registered */
     response.registered = true;
+
+    /* send admin notification email */
+    sendCustomerRegistrationEmailToAdmin({
+        firstName,
+        surName,
+        phoneNumber,
+        countryDialCode,
+        countryIsoCode
+    })
+
     /* login user (should shift cart always) */
     const loginAttempt = await userMethods.registerSession(userRegistered._id);
 
