@@ -1,6 +1,6 @@
 name: Node Github CI
 
-#on:
+on:
  push:
    branches:
      - master
