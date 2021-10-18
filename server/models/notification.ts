@@ -4,6 +4,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 /* template id send grid */
 const templateIdSG = 'd-4d596c48997442849bc5e4358851973b';
+const contactEmailTemplateId  = 'd-7759ca45d9e54e08841cdddc3b2d427f'
 
 const typeString = {
     type: String,
@@ -52,33 +53,29 @@ type TextNotification = {
     templateId: string
 }
 
+type ContactEmailTemplate = {
+    name: string
+    timestamp: string,
+    subject: string,
+    email: string,
+    message: string
+}
+
+// {
+//     "name": "Suhaib Khan",
+//     "timestamp":"2021-08-28T11:49:50.524+00:00",
+//     "subject": "Bulk Orders ASAP",
+//     "email": "hello@saibbyweb.com",
+//     "message": "Hello there, I wanted to know about bulk pricing. Reach me at 9906697711 for more information"
+//     }
+
 /* helper methods */
 export const methods = {
     register() {
         console.log('notification registered');
         // this.sendTestDynamicMail();
     },
-    sendTestMail() {
-        const msg = {
-            to: 'hello@saibbyweb.com', // Change to your recipient
-            from: 'noreply@bounipun.in', // Change to your verified sender
-            subject: 'Sending with SendGrid is Fun',
-            text: 'and easy to do anywhere, even with Node.js',
-            html: '<strong>and easy to do anywhere, even with Node.js</strong>',
-        }
-        sgMail
-            .send(msg)
-            .then(() => {
-                console.log('Email sent')
-            })
-            .catch((error) => {
-                console.error(error)
-            })
-    },
-    sendTestDynamicMail() {
-
-    },
-    async sendDynamicEmailViaSendGrid(to:string, subject: string, templateId:string, dynamicTemplateData:any, from:string = 'noreply@bounipun.in') {
+    async sendDynamicEmailViaSendGrid(to: string, subject: string, templateId: string, dynamicTemplateData: any, from: string = 'noreply@bounipun.in') {
         /* construct email data */
         const emailData: MailDataRequired = {
             to,
@@ -87,16 +84,16 @@ export const methods = {
             templateId,
             dynamicTemplateData
         }
-            
+
         /* email sending attempt */
         let attempt: any = false;
-        
+
         /* try sending with send grid */
         try {
             attempt = await sgMail.send(emailData);
         }
         /* if error occurred */
-        catch(e) {
+        catch (e) {
             console.log(e);
             return false;
         }
@@ -107,16 +104,16 @@ export const methods = {
 
     },
     async sendEmailNotification(details: EmailNotification) {
-        const { to, receipt, subject, templateId, templateData, emailProvider, type, customer  } = details;
+        const { to, receipt, subject, templateId, templateData, emailProvider, type, customer } = details;
 
-        switch(details.emailProvider) {
+        switch (details.emailProvider) {
             case 'sendgrid':
                 this.sendDynamicEmailViaSendGrid(receipt, subject, templateId, templateData);
                 break;
             default:
                 break;
         }
-        
+
         /* new notification */
         const newNotification = new model({
             channel: 'email',
@@ -133,7 +130,18 @@ export const methods = {
     },
     async sendTextNotification(details: TextNotification) {
 
-    }
+    },
+    async sendContactFormEmailToAdmin(details: ContactEmailTemplate) {
+        await this.sendEmailNotification({
+            to: 'admin',
+            receipt: 'hello@saibbyweb.com',
+            subject: 'New Contact Request | Bounipun Ecom',
+            templateId: contactEmailTemplateId,
+            templateData: details,
+            emailProvider: 'sendgrid',
+            type: 'contact-request'
+        });
+    },
 }
 
 export default { model, methods };

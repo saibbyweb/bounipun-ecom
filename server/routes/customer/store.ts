@@ -1,8 +1,12 @@
-import { server, db, mongoose, task } from "@helpers/essentials";
+import { server, db, mongoose, task, formatDate } from "@helpers/essentials";
 import { methods as userMethods } from "@models/user";
 import { methods as couponMethods } from "@models/coupon";
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
 import { methods as messageMethods } from "@models/message";
+import { methods as notificationMethods } from "@models/notification";
+
+let { sendContactFormEmailToAdmin } = notificationMethods;
+sendContactFormEmailToAdmin = sendContactFormEmailToAdmin.bind(notificationMethods);
 
 /* user auth middleware */
 const { userAuth } = userMethods;
@@ -14,7 +18,18 @@ const router = server.express.Router();
 router.post('/sendMessage', async (req, res) => {
     let response = { resolved: true }
     const { name, subject, email, message } = req.body;
-    await messageMethods.saveMessage(name, subject, email, message);
+    const msgSaved: any = await messageMethods.saveMessage(name, subject, email, message);
+    console.log(msgSaved);
+
+    const timestamp = formatDate(msgSaved.createdAt);
+
+    await sendContactFormEmailToAdmin({
+        name,
+        timestamp,
+        subject,
+        email,
+        message
+    });
     res.send(response);
 });
 

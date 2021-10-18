@@ -101,3 +101,32 @@ export const task = async (promise: Promise<any>): Promise<any> => {
     }
     return { response, error };
 };
+
+/* format date */
+export const formatDate = function(date) {
+  date = new Date(date);
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December"
+  ];
+  return (
+    date.getDate() +
+    " " +
+    months[date.getMonth()] +
+    ", " +
+    date.getFullYear() +
+    " - " +
+    date.toLocaleTimeString()
+    + " IST"
+  );
+};
