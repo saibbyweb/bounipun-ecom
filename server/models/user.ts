@@ -12,6 +12,10 @@ import payment, { methods as paymentMethods } from "@models/payment";
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
 import { methods as productMethods } from "@models/product";
 import { methods as couponMethods } from "@models/coupon";
+import { methods as notificationMethods } from "@models/notification";
+
+let { newOrderEmailToAdmin } = notificationMethods;
+newOrderEmailToAdmin = newOrderEmailToAdmin.bind(notificationMethods);
 
 /* validate session */
 const { validateSession } = sessionMethods;
@@ -632,10 +636,12 @@ export const methods = {
         let discountPerItem: any = (discountValue / 100 / cartItems.length);
         discountPerItem = discountPerItem.toFixed(2);
 
+        const newOrderNumber = 'BOOK_2_INVOICE_' + await this.getNextSequence();
+
         const orderDetails = {
             paymentIntent: paymentIntent._id,
             // number: `BOUNIPUN-${Math.floor(Math.random() * 9999) + 1000}`,
-            number: 'BOOK_2_INVOICE_' + await this.getNextSequence(),
+            number: newOrderNumber,
             paymentGateway: gateway,
             transactionId,
             amount: paymentIntent.amount,
@@ -694,6 +700,15 @@ export const methods = {
             console.log('COUPON_NOT_APPLIED')
         /* notify the interested parties */
         console.log('order placing complete');
+
+        /* notify admin about new order */
+        newOrderEmailToAdmin({
+            orderId: newOrderNumber,
+            amount: paymentIntent.amount/100,
+            currency: paymentIntent.currency,
+            gateway: gateway
+        });
+
         return true;
     },
     async orderBelongsToUser(userId, orderId) {

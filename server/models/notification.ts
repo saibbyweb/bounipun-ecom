@@ -6,6 +6,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const templateIdSG = 'd-4d596c48997442849bc5e4358851973b';
 const contactEmailTemplateId  = 'd-7759ca45d9e54e08841cdddc3b2d427f';
 const customerRegistrationTemplateId = 'd-a3ec24c9d180470c955f0d62ef10b4a8'
+const newOrderAdminTemplateId = 'd-4d596c48997442849bc5e4358851973b';
 
 const typeString = {
     type: String,
@@ -68,6 +69,13 @@ type CustomerRegistrationEmailTemplate = {
     phoneNumber: string,
     countryDialCode: string,
     countryIsoCode: string
+}
+
+type AdminOrderEmailTemplate = {
+    orderId: string,
+    amount: string | number,
+    currency: string,
+    gateway: string
 }
 
 // {
@@ -162,6 +170,20 @@ export const methods = {
             emailProvider: 'sendgrid',
             type: 'customer-signup'
         })
+    },
+    async newOrderEmailToAdmin(details: AdminOrderEmailTemplate) {
+        
+        console.log(details);
+
+        await this.sendEmailNotification({
+            to:'admin',
+            receipt: ['hello@saibbyweb.com','suhaibzreason@gmail.com'],
+            subject: 'New Order Received',
+            templateId: newOrderAdminTemplateId,
+            templateData: details,
+            emailProvider: 'sendgrid',
+            type: 'order-received'
+        });
     }
 }
 
