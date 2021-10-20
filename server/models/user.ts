@@ -14,9 +14,10 @@ import { methods as productMethods } from "@models/product";
 import { methods as couponMethods } from "@models/coupon";
 import { methods as notificationMethods } from "@models/notification";
 
-let { newOrderEmailToAdmin, orderCancelEmailToAdmin } = notificationMethods;
+let { newOrderEmailToAdmin, orderCancelEmailToAdmin, orderUpdateEmailToCustomer } = notificationMethods;
 newOrderEmailToAdmin = newOrderEmailToAdmin.bind(notificationMethods);
 orderCancelEmailToAdmin = orderCancelEmailToAdmin.bind(notificationMethods);
+orderUpdateEmailToCustomer = orderUpdateEmailToCustomer.bind(notificationMethods);
 
 
 /* validate session */
@@ -90,6 +91,19 @@ const schema = new mongoose.Schema({
 /* model */
 const modelName = 'users';
 const model = mongoose.model('users', schema);
+
+const formatCurrency = (price, currency) => {
+    let formattedNumber = price;
+       /* if currence is INR */
+       if (currency === "INR") {
+        formattedNumber = new Intl.NumberFormat('en-IN', { currency: 'INR' }).format(price)
+        return formattedNumber;
+      }
+      else {
+        formattedNumber = new Intl.NumberFormat('en-US', { currency: 'USD' }).format(price);
+        return formattedNumber;
+      }
+  }
 
 /* express auth */
 const expressAuth = async (req, res, next, usergroup, strictMode) => {
@@ -615,9 +629,7 @@ export const methods = {
         return ans;
     },
     async placeOrder(gatewayToken, transactionId, gateway) {
-        console.log(gatewayToken);
-        console.log(transactionId);
-        console.log(gateway);
+
 
         /* verify token is valid */
         const paymentIntent: any = await paymentIntentMethods.fetchPaymentIntent(gatewayToken);
@@ -685,7 +697,7 @@ export const methods = {
         const orderSaved: any = await new ordersCollection(orderDetails).save();
         console.log('Order Saved in DB');
         /* save order id to user account */
-        const userOrdersUpdated = await db.model('users').findOneAndUpdate({ _id: paymentIntent.createdBy }, { $push: { orders: orderSaved._id } });
+        const userOrdersUpdated: any = await db.model('users').findOneAndUpdate({ _id: paymentIntent.createdBy }, { $push: { orders: orderSaved._id } });
         /* mark payment intent as invalid */
         await paymentIntentMethods.setIntentAsInvalid(paymentIntent._id);
         /* clear user cart */
@@ -710,6 +722,26 @@ export const methods = {
             currency: paymentIntent.currency,
             gateway: gateway
         });
+        
+        /* extract name for this */
+        console.log(userOrdersUpdated);
+        const { firstName, surName } = userOrdersUpdated;
+
+        /* extract email from delivery address */
+        console.log(deliveryAddress);
+
+
+        /* notify customer about the new order */
+        /* email */
+        /* user name, orderId, amount, currency */
+
+        orderUpdateEmailToCustomer('placed', deliveryAddress.email, {
+            name: firstName + " " + surName,
+            orderId: newOrderNumber,
+            amount: paymentIntent.amount/100,
+            currency: paymentIntent.currency,
+        });
+        
 
         return true;
     },
