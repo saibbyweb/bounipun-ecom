@@ -70,7 +70,7 @@
       <!-- main image -->
       <div
         class="image-container"
-        :style="`background-image: url(${$getImagePath(localItem.mainImage)})`"
+        :style="`background-image: url( ${$getImage(localItem.mainImage,'productPages')} )`"
       >
         <!-- <img :src="item.mainImage" /> -->
       </div>

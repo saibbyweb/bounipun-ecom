@@ -14,8 +14,10 @@ import { methods as productMethods } from "@models/product";
 import { methods as couponMethods } from "@models/coupon";
 import { methods as notificationMethods } from "@models/notification";
 
-let { newOrderEmailToAdmin } = notificationMethods;
+let { newOrderEmailToAdmin, orderCancelEmailToAdmin } = notificationMethods;
 newOrderEmailToAdmin = newOrderEmailToAdmin.bind(notificationMethods);
+orderCancelEmailToAdmin = orderCancelEmailToAdmin.bind(notificationMethods);
+
 
 /* validate session */
 const { validateSession } = sessionMethods;
@@ -733,7 +735,7 @@ export const methods = {
             'items._id': subOrderId
         }
 
-        const cancelSubOrder = await db.model('orders').findOneAndUpdate(subOrderFilter, {
+        const cancelSubOrder:any = await db.model('orders').findOneAndUpdate(subOrderFilter, {
             $set: {
                 "items.$.status": "cancelled",
                 "items.$.cancellation": {
@@ -748,6 +750,16 @@ export const methods = {
                 }
             }
         });
+        
+        console.log(cancelSubOrder.number, reason);
+
+        /* notify admin */
+         await orderCancelEmailToAdmin({
+            orderNumber: cancelSubOrder.number,
+            reason
+        })
+
+
         /* return with response */
         return cancelSubOrder === null ? false : cancelSubOrder;
     }

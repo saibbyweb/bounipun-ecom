@@ -7,6 +7,7 @@ const templateIdSG = 'd-4d596c48997442849bc5e4358851973b';
 const contactEmailTemplateId  = 'd-7759ca45d9e54e08841cdddc3b2d427f';
 const customerRegistrationTemplateId = 'd-a3ec24c9d180470c955f0d62ef10b4a8'
 const newOrderAdminTemplateId = 'd-4d596c48997442849bc5e4358851973b';
+const orderCancelledAdminTemplateId = 'd-fe286d508f9545d0b96569179293ef75';
 
 const typeString = {
     type: String,
@@ -77,6 +78,11 @@ type AdminOrderEmailTemplate = {
     currency: string,
     gateway: string
 }
+
+ type AdminOrderCancelledEmailTemplate = {
+     orderNumber: string,
+     reason: string
+ }
 
 // {
 //     "name": "Suhaib Khan",
@@ -183,6 +189,17 @@ export const methods = {
             templateData: details,
             emailProvider: 'sendgrid',
             type: 'order-received'
+        });
+    },
+    async orderCancelEmailToAdmin(details: AdminOrderCancelledEmailTemplate) {
+        await this.sendEmailNotification({
+            to: 'admin',
+            receipt: ['hello@saibbyweb.com','suhaibzreason@gmail.com'],
+            subject:'Order Cancelled by Customer',
+            templateId: orderCancelledAdminTemplateId,
+            templateData: details,
+            emailProvider: 'sendgrid',
+            type: 'order-cancelled'
         });
     }
 }
