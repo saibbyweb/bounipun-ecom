@@ -8,7 +8,7 @@ const contactEmailTemplateId = 'd-7759ca45d9e54e08841cdddc3b2d427f';
 const customerRegistrationTemplateId = 'd-a3ec24c9d180470c955f0d62ef10b4a8'
 const newOrderAdminTemplateId = 'd-4d596c48997442849bc5e4358851973b';
 const orderCancelledAdminTemplateId = 'd-fe286d508f9545d0b96569179293ef75';
-
+const orderUpdateCustomerTemplateId = 'd-4831632c7d7b4da98f41b97fa548b013';
 const orderPlacedCustomerTemplateId = 'd-85ed720ba2ea445fba54555ec1da9baf';
 
 const typeString = {
@@ -203,10 +203,10 @@ export const methods = {
         });
     },
     async orderUpdateEmailToCustomer(action, email, payload) {
-        
+
         /* set type */
         let type = 'order-' + action;
-        let templateId = '';
+        let templateId = orderUpdateCustomerTemplateId;
         let subject = '';
 
         switch (action) {
@@ -214,16 +214,25 @@ export const methods = {
                 templateId = orderPlacedCustomerTemplateId;
                 subject = 'Bounipun Order Placed Successfully';
                 break;
-            case 'shipped':
+            case 'confirmed':
+                subject = 'Bounipun Order Confirmed'
                 break;
-            case 'cancelled':
+            case 'shipped':
+                subject = 'Bounipun Order Shipped'
+                break;
+            case 'delayed':
+                subject = 'Bounipun Order Delayed'
                 break;
             case 'delivered':
+                subject = 'Bounipun Order Delivered'
+                break;
+            case 'cancelled':
+                subject = 'Bounipun Order Cancelled'
                 break;
         }
 
         await this.sendEmailNotification({
-            to:'customer',
+            to: 'customer',
             templateId,
             receipt: [email],
             subject,

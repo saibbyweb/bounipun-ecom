@@ -5,6 +5,11 @@ import { register } from "@models";
 import { methods as userMethods } from "@models/user";
 import { methods as adminMethods } from "@models/admin";
 import { methods as sessionMethods } from "@models/session";
+import { methods as notificationMethods } from "@models/notification";
+
+let { orderUpdateEmailToCustomer } = notificationMethods;
+orderUpdateEmailToCustomer = orderUpdateEmailToCustomer.bind(notificationMethods);
+
 const { adminAuth } = adminMethods;
 register();
 
@@ -314,8 +319,6 @@ router.post('/updateOrderItemDetails', async (req, res) => {
     /* find sub-order */
     let subOrder = originalOrder.items.find(item => item._id.toString() === subOrderId.toString());
 
-    console.log(subOrder, status);
-
     /* if sub order status changed, update timeline */
     if (subOrder.status !== status) {
         await db.model('orders').findOneAndUpdate(filter, {
@@ -337,7 +340,20 @@ router.post('/updateOrderItemDetails', async (req, res) => {
         }
     }
 
-    /* if status set to delivered, set delivery timestamp */
+    console.log(originalOrder.deliveryAddress);
+
+    const { deliveryAddress } = originalOrder;
+    const customerEmail = deliveryAddress.email;
+    const customerName = deliveryAddress.firstName + " " + deliveryAddress.surName;
+
+    /* notify customer */
+    orderUpdateEmailToCustomer(status,customerEmail,{
+        bgColor: status === 'delivered' ? '#2c8f4d' : '#333333',
+        name: customerName,
+        orderId: originalOrder.number,
+        status
+    });
+
 
 
     res.send('broo');
