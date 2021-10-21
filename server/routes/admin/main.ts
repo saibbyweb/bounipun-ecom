@@ -347,7 +347,7 @@ router.post('/updateOrderItemDetails', async (req, res) => {
     const customerName = deliveryAddress.firstName + " " + deliveryAddress.surName;
 
     /* notify customer */
-    orderUpdateEmailToCustomer(status,customerEmail,{
+    orderUpdateEmailToCustomer(status, customerEmail, {
         bgColor: status === 'delivered' ? '#2c8f4d' : '#333333',
         name: customerName,
         orderId: originalOrder.number,
@@ -365,6 +365,21 @@ router.post('/cancelSubOrder', async (req, res) => {
     const { orderId, subOrderId, reason } = req.body;
     const cancelOrder = await userMethods.cancelOrder(orderId, subOrderId, reason, false);
     response.resolved = !(cancelOrder === false)
+
+    /* notify customer about cancellation, fetch orginal order */
+    const originalOrder: any = await db.model('orders').findOne({ _id: orderId }).select('number deliveryAddress');
+    const { deliveryAddress } = originalOrder;
+    const customerName = deliveryAddress.firstName + " " + deliveryAddress.surName;
+    const customerEmail = deliveryAddress.email;
+
+    /* notify customer */
+    orderUpdateEmailToCustomer('cancelled', customerEmail, {
+        bgColor: '#8f2c38',
+        name: customerName,
+        orderId: originalOrder.number,
+        status: 'cancelled'
+    });
+
     res.send(response);
 });
 
