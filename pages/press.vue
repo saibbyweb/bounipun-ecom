@@ -62,7 +62,6 @@ export default {
       }
       console.log(layout.doc.press.imageList);
       this.pressImageList = layout.doc.press.imageList.map(image =>
-        // this.$getImagePath(image.path)
         this.$getOriginalPath(image.path)
       );
 

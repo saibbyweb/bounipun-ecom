@@ -561,7 +561,6 @@ export default {
     getCollectionImage(image) {
       if (image === undefined) return "/default-image.png";
       return this.$getOriginalPath(image)
-      // return this.$getImagePath(image);
     }
   }
 };

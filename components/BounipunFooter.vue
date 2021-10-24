@@ -45,7 +45,7 @@
       </div>
 
       <!-- crafted in kashmir -->
-      <div @click="$getImagePath('abc')" id="crafted-in-kashmir" class="section">
+      <div id="crafted-in-kashmir" class="section">
         <span class="last-footer-item flex center"> Crafted with <img src="/icons/light/heart-filled-white.png" />  in Kashmir </span>
       </div>
     </div>

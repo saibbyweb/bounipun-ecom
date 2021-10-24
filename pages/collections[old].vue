@@ -226,7 +226,7 @@ export default {
     },
     getCollectionImage(image) {
       if (image === undefined) return "/default-image.png";
-      return this.$getImagePath(image);
+      return this.$getOriginalPath(image);
     }
   }
 }

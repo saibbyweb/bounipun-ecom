@@ -695,7 +695,7 @@ export default {
     },
     getVariantImage(image) {
       if (image === undefined) return "/demo_images/variants/shawl.png";
-      return this.$getImagePath(image);
+      return this.$getOriginalPath(image);
     },
     async fetchProduct(slug) {
       const result = await this.$fetchDocument("products", slug, "customer");
