@@ -1,7 +1,7 @@
 <template>
   <div class="page">
     <!-- header image with arrow in bottom-middle part -->
-    <div class="header-image"></div>
+    <div class="header-image" style="background-image: url('/story-images/header-image.jpg')"></div>
     <!-- centralized text block -->
     <div class="c-text">
       <p></p>
@@ -41,7 +41,7 @@
       </div>
     </div>
     <!-- full width image -->
-    <div class="full-width"></div>ß
+    <div class="full-width"></div>
     <!-- centralized text block -->
     <div class="c-text">
       <p></p>
@@ -64,5 +64,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+/* header image */
+.header-image {
+    height:70vh;
+    width:100%;
+}
 </style>

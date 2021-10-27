@@ -1,7 +1,12 @@
 <template>
-  <div class="page">
+  <div class="page -wh">
     <!-- header image with arrow in bottom-middle part -->
-    <div class="header-image"></div>
+    <div class="header-image flex center col" style="background-image: url('story-images/header-image.png')">
+        <h1> Our Story </h1>
+        <br>
+        <br>
+        <img src="/story-images/arrow-down.png" style="width:50px;"/>
+    </div>
     <!-- centralized text block -->
     <div class="c-text">
       <p></p>
@@ -41,7 +46,7 @@
       </div>
     </div>
     <!-- full width image -->
-    <div class="full-width"></div>ß
+    <div class="full-width"></div>
     <!-- centralized text block -->
     <div class="c-text">
       <p></p>
@@ -64,5 +69,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.cover {
+    background-size: cover;
+}
+.header-image {
+    height: 100vh;
+    width:100%;
+    background-position: bottom center;
+      background-attachment: fixed;
+    h1 {
+        color: white;
+    }
+}
 </style>
