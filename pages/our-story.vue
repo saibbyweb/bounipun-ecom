@@ -45,13 +45,19 @@
       <div class="two" :style="setBg('2.png')"></div>
     </div>
     <!-- full width image -->
-    <div class="full-width" :style="setBg('3.png')">
-
-    </div>
+    <div class="full-width" :style="setBg('3.png')"></div>
     <!-- centralized text block -->
     <div class="c-text">
-      <p>In fashion, he’s celebrated as a reformer of fabric, texture and simplicity of silhouette. He was awarded as the “best debut” and “neo-minimal designer” by ELLE magazine just after the launch of his men’s and women’s label. His profile has been published by an Italian Publication (Damiani) based on CONTEMPORARY INDIAN FASHION. Winner of the prestigious International Woolmark Prize 2016/17 India, Pakistan and Middle East regional final for his innovative development in wool held in Paris.
-</p>
+      <p>
+        In fashion, he’s celebrated as a reformer of fabric, texture and
+        simplicity of silhouette. He was awarded as the “best debut” and
+        “neo-minimal designer” by ELLE magazine just after the launch of his
+        men’s and women’s label. His profile has been published by an Italian
+        Publication (Damiani) based on CONTEMPORARY INDIAN FASHION. Winner of
+        the prestigious International Woolmark Prize 2016/17 India, Pakistan and
+        Middle East regional final for his innovative development in wool held
+        in Paris.
+      </p>
     </div>
     <!-- reverse of section 1 -->
     <div class="section-split reverse">
@@ -61,10 +67,14 @@
         <div class="one-image" :style="setBg('4.png')"></div>
         <!-- text -->
         <div class="text">
-            <p>
-                In fashion, he’s celebrated as a reformer of fabric, texture and simplicity of silhouette. He was awarded as the “best debut” and “neo-minimal designer” by ELLE magazine just after the launch of his men’s and women’s label. His profile has been published by an Italian Publication (Damiani) based on CONTEMPORARY INDIAN FASHION. Winner.
-
-            </p>
+          <p>
+            In fashion, he’s celebrated as a reformer of fabric, texture and
+            simplicity of silhouette. He was awarded as the “best debut” and
+            “neo-minimal designer” by ELLE magazine just after the launch of his
+            men’s and women’s label. His profile has been published by an
+            Italian Publication (Damiani) based on CONTEMPORARY INDIAN FASHION.
+            Winner.
+          </p>
         </div>
       </div>
       <!-- second part -->
@@ -75,14 +85,40 @@
     <!-- centralized text block -->
     <div class="c-text">
       <p>
-          In fashion, he’s celebrated as a reformer of fabric, texture and simplicity of silhouette. He was awarded as the “best debut” and “neo-minimal designer” by ELLE magazine just after the launch of his men’s and women’s label. His profile has been published by an Italian Publication (Damiani) based on CONTEMPORARY INDIAN FASHION. Winner of the prestigious International Woolmark Prize 2016/17 India, Pakistan and Middle East regional final for his innovative development in wool held in Paris.
-
+        In fashion, he’s celebrated as a reformer of fabric, texture and
+        simplicity of silhouette. He was awarded as the “best debut” and
+        “neo-minimal designer” by ELLE magazine just after the launch of his
+        men’s and women’s label. His profile has been published by an Italian
+        Publication (Damiani) based on CONTEMPORARY INDIAN FASHION. Winner of
+        the prestigious International Woolmark Prize 2016/17 India, Pakistan and
+        Middle East regional final for his innovative development in wool held
+        in Paris.
       </p>
     </div>
     <!-- bordered block with image and text -->
-    <div class="bordered-block"></div>
-    <!-- reverse of bordered block with image and text -->
-    <div class="bordered-block reverse"></div>
+    <div class="flex center col">
+      <div class="bordered-block">
+        <p class="text">
+          In fashion, he’s celebrated as a reformer of fabric, texture and
+          simplicity of silhouette. He was awarded as the “best debut” and
+          “neo-minimal designer” by ELLE magazine just after the launch of his
+          men’s and women’s label. His profile has been published by an Italian
+          Publication.
+        </p>
+        <div class="image first" :style="setBg('7.png')"></div>
+      </div>
+      <!-- reverse of bordered block with image and text -->
+      <div class="bordered-block reverse">
+        <div class="image second" :style="setBg('8.png')"></div>
+        <p class="text">
+          In fashion, he’s celebrated as a reformer of fabric, texture and
+          simplicity of silhouette. He was awarded as the “best debut” and
+          “neo-minimal designer” by ELLE magazine just after the launch of his
+          men’s and women’s label. His profile has been published by an Italian
+          Publication.
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -99,7 +135,7 @@ export default {
         backgroundImage: `url(story-images/${image})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
-        backgroundOrigin: "content-box"
+        backgroundOrigin: "content-box",
       };
     },
     moveDown() {
@@ -126,11 +162,10 @@ export default {
   }
 
   .pointer {
-      transition: all 0.3s ease-in-out;
-      &:hover {
-          transform: scale(1.3);
-
-      }
+    transition: all 0.3s ease-in-out;
+    &:hover {
+      transform: scale(1.3);
+    }
   }
 }
 
@@ -143,14 +178,16 @@ p {
   text-align: center;
 }
 
+  .reverse {
+    flex-direction: row-reverse;
+  }
+
+
 .section-split {
   display: flex;
   height: 140vh;
   padding: 1% 5% 3% 5%;
 
-  &.reverse {
-      flex-direction: row-reverse;
-  }
 
   .one {
     width: 45%;
@@ -172,7 +209,36 @@ p {
 
 /* full width */
 .full-width {
-    width:100%;
-    height:90vh;
+  width: 100%;
+  height: 90vh;
+}
+
+/* bordered block */
+.bordered-block {
+  border: 2px solid #cecece;
+  width: 75%;
+  height: 50vh;
+  display: flex;
+  margin: 3% 0;
+  position: relative;
+
+  .text {
+      padding: 10%;
+      width: 70%;
+  }
+
+  .image {
+    position: absolute;
+    height: 110%;
+    top: -5%;
+    width: 40%;
+
+    &.first {
+      right: -5%;
+    }
+    &.second {
+      left: -5%;
+    }
+  }
 }
 </style>
