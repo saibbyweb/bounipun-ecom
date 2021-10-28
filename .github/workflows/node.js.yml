@@ -19,7 +19,7 @@ jobs:
         port: ${{ secrets.SSH_PORT }}
         script: |
           cd ~/bounipun-ecom
-          git pull origin master
+          git reset --hard HEAD
           yarn install
           yarn build
           pm2 restart website
