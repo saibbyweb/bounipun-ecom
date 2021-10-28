@@ -14,11 +14,16 @@
 
     <!-- ticker -->
     <Ticker />
-
+    
+    <!-- bounipun header -->
     <BounipunHeader
       @showMenu="menuOpen = true"
       @showSearch="searchOpen = true"
     />
+
+    <!-- bounipun desktop menu -->
+    <DesktopMenu />
+
     <OffCanvasMenu
       :class="{ visible: menuOpen }"
       @closeMenu="menuOpen = false"
@@ -60,6 +65,7 @@ export default {
       this.$store.dispatch("customer/fetchProfile");
       this.$store.dispatch("customer/fetchStoreLocation");
       this.$store.dispatch("customer/fetchGlobalConfig");
+      this.$store.dispatch("customer/fetchCollections");
     }, 100);
 
     setTimeout(() => {

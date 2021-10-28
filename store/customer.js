@@ -15,12 +15,13 @@ export const state = () => ({
   combinedDeliveryConsent: false,
   coupon: {
     applied: false,
-    code: ""
+    code: "",
     /* more props added after fetching from server */
   },
+  collections: [],
   recentlyViewed: [],
   countryIndex: 0,
-  currencyMultiplier: 1.3
+  currencyMultiplier: 1.3,
 });
 
 /* find cartItem helper  */
@@ -29,7 +30,7 @@ const findCartItem = (cart, cartItem) => {
   /* if cart empty */
   if (cart.length === 0) return false;
 
-  let foundIndex = cart.findIndex(item => {
+  let foundIndex = cart.findIndex((item) => {
     /* common params to match */
     let paramsToBeMatched =
       item.product === cartItem.product &&
@@ -53,20 +54,20 @@ const findCartItem = (cart, cartItem) => {
 export const mutations = {
   addToRecentlyViewed(state, value) {
     /* value contains product id and color id */
-    if(state.recentlyViewed === undefined)
-      state.recentlyViewed = []
+    if (state.recentlyViewed === undefined) state.recentlyViewed = [];
 
     /* check if entry is already in array or not */
-    const previousEntry = state.recentlyViewed.findIndex(entry => entry.product === value.product)
+    const previousEntry = state.recentlyViewed.findIndex(
+      (entry) => entry.product === value.product
+    );
     /* if yes, remove that entry  */
-    if(previousEntry !== -1) {
+    if (previousEntry !== -1) {
       state.recentlyViewed.splice(previousEntry, 1);
     }
     /* add new entry to array */
-    state.recentlyViewed.unshift(value)
+    state.recentlyViewed.unshift(value);
     /* if array is greater than 10, remove the oldest entry */
-    if(state.recentlyViewed.length > 5)
-      state.recentlyViewed.pop();
+    if (state.recentlyViewed.length > 5) state.recentlyViewed.pop();
   },
   setCookieConsent(state, value) {
     state.cookieConsent = value;
@@ -166,15 +167,21 @@ export const mutations = {
   },
   setCountryIndex(state, countryIndex) {
     state.countryIndex = countryIndex;
+  },
+  setCollections(state, collections) {
+    state.collections = collections;
   }
 };
 
 export const getters = {
-  alreadyInCart: state => cartItem => {
-    if(state.globalRemoteCart === false || Array.isArray(state.globalRemoteCart) === false)
+  alreadyInCart: (state) => (cartItem) => {
+    if (
+      state.globalRemoteCart === false ||
+      Array.isArray(state.globalRemoteCart) === false
+    )
       return false;
-      
-    const localCart = state.globalRemoteCart.map(item => item.cartEntry);
+
+    const localCart = state.globalRemoteCart.map((item) => item.cartEntry);
     return findCartItem(localCart, cartItem) !== false;
   },
   getCartCount(state) {
@@ -182,29 +189,27 @@ export const getters = {
   },
   getCartProductIds(state) {
     if (state.cart.length === 0) return false;
-    return [...new Set(state.cart.map(product => product._id))];
+    return [...new Set(state.cart.map((product) => product._id))];
   },
   getCartTotal(state, getters) {
     return sumBy(
       state.globalRemoteCart,
-      item => getters.adjustPrice(item.price) * item.quantity
+      (item) => getters.adjustPrice(item.price) * item.quantity
     );
   },
   /* discount amount per item */
   getDiscountAmountPerItem() {
-    let discountPerItem = (discountValue/100/cartItems.length);
+    let discountPerItem = discountValue / 100 / cartItems.length;
     return discountPerItem.toFixed(2);
   },
   /* applied with discount */
   getSubTotal(state, getters) {
     return sumBy(state.globalRemoteCart, (item) => {
       const itemAmount = getters.adjustPrice(item.price) * item.quantity;
-     
-
-    })
+    });
   },
   getTotalCartItems(state) {
-    return sumBy(state.globalRemoteCart, item => item.quantity)
+    return sumBy(state.globalRemoteCart, (item) => item.quantity);
   },
   getShippingCharge(state) {
     return state.currency === "INR"
@@ -213,40 +218,57 @@ export const getters = {
   },
   getTaxPercentage(state) {
     return state.currency === "INR"
-    ? state.globalConfig.gstPercentage
-    : state.globalConfig.internationalTaxPercentage
+      ? state.globalConfig.gstPercentage
+      : state.globalConfig.internationalTaxPercentage;
   },
-  adjustPrice: state => dbPrice => {
+  adjustPrice: (state) => (dbPrice) => {
     /* if currence is INR, return as is */
     if (state.currency === "INR") {
       return dbPrice;
-    }
+    } else {
     /* if not then, multiply db price with currency multiplier and return */
-    else {
-      const inflatedPrice = (dbPrice * state.globalConfig.currencyMultiplier) / state.globalConfig.dollarValue;
+      const inflatedPrice =
+        (dbPrice * state.globalConfig.currencyMultiplier) /
+        state.globalConfig.dollarValue;
       return inflatedPrice.toFixed(2);
     }
   },
-  formatCurrency: state => adjustedPrice => {
+  formatCurrency: (state) => (adjustedPrice) => {
     let formattedNumber = adjustedPrice;
-       /* if currence is INR, return as is */
-       if (state.currency === "INR") {
-        formattedNumber = new Intl.NumberFormat('en-IN', { currency: 'INR' }).format(adjustedPrice)
-        return formattedNumber;
-      }
-      else {
-        formattedNumber = new Intl.NumberFormat('en-US', { currency: 'USD' }).format(adjustedPrice);
-        return formattedNumber;
-      }
+    /* if currence is INR, return as is */
+    if (state.currency === "INR") {
+      formattedNumber = new Intl.NumberFormat("en-IN", {
+        currency: "INR",
+      }).format(adjustedPrice);
+      return formattedNumber;
+    } else {
+      formattedNumber = new Intl.NumberFormat("en-US", {
+        currency: "USD",
+      }).format(adjustedPrice);
+      return formattedNumber;
+    }
   }
-}
+};
 
 export const actions = {
+  async fetchCollections({ state, commit }) {
+    const collections = await this.$fetchData(
+      "collections",
+      {
+        status: true,
+      },
+      true
+    );
+    /* if collections not fetched */
+    if (!collections.fetched) return;
+
+    commit("setCollections",collections.docs);
+  },
   async fetchCart({ state, commit }) {
     const endPoint = state.authorized ? "/fetchCart" : "/fetchLocalCart";
 
     const cartItems = await this.$post(endPoint, {
-      cart: state.cart
+      cart: state.cart,
     });
 
     if (cartItems.resolved === false) {
@@ -295,16 +317,16 @@ export const actions = {
   async fetchCoupon({ state, commit }, couponCode) {
     const fetchCouponRequest = await this.$post("/fetchCoupon", {
       couponCode,
-      currency: state.currency
+      currency: state.currency,
     });
     /* if request failed */
     if (fetchCouponRequest.resolved == false) {
-      commit("setCoupon", { applied: false, code: ""})
+      commit("setCoupon", { applied: false, code: "" });
       return false;
     }
     /* extract details */
     const { couponDetails } = fetchCouponRequest.response;
     /* save coupon details */
     commit("setCoupon", { applied: true, ...couponDetails });
-  }
+  },
 };

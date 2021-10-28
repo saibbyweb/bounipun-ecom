@@ -102,7 +102,7 @@
 export default {
   data() {
     return {
-      collections: []
+      // collections: []
     };
   },
   mounted() {
@@ -121,6 +121,9 @@ export default {
       }
 
       return greeting;
+    },
+    collections() {
+      return this.$store.state.customer.collections;
     }
   },
   methods: {
@@ -143,17 +146,17 @@ export default {
       this.$router.push(route);
     },
     async fetchCollections() {
-      const collections = await this.$fetchData(
-        "collections",
-        {
-          status: true
-        },
-        true
-      );
+      // const collections = await this.$fetchData(
+      //   "collections",
+      //   {
+      //     status: true
+      //   },
+      //   true
+      // );
       /* if collections not fetched */
-      if (!collections.fetched) return;
+      // if (!collections.fetched) return;
 
-      this.collections = collections.docs;
+      // this.collections = collections.docs;
     },
     async logout() {
       const { resolved, response } = await this.$post("/logoutCustomer");
