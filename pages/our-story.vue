@@ -45,28 +45,39 @@
       <div class="two" :style="setBg('2.png')"></div>
     </div>
     <!-- full width image -->
-    <div class="full-width"></div>
+    <div class="full-width" :style="setBg('3.png')">
+
+    </div>
     <!-- centralized text block -->
     <div class="c-text">
-      <p></p>
+      <p>In fashion, he’s celebrated as a reformer of fabric, texture and simplicity of silhouette. He was awarded as the “best debut” and “neo-minimal designer” by ELLE magazine just after the launch of his men’s and women’s label. His profile has been published by an Italian Publication (Damiani) based on CONTEMPORARY INDIAN FASHION. Winner of the prestigious International Woolmark Prize 2016/17 India, Pakistan and Middle East regional final for his innovative development in wool held in Paris.
+</p>
     </div>
     <!-- reverse of section 1 -->
     <div class="section-split reverse">
       <!-- first part -->
       <div class="one">
         <!-- one image -->
-        <div class="one-image"></div>
+        <div class="one-image" :style="setBg('4.png')"></div>
         <!-- text -->
-        <div class="text"></div>
+        <div class="text">
+            <p>
+                In fashion, he’s celebrated as a reformer of fabric, texture and simplicity of silhouette. He was awarded as the “best debut” and “neo-minimal designer” by ELLE magazine just after the launch of his men’s and women’s label. His profile has been published by an Italian Publication (Damiani) based on CONTEMPORARY INDIAN FASHION. Winner.
+
+            </p>
+        </div>
       </div>
       <!-- second part -->
-      <div class="two"></div>
+      <div class="two" :style="setBg('5.png')"></div>
     </div>
     <!-- full width image -->
-    <div class="full-width"></div>
+    <div class="full-width" :style="setBg('6.png')"></div>
     <!-- centralized text block -->
     <div class="c-text">
-      <p></p>
+      <p>
+          In fashion, he’s celebrated as a reformer of fabric, texture and simplicity of silhouette. He was awarded as the “best debut” and “neo-minimal designer” by ELLE magazine just after the launch of his men’s and women’s label. His profile has been published by an Italian Publication (Damiani) based on CONTEMPORARY INDIAN FASHION. Winner of the prestigious International Woolmark Prize 2016/17 India, Pakistan and Middle East regional final for his innovative development in wool held in Paris.
+
+      </p>
     </div>
     <!-- bordered block with image and text -->
     <div class="bordered-block"></div>
@@ -88,7 +99,7 @@ export default {
         backgroundImage: `url(story-images/${image})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
-        backgroundOrigin: "content-box",
+        backgroundOrigin: "content-box"
       };
     },
     moveDown() {
@@ -128,19 +139,22 @@ p {
 }
 
 .c-text {
-  padding: 5% 5%;
+  padding: 4% 10%;
   text-align: center;
 }
 
 .section-split {
   display: flex;
   height: 140vh;
-  padding: 2% 5%;
-  // background:red;
+  padding: 1% 5% 3% 5%;
+
+  &.reverse {
+      flex-direction: row-reverse;
+  }
 
   .one {
     width: 45%;
-    padding: 3%;
+    padding: 1% 3%;
 
     .one-image {
       width: 100%;
@@ -151,8 +165,14 @@ p {
     }
   }
   .two {
-    padding: 3%;
+    padding: 1% 3%;
     width: 55%;
   }
+}
+
+/* full width */
+.full-width {
+    width:100%;
+    height:90vh;
 }
 </style>
