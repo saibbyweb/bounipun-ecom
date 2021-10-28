@@ -140,9 +140,11 @@ export default {
     },
     moveDown() {
       const offsetTop = this.$refs.start.offsetTop;
+      const headerHeightDelta = 0.13;
 
       window.scroll({
-        top: offsetTop - 80,
+        top:
+          offsetTop - document.documentElement.clientHeight * headerHeightDelta,
         left: 0,
         behavior: "smooth",
       });
@@ -178,16 +180,14 @@ p {
   text-align: center;
 }
 
-  .reverse {
-    flex-direction: row-reverse;
-  }
-
+.reverse {
+  flex-direction: row-reverse;
+}
 
 .section-split {
   display: flex;
   height: 140vh;
   padding: 1% 5% 3% 5%;
-
 
   .one {
     width: 45%;
@@ -205,12 +205,36 @@ p {
     padding: 1% 3%;
     width: 55%;
   }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    height: 200vh;
+    .one {
+      width: 100%;
+      height: 50%;
+
+      .one-image {
+        height: 65%;
+      }
+
+      .text {
+        padding-top: 10%;
+        height: 35%;
+        text-align: center;
+      }
+    }
+    .two {
+      width: 100%;
+      height: 50%;
+    }
+  }
 }
 
 /* full width */
 .full-width {
   width: 100%;
   height: 90vh;
+  background-attachment: fixed;
 }
 
 /* bordered block */
@@ -223,8 +247,8 @@ p {
   position: relative;
 
   .text {
-      padding: 10%;
-      width: 70%;
+    padding: 10%;
+    width: 70%;
   }
 
   .image {
@@ -238,6 +262,33 @@ p {
     }
     &.second {
       left: -5%;
+    }
+  }
+
+  @media (max-width: 768px) {
+    width: 85%;
+    height: 83vh;
+    flex-direction: column;
+    justify-content: flex-end;
+
+    .text {
+      padding: 10%;
+      width: 100%;
+      //   font-size:14px;
+    }
+
+    .image {
+      top: 0;
+      width: 100%;
+      height: 57%;
+
+      &.first {
+        left: 0;
+      }
+
+      &.second {
+        left: 0;
+      }
     }
   }
 }
