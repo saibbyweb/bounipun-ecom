@@ -132,7 +132,7 @@ export default {
   methods: {
     setBg(image) {
       return {
-        backgroundImage: `url(story-images/${image})`,
+        backgroundImage: `url(/story-images/${image})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundOrigin: "content-box",
