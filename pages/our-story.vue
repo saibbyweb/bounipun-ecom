@@ -131,8 +131,11 @@ export default {
   },
   methods: {
     setBg(image) {
+    //   const bg = this.windowWidth > 768 ? image : `mobile/${image}`
+      const bg = image;
+
       return {
-        backgroundImage: `url(/story-images/${image})`,
+        backgroundImage: `url(/story-images/${bg})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundOrigin: "content-box",
@@ -169,7 +172,9 @@ export default {
       transform: scale(1.3);
     }
   }
+
 }
+
 
 p {
   font-size: 15px;
@@ -236,6 +241,17 @@ p {
   height: 90vh;
   background-attachment: fixed;
 }
+
+@media(max-width: 768px) {
+    .header-image {
+        background-attachment: initial;
+    }
+
+    .full-width {
+        background-attachment: initial;
+    }
+}
+
 
 /* bordered block */
 .bordered-block {
