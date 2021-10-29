@@ -21,6 +21,18 @@ $font_4_bold: "Charmonman-Bold";
 
 $pageMarginTop: 20vh;
 
+@media(max-width: 768px) {
+  $pageMarginTop: 13vh;
+}
+
+@mixin marginTop {
+  margin-top: 20vh;
+
+  @media(max-width: 768px) {
+    margin-top:13vh;
+  }
+}
+
 @font-face {
   font-family: "SF-Pro";
   font-style: normal;
@@ -176,11 +188,10 @@ span {
 .page {
   min-height: 80vh;
   padding: 5%;
-  margin-top: $pageMarginTop;
-
+  @include marginTop;
+  
   @media (max-width: $breakpoint-tablet) {
     padding: 7%;
-    margin-top: $pageMarginTop;
   }
 
   &.-wh {

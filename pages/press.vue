@@ -73,7 +73,9 @@ export default {
 
 <style lang="scss" scoped>
 .press-box {
-  margin-top: $pageMarginTop;
+  // margin-top: $pageMarginTop;
+  @include marginTop;
+  
   @media(max-width: 768px) {
       flex-direction: column;
   }

@@ -70,5 +70,8 @@ export default {
       letter-spacing: 1px;
     }
   }
+  @media(max-width: 768px) {
+      display: none;
+  }
 }
 </style>

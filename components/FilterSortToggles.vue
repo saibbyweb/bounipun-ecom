@@ -56,7 +56,8 @@ export default {
 .fs-wrapper {
   padding: 5px;
   position: fixed;
-  top: $pageMarginTop;
+  top: 0;
+  @include marginTop;
   left: 0;
   z-index: 2;
   width: 100%;

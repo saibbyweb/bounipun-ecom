@@ -877,8 +877,7 @@ export default {
   }
 }
 .product-page {
-  margin-top: $pageMarginTop;
-  // padding: 2.5%;
+  @include marginTop;
   position: relative;
   min-height: 90vh;
 
