@@ -152,9 +152,10 @@ export default {
   .logo {
     height: inherit;
     cursor: pointer;
+    margin-top:1%;
 
     img {
-      height: 50%;
+      height: 70%;
       filter: contrast(3);
 
       @media (max-width: $breakpoint-tablet) {
