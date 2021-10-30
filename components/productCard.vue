@@ -55,11 +55,7 @@
         :dSlideWidth="29"
         dSlideHeight="400px"
         size="cover"
-      /> 
-
-      
-
-
+      />
     </div>
 
     <!-- product colors [images] -->
@@ -204,7 +200,9 @@ export default {
   },
   computed: {
     mobileDimensions() {
-      return this.gridView ? { width: 48, height: '315px'} : { width: 100, height: '60vh'}
+      return this.gridView
+        ? { width: 48, height: "315px" }
+        : { width: 100, height: "67vh" };
     },
     currency() {
       return this.$store.state.customer.currency + " ";
@@ -673,7 +671,39 @@ export default {
 
     &.singleView {
       width: 100%;
-      height: 690px;
+      // height: 650px;
+      box-sizing: content-box;
+      padding-bottom:25px;
+      height: 91vh;
+      border-bottom: 1px solid #efefef;
+      margin: 0px;
+
+      .main-image-container {
+        height: 79%;
+      }
+
+      .color-previews {
+        height: 7%;
+      }
+
+      .text-details {
+        height: 10%;
+
+        span {
+          // font-size: 12px;
+          &.price {
+            font-size: 13px;
+          }
+
+          &.name {
+            font-size: 13px;
+          }
+        }
+      }
+
+      .variants-available {
+        height: 6%;
+      }
     }
 
     &.escape {
