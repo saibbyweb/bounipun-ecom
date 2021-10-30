@@ -6,49 +6,71 @@
       <i> "{{ searchTerm }}" </i>
     </p>
 
-    <div class="filters-and-sort">
-      <!-- filter -->
-      <button class="action" @click="openFilters">
-        Filters
-        <img class="arrow-bottom" src="/icons/arrow_bottom.png" />
-      </button>
+    <div class="relative-wrapper flex center">
+      <!-- filters and sort -->
+      <div class="filters-and-sort">
+        <!-- filter -->
+        <button class="action" @click="openFilters">
+          Filters
+          <img class="arrow-bottom" src="/icons/arrow_bottom.png" />
+        </button>
 
-      <!-- center pipe -->
-      <span class="pipe"> | </span>
+        <!-- center pipe -->
+        <span class="pipe"> | </span>
 
-      <!-- sort -->
-      <button class="action" @click="openSort">
-        Sort
-        <img class="arrow-bottom" src="/icons/arrow_bottom.png" />
-      </button>
+        <!-- sort -->
+        <button class="action" @click="openSort">
+          Sort
+          <img class="arrow-bottom" src="/icons/arrow_bottom.png" />
+        </button>
+
+        <!-- view switch -->
+        <div class="mobile-view-switcher flex center">
+          <!-- <img src="/icons/dark/single-box.png" /> -->
+          <img @click="toggleGridView" :src="currentViewImage" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      gridView: true
+    };
+  },
   props: {
     searchTerm: {
       type: String,
-      default: ""
+      default: "",
     },
     totalMatches: {
       type: Number,
-      defauly: 0
+      defauly: 0,
     },
     collectionView: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
+    },
+  },
+  computed: {
+    currentViewImage() {
+      return this.gridView ? "/icons/dark/grid.png" : "/icons/dark/single-box.png"
     }
   },
   methods: {
     openFilters() {
-      this.$emit('openFilters');
+      this.$emit("openFilters");
     },
-     openSort() {
-      this.$emit('openSort');
-     } 
+    openSort() {
+      this.$emit("openSort");
+    },
+    toggleGridView() {
+      this.gridView = !this.gridView;
     }
+  }
 };
 </script>
 
@@ -64,8 +86,13 @@ export default {
   background-color: white;
   box-shadow: 20px 0px 15px rgba(0, 0, 0, 0.16);
 
+  .relative-wrapper {
+    width: 100%;
+  }
+
   .filters-and-sort {
     // margin-top: 10px;
+    position: relative;
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -112,6 +139,19 @@ export default {
           width: 15%;
         }
       }
+    }
+  }
+
+  .mobile-view-switcher {
+    position: absolute;
+    right: -4%;
+    top: 0;
+    width: 12%;
+    height: 100%;
+
+    img {
+      width: 50%;
+      // margin:0 5%;
     }
   }
 }

@@ -3,8 +3,6 @@
     class="page -broad center-col search-results-page"
     style="padding-top:3%;"
   >
-
-
     <!-- filter sort toggles -->
     <FilterSortToggles
       :searchTerm="$route.query.searchTerm"
@@ -384,6 +382,7 @@ export default {
 .search-results {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   // margin-top: 5vw;
 
   margin-top: 10vh;

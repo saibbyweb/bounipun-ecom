@@ -3,7 +3,7 @@
     @click="navigateToProductPage"
     class="product-card"
     :class="{
-      escape: collectionName === 'Escape' && $route.name === 'Collections'
+      escape: collectionName === 'Escape' && $route.name === 'Collections',
     }"
   >
     <!-- wishlist icon -->
@@ -31,6 +31,17 @@
         dSlideHeight="400px"
         size="cover"
       />
+
+      <!-- <slideshow
+        ref="slideshow"
+        :images="slideshowImages"
+        extraClass="search-slideshow"
+        :dots="true"
+        mSlideHeight="60vh"
+        :dSlideWidth="29"
+        dSlideHeight="400px"
+        size="cover"
+      /> -->
     </div>
 
     <!-- product colors [images] -->
@@ -57,7 +68,7 @@
         <p
           v-if="!readyToShip"
           class="additional-colors"
-          style="display:block; margin-left:3px;"
+          style="display: block; margin-left: 3px"
         >
           <span>
             {{
@@ -96,7 +107,8 @@
 
         <!-- if made on order and lowest and highest is not same -->
         <span v-if="!readyToShip && !lowestAndHighestPriceisSame" class="price">
-          {{ currency + "" + formatCurrency(adjustPrice(lowestVariantPrice)) }} -
+          {{ currency + "" + formatCurrency(adjustPrice(lowestVariantPrice)) }}
+          -
           {{ currency + "" + formatCurrency(adjustPrice(highestVariantPirce)) }}
         </span>
         <!-- if made on order and lowest and highest same -->
@@ -113,10 +125,7 @@
 
     <!-- variants available -->
     <div>
-      <div
-        v-if="!thirdPartyProduct"
-        class="variants-available center"
-      >
+      <div v-if="!thirdPartyProduct" class="variants-available center">
         <div
           v-for="(variant, index) in variantsAvailable"
           :key="index"
@@ -136,7 +145,7 @@ export default {
   props: {
     searchView: {
       type: Boolean,
-      default: false
+      default: false,
     },
     details: {
       type: Object,
@@ -144,32 +153,32 @@ export default {
         return {
           name: "Khatamband Search",
           collection: "Bounipun Karakul",
-          price: "INR 20000"
+          price: "INR 20000",
         };
-      }
+      },
     },
     variants: {
       type: Object,
       default: () => {
         return {
-          shawl: true
+          shawl: true,
         };
-      }
+      },
     },
     product: {
       type: Object,
       default: {
-        notProvided: true
-      }
+        notProvided: true,
+      },
     },
     image: {
       type: String,
-      default: "product1.png"
+      default: "product1.png",
     },
     activeColor: {
       type: Number,
-      default: -1
-    }
+      default: -1,
+    },
   },
   computed: {
     currency() {
@@ -183,7 +192,7 @@ export default {
 
       /* find main color */
       const mainColor = this.product.colors.find(
-        color => color.mainColor === true
+        (color) => color.mainColor === true
       );
 
       /* if main color undefined */
@@ -191,18 +200,17 @@ export default {
         mainImage = mainColor.images[0].path;
       } else mainImage = this.product.colors[0].images;
 
-      return this.$getImage(mainImage, 'productPages');
+      return this.$getImage(mainImage, "productPages");
     },
     variantsAvailable() {
-
-        if(this.rtsAndUnderBounipun) {
-            return [this.product.rtsDirectVariant]
-        }
+      if (this.rtsAndUnderBounipun) {
+        return [this.product.rtsDirectVariant];
+      }
       /* TODO: what is this? */
       if (this.product.variantData) {
         let temp = JSON.parse(JSON.stringify(this.product.variantData));
         temp.sort((a, b) => a.order - b.order);
-        return temp.map(variant => variant.name);
+        return temp.map((variant) => variant.name);
       }
 
       // if(this.product.variants) {
@@ -211,7 +219,7 @@ export default {
       // }
 
       // if (this.product.variantNames) return this.product.variantNames;
-      return this.product.variants.map(variant => variant._id.name);
+      return this.product.variants.map((variant) => variant._id.name);
     },
     baseColorsBoxes() {
       if (!this.product.colors) return;
@@ -236,8 +244,8 @@ export default {
         return [
           {
             path: "",
-            actualIndex: -1
-          }
+            actualIndex: -1,
+          },
         ];
 
       /* base color list */
@@ -249,13 +257,13 @@ export default {
           /* if escape, show the chip (NO_WAY) */
           return {
             path: "",
-            actualIndex: index
+            actualIndex: index,
           };
         }
 
         return {
-          path: this.$getImage(images[images.length - 1].path, 'chips'),
-          actualIndex: index
+          path: this.$getImage(images[images.length - 1].path, "chips"),
+          actualIndex: index,
         };
       });
 
@@ -290,7 +298,7 @@ export default {
 
       return {
         previews,
-        additional
+        additional,
       };
     },
     collectionName() {
@@ -302,8 +310,8 @@ export default {
       if (this.product.type === "third-party") return this.product.directPrice;
 
       let allPrices = [];
-      this.product.variants.forEach(variant => {
-        variant.fabrics.forEach(fabric => {
+      this.product.variants.forEach((variant) => {
+        variant.fabrics.forEach((fabric) => {
           // console.log(fabric.price);
           allPrices.push(fabric.price);
         });
@@ -333,12 +341,14 @@ export default {
         if (mImages.length === 0) {
           return ["/default-image.png"];
         }
-        return mImages.map(image => this.$getImage(image.path, 'productPages'));
+        return mImages.map((image) =>
+          this.$getImage(image.path, "productPages")
+        );
       }
 
       /* find main color */
       const mainColor = this.product.colors.find(
-        color => color.mainColor === true
+        (color) => color.mainColor === true
       );
 
       /* if main color undefined */
@@ -347,7 +357,9 @@ export default {
       } else mainImages = this.product.colors[0].images;
 
       /* fetch main image */
-      return mainImages.map(image => this.$getImage(image.path,'productPages'));
+      return mainImages.map((image) =>
+        this.$getImage(image.path, "productPages")
+      );
     },
     readyToShip() {
       return this.product.availabilityType === "ready-to-ship";
@@ -356,36 +368,34 @@ export default {
       return this.product.type === "third-party";
     },
     rtsAndUnderBounipun() {
-        return this.readyToShip && !this.thirdPartyProduct;
+      return this.readyToShip && !this.thirdPartyProduct;
     },
     activeColorCode() {
-      const index = this.activeColorIndex === -1 ? 0: this.activeColorIndex;
+      const index = this.activeColorIndex === -1 ? 0 : this.activeColorIndex;
       return this.product.colors[index].code;
     },
     inWishlist() {
       /* if customer is not logged in, return  */
       const customer = this.$store.state.customer;
-      if(customer.authorized === false)
-        return false;
-      
+      if (customer.authorized === false) return false;
+
       /* if wishlist is undefined, return */
       const wishlist = customer.user.wishlist;
-      if(wishlist === undefined)
-        return false;
+      if (wishlist === undefined) return false;
 
       /* check if product is in wishlist */
       // const foundIndex = wishlist.findIndex(entry => entry.product === this.product._id && entry.colorCode === this.activeColorCode);
 
-        const foundIndex = wishlist.findIndex(entry => entry.product === this.product._id);
+      const foundIndex = wishlist.findIndex(
+        (entry) => entry.product === this.product._id
+      );
 
-
-      if(foundIndex !== -1) {
+      if (foundIndex !== -1) {
         return true;
       }
 
       return false;
-
-    }
+    },
   },
   mounted() {
     this.activeColorIndex = this.activeColor;
@@ -394,12 +404,12 @@ export default {
   watch: {
     activeColor(val) {
       this.activeColorIndex = val;
-    }
+    },
   },
   data() {
     return {
       addedToWishlist: false,
-      activeColorIndex: -1
+      activeColorIndex: -1,
     };
   },
   methods: {
@@ -412,29 +422,29 @@ export default {
       return this.$store.getters["customer/formatCurrency"](adjustedPrice);
     },
     async toggleWishlist() {
-   
       /* if user is not logged in, move to login page */
       if (!this.$store.state.customer.authorized) {
-        this.$router.push('/login');
+        this.$router.push("/login");
         return;
       }
 
       /* set action according to state */
-      const action = this.inWishlist ? 'remove-from-wishlist' : 'add-to-wishlist';
-      
+      const action = this.inWishlist
+        ? "remove-from-wishlist"
+        : "add-to-wishlist";
+
       /* take item to wishlist */
-      const addToWishlist = await this.$post('/wishlistActions', {
+      const addToWishlist = await this.$post("/wishlistActions", {
         action,
         product: this.product._id,
-        colorCode: this.activeColorCode
+        colorCode: this.activeColorCode,
       });
 
       /* if request failed */
-      if(addToWishlist.resolved === false)
-        return;
+      if (addToWishlist.resolved === false) return;
 
       /* refetch wishlist */
-          /* fetch profile */
+      /* fetch profile */
       this.$store.dispatch("customer/fetchProfile");
     },
     navigateToProductPage() {
@@ -446,7 +456,7 @@ export default {
 
       this.$router.push({
         path: `/${this.product.slug}`,
-        query
+        query,
       });
 
       window.scroll({ top: 0, behavior: "smooth" });
@@ -469,8 +479,8 @@ export default {
     isActiveBaseColor(index) {
       const actualIndex = this.baseColorImages[index].actualIndex;
       return actualIndex === this.activeColorIndex;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -635,6 +645,11 @@ export default {
   @media (max-width: $breakpoint-tablet) {
     width: 48vw;
     height: 480px;
+
+    &.single-view {
+      width: 100%;
+      height: 690px;
+    }
 
     &.escape {
       height: 440px;
