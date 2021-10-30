@@ -9,6 +9,7 @@
       :totalMatches="totalMatches"
       @openFilters="filtersOpen = true; sortOpen = false"
       @openSort="sortOpen = true; filtersOpen = false"
+      @viewChanged="gridView = $event"
     />
 
 
@@ -37,6 +38,7 @@
         :product="product.color"
         :searchView="true"
         :activeColor="product.actualIndex"
+        :gridView="gridView"
       />
     </div>
 
@@ -92,6 +94,7 @@ export default {
   },
   data() {
     return {
+      gridView: true,
       /* rawCriterion */
       rawCriterion: {
         search: {

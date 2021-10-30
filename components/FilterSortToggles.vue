@@ -69,6 +69,7 @@ export default {
     },
     toggleGridView() {
       this.gridView = !this.gridView;
+      this.$emit('viewChanged', this.gridView);
     }
   }
 };

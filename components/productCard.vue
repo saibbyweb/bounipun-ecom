@@ -4,6 +4,7 @@
     class="product-card"
     :class="{
       escape: collectionName === 'Escape' && $route.name === 'Collections',
+      singleView: !gridView,
     }"
   >
     <!-- wishlist icon -->
@@ -20,28 +21,45 @@
     <!-- main image container -->
     <div class="main-image-container center">
       <!-- TODO: size was 165% -->
-      <slideshow
+      <!-- <slideshow
         ref="slideshow"
         :images="slideshowImages"
         extraClass="search-slideshow"
         :dots="true"
         :mSlideWidth="48"
-        :dSlideWidth="29"
         mSlideHeight="315px"
+        :dSlideWidth="29"
         dSlideHeight="400px"
         size="cover"
-      />
+      /> -->
 
       <!-- <slideshow
         ref="slideshow"
         :images="slideshowImages"
         extraClass="search-slideshow"
         :dots="true"
+        :mSlideWidth="100"
         mSlideHeight="60vh"
         :dSlideWidth="29"
         dSlideHeight="400px"
         size="cover"
       /> -->
+
+      <slideshow
+        ref="slideshow"
+        :images="slideshowImages"
+        extraClass="search-slideshow"
+        :dots="true"
+        :mSlideWidth="mobileDimensions.width"
+        :mSlideHeight="mobileDimensions.height"
+        :dSlideWidth="29"
+        dSlideHeight="400px"
+        size="cover"
+      /> 
+
+      
+
+
     </div>
 
     <!-- product colors [images] -->
@@ -143,6 +161,10 @@ import { mapGetters } from "vuex";
 
 export default {
   props: {
+    gridView: {
+      type: Boolean,
+      default: false,
+    },
     searchView: {
       type: Boolean,
       default: false,
@@ -181,6 +203,9 @@ export default {
     },
   },
   computed: {
+    mobileDimensions() {
+      return this.gridView ? { width: 48, height: '315px'} : { width: 100, height: '60vh'}
+    },
     currency() {
       return this.$store.state.customer.currency + " ";
     },
@@ -646,7 +671,7 @@ export default {
     width: 48vw;
     height: 480px;
 
-    &.single-view {
+    &.singleView {
       width: 100%;
       height: 690px;
     }
