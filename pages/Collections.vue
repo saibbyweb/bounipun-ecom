@@ -31,6 +31,7 @@
    @openFilters="filtersOpen = true; sortOpen = false"
       @openSort="sortOpen = true; filtersOpen = false"
       :collectionView="true"
+      @viewChanged="gridView = $event"
     />
 
     <!-- offcanvas filters -->
@@ -68,6 +69,7 @@
         :product="product.color"
         :searchView="true"
         :activeColor="product.actualIndex"
+        :gridView="gridView"
       />
 
       <h3 v-if="products.length === 0">
@@ -96,6 +98,7 @@
               :key="cIndex"
               :product="adjustProduct(products[0], color.actualIndex)"
               :activeColor="color.actualIndex"
+              :gridView="gridView"
             />
           </div>
         </div>
@@ -127,6 +130,7 @@ export default {
   },
   data() {
     return {
+      gridView: true,
       /* rawCriterion */
       rawCriterion: {
         search: {
@@ -569,7 +573,7 @@ export default {
 <style lang="scss" scoped>
 .c-header {
   height: 40vw;
-  margin-top: 8vh;
+  margin-top: 5vh;
   // background: url("/demo_images/collection-header.png");
   background-size: cover;
   width: 100%;

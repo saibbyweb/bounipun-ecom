@@ -145,15 +145,20 @@ export default {
 
   .mobile-view-switcher {
     position: absolute;
-    right: -4%;
+    right: -2%;
     top: 0;
-    width: 12%;
+    width: 11%;
     height: 100%;
 
     img {
       width: 50%;
       // margin:0 5%;
     }
+
+    @media(min-width: 768px) {
+      display: none;
+    }
+
   }
 }
 </style>

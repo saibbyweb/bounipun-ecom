@@ -57,6 +57,9 @@ export default {
                 return;
             }
 
+            /* sanitize search term */
+            this.searchTerm = encodeURIComponent(this.searchTerm)
+
             if (this.searchTerm === this.previousVal && this.$route.name === "Search") {
                 this.$router.go();
                 return;
