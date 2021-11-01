@@ -294,6 +294,9 @@
     <!-- estimated delivery time -->
     <!-- <InputBox label="Estimated Delivery Time (in weeks)" v-model="doc.etd" type="number" /> -->
 
+        <!-- lock status -->
+    <Toggle v-model="doc.lock" label="Lock Status" :disabled="true" width="80px" activeText="🔒" inactiveText="👎" />
+
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
 
@@ -472,6 +475,7 @@ export default {
         rtsDirectVariant: "",
         rtsDirectFabric: "",
         // etd: "",
+        lock: false,
         status: false
       },
       types: [
@@ -797,6 +801,7 @@ export default {
         rtsDirectVariant,
         rtsDirectFabric,
         // etd,
+        lock,
         status
       } = details;
       this.doc = {
@@ -819,6 +824,7 @@ export default {
         rtsDirectFabric,
         stock: stock === undefined ? "" : stock,
         // etd: etd === null ? "" : etd.toString(),
+        lock,
         status
       };
       this.editMode = true;
@@ -849,6 +855,7 @@ export default {
         rtsDirectFabric: "",
         stock: "",
         // etd: "",
+        lock: false,
         status: false
       });
       this.editMode = false;

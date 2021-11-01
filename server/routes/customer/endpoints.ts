@@ -2,6 +2,9 @@
 import { server, db, task, mongoose } from "@helpers/essentials";
 import admin from "@helpers/admin";
 import customer from "@helpers/customer";
+import { methods as userMethods } from "@models/user";
+
+const { userAuth } = userMethods;
 
 /* creating express router */
 const router = server.express.Router();
@@ -168,7 +171,7 @@ router.get('/getSearchFilters', async (req, res) => {
 })
 
 /* search products */
-router.post('/searchProducts', async (req, res) => {
+router.post('/searchProducts', userAuth('customer', false),async (req, res) => {
     /* destructure data from request body */
     const { rawCriterion } = req.body;
 

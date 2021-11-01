@@ -61,7 +61,7 @@ export const methods = {
 
         /* update all products under this collection */
         if (editMode)
-            await product.methods.updateSlugs(details._id, details.slug);
+            await product.methods.updateAllProductsUnderCollection(details._id, details.slug, details.lock);
 
         /* find the last highest order and assign it to the new collection */
         if (!editMode) {

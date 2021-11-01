@@ -57,6 +57,7 @@ const schema = new mongoose.Schema({
     meta: String,
     /* estimated time of delivery */
     // edt: { type: Number, default: 1 },
+    lock: Boolean,
     status: Boolean
 }, {
     timestamps: true
@@ -107,6 +108,8 @@ export const methods = {
 
         /* new product slug */
         details.slug = parent.slug + "/" + details.alias;
+        /* set product lock as collection lock  */
+        details.lock = parent.lock;
 
         /* verify slug automicity */
         let filter: any = { slug: details.slug };
@@ -163,7 +166,7 @@ export const methods = {
         console.log(details.slug, '-- FINAL SLUG');
 
     },
-    async updateSlugs(collectionId, collectionSlug) {
+    async updateAllProductsUnderCollection(collectionId, collectionSlug, collectionLock) {
         const products = model;
         let matchedProducts: any = await products.find({ bounipun_collection: collectionId });
 
@@ -173,9 +176,8 @@ export const methods = {
 
         /* update slugs for all matched products */
         for (const product of matchedProducts) {
-            const updated: any = await products.findOneAndUpdate({ _id: product._id }, { slug: collectionSlug + "/" + product.alias }, { returnOriginal: false });
-
-            console.log(updated.slug);
+            const updated: any = await products.findOneAndUpdate({ _id: product._id }, { slug: collectionSlug + "/" + product.alias, lock: collectionLock }, { returnOriginal: false });
+            console.log(updated.slug, updated.lock);
         }
 
     },
