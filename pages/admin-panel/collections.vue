@@ -124,8 +124,7 @@ export default {
       this.$refs.updateComponent.populateForm(doc);
 
       this.assignImages("imageUploader", doc.image);
-      this.assignImages("lockedImageUploader",doc.lockedImage);
-
+      this.assignImages("lockedImageUploader", doc.lockedImage);
     },
     resultsFetched(result) {
       if (result.docs.length === 0) {
@@ -155,7 +154,7 @@ export default {
           };
         }
       );
-    },
+    }
   },
 };
 </script>

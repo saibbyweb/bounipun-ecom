@@ -5,7 +5,7 @@
       class="c-header center"
       :class="{ isEscape }"
       :style="{
-        backgroundImage: `url(${getCollectionImage(collection.image)})`
+        backgroundImage: `url(${getCollectionImage(collection.image)})`,
       }"
     >
       <h2 v-if="collection.image === ''" class="heading">
@@ -17,7 +17,7 @@
     <div
       v-if="
         collection.mainTextBlock !== undefined &&
-          collection.mainTextBlock.visible
+        collection.mainTextBlock.visible
       "
       class="main-text-block center-col pad"
     >
@@ -28,8 +28,14 @@
 
     <!-- filter sort toggles -->
     <FilterSortToggles
-   @openFilters="filtersOpen = true; sortOpen = false"
-      @openSort="sortOpen = true; filtersOpen = false"
+      @openFilters="
+        filtersOpen = true;
+        sortOpen = false;
+      "
+      @openSort="
+        sortOpen = true;
+        filtersOpen = false;
+      "
       :collectionView="true"
       @viewChanged="gridView = $event"
     />
@@ -54,7 +60,10 @@
 
     <!-- if collections is not escape -->
     <div
-      v-if="(!collectionLocked && isEscape && !noFilterOrSortApplied) || (!collectionLocked  && !isEscape)"
+      v-if="
+        (!collectionLocked && isEscape && !noFilterOrSortApplied) ||
+        (!collectionLocked && !isEscape)
+      "
       class="collection-items"
     >
       <!-- <product-card
@@ -122,11 +131,11 @@ import productCard from "../components/productCard.vue";
 export default {
   head() {
     return {
-      title: `${this.collection.name} | Bounipun Kashmir`
+      title: `${this.collection.name} | Bounipun Kashmir`,
     };
   },
   components: {
-    productCard
+    productCard,
   },
   data() {
     return {
@@ -135,16 +144,16 @@ export default {
       rawCriterion: {
         search: {
           key: "name",
-          term: ""
+          term: "",
         },
         filters: {},
         sortBy: {},
         limit: 50,
-        cursor: 1
+        cursor: 1,
       },
       products: [],
       collection: {
-        name: "fetching..."
+        name: "fetching...",
       },
       filterData: [],
       sortData: {},
@@ -152,7 +161,7 @@ export default {
       sortOpen: false,
       filterDataFetched: false,
       colorCategories: [],
-      escapeProduct: []
+      escapeProduct: [],
     };
   },
   watch: {
@@ -166,7 +175,7 @@ export default {
       //   return;
       // }
       this.fetchResults(to.query.slug);
-    }
+    },
   },
   computed: {
     collectionLocked() {
@@ -176,20 +185,20 @@ export default {
       return this.$route.query.slug.toUpperCase() === "ESCAPE";
     },
     noFiltersApplied() {
-      if(Object.keys(this.rawCriterion.filters).length === 0)
-        return true;
+      if (Object.keys(this.rawCriterion.filters).length === 0) return true;
 
-      return this.rawCriterion.colors.length === 0 &&
+      return (
+        this.rawCriterion.colors.length === 0 &&
         this.rawCriterion.filters.availabilityType.length === 0 &&
-        this.rawCriterion.filters["variants._id"].length === 0;
-
+        this.rawCriterion.filters["variants._id"].length === 0
+      );
     },
     noFilterOrSortApplied() {
       return (
         this.noFiltersApplied &&
         this.rawCriterion.sortBy["priceRange.startsAt"] === undefined
       );
-    }
+    },
   },
   mounted() {
     // if (this.isEscape) this.fetchCollectionProducts(this.$route.query.slug);
@@ -209,13 +218,13 @@ export default {
     getCheckedOnes(options) {
       let checkedOptions = [];
       let allOptions = {
-        ...options
+        ...options,
       };
 
       const keys = Object.keys(allOptions);
 
       /* omit unused filters */
-      keys.forEach(key => {
+      keys.forEach((key) => {
         if (allOptions[key].checked === true)
           checkedOptions.push(allOptions[key].value);
       });
@@ -223,15 +232,12 @@ export default {
       return checkedOptions;
     },
     async fetchResults() {
-      // if (
-      //   this.filterDataFetched === false ||
-      //   this.$route.query.slug.toUpperCase() === "ESCAPE"
-      // )
-      //   return;
       this.escapeProduct = [];
       this.products = [];
+      /* if fitlet data was not fetched, stop execution */
       if (this.filterDataFetched === false) return;
 
+      /* reset cursor */
       this.rawCriterion.cursor = 1;
 
       /* keep only the checked ones from (type, variants, collection) */
@@ -242,17 +248,19 @@ export default {
 
       /* get bounipun collection id */
       const bounipunCollection = this.filterData.collections.find(
-        col => col.name.toUpperCase() == this.$route.query.slug.toUpperCase()
+        (col) => col.name.toUpperCase() == this.$route.query.slug.toUpperCase()
       );
-      console.log(bounipunCollection);
-      // TODO: added as expirement
+
+      // TODO: added as expirement SET COLLECTION
       this.collection = bounipunCollection;
 
+      /* set bounipun collection for filters */
       filters.bounipun_collection = [bounipunCollection._id];
 
+      /* set selected variants (all variants on mounted) */
       filters["variants._id"] = this.getCheckedOnes(this.filterData.variants);
 
-      /* send base colors once */
+      /* send base colors once (all colors on mounted) */
       this.rawCriterion.colors = this.getCheckedOnes(
         this.filterData.baseColors
       );
@@ -267,21 +275,23 @@ export default {
         this.sortData.priceRange !== ""
       ) {
         this.rawCriterion.sortBy = {
-          "priceRange.startsAt": parseInt(this.sortData.priceRange)
+          "priceRange.startsAt": parseInt(this.sortData.priceRange),
         };
       } else this.rawCriterion.sortBy = {};
 
-      console.log(this.rawCriterion, "--raw criterion");
-
       /* if escape, no filter applied but sort applied, reset sort */
-      if(this.isEscape && this.noFiltersApplied && this.rawCriterion.sortBy["priceRange.startsAt"] !== undefined) {
-        this.rawCriterion.sortBy = {}
+      if (
+        this.isEscape &&
+        this.noFiltersApplied &&
+        this.rawCriterion.sortBy["priceRange.startsAt"] !== undefined
+      ) {
+        this.rawCriterion.sortBy = {};
       }
 
-      /* post raw criterion to the server */
+      /* TODO: should add lock check flag post raw criterion to the server */
       this.$store.commit("customer/setLoading", true);
       const fetchPaginatedResults = this.$axios.$post("/searchProducts", {
-        rawCriterion: this.rawCriterion
+        rawCriterion: this.rawCriterion,
       });
 
       /* wait for request to resolve */
@@ -298,7 +308,7 @@ export default {
       try {
         window.scroll({
           top: 0,
-          behavior: "smooth"
+          behavior: "smooth",
         });
       } catch (err) {
         // console.log("Oops, `window` is not defined");
@@ -311,26 +321,8 @@ export default {
         return;
       }
 
-      /* collection name */
-      let collectionName = "";
-
-      const foundCollection = this.filterData.collections.find(
-        collection => collection.value === response.docs[0].bounipun_collection
-      );
-
-      if (foundCollection !== undefined) {
-        this.collection = foundCollection;
-        // collectionName = foundCollection.name;
-      }
-
       /* attach collection name */
-      response.docs.forEach(product => {
-        // const foundCollection = this.filterData.collections.find(
-        //   collection => collection.value === product.bounipun_collection
-        // );
-        // if (foundCollection !== undefined)
-        //   product.bounipun_collection = foundCollection.name;
-
+      response.docs.forEach((product) => {
         product.bounipun_collection = this.collection.name;
 
         /* attach variant data to rts and under bounipun products */
@@ -340,7 +332,7 @@ export default {
           product.rtsDirectVariant !== undefined
         ) {
           const foundVariant = this.filterData.variants.find(
-            variant => variant.value === product.rtsDirectVariant
+            (variant) => variant.value === product.rtsDirectVariant
           );
           if (foundVariant !== undefined)
             product.rtsDirectVariant = foundVariant.name;
@@ -356,15 +348,12 @@ export default {
 
       /* process color segregation */
       this.processColorSegregation(response.docs);
-      // this.products = response.docs;
-
-      console.log(response.docs);
     },
     processColorSegregation(matchedProducts) {
       /* figure out (guess) the number of color matches in the product */
       let segregated = [];
 
-      matchedProducts.forEach(product => {
+      matchedProducts.forEach((product) => {
         const matchedColors = this.findMatchedColors(product);
         segregated = [...segregated, ...matchedColors];
       });
@@ -389,21 +378,21 @@ export default {
       let matchedColors = [];
 
       /* filter out colors which are inactive */
-      product.colors = product.colors.filter(color => color.status === true);
+      product.colors = product.colors.filter((color) => color.status === true);
 
       /* what are the color filter */
       product.colors.forEach((color, index) => {
         /* color.baseColor is $in [colorFilters] */
         const baseColorFilterMatch = this.rawCriterion.colors.findIndex(
-          col => col === color.baseColor
+          (col) => col === color.baseColor
         );
         /* color.additionalColor1 is $in [colorFilters] */
         const additionalColor1FilterMatch = this.rawCriterion.colors.findIndex(
-          col => col === color.additionalColor1
+          (col) => col === color.additionalColor1
         );
         /* color.additionalColor2 is $in [colorFilters] */
         const additionalColor2FilterMatch = this.rawCriterion.colors.findIndex(
-          col => col === color.additionalColor2
+          (col) => col === color.additionalColor2
         );
 
         /* overall filter match */
@@ -415,7 +404,7 @@ export default {
         /* make sure the color is active */
         if (filterMatch && color.status === true) {
           const colorProduct = {
-            ...product
+            ...product,
           };
           console.log("COLOR MATCHED", color.name, product.bounipun_collection);
           /* TODO: escape collection id should be global */
@@ -426,7 +415,7 @@ export default {
 
           matchedColors.push({
             color: colorProduct,
-            actualIndex: index
+            actualIndex: index,
           });
         }
 
@@ -439,8 +428,8 @@ export default {
         matchedColors = [
           {
             color: product,
-            actualIndex: -1
-          }
+            actualIndex: -1,
+          },
         ];
       }
 
@@ -448,7 +437,7 @@ export default {
     },
     adjustProduct(product, cIndex) {
       let adjustedProduct = {
-        ...product
+        ...product,
       };
 
       // if(adjustedProduct.colors[cIndex] !== undefined) {
@@ -457,7 +446,7 @@ export default {
 
       adjustedProduct.name = adjustedProduct.colors[cIndex].name;
       return {
-        ...adjustedProduct
+        ...adjustedProduct,
       };
     },
     async fetchColorCategories() {
@@ -477,7 +466,7 @@ export default {
       /* fetch collection id */
       const collection = await this.$fetchData("collections", {
         slug: collectionSlug,
-        status: true
+        status: true,
       });
 
       if (!collection.fetched) return;
@@ -493,7 +482,7 @@ export default {
         {
           bounipun_collection: collection.doc._id,
           type: "under-bounipun",
-          status: true
+          status: true,
         },
         true
       );
@@ -503,18 +492,20 @@ export default {
       }
 
       /* filter out inactive colors */
-      products.docs.forEach(product => {
-        product.colors = product.colors.filter(color => color.status === true);
+      products.docs.forEach((product) => {
+        product.colors = product.colors.filter(
+          (color) => color.status === true
+        );
         product.variants.sort((a, b) => a._id.order - b._id.order);
       });
 
       /* filter out products with no active colors */
       products.docs = products.docs.filter(
-        product => product.colors.length > 0
+        (product) => product.colors.length > 0
       );
 
       /* set rts direct variant */
-      products.docs.forEach(product => {
+      products.docs.forEach((product) => {
         if (
           product.availabilityType === "ready-to-ship" &&
           product.type !== "third-party" &&
@@ -542,14 +533,16 @@ export default {
       for (let i = 0; i < product.colors.length; i++)
         product.colors[i]._id = product.colorData[i];
 
-      this.colorCategories.forEach(category => {
+      this.colorCategories.forEach((category) => {
         /* remove inactive colors */
-        product.colors = product.colors.filter(color => color.status === true);
+        product.colors = product.colors.filter(
+          (color) => color.status === true
+        );
         /* find all colors under this category */
-        const colors = product.colors.filter(color => {
+        const colors = product.colors.filter((color) => {
           /* attach actual index */
           color.actualIndex = product.colors.findIndex(
-            col => col._id === color._id
+            (col) => col._id === color._id
           );
           return color._id.category === category._id;
         });
@@ -557,7 +550,7 @@ export default {
         groupedData.push({
           name: category.name,
           description: category.description,
-          colors
+          colors,
         });
       });
 
@@ -567,9 +560,9 @@ export default {
     },
     getCollectionImage(image) {
       if (image === undefined) return "/default-image.png";
-      return this.$getOriginalPath(image)
-    }
-  }
+      return this.$getOriginalPath(image);
+    },
+  },
 };
 </script>
 

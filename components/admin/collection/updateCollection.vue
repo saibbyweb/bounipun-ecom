@@ -265,7 +265,6 @@ export default {
     color: #333333;
     font-size: 12px;
     padding-top:10px;
-
   }
 }
 </style>
