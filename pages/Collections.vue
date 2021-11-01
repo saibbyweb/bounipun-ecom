@@ -245,6 +245,9 @@ export default {
         col => col.name.toUpperCase() == this.$route.query.slug.toUpperCase()
       );
       console.log(bounipunCollection);
+      // TODO: added as expirement
+      this.collection = bounipunCollection;
+
       filters.bounipun_collection = [bounipunCollection._id];
 
       filters["variants._id"] = this.getCheckedOnes(this.filterData.variants);

@@ -73,6 +73,19 @@
       <!-- text 3 -->
       <InputBox v-model="doc.mainTextBlock.text3" label="Main Text 3" />
 
+      <!-- visiblity toggle -->
+      <Toggle
+        v-model="doc.mainTextBlock.visible"
+        label="Text Block Visiblity"
+        activeText="Show"
+        inactiveText="Hidden"
+        width="90px"
+      />
+    </div>
+
+    <!-- lock -->
+    <div class="section">
+      <label class="label"> Collection Lock </label>
       <!-- locked image -->
       <UploadImage
         ref="lockedImageUploader"
@@ -83,18 +96,16 @@
 
       <!-- locked text -->
       <TextBox v-model="doc.lockedText" label="Locked Text" />
-
-      <!-- visiblity toggle -->
+      <!-- lock toggle -->
       <Toggle
-        v-model="doc.mainTextBlock.visible"
-        label="Visiblity"
-        activeText="Live"
-        inactiveText="Hidden"
-        width="100px"
+        v-model="doc.lock"
+        label="🔒 Lock"
+        width="90px"
+        activeText="Enabled"
+        inactiveText="Unlocked"
       />
     </div>
-    <!-- publish toggle -->
-    <Toggle v-model="doc.lock" label="🔒 Lock" />
+
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
     <!-- update button -->
@@ -243,3 +254,18 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.section {
+  margin-top: 10px;
+  padding-top:10px;
+  border: 3px dotted #efefef;
+
+  .label {
+    color: #333333;
+    font-size: 12px;
+    padding-top:10px;
+
+  }
+}
+</style>
