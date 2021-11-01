@@ -1,125 +1,163 @@
 <template>
-<div class="collection crud">
+  <div class="collection crud">
     <!-- filters -->
-    <div :class="{updating: showForm}" class="filters center">
-        <input v-model="rawCriterion.search.term" class="search shadow" type="text" placeholder="Search for collections" :disabled="dragEnabled" />
+    <div :class="{ updating: showForm }" class="filters center">
+      <input
+        v-model="rawCriterion.search.term"
+        class="search shadow"
+        type="text"
+        placeholder="Search for collections"
+        :disabled="dragEnabled"
+      />
     </div>
     <!-- list of collections -->
-    <div :class="{updating: showForm}" class="list">
-        <List :list="list" :headings="headings" :sortByFields="sortByFields" :model="model" @documentFetched="documentFetched" @sortToggled="sortToggled" custom_css="10% 25% 25% 15% 10% 15%" @clearFilters="clearFilters" @refetchList="updateList()" :isDraggable="true"/>
+    <div :class="{ updating: showForm }" class="list">
+      <List
+        :list="list"
+        :headings="headings"
+        :sortByFields="sortByFields"
+        :model="model"
+        @documentFetched="documentFetched"
+        @sortToggled="sortToggled"
+        custom_css="10% 25% 25% 15% 10% 15%"
+        @clearFilters="clearFilters"
+        @refetchList="updateList()"
+        :isDraggable="true"
+      />
 
-        <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
+      <Pagination
+        ref="pagination"
+        :model="model"
+        :rawCriterion="rawCriterion"
+        @resultsFetched="resultsFetched"
+      />
     </div>
     <!-- update collection form -->
-    <div :class="{updating: showForm}" class="update">
-        <UpdateCollection v-show="showForm" ref="updateComponent" @updated="updateList" :model="model" @close="showForm = false" />
-        <AddNewItem v-if="!showForm && !dragEnabled" label="collection" @showForm="showForm = true" />
+    <div :class="{ updating: showForm }" class="update">
+      <UpdateCollection
+        v-show="showForm"
+        ref="updateComponent"
+        @updated="updateList"
+        :model="model"
+        @close="showForm = false"
+      />
+      <AddNewItem
+        v-if="!showForm && !dragEnabled"
+        label="collection"
+        @showForm="showForm = true"
+      />
     </div>
-</div>
+  </div>
 </template>
 
 <script>
 export default {
-    layout: 'admin',
-    data() {
-        return {
-            showForm: false,
-            loading: false,
-            model: 'collections',
-            /* rawCriterion */
-            rawCriterion: {
-                search: {
-                    key: "name",
-                    term: ""
-                },
-                filters: {
-                    type: 'default'
-                },
-                sortBy: {
+  layout: "admin",
+  data() {
+    return {
+      showForm: false,
+      loading: false,
+      model: "collections",
+      /* rawCriterion */
+      rawCriterion: {
+        search: {
+          key: "name",
+          term: "",
+        },
+        filters: {
+          type: "default",
+        },
+        sortBy: {},
+        limit: 50,
+      },
+      sortByFields: ["name", "order", "status"],
+      list: [],
+      headings: [
+        "_id",
+        "name",
+        "Slug",
+        "Estimated Time of Delivery",
+        "order",
+        "status",
+      ],
+      dragEnabled: false,
+    };
+  },
+  mounted() {
+    // this.fetchList();
+  },
+  methods: {
+    clearFilters(dragEnabled) {
+      this.dragEnabled = dragEnabled;
 
-                },
-                limit: 50
-            },
-            sortByFields: ['name', 'order', 'status'],
-            list: [],
-            headings: ['_id', 'name', 'Slug', 'Estimated Time of Delivery','order', 'status'],
-            dragEnabled: false
-        }
+      this.rawCriterion.filters = {
+        type: "default",
+      };
+
+      this.rawCriterion.search.term = "";
     },
-    mounted() {
-        // this.fetchList();
+    updateList() {
+      this.$refs.pagination.fetchResults();
     },
-    methods: {
-        clearFilters(dragEnabled) {
-            this.dragEnabled = dragEnabled;
+    sortToggled(sortBy) {
+      // console.log(sortBy);
+      this.rawCriterion = {
+        ...this.rawCriterion,
+        sortBy,
+      };
+    },
+    assignImages(ref, image) {
+      if (image === "" || image === undefined) return;
+      setTimeout(() => {
+        this.$refs.updateComponent.$refs[ref].assignImages([
+          {
+            _id: "",
+            mainImage: false,
+            path: image,
+          },
+        ]);
+      }, 1200);
+    },
+    documentFetched(doc) {
+      this.showForm = true;
+      this.editMode = true;
+      this.$refs.updateComponent.populateForm(doc);
 
-            this.rawCriterion.filters = {
-                type: 'default'
-            }
-            
-            this.rawCriterion.search.term = "";
-        },
-        updateList() {
-            this.$refs.pagination.fetchResults();
-        },
-        sortToggled(sortBy) {
-            // console.log(sortBy);
-            this.rawCriterion = {
-                ...this.rawCriterion,
-                sortBy
-            }
-        },
-        documentFetched(doc) {
-            this.showForm = true;
-            this.editMode = true;
-            this.$refs.updateComponent.populateForm(doc);
+      this.assignImages("imageUploader", doc.image);
+      this.assignImages("lockedImageUploader",doc.lockedImage);
 
-            if (doc.image === "" || doc.image === undefined)
-                return;
+    },
+    resultsFetched(result) {
+      if (result.docs.length === 0) {
+        this.list = [];
+        return;
+      }
 
-            /* assign images */
-            setTimeout(() => {
-                this.$refs.updateComponent.$refs.imageUploader.assignImages([{
-                    _id: '',
-                    mainImage: false,
-                    path: doc.image
-                }]);
-            }, 1200);
-
-        },
-        resultsFetched(result) {
-            if (result.docs.length === 0) {
-                this.list = [];
-                return;
-            }
-
-            /* extract list */
-            this.list = result.docs.map(({
-                _id,
-                name,
-                slug,
-                // description,
-                edt,
-                order,
-                status
-            }) => {
-
-                return {
-                    _id,
-                    name,
-                    slug,
-                    // description,
-                    edt: edt + " weeks",
-                    order,
-                    status
-                }
-            });
-
+      /* extract list */
+      this.list = result.docs.map(
+        ({
+          _id,
+          name,
+          slug,
+          // description,
+          edt,
+          order,
+          status,
+        }) => {
+          return {
+            _id,
+            name,
+            slug,
+            // description,
+            edt: edt + " weeks",
+            order,
+            status,
+          };
         }
-    }
-}
+      );
+    },
+  },
+};
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

@@ -5,15 +5,17 @@ import { product } from "@models"
 /* schema */
 const schema = new mongoose.Schema({
     name: String,
-    slug: {type: String, default: ''},
+    slug: { type: String, default: '' },
     mainTextBlock: {
         text1: String, text2: String, text3: String, visible: Boolean
     },
-    description: {type: String, default: ''},
-    variantNote: { type: String, default: ''},
+    description: { type: String, default: '' },
+    variantNote: { type: String, default: '' },
     edt: { type: Number, default: 1 },
     image: String,
     lock: { type: Boolean, default: false },
+    lockedImage: { type: String, default: '' },
+    lockedText: { type: String, default: '' },
     order: Number,
     activeOrderLimit: { type: Number, default: 50 },
     status: Boolean
@@ -25,16 +27,16 @@ const schema = new mongoose.Schema({
 const model = mongoose.model('collections', schema);
 /* helper methods */
 export const methods = {
-     register: async () => { 
+    register: async () => {
         console.log('registered')
         const allDocs = await model.find();
-        
+
         let i = 0;
-        for(const doc of allDocs) {
+        for (const doc of allDocs) {
             await model.findOneAndUpdate({ _id: doc._id }, { order: i });
             i++;
         }
-    
+
     },
     async updateCollection(details, editMode) {
         const collections = model;
@@ -58,12 +60,12 @@ export const methods = {
         }
 
         /* update all products under this collection */
-        if(editMode)
+        if (editMode)
             await product.methods.updateSlugs(details._id, details.slug);
-        
+
         /* find the last highest order and assign it to the new collection */
-        if(!editMode) {
-            const highestOrderElement : any = await collections.findOne().sort('-order').select('order');
+        if (!editMode) {
+            const highestOrderElement: any = await collections.findOne().sort('-order').select('order');
             console.log(highestOrderElement);
             details.order = highestOrderElement.order + 1;
         }

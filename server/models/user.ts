@@ -650,7 +650,7 @@ export const methods = {
         let discountPerItem: any = (discountValue / 100 / cartItems.length);
         discountPerItem = discountPerItem.toFixed(2);
 
-        const newOrderNumber = 'BOOK_2_INVOICE_' + await this.getNextSequence();
+        const newOrderNumber = 'BP-ORDER-' + await this.getNextSequence();
 
         const orderDetails = {
             paymentIntent: paymentIntent._id,
