@@ -427,6 +427,8 @@ router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
         .populate('orders')
         .select(fields)
 
+    /* TODO: check content unlock status by validating unlock code status */
+
     res.send(profile)
 });
 

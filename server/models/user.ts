@@ -79,6 +79,11 @@ const schema = new mongoose.Schema({
     orders: [
         { type: ObjectId, ref: 'orders' }
     ],
+    /* content unlock */
+    contentUnlock: {
+        code: String,
+        status: Boolean
+    },
     /* status */
     status: {
         type: Boolean,
@@ -109,6 +114,8 @@ const formatCurrency = (price, currency) => {
 const expressAuth = async (req, res, next, usergroup, strictMode) => {
 
     req.body.user = { status: false }
+    req.body.unlocked = false;
+
     /* no cookie is found, mark user as guest */
     if (req.cookies.swecom_bounipun === undefined) {
         if (strictMode) {
@@ -134,7 +141,15 @@ const expressAuth = async (req, res, next, usergroup, strictMode) => {
         return;
     }
 
-    /* if session valid, append user data on req body */
+    /* if session valid, check for any additional checks*/
+    if(req.body.lockCheck === true) {
+        /* run db query, match the lock access code from user doc in the unlock collection, (check for expiry, usage limit and black list) */
+        /* if valid, append unlock status to the user object */
+        req.body.unlocked = true;
+    }
+    
+    
+    /* append user data on req body */
     req.body.user = session.user;
     req.body.token = token;
     next();
