@@ -1,6 +1,6 @@
 <template>
   <div class="unlock-content">
-    <div class="form">
+    <div class="form flex col center">
       <!-- code input box -->
       <InputCredential
         v-model="unlockCode"
@@ -17,7 +17,7 @@
         class="action apply"
         :class="{ applied: unlockCodeApplied }"
       >
-        {{ unlockCodeApplied ? "Unlocking..." : "Apply Promo Code" }}
+        {{ unlockCodeApplied ? "Unlocking..." : "Apply Unlock Code" }}
       </button>
 
       <!-- code error -->
@@ -53,12 +53,12 @@ export default {
 
       /* check code validity on server */
       const applyUnlockCodeRequest = await this.$post("/applyUnlockCode", {
-            unlockCode: this.unlockCode
+        unlockCode: this.unlockCode,
       });
 
       /* if request failed */
-      if(applyUnlockCodeRequest.resolved === false) {
-           this.unlockCodeError = {
+      if (applyUnlockCodeRequest.resolved === false) {
+        this.unlockCodeError = {
           status: true,
           message: "Couldn't apply unlock code",
         };
@@ -66,8 +66,7 @@ export default {
       }
 
       /* refresh window */
-
-
+      console.log(applyUnlockCodeRequest);
     },
   },
 };

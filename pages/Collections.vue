@@ -120,7 +120,8 @@
         🔒 This collection is locked
       </h2>
       <br />
-      <button class="action">Request Access</button>
+      <UnlockContent />
+      <!-- <button class="action">Request Access</button> -->
     </div>
   </div>
 </template>

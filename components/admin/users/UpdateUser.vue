@@ -13,11 +13,7 @@
     <!-- first name -->
     <InputBox label="First Name" v-model="doc.firstName" disabled />
     <!-- sur name -->
-    <InputBox
-      v-model="doc.surName"
-      label="Sur Name"
-      disabled
-    />
+    <InputBox v-model="doc.surName" label="Sur Name" disabled />
     <!-- country iso code -->
     <InputBox v-model="doc.countryIsoCode" label="Country ISO Code" disabled />
     <!-- country dial code -->
@@ -30,12 +26,14 @@
     <InputBox v-model="doc.phoneNumber" label="Phone Number" disabled />
     <!-- usergroup -->
     <InputBox v-model="doc.usergroup" label="Usergroup" disabled />
+
+    <!-- content unlock code -->
+    <InputBox v-model="doc.contentUnlock.code" label="Content Unlock Code" disabled />
+    <!-- content unlock status -->
+    <Toggle v-model="doc.contentUnlock.status" activeText="✅" inactiveText="❌" label="Content Unlock" :disabled="true" />
+
     <!-- status -->
-    <Toggle
-      v-model="doc.status"
-      label="Status:"
-   
-    />
+    <Toggle v-model="doc.status" label="Status:" />
 
     <!-- update button -->
     <div class="center-space">
@@ -76,6 +74,10 @@ export default {
         countryIsoCode: "",
         phoneNumber: "",
         usergroup: "",
+        contentUnlock: {
+          status: false,
+          code: ''
+        },
         status: false
       },
       loading: false,
@@ -118,6 +120,7 @@ export default {
         countryIsoCode,
         phoneNumber,
         usergroup,
+        contentUnlock,
         status
       } = details;
       this.doc = {
@@ -128,6 +131,7 @@ export default {
         countryIsoCode,
         phoneNumber,
         usergroup,
+        contentUnlock: contentUnlock === undefined ? { status: false, code:''} : contentUnlock,
         status
       };
       this.editMode = true;
@@ -145,6 +149,10 @@ export default {
         countryIsoCode: "",
         phoneNumber: "",
         usergroup: "",
+        contentUnlock: {
+          status: false,
+          code: ''
+        },
         status: false
       });
 
