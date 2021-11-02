@@ -23,6 +23,7 @@ import faq from "./faq";
 import ticker from "./ticker";
 import admin from "./admin";
 import notification from "./notification"
+import unlock from "./unlock"
 
 const register = function () {
     imageUpload.methods.register();
@@ -50,6 +51,7 @@ const register = function () {
     ticker.methods.register();
     admin.methods.register();
     notification.methods.register();
+    unlock.methods.register()
 }
 
-export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage, user, session, order, payment, paymentIntent, globalConfig, orderSequence, faq, ticker, admin, notification, register };
+export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage, user, session, order, payment, paymentIntent, globalConfig, orderSequence, faq, ticker, admin, notification, unlock, register };

@@ -134,6 +134,11 @@ export default {
           path: "/admin-panel/admins",
           desc: "...",
         },
+          {
+          name: "Content Unlock",
+          path: "/admin-panel/unlock",
+          desc: "...",
+        },
       ],
       activeIndex: -1,
     };

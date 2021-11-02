@@ -11,8 +11,8 @@
     </div>
     <!-- update unlock code form -->
     <div :class="{updating: showForm}" class="update">
-        <UpdateCoupon v-show="showForm" ref="updateComponent" @updated="updateList" :model="model" @close="showForm = false" />
-        <AddNewItem v-if="!showForm" label="Coupon" @showForm="showForm = true" />
+        <UpdateUnlockCode v-show="showForm" ref="updateComponent" @updated="updateList" :model="model" @close="showForm = false" />
+        <AddNewItem v-if="!showForm" label="Unlock Code" @showForm="showForm = true" />
     </div>
 </div>
 </template>
