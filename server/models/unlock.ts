@@ -13,7 +13,8 @@ const schema = new mongoose.Schema({
         user: {
             type: ObjectId,
             ref: 'users'
-        }, usedOn: Date
+        }, 
+        usedOn: Date
     }],
     blackList: [{
         type: ObjectId,
@@ -75,6 +76,18 @@ export const methods = {
 
     },
     async updateUnlockCodeLog(code, user) {
+        /* fetch update */
+        const updateDoc = await model.findOne({
+            code: code.toUpperCase()
+        });
+        
+        /* update log */
+        updateDoc.log.push({
+            user,
+            usedOn: new Date()
+        });
+        
+        await updateDoc.save();
 
     }
 }

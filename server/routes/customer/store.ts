@@ -90,6 +90,10 @@ router.post('/applyUnlockCode', userAuth('customer'), async (req, res) => {
         }
     }, { returnOriginal: false }).select('contentUnlock');
 
+
+    /* update coupon log */
+    await unlockMethods.updateUnlockCodeLog(unlockCode, user._id);
+
     console.log(updateUserRequest);
 
     response.resolved = true;
