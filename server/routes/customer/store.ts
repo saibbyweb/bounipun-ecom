@@ -4,6 +4,7 @@ import { methods as couponMethods } from "@models/coupon";
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
 import { methods as messageMethods } from "@models/message";
 import { methods as notificationMethods } from "@models/notification";
+import { methods as unlockMethods } from "@models/unlock"
 
 let { sendContactFormEmailToAdmin } = notificationMethods;
 sendContactFormEmailToAdmin = sendContactFormEmailToAdmin.bind(notificationMethods);
@@ -64,6 +65,34 @@ router.post('/fetchCoupon', userAuth('customer', false), async (req, res) => {
     /* set reponse */
     response.resolved = couponDetails !== false;
     response.couponDetails = couponDetails;
+    res.send(response);
+});
+
+/* apply unlock code */
+router.post('/applyUnlockCode', userAuth('customer'), async (req, res) => {
+    /* response to be send back */
+    const response = { resolved: false };
+    /* extract unlock code and user id from body */
+    const { unlockCode, user } = req.body;
+    /* validate coupon */
+    const unlockDetails = await unlockMethods.validateUnlockCode(unlockCode, user._id);
+
+    if (unlockDetails === false) {
+        res.send(response);
+        return;
+    }
+
+    /* update user doc in db */
+    const updateUserRequest = await db.model('users').findOneAndUpdate({ _id: user._id }, {
+        contentUnlock: {
+            status: true,
+            code: unlockCode
+        }
+    }, { returnOriginal: false }).select('contentUnlock');
+
+    console.log(updateUserRequest);
+
+    response.resolved = true;
     res.send(response);
 });
 

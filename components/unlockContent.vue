@@ -34,25 +34,41 @@ export default {
     return {
       unlockCode: "",
       unlockCodeError: {
-          status: false,
-          message: ""
+        status: false,
+        message: "",
       },
-      unlockCodeApplied: false
-    }
+      unlockCodeApplied: false,
+    };
   },
   methods: {
-      async applyUnlockCode() {
-            /* validate input */
-            if(this.unlockCode.trim() === "" || this.unlockCode.length > 25) {
-                this.unlockCodeError = {
-                    status: true,
-                    message: 'Please enter a valid unlock code'
-                }
-                return;
-            }
-
-            /* check code validity on server */
+    async applyUnlockCode() {
+      /* validate input */
+      if (this.unlockCode.trim() === "" || this.unlockCode.length > 25) {
+        this.unlockCodeError = {
+          status: true,
+          message: "Please enter a valid unlock code",
+        };
+        return;
       }
+
+      /* check code validity on server */
+      const applyUnlockCodeRequest = await this.$post("/applyUnlockCode", {
+            unlockCode: this.unlockCode
+      });
+
+      /* if request failed */
+      if(applyUnlockCodeRequest.resolved === false) {
+           this.unlockCodeError = {
+          status: true,
+          message: "Couldn't apply unlock code",
+        };
+        return;
+      }
+
+      /* refresh window */
+
+
+    },
   },
 };
 </script>
