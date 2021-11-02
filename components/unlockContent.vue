@@ -1,0 +1,58 @@
+<template>
+  <div class="unlock-content">
+    <div class="form">
+      <!-- code input box -->
+      <InputCredential
+        v-model="unlockCode"
+        label="Enter Unlock Code"
+        :uppercase="true"
+        :checked="unlockCodeApplied"
+        :disabled="unlockCodeApplied"
+        @input="unlockCodeError.status = false"
+      />
+
+      <!-- apply button -->
+      <button
+        @click="applyUnlockCode"
+        class="action apply"
+        :class="{ applied: unlockCodeApplied }"
+      >
+        {{ unlockCodeApplied ? "Unlocking..." : "Apply Promo Code" }}
+      </button>
+
+      <!-- code error -->
+      <p v-if="unlockCodeError.status" class="error msg">
+        {{ unlockCodeError.message }}
+      </p>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      unlockCode: "",
+      unlockCodeError: {
+          status: false,
+          message: ""
+      },
+      unlockCodeApplied: false
+    }
+  },
+  methods: {
+      async applyUnlockCode() {
+            /* validate input */
+            if(this.unlockCode.trim() === "" || this.unlockCode.length > 25) {
+                this.unlockCodeError = {
+                    status: true,
+                    message: 'Please enter a valid unlock code'
+                }
+                return;
+            }
+
+            /* check code validity on server */
+      }
+  },
+};
+</script>
