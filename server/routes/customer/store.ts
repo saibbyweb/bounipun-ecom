@@ -75,7 +75,7 @@ router.post('/applyUnlockCode', userAuth('customer'), async (req, res) => {
     /* extract unlock code and user id from body */
     const { unlockCode, user } = req.body;
     /* validate coupon */
-    const unlockDetails = await unlockMethods.validateUnlockCode(unlockCode, user._id);
+    const unlockDetails = await unlockMethods.validateUnlockCode(unlockCode, user._id, true);
 
     if (unlockDetails === false) {
         res.send(response);

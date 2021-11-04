@@ -37,7 +37,7 @@ export const methods = {
         console.log('registered');
     },
     /* check for expiry and black list  */
-    async validateUnlockCode(code, user) {
+    async validateUnlockCode(code, user, applying = false) {
         const checkValidity: any = model.findOne({
             code: code.toUpperCase(),
             status: true,
@@ -62,7 +62,10 @@ export const methods = {
             console.log('User found in black list');
             return false;
         }
-
+        /* if code is not getting applied for the first time */
+        if(applying === false)
+            return codeDoc;
+            
         /* check if user already in log (prevent duplicate usage) */
         const logIndex = codeDoc.log.findIndex(log => log.user.toString() === user.toString())
 
@@ -71,7 +74,6 @@ export const methods = {
             return false;
         }
 
-        console.log(codeDoc);
         return codeDoc;
 
     },

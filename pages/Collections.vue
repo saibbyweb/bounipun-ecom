@@ -180,10 +180,17 @@ export default {
   },
   computed: {
     collectionLocked() {
-      const user = this.$store.state.customer.user;
-      /* if collection is locked and user is logged in */
-      if (this.collection.lock === true && user.authorzied === true) {
-        return !(user.contentUnlock.status === true)
+      /* if collection is locked */
+      if (this.collection.lock === true) {
+        const customer = this.$store.state.customer;
+        switch (customer.authorized) {
+          case true:
+            return !(customer.user.contentUnlock.status === true);
+            break;
+          case false:
+            return true;
+            break;
+        }
       }
 
       return false;
@@ -299,6 +306,7 @@ export default {
       this.$store.commit("customer/setLoading", true);
       const fetchPaginatedResults = this.$axios.$post("/searchProducts", {
         rawCriterion: this.rawCriterion,
+        lockCheck: this.collection.lock
       });
 
       /* wait for request to resolve */

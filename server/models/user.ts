@@ -143,6 +143,7 @@ const expressAuth = async (req, res, next, usergroup, strictMode) => {
 
     /* if session valid, check for any additional checks*/
     if(req.body.lockCheck === true) {
+        console.log('SEARCH QUERY DEMANS LOCK CHECK')
         /* run db query, match the lock access code from user doc in the unlock collection, (check for expiry, usage limit and black list) */
         /* if valid, append unlock status to the user object */
         req.body.unlocked = true;
@@ -282,7 +283,7 @@ export const methods = {
         /* remove all inactive colors */
         allProducts.forEach(product => {
             /* filter out inactive colors */
-            console.log(product.name, product.colors)
+            // console.log(product.name, product.colors)
             product.colors = product.colors.filter(color => color.status === true);
         });
 
@@ -363,7 +364,7 @@ export const methods = {
                 cartItem.collectionName = product.bounipun_collection.name;
                 /* shipping time */
                 cartItem.shippingTime = product.bounipun_collection.edt;
-                console.log(cartItem);
+                // console.log(cartItem);
             }
 
             /* if under bounipun and made to order */
