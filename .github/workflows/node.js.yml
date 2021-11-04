@@ -18,6 +18,11 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
+          rm -rf bounipun-ecom/node_modules
+          rm -rf bounipun-ecom/dist
+          rm -rf bounipun-ecom/server
+          rm  bounipun-ecom/yarn.lock
+          rm  bounipun-ecom/package.json
           cd ~/bounipun-ecom
           git reset --hard HEAD
           yarn install
