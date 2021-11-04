@@ -70,6 +70,7 @@ export default {
 
       /* refresh window */
       console.log(applyUnlockCodeRequest);
+      location.reload();
     },
   },
 };

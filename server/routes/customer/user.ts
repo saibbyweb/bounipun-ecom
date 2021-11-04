@@ -6,6 +6,7 @@ import { methods as paymentMethods } from "@models/payment"
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
 import axios from "axios";
 import { methods as notificationMethods } from "@models/notification";
+import { methods as unlockMethods } from "@models/unlock";
 
 let { sendCustomerRegistrationEmailToAdmin } = notificationMethods;
 sendCustomerRegistrationEmailToAdmin = sendCustomerRegistrationEmailToAdmin.bind(notificationMethods);
@@ -421,13 +422,28 @@ router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
     const { user } = req.body;
     let fields = 'firstName surName phoneNumber countryDialCode countryIsoCode profession cart orders wishlist addressBook contentUnlock';
 
-    const profile = await db
+    let profile: any = await db
         .model('users')
         .findOne({ _id: user._id })
         .populate('orders')
         .select(fields)
 
+    /* check if unlockContent is not undefined */
+    if(profile.contentUnlock === undefined) {
+        profile.contentUnlock = { code: '', status: ''}
+    }
+
     /* TODO: check content unlock status by validating unlock code status */
+    if(profile.contentUnlock.status === true) {
+        console.log('checking user unlock code')
+       const validated = await unlockMethods.validateUnlockCode(profile.contentUnlock.code, profile._id);
+       /* if validation failed, update user */
+       if(validated === false) {
+           console.log('user unlock code not valid')
+            profile.contentUnlock = { code: '', status: false }
+            profile = await profile.save();
+       }
+    }
 
     res.send(profile)
 });

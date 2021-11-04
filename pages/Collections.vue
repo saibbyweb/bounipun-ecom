@@ -180,7 +180,13 @@ export default {
   },
   computed: {
     collectionLocked() {
-      return this.collection.lock === undefined ? false : this.collection.lock;
+      const user = this.$store.state.customer.user;
+      /* if collection is locked and user is logged in */
+      if (this.collection.lock === true && user.authorzied === true) {
+        return !(user.contentUnlock.status === true)
+      }
+
+      return false;
     },
     isEscape() {
       return this.$route.query.slug.toUpperCase() === "ESCAPE";
