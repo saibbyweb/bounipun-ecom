@@ -13,6 +13,7 @@ import { methods as paymentIntentMethods } from "@models/paymentIntent";
 import { methods as productMethods } from "@models/product";
 import { methods as couponMethods } from "@models/coupon";
 import { methods as notificationMethods } from "@models/notification";
+import { methods as unlockMethods } from "@models/unlock";
 
 let { newOrderEmailToAdmin, orderCancelEmailToAdmin, orderUpdateEmailToCustomer } = notificationMethods;
 newOrderEmailToAdmin = newOrderEmailToAdmin.bind(notificationMethods);
@@ -46,19 +47,19 @@ const schema = new mongoose.Schema({
     usergroup: String,
     /* address book */
     addressBook: [{
-        firstName:  { type: String },
-        surName:  { type: String },
-        mobileNumber:  { type: String },
+        firstName: { type: String },
+        surName: { type: String },
+        mobileNumber: { type: String },
         email: { type: String },
-        addressType:  { type: String },
-        state:  { type: String },
-        countryDialCode:  { type: String },
-        countryIsoCode:  { type: String },
-        addressLine1:  { type: String },
-        addressLine2:  { type: String },
-        city:  { type: String },
-        postalCode:  { type: String },
-        type:  { type: String }
+        addressType: { type: String },
+        state: { type: String },
+        countryDialCode: { type: String },
+        countryIsoCode: { type: String },
+        addressLine1: { type: String },
+        addressLine2: { type: String },
+        city: { type: String },
+        postalCode: { type: String },
+        type: { type: String }
     }],
     cart: [
         {
@@ -99,16 +100,16 @@ const model = mongoose.model('users', schema);
 
 const formatCurrency = (price, currency) => {
     let formattedNumber = price;
-       /* if currence is INR */
-       if (currency === "INR") {
+    /* if currence is INR */
+    if (currency === "INR") {
         formattedNumber = new Intl.NumberFormat('en-IN', { currency: 'INR' }).format(price)
         return formattedNumber;
-      }
-      else {
+    }
+    else {
         formattedNumber = new Intl.NumberFormat('en-US', { currency: 'USD' }).format(price);
         return formattedNumber;
-      }
-  }
+    }
+}
 
 /* express auth */
 const expressAuth = async (req, res, next, usergroup, strictMode) => {
@@ -140,18 +141,25 @@ const expressAuth = async (req, res, next, usergroup, strictMode) => {
             next()
         return;
     }
+    
+    /* extract user from session */
+    const { user } = session;
 
     /* if session valid, check for any additional checks*/
-    if(req.body.lockCheck === true) {
+    if (req.body.lockCheck === true) {
         console.log('SEARCH QUERY DEMANS LOCK CHECK')
+        /* if content unlock status not found for user */
+        if(user.contentUnlock === undefined || user.contentUnlock.status === false)
+            req.body.unlocked = false;
         /* run db query, match the lock access code from user doc in the unlock collection, (check for expiry, usage limit and black list) */
+        const validated = await unlockMethods.validateUnlockCode(user.contentUnlock.code, user._id);
         /* if valid, append unlock status to the user object */
-        req.body.unlocked = true;
+        req.body.unlocked = validated === false ? false : true;
     }
-    
-    
+
+
     /* append user data on req body */
-    req.body.user = session.user;
+    req.body.user = user;
     req.body.token = token;
     next();
 
@@ -265,7 +273,7 @@ export const methods = {
                 .populate('variants.fabrics._id', { name: 1, info1: 1 })
                 .populate('colors._id', { name: 1 })
                 .populate('rtsDirectVariant', { name: 1 })
-                .populate('rtsDirectFabric', {name: 1})
+                .populate('rtsDirectFabric', { name: 1 })
                 .select('name slug styleId type availabilityType directPrice variants.fabrics.price colors.name colors.code colors.images colors.status rtsDirectVaraint rtsDirectFabric')
                 .lean();
             allProductPromises.push(fetchProduct);
@@ -403,7 +411,7 @@ export const methods = {
         return cartItems;
     },
     async clearUserCart(userId) {
-        await model.findOneAndUpdate({_id: userId }, { cart: []});
+        await model.findOneAndUpdate({ _id: userId }, { cart: [] });
     },
     /* find cartItem helper  */
     findCartItem(cart, cartItem) {
@@ -634,7 +642,7 @@ export const methods = {
         /* wait for query to process */
         const { response, error } = await task(nextDoc);
 
-        if(response === null || error) {
+        if (response === null || error) {
             return '..';
         }
 
@@ -734,11 +742,11 @@ export const methods = {
         /* notify admin about new order */
         newOrderEmailToAdmin({
             orderId: newOrderNumber,
-            amount: paymentIntent.amount/100,
+            amount: paymentIntent.amount / 100,
             currency: paymentIntent.currency,
             gateway: gateway
         });
-        
+
         /* extract name for this */
         console.log(userOrdersUpdated);
         const { firstName, surName } = userOrdersUpdated;
@@ -754,10 +762,10 @@ export const methods = {
         orderUpdateEmailToCustomer('placed', deliveryAddress.email, {
             name: firstName + " " + surName,
             orderId: newOrderNumber,
-            amount: paymentIntent.amount/100,
+            amount: paymentIntent.amount / 100,
             currency: paymentIntent.currency,
         });
-        
+
 
         return true;
     },
@@ -783,7 +791,7 @@ export const methods = {
             'items._id': subOrderId
         }
 
-        const cancelSubOrder:any = await db.model('orders').findOneAndUpdate(subOrderFilter, {
+        const cancelSubOrder: any = await db.model('orders').findOneAndUpdate(subOrderFilter, {
             $set: {
                 "items.$.status": "cancelled",
                 "items.$.cancellation": {
@@ -798,11 +806,11 @@ export const methods = {
                 }
             }
         });
-        
+
         console.log(cancelSubOrder.number, reason);
 
         /* notify admin */
-         await orderCancelEmailToAdmin({
+        await orderCancelEmailToAdmin({
             orderNumber: cancelSubOrder.number,
             reason
         })
