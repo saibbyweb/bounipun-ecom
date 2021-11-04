@@ -18,13 +18,9 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         port: ${{ secrets.SSH_PORT }}
         script: |
-          rm -rf bounipun-ecom/node_modules
-          rm -rf bounipun-ecom/dist
-          rm -rf bounipun-ecom/server
-          rm  bounipun-ecom/yarn.lock
-          rm  bounipun-ecom/package.json
+          rm -rf bounipun-ecom
+          git clone git@github.com:saibbyweb/bounipun-ecom
+          cp .env bounipun-ecom/.env
           cd ~/bounipun-ecom
-          git reset --hard HEAD
           yarn install
-          yarn build
           pm2 restart website
