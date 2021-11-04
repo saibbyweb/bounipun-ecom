@@ -333,7 +333,7 @@ export default {
 
   /* common all options */
   .all-options {
-    padding: 5% 5% 0 5%;
+    padding: 15% 5% 0 5%;
 
     .colors {
       .option {

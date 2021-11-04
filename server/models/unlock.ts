@@ -13,7 +13,7 @@ const schema = new mongoose.Schema({
         user: {
             type: ObjectId,
             ref: 'users'
-        }, 
+        },
         usedOn: Date
     }],
     blackList: [{
@@ -63,33 +63,50 @@ export const methods = {
             return false;
         }
         /* if code is not getting applied for the first time */
-        if(applying === false)
+        if (applying === false)
             return codeDoc;
-            
+
         /* check if user already in log (prevent duplicate usage) */
         const logIndex = codeDoc.log.findIndex(log => log.user.toString() === user.toString())
 
         if (logIndex !== -1) {
-            console.log('User already in log');
+            console.log('❌  User already in unlock usage log');
             return false;
         }
 
         return codeDoc;
 
     },
-    async updateUnlockCodeLog(code, user) {
-        /* fetch update */
-        const updateDoc = await model.findOne({
+    async updateUnlockCodeLog(code, user, action = 'push') {
+
+
+        /* fetch unlock code doc */
+        const unlockDoc = await model.findOne({
             code: code.toUpperCase()
         });
-        
-        /* update log */
-        updateDoc.log.push({
-            user,
-            usedOn: new Date()
-        });
-        
-        await updateDoc.save();
+
+        switch (action) {
+            /* add user to log */
+            case 'push':
+                unlockDoc.log.push({
+                    user,
+                    usedOn: new Date()
+                });
+                break;
+            case 'remove':
+                const foundIndex = unlockDoc.log.findIndex(entry => entry.user.toString() === user.toString())
+                if (foundIndex !== -1)
+                    unlockDoc.log.splice(foundIndex, 1);
+                break;
+        }
+
+
+
+        /*  re-save doc */
+        await unlockDoc.save();
+
+        /* unlock code log updated */
+        console.log('✅ User unlock code log updated, action: ', action);
 
     }
 }

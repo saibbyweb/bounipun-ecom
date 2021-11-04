@@ -438,16 +438,22 @@ router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
 
     /* TODO: check content unlock status by validating unlock code status */
     if(profile.contentUnlock.status === true) {
-       console.log('🔍 Unlock code applied, validating user unlock code...')
-       const validated = await unlockMethods.validateUnlockCode(profile.contentUnlock.code, profile._id);
-       /* if validation failed, update user */
+       console.log('🔍 Unlock code already applied, validating user unlock code...')
+        /* extract code */
+       const { code } = profile.contentUnlock
+       /* validate code */
+       const validated = await unlockMethods.validateUnlockCode(code, profile._id);
+       /* if validation failed, update user and unlock code log*/
        if(validated === false) {
            console.log('❌ User unlock code not valid, resetting user unlock status')
             profile.contentUnlock = { code: '', status: false }
             await profile.save();
+            await unlockMethods.updateUnlockCodeLog(code, profile._id, 'remove')
        }
+       else
+        console.log('✅ User unlock code validated');
     }
-    console.log('✅ User unlock code validated');
+    
 
     res.send(profile)
 });

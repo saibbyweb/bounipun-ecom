@@ -1,9 +1,9 @@
 <template>
-  <div class="center-col page -wh">
+  <div class="center-col page -wh" >
     <!-- collection header -->
     <div
       class="c-header center"
-      :class="{ isEscape }"
+      :class="{ isEscape, collectionLocked }"
       :style="{
         backgroundImage: `url(${getCollectionImage(collection.image)})`,
       }"
@@ -28,6 +28,7 @@
 
     <!-- filter sort toggles -->
     <FilterSortToggles
+    v-if="!collectionLocked"
       @openFilters="
         filtersOpen = true;
         sortOpen = false;
@@ -588,6 +589,10 @@ export default {
   // background: url("/demo_images/collection-header.png");
   background-size: cover;
   width: 100%;
+
+  &.collectionLocked {
+    margin-top:0;
+  }
 
   &.isEscape {
     margin-top: 0vh;

@@ -1040,7 +1040,7 @@ export default {
         position: fixed;
         width: 69%;
         right: 0;
-        top: o;
+        top: 0;
         @include marginTop;
         background-color: white;
         overflow: hidden;
