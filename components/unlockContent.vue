@@ -42,6 +42,9 @@ export default {
   },
   methods: {
     async applyUnlockCode() {
+      /* clear error */
+      this.unlockCodeError.status = false;
+
       /* validate input */
       if (this.unlockCode.trim() === "" || this.unlockCode.length > 25) {
         this.unlockCodeError = {
