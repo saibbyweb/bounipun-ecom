@@ -2,7 +2,7 @@
   <div class="whole-page">
     <!-- loading -->
     <div v-if="!productFetched" class="placeholder flex center">
-      <span> Loading product details... </span>
+      <span> {{ preLoadMessage }} </span>
     </div>
 
     <div v-if="productFetched" class="product-page flex start">
@@ -701,7 +701,15 @@ export default {
       const result = await this.$fetchDocument("products", slug, "customer");
       // const result = await this.$fetchData('products', {_id: slug, 'colors.status': false });
       if (!result.fetched) {
-        alert("Couldnt fetch product, check url");
+        this.preLoadMessage = "Product not found :("
+        // alert("Couldnt fetch product, check url");
+        return;
+      }
+
+      /* if product not found */
+      if(response.data.resolved === false) {
+        this.preLoadMessage = "Product not found :("
+        console.log('Product not found');
         return;
       }
 
@@ -795,8 +803,6 @@ export default {
       });
 
       this.variants = variants.sort((a, b) => a.order - b.order);
-
-      console.log(this.variants);
     },
     setActiveVariant(index) {
       this.activeFabricIndex = 0;

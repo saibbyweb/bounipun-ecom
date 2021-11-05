@@ -139,7 +139,7 @@ const expressAuth = async (req, res, next, usergroup, strictMode) => {
             res.send({ notAuthorized: true });
         else
             next()
-        return;
+        return; 
     }
     
     /* extract user from session */

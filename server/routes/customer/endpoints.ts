@@ -94,10 +94,17 @@ router.post('/findDocuments', async (req, res) => {
 });
 
 /* get product */
-router.post('/fetchProduct', async (req, res) => {
-    const { slug } = req.body;
+router.post('/fetchProduct', userAuth('customer', false), async (req, res) => {
+    const { slug, unlocked } = req.body;
     const collection = db.model('products');
-    let document: any = collection.findOne({ slug }).lean();
+    const filters: any = {slug}
+    /* if user is not unlocked, show only unlocked content */
+    if(unlocked === false)
+        filters.lock = false;
+    
+    console.log(unlocked, filters, '-- FETCH PRODUCTS');
+
+    let document: any = collection.findOne(filters).lean();
 
     document = await document
         .populate('bounipun_collection', 'name description variantNote edt')
@@ -107,6 +114,12 @@ router.post('/fetchProduct', async (req, res) => {
         .populate('rtsDirectVariant')
         .populate('rtsDirectFabric')
         .populate('rtsFabric')
+    
+    /* if no doc matched */
+    if(document === null) {
+        res.send({ resolved: false })
+        return;
+    }
 
     /* if bounipun colors, get grouped color data */
     if (document.colorSource === 'bounipun-colors') {
@@ -171,7 +184,7 @@ router.get('/getSearchFilters', async (req, res) => {
 })
 
 /* search products */
-router.post('/searchProducts', userAuth('customer', false),async (req, res) => {
+router.post('/searchProducts', userAuth('customer', false), async (req, res) => {
     /* destructure data from request body */
     const { rawCriterion, unlocked } = req.body;
 

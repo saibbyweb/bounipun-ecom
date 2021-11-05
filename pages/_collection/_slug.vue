@@ -2,7 +2,7 @@
   <div class="whole-page">
     <!-- loading -->
     <div v-if="!productFetched" class="placeholder flex center">
-      <span> Loading product details... </span>
+      <span> {{ preLoadMessage }} </span>
     </div>
 
     <div v-if="productFetched" class="product-page flex start">
@@ -116,11 +116,13 @@
                   {{
                     thirdPartyProduct || readyToShip
                       ? formatCurrency(adjustPrice(product.directPrice))
-                      : formatCurrency(adjustPrice(
-                          variants[activeVariantIndex].fabrics[
-                            activeFabricIndex
-                          ].price
-                        ))
+                      : formatCurrency(
+                          adjustPrice(
+                            variants[activeVariantIndex].fabrics[
+                              activeFabricIndex
+                            ].price
+                          )
+                        )
                   }}
                 </h5>
                 <p>Taxes and Shipping Included</p>
@@ -133,7 +135,7 @@
                 </button>
                 <button class="arrow">></button>
               </div>
-              <span style="font-size: 9px;">
+              <span style="font-size: 9px">
                 Standard Shipping: {{ shippingTime }} week(s)
               </span>
             </div>
@@ -215,9 +217,7 @@
             v-if="!thirdPartyProduct && multiPriced && !readyToShip"
             class="variants-available"
           >
-            <h4 class="section-heading">
-              Select Variant:
-            </h4>
+            <h4 class="section-heading">Select Variant:</h4>
             <p class="section-paragraph">
               {{ variantNote }}
             </p>
@@ -359,7 +359,7 @@ import InnerImageZoom from "vue-inner-image-zoom";
 export default {
   head() {
     return {
-      title: `${this.product.name} | Bounipun Kashmir`
+      title: `${this.product.name} | Bounipun Kashmir`,
     };
   },
   created() {
@@ -377,10 +377,10 @@ export default {
     }
   },
   components: {
-    "inner-image-zoom": InnerImageZoom
+    "inner-image-zoom": InnerImageZoom,
   },
   mounted() {
-    const slug = this.$route.params.collection + '/' + this.$route.params.slug;
+    const slug = this.$route.params.collection + "/" + this.$route.params.slug;
     this.fetchProduct(slug);
     setTimeout(() => {
       console.log(this.scrollPosition, "scroll position");
@@ -393,7 +393,7 @@ export default {
       //  this.$router.go()
       this.images = [];
       // this.fetchProduct(slug);
-    }
+    },
   },
   data() {
     return {
@@ -403,7 +403,7 @@ export default {
         dots: true,
         navButtons: true,
         centerMode: true,
-        autoplay: false
+        autoplay: false,
       },
       /* images with absolute paths */
       images: [],
@@ -411,7 +411,7 @@ export default {
       quantity: 1,
       addedToWishlist: false,
       product: {
-        name: 'loading...'
+        name: "loading...",
       },
       variants: [],
       activeColorIndex: 0,
@@ -421,7 +421,8 @@ export default {
       stockLimit: 3,
       scrollPosition: 0,
       sticky: false,
-      desktopSticky: false
+      desktopSticky: false,
+      preLoadMessage: "Loading product details..."
     };
   },
   computed: {
@@ -487,9 +488,9 @@ export default {
       }
 
       if (this.variants.length === 0) return "";
-      const detailsAndCare = this.variants[this.activeVariantIndex].fabrics[
-        this.activeFabricIndex
-      ].detailsAndCare;
+      const detailsAndCare =
+        this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex]
+          .detailsAndCare;
       if (detailsAndCare === undefined) return "";
       return detailsAndCare.split("\n");
     },
@@ -501,9 +502,8 @@ export default {
       return selectedVariant;
     },
     selectedFabric() {
-      const selectedFabric = this.variants[this.activeVariantIndex].fabrics[
-        this.activeFabricIndex
-      ];
+      const selectedFabric =
+        this.variants[this.activeVariantIndex].fabrics[this.activeFabricIndex];
 
       if (selectedFabric === undefined) return { name: "", info1: "" };
 
@@ -542,7 +542,7 @@ export default {
           ? this.variants[this.activeVariantIndex].fabrics[
               this.activeFabricIndex
             ]._id
-          : null
+          : null,
       };
     },
     alreadyInCart() {
@@ -564,10 +564,9 @@ export default {
       return link;
     },
     shippingTime() {
-      if(this.product.availabilityType === 'ready-to-ship')
-        return "1";
+      if (this.product.availabilityType === "ready-to-ship") return "1";
 
-      if (this.product.type === "under-bounipun") 
+      if (this.product.type === "under-bounipun")
         return this.product.bounipun_collection.edt;
       else "4";
     },
@@ -584,7 +583,7 @@ export default {
       // const foundIndex = wishlist.findIndex(entry => entry.product === this.product._id && entry.colorCode === this.activeColorCode);
 
       const foundIndex = wishlist.findIndex(
-        entry => entry.product === this.product._id
+        (entry) => entry.product === this.product._id
       );
 
       if (foundIndex !== -1) {
@@ -592,7 +591,7 @@ export default {
       }
 
       return false;
-    }
+    },
   },
   methods: {
     async toggleWishlist() {
@@ -611,7 +610,7 @@ export default {
       const addToWishlist = await this.$post("/wishlistActions", {
         action,
         product: this.product._id,
-        colorCode: this.activeColorCode
+        colorCode: this.activeColorCode,
       });
 
       /* if request failed */
@@ -624,7 +623,7 @@ export default {
       this.$store.commit("customer/addToRecentlyViewed", {
         product: this.product._id,
         name: this.product.name,
-        colorCode: this.product.colors[this.activeColorIndex].code
+        colorCode: this.product.colors[this.activeColorIndex].code,
       });
     },
     adjustPrice(price) {
@@ -668,7 +667,7 @@ export default {
       /* take cart item to server */
       const remoteAddToCart = await this.$post("/cartActions", {
         action: "add-to-cart",
-        cartItem: this.newCartItem
+        cartItem: this.newCartItem,
       });
 
       /* if request failed */
@@ -682,7 +681,7 @@ export default {
     },
     ifActiveColorInCategory(colors) {
       const foundIndex = colors.findIndex(
-        col => col.actualIndex == this.$route.query.activeColor
+        (col) => col.actualIndex == this.$route.query.activeColor
       );
       console.log(foundIndex);
       return foundIndex !== -1;
@@ -690,7 +689,7 @@ export default {
     setVariantColorToActiveFabric(index) {
       if (this.activeFabricIndex === index)
         return {
-          backgroundColor: this.variants[this.activeVariantIndex].hex
+          backgroundColor: this.variants[this.activeVariantIndex].hex,
         };
     },
     getVariantImage(image) {
@@ -698,22 +697,31 @@ export default {
       return this.$getOriginalPath(image);
     },
     async fetchProduct(slug) {
-      const productFetch = this.$axios.post('/fetchProduct', { slug });
+      const productFetch = this.$axios.post("/fetchProduct", { slug });
       const { response, error } = await this.$task(productFetch);
 
-      if(error) {
-        alert("Couldnt fetch product, check url");
+      if (error) {
+        alert("Couldnt fetch product.");
         return;
       }
 
-      console.log(response,'--PRODUCT');
+      console.log(response, '-- RESPONSE')
+      
+      /* if product not found */
+      if(response.data.resolved === false) {
+        this.preLoadMessage = "Product not found :("
+        console.log('Product not found');
+        return;
+      }
 
-      let result = {}
-      result.doc = {...response.data};
+      console.log(response, "--PRODUCT");
+
+      let result = {};
+      result.doc = { ...response.data };
 
       /* filter out inactive colors */
       result.doc.colors = result.doc.colors.filter(
-        color => color.status === true
+        (color) => color.status === true
       );
 
       if (result.doc.colors.length === 0) {
@@ -726,13 +734,13 @@ export default {
         let colorCategories = result.doc.colorData;
         // const colorCategories = Object.keys(colorData);
 
-        colorCategories.forEach(category => {
+        colorCategories.forEach((category) => {
           let colors = category.colors;
 
           /* attach actual index */
-          colors.forEach(color => {
+          colors.forEach((color) => {
             color.actualIndex = result.doc.colors.findIndex(
-              col => col._id === color._id
+              (col) => col._id === color._id
             );
           });
 
@@ -761,15 +769,15 @@ export default {
 
       /* fetch main color */
       const mainColorIndex = this.product.colors.findIndex(
-        color => color.mainColor === true
+        (color) => color.mainColor === true
       );
 
       if (mainColorIndex !== -1) this.activeColorIndex = mainColorIndex;
     },
     setVariants() {
-      const variants = this.product.variants.map(variant => {
+      const variants = this.product.variants.map((variant) => {
         /* map fabric details */
-        let fabrics = variant.fabrics.map(fabric => {
+        let fabrics = variant.fabrics.map((fabric) => {
           return {
             _id: fabric._id._id,
             name: fabric._id.name,
@@ -779,7 +787,7 @@ export default {
             description: fabric._id.description,
             writeUp: fabric._id.writeUp,
             detailsAndCare: fabric._id.detailsAndCare,
-            order: fabric._id.order
+            order: fabric._id.order,
           };
         });
 
@@ -796,7 +804,7 @@ export default {
           hex: variant._id.hex,
           description: variant._id.description,
           image: variant._id.image,
-          fabrics
+          fabrics,
         };
       });
 
@@ -816,13 +824,13 @@ export default {
       this.$vibrateDevice(300);
     },
     setActiveColor(index, colorId = false) {
-      history.pushState({}, '', `${this.$route.path}?activeColor=${index}`);
+      history.pushState({}, "", `${this.$route.path}?activeColor=${index}`);
 
       let activeIndex = index;
       if (colorId) {
         /* find index from actual color array */
         activeIndex = this.product.colors.findIndex(
-          color => color._id === colorId
+          (color) => color._id === colorId
         );
       }
       this.activeColorIndex = activeIndex;
@@ -833,20 +841,20 @@ export default {
     },
     isActiveBounipunColor(colorId) {
       const colorIndex = this.product.colors.findIndex(
-        color => color._id === colorId
+        (color) => color._id === colorId
       );
       return this.activeColorIndex === colorIndex;
     },
     setImages() {
-      this.product.colors.forEach(color => {
-        let images = color.images.map(
-          image => this.$getImage(image.path,'productPages')
+      this.product.colors.forEach((color) => {
+        let images = color.images.map((image) =>
+          this.$getImage(image.path, "productPages")
         );
 
         if (images.length === 0 && color._id !== null) {
           console.log("No image found");
           images = [];
-          images.push(this.$getImage(color.image,'productPages'));
+          images.push(this.$getImage(color.image, "productPages"));
         }
 
         this.images.push(images);
@@ -859,21 +867,22 @@ export default {
 
       if (images.length === 0) {
         return {
-          backgroundImage: `url(${
-            this.$getImage(color.image,'productPages')
-          })`
+          backgroundImage: `url(${this.$getImage(
+            color.image,
+            "productPages"
+          )})`,
         };
       }
 
-      let mainImage = images.find(image => image.main === true);
+      let mainImage = images.find((image) => image.main === true);
       mainImage = mainImage === undefined ? images[0] : mainImage;
-      const mainImagePath = this.$getImage(mainImage.path,'productPages');
+      const mainImagePath = this.$getImage(mainImage.path, "productPages");
       const mainImageCSS = {
-        backgroundImage: `url(${mainImagePath})`
+        backgroundImage: `url(${mainImagePath})`,
       };
       return mainImageCSS;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -957,7 +966,7 @@ export default {
         box-sizing: content-box;
         transform: rotate(0deg) scale(1);
         cursor: pointer;
-        
+
         background-color: white;
         display: flex;
         justify-content: center;
@@ -1189,7 +1198,7 @@ export default {
               text-align: center;
               padding: 0px;
               font-size: 10px;
-              color:black;
+              color: black;
 
               &:first-child {
                 border-right: 1px solid #919191;
