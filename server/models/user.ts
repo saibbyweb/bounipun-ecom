@@ -113,7 +113,7 @@ const formatCurrency = (price, currency) => {
 
 /* express auth */
 const expressAuth = async (req, res, next, usergroup, strictMode) => {
-
+    console.log('🔆 Entered customer auth middleware');
     req.body.user = { status: false }
     req.body.unlocked = false;
 
@@ -147,7 +147,7 @@ const expressAuth = async (req, res, next, usergroup, strictMode) => {
 
     /* if session valid, check for any additional checks*/
     if (req.body.lockCheck === true) {
-        console.log('SEARCH QUERY DEMANS LOCK CHECK')
+        console.log('🔑 Request asked for lock access check');
         /* if content unlock status not found for user */
         if(user.contentUnlock === undefined || user.contentUnlock.status === false)
             req.body.unlocked = false;

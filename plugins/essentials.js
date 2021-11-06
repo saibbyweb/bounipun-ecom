@@ -31,6 +31,10 @@ export default (context, inject) => {
     if (error) {
       return result;
     }
+    /* if request didnt fail, but update failed */
+    if(response.updated === false) {
+      return response;
+    }
 
     /* set documents */
     result.updated = true;

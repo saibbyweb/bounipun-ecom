@@ -251,12 +251,19 @@ router.post('/updateDocument', adminAuth('1'), async (req, res) => {
     const collection = db.model(model);
     let result: any;
 
-    if (editMode) {
-        result = await collection.findOneAndUpdate({ _id: details._id }, details, { upsert: true, returnOriginal: false });
+    try {
+        if (editMode) {
+            result = await collection.findOneAndUpdate({ _id: details._id }, details, { upsert: true, returnOriginal: false });
+        }
+        else {
+            delete details._id;
+            result = await new collection(details).save();
+        }
     }
-    else {
-        delete details._id;
-        result = await new collection(details).save();
+    catch (e) {
+        console.log('❌ UPDATE FAILED')
+        res.send({ updated: false, message: 'Could not save document.' });
+        return;
     }
 
     // console.log(result);

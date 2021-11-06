@@ -88,6 +88,8 @@
         Delete
       </button>
     </div>
+    <!-- error message -->
+    <Toast :msg="error.msg" :show="error.status" :error="true" />
   </div>
 </template>
 
@@ -130,9 +132,13 @@ export default {
           value: "type2",
         },
       ],
+      error: {
+        status: false,
+        msg: "Document could not be saved",
+      },
       loading: false,
       updated: false,
-    }
+    };
   },
   mounted() {},
   methods: {
@@ -147,7 +153,16 @@ export default {
       );
       this.loading = false;
 
-      if (!result.updated) return;
+      console.log(result, "-- FROM UPDATE UNLOCK ");
+
+      if (!result.updated) {
+        this.error.msg = result.message;
+        this.error.status = true;
+        setTimeout(() => {
+          this.error.status = false;
+        }, 2000);
+        return;
+      }
 
       this.$emit("updated");
       this.populateForm(result.doc);

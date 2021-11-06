@@ -21,6 +21,9 @@ export default {
             case 'ticker':
                 await ticker.methods.updateTickers(details, editMode);
                 break;
+            // case 'unlock':
+            //     await unlock.methods.updateUnlockCode()
+            //     break;
             default:
                 break;
         }

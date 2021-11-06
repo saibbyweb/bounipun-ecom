@@ -188,7 +188,7 @@ router.post('/searchProducts', userAuth('customer', false), async (req, res) => 
     /* destructure data from request body */
     const { rawCriterion, unlocked } = req.body;
 
-    console.log(rawCriterion);
+    // console.log(rawCriterion);
 
     /* construct criterion from raw criterion */
     let criterion: any = {};
@@ -229,7 +229,7 @@ router.post('/searchProducts', userAuth('customer', false), async (req, res) => 
         filters = { ...colorFilter, ...filters }
     }
 
-    console.log(JSON.stringify(filters));
+    // console.log(JSON.stringify(filters));
 
     /* add generic filters (product and color should be active) */
     // filters = {...filters, status: true, 'colors.status': true }

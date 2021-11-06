@@ -58,11 +58,17 @@ export default {
   },
   methods: {
     async fetchWishlistItems() {
-      const wishlistItems = await this.$post("/fetchWishlist");
+      // const wishlistItems = await this.$post("/fetchWishlist");
+
+      const wishlistItems = await this.$axios.$post('/fetchWishlist', {
+        lockCheck: true
+      });
+
+      console.log(wishlistItems);
 
       if (wishlistItems.resolved === false) return;
 
-      let { products } = wishlistItems.response;
+      let { products } = wishlistItems;
 
       products.forEach(product => {
         /* filter out inactive colors */

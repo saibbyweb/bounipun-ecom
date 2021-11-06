@@ -697,7 +697,7 @@ export default {
       return this.$getOriginalPath(image);
     },
     async fetchProduct(slug) {
-      const productFetch = this.$axios.post("/fetchProduct", { slug });
+      const productFetch = this.$axios.post("/fetchProduct", { slug, lockCheck: true });
       const { response, error } = await this.$task(productFetch);
 
       if (error) {

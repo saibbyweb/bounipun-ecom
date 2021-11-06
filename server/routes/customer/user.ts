@@ -280,6 +280,9 @@ router.post('/fetchLocalCart', async (req, res) => {
 
 /* detch wishlist */
 router.post('/fetchWishlist', userAuth('customer'), async (req, res) => {
+
+    const { unlocked } = req.body;
+
     let response = { resolved: false, products: [] }
 
     const details: any = await db.model('users').findOne({ _id: req.body.user._id }).select('name wishlist').populate({
@@ -289,9 +292,14 @@ router.post('/fetchWishlist', userAuth('customer'), async (req, res) => {
         }
     });
 
-    let products = details.wishlist.map(item => item.product)
-    /* filter products which are inactive */
-    products = products.filter(product => product.status)
+    let products = details.wishlist.map(item => item.product);
+
+    /* filter products which are inactive and also check for locked products */
+    products = products.filter(product => {
+        if(product.lock === true && unlocked === false)
+            return;
+        return product.status === true
+    });
 
 
     response.products = products;
@@ -409,7 +417,7 @@ router.post('/addressBookActions', userAuth('customer'), async (req, res) => {
     }
 
     /* save address book back to database */
-    
+
     console.log(addressBook);
 
     await db.model('users').findOneAndUpdate({ _id: user._id }, { addressBook });
@@ -430,30 +438,30 @@ router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
 
     /* check if unlockContent is not undefined */
     const { contentUnlock } = profile;
-    profile.contentLock = contentUnlock === undefined ? { code: '', status: ''} : contentUnlock;
+    profile.contentLock = contentUnlock === undefined ? { code: '', status: '' } : contentUnlock;
 
-    if(profile.contentUnlock.status === false) {
-        console.log('🔒 Unlock code not applied.')  
+    if (profile.contentUnlock.status === false) {
+        console.log('🔒 Unlock code not applied.')
     }
 
     /* TODO: check content unlock status by validating unlock code status */
-    if(profile.contentUnlock.status === true) {
-       console.log('🔍 Unlock code already applied, validating user unlock code...')
+    if (profile.contentUnlock.status === true) {
+        console.log('🔍 Unlock code already applied, validating user unlock code...')
         /* extract code */
-       const { code } = profile.contentUnlock
-       /* validate code */
-       const validated = await unlockMethods.validateUnlockCode(code, profile._id);
-       /* if validation failed, update user and unlock code log*/
-       if(validated === false) {
-           console.log('❌ User unlock code not valid, resetting user unlock status')
+        const { code } = profile.contentUnlock
+        /* validate code */
+        const validated = await unlockMethods.validateUnlockCode(code, profile._id);
+        /* if validation failed, update user and unlock code log*/
+        if (validated === false) {
+            console.log('❌ User unlock code not valid, resetting user unlock status')
             profile.contentUnlock = { code: '', status: false }
             await profile.save();
             await unlockMethods.updateUnlockCodeLog(code, profile._id, 'remove')
-       }
-       else
-        console.log('✅ User unlock code validated');
+        }
+        else
+            console.log('✅ User unlock code validated');
     }
-    
+
 
     res.send(profile)
 });

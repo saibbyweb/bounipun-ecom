@@ -1,8 +1,12 @@
 import { mongoose, ObjectId, task } from "@helpers/essentials";
+import { Schema } from "mongoose";
 
 /* schema */
-const schema = new mongoose.Schema({
-    code: String,
+const schema: Schema = new mongoose.Schema({
+    code: {
+        type: String,
+        unique: true
+    },
     type: String,
     validity: Number,
     validityRange: {

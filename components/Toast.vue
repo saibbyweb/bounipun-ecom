@@ -1,7 +1,7 @@
 <template>
 <div class="response">
     <div v-if="show" class="toast center">
-        <span class="msg">
+        <span class="msg" :class="{error}">
             {{ msg }}
         </span>
     </div>
@@ -12,7 +12,11 @@
 export default {
     props: {
         msg: String,
-        show: Boolean
+        show: Boolean,
+        error: {
+            type: Boolean,
+            default: false
+        }
     }
 }
 </script>
@@ -49,6 +53,10 @@ export default {
         background-color: #2d985c;
         color: white;
         font-weight: 500;
+
+        &.error {
+            background-color: rgb(173, 45, 45);
+        }
     }
 }
 </style>
