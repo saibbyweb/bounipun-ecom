@@ -85,7 +85,7 @@ export const methods = {
 
 
         /* fetch unlock code doc */
-        const unlockDoc = await model.findOne({
+        const unlockDoc: any = await model.findOne({
             code: code.toUpperCase()
         });
 
@@ -96,6 +96,7 @@ export const methods = {
                     user,
                     usedOn: new Date()
                 });
+                unlockDoc.validity = unlockDoc.validity - 1;
                 break;
             case 'remove':
                 const foundIndex = unlockDoc.log.findIndex(entry => entry.user.toString() === user.toString())
@@ -103,9 +104,6 @@ export const methods = {
                     unlockDoc.log.splice(foundIndex, 1);
                 break;
         }
-
-
-
         /*  re-save doc */
         await unlockDoc.save();
 
