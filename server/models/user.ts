@@ -113,7 +113,7 @@ const formatCurrency = (price, currency) => {
 
 /* express auth */
 const expressAuth = async (req, res, next, usergroup, strictMode) => {
-    console.log('🔆 Entered customer auth middleware');
+    console.log('🔹🔹 Customer Auth Middleware');
     req.body.user = { status: false }
     req.body.unlocked = false;
 
@@ -139,22 +139,30 @@ const expressAuth = async (req, res, next, usergroup, strictMode) => {
             res.send({ notAuthorized: true });
         else
             next()
-        return; 
+        return;
     }
-    
+
     /* extract user from session */
     const { user } = session;
 
     /* if session valid, check for any additional checks*/
     if (req.body.lockCheck === true) {
-        console.log('🔑 Request asked for lock access check');
+        console.log('🔸🔸 Request asked for lock access check');
         /* if content unlock status not found for user */
-        if(user.contentUnlock === undefined || user.contentUnlock.status === false)
+        if (user.contentUnlock === undefined || user.contentUnlock.status === false)
             req.body.unlocked = false;
-        /* run db query, match the lock access code from user doc in the unlock collection, (check for expiry, usage limit and black list) */
-        const validated = await unlockMethods.validateUnlockCode(user.contentUnlock.code, user._id);
-        /* if valid, append unlock status to the user object */
-        req.body.unlocked = validated === false ? false : true;
+
+        if (user.contentUnlock.status === true) {
+            /* run db query, match the lock access code from user doc in the unlock collection, (check for expiry, usage limit and black list) */
+            const validated = await unlockMethods.validateUnlockCode(user.contentUnlock.code, user._id);
+            /* if valid, append unlock status to the user object */
+            if (validated !== false)
+                console.log('✅ Lock access granted')
+
+            req.body.unlocked = validated === false ? false : true;
+        }
+        else
+            console.log('🔸🔸 No unlock code applied!')
     }
 
 
@@ -255,7 +263,7 @@ export const methods = {
     userAuth: (userGroup, strictMode = true) => (...args: [req: any, res: any, next: any]) => {
         return expressAuth(...args, userGroup, strictMode)
     },
-    async getCartItems(cart) {
+    async getCartItems(cart, unlocked = false) {
 
         /*  if cart is empty */
         if (cart.length === 0)
@@ -266,15 +274,21 @@ export const methods = {
         /* fetch all relevant details for each unique product */
         let allProductPromises = []
         for (const productId of allUniqueProducts) {
+            /* filter */
+            const filter: any = { _id: productId, status: true };
+
+            if (unlocked === false)
+                filter.lock = false;
+
             const fetchProduct = db.model('products')
-                .findOne({ _id: productId, status: true })
+                .findOne(filter)
                 .populate('bounipun_collection', { _id: 0, name: 1, edt: 1 })
                 .populate('variants._id', { name: 1, hsnCode: 1, gstPercentage: 1 })
                 .populate('variants.fabrics._id', { name: 1, info1: 1 })
                 .populate('colors._id', { name: 1 })
                 .populate('rtsDirectVariant', { name: 1 })
                 .populate('rtsDirectFabric', { name: 1 })
-                .select('name slug styleId type availabilityType directPrice variants.fabrics.price colors.name colors.code colors.images colors.status rtsDirectVaraint rtsDirectFabric')
+                .select('name slug styleId type availabilityType directPrice variants.fabrics.price colors.name colors.code colors.images colors.status rtsDirectVaraint rtsDirectFabric lock')
                 .lean();
             allProductPromises.push(fetchProduct);
         }

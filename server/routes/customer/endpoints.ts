@@ -101,8 +101,6 @@ router.post('/fetchProduct', userAuth('customer', false), async (req, res) => {
     /* if user is not unlocked, show only unlocked content */
     if(unlocked === false)
         filters.lock = false;
-    
-    console.log(unlocked, filters, '-- FETCH PRODUCTS');
 
     let document: any = collection.findOne(filters).lean();
 

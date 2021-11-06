@@ -85,7 +85,7 @@ export default {
         /* if no results found */
         const fetchedResults = results[0];
         if (fetchedResults.documents.length === 0 && fetchedResults.totalMatches.length === 0) {
-            console.log('No results found');
+            // console.log('No results found');
             return paginatedResults;
         }
 

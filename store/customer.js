@@ -269,6 +269,7 @@ export const actions = {
 
     const cartItems = await this.$post(endPoint, {
       cart: state.cart,
+      lockCheck: state.authorized ? true : false
     });
 
     if (cartItems.resolved === false) {

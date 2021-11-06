@@ -199,7 +199,8 @@ export default {
       /* post raw criterion to the server */
       this.$store.commit("customer/setLoading", true);
       const fetchPaginatedResults = this.$axios.$post("/searchProducts", {
-        rawCriterion: this.rawCriterion
+        rawCriterion: this.rawCriterion,
+        lockCheck: true
       });
 
       /* wait for request to resolve */
@@ -357,7 +358,6 @@ export default {
       return matchedColors;
     },
     resultsFetched(result) {
-      console.log("AM I BEING WATCH");
       if (result.docs.length === 0) {
         this.products = [];
         return;

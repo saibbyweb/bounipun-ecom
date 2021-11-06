@@ -266,8 +266,9 @@ router.post('/shiftCart', userAuth('customer'), async (req, res) => {
 
 /* fetch cart */
 router.post('/fetchCart', userAuth('customer'), async (req, res) => {
+    const { unlocked } = req.body;
     const cart = req.body.user.cart;
-    const cartItems = await userMethods.getCartItems(cart);
+    const cartItems = await userMethods.getCartItems(cart, unlocked);
     res.send(cartItems);
 });
 

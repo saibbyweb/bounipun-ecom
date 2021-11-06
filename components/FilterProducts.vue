@@ -86,7 +86,7 @@
                 :value="collection.value"
                 v-model="collection.checked"
               />
-              {{ collection.name.toLowerCase() }}</label
+               {{ collection.lock ? "🔒" : "" }} {{ collection.name.toLowerCase() }}</label
             >
           </div>
         </Accordion>

@@ -8,6 +8,14 @@ const { app } = server;
 app.set('trust proxy', true);
 server.enableCorsIfNeeded();
 
+if(process.env.NODE_ENV === 'development') {
+    app.use((req, res, next) => {
+        console.log('🔘 ' + req.method + ': ' + req.url);
+        next();
+    });
+}
+
+
 app.use('/', mainRoutes);
 app.use('/', customerRoutes.endpoints);
 app.use('/', customerRoutes.user);
