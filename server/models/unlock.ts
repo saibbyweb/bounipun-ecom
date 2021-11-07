@@ -82,8 +82,6 @@ export const methods = {
 
     },
     async updateUnlockCodeLog(code, user, action = 'push') {
-
-
         /* fetch unlock code doc */
         const unlockDoc: any = await model.findOne({
             code: code.toUpperCase()
@@ -109,7 +107,6 @@ export const methods = {
 
         /* unlock code log updated */
         console.log('✅ User unlock code log updated, action: ', action);
-
     }
 }
 

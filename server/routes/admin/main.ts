@@ -234,7 +234,7 @@ router.post('/fetchPaginatedResults', async (req, res) => {
 });
 
 /* update api */
-router.post('/updateDocument', adminAuth('1'), async (req, res) => {
+router.post('/updateDocument', adminAuth('1', true), async (req, res) => {
     /* extracting query details */
     const { model, details, editMode } = req.body;
 
@@ -272,7 +272,7 @@ router.post('/updateDocument', adminAuth('1'), async (req, res) => {
 });
 
 /* delete document */
-router.post('/deleteDocument', adminAuth('1'), async (req, res) => {
+router.post('/deleteDocument', adminAuth('1', true), async (req, res) => {
     const { model, _id } = req.body;
     const collection = db.model(model);
     console.log(_id, model);
@@ -280,14 +280,13 @@ router.post('/deleteDocument', adminAuth('1'), async (req, res) => {
     console.log(result);
     res.send(result);
 })
-
-router.get('/test', async (req, res) => {
-    /* model */
-    const images = await db.collection('imageuploads').find({ uploader: 'admin' }).toArray();
-    console.log(images);
-    // images.forEach(image => console.log(image));
-    res.send('bro');
-})
+/* populate $_ids */
+router.post('/populate', adminAuth('1', true), async (req, res) => {
+    let response = [];
+    const { model, _ids, fields } = req.body;
+    response = await db.model(model).find({ _id: { $in: _ids } }).select(fields).lean();
+    res.send(response);
+});
 
 /* update order (of lists in admin panel) */
 router.post('/updateOrder', async (req, res) => {

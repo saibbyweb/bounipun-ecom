@@ -42,7 +42,10 @@
 
     <!-- log -->
     <div class="log">
+      
       <label class="label"> Usage Log </label>
+      <button style="font-size:11px; padding:2px 5px; background-color: #333333; color:white;" v-if="doc.log.length > 0" @click="populateUsageLog()"> Fetch Names </button>
+
       <div class="flex center col">
         <div
           class="item flex around"
@@ -53,10 +56,17 @@
             Used on: <br />
             {{ $formatDate(item.usedOn) }}</span
           >
+
           <span>
             Customer ID: <br />
             {{ item.user }}</span
           >
+
+          <span v-if="customersUnlocked.length > 0">
+             Name: <br />
+            {{ customersUnlocked[index].firstName }}
+            {{ customersUnlocked[index].surName }}
+          </span>
         </div>
       </div>
     </div>
@@ -138,6 +148,7 @@ export default {
       },
       loading: false,
       updated: false,
+      customersUnlocked: [],
     };
   },
   mounted() {},
@@ -210,7 +221,19 @@ export default {
     },
     resetForm() {
       this.populateForm(baseDoc());
+      this.customersUnlocked = []
       this.editMode = false;
+    },
+    async populateUsageLog() {
+      const result = await this.$axios.$post("/populate", {
+        model: "users",
+        fields: "firstName surName",
+        _ids: this.doc.log.map((item) => item.user),
+      });
+
+      if (result.length > 0) {
+        this.customersUnlocked = result;
+      }
     },
   },
 };
