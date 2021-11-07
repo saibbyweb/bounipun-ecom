@@ -261,6 +261,7 @@ router.post('/updateDocument', adminAuth('1', true), async (req, res) => {
         }
     }
     catch (e) {
+        console.log(e);
         console.log('❌ UPDATE FAILED')
         res.send({ updated: false, message: 'Could not save document.' });
         return;

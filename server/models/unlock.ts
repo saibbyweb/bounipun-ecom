@@ -21,8 +21,11 @@ const schema: Schema = new mongoose.Schema({
         usedOn: Date
     }],
     blackList: [{
-        type: ObjectId,
-        ref: 'users'
+        name: String,
+        customer: {
+            type: ObjectId,
+            ref: 'users'
+        }
     }],
     description: String,
     status: Boolean

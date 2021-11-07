@@ -42,9 +42,19 @@
 
     <!-- log -->
     <div class="log">
-      
       <label class="label"> Usage Log </label>
-      <button style="font-size:11px; padding:2px 5px; background-color: #333333; color:white;" v-if="doc.log.length > 0" @click="populateUsageLog()"> Fetch Names </button>
+      <button
+        style="
+          font-size: 11px;
+          padding: 2px 5px;
+          background-color: #333333;
+          color: white;
+        "
+        v-if="doc.log.length > 0"
+        @click="populateUsageLog()"
+      >
+        Fetch Names
+      </button>
 
       <div class="flex center col">
         <div
@@ -63,7 +73,7 @@
           >
 
           <span v-if="customersUnlocked.length > 0">
-             Name: <br />
+            Name: <br />
             {{ customersUnlocked[index].firstName }}
             {{ customersUnlocked[index].surName }}
           </span>
@@ -74,32 +84,47 @@
     <!-- black list -->
     <div class="black-list">
       <label class="label"> Black List: </label>
+      <autocomplete
+        inputClass="small"
+        ref="autocomplete"
+        :source="nonBlacklisted"
+        @enter="addToBlackList"
+        @selected="addToBlackList"
+      >
+      </autocomplete>
+
+      <div class="list">
+        <div class="selected" v-for="(blacklisted,index) in doc.blackList" :key="index">
+            <span> {{ blacklisted.name }} </span>
+            <img @click="removeFromBlacklist(index)" src="/icons/light/trash.png" />
+        </div>
     </div>
 
-    <!-- publish toggle -->
-    <Toggle v-model="doc.status" label="Status" />
-    <!-- update button -->
-    <div class="center-space">
-      <!-- loading bar -->
-      <img v-if="loading" class="loading" src="/loading.gif" />
-      <!-- action complete gif -->
-      <img v-if="updated" class="action-complete" src="/complete.gif" />
-      <!-- update document -->
-      <button @click="updateDocument" class="action" :disabled="loading">
-        {{ editMode ? "Apply Changes" : "Add Unlock Code" }}
-      </button>
-      <!-- delete document -->
-      <button
-        v-if="editMode"
-        @click="deleteDocument"
-        class="action delete"
-        :disabled="loading"
-      >
-        Delete
-      </button>
+      <!-- publish toggle -->
+      <Toggle v-model="doc.status" label="Status" />
+      <!-- update button -->
+      <div class="center-space">
+        <!-- loading bar -->
+        <img v-if="loading" class="loading" src="/loading.gif" />
+        <!-- action complete gif -->
+        <img v-if="updated" class="action-complete" src="/complete.gif" />
+        <!-- update document -->
+        <button @click="updateDocument" class="action" :disabled="loading">
+          {{ editMode ? "Apply Changes" : "Add Unlock Code" }}
+        </button>
+        <!-- delete document -->
+        <button
+          v-if="editMode"
+          @click="deleteDocument"
+          class="action delete"
+          :disabled="loading"
+        >
+          Delete
+        </button>
+      </div>
+      <!-- error message -->
+      <Toast :msg="error.msg" :show="error.status" :error="true" />
     </div>
-    <!-- error message -->
-    <Toast :msg="error.msg" :show="error.status" :error="true" />
   </div>
 </template>
 
@@ -151,10 +176,34 @@ export default {
       customersUnlocked: [],
     };
   },
-  mounted() {},
+  computed: {
+    nonBlacklisted() {
+      return this.unlockedCustomersWithIds.filter(entry => {
+        return this.doc.blackList.findIndex(blacklisted => blacklisted.customer === entry.customer) === -1
+      })
+    },
+    unlockedCustomersWithIds() {
+      if (this.customersUnlocked.length === 0)
+        return [{ name: "No List available" }];
+
+      let list = this.doc.log.map((item, index) => {
+        const { firstName, surName } = this.customersUnlocked[index];
+        return {
+          name: firstName + " " + surName,
+          customer: item._id,
+        };
+      });
+
+      return list;
+ 
+    },
+  },
   methods: {
     async updateDocument() {
       this.doc.code = this.doc.code.toUpperCase();
+      
+      /* update black list (should be string of user _ids) */
+      // this.doc.blackList = this.doc.blackList.map(blackListed => blackListed.name);
 
       this.loading = true;
       const result = await this.$updateDocument(
@@ -221,7 +270,7 @@ export default {
     },
     resetForm() {
       this.populateForm(baseDoc());
-      this.customersUnlocked = []
+      this.customersUnlocked = [];
       this.editMode = false;
     },
     async populateUsageLog() {
@@ -235,11 +284,49 @@ export default {
         this.customersUnlocked = result;
       }
     },
+    addToBlackList(data) {
+      /* save customer id in black list */
+      this.doc.blackList.push(data.selectedObject);
+    },
+    removeFromBlacklist(index) {
+      this.doc.blackList.splice(index, 1);
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+
+.list {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .selected {
+        background: #d68595;
+        color: white;
+        border-radius: 20px;
+        padding: 7px;
+        margin: 2px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+
+        span {
+            font-size: 12px;
+            color: white;
+        }
+
+        img {
+            margin-left: 1vw;
+            width: 2vw;
+            cursor: pointer;
+        }
+    }
+}
+
 .section {
   position: relative;
   margin: 10px;
