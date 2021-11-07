@@ -63,10 +63,10 @@ export const methods = {
         }
 
         /* coupon is valid, check if user is in black list*/
-        const blackListIndex = codeDoc.blackList.findIndex(u => u.toString() === user.toString())
+        const blackListIndex = codeDoc.blackList.findIndex(u => u.customer.toString() === user.toString())
 
         if (blackListIndex !== -1) {
-            console.log('User found in black list');
+            console.log('❌ User found in black list');
             return false;
         }
         /* if code is not getting applied for the first time */

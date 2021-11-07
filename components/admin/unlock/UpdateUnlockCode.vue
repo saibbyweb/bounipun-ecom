@@ -82,7 +82,8 @@
     </div>
 
     <!-- black list -->
-    <div class="black-list">
+    <div  class="black-list">
+      <div v-if="doc.log.length > 0">
       <label class="label"> Black List: </label>
       <autocomplete
         inputClass="small"
@@ -92,6 +93,7 @@
         @selected="addToBlackList"
       >
       </autocomplete>
+      </div>
 
       <div class="list">
         <div class="selected" v-for="(blacklisted,index) in doc.blackList" :key="index">
@@ -184,13 +186,13 @@ export default {
     },
     unlockedCustomersWithIds() {
       if (this.customersUnlocked.length === 0)
-        return [{ name: "No List available" }];
+        return [{ name: "Click to fetch names!", customer: false }];
 
       let list = this.doc.log.map((item, index) => {
         const { firstName, surName } = this.customersUnlocked[index];
         return {
           name: firstName + " " + surName,
-          customer: item._id,
+          customer: item.user,
         };
       });
 
@@ -285,6 +287,10 @@ export default {
       }
     },
     addToBlackList(data) {
+      if(data.selectedObject.customer === false) {
+        this.populateUsageLog();
+        return;
+      }
       /* save customer id in black list */
       this.doc.blackList.push(data.selectedObject);
     },

@@ -452,6 +452,7 @@ router.post('/fetchProfile', userAuth('customer'), async (req, res) => {
         const { code } = profile.contentUnlock
         /* validate code */
         const validated = await unlockMethods.validateUnlockCode(code, profile._id);
+        
         /* if validation failed, update user and unlock code log*/
         if (validated === false) {
             console.log('❌ User unlock code not valid, resetting user unlock status')

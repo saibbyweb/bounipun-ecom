@@ -12,7 +12,6 @@ const router = server.express.Router();
 /* get document with any filter */
 router.post('/findDocument', async (req, res) => {
     const { model, filters } = req.body;
-    console.log(model, filters);
     const collection = db.model(model);
     let documentFetch: any = collection.findOne(filters).lean();
 
