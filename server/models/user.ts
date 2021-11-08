@@ -149,8 +149,10 @@ const expressAuth = async (req, res, next, usergroup, strictMode) => {
     if (req.body.lockCheck === true) {
         console.log('🔸🔸 Request asked for lock access check');
         /* if content unlock status not found for user */
-        if (user.contentUnlock === undefined || user.contentUnlock.status === false)
-            req.body.unlocked = false;
+        if(user.contentUnlock === undefined) {
+            user.contentUnlock = { status: false, code: ''}
+        }
+           
 
         if (user.contentUnlock.status === true) {
             /* run db query, match the lock access code from user doc in the unlock collection, (check for expiry, usage limit and black list) */
