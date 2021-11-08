@@ -42,7 +42,6 @@ router.post('/uploadImage', uploader.single('productImage'), async (req: any, re
 /* get document route */
 router.post('/getDocument', async (req, res) => {
     const { model, _id, requestedBy } = req.body;
-    console.log(_id, '-fetch doc called')
     const collection = db.model(model);
     let document: any = collection.findOne({ _id }).lean()
 
@@ -99,7 +98,7 @@ router.post('/getDocument', async (req, res) => {
     }
 
     if (requestedBy === 'admin') {
-        console.log('requested by admin', model);
+        console.log('♠️♠️  requested by Admin, model: ', model);
         switch (model) {
             /* products */
             case 'products':
@@ -304,8 +303,7 @@ router.post('/updateOrder', async (req, res) => {
 
 /* update order item details */
 router.post('/updateOrderItemDetails', async (req, res) => {
-    console.log('req received:')
-    console.log(req.body);
+
     const { orderId, subOrderId, status, trackingId, trackingUrl } = req.body;
     const filter = { _id: orderId, 'items._id': mongoose.Types.ObjectId(subOrderId) };
 
@@ -321,7 +319,6 @@ router.post('/updateOrderItemDetails', async (req, res) => {
         }
     });
 
-    console.log(filter);
 
     /* find sub-order */
     let subOrder = originalOrder.items.find(item => item._id.toString() === subOrderId.toString());
@@ -346,8 +343,6 @@ router.post('/updateOrderItemDetails', async (req, res) => {
             })
         }
     }
-
-    console.log(originalOrder.deliveryAddress);
 
     const { deliveryAddress } = originalOrder;
     const customerEmail = deliveryAddress.email;

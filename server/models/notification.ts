@@ -1,4 +1,4 @@
-import { mongoose, ObjectId } from "@helpers/essentials";
+import { mongoose, ObjectId, environment } from "@helpers/essentials";
 import sgMail, { MailDataRequired } from '@sendgrid/mail'
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -42,7 +42,7 @@ const model = mongoose.model('notification', schema);
 
 type EmailNotification = {
     to: string,
-    receipt: string | Array<string>,
+    receipt: Array<string>,
     subject: string,
     templateId: string,
     templateData: any,
@@ -110,8 +110,6 @@ export const methods = {
             dynamicTemplateData
         }
 
-        console.log(subject);
-
         /* email sending attempt */
         let attempt: any = false;
 
@@ -125,12 +123,20 @@ export const methods = {
             return false;
         }
 
-        console.log('Email probably sent.');
-        // console.log(attempt);
+        console.log('✅ Email probably sent.');
         return true;
     },
     async sendEmailNotification(details: EmailNotification) {
-        const { to, receipt, subject, templateId, templateData, emailProvider, type, customer } = details;
+        const { to, subject, templateId, templateData, emailProvider, type, customer } = details;
+        let { receipt } = details;
+
+        console.log('📤 Email notification request type:' ,type)
+        
+          //remove @bounipun emails from list (for dev)
+        if(environment === 'development') {
+            receipt = receipt.filter(email => email.includes('@bounipun') === false)
+            console.log('🔸 Removed @bounipun.in email for dev. environement')
+        }
 
         switch (details.emailProvider) {
             case 'sendgrid':
@@ -158,6 +164,7 @@ export const methods = {
 
     },
     async sendContactFormEmailToAdmin(details: ContactEmailTemplate) {
+        
         await this.sendEmailNotification({
             to: 'admin',
             receipt: ['contact@bounipun.in', 'hello@saibbyweb.com', 'suhaibzreason@gmail.com'],
