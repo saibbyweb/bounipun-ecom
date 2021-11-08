@@ -92,6 +92,22 @@ router.post('/findDocuments', async (req, res) => {
 
 });
 
+router.post('/productIdToSlug', async(req, res) => {
+    const response = { resolved: false, product: {} }
+    const { productId } = req.body;
+    console.log(productId)
+    const product = await db.model('products').findOne({_id: productId }).select('slug');
+
+    if(product === null) {
+        res.send(response);
+        return;
+    }
+
+    response.product = product;
+    response.resolved = true;
+    res.send(response);
+});
+
 /* get product */
 router.post('/fetchProduct', userAuth('customer', false), async (req, res) => {
     const { slug, unlocked } = req.body;
