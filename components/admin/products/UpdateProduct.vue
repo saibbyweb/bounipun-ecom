@@ -740,23 +740,18 @@ export default {
     },
     async updateDocument() {
       console.log("PRODUCT TO BE UPDATED!:");
-      console.log(this.doc);
-
-      // const variantionsCheck = this.doc.variants.length === this.selectedVariants.length;
-
-      // if(!variantionsCheck) {
-      //     this.error.msg = "Please re-verify variants and fabric selection";
-      //     this.error.status = true;
-      //     return;
-      // }
-
-      // return;
-      // return;
+      
+      let details = {...this.doc};
+      // ready to ship
+      if(this.doc.availabilityType !== "ready-to-ship") {
+        delete details.rtsDirectVariant;
+        delete details.rtsDirectFabric;
+      }
 
       this.loading = true;
       const result = await this.$updateDocument(
         this.model,
-        this.doc,
+        details,
         this.editMode
       );
       this.loading = false;

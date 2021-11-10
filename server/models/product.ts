@@ -57,7 +57,10 @@ const schema = new mongoose.Schema({
     meta: String,
     /* estimated time of delivery */
     // edt: { type: Number, default: 1 },
-    lock: Boolean,
+    lock: {
+        type: Boolean,
+        default: false
+    },
     status: Boolean
 }, {
     timestamps: true
