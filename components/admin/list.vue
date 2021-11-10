@@ -15,11 +15,9 @@
 
       <!-- action bar -->
       <div v-if="selectedList.length > 0" class="action-bar">
-        <p> {{ selectedList.length }} Selected </p>
         <div class="actions">
-          <button class="action">Set as Active</button>
-          <button class="action">Set as Inactive</button>
-          <button class="action" @click="selectedList = []"> Clear Selection </button>
+          <button class="action" v-for="action in actions" :key="action.type" @click="takeBulkAction(action.type)"> {{ action.name }} </button>
+          <button class="action" @click="selectedList = []"> Clear Selection ( {{ selectedList.length }} items) </button>
         </div>
       </div>
 
@@ -106,6 +104,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    actions: {
+      type: Array,
+      default: () => []
+    }
   },
   watch: {
     sortByFields() {
@@ -153,6 +155,22 @@ export default {
     },
   },
   methods: {
+    async takeBulkAction(type) {
+      const request = await this.$post("/takeBulkAction", {
+        _ids: this.selectedList, 
+        model: this.model, 
+        type
+      });
+
+      console.log(request,'--bulk action');
+
+      if(request.resolved === false) {
+        console.log('Update Failed');
+        return;
+      }
+
+      console.log('Update probably succeeded');
+    },
     toggleSelect(_id) {
       console.log(_id)
       //if id is not already present in the list, push it in, else pop it out
@@ -277,21 +295,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+@keyframes slide {
+  0% {
+    margin-bottom: -10%;
+  }
+
+  100% {
+    margin-bottom: 0%;
+  }
+}
+
 .inner {
   width: 97%;
 
   .action-bar {
-    .action {
-      padding: 5px 9px;
-      margin: 2px;
+    // height:8%;
+    animation: slide 0.3s;
+    transition: all 0.3s ease-in-out;
+    padding-bottom: 5px;
+    border-bottom:1px solid #efefef;
+
+    .text {
       font-size: 13px;
+    }
+
+    .action {
+      padding: 3px 9px;
+      margin: 2px;
+      font-size: 12px;
       font-family: $font_1;
       text-transform: capitalize;
       background-color: rgb(91, 91, 190);
 
       &:hover {
         background-color: rgb(76, 76, 247);
-        padding: 5px 11px;
+        padding: 3px 11px;
       }
     }
   }

@@ -14,7 +14,7 @@
 
     <!-- list of products -->
     <div :class="{updating: showForm}" class="list">
-        <List ref="list" :list="list" :model="model" :headings="headings" custom_css="10% 10% 25% 20% 10% 15% 10%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" />
+        <List ref="list" :list="list" :model="model" :actions="actions" :headings="headings" custom_css="10% 10% 25% 20% 10% 15% 10%" :sortByFields="sortByFields" @documentFetched="documentFetched" @sortToggled="sortToggled" />
         <Pagination ref="pagination" :model="model" :rawCriterion="rawCriterion" @resultsFetched="resultsFetched" />
     </div>
 
@@ -90,7 +90,14 @@ export default {
             sortByFields: ['name', 'styleId', 'availabilityType', 'status'],
             collections: [],
             variants: [],
-            fabrics: []
+            fabrics: [],
+            actions: [{
+                name: "Mark as Active",
+                type: "active"
+            }, {
+                name: "Mark as Inactive",
+                type: "inactive"
+            }]
         }
     },
     async mounted() {
