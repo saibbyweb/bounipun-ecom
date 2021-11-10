@@ -1,93 +1,111 @@
 <template>
   <!-- list -->
-  <div class="list">
-    <button
-      v-if="isDraggable"
-      class="action shadow"
-      @click="dragEnabled = !dragEnabled"
-    >
-      Toggle Drag
-    </button>
-    <span v-if="dragEnabled">
-      You can now drag the items and adjust the order.
-    </span>
-    <!-- headings -->
-    <div class="item shadow headings" :style="adjustItem()">
-      <span class="heading" v-for="(heading, index) in headings" :key="index">
-        {{ heading }}
-        <img
-          @click="toggleSort(heading)"
-          class="sortable"
-          v-if="isSortable(heading)"
-          src="/icons/light/sort.png"
-        />
-      </span>
-    </div>
-    <client-only>
-      <Draggable
-        v-model="localList"
-        ghost-class="ghost"
-        @end="onDragEnd"
-        :sort="isDraggable && dragEnabled"
+  <div class="list flex end">
+    <div class="inner">
+      <button
+        v-if="isDraggable"
+        class="action shadow"
+        @click="dragEnabled = !dragEnabled"
       >
-        <transition-group type="transition" name="flip-list">
-          <div
-            @click="select(item, index)"
-            :class="{ selected: isSelected(index), dragEnabled }"
-            class="item shadow"
-            v-for="(item, index) in localList"
-            :key="item._id"
-            :style="adjustItem()"
-          >
-            <span
-              :class="setClasses(propIndex, value)"
-              v-for="(value, propIndex) in Object.values(item)"
-              :key="propIndex"
+        Toggle Drag
+      </button>
+      <span v-if="dragEnabled">
+        You can now drag the items and adjust the order.
+      </span>
+
+      <!-- action bar -->
+      <div v-if="selectedList.length > 0" class="action-bar">
+        <p> {{ selectedList.length }} Selected </p>
+        <div class="actions">
+          <button class="action">Set as Active</button>
+          <button class="action">Set as Inactive</button>
+          <button class="action" @click="selectedList = []"> Clear Selection </button>
+        </div>
+      </div>
+
+      <!-- headings -->
+      <div class="item shadow headings" :style="adjustItem()">
+        <span class="heading" v-for="(heading, index) in headings" :key="index">
+          {{ heading }}
+          <img
+            @click="toggleSort(heading)"
+            class="sortable"
+            v-if="isSortable(heading)"
+            src="/icons/light/sort.png"
+          />
+        </span>
+      </div>
+      <client-only>
+        <Draggable
+          v-model="localList"
+          ghost-class="ghost"
+          @end="onDragEnd"
+          :sort="isDraggable && dragEnabled"
+        >
+          <transition-group type="transition" name="flip-list">
+            <div
+              @click="select(item, index)"
+              :class="{ selected: isSelected(index), dragEnabled }"
+              class="item shadow"
+              v-for="(item, index) in localList"
+              :key="item._id+index"
+              :style="adjustItem()"
             >
-              {{ optimizeValue(value, propIndex) }}
-            </span>
-          </div>
-        </transition-group>
-      </Draggable>
-    </client-only>
+              <!-- selector -->
+              <div class="selector">
+                <input
+                  class="check"
+                  type="checkbox"
+                  :checked="selectedList.findIndex(id => id === item._id) !== -1"
+                  @click.stop="toggleSelect(item._id)"
+                />
+              </div>
 
-    <!-- data points -->
-    <!-- <div @click="select(item, index)" :class="{selected: isSelected(index)}" class="item shadow" v-for="(item, index) in list" :key="index" :style="adjustItem()">
-
-        <span :class="setClasses(propIndex, value)" v-for="(value, propIndex) in Object.values(item)" :key="propIndex"> {{ optimizeValue(value) }} </span>
-
-    </div> -->
+              <span
+                :class="setClasses(propIndex, value)"
+                v-for="(value, propIndex) in Object.values(item)"
+                :key="value + propIndex"
+              >
+                {{ optimizeValue(value, propIndex) }}
+              </span>
+            </div>
+          </transition-group>
+        </Draggable>
+      </client-only>
+    </div>
   </div>
 </template>
 
 <script>
 import slugify from "slugify";
+import { v4 as uuidv4 } from "uuid";
+
 export default {
   props: {
     headings: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     list: {
       type: Array,
-      default: () => [{}]
+      default: () => [{}],
     },
     custom_css: {
       type: String,
-      default: ""
+      default: "",
     },
     model: {
       type: String,
-      default: ""
+      default: "",
     },
     sortByFields: {
       type: Array,
-      default: () => []
+      default: () => [],
     },
     isDraggable: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   watch: {
     sortByFields() {
@@ -103,7 +121,8 @@ export default {
     },
     list(newVal) {
       this.localList = newVal;
-    }
+      this.selected = null;
+    },
   },
   mounted() {
     this.constructSortBy();
@@ -116,7 +135,9 @@ export default {
       dragEnabled: false,
       disableSort: false,
       localList: [],
-      dragUpdateEndpoint: "/updateOrder"
+      dragUpdateEndpoint: "/updateOrder",
+      selectedList: [],
+      v4: uuidv4,
     };
   },
   computed: {
@@ -129,21 +150,29 @@ export default {
         i++;
       }
       return colCSS;
-    }
+    },
   },
   methods: {
+    toggleSelect(_id) {
+      console.log(_id)
+      //if id is not already present in the list, push it in, else pop it out
+      const foundIndex = this.selectedList.findIndex((id) => id === _id);
+      if (foundIndex === -1) this.selectedList.push(_id);
+      else this.selectedList.splice(foundIndex, 1);
+
+    },
     async onDragEnd($event) {
       if (!this.dragEnabled) return;
 
       /* get the order of the whole array */
       let newList = this.localList.map((item, index) => ({
         _id: item._id,
-        newOrder: index
+        newOrder: index,
       }));
       /* set the order accordingly */
       const updateOrder = this.$axios.$post(this.dragUpdateEndpoint, {
         model: this.model,
-        newList
+        newList,
       });
       /* wait for request to resolve */
       this.$store.commit("customer/setLoading", true);
@@ -164,7 +193,7 @@ export default {
       const field = this.sortBy[key];
 
       const sortBy = this.sortBy;
-      Object.keys(sortBy).forEach(function(key) {
+      Object.keys(sortBy).forEach(function (key) {
         sortBy[key].active = false;
       });
 
@@ -177,10 +206,10 @@ export default {
       /* flush old data, if any */
       this.sortBy = {};
       /* for each key, create a object which holds sort state */
-      this.sortByFields.forEach(field => {
+      this.sortByFields.forEach((field) => {
         this.sortBy[field] = {
           order: 1,
-          active: false
+          active: false,
         };
       });
     },
@@ -197,7 +226,7 @@ export default {
       return value;
     },
     isSortable(field) {
-      return this.sortByFields.findIndex(key => field === key) !== -1;
+      return this.sortByFields.findIndex((key) => field === key) !== -1;
     },
     isSelected(index) {
       return this.selected === index;
@@ -222,7 +251,7 @@ export default {
       let classes = [];
       const heading = this.headings[propIndex];
       const slugifiedHeading = slugify(heading, {
-        lower: true
+        lower: true,
       });
       classes.push(slugifiedHeading);
       /* if status column, slugify the value and set it as class name for color coding */
@@ -237,17 +266,36 @@ export default {
     adjustItem() {
       if (this.custom_css !== "")
         return {
-          "grid-template-columns": this.custom_css
+          "grid-template-columns": this.custom_css,
         };
       return {
-        "grid-template-columns": this.columns
+        "grid-template-columns": this.columns,
       };
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
+.inner {
+  width: 97%;
+
+  .action-bar {
+    .action {
+      padding: 5px 9px;
+      margin: 2px;
+      font-size: 13px;
+      font-family: $font_1;
+      text-transform: capitalize;
+      background-color: rgb(91, 91, 190);
+
+      &:hover {
+        background-color: rgb(76, 76, 247);
+        padding: 5px 11px;
+      }
+    }
+  }
+}
 .item-drag {
   opacity: 0;
 }
@@ -263,10 +311,23 @@ export default {
 .item {
   margin: 10px 0;
   display: grid;
+  position: relative;
   // grid-template-columns: 25% 20% 20% 15% 10% 10%;
   // grid-template-columns: auto auto auto;
   transition: all 0.3s ease-in-out;
   cursor: pointer;
+
+  .selector {
+    position: absolute;
+    left: -4%;
+    top: 20%;
+
+    .check {
+      height: 15px;
+      width: 15px;
+      cursor: pointer;
+    }
+  }
 
   &.selected {
     background-color: rgb(35, 148, 92) !important;

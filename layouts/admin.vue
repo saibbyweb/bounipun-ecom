@@ -129,6 +129,7 @@ export default {
     transition: all 0.3s ease-in-out;
     overflow-y: scroll;
     position: relative;
+    margin-left:2%;
 
     &.updating {
       opacity: 0.5;

@@ -278,7 +278,7 @@ export const methods = {
         for (const productId of allUniqueProducts) {
             /* filter */
             const filter: any = { _id: productId, status: true };
-
+            // TODO: may be it should be lock not equal to true
             if (unlocked === false)
                 filter.lock = false;
 
