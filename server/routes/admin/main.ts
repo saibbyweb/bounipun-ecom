@@ -287,7 +287,13 @@ router.post('/populate', adminAuth('1', true), async (req, res) => {
     response = await db.model(model).find({ _id: { $in: _ids } }).select(fields).lean();
     res.send(response);
 });
-
+/* take bulk action */
+router.post('/takeBulkAction', adminAuth('1', true), async(req, res) => {
+    let response = { resolved: false }
+    const { _ids, model, type } = req.body;
+    console.log(_ids, model, type);
+    res.send(response);
+});
 /* update order (of lists in admin panel) */
 router.post('/updateOrder', async (req, res) => {
 
