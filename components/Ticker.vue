@@ -4,10 +4,14 @@
       <div
         :class="{ pointer: activeTicker.link !== '' }"
         @click="navigate"
-        class="text"
+        class="text flex center"
         :key="activeTicker.text"
       >
-        {{ activeTicker.text }}
+        <marquee class="onlyMobile" width="100%" scrollamount="5">
+          {{ activeTicker.text }}
+        </marquee>
+<!-- {{ activeTicker.text }} -->
+        <span class="onlyDesktop"> {{ activeTicker.text }} </span>
       </div>
     </Transition>
   </div>
@@ -42,6 +46,11 @@ export default {
       this.tickerItems = tickerItems.doc.items;
 
       if (this.tickerItems.length === 0) return;
+      
+
+      const isMobile = this.windowWidth < 768;
+      const intervalDuration = isMobile ? 8500 : 6000;
+      console.log(intervalDuration, '--interval duration')
 
       setInterval(() => {
         if (this.activeIndex === this.tickerItems.length - 1) {
@@ -49,7 +58,7 @@ export default {
           return;
         }
         this.activeIndex += 1;
-      }, 6000);
+      }, intervalDuration);
     },
     navigate() {
       if (this.activeTicker.link !== "") {
@@ -70,27 +79,45 @@ export default {
   left: 0;
   background-color: #202020;
   transition: all 0.5s ease-in-out;
-  .text {
+
+  .text, span {
     color: white;
-    font-size: 10px;
+    font-size: 11px;
     text-transform: uppercase;
+    width: 100%;
+    text-align:center;
 
     &.pointer {
       cursor: pointer;
     }
   }
+
 }
 
 .fade-in-enter-active {
-  transition: opacity 300ms cubic-bezier(0.55, 0.085, 0.68, 0.53);
+  transition: opacity 450ms cubic-bezier(0.55, 0.085, 0.68, 0.53);
 }
 
 .fade-in-leave-active {
-  transition: opacity 225ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: opacity 325ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .fade-in-enter,
 .fade-in-leave-to {
   opacity: 0;
+}
+
+.onlyDesktop {
+  display: block;
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.onlyMobile {
+  display: none;
+  @media (max-width: 768px) {
+    display: block;
+  }
 }
 </style>
