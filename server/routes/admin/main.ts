@@ -288,10 +288,23 @@ router.post('/populate', adminAuth('1', true), async (req, res) => {
     res.send(response);
 });
 /* take bulk action */
-router.post('/takeBulkAction', adminAuth('1', true), async(req, res) => {
+router.post('/takeBulkAction', adminAuth('1', true), async (req, res) => {
     let response = { resolved: false }
     const { _ids, model, type } = req.body;
     console.log(_ids, model, type);
+    let updateFields: any = {};
+
+    switch (type) {
+        case 'active':
+            updateFields.status = true;
+            break;
+        case 'inactive':
+            updateFields.status = false;
+            break;
+    }
+    const bulkUpdated = await db.model(model).updateMany({ _id: { $in: _ids }}, updateFields);
+    console.log(bulkUpdated);
+    response.resolved = true;
     res.send(response);
 });
 /* update order (of lists in admin panel) */

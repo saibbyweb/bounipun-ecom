@@ -170,6 +170,8 @@ export default {
       }
 
       console.log('Update probably succeeded');
+      // refetch list
+      this.$emit('updated');
     },
     toggleSelect(_id) {
       console.log(_id)
