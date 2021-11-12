@@ -16,8 +16,17 @@
       <!-- action bar -->
       <div v-if="selectedList.length > 0" class="action-bar">
         <div class="actions">
-          <button class="action" v-for="action in actions" :key="action.type" @click="takeBulkAction(action.type)"> {{ action.name }} </button>
-          <button class="action" @click="selectedList = []"> Clear Selection ( {{ selectedList.length }} items) </button>
+          <button
+            class="action"
+            v-for="action in actions"
+            :key="action.type"
+            @click="takeBulkAction(action.type)"
+          >
+            {{ action.name }}
+          </button>
+          <button class="action" @click="selectedList = []">
+            Clear Selection ( {{ selectedList.length }} items)
+          </button>
         </div>
       </div>
 
@@ -46,7 +55,7 @@
               :class="{ selected: isSelected(index), dragEnabled }"
               class="item shadow"
               v-for="(item, index) in localList"
-              :key="item._id+index"
+              :key="item._id + index"
               :style="adjustItem()"
             >
               <!-- selector -->
@@ -54,7 +63,9 @@
                 <input
                   class="check"
                   type="checkbox"
-                  :checked="selectedList.findIndex(id => id === item._id) !== -1"
+                  :checked="
+                    selectedList.findIndex((id) => id === item._id) !== -1
+                  "
                   @click.stop="toggleSelect(item._id)"
                 />
               </div>
@@ -70,6 +81,20 @@
           </transition-group>
         </Draggable>
       </client-only>
+    </div>
+
+    <div
+    v-if="showUpdateToast"
+      style="
+        position: fixed;
+        width: 100%;
+        height: 10%;
+        bottom: 5%;
+        left:0;
+        z-index: 3;
+      "
+    >
+      <Toast :show="showUpdateToast" msg="Bulk Action Complete" />
     </div>
   </div>
 </template>
@@ -106,8 +131,8 @@ export default {
     },
     actions: {
       type: Array,
-      default: () => []
-    }
+      default: () => [],
+    },
   },
   watch: {
     sortByFields() {
@@ -140,6 +165,7 @@ export default {
       dragUpdateEndpoint: "/updateOrder",
       selectedList: [],
       v4: uuidv4,
+      showUpdateToast: false,
     };
   },
   computed: {
@@ -157,29 +183,31 @@ export default {
   methods: {
     async takeBulkAction(type) {
       const request = await this.$post("/takeBulkAction", {
-        _ids: this.selectedList, 
-        model: this.model, 
-        type
+        _ids: this.selectedList,
+        model: this.model,
+        type,
       });
 
-      console.log(request,'--bulk action');
+      console.log(request, "--bulk action");
 
-      if(request.resolved === false) {
-        console.log('Update Failed');
+      if (request.resolved === false) {
+        console.log("Update Failed");
         return;
       }
 
-      console.log('Update probably succeeded');
+      console.log("Update probably succeeded");
+
+      this.showUpdateToast = true;
+      setTimeout(() => (this.showUpdateToast = false), 2000);
       // refetch list
-      this.$emit('updated');
+      this.$emit("updated");
     },
     toggleSelect(_id) {
-      console.log(_id)
+      console.log(_id);
       //if id is not already present in the list, push it in, else pop it out
       const foundIndex = this.selectedList.findIndex((id) => id === _id);
       if (foundIndex === -1) this.selectedList.push(_id);
       else this.selectedList.splice(foundIndex, 1);
-
     },
     async onDragEnd($event) {
       if (!this.dragEnabled) return;
@@ -297,6 +325,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.list {
+  position: relative;
+}
 
 @keyframes slide {
   0% {
@@ -316,7 +347,7 @@ export default {
     animation: slide 0.3s;
     transition: all 0.3s ease-in-out;
     padding-bottom: 5px;
-    border-bottom:1px solid #efefef;
+    border-bottom: 1px solid #efefef;
 
     .text {
       font-size: 13px;
