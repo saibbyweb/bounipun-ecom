@@ -67,11 +67,6 @@
       "
       class="collection-items"
     >
-      <!-- <product-card
-        v-for="(product, index) in products"
-        :key="index"
-        :product="product"
-      /> -->
 
       <product-card
         v-for="(product, index) in products"
@@ -121,8 +116,8 @@
         🔒 This collection is locked
       </h2>
       <br />
+      <!-- unlock content -->
       <UnlockContent />
-      <!-- <button class="action">Request Access</button> -->
     </div>
   </div>
 </template>
@@ -586,7 +581,6 @@ export default {
 .c-header {
   height: 40vw;
   margin-top: 5vh;
-  // background: url("/demo_images/collection-header.png");
   background-size: cover;
   width: 100%;
 
@@ -607,7 +601,6 @@ export default {
 }
 
 .main-text-block {
-  // margin-top:20px;
   padding: 5%;
 
   .text-1 {
@@ -633,7 +626,6 @@ export default {
 .collection-items {
   display: flex;
   flex-wrap: wrap;
-  // margin-top: 10vw;
   justify-content: center;
 }
 

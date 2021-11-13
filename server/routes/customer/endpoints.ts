@@ -356,7 +356,7 @@ router.post('/fetchRelatedProducts', async (req, res) => {
     response.products = relatedProducts;
     response.resolved = true;
 
-    const names = relatedProducts.map((product: any) => product.name);
+  //  const names = relatedProducts.map((product: any) => product.name);
     // console.log(names);
 
     res.send(response);

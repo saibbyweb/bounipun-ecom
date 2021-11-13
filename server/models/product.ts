@@ -131,7 +131,7 @@ export const methods = {
         }
 
         /* if product is under bounipun, add meta data to the product (variant names ) */
-        if (details.type !== 'third-party'&& details.availabilityType !== 'ready-to-ship') {
+        if (details.type !== 'third-party' && details.availabilityType !== 'ready-to-ship') {
             let keywords = [];
             /* fetch variant names */
             for (const variant of details.variants) {
@@ -190,20 +190,20 @@ export const methods = {
     async updateStock(products: Array<{ _id: string, quantity: string }>) {
         /* remove duplicates (ready to ship items are unique)  */
         const uniqueProductsIds = [...new Set(products.map(product => product._id))];
-        
+
         /* fetch ready-to-ship products */
         const result = await model
-        .find({ _id: { $in: uniqueProductsIds }, availabilityType: 'ready-to-ship' })
-        
+            .find({ _id: { $in: uniqueProductsIds }, availabilityType: 'ready-to-ship' })
+
         /* update stock according to the quantities ordered */
         result.forEach((doc: any) => {
-            const product:any = products.find(prod => prod._id.toString() === doc._id.toString());
-            console.log(product,'-- [stock to be updated]')
+            const product: any = products.find(prod => prod._id.toString() === doc._id.toString());
+            console.log(product, '-- [stock to be updated]')
             const newStock = parseInt(doc.stock) - parseInt(product.quantity);
             doc.stock = newStock;
-            doc.save(); 
+            doc.save();
         });
-        
+
     },
     async getPaginatedSearchResults() {
         /* fetch all collections (active and unlocked) */

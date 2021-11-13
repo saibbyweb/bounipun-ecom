@@ -21,9 +21,6 @@ export default {
             case 'ticker':
                 await ticker.methods.updateTickers(details, editMode);
                 break;
-            // case 'unlock':
-            //     await unlock.methods.updateUnlockCode()
-            //     break;
             default:
                 break;
         }
@@ -84,7 +81,6 @@ export default {
         /* if no results found */
         const fetchedResults = results[0];
         if (fetchedResults.documents.length === 0 && fetchedResults.totalMatches.length === 0) {
-            // console.log('No results found');
             return paginatedResults;
         }
 
@@ -92,8 +88,6 @@ export default {
         paginatedResults.totalMatches = fetchedResults.totalMatches[0].count;
         paginatedResults.fetched = true;
 
-        // console.log(paginatedResults);
         return paginatedResults;
-
     }
 }
