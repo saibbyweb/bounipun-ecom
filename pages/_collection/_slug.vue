@@ -748,7 +748,7 @@ export default {
       this.product = result.doc;
       this.productFetched = true;
     
-    
+      // set stock for ready to ship
       if(this.product.availabilityType === "ready-to-ship")
         this.stockLimit = parseInt(this.product.stock)
 
@@ -768,7 +768,7 @@ export default {
       /* fetch main color */
       const mainColorIndex = this.product.colors.findIndex(
         (color) => color.mainColor === true
-      );
+      )
 
       if (mainColorIndex !== -1) this.activeColorIndex = mainColorIndex;
     },

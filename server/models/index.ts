@@ -24,6 +24,7 @@ import ticker from "./ticker";
 import admin from "./admin";
 import notification from "./notification"
 import unlock from "./unlock"
+import currency from "./currency"
 
 const register = function () {
     imageUpload.methods.register();
@@ -52,6 +53,7 @@ const register = function () {
     admin.methods.register();
     notification.methods.register();
     unlock.methods.register()
+    currency.methods.register()
 }
 
-export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage, user, session, order, payment, paymentIntent, globalConfig, orderSequence, faq, ticker, admin, notification, unlock, register };
+export { imageUpload, collection, fabric, colorCategory, color, variantCategories, variants, product, productLists, homepageLayouts, sales, coupon, baseColor, homepage, user, session, order, payment, paymentIntent, globalConfig, orderSequence, faq, ticker, admin, notification, unlock, currency, register };

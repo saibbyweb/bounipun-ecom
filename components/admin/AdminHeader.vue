@@ -139,6 +139,12 @@ export default {
           path: "/admin-panel/unlock",
           desc: "...",
         },
+        {
+          name: "Currencies",
+          path: "/admin-panel/currency",
+          onlyDev: true,
+          desc: "...",
+        },
       ],
       activeIndex: -1,
     };
