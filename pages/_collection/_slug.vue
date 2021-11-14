@@ -704,17 +704,12 @@ export default {
         alert("Couldnt fetch product.");
         return;
       }
-
-      console.log(response, '-- RESPONSE')
       
       /* if product not found */
       if(response.data.resolved === false) {
         this.preLoadMessage = "Product not found :("
-        console.log('Product not found');
         return;
       }
-
-      console.log(response, "--PRODUCT");
 
       let result = {};
       result.doc = { ...response.data };
@@ -752,6 +747,10 @@ export default {
 
       this.product = result.doc;
       this.productFetched = true;
+    
+    
+      if(this.product.availabilityType === "ready-to-ship")
+        this.stockLimit = parseInt(this.product.stock)
 
       /* add product to recently viewed */
       this.addToRecentlyViewed();
@@ -763,7 +762,6 @@ export default {
       /* if main color provided via query param */
       if (this.$route.query.activeColor) {
         this.activeColorIndex = parseInt(this.$route.query.activeColor);
-        console.log("ACTIVE COLOR SET FROM QUERY PARAM");
         return;
       }
 
