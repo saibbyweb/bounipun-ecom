@@ -179,3 +179,5 @@ const allCurrencies = [
   { name: "Zambian Kwacha", code: "ZMW", zeroDecimal: false },
   { name: "Zimbabwean Dollar", code: "ZWL", zeroDecimal: false },
 ];
+
+module.exports = allCurrencies;

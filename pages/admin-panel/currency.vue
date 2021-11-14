@@ -69,7 +69,7 @@ export default {
         limit: 20,
       },
       list: [],
-      sortByFields: ["name", "status"],
+      sortByFields: ["name", "adminEnabled", "clientEnabled"],
       headings: [
         "_id",
         "name",
