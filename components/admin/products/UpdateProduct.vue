@@ -7,7 +7,14 @@
     <div class="center">
       <a v-if="editMode" :href="`/products?_id=${doc._id}`" target="_blank">
         <span
-          style="background:#333; text-align:center; color:white; font-size: 12px; padding:2px 4px; border-radius:2px;"
+          style="
+            background: #333;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+            padding: 2px 4px;
+            border-radius: 2px;
+          "
         >
           Preview Product ➚
         </span>
@@ -103,7 +110,7 @@
     <div
       v-if="doc.colorSource !== ''"
       class="colors"
-      style="width:100%; position:relative;"
+      style="width: 100%; position: relative"
     >
       <div
         class="color-box"
@@ -169,7 +176,7 @@
         <!-- remove color -->
         <button
           class="action delete"
-          style="font-size:9px; position: absolute; top:0; right:0;"
+          style="font-size: 9px; position: absolute; top: 0; right: 0"
           @click="removeColor(index, true)"
         >
           Remove Color
@@ -185,12 +192,17 @@
           <span> Main Color </span>
         </div>
 
-        <div class="center-col" style="align-items:flex-end; width: 100%">
+        <div class="center-col" style="align-items: flex-end; width: 100%">
           <!-- disclaimer box -->
           <InputBox label="Disclaimer" v-model="color.disclaimer" />
 
           <div
-            style="width:100%; display:flex; justify-content: space-between; align-items: center;"
+            style="
+              width: 100%;
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
           >
             <!-- publish toggle for color -->
             <Toggle
@@ -205,7 +217,7 @@
             <button
               v-if="doc.availabilityType === 'made-to-order'"
               class="action"
-              style="font-size:10px; width:70%;background-color: orange;"
+              style="font-size: 10px; width: 70%; background-color: orange"
               @click="toggleRTSPanel(color)"
             >
               {{ color.showRTSPanel ? "Hide" : "Show" }} RTS PANEL
@@ -215,7 +227,7 @@
           <div
             v-if="color.showRTSPanel"
             class="ready-to-ship-marker"
-            style="width:100%; border:1px dashed orange;"
+            style="width: 100%; border: 1px dashed orange"
           >
             <!-- select variant -->
             <SelectBox
@@ -240,7 +252,7 @@
               <button
                 @click="addNewRTSEntry(color)"
                 class="action"
-                style="font-size:12px; margin:10px 0px;"
+                style="font-size: 12px; margin: 10px 0px"
               >
                 Add New RTS Entry
               </button>
@@ -251,7 +263,7 @@
       <button
         v-if="doc.colorSource !== 'bounipun-colors'"
         class="action"
-        style="font-size:9px; position: absolute; bottom: -30px;  right:10px;"
+        style="font-size: 9px; position: absolute; bottom: -30px; right: 10px"
         @click="addNewColor({ _id: null, name: '', code: '' })"
       >
         Add Color
@@ -294,8 +306,15 @@
     <!-- estimated delivery time -->
     <!-- <InputBox label="Estimated Delivery Time (in weeks)" v-model="doc.etd" type="number" /> -->
 
-        <!-- lock status -->
-    <Toggle v-model="doc.lock" label="Lock Status" :disabled="true" width="80px" activeText="🔒" inactiveText="👎" />
+    <!-- lock status -->
+    <Toggle
+      v-model="doc.lock"
+      label="Lock Status"
+      :disabled="true"
+      width="80px"
+      activeText="🔒"
+      inactiveText="👎"
+    />
 
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
@@ -335,7 +354,7 @@ export default {
     model: String,
     collections: Array,
     variants: Array,
-    fabrics: Array
+    fabrics: Array,
   },
   watch: {
     selectedVariantsWithFabricOptions(newVal) {
@@ -350,14 +369,10 @@ export default {
         /* if not under escape */
         if (!this.underEscape) this.doc.colorSource = "custom";
       },
-      deep: true
+      deep: true,
     },
     /* update colors array according to collection selection */
     underEscape(newVal, oldVal) {
-      // if(!oldVal && !newVal) {
-      //     console.log('do nothin');
-      //     this.doc.colorSource = 'custom';
-      // }
       if (newVal) {
         this.doc.colorSource = "bounipun-colors";
         // this.doc.colorSource = '';
@@ -365,7 +380,7 @@ export default {
       } else if (!newVal) {
         this.doc.colorSource = "custom";
       }
-    }
+    },
   },
   computed: {
     bounipunColors() {
@@ -375,25 +390,27 @@ export default {
       /* show color sources according to collection selection */
       if (!this.underEscape)
         return this.colorSourceTypes.filter(
-          source => source.value !== "bounipun-colors"
+          (source) => source.value !== "bounipun-colors"
         );
       else
         return this.colorSourceTypes.filter(
-          source => source.value !== "custom"
+          (source) => source.value !== "custom"
         );
     },
     selectedVariants() {
-      const selectedVariants = this.variants.filter(variant => variant.checked);
+      const selectedVariants = this.variants.filter(
+        (variant) => variant.checked
+      );
 
       /* update doc.variants accordingly */
       console.log(this.doc.variants.length, selectedVariants.length);
 
       /* if there's any variant which is not in the selected variants,, remove it */
       let deselectedVariantId = null;
-      this.doc.variants.forEach(variant => {
+      this.doc.variants.forEach((variant) => {
         /* check if its in the selected list */
         let foundVariant = selectedVariants.find(
-          sVariant => sVariant._id === variant._id
+          (sVariant) => sVariant._id === variant._id
         );
 
         /* if found */
@@ -406,7 +423,7 @@ export default {
       /*  remove deselected variant from doc.variants */
       if (deselectedVariantId !== null) {
         let foundIndex = this.doc.variants.findIndex(
-          variant => variant._id === deselectedVariantId
+          (variant) => variant._id === deselectedVariantId
         );
 
         if (foundIndex !== -1) this.doc.variants.splice(foundIndex, 1);
@@ -415,14 +432,14 @@ export default {
       return selectedVariants;
     },
     selectedVariantsWithFabricOptions() {
-      return this.selectedVariants.map(variant => {
+      return this.selectedVariants.map((variant) => {
         return {
           _id: variant._id,
           name: variant.name,
           code: variant.code,
-          fabrics: this.fabrics.filter(fabric =>
+          fabrics: this.fabrics.filter((fabric) =>
             fabric.code.startsWith(variant.code)
-          )
+          ),
           // key: uuidv4()
           // fabrics: this.fabrics
         };
@@ -449,7 +466,7 @@ export default {
         this.doc.bounipun_collection === "60522ab3be493200150ff835" &&
         this.doc.type !== "third-party"
       );
-    }
+    },
   },
   data() {
     return {
@@ -476,79 +493,79 @@ export default {
         rtsDirectFabric: "",
         // etd: "",
         lock: false,
-        status: false
+        status: false,
       },
       types: [
         {
           name: "Select Type",
-          value: null
+          value: null,
         },
         {
           name: "Under Bounipun",
-          value: "under-bounipun"
+          value: "under-bounipun",
         },
         {
           name: "Third Party",
-          value: "third-party"
-        }
+          value: "third-party",
+        },
       ],
       availabilityTypes: [
         {
           name: "Select Availablity Type",
-          value: ""
+          value: "",
         },
         {
           name: "Made To Order",
-          value: "made-to-order"
+          value: "made-to-order",
         },
         {
           name: "Ready To Ship",
-          value: "ready-to-ship"
-        }
+          value: "ready-to-ship",
+        },
       ],
       colorSourceTypes: [
         {
           name: "Select Source",
-          value: ""
+          value: "",
         },
         {
           name: "Bounipun Colors",
-          value: "bounipun-colors"
+          value: "bounipun-colors",
         },
         {
           name: "Custom",
-          value: "custom"
-        }
+          value: "custom",
+        },
       ],
       genders: [
         {
           name: "Select Preferred Gender",
-          value: ""
+          value: "",
         },
         {
           name: "For Her",
-          value: "for-her"
+          value: "for-her",
         },
         {
           name: "For Him",
-          value: "for-him"
+          value: "for-him",
         },
         {
           name: "For Him & Her",
-          value: "for-him-and-her"
+          value: "for-him-and-her",
         },
         {
           name: "N/A",
-          value: "na"
-        }
+          value: "na",
+        },
       ],
       baseColors: [],
       loading: false,
       updated: false,
       error: {
         status: false,
-        msg: ""
-      }
+        msg: "",
+      },
     };
   },
   mounted() {
@@ -557,11 +574,11 @@ export default {
   methods: {
     async addNewRTSEntry(color) {
       const selectedVariant = this.variants.find(
-        variant => variant.value === color.rtsVariant
+        (variant) => variant.value === color.rtsVariant
       );
       if (selectedVariant === undefined) return;
       const selectedFabric = this.fabrics.find(
-        fabric => fabric.value === color.rtsFabric
+        (fabric) => fabric.value === color.rtsFabric
       );
       if (selectedFabric === undefined) return;
 
@@ -586,7 +603,7 @@ export default {
         rtsDirectFabric: selectedFabric._id,
         stock: color.rtsStock,
         gender: this.doc.gender,
-       // name: `${this.doc.name} - ${color.name}`,
+        // name: `${this.doc.name} - ${color.name}`,
         name: this.doc.name,
         printNo: this.doc.printNo,
         slug: "",
@@ -594,7 +611,7 @@ export default {
         styleId: constructedStyleId,
         type: "under-bounipun",
         variants: [],
-        _id: ""
+        _id: "",
       };
 
       this.loading = true;
@@ -611,21 +628,21 @@ export default {
     getRTSFabrics(variantId) {
       /* fetch variant code */
       const selectedVariant = this.variants.find(
-        variant => variant.value === variantId
+        (variant) => variant.value === variantId
       );
       if (selectedVariant === undefined)
         return [
           {
             name: "Select Variant First",
-            value: ""
-          }
+            value: "",
+          },
         ];
 
-      const filteredFabrics = this.fabrics.filter(fabric => {
+      const filteredFabrics = this.fabrics.filter((fabric) => {
         return fabric.code.startsWith(selectedVariant.code);
       });
 
-      return filteredFabrics.map(fab => {
+      return filteredFabrics.map((fab) => {
         fab.name = `${fab.code}`;
         return fab;
       });
@@ -657,22 +674,22 @@ export default {
       }
 
       /* base colors array */
-      this.baseColors = result.docs.map(color => {
+      this.baseColors = result.docs.map((color) => {
         return {
           name: color.name.toUpperCase(),
-          value: color.name
+          value: color.name,
         };
       });
 
       this.baseColors.unshift({
         name: "Select Color",
-        value: ""
+        value: "",
       });
     },
     /* populateVariant */
     populateVariants(variants) {
       console.log(this.$refs.collections, "collections");
-      variants.forEach(variant => {
+      variants.forEach((variant) => {
         let match = this.variants.find(({ _id }) => _id === variant._id);
         match.checked = true;
       });
@@ -694,13 +711,13 @@ export default {
         disclaimer: "",
         mainColor: false,
         status: false,
-        key: uuidv4()
+        key: uuidv4(),
       });
     },
     colorDeselected(color) {
       /* find key of the deselected color */
       const foundIndex = this.doc.colors.findIndex(
-        col => col._id === color._id
+        (col) => col._id === color._id
       );
       console.log(color, foundIndex, "DESELECTED");
       /* remove color */
@@ -719,34 +736,26 @@ export default {
     fabricSelectionUpdated(variant) {
       let details = {
         _id: variant._id,
-        fabrics: variant.fabrics
+        fabrics: variant.fabrics,
       };
-
-      console.log(details);
 
       /* check if variant already exists in the array */
       let foundIndex = this.doc.variants.findIndex(
-        element => element._id === variant._id
+        (element) => element._id === variant._id
       );
 
       /* if not found  */
       if (foundIndex === -1) this.doc.variants.push(details);
       else this.doc.variants[foundIndex] = details;
 
-      console.log(foundIndex !== -1);
-
       this.doc.variants = this.doc.variants.filter(
-        variant => variant.fabrics.length !== 0
+        (variant) => variant.fabrics.length !== 0
       );
-
-      console.log(this.doc.variants);
     },
     async updateDocument() {
-      console.log("PRODUCT TO BE UPDATED!:");
-      
-      let details = {...this.doc};
+      let details = { ...this.doc };
       // ready to ship
-      if(this.doc.availabilityType !== "ready-to-ship") {
+      if (this.doc.availabilityType !== "ready-to-ship") {
         delete details.rtsDirectVariant;
         delete details.rtsDirectFabric;
       }
@@ -800,7 +809,7 @@ export default {
         rtsDirectFabric,
         // etd,
         lock,
-        status
+        status,
       } = details;
       this.doc = {
         _id,
@@ -823,7 +832,7 @@ export default {
         stock: stock === undefined ? "" : stock,
         // etd: etd === null ? "" : etd.toString(),
         lock,
-        status
+        status,
       };
       this.editMode = true;
     },
@@ -854,11 +863,11 @@ export default {
         stock: "",
         // etd: "",
         lock: false,
-        status: false
+        status: false,
       });
       this.editMode = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -41,7 +41,8 @@ const schema = new mongoose.Schema({
         _id: { type: ObjectId, ref: 'variants' },
         fabrics: [{
             _id: { type: ObjectId, ref: 'fabrics' },
-            price: Number
+            price: Number,
+            pricing: mongoose.Schema.Types.Mixed
         }]
     }],
     directPrice: { type: String, default: '0' },
@@ -72,28 +73,6 @@ const model = mongoose.model('products', schema);
 export const methods = {
     async register() {
         console.log('registered');
-
-        const products = [{
-            _id: '6080893e2ac9ae00156bffd7',
-            quantity: '1'
-        }, {
-            _id: '6079dedc195f00001537aad1',
-            quantity: '3'
-        },
-        {
-            _id: '60b4d8eb6292a70015c6b60c',
-            quantity: '2'
-        },
-        {
-            _id: '60eb03463f07c425190d275b',
-            quantity: '3'
-        },
-        {
-            _id: '6079dedc195f00001537aad1',
-            quantity: '2'
-        }];
-
-
     },
     async updateProduct(details, editMode) {
         /* product and collection models */

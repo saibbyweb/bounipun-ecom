@@ -10,6 +10,12 @@
              <span style="margin-top: 10px;font-size: 8px; font-style: italic; text-align:center; color: #333;"> {{ option.code }} </span>
             <!-- fabric price holder -->
             <input class="price shadow" v-if="option.checked" type="text" v-model="option.price" placeholder="Price"/>
+              <!-- fabric price usd -->
+            <input class="price shadow" v-if="option.checked" type="text" v-model="option.pricing.usd" placeholder="Price USD"/>
+             <!-- fabric price gbp -->
+            <input class="price shadow" v-if="option.checked" type="text" v-model="option.pricing.gbp" placeholder="Price GBP"/>
+
+
         </div>
     </div>
 </div>
@@ -37,7 +43,8 @@ export default {
                 return {
                     _id: fabric._id,
                     name: fabric.name,
-                    price: fabric.price
+                    price: fabric.price,
+                    pricing: fabric.pricing
                 }
             })
         }

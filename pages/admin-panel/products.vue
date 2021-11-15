@@ -194,6 +194,7 @@ export default {
           _id,
           checked: false,
           price: "",
+          pricing: {}
         };
       });
     },
