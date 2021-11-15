@@ -13,6 +13,7 @@ const schema = new mongoose.Schema({
     variantNote: { type: String, default: '' },
     edt: { type: Number, default: 1 },
     image: String,
+    inflationPercentage: Number,
     lock: { type: Boolean, default: false },
     lockedImage: { type: String, default: '' },
     lockedText: { type: String, default: '' },

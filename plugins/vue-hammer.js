@@ -14,11 +14,13 @@ import 'verte/dist/verte.css';
 import VueWindowSize from "vue-window-size";
 
 
+
 Vue.use(VueHammer);
 Vue.use(VueEllipseProgress);
 Vue.component("Switches", Switches);
 Vue.component("RockerSwitch", RockerSwitch);
 Vue.component("Autocomplete", Autocomplete);
+
 Vue.use(VCalendar, {
     componentPrefix: 'vc'
   });

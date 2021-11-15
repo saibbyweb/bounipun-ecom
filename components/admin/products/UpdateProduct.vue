@@ -718,7 +718,6 @@ export default {
     },
     /* populateVariant */
     populateVariants(variants) {
-      console.log(this.$refs.collections, "collections");
       variants.forEach((variant) => {
         let match = this.variants.find(({ _id }) => _id === variant._id);
         match.checked = true;

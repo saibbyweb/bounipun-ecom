@@ -42,6 +42,7 @@
     <TextBox v-model="doc.description" label="Description" />
     <!-- description -->
     <TextBox v-model="doc.variantNote" label="Variant Note" />
+
     <!-- active order limit -->
     <InputBox
       v-model.number="doc.activeOrderLimit"
@@ -82,6 +83,9 @@
         width="90px"
       />
     </div>
+
+    <!-- inflation slider -->
+    <InputSlider v-model="doc.inflationPercentage" label="Inflation Percentage (for outside India)" />
 
     <!-- lock -->
     <div class="section">
@@ -150,6 +154,7 @@ const baseDoc = () => ({
   activeOrderLimit: "",
   edt: "",
   image: "",
+  inflationPercentage:0,
   lockedImage: "",
   lockedText: "",
   mainTextBlock: baseTextBlock(),
@@ -167,6 +172,7 @@ export default {
       doc: baseDoc(),
       loading: false,
       updated: false,
+      val: 20,
     };
   },
   methods: {
@@ -216,6 +222,7 @@ export default {
         edt,
         activeOrderLimit,
         image,
+        inflationPercentage,
         lockedImage,
         lockedText,
         mainTextBlock,
@@ -232,6 +239,7 @@ export default {
         activeOrderLimit,
         edt: edt !== null ? edt.toString() : "",
         image,
+        inflationPercentage: inflationPercentage == undefined ? 0 : inflationPercentage,
         lockedImage,
         lockedText,
         mainTextBlock:
@@ -258,13 +266,13 @@ export default {
 <style lang="scss" scoped>
 .section {
   margin-top: 10px;
-  padding-top:10px;
+  padding-top: 10px;
   border: 3px dotted #efefef;
 
   .label {
     color: #333333;
     font-size: 12px;
-    padding-top:10px;
+    padding-top: 10px;
   }
 }
 </style>
