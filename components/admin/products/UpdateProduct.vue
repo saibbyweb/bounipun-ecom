@@ -331,6 +331,11 @@
         {{ editMode ? "Apply Changes" : "Add Product" }}
       </button>
 
+      <!-- set suggested pricing -->
+      <button @click="setSuggestedPrices" class="action" :disabled="loading">
+        Calculate Suggested Price
+      </button>
+
       <!-- delete document -->
       <button
         v-if="editMode"
@@ -591,7 +596,10 @@ export default {
     async fetchActiveCurrencies() {
       const request = await this.$post("/findDocuments", {
         model: "currency",
-        filters: { adminEnabled: true, status: true },
+        filters: {
+          adminEnabled: true,
+          status: true,
+        },
       });
 
       if (request.resolved == false) {
@@ -651,7 +659,7 @@ export default {
       if (!result.updated) return;
 
       this.$emit("updated");
-      // color.showRTSPanel = false;
+
       color.rtsDirectPrice = "ADDED";
       color.rtsStock = "ADDED";
     },
@@ -727,7 +735,6 @@ export default {
     imageListUpdated(list, index) {
       // console.log(list, index);
       this.doc.colors[index].images = list;
-      console.log(list, "image list updated");
     },
     /* add new color */
     addNewColor(color) {
@@ -782,7 +789,9 @@ export default {
       );
     },
     async updateDocument() {
-      let details = { ...this.doc };
+      let details = {
+        ...this.doc,
+      };
       // ready to ship
       if (this.doc.availabilityType !== "ready-to-ship") {
         delete details.rtsDirectVariant;
@@ -790,20 +799,19 @@ export default {
       }
       /* if product is under bounipun */
       if (this.doc.type === "under-bounipun") {
-        console.log("UNDERRRRRR");
         const { variants } = this.doc;
+        /* base price set for all variants */
         const basePriceSetForAllVariants = variants.every((variant) => {
           const { fabrics } = variant;
           const basePriceSetForAllFabrics = fabrics.every((fabric) => {
-            if(fabric.price === undefined || fabric.price === null)
+            if (fabric.price === undefined || fabric.price === null)
               return false;
-            console.log(fabric.price, "--fabric price");
             return fabric.price.trim() !== "";
           });
           return basePriceSetForAllFabrics;
         });
 
-        // if base price not set, dont update the product
+        /* if base price not set, dont update the product */
         if (basePriceSetForAllVariants == false) {
           this.errorToast.status = true;
           this.errorToast.msg = "Base Price not set for all fabrics.";
@@ -827,6 +835,45 @@ export default {
       this.doc._id = result.doc._id;
       this.editMode = true;
       this.$flash(this);
+    },
+    setSuggestedPrices() {
+      /* inflated percentage */
+      let inflationPercentage = 0;
+      /* calculate inflation percentage */
+      if (this.doc.type === "under-bounipun") {
+        const foundIndex = this.collections.findIndex(
+          (col) => col.value === this.doc.bounipun_collection
+        );
+        console.log(foundIndex,'--- FOUND INDEXX_____')
+        const collection = this.collections[foundIndex];
+        console.log(collection,'--FOUNDINDEXXXXXX');
+        inflationPercentage = collection.inflationPercentage;
+      }
+      /* variants */
+      const { variants } = this.doc;
+      /* loop throught every variant */
+      variants.forEach((variant) => {
+        /* fabrics */
+        const { fabrics } = variant;
+        /* loop through every fabrics */
+        fabrics.forEach((fabric) => {
+          /* get all available currencies for fabric */
+          const currencyCodes = Object.keys(fabric.pricing);
+          /* loop through all available currencies */
+          for (const code of currencyCodes) {
+            /* get exchange rate */
+            const foundIndex = this.currencies.findIndex(cur => cur.code === code);
+            /* if currency not found  */
+            if(foundIndex === -1) {
+                return;
+            }
+            const currencyDetails = this.currencies[foundIndex];
+            console.log(currencyDetails.exchangeRateINR);
+            fabric.pricing[code] = ((fabric.price * (1 + inflationPercentage/100)) / currencyDetails.exchangeRateINR)
+            console.log(fabric.pricing[code]);
+          }
+        });
+      });
     },
     async deleteDocument() {
       this.loading = true;

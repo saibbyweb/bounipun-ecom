@@ -214,15 +214,19 @@ export default {
     },
     async fetchBounipunCollections() {
       const result = await this.$fetchCollection("collections");
-      this.collections = result.docs.map(({ _id, name }) => {
+      
+      this.collections = result.docs.map(({ _id, name, inflationPercentage }) => {
         return {
           name,
           value: _id,
-        };
+          inflationPercentage
+        }
       });
+
       this.collections.unshift({
         name: "Select Collection",
         value: "default",
+        inflationPercentage: 0
       });
 
       /* update collection name in list */

@@ -13,6 +13,7 @@
           type="checkbox"
           :value="option.value"
           v-model="option.checked"
+          @input="fabricChecked"
         />
         <label class="label"> {{ option.name }} </label>
         <!-- <span style="margin: 0;font-size: 8px; font-style: italic; text-align:center; color: #333;"> {{ option.info1 }} </span> -->
@@ -46,7 +47,6 @@
             :placeholder="`Price (${currency.code})`"
           />
         </div>
-        
       </div>
     </div>
   </div>
@@ -84,11 +84,22 @@ export default {
           pricing: fabric.pricing,
         };
       });
-    }
+    },
   },
   methods: {
     populateFabricSelection(variant) {
       const selectedFabrics = variant.fabrics;
+
+      /* all fabrics */
+      const allFabrics = this.localVariant.fabrics;
+
+      allFabrics.forEach((fabric) => {
+          fabric.pricing = {}
+        this.localCurrencies.forEach((currency) => {
+          //if enabled currency pricing is not present in saved product pricing, then define fields for the
+            fabric.pricing[currency.code] = "";
+        });
+      });
 
       const preselectList = this.localVariant.fabrics.map((fabric) => {
         let element = fabric;
@@ -101,18 +112,11 @@ export default {
           element.price = selectedFabrics[foundIndex].price;
           element.pricing = selectedFabrics[foundIndex].pricing;
 
-          if(element.pricing === undefined) {
-              element.pricing = {}
+          if (element.pricing === undefined) {
+            element.pricing = {};
           }
 
-        //   this.alreadySetCurrencies = Object.keys(element.pricing)
-
-          this.localCurrencies.forEach(currency => {
-            //if enabled currency pricing is not present in saved product pricing, then define fields for them
-            
-            if(element.pricing[currency.code] === undefined)
-                element.pricing[currency.code] = ""
-          });
+          //   this.alreadySetCurrencies = Object.keys(element.pricing)
         }
       });
     },
@@ -124,12 +128,15 @@ export default {
       });
       this.$forceUpdate();
     },
+    fabricChecked(event) {
+      console.log(event.target.value);
+    },
   },
   data() {
     return {
       localVariant: JSON.parse(JSON.stringify(this.variant)),
       localCurrencies: JSON.parse(JSON.stringify(this.currencies)),
-      alreadySetCurrencies: []
+      alreadySetCurrencies: [],
     };
   },
 };
@@ -163,7 +170,7 @@ export default {
       padding: 10px 5px;
       // margin: 10px;
       width: 22%;
-    //   height: 130px;
+      //   height: 130px;
       box-sizing: border-box;
       // box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
 
