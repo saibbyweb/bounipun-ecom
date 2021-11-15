@@ -330,6 +330,7 @@
       <button @click="updateDocument" class="action" :disabled="loading">
         {{ editMode ? "Apply Changes" : "Add Product" }}
       </button>
+
       <!-- delete document -->
       <button
         v-if="editMode"
@@ -339,6 +340,14 @@
       >
         Delete
       </button>
+
+      <!-- error toast -->
+      <Toast
+        v-if="errorToast.status"
+        :msg="errorToast.msg"
+        :show="errorToast.status"
+        :error="true"
+      />
     </div>
     <br />
     <div class="center">
@@ -564,6 +573,10 @@ export default {
       loading: false,
       updated: false,
       currencies: [],
+      errorToast: {
+        status: false,
+        msg: "Base Price not set",
+      },
       error: {
         status: false,
         msg: "",
@@ -576,12 +589,12 @@ export default {
   },
   methods: {
     async fetchActiveCurrencies() {
-      const request = await this.$post('/findDocuments', {
-          model: 'currency',
-          filters: { adminEnabled: true, status: true }
+      const request = await this.$post("/findDocuments", {
+        model: "currency",
+        filters: { adminEnabled: true, status: true },
       });
 
-      if(request.resolved == false) {
+      if (request.resolved == false) {
         return;
       }
 
@@ -775,6 +788,29 @@ export default {
       if (this.doc.availabilityType !== "ready-to-ship") {
         delete details.rtsDirectVariant;
         delete details.rtsDirectFabric;
+      }
+      /* if product is under bounipun */
+      if (this.doc.type === "under-bounipun") {
+        console.log("UNDERRRRRR");
+        const { variants } = this.doc;
+        const basePriceSetForAllVariants = variants.every((variant) => {
+          const { fabrics } = variant;
+          const basePriceSetForAllFabrics = fabrics.every((fabric) => {
+            if(fabric.price === undefined || fabric.price === null)
+              return false;
+            console.log(fabric.price, "--fabric price");
+            return fabric.price.trim() !== "";
+          });
+          return basePriceSetForAllFabrics;
+        });
+
+        // if base price not set, dont update the product
+        if (basePriceSetForAllVariants == false) {
+          this.errorToast.status = true;
+          this.errorToast.msg = "Base Price not set for all fabrics.";
+          setTimeout(() => (this.errorToast.status = false), 2200);
+          return;
+        }
       }
 
       this.loading = true;
