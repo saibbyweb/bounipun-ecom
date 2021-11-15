@@ -1,8 +1,7 @@
 <template>
-  <div class="slidecontainer">
+  <div class="range-slider">
     <label class="label"> {{ label }} </label>
     <div class="pad-10 flex center col">
-       
       <input
         ref="rangeSlider"
         type="range"
@@ -16,7 +15,12 @@
         :style="getStyles(percentage)"
       />
       <div class="flex">
-       <input type="number" @input="$emit('input', $event.target.value)" :value="value"/>{{ unit }}
+        <input
+        class="alternate-input shadow"
+          type="number"
+          @input="$emit('input', $event.target.value)"
+          :value="value"
+        />{{ unit }}
       </div>
     </div>
   </div>
@@ -27,7 +31,7 @@ export default {
   props: {
     label: String,
     value: Number,
-    unit: { type: String, default: '%' },
+    unit: { type: String, default: "%" },
     step: { type: Number, default: 1 },
     min: { type: Number, default: 0 },
     max: { type: Number, default: 100 },
@@ -50,7 +54,7 @@ export default {
 </script>
 
 <style lang="scss">
-.slidecontainer {
+.range-slider {
   width: 100%; /* Width of the outside container */
 }
 
@@ -81,5 +85,23 @@ export default {
   background: #0c8357; /* Green background */
   cursor: pointer; /* Cursor on hover */
   border-radius: 10px;
+}
+
+.alternate-input {
+    width: 80px;
+    border:none;
+    padding:2px 5px;
+    font-size:16px;
+    color:#0c8357; 
+    margin-right:10px;
+    font-family: $font_2_bold;
+    text-align:center;
+
+    
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 </style>

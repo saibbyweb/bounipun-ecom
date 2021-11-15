@@ -16,7 +16,7 @@
     <InputBox label="Code" v-model="doc.code" />
     <!-- exchange rate -->
     <!-- <InputBox label="Exchange Rate (INR)" v-model="doc.exchangeRateINR" /> -->
-    <InputSlider v-model="doc.exchangeRateINR" label="DExchange Rate (INR)" unit="INR" :min="0" :max="250" :step="0.25" />
+    <InputSlider v-model="doc.exchangeRateINR" label="DExchange Rate (INR)" unit="INR" :min="0" :max="250" />
     <!-- zero decimal toggle -->
     <Toggle v-model="doc.zeroDecimal" label="Zero Decimal:" />
     <!-- admin enabled toggle -->
