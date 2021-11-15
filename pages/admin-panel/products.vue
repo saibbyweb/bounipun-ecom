@@ -170,7 +170,6 @@ export default {
     await this.fetchBounipunCollections();
     await this.fetchVariants();
     await this.fetchFabrics();
-    // await this.fetchList();
   },
   methods: {
     updateList() {
@@ -240,7 +239,7 @@ export default {
           item.type !== "third-party" ? bounipun_collection : "N/A";
         return item;
       });
-      console.log("LIST UPDATED");
+
     },
     documentFetched(doc) {
       this.showForm = true;
@@ -325,9 +324,7 @@ export default {
               foundCollection !== undefined
                 ? foundCollection.name
                 : "NOT AVAILABLE";
-          }
-
-          // console.log(foundCollection, '-found collection');
+          }6
 
           return {
             _id,

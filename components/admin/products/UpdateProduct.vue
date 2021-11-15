@@ -285,6 +285,7 @@
         v-for="variant in selectedVariantsWithFabricOptions"
         :key="variant._id"
         :variant="variant"
+        :currencies="currencies"
         @fabricSelectionUpdated="fabricSelectionUpdated"
       />
     </div>
@@ -562,6 +563,7 @@ export default {
       baseColors: [],
       loading: false,
       updated: false,
+      currencies: [],
       error: {
         status: false,
         msg: "",
@@ -570,8 +572,23 @@ export default {
   },
   mounted() {
     this.fetchBaseColors();
+    this.fetchActiveCurrencies();
   },
   methods: {
+    async fetchActiveCurrencies() {
+      const request = await this.$post('/findDocuments', {
+          model: 'currency',
+          filters: { adminEnabled: true, status: true }
+      });
+
+      if(request.resolved == false) {
+        return;
+      }
+
+      const currencies = request.response;
+
+      this.currencies = currencies;
+    },
     async addNewRTSEntry(color) {
       const selectedVariant = this.variants.find(
         (variant) => variant.value === color.rtsVariant
