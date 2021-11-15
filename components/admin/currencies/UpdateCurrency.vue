@@ -15,7 +15,8 @@
     <!-- code -->
     <InputBox label="Code" v-model="doc.code" />
     <!-- exchange rate -->
-    <InputBox label="Exchange Rate (INR)" v-model="doc.exchangeRateINR" />
+    <!-- <InputBox label="Exchange Rate (INR)" v-model="doc.exchangeRateINR" /> -->
+    <InputSlider v-model="doc.exchangeRateINR" label="DExchange Rate (INR)" unit="INR" :min="0" :max="250" :step="0.25" />
     <!-- zero decimal toggle -->
     <Toggle v-model="doc.zeroDecimal" label="Zero Decimal:" />
     <!-- admin enabled toggle -->
@@ -23,7 +24,7 @@
     <!-- client enabled toggle -->
     <Toggle v-model="doc.clientEnabled" label="Client Enabled:" />
     <!-- default inflation percentage -->
-    <InputBox label="Default Inflation Percentage" v-model="doc.defaultInflationPercentage" />
+    <InputSlider v-model="doc.defaultInflationPercentage" label="Default Inflation Percentage (for outside India)" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
     <!-- status toggle -->
@@ -131,6 +132,10 @@ export default {
         description,
         status
       };
+
+      if(typeof defaultInflationPercentage === 'String') {
+        this.doc.defaultInflationPercentage = parseInt(defaultInflationPercentage)
+      }
 
       this.editMode = true;
     },

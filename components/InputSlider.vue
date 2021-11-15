@@ -2,18 +2,22 @@
   <div class="slidecontainer">
     <label class="label"> {{ label }} </label>
     <div class="pad-10 flex center col">
+       
       <input
         ref="rangeSlider"
         type="range"
         :min="min"
         :max="max"
         :value="value"
+        :step="step"
         class="slider"
         id="myRange"
         @input="$emit('input', $event.target.value)"
         :style="getStyles(percentage)"
       />
-      {{ value }} %
+      <div class="flex">
+       <input type="number" @input="$emit('input', $event.target.value)" :value="value"/>{{ unit }}
+      </div>
     </div>
   </div>
 </template>
@@ -23,6 +27,8 @@ export default {
   props: {
     label: String,
     value: Number,
+    unit: { type: String, default: '%' },
+    step: { type: Number, default: 1 },
     min: { type: Number, default: 0 },
     max: { type: Number, default: 100 },
   },
