@@ -266,7 +266,7 @@ router.post('/updateDocument', adminAuth('1', true), async (req, res) => {
         return;
     }
 
-    // console.log(result);
+    console.log(result);
 
     res.send(result);
 });

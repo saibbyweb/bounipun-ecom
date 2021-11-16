@@ -185,7 +185,7 @@ export const methods = {
     }
 
     /* add lowest and highest price */
-    console.log(details.priceRange);
+    // console.log(details.directPricing,'-- Direct Pricing');
     console.log(details.alias, "-- FINAL ALIAS");
     console.log(details.slug, "-- FINAL SLUG");
   },

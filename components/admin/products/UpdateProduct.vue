@@ -657,10 +657,12 @@ export default {
       const currencies = request.response;
 
       this.currencies = currencies;
+
       this.currencies.forEach(({code}) => {
         const dbPrice = this.doc.directPricing[code];
         this.doc.directPricing[code] = dbPrice === undefined ? dbPrice : "";
       });
+
     },
     async addNewRTSEntry(color) {
       const selectedVariant = this.variants.find(
@@ -925,11 +927,6 @@ export default {
       );
     },
     setNonINRPrices(nonINRPricing, INRPrice, inflationPercentage) {
-      if (inflationPercentage === false) {
-        console.log("inflation not provided");
-        return;
-      }
-
       /* get all available currencies for fabric */
       const currencyCodes = Object.keys(nonINRPricing);
       /* loop through all available currencies */
@@ -946,8 +943,14 @@ export default {
         if (INRPrice === undefined) return;
 
         const currencyDetails = this.currencies[foundIndex];
-        const price =
-          (INRPrice * (1 + inflationPercentage / 100)) /
+        /* if inflation percentage not provide, use default currency inflation */
+        if(inflationPercentage === false) {
+          inflationPercentage = currencyDetails.defaultInflationPercentage
+          if(typeof inflationPercentage === "String")
+            inflationPercentage = parseInt(inflationPercentage);
+        }
+        /* calculate inflated price */
+        const price = (INRPrice * (1 + inflationPercentage / 100)) /
           currencyDetails.exchangeRateINR;
 
         nonINRPricing[code] = price;
@@ -1018,10 +1021,14 @@ export default {
         status,
       };
 
+    
+
       /* currency */
       this.currencies.forEach(({ code }) => {
         const dbPrice = this.doc.directPricing[code];
-        this.doc.directPricing[code] = dbPrice === undefined ? dbPrice : "";
+        if(dbPrice !== undefined)
+          return;
+        this.doc.directPricing[code] = "";
       });
 
       this.editMode = true;

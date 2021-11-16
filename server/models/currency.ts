@@ -1,5 +1,4 @@
 import { mongoose } from "@helpers/essentials"
-import allCurrencies from "../../helpers/currencies.js"
 /* schema */
 const schema = new mongoose.Schema({
     name: { type: String, required: true },
