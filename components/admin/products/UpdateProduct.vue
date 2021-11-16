@@ -241,11 +241,43 @@
               v-model="color.rtsFabric"
               label="Select Fabric:"
             />
-            <div class="center">
+            <div class="flex">
               <!-- stock -->
               <InputBox label="Stock:" v-model="color.rtsStock" />
               <!-- direct price -->
-              <InputBox label="Direct Price:" v-model="color.rtsDirectPrice" />
+              <!-- <InputBox label="Direct Price:" v-model="color.rtsDirectPrice" /> -->
+
+              <!-- RTS PANEL PRICING -->
+              <div class="rts-pricing flex col" style="width: 100%">
+                <!-- direct price (INR) -->
+                <div class="currency-box">
+                  <span class="code flex center"> INR </span>
+                  <input
+                    class="price shadow"
+                    type="text"
+                    v-model="color.directPrice"
+                    placeholder="Price (INR)"
+                  />
+                </div>
+
+                <!-- direct pricing (non INR currencies) -->
+                <div
+                  v-for="{ code } in currencies"
+                  :key="code"
+                  class="currency-box"
+                >
+                  <span class="code flex center">
+                    {{ code }}
+                  </span>
+
+                  <input
+                    class="price shadow"
+                    type="text"
+                    v-model="color.directPricing[code]"
+                    :placeholder="`Price (${code})`"
+                  />
+                </div>
+              </div>
             </div>
             <!-- add new RTS entry -->
             <div class="center">
@@ -663,6 +695,9 @@ export default {
       });
     },
     async addNewRTSEntry(color) {
+      console.log(color);
+      return;
+
       const selectedVariant = this.variants.find(
         (variant) => variant.value === color.rtsVariant
       );
@@ -679,6 +714,7 @@ export default {
         selectedVariant.code +
         "/" +
         selectedFabric.code;
+
       /* rts product */
       const rtsProduct = {
         alias: "",
@@ -888,17 +924,20 @@ export default {
         /* base price set for all variants */
         allPricesSet = variants.every((variant) => {
           const { fabrics } = variant;
-          
+
           const basePriceSetForAllFabrics = fabrics.every((fabric) => {
             return checkAllPrices(fabric.price, fabric.pricing);
           });
 
-          console.log(basePriceSetForAllFabrics,variant.name)
+          console.log(basePriceSetForAllFabrics, variant.name);
 
           return basePriceSetForAllFabrics;
         });
       } else {
-        allPricesSet = checkAllPrices(this.doc.directPrice, this.doc.directPricing)
+        allPricesSet = checkAllPrices(
+          this.doc.directPrice,
+          this.doc.directPricing
+        );
       }
 
       /* if all prices not set, dont update the product */
@@ -1033,12 +1072,20 @@ export default {
         status,
       };
 
+         /* add direct pricing object to every color */
+      this.doc.colors.forEach((color) => {
+        color.directPricing = {}
+        this.currencies.forEach(({code}) => color.directPricing[code] = "")
+      });
+
       /* currency */
       this.currencies.forEach(({ code }) => {
         const dbPrice = this.doc.directPricing[code];
         if (dbPrice !== undefined) return;
         this.doc.directPricing[code] = "";
       });
+
+   
 
       this.editMode = true;
     },
