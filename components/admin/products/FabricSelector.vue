@@ -88,6 +88,7 @@ export default {
       type: Number,
       default: 0,
     },
+    setNonINRPrices: Function
   },
   watch: {
     selectedFabrics() {
@@ -97,6 +98,8 @@ export default {
         if(newVal)
             this.setSuggestedPricing();
     }
+  },
+  mounted() {
   },
   computed: {
     selectedFabrics() {
@@ -115,34 +118,15 @@ export default {
   },
   methods: {
     basePriceUpdated() {
-      if (this.enableSuggestedPricing) this.setSuggestedPricing();
+      if (this.enableSuggestedPricing) 
+      this.setSuggestedPricing();
     },
     setSuggestedPricing() {
       /* loop through every fabrics */
       this.selectedFabrics.forEach((fabric) => {
-        /* get all available currencies for fabric */
-        const currencyCodes = Object.keys(fabric.pricing);
-        /* loop through all available currencies */
-        for (const code of currencyCodes) {
-          /* get exchange rate */
-          const foundIndex = this.currencies.findIndex(
-            (cur) => cur.code === code
-          );
-          /* if currency not found  */
-          if (foundIndex === -1) {
-            return;
-          }
-          if (fabric.price === undefined) return;
 
-          const currencyDetails = this.currencies[foundIndex];
-          const price =
-            (fabric.price * (1 + this.inflationPercentage / 100)) /
-            currencyDetails.exchangeRateINR;
-          fabric.pricing[code] = price;
-          fabric.pricing[code] = currencyDetails.zeroDecimal
-            ? parseInt(price)
-            : parseFloat(price).toFixed(2);
-        }
+      this.setNonINRPrices(fabric.pricing, fabric.price, this.inflationPercentage);
+        
       });
 
       this.updateSelectionList();

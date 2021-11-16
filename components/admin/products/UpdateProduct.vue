@@ -287,16 +287,44 @@
         :variant="variant"
         :currencies="currencies"
         :inflationPercentage="collectionInflationPercentage"
+        :setNonINRPrices="setNonINRPrices"
         @fabricSelectionUpdated="fabricSelectionUpdated"
       />
     </div>
 
-    <!-- direct price -->
-    <InputBox
-      v-if="thirdPartyProduct || readyToShip"
-      label="Direct Price"
-      v-model="doc.directPrice"
-    />
+    <!-- direct pricing -->
+    <div v-if="thirdPartyProduct || readyToShip">
+      <button @click="setSuggestedPrices">Set Suggested Prices</button>
+
+      <!-- direct price (INR) -->
+      <div class="currency-box">
+        <span class="code flex center"> Direct Price (INR) </span>
+        <input
+          class="price shadow"
+          type="text"
+          v-model="doc.directPrice"
+          placeholder="Price (INR)"
+        />
+      </div>
+
+      <!-- direct pricing (non INR currencies) -->
+      <div
+        v-for="code in Object.keys(doc.directPricing)"
+        :key="code"
+        class="currency-box"
+      >
+        <span class="code flex center">
+          {{ code }}
+        </span>
+
+        <input
+          class="price shadow"
+          type="text"
+          v-model="doc.directPricing[code]"
+          :placeholder="`Price (${code})`"
+        />
+      </div>
+    </div>
 
     <!-- stock -->
     <InputBox
@@ -358,8 +386,33 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from "uuid";
+/* base doc */
+const baseDoc = () => ({
+  _id: "",
+  styleId: "",
+  printNo: "",
+  gender: "",
+  name: "",
+  alias: "",
+  slug: "",
+  description: "",
+  type: "",
+  availabilityType: "",
+  bounipun_collection: null,
+  colorSource: "",
+  variants: [],
+  colors: [],
+  directPrice: "",
+  directPricing: {},
+  rtsDirectVariant: "",
+  rtsDirectFabric: "",
+  stock: "",
+  // etd: "",
+  lock: false,
+  status: false,
+});
 
+import { v4 as uuidv4 } from "uuid";
 export default {
   props: {
     model: String,
@@ -400,6 +453,8 @@ export default {
         const foundIndex = this.collections.findIndex(
           (col) => col.value === this.doc.bounipun_collection
         );
+        if(foundIndex === -1)
+          return 0;
         const collection = this.collections[foundIndex];
         inflationPercentage = collection.inflationPercentage;
       }
@@ -502,30 +557,7 @@ export default {
   data() {
     return {
       editMode: false,
-      doc: {
-        _id: "",
-        styleId: "",
-        printNo: "",
-        gender: "",
-        name: "",
-        alias: "",
-        slug: "",
-        description: "",
-        type: "",
-        availabilityType: "",
-        bounipun_collection: null,
-        /* new types */
-        colorSource: "",
-        variants: [],
-        colors: [],
-        directPrice: "",
-        stock: "",
-        rtsDirectVariant: "",
-        rtsDirectFabric: "",
-        // etd: "",
-        lock: false,
-        status: false,
-      },
+      doc: baseDoc(),
       types: [
         {
           name: "Select Type",
@@ -625,6 +657,10 @@ export default {
       const currencies = request.response;
 
       this.currencies = currencies;
+      this.currencies.forEach(({code}) => {
+        const dbPrice = this.doc.directPricing[code];
+        this.doc.directPricing[code] = dbPrice === undefined ? dbPrice : "";
+      });
     },
     async addNewRTSEntry(color) {
       const selectedVariant = this.variants.find(
@@ -813,7 +849,7 @@ export default {
         delete details.rtsDirectVariant;
         delete details.rtsDirectFabric;
       }
-      
+
       // check price validitity
       function checkValidPrice(price) {
         if (typeof price === "number") {
@@ -831,22 +867,22 @@ export default {
         const basePriceSetForAllVariants = variants.every((variant) => {
           const { fabrics } = variant;
           const basePriceSetForAllFabrics = fabrics.every((fabric) => {
-            
             /* check INR pricing */
             const INRPriceValid = checkValidPrice(fabric.price);
-            if(INRPriceValid === false) {
+            if (INRPriceValid === false) {
               return false;
             }
 
             /* check non INR Pricing */
             const currencyCodes = Object.keys(fabric.pricing);
-            const nonINRSet = currencyCodes.every(code => checkValidPrice(fabric.pricing[code]));
-            if(nonINRSet === false) {
+            const nonINRSet = currencyCodes.every((code) =>
+              checkValidPrice(fabric.pricing[code])
+            );
+            if (nonINRSet === false) {
               return false;
             }
 
             return true;
-
           });
           return basePriceSetForAllFabrics;
         });
@@ -877,45 +913,48 @@ export default {
       this.$flash(this);
     },
     setSuggestedPrices() {
-      /* inflated percentage */
-      let inflationPercentage = 0;
-      /* calculate inflation percentage */
-      if (this.doc.type === "under-bounipun") {
-        const foundIndex = this.collections.findIndex(
-          (col) => col.value === this.doc.bounipun_collection
-        );
-        const collection = this.collections[foundIndex];
-        inflationPercentage = collection.inflationPercentage;
+      const inflationPercentage =
+        this.doc.type === "under-bounipun"
+          ? this.collectionInflationPercentage
+          : false;
+
+      this.setNonINRPrices(
+        this.doc.directPricing,
+        this.doc.directPrice,
+        inflationPercentage
+      );
+    },
+    setNonINRPrices(nonINRPricing, INRPrice, inflationPercentage) {
+      if (inflationPercentage === false) {
+        console.log("inflation not provided");
+        return;
       }
-      /* variants */
-      const { variants } = this.doc;
-      /* loop throught every variant */
-      variants.forEach((variant) => {
-        /* fabrics */
-        // const { fabrics } = variant;
-        /* loop through every fabrics */
-        variant.fabrics.forEach((fabric) => {
-          /* get all available currencies for fabric */
-          const currencyCodes = Object.keys(fabric.pricing);
-          /* loop through all available currencies */
-          for (const code of currencyCodes) {
-            /* get exchange rate */
-            const foundIndex = this.currencies.findIndex(
-              (cur) => cur.code === code
-            );
-            /* if currency not found  */
-            if (foundIndex === -1) {
-              return;
-            }
-            const currencyDetails = this.currencies[foundIndex];
-            const price =
-              (fabric.price * (1 + inflationPercentage / 100)) /
-              currencyDetails.exchangeRateINR;
-            fabric.pricing[code] = price;
-            // fabric.pricing[code] = currencyDetails.zeroDecimal ? parseInt(price) : parseFloat(price).toFixed(2)
-          }
-        });
-      });
+
+      /* get all available currencies for fabric */
+      const currencyCodes = Object.keys(nonINRPricing);
+      /* loop through all available currencies */
+      for (const code of currencyCodes) {
+        /* get exchange rate */
+        const foundIndex = this.currencies.findIndex(
+          (cur) => cur.code === code
+        );
+        /* if currency not found  */
+        if (foundIndex === -1) {
+          return;
+        }
+
+        if (INRPrice === undefined) return;
+
+        const currencyDetails = this.currencies[foundIndex];
+        const price =
+          (INRPrice * (1 + inflationPercentage / 100)) /
+          currencyDetails.exchangeRateINR;
+
+        nonINRPricing[code] = price;
+        nonINRPricing[code] = currencyDetails.zeroDecimal
+          ? parseInt(price)
+          : parseFloat(price).toFixed(2);
+      }
       this.$forceUpdate();
     },
     async deleteDocument() {
@@ -946,6 +985,7 @@ export default {
         variants,
         colors,
         directPrice,
+        directPricing,
         stock,
         rtsDirectVariant,
         rtsDirectFabric,
@@ -969,6 +1009,7 @@ export default {
         variants,
         colors,
         directPrice,
+        directPricing: directPricing === undefined ? {} : directPricing,
         rtsDirectVariant,
         rtsDirectFabric,
         stock: stock === undefined ? "" : stock,
@@ -976,6 +1017,13 @@ export default {
         lock,
         status,
       };
+
+      /* currency */
+      this.currencies.forEach(({ code }) => {
+        const dbPrice = this.doc.directPricing[code];
+        this.doc.directPricing[code] = dbPrice === undefined ? dbPrice : "";
+      });
+
       this.editMode = true;
     },
     closeForm() {
@@ -984,29 +1032,7 @@ export default {
       this.$emit("close");
     },
     resetForm() {
-      this.populateForm({
-        _id: "",
-        styleId: "",
-        printNo: "",
-        gender: "",
-        name: "",
-        alias: "",
-        slug: "",
-        description: "",
-        type: "",
-        availabilityType: "",
-        bounipun_collection: null,
-        colorSource: "",
-        variants: [],
-        colors: [],
-        directPrice: "",
-        rtsDirectVariant: "",
-        rtsDirectFabric: "",
-        stock: "",
-        // etd: "",
-        lock: false,
-        status: false,
-      });
+      this.populateForm(baseDoc());
       this.editMode = false;
     },
   },
@@ -1014,6 +1040,30 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.currency-box {
+  position: relative;
+  .price {
+    width: 100%;
+    text-align: right;
+    border: none;
+    margin-top: 3px;
+    padding: 2px 6px;
+    box-sizing: border-box;
+    font-size: 13px;
+
+    &::placeholder {
+      opacity: 0.6;
+    }
+  }
+
+  .code {
+    top: 0;
+    left: 0;
+    position: absolute;
+    font-size: 12px;
+    height: 100%;
+  }
+}
 .colors {
   .color-box {
     position: relative;
