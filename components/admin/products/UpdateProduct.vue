@@ -453,8 +453,7 @@ export default {
         const foundIndex = this.collections.findIndex(
           (col) => col.value === this.doc.bounipun_collection
         );
-        if(foundIndex === -1)
-          return 0;
+        if (foundIndex === -1) return 0;
         const collection = this.collections[foundIndex];
         inflationPercentage = collection.inflationPercentage;
       }
@@ -658,11 +657,10 @@ export default {
 
       this.currencies = currencies;
 
-      this.currencies.forEach(({code}) => {
+      this.currencies.forEach(({ code }) => {
         const dbPrice = this.doc.directPricing[code];
         this.doc.directPricing[code] = dbPrice === undefined ? dbPrice : "";
       });
-
     },
     async addNewRTSEntry(color) {
       const selectedVariant = this.variants.find(
@@ -847,7 +845,10 @@ export default {
         ...this.doc,
       };
       // ready to ship
-      if (this.doc.type !== 'under-bounipun' || this.doc.availabilityType !== "ready-to-ship") {
+      if (
+        this.doc.type !== "under-bounipun" ||
+        this.doc.availabilityType !== "ready-to-ship"
+      ) {
         delete details.rtsDirectVariant;
         delete details.rtsDirectFabric;
       }
@@ -862,40 +863,50 @@ export default {
         return price.trim() !== "";
       }
 
+      /* check all prices INR as well as non INR */
+      function checkAllPrices(INRPrice, NonINRPrices) {
+        const INRPriceValid = checkValidPrice(INRPrice);
+        if (INRPriceValid === false) {
+          return false;
+        }
+
+        /* check non INR Pricing */
+        const currencyCodes = Object.keys(NonINRPrices);
+        const nonINRSet = currencyCodes.every((code) =>
+          checkValidPrice(NonINRPrices[code])
+        );
+
+        return nonINRSet;
+      }
+
+      /* all prices not set flag */
+      let allPricesSet = false;
+
       /* if product is under bounipun */
-      if (this.doc.type === "under-bounipun") {
+      if (this.doc.availabilityType === "made-to-order") {
         const { variants } = this.doc;
         /* base price set for all variants */
-        const basePriceSetForAllVariants = variants.every((variant) => {
+        allPricesSet = variants.every((variant) => {
           const { fabrics } = variant;
+          
           const basePriceSetForAllFabrics = fabrics.every((fabric) => {
-            /* check INR pricing */
-            const INRPriceValid = checkValidPrice(fabric.price);
-            if (INRPriceValid === false) {
-              return false;
-            }
-
-            /* check non INR Pricing */
-            const currencyCodes = Object.keys(fabric.pricing);
-            const nonINRSet = currencyCodes.every((code) =>
-              checkValidPrice(fabric.pricing[code])
-            );
-            if (nonINRSet === false) {
-              return false;
-            }
-
-            return true;
+            return checkAllPrices(fabric.price, fabric.pricing);
           });
+
+          console.log(basePriceSetForAllFabrics,variant.name)
+
           return basePriceSetForAllFabrics;
         });
+      } else {
+        allPricesSet = checkAllPrices(this.doc.directPrice, this.doc.directPricing)
+      }
 
-        /* if base price not set, dont update the product */
-        if (basePriceSetForAllVariants == false) {
-          this.errorToast.status = true;
-          this.errorToast.msg = "Pricing is not set for all currencies.";
-          setTimeout(() => (this.errorToast.status = false), 2200);
-          return;
-        }
+      /* if all prices not set, dont update the product */
+      if (allPricesSet == false) {
+        this.errorToast.status = true;
+        this.errorToast.msg = "Pricing is not set for all currencies.";
+        setTimeout(() => (this.errorToast.status = false), 2200);
+        return;
       }
 
       this.loading = true;
@@ -944,13 +955,14 @@ export default {
 
         const currencyDetails = this.currencies[foundIndex];
         /* if inflation percentage not provide, use default currency inflation */
-        if(inflationPercentage === false) {
-          inflationPercentage = currencyDetails.defaultInflationPercentage
-          if(typeof inflationPercentage === "String")
+        if (inflationPercentage === false) {
+          inflationPercentage = currencyDetails.defaultInflationPercentage;
+          if (typeof inflationPercentage === "String")
             inflationPercentage = parseInt(inflationPercentage);
         }
         /* calculate inflated price */
-        const price = (INRPrice * (1 + inflationPercentage / 100)) /
+        const price =
+          (INRPrice * (1 + inflationPercentage / 100)) /
           currencyDetails.exchangeRateINR;
 
         nonINRPricing[code] = price;
@@ -1021,13 +1033,10 @@ export default {
         status,
       };
 
-    
-
       /* currency */
       this.currencies.forEach(({ code }) => {
         const dbPrice = this.doc.directPricing[code];
-        if(dbPrice !== undefined)
-          return;
+        if (dbPrice !== undefined) return;
         this.doc.directPricing[code] = "";
       });
 
