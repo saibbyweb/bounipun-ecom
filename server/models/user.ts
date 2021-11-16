@@ -432,9 +432,10 @@ export const methods = {
     /* find cartItem helper  */
     findCartItem(cart, cartItem) {
         /* if cart empty */
-        if (cart.length === 0) return false;
-
-        console.log(cart, cartItem);
+        if (cart.length === 0) {
+            console.log('%cuser.ts line:436 cart.length', 'color: #007acc;', cart.length);
+            return false;
+        }
 
         let foundIndex = cart.findIndex(item => {
             /* common params to match */

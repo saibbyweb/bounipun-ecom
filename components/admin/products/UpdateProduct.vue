@@ -847,7 +847,7 @@ export default {
         ...this.doc,
       };
       // ready to ship
-      if (this.doc.availabilityType !== "ready-to-ship") {
+      if (this.doc.type !== 'under-bounipun' || this.doc.availabilityType !== "ready-to-ship") {
         delete details.rtsDirectVariant;
         delete details.rtsDirectFabric;
       }

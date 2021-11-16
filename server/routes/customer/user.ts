@@ -311,14 +311,17 @@ router.post('/fetchWishlist', userAuth('customer'), async (req, res) => {
 router.post('/cartActions', userAuth('customer'), async (req, res) => {
     const { user, action, cartItem } = req.body;
     const { cart } = user;
+    console.log('%cuser.ts line:314 cart', 'color: #007acc;', cart);
 
     let search: any = false;
 
     switch (action) {
         case 'add-to-cart':
             /* if cart is empty, directly push the item */
-            if (cart.length === 0 || cart === undefined)
+            if (cart.length === 0 || cart === undefined) {
                 cart.push(cartItem);
+                break;
+            }
             /* check if item already exists in cart */
             search = userMethods.findCartItem(cart, cartItem);
             /* if product found, add qty to existing qty */
@@ -348,7 +351,7 @@ router.post('/cartActions', userAuth('customer'), async (req, res) => {
 
     /* save cart back to database */
     await db.model('users').findOneAndUpdate({ _id: user._id }, { cart })
-
+    
     res.send('cart_updated')
 
 });

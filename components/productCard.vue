@@ -327,6 +327,8 @@ export default {
     collectionName() {
       if (typeof this.product.bounipun_collection === "string")
         return this.product.bounipun_collection;
+      if(this.product.bounipun_collection === null)
+        return 'N/A'
       return this.product.bounipun_collection.name;
     },
     lowestVariantPricex() {
