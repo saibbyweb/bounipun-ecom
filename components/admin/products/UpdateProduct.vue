@@ -241,14 +241,21 @@
               v-model="color.rtsFabric"
               label="Select Fabric:"
             />
-            <div class="flex">
+            <div class="flex center">
               <!-- stock -->
               <InputBox label="Stock:" v-model="color.rtsStock" />
               <!-- direct price -->
               <!-- <InputBox label="Direct Price:" v-model="color.rtsDirectPrice" /> -->
 
               <!-- RTS PANEL PRICING -->
-              <div class="rts-pricing flex col" style="width: 100%">
+              <div class="rts-pricing flex col" style="width: 100%; margin:10px 0;">
+                <button
+                  @click="
+                    setSuggestedPrices(color.directPricing, color.directPrice)
+                  "
+                >
+                  Set Suggested Prices
+                </button>
                 <!-- direct price (INR) -->
                 <div class="currency-box">
                   <span class="code flex center"> INR </span>
@@ -326,7 +333,9 @@
 
     <!-- direct pricing -->
     <div v-if="thirdPartyProduct || readyToShip">
-      <button @click="setSuggestedPrices">Set Suggested Prices</button>
+      <button @click="setSuggestedPrices(doc.directPricing, doc.directPrice)">
+        Set Suggested Prices
+      </button>
 
       <!-- direct price (INR) -->
       <div class="currency-box">
@@ -445,7 +454,10 @@ const baseDoc = () => ({
 });
 
 import { v4 as uuidv4 } from "uuid";
+import updateProductHelper from "./updateProductHelper.js";
+
 export default {
+  mixins: [updateProductHelper],
   props: {
     model: String,
     collections: Array,
@@ -696,7 +708,7 @@ export default {
     },
     async addNewRTSEntry(color) {
       console.log(color);
-      return;
+  
 
       const selectedVariant = this.variants.find(
         (variant) => variant.value === color.rtsVariant
@@ -724,7 +736,8 @@ export default {
         colorSource: "custom",
         colors: [color],
         description: this.doc.description,
-        directPrice: color.rtsDirectPrice,
+        directPrice: color.directPrice,
+        directPricing: color.directPricing,
         rtsDirectVariant: selectedVariant._id,
         rtsDirectFabric: selectedFabric._id,
         stock: color.rtsStock,
@@ -740,6 +753,13 @@ export default {
         _id: "",
       };
 
+      /* check price validity */
+      let allPricesSet = this.checkAllPrices(rtsProduct.directPrice, rtsProduct.directPricing);
+      if(allPricesSet === false) {
+        console.log('prices not set')
+        return;
+      }
+
       this.loading = true;
       const result = await this.$updateDocument(this.model, rtsProduct, false);
       this.loading = false;
@@ -748,7 +768,7 @@ export default {
 
       this.$emit("updated");
 
-      color.rtsDirectPrice = "ADDED";
+      // color.directPrice = "ADDED";
       color.rtsStock = "ADDED";
     },
     getRTSFabrics(variantId) {
@@ -964,17 +984,18 @@ export default {
       this.editMode = true;
       this.$flash(this);
     },
-    setSuggestedPrices() {
+    setSuggestedPrices(nonINRPricing, INRPrice) {
       const inflationPercentage =
         this.doc.type === "under-bounipun"
           ? this.collectionInflationPercentage
           : false;
 
-      this.setNonINRPrices(
+      /*   this.setNonINRPrices(
         this.doc.directPricing,
         this.doc.directPrice,
         inflationPercentage
-      );
+      ); */
+      this.setNonINRPrices(nonINRPricing, INRPrice, inflationPercentage);
     },
     setNonINRPrices(nonINRPricing, INRPrice, inflationPercentage) {
       /* get all available currencies for fabric */
@@ -1072,10 +1093,10 @@ export default {
         status,
       };
 
-         /* add direct pricing object to every color */
+      /* add direct pricing object to every color */
       this.doc.colors.forEach((color) => {
-        color.directPricing = {}
-        this.currencies.forEach(({code}) => color.directPricing[code] = "")
+        color.directPricing = {};
+        this.currencies.forEach(({ code }) => (color.directPricing[code] = ""));
       });
 
       /* currency */
@@ -1084,8 +1105,6 @@ export default {
         if (dbPrice !== undefined) return;
         this.doc.directPricing[code] = "";
       });
-
-   
 
       this.editMode = true;
     },

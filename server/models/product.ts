@@ -177,11 +177,26 @@ export const methods = {
         details.pricingRange = pricingRange;
       }
 
-    } else {
+    } 
+    /* ready to ship products */
+    else {
       details.priceRange = {
         startsAt: details.directPrice,
         endsAt: details.directPrice,
       }
+      
+      /* pricing range */
+        let pricingRange = {}
+      Object.keys(details.directPricing).forEach(code => {
+        pricingRange[code] = {
+            startsAt: parseFloat(details.directPricing[code]).toFixed(2),
+            endsAt: parseFloat(details.directPricing[code]).toFixed(2)
+        }
+      });
+
+      details.pricingRange = pricingRange;
+
+
     }
 
     /* add lowest and highest price */
