@@ -286,6 +286,7 @@
         :key="variant._id"
         :variant="variant"
         :currencies="currencies"
+        :inflationPercentage="collectionInflationPercentage"
         @fabricSelectionUpdated="fabricSelectionUpdated"
       />
     </div>
@@ -329,11 +330,6 @@
       <!-- update document -->
       <button @click="updateDocument" class="action" :disabled="loading">
         {{ editMode ? "Apply Changes" : "Add Product" }}
-      </button>
-
-      <!-- set suggested pricing -->
-      <button @click="setSuggestedPrices" class="action" :disabled="loading">
-        Calculate Suggested Price
       </button>
 
       <!-- delete document -->
@@ -398,6 +394,17 @@ export default {
     },
   },
   computed: {
+    collectionInflationPercentage() {
+      let inflationPercentage = 0;
+      if (this.doc.type === "under-bounipun") {
+        const foundIndex = this.collections.findIndex(
+          (col) => col.value === this.doc.bounipun_collection
+        );
+        const collection = this.collections[foundIndex];
+        inflationPercentage = collection.inflationPercentage;
+      }
+      return inflationPercentage;
+    },
     bounipunColors() {
       return this.doc.colorSource === "bounipun-colors";
     },
@@ -448,13 +455,22 @@ export default {
     },
     selectedVariantsWithFabricOptions() {
       return this.selectedVariants.map((variant) => {
+        const fabrics = this.fabrics.filter((fabric) =>
+          fabric.code.startsWith(variant.code)
+        );
+
+        fabrics.forEach((fabric) => {
+          fabric.pricing = {};
+          this.currencies.forEach((currency) => {
+            fabric.pricing[currency.code] = "";
+          });
+        });
+
         return {
           _id: variant._id,
           name: variant.name,
           code: variant.code,
-          fabrics: this.fabrics.filter((fabric) =>
-            fabric.code.startsWith(variant.code)
-          ),
+          fabrics: fabrics,
           // key: uuidv4()
           // fabrics: this.fabrics
         };
@@ -797,6 +813,17 @@ export default {
         delete details.rtsDirectVariant;
         delete details.rtsDirectFabric;
       }
+      
+      // check price validitity
+      function checkValidPrice(price) {
+        if (typeof price === "number") {
+          return true;
+        }
+        if (price === undefined || price === null) return false;
+
+        return price.trim() !== "";
+      }
+
       /* if product is under bounipun */
       if (this.doc.type === "under-bounipun") {
         const { variants } = this.doc;
@@ -804,9 +831,22 @@ export default {
         const basePriceSetForAllVariants = variants.every((variant) => {
           const { fabrics } = variant;
           const basePriceSetForAllFabrics = fabrics.every((fabric) => {
-            if (fabric.price === undefined || fabric.price === null)
+            
+            /* check INR pricing */
+            const INRPriceValid = checkValidPrice(fabric.price);
+            if(INRPriceValid === false) {
               return false;
-            return fabric.price.trim() !== "";
+            }
+
+            /* check non INR Pricing */
+            const currencyCodes = Object.keys(fabric.pricing);
+            const nonINRSet = currencyCodes.every(code => checkValidPrice(fabric.pricing[code]));
+            if(nonINRSet === false) {
+              return false;
+            }
+
+            return true;
+
           });
           return basePriceSetForAllFabrics;
         });
@@ -814,7 +854,7 @@ export default {
         /* if base price not set, dont update the product */
         if (basePriceSetForAllVariants == false) {
           this.errorToast.status = true;
-          this.errorToast.msg = "Base Price not set for all fabrics.";
+          this.errorToast.msg = "Pricing is not set for all currencies.";
           setTimeout(() => (this.errorToast.status = false), 2200);
           return;
         }
@@ -844,9 +884,7 @@ export default {
         const foundIndex = this.collections.findIndex(
           (col) => col.value === this.doc.bounipun_collection
         );
-        console.log(foundIndex,'--- FOUND INDEXX_____')
         const collection = this.collections[foundIndex];
-        console.log(collection,'--FOUNDINDEXXXXXX');
         inflationPercentage = collection.inflationPercentage;
       }
       /* variants */
@@ -854,26 +892,31 @@ export default {
       /* loop throught every variant */
       variants.forEach((variant) => {
         /* fabrics */
-        const { fabrics } = variant;
+        // const { fabrics } = variant;
         /* loop through every fabrics */
-        fabrics.forEach((fabric) => {
+        variant.fabrics.forEach((fabric) => {
           /* get all available currencies for fabric */
           const currencyCodes = Object.keys(fabric.pricing);
           /* loop through all available currencies */
           for (const code of currencyCodes) {
             /* get exchange rate */
-            const foundIndex = this.currencies.findIndex(cur => cur.code === code);
+            const foundIndex = this.currencies.findIndex(
+              (cur) => cur.code === code
+            );
             /* if currency not found  */
-            if(foundIndex === -1) {
-                return;
+            if (foundIndex === -1) {
+              return;
             }
             const currencyDetails = this.currencies[foundIndex];
-            console.log(currencyDetails.exchangeRateINR);
-            fabric.pricing[code] = ((fabric.price * (1 + inflationPercentage/100)) / currencyDetails.exchangeRateINR)
-            console.log(fabric.pricing[code]);
+            const price =
+              (fabric.price * (1 + inflationPercentage / 100)) /
+              currencyDetails.exchangeRateINR;
+            fabric.pricing[code] = price;
+            // fabric.pricing[code] = currencyDetails.zeroDecimal ? parseInt(price) : parseFloat(price).toFixed(2)
           }
         });
       });
+      this.$forceUpdate();
     },
     async deleteDocument() {
       this.loading = true;
