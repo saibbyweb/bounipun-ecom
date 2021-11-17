@@ -312,8 +312,8 @@ router.post('/takeBulkAction', adminAuth('1', true), async (req, res) => {
 router.post('/updateProductPricesForCollection', adminAuth('1', true), async(req,res) => {
     const { collectionId, inflationPercentage } = req.body;
     console.log(collectionId, inflationPercentage)
-    res.send(true);
-    // await currecnyMethods.updateAllProductPricesForCollection(collectionId, inflationPercentage);
+    await currecnyMethods.updateAllProductPricesForCollection(collectionId, inflationPercentage);
+    res.send(true); 
 });
 /* update order (of lists in admin panel) */
 router.post('/updateOrder', async (req, res) => {

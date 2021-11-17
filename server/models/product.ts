@@ -155,6 +155,7 @@ export const methods = {
             if (nonINRPrices[code] === undefined) nonINRPrices[code] = [];
             nonINRPrices[code].push(fabric.pricing[code]);
           }
+          console.log(fabric.pricing, "--FROM UPDATE FUNCTION");
         });
       });
 
@@ -194,6 +195,8 @@ export const methods = {
 
       details.pricingRange = pricingRange;
     }
+
+    return details;
 
     /* add lowest and highest price */
     // console.log(details.directPricing,'-- Direct Pricing');
@@ -253,20 +256,14 @@ export const methods = {
     if (matchedProducts === null) return [];
     return matchedProducts;
   },
-  /* update multiple products at once */
-  async updateProducts(filter, fields) {
-    const matchedProducts = this.getProducts(filter);
-    /* if no matched products found */
-    if (matchedProducts.length === 0) return;
-    /* update fields for all matched products */
-    for (const product of matchedProducts) {
-      const updated: any = await model.findOneAndUpdate(
-        { _id: product._id },
-        fields,
-        { returnOriginal: false }
-      );
-      console.log(updated.slug, updated.lock);
-    }
+  /* update one product */
+  async updateOne(filter, fields) {
+    const updated: any = await model.findOneAndUpdate(
+      filter,
+      fields,
+      { returnOriginal: false }
+    );
+    console.log(updated.slug, updated.lock);
   },
 };
 
