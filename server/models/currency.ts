@@ -47,18 +47,22 @@ export const methods = {
     inflationPercentage: any,
     activeCurrencies
   ) {
+    let useDefaultInfaltion = inflationPercentage === false;
     for (const currency of activeCurrencies) {
       const { code } = currency;
 
       /* set inflation percentage if not provided */
-      if (inflationPercentage === false) {
+      if (useDefaultInfaltion) {
         inflationPercentage = currency.defaultInflationPercentage;
         inflationPercentage = parseInt(inflationPercentage);
       }
 
       /* calculate inflated price */
+      const inflationMultiplier =
+        inflationPercentage === 0 ? 1 : 1 + inflationPercentage / 100;
+      console.log(inflationMultiplier);
       const price: number =
-        (INRPrice * (1 + inflationPercentage / 100)) / currency.exchangeRateINR;
+        (INRPrice * inflationMultiplier) / currency.exchangeRateINR;
 
       /* in non inr pricing hasnt been defined yet */
       if (nonINRPricing === undefined) nonINRPricing = {};
@@ -69,10 +73,12 @@ export const methods = {
         : parseFloat(price.toString()).toFixed(2);
     }
 
+    console.log(INRPrice, nonINRPricing);
     return nonINRPricing;
-    // console.log(INRPrice, nonINRPricing);
   },
   async updateAllProductPricesForCollection(collectionID, inflationPercentage) {
+    return this.updateAllNonBounipunProductPrices(false);
+
     /* get all active currencies */
     const activeCurrencies = await model.find({
       adminEnabled: true,
@@ -149,6 +155,46 @@ export const methods = {
       console.log("No Active Currency");
       return 0;
     }
+    /* total active currencies */
+    console.log("Active Currencies: ", activeCurrencies.length);
+
+    /* fetch all non-bounipun products */
+    const products = await productMethods.getProducts({
+      type: "third-party",
+    });
+    /* if no product found */
+    if (products.length === 0) {
+      console.log("No matching products found");
+      return 0;
+    }
+
+    /* products found */
+    console.log("Products found: ", products.length);
+
+    /* loop through every product */
+    products.forEach(async (product) => {
+      product.directPricing = this.setNonINRPricing(
+        product.directPricing,
+        product.directPrice,
+        inflationPercentage,
+        activeCurrencies
+      );
+    });
+
+    /* re-save all products after pre-processing details */
+    for (const product of products) {
+      /* it needs special update here */
+      const processedProduct = await productMethods.updateProduct(
+        product,
+        true
+      );
+      await productMethods.updateOne(
+        { _id: product._id },
+        { ...processedProduct }
+      );
+    }
+
+    return products.length;
   },
 };
 
