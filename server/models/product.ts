@@ -155,7 +155,6 @@ export const methods = {
             if (nonINRPrices[code] === undefined) nonINRPrices[code] = [];
             nonINRPrices[code].push(fabric.pricing[code]);
           }
-          console.log(fabric.pricing, "--FROM UPDATE FUNCTION");
         });
       });
 

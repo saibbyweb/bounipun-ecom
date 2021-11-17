@@ -90,6 +90,13 @@
     <div class="flex center">
     <button @click="resetProductPrices" class="sub-action"> Update All International Product Prices <br>for {{ doc.name }} at {{ doc.inflationPercentage }} % inflation</button> 
     </div>
+    
+    <!-- price reset confirmation -->
+    <div v-if="pricesReset" style="position:fixed; z-index:3; bottom:10px; left:0; width:100%;height:20%;">
+       <Toast :msg="`${totalProductsReset} Products updated.`" :show="pricesReset" />
+    </div>
+
+
     <!-- lock -->
     <div class="section">
       <label class="label"> Collection Lock </label>
@@ -175,15 +182,25 @@ export default {
       doc: baseDoc(),
       loading: false,
       updated: false,
-      val: 20,
+      pricesReset: false,
+      totalProductsReset: 0
     };
   },
   methods: {
     async resetProductPrices() {
-      await this.$post('/updateProductPricesForCollection', {
+      const request = await this.$post('/updateProductPricesForCollection', {
         collectionId: this.doc._id,
         inflationPercentage: this.doc.inflationPercentage
       })
+      
+      /* show feed on update */
+      if(request.resolved ===  true) {
+        this.pricesReset = true;
+        this.totalProductsReset = request.response.total;
+        setTimeout(() => this.pricesReset = false, 3000)
+      }
+ 
+      
     },
     imageListUpdated(list, type) {
       switch (type) {

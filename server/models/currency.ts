@@ -81,7 +81,7 @@ export const methods = {
 
     if (activeCurrencies === null) {
       console.log("No Active Currency");
-      return;
+      return 0;
     }
     /* total active currencies */
     console.log("Active Currencies: ", activeCurrencies.length);
@@ -92,7 +92,7 @@ export const methods = {
     /* if no product found */
     if (products.length === 0) {
       console.log("No matching products found");
-      return;
+      return 0;
     }
 
     /* products found */
@@ -113,19 +113,41 @@ export const methods = {
             );
           });
         });
+      } else {
+        product.directPricing = this.setNonINRPricing(
+          product.directPricing,
+          product.directPrice,
+          inflationPercentage,
+          activeCurrencies
+        );
       }
     });
 
-    /* re-save all products */
+    /* re-save all products after pre-processing details */
     for (const product of products) {
-      const { variants } = product;
-      variants.forEach((variant) => {
-        const { fabrics } = variant;
-        fabrics.forEach((fabric) => console.log(fabric.price, fabric.pricing));
-      });
       /* it needs special update here */
-      const processedProduct = await productMethods.updateProduct(product, true);
-      await productMethods.updateOne({_id: product._id}, {...processedProduct});
+      const processedProduct = await productMethods.updateProduct(
+        product,
+        true
+      );
+      await productMethods.updateOne(
+        { _id: product._id },
+        { ...processedProduct }
+      );
+    }
+
+    return products.length;
+  },
+  async updateAllNonBounipunProductPrices(inflationPercentage) {
+    /* get all active currencies */
+    const activeCurrencies = await model.find({
+      adminEnabled: true,
+      status: true,
+    });
+
+    if (activeCurrencies === null) {
+      console.log("No Active Currency");
+      return 0;
     }
   },
 };
