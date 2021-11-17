@@ -188,10 +188,11 @@ export default {
   },
   methods: {
     async resetProductPrices() {
-      const request = await this.$post('/updateProductPricesForCollection', {
+      const request = await this.$post('/updateNonINRPricing', {
         collectionId: this.doc._id,
-        inflationPercentage: this.doc.inflationPercentage
-      })
+        inflationPercentage: this.doc.inflationPercentage,
+        type: 'collection'
+      });
       
       /* show feed on update */
       if(request.resolved ===  true) {
@@ -199,8 +200,6 @@ export default {
         this.totalProductsReset = request.response.total;
         setTimeout(() => this.pricesReset = false, 3000)
       }
- 
-      
     },
     imageListUpdated(list, type) {
       switch (type) {

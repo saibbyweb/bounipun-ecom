@@ -72,13 +72,9 @@ export const methods = {
         ? parseInt(price.toString())
         : parseFloat(price.toString()).toFixed(2);
     }
-
-    console.log(INRPrice, nonINRPricing);
     return nonINRPricing;
   },
-  async updateAllProductPricesForCollection(collectionID, inflationPercentage) {
-    return this.updateAllNonBounipunProductPrices(false);
-
+  async updateNonINRPricing(filter, inflationPercentage) {
     /* get all active currencies */
     const activeCurrencies = await model.find({
       adminEnabled: true,
@@ -91,10 +87,9 @@ export const methods = {
     }
     /* total active currencies */
     console.log("Active Currencies: ", activeCurrencies.length);
-    /*  get product list to be updated */
-    const products = await productMethods.getProducts({
-      bounipun_collection: collectionID,
-    });
+
+    /* fetch all products for that particular filter */
+    const products = await productMethods.getProducts(filter);
     /* if no product found */
     if (products.length === 0) {
       console.log("No matching products found");
@@ -106,28 +101,28 @@ export const methods = {
 
     /* loop through every product */
     products.forEach(async (product) => {
-      const { variants, availabilityType } = product;
-
-      if (availabilityType === "made-to-order") {
-        variants.forEach(({ fabrics }) => {
-          fabrics.forEach((fabric) => {
-            fabric.pricing = this.setNonINRPricing(
-              fabric.pricing,
-              fabric.price,
-              inflationPercentage,
-              activeCurrencies
-            );
+        const { variants, availabilityType } = product;
+  
+        if (availabilityType === "made-to-order") {
+          variants.forEach(({ fabrics }) => {
+            fabrics.forEach((fabric) => {
+              fabric.pricing = this.setNonINRPricing(
+                fabric.pricing,
+                fabric.price,
+                inflationPercentage,
+                activeCurrencies
+              );
+            });
           });
-        });
-      } else {
-        product.directPricing = this.setNonINRPricing(
-          product.directPricing,
-          product.directPrice,
-          inflationPercentage,
-          activeCurrencies
-        );
-      }
-    });
+        } else {
+          product.directPricing = this.setNonINRPricing(
+            product.directPricing,
+            product.directPrice,
+            inflationPercentage,
+            activeCurrencies
+          );
+        }
+      });
 
     /* re-save all products after pre-processing details */
     for (const product of products) {
@@ -143,59 +138,7 @@ export const methods = {
     }
 
     return products.length;
-  },
-  async updateAllNonBounipunProductPrices(inflationPercentage) {
-    /* get all active currencies */
-    const activeCurrencies = await model.find({
-      adminEnabled: true,
-      status: true,
-    });
-
-    if (activeCurrencies === null) {
-      console.log("No Active Currency");
-      return 0;
-    }
-    /* total active currencies */
-    console.log("Active Currencies: ", activeCurrencies.length);
-
-    /* fetch all non-bounipun products */
-    const products = await productMethods.getProducts({
-      type: "third-party",
-    });
-    /* if no product found */
-    if (products.length === 0) {
-      console.log("No matching products found");
-      return 0;
-    }
-
-    /* products found */
-    console.log("Products found: ", products.length);
-
-    /* loop through every product */
-    products.forEach(async (product) => {
-      product.directPricing = this.setNonINRPricing(
-        product.directPricing,
-        product.directPrice,
-        inflationPercentage,
-        activeCurrencies
-      );
-    });
-
-    /* re-save all products after pre-processing details */
-    for (const product of products) {
-      /* it needs special update here */
-      const processedProduct = await productMethods.updateProduct(
-        product,
-        true
-      );
-      await productMethods.updateOne(
-        { _id: product._id },
-        { ...processedProduct }
-      );
-    }
-
-    return products.length;
-  },
+  }
 };
 
 export default { model, methods };

@@ -6,10 +6,11 @@ import { methods as userMethods } from "@models/user";
 import { methods as adminMethods } from "@models/admin";
 import { methods as sessionMethods } from "@models/session";
 import { methods as notificationMethods } from "@models/notification";
-import { methods as currecnyMethods } from "@models/currency";
+import { methods as currencyMethods } from "@models/currency";
 
 let { orderUpdateEmailToCustomer } = notificationMethods;
-orderUpdateEmailToCustomer = orderUpdateEmailToCustomer.bind(notificationMethods);
+orderUpdateEmailToCustomer =
+  orderUpdateEmailToCustomer.bind(notificationMethods);
 
 const { adminAuth } = adminMethods;
 register();
@@ -18,482 +19,559 @@ register();
 const router = server.express.Router();
 
 /* upload image route */
-router.post('/uploadImage', uploader.single('productImage'), async (req: any, res) => {
-
+router.post(
+  "/uploadImage",
+  uploader.single("productImage"),
+  async (req: any, res) => {
     console.log(req.file);
-    const fileName = req.file.key.replace('original/', '');
+    const fileName = req.file.key.replace("original/", "");
     const { uploadType } = req.body;
 
     switch (uploadType) {
-        case 'product':
-            await imageHelper.createProductImageVariants(fileName);
-            break;
+      case "product":
+        await imageHelper.createProductImageVariants(fileName);
+        break;
     }
 
     /* save image details to database */
     const imageDetails = { name: fileName, size: req.file.size };
 
-
-
-    const uploadedImageDetails = await imageHelper.saveImageDetails(imageDetails);
+    const uploadedImageDetails = await imageHelper.saveImageDetails(
+      imageDetails
+    );
 
     res.send(uploadedImageDetails);
-});
+  }
+);
 
 /* get document route */
-router.post('/getDocument', async (req, res) => {
-    const { model, _id, requestedBy } = req.body;
-    const collection = db.model(model);
-    let document: any = collection.findOne({ _id }).lean()
+router.post("/getDocument", async (req, res) => {
+  const { model, _id, requestedBy } = req.body;
+  const collection = db.model(model);
+  let document: any = collection.findOne({ _id }).lean();
 
-    if (requestedBy === 'customer') {
-        switch (model) {
-            /* products */
-            case 'products':
-                document = await document
-                    .populate('bounipun_collection', 'name description variantNote edt')
-                    .populate('variants._id')
-                    .populate('variants.fabrics._id')
-                    .populate('colors._id', 'name category image')
-                    .populate('rtsDirectVariant')
-                    .populate('rtsDirectFabric')
-                    .populate('rtsFabric')
+  if (requestedBy === "customer") {
+    switch (model) {
+      /* products */
+      case "products":
+        document = await document
+          .populate("bounipun_collection", "name description variantNote edt")
+          .populate("variants._id")
+          .populate("variants.fabrics._id")
+          .populate("colors._id", "name category image")
+          .populate("rtsDirectVariant")
+          .populate("rtsDirectFabric")
+          .populate("rtsFabric");
 
+        /* if bounipun colors, get grouped color data */
+        if (document.colorSource === "bounipun-colors") {
+          /* get color categories */
+          const colorCategories = await db
+            .model("color_categories")
+            .find()
+            .sort("order");
+          /* grouped data array */
+          let groupedData = [];
+          colorCategories.forEach((category: any) => {
+            /* find all colors under this category */
+            const colors = document.colors.filter((color) => {
+              return (
+                color._id.category.toString() === category._id.toString() &&
+                color.status === true
+              );
+            });
+            /* save colors */
+            groupedData.push({
+              name: category.name,
+              description: category.description,
+              colors,
+            });
+          });
 
-
-
-                /* if bounipun colors, get grouped color data */
-                if (document.colorSource === 'bounipun-colors') {
-
-                    /* get color categories */
-                    const colorCategories = await db.model('color_categories').find().sort('order');
-                    /* grouped data array */
-                    let groupedData = [];
-                    colorCategories.forEach((category: any) => {
-                        /* find all colors under this category */
-                        const colors = document.colors.filter(color => {
-                            return color._id.category.toString() === category._id.toString() && color.status === true
-                        });
-                        /* save colors */
-                        groupedData.push({ name: category.name, description: category.description, colors })
-                    });
-
-
-                    /* add color data to document */
-                    document.colorData = groupedData;
-                }
-
-                /* update color name for color list */
-                document.colors.forEach(color => {
-                    const bounipunColor = color._id !== null;
-                    color.name = bounipunColor ? color._id.name : color.name;
-                    color.image = bounipunColor ? color._id.image : "";
-                    color._id = bounipunColor ? color._id._id : null;
-                });
-
-
-                break;
-            default:
-                break;
+          /* add color data to document */
+          document.colorData = groupedData;
         }
+
+        /* update color name for color list */
+        document.colors.forEach((color) => {
+          const bounipunColor = color._id !== null;
+          color.name = bounipunColor ? color._id.name : color.name;
+          color.image = bounipunColor ? color._id.image : "";
+          color._id = bounipunColor ? color._id._id : null;
+        });
+
+        break;
+      default:
+        break;
     }
+  }
 
-    if (requestedBy === 'admin') {
-        console.log('♠️♠️  requested by Admin, model: ', model);
-        switch (model) {
-            /* products */
-            case 'products':
-                document = await document
-                    .populate('colors._id', 'name code baseColor image')
+  if (requestedBy === "admin") {
+    console.log("♠️♠️  requested by Admin, model: ", model);
+    switch (model) {
+      /* products */
+      case "products":
+        document = await document.populate(
+          "colors._id",
+          "name code baseColor image"
+        );
 
-                /* */
+        /* */
 
-                /* update color name for color list */
-                document.colors.forEach(color => {
-                    const bounipunColor = color._id !== null;
-                    color.name = bounipunColor ? color._id.name : color.name;
-                    color.code = bounipunColor ? color._id.code : color.code;
-                    color.baseColor = bounipunColor ? color._id.baseColor : color.baseColor
-                    color._id = bounipunColor ? color._id._id : null;
-                });
+        /* update color name for color list */
+        document.colors.forEach((color) => {
+          const bounipunColor = color._id !== null;
+          color.name = bounipunColor ? color._id.name : color.name;
+          color.code = bounipunColor ? color._id.code : color.code;
+          color.baseColor = bounipunColor
+            ? color._id.baseColor
+            : color.baseColor;
+          color._id = bounipunColor ? color._id._id : null;
+        });
 
-                break;
-            case 'product_lists':
-
-                document = await document.populate('list._id', 'name styleId');
-                // console.log(document);
-                document.list.forEach(product => {
-                    if (product._id === null)
-                        return;
-                    product.name = `${product._id.styleId} - (${product._id.name})`;
-                    product._id = product._id._id;
-                });
-                break;
-            default:
-                break;
-        }
+        break;
+      case "product_lists":
+        document = await document.populate("list._id", "name styleId");
+        // console.log(document);
+        document.list.forEach((product) => {
+          if (product._id === null) return;
+          product.name = `${product._id.styleId} - (${product._id.name})`;
+          product._id = product._id._id;
+        });
+        break;
+      default:
+        break;
     }
-    document = await document;
-    // console.log(document);
-    res.json(document);
+  }
+  document = await document;
+  // console.log(document);
+  res.json(document);
 });
 
 /* fetch collection */
-router.post('/fetchCollection', async (req, res) => {
-    const { model, requestedBy } = req.body;
-    // console.log('Collection fetch requested: ', model);
-    const collection = db.model(model)
-    let documents: any = collection.find();
+router.post("/fetchCollection", async (req, res) => {
+  const { model, requestedBy } = req.body;
+  // console.log('Collection fetch requested: ', model);
+  const collection = db.model(model);
+  let documents: any = collection.find();
 
-    /* check request source */
-    if (requestedBy === 'admin') {
-        switch (model) {
-            case 'colors':
-                documents = await documents.populate('category', 'name');
-                /* get color categories */
-                const colorCategories = await db.model('color_categories').find();
+  /* check request source */
+  if (requestedBy === "admin") {
+    switch (model) {
+      case "colors":
+        documents = await documents.populate("category", "name");
+        /* get color categories */
+        const colorCategories = await db.model("color_categories").find();
 
-                /* grouped data array */
-                let groupedData = {};
-                colorCategories.forEach((category: any) => {
-                    /* find all colors under this category */
-                    const colors = documents.filter(color => {
-                        return color.category._id.toString() === category._id.toString()
-                    });
-                    groupedData[category.name] = colors;
-                });
+        /* grouped data array */
+        let groupedData = {};
+        colorCategories.forEach((category: any) => {
+          /* find all colors under this category */
+          const colors = documents.filter((color) => {
+            return color.category._id.toString() === category._id.toString();
+          });
+          groupedData[category.name] = colors;
+        });
 
-                res.send(groupedData);
-                return;
-                break;
-            default:
-                break;
-        }
+        res.send(groupedData);
+        return;
+        break;
+      default:
+        break;
     }
+  }
 
-    /* wait for promise to resolve */
-    documents = await documents;
+  /* wait for promise to resolve */
+  documents = await documents;
 
-    console.log('sending DEFAULT RESPONSE');
-    res.send(documents);
+  console.log("sending DEFAULT RESPONSE");
+  res.send(documents);
 });
 
 /* fetch paginated results */
-router.post('/fetchPaginatedResults', async (req, res) => {
-    /* destructure data from request body */
-    const { model, rawCriterion, requestedBy } = req.body;
+router.post("/fetchPaginatedResults", async (req, res) => {
+  /* destructure data from request body */
+  const { model, rawCriterion, requestedBy } = req.body;
 
-    /* construct criterion from raw criterion */
-    let criterion: any = {};
+  /* construct criterion from raw criterion */
+  let criterion: any = {};
 
-    /* add filters (match) */
-    criterion.match = rawCriterion.filters;
+  /* add filters (match) */
+  criterion.match = rawCriterion.filters;
 
-    /* text search match */
-    const textSearch = { name: { $regex: rawCriterion.search.term, $options: "i" } }
+  /* text search match */
+  const textSearch = {
+    name: { $regex: rawCriterion.search.term, $options: "i" },
+  };
 
+  /* add text search */
+  // criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
+  if (model === "products" && requestedBy === "customer") {
+    criterion.match = {
+      $or: [
+        { name: { $regex: rawCriterion.search.term, $options: "i" } },
+        { "colors.name": { $regex: rawCriterion.search.term, $options: "i" } },
+        {
+          "colors.baseColor": {
+            $regex: rawCriterion.search.term,
+            $options: "i",
+          },
+        },
+        { meta: { $regex: rawCriterion.search.term, $options: "i" } },
+      ],
+      ...admin.setObjectIds(rawCriterion.filters, [
+        "bounipun_collection",
+        "variants._id",
+      ]),
+    };
+  } else if (model === "products" && requestedBy === "default") {
+    const objectided = admin.setObjectIds(rawCriterion.filters, [
+      "bounipun_collection",
+    ]);
+    // criterion.match = {...textSearch, ...objectided}
+    criterion.match = { ...objectided };
+    criterion.match[rawCriterion.search.key] = {
+      $regex: rawCriterion.search.term,
+      $options: "i",
+    };
+  } else if (model === "colors" && requestedBy === "default") {
+    criterion.match = {
+      ...textSearch,
+      ...admin.setObjectIds(rawCriterion.filters, ["category"]),
+    };
+  } else
+    criterion.match[rawCriterion.search.key] = {
+      $regex: rawCriterion.search.term,
+      $options: "i",
+    };
 
-    /* add text search */
-    // criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
-    if (model === "products" && requestedBy === "customer") {
-        criterion.match = {
-            $or: [
-                { name: { $regex: rawCriterion.search.term, $options: "i" } },
-                { 'colors.name': { $regex: rawCriterion.search.term, $options: "i" } },
-                { 'colors.baseColor': { $regex: rawCriterion.search.term, $options: "i" } },
-                { meta: { $regex: rawCriterion.search.term, $options: "i" } }
-            ], ...admin.setObjectIds(rawCriterion.filters, ['bounipun_collection', 'variants._id'])
-        }
-    }
-    else if (model === "products" && requestedBy === "default") {
-        const objectided = admin.setObjectIds(rawCriterion.filters, ['bounipun_collection']);
-        // criterion.match = {...textSearch, ...objectided}
-        criterion.match = { ...objectided }
-        criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
+  /* sort by fields */
+  criterion.sort = rawCriterion.sortBy;
 
-    }
-    else if (model === "colors" && requestedBy === "default") {
-        criterion.match = { ...textSearch, ...admin.setObjectIds(rawCriterion.filters, ['category']) }
-    }
-    else
-        criterion.match[rawCriterion.search.key] = { $regex: rawCriterion.search.term, $options: "i" };
+  /* calculate number of docs to be skipped */
+  criterion.skip = (rawCriterion.cursor - 1) * rawCriterion.limit;
 
+  /* set result set limit */
+  criterion.limit = rawCriterion.limit;
 
-    /* sort by fields */
-    criterion.sort = rawCriterion.sortBy;
+  let paginatedResults: any = await admin.getPaginationResults(
+    model,
+    criterion
+  );
 
-    /* calculate number of docs to be skipped */
-    criterion.skip = (rawCriterion.cursor - 1) * rawCriterion.limit;
-
-    /* set result set limit */
-    criterion.limit = rawCriterion.limit;
-
-    let paginatedResults: any = await admin.getPaginationResults(model, criterion);
-
-    res.send(paginatedResults);
+  res.send(paginatedResults);
 });
 
 /* update api */
-router.post('/updateDocument', adminAuth('1', true), async (req, res) => {
-    /* extracting query details */
-    const { model, details, editMode } = req.body;
+router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
+  /* extracting query details */
+  const { model, details, editMode } = req.body;
 
-    /* check if special update is required */
-    const specialUpdate = await admin.specialUpdate(model, details, editMode);
+  /* check if special update is required */
+  const specialUpdate = await admin.specialUpdate(model, details, editMode);
 
-    /* if special update processed */
-    if (specialUpdate.updated) {
-        res.send({ updated: true });
-        return;
+  /* if special update processed */
+  if (specialUpdate.updated) {
+    res.send({ updated: true });
+    return;
+  }
+
+  /* get collection  */
+  const collection = db.model(model);
+  let result: any;
+
+  try {
+    if (editMode) {
+      result = await collection.findOneAndUpdate(
+        { _id: details._id },
+        details,
+        { upsert: true, returnOriginal: false }
+      );
+    } else {
+      delete details._id;
+      result = await new collection(details).save();
     }
+  } catch (e) {
+    console.log(e);
+    console.log("❌ UPDATE FAILED");
+    res.send({ updated: false, message: "Could not save document." });
+    return;
+  }
 
-    /* get collection  */
-    const collection = db.model(model);
-    let result: any;
+  console.log(result);
 
-    try {
-        if (editMode) {
-            result = await collection.findOneAndUpdate({ _id: details._id }, details, { upsert: true, returnOriginal: false });
-        }
-        else {
-            delete details._id;
-            result = await new collection(details).save();
-        }
-    }
-    catch (e) {
-        console.log(e);
-        console.log('❌ UPDATE FAILED')
-        res.send({ updated: false, message: 'Could not save document.' });
-        return;
-    }
-
-    console.log(result);
-
-    res.send(result);
+  res.send(result);
 });
 
 /* delete document */
-router.post('/deleteDocument', adminAuth('1', true), async (req, res) => {
-    const { model, _id } = req.body;
-    const collection = db.model(model);
-    console.log(_id, model);
-    const result = await collection.findByIdAndDelete({ _id });
-    console.log(result);
-    res.send(result);
-})
+router.post("/deleteDocument", adminAuth("1", true), async (req, res) => {
+  const { model, _id } = req.body;
+  const collection = db.model(model);
+  console.log(_id, model);
+  const result = await collection.findByIdAndDelete({ _id });
+  console.log(result);
+  res.send(result);
+});
 /* populate $_ids */
-router.post('/populate', adminAuth('1', true), async (req, res) => {
-    let response = [];
-    const { model, _ids, fields } = req.body;
-    response = await db.model(model).find({ _id: { $in: _ids } }).select(fields).lean();
-    res.send(response);
+router.post("/populate", adminAuth("1", true), async (req, res) => {
+  let response = [];
+  const { model, _ids, fields } = req.body;
+  response = await db
+    .model(model)
+    .find({ _id: { $in: _ids } })
+    .select(fields)
+    .lean();
+  res.send(response);
 });
 /* take bulk action */
-router.post('/takeBulkAction', adminAuth('1', true), async (req, res) => {
-    let response = { resolved: false }
-    const { _ids, model, type } = req.body;
-    console.log(_ids, model, type);
-    let updateFields: any = {};
+router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
+  let response = { resolved: false };
+  const { _ids, model, type } = req.body;
+  console.log(_ids, model, type);
+  let updateFields: any = {};
 
-    switch (type) {
-        case 'active':
-            updateFields.status = true;
-            break;
-        case 'inactive':
-            updateFields.status = false;
-            break;
-    }
-    const bulkUpdated = await db.model(model).updateMany({ _id: { $in: _ids }}, updateFields);
-    console.log(bulkUpdated);
-    response.resolved = true;
-    res.send(response);
+  switch (type) {
+    case "active":
+      updateFields.status = true;
+      break;
+    case "inactive":
+      updateFields.status = false;
+      break;
+  }
+  const bulkUpdated = await db
+    .model(model)
+    .updateMany({ _id: { $in: _ids } }, updateFields);
+  console.log(bulkUpdated);
+  response.resolved = true;
+  res.send(response);
 });
-/* update product prices for a collection */
-router.post('/updateProductPricesForCollection', adminAuth('1', true), async(req,res) => {
-    const { collectionId, inflationPercentage } = req.body;
-    console.log(collectionId, inflationPercentage)
-    const totalUpdated = await currecnyMethods.updateAllProductPricesForCollection(collectionId, inflationPercentage);
-    res.send({ total: totalUpdated}); 
+/* update non inr prices for products */
+router.post("/updateNonINRPricing", adminAuth("1", true), async (req, res) => {
+  const { collectionId, inflationPercentage, type } = req.body;
+  let filter = {};
+
+  switch (type) {
+    case "collection":
+      filter = { bounipun_collection: collectionId };
+      break;
+    case "third-party":
+      filter = { type: "third-party" };
+      break;
+    case "all":
+      break;
+    default:
+      res.send({ total: 'No' });
+      return;
+      break;
+  }
+
+  const totalUpdated = await currencyMethods.updateNonINRPricing(
+    filter,
+    inflationPercentage
+  );
+
+  res.send({ total: totalUpdated });
 });
 /* update order (of lists in admin panel) */
-router.post('/updateOrder', async (req, res) => {
-
-    const { model, newList } = req.body;
-    console.log(newList);
-    /* update order one by one */
-    for (const item of newList) {
-        // console.log(item);
-        await db.model(model).findOneAndUpdate({ _id: item._id }, { order: item.newOrder })
-    }
-    res.send('up');
+router.post("/updateOrder", async (req, res) => {
+  const { model, newList } = req.body;
+  console.log(newList);
+  /* update order one by one */
+  for (const item of newList) {
+    // console.log(item);
+    await db
+      .model(model)
+      .findOneAndUpdate({ _id: item._id }, { order: item.newOrder });
+  }
+  res.send("up");
 });
 
 /* update order item details */
-router.post('/updateOrderItemDetails', async (req, res) => {
+router.post("/updateOrderItemDetails", async (req, res) => {
+  const { orderId, subOrderId, status, trackingId, trackingUrl } = req.body;
+  const filter = {
+    _id: orderId,
+    "items._id": mongoose.Types.ObjectId(subOrderId),
+  };
 
-    const { orderId, subOrderId, status, trackingId, trackingUrl } = req.body;
-    const filter = { _id: orderId, 'items._id': mongoose.Types.ObjectId(subOrderId) };
+  // const filter = { id: orderId, 'items._id': subOrderId };
 
-    // const filter = { id: orderId, 'items._id': subOrderId };
+  /* update order with new details */
+  const originalOrder: any = await db.model("orders").findOneAndUpdate(filter, {
+    $set: {
+      "items.$.status": status,
+      "items.$.trackingId": trackingId,
+      "items.$.trackingUrl": trackingUrl,
+    },
+  });
 
+  /* find sub-order */
+  let subOrder = originalOrder.items.find(
+    (item) => item._id.toString() === subOrderId.toString()
+  );
 
-    /* update order with new details */
-    const originalOrder: any = await db.model('orders').findOneAndUpdate(filter, {
+  /* if sub order status changed, update timeline */
+  if (subOrder.status !== status) {
+    await db.model("orders").findOneAndUpdate(filter, {
+      $push: {
+        "items.$.timeline": {
+          status,
+          updatedAt: new Date(),
+        },
+      },
+    });
+
+    /* if delivered */
+    if (status === "delivered") {
+      await db.model("orders").findOneAndUpdate(filter, {
         $set: {
-            "items.$.status": status,
-            "items.$.trackingId": trackingId,
-            "items.$.trackingUrl": trackingUrl
-        }
-    });
-
-
-    /* find sub-order */
-    let subOrder = originalOrder.items.find(item => item._id.toString() === subOrderId.toString());
-
-    /* if sub order status changed, update timeline */
-    if (subOrder.status !== status) {
-        await db.model('orders').findOneAndUpdate(filter, {
-            $push: {
-                "items.$.timeline": {
-                    status,
-                    updatedAt: new Date()
-                }
-            }
-        });
-
-        /* if delivered */
-        if (status === 'delivered') {
-            await db.model('orders').findOneAndUpdate(filter, {
-                $set: {
-                    "items.$.delivered": new Date()
-                }
-            })
-        }
+          "items.$.delivered": new Date(),
+        },
+      });
     }
+  }
 
-    const { deliveryAddress } = originalOrder;
-    const customerEmail = deliveryAddress.email;
-    const customerName = deliveryAddress.firstName + " " + deliveryAddress.surName;
+  const { deliveryAddress } = originalOrder;
+  const customerEmail = deliveryAddress.email;
+  const customerName =
+    deliveryAddress.firstName + " " + deliveryAddress.surName;
 
-    /* notify customer */
-    orderUpdateEmailToCustomer(status, customerEmail, {
-        bgColor: status === 'delivered' ? '#2c8f4d' : '#333333',
-        name: customerName,
-        orderId: originalOrder.number,
-        status
-    });
+  /* notify customer */
+  orderUpdateEmailToCustomer(status, customerEmail, {
+    bgColor: status === "delivered" ? "#2c8f4d" : "#333333",
+    name: customerName,
+    orderId: originalOrder.number,
+    status,
+  });
 
-
-
-    res.send('broo');
+  res.send("broo");
 });
 
 /* cancel sub order */
-router.post('/cancelSubOrder', async (req, res) => {
-    let response = { resolved: true }
-    const { orderId, subOrderId, reason } = req.body;
-    const cancelOrder = await userMethods.cancelOrder(orderId, subOrderId, reason, false);
-    response.resolved = !(cancelOrder === false)
+router.post("/cancelSubOrder", async (req, res) => {
+  let response = { resolved: true };
+  const { orderId, subOrderId, reason } = req.body;
+  const cancelOrder = await userMethods.cancelOrder(
+    orderId,
+    subOrderId,
+    reason,
+    false
+  );
+  response.resolved = !(cancelOrder === false);
 
-    /* notify customer about cancellation, fetch orginal order */
-    const originalOrder: any = await db.model('orders').findOne({ _id: orderId }).select('number deliveryAddress');
-    const { deliveryAddress } = originalOrder;
-    const customerName = deliveryAddress.firstName + " " + deliveryAddress.surName;
-    const customerEmail = deliveryAddress.email;
+  /* notify customer about cancellation, fetch orginal order */
+  const originalOrder: any = await db
+    .model("orders")
+    .findOne({ _id: orderId })
+    .select("number deliveryAddress");
+  const { deliveryAddress } = originalOrder;
+  const customerName =
+    deliveryAddress.firstName + " " + deliveryAddress.surName;
+  const customerEmail = deliveryAddress.email;
 
-    /* notify customer */
-    orderUpdateEmailToCustomer('cancelled', customerEmail, {
-        bgColor: '#8f2c38',
-        name: customerName,
-        orderId: originalOrder.number,
-        status: 'cancelled'
-    });
+  /* notify customer */
+  orderUpdateEmailToCustomer("cancelled", customerEmail, {
+    bgColor: "#8f2c38",
+    name: customerName,
+    orderId: originalOrder.number,
+    status: "cancelled",
+  });
 
-    res.send(response);
+  res.send(response);
 });
 
 /* admin login */
-router.post('/loginAdmin', async (req, res) => {
+router.post("/loginAdmin", async (req, res) => {
+  let response = {
+    resolved: false,
+    otpVerified: false,
+    loggedIn: false,
+    sessionToken: "",
+    message: "",
+  };
 
-    let response = {
-        resolved: false,
-        otpVerified: false,
-        loggedIn: false,
-        sessionToken: '',
-        message: ''
-    }
+  console.log(req.body);
+  // return;
 
-    console.log(req.body);
-    // return;
+  /* extract post body */
+  const { countryDialCode, phoneNumber, otp, platform } = req.body;
 
-    /* extract post body */
-    const { countryDialCode, phoneNumber, otp, platform } = req.body;
+  /* check if admin already exists (by phone number) */
+  const adminFound = await adminMethods.getAdmin({
+    countryDialCode,
+    phoneNumber,
+  });
 
-    /* check if admin already exists (by phone number) */
-    const adminFound = await adminMethods.getAdmin({ countryDialCode, phoneNumber });
-
-    /* if admin not found */
-    if (adminFound === null) {
-        response.message = "Phone number not linked to any admin account.";
-        console.log('number not registered');
-        res.send(response);
-        return;
-    }
-
-    let otpVerified = false;
-
-    if (countryDialCode === "+91")
-        otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp)
-    else
-        otpVerified = await userMethods.verifyInternationalOtp(countryDialCode, phoneNumber, otp)
-
-    /* if otp verification failed */
-    if (otpVerified === false) {
-        response.message = 'Incorrect OTP entered.'
-        console.log('incorrect otp');
-        res.send(response);
-        return;
-    }
-
-    /* mark otp as verified */
-    response.otpVerified = true;
-
-    console.log(adminFound._id, '-ADMIN ID')
-
-    /* login admin */
-    const loginAttempt = await adminMethods.registerSession(adminFound._id);
-
-    if (loginAttempt === false) {
-        response.message = 'Session Generation failed'
-        res.send(response);
-        return;
-    }
-    /* mark as logged in */
-    if (platform === 'web') {
-        console.log('setting cookie...', loginAttempt.token);
-        res.cookie('swecom_bounipun_admin', loginAttempt.token, { maxAge: 1209600000, httpOnly: false, sameSite: 'none', secure: true });
-    }
-
-    response.loggedIn = true;
-    response.sessionToken = loginAttempt.token;
-    response.resolved = true;
-
-    /* revert with response */
+  /* if admin not found */
+  if (adminFound === null) {
+    response.message = "Phone number not linked to any admin account.";
+    console.log("number not registered");
     res.send(response);
+    return;
+  }
 
+  let otpVerified = false;
+
+  if (countryDialCode === "+91")
+    otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp);
+  else
+    otpVerified = await userMethods.verifyInternationalOtp(
+      countryDialCode,
+      phoneNumber,
+      otp
+    );
+
+  /* if otp verification failed */
+  if (otpVerified === false) {
+    response.message = "Incorrect OTP entered.";
+    console.log("incorrect otp");
+    res.send(response);
+    return;
+  }
+
+  /* mark otp as verified */
+  response.otpVerified = true;
+
+  console.log(adminFound._id, "-ADMIN ID");
+
+  /* login admin */
+  const loginAttempt = await adminMethods.registerSession(adminFound._id);
+
+  if (loginAttempt === false) {
+    response.message = "Session Generation failed";
+    res.send(response);
+    return;
+  }
+  /* mark as logged in */
+  if (platform === "web") {
+    console.log("setting cookie...", loginAttempt.token);
+    res.cookie("swecom_bounipun_admin", loginAttempt.token, {
+      maxAge: 1209600000,
+      httpOnly: false,
+      sameSite: "none",
+      secure: true,
+    });
+  }
+
+  response.loggedIn = true;
+  response.sessionToken = loginAttempt.token;
+  response.resolved = true;
+
+  /* revert with response */
+  res.send(response);
 });
 
 /* admin logout */
-router.post('/logoutAdmin', async (req, res) => {
-    console.log('admin logout called');
-    const { token } = req.body;
-    await sessionMethods.invalidateSession(false, token, 'admin');
-    res.send({ adminNotAuthorized: true })
+router.post("/logoutAdmin", async (req, res) => {
+  console.log("admin logout called");
+  const { token } = req.body;
+  await sessionMethods.invalidateSession(false, token, "admin");
+  res.send({ adminNotAuthorized: true });
 });
 
 /* fetch customer profile */
-router.post('/fetchAdminProfile', adminAuth('0', false), async (req, res) => {
-    const { admin } = req.body;
-    res.send(admin);
+router.post("/fetchAdminProfile", adminAuth("0", false), async (req, res) => {
+  const { admin } = req.body;
+  res.send(admin);
 });
 export default router;
