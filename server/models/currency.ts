@@ -1,10 +1,10 @@
-import { mongoose } from "@helpers/essentials";
+import { db, mongoose } from "@helpers/essentials";
 import { methods as productMethods } from "./product";
 /* schema */
 const schema = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    code: { type: String, required: true },
+    code: { type: String, required: true, unique: true },
     exchangeRateINR: { type: Number, required: true },
     zeroDecimal: { type: Boolean, default: false, required: true },
     adminEnabled: { type: Boolean, default: false },
@@ -60,7 +60,10 @@ export const methods = {
       /* calculate inflated price */
       const inflationMultiplier =
         inflationPercentage === 0 ? 1 : 1 + inflationPercentage / 100;
-      console.log(inflationMultiplier);
+      
+      console.log(`◻️ Currency: ${currency.code} ; 🔹 Inflation Multiplier: ${inflationMultiplier} ; 🔸 Ex.Rate: ${currency.exchangeRateINR}`);
+
+
       const price: number =
         (INRPrice * inflationMultiplier) / currency.exchangeRateINR;
 
@@ -86,7 +89,7 @@ export const methods = {
       return 0;
     }
     /* total active currencies */
-    console.log("Active Currencies: ", activeCurrencies.length);
+    console.log("❇️ Active Currencies: ", activeCurrencies.length);
 
     /* fetch all products for that particular filter */
     const products = await productMethods.getProducts(filter);
@@ -97,32 +100,32 @@ export const methods = {
     }
 
     /* products found */
-    console.log("Products found: ", products.length);
+    console.log("✳️ Products found: ", products.length);
 
     /* loop through every product */
     products.forEach(async (product) => {
-        const { variants, availabilityType } = product;
-  
-        if (availabilityType === "made-to-order") {
-          variants.forEach(({ fabrics }) => {
-            fabrics.forEach((fabric) => {
-              fabric.pricing = this.setNonINRPricing(
-                fabric.pricing,
-                fabric.price,
-                inflationPercentage,
-                activeCurrencies
-              );
-            });
+      const { variants, availabilityType } = product;
+
+      if (availabilityType === "made-to-order") {
+        variants.forEach(({ fabrics }) => {
+          fabrics.forEach((fabric) => {
+            fabric.pricing = this.setNonINRPricing(
+              fabric.pricing,
+              fabric.price,
+              inflationPercentage,
+              activeCurrencies
+            );
           });
-        } else {
-          product.directPricing = this.setNonINRPricing(
-            product.directPricing,
-            product.directPrice,
-            inflationPercentage,
-            activeCurrencies
-          );
-        }
-      });
+        });
+      } else {
+        product.directPricing = this.setNonINRPricing(
+          product.directPricing,
+          product.directPrice,
+          inflationPercentage,
+          activeCurrencies
+        );
+      }
+    });
 
     /* re-save all products after pre-processing details */
     for (const product of products) {
@@ -135,10 +138,34 @@ export const methods = {
         { _id: product._id },
         { ...processedProduct }
       );
+
     }
 
     return products.length;
-  }
+  },
+  async updateWholeStore() {
+   /*  get all collections (id and inflation percentage) */
+    const collections: any = await db
+      .model("collections")
+      .find()
+      .select("inflationPercentage");
+
+    console.log(collections.length,'--collections');
+
+    if (collections.length === 0) return;
+
+    /* update non inr pricing for every collection, one by one */
+    for(const collection of collections) {
+        await this.updateNonINRPricing({bounipun_collection: collection._id}, collection.inflationPercentage)
+    }
+    /* then update third-part products */
+    await this.updateNonINRPricing({type: "third-party"}, false);
+
+    console.log('✅ WHOLE STORE UPDATED')
+
+  },
 };
+
+// methods.updateWholeStore();
 
 export default { model, methods };

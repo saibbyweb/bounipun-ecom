@@ -358,6 +358,7 @@ router.post("/updateNonINRPricing", adminAuth("1", true), async (req, res) => {
       filter = { type: "third-party" };
       break;
     case "all":
+      
       break;
     default:
       res.send({ total: 'No' });

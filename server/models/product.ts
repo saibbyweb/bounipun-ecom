@@ -262,7 +262,7 @@ export const methods = {
       fields,
       { returnOriginal: false }
     );
-    console.log(updated.slug, updated.lock);
+    console.log('Updated: ', updated.slug, ' ✅');
   },
 };
 
