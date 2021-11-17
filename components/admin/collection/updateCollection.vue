@@ -86,7 +86,10 @@
 
     <!-- inflation slider -->
     <InputSlider v-model="doc.inflationPercentage" label="Inflation Percentage (for outside India)" />
-
+    
+    <div class="flex center">
+    <button @click="resetProductPrices" class="sub-action"> Update All International Product Prices <br>for {{ doc.name }} at {{ doc.inflationPercentage }} % inflation</button> 
+    </div>
     <!-- lock -->
     <div class="section">
       <label class="label"> Collection Lock </label>
@@ -176,6 +179,12 @@ export default {
     };
   },
   methods: {
+    async resetProductPrices() {
+      await this.$post('/updateProductPricesForCollection', {
+        collectionId: this.doc._id,
+        inflationPercentage: this.doc.inflationPercentage
+      })
+    },
     imageListUpdated(list, type) {
       switch (type) {
         case "image":
@@ -264,6 +273,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.sub-action {
+  background-color: rgb(194, 71, 62) !important;
+  color: white;
+}
 .section {
   margin-top: 10px;
   padding-top: 10px;

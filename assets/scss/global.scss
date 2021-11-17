@@ -144,6 +144,10 @@ button {
     width: 7%;
   }
 
+  &.sub-action {
+    background-color: green;
+  }
+
   &.action {
     background-color: $primary_dark;
     color: white;

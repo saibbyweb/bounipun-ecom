@@ -157,7 +157,7 @@ export const methods = {
           }
         });
       });
-    
+
       /* set pricing range for INR */
       details.priceRange = {
         startsAt: Math.min(...allPrices),
@@ -176,27 +176,23 @@ export const methods = {
         }
         details.pricingRange = pricingRange;
       }
-
-    } 
-    /* ready to ship products */
-    else {
+    } else {
+      /* ready to ship products */
       details.priceRange = {
         startsAt: details.directPrice,
         endsAt: details.directPrice,
-      }
-      
+      };
+
       /* pricing range */
-        let pricingRange = {}
-      Object.keys(details.directPricing).forEach(code => {
+      let pricingRange = {};
+      Object.keys(details.directPricing).forEach((code) => {
         pricingRange[code] = {
-            startsAt: parseFloat(details.directPricing[code]).toFixed(2),
-            endsAt: parseFloat(details.directPricing[code]).toFixed(2)
-        }
+          startsAt: parseFloat(details.directPricing[code]).toFixed(2),
+          endsAt: parseFloat(details.directPricing[code]).toFixed(2),
+        };
       });
 
       details.pricingRange = pricingRange;
-
-
     }
 
     /* add lowest and highest price */
@@ -251,10 +247,26 @@ export const methods = {
       doc.save();
     });
   },
-  async getPaginatedSearchResults() {
-    /* fetch all collections (active and unlocked) */
-    /* fetch all variants (active) */
-    /* fetch all base colors */
+  async getProducts(filter) {
+    let matchedProducts: any = await model.find(filter);
+    /* if no matched products found */
+    if (matchedProducts === null) return [];
+    return matchedProducts;
+  },
+  /* update multiple products at once */
+  async updateProducts(filter, fields) {
+    const matchedProducts = this.getProducts(filter);
+    /* if no matched products found */
+    if (matchedProducts.length === 0) return;
+    /* update fields for all matched products */
+    for (const product of matchedProducts) {
+      const updated: any = await model.findOneAndUpdate(
+        { _id: product._id },
+        fields,
+        { returnOriginal: false }
+      );
+      console.log(updated.slug, updated.lock);
+    }
   },
 };
 

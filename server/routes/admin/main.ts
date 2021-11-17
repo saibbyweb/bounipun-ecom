@@ -6,6 +6,7 @@ import { methods as userMethods } from "@models/user";
 import { methods as adminMethods } from "@models/admin";
 import { methods as sessionMethods } from "@models/session";
 import { methods as notificationMethods } from "@models/notification";
+import { methods as currecnyMethods } from "@models/currency";
 
 let { orderUpdateEmailToCustomer } = notificationMethods;
 orderUpdateEmailToCustomer = orderUpdateEmailToCustomer.bind(notificationMethods);
@@ -306,6 +307,13 @@ router.post('/takeBulkAction', adminAuth('1', true), async (req, res) => {
     console.log(bulkUpdated);
     response.resolved = true;
     res.send(response);
+});
+/* update product prices for a collection */
+router.post('/updateProductPricesForCollection', adminAuth('1', true), async(req,res) => {
+    const { collectionId, inflationPercentage } = req.body;
+    console.log(collectionId, inflationPercentage)
+    res.send(true);
+    // await currecnyMethods.updateAllProductPricesForCollection(collectionId, inflationPercentage);
 });
 /* update order (of lists in admin panel) */
 router.post('/updateOrder', async (req, res) => {
