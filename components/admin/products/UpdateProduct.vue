@@ -381,10 +381,10 @@
     <Toggle
       v-model="doc.lock"
       label="Lock Status"
-      :disabled="true"
-      width="80px"
-      activeText="🔒"
-      inactiveText="👎"
+      :disabled="false"
+      
+      activeText="🔒 Locked"
+      inactiveText="Unlocked"
     />
 
     <!-- publish toggle -->
