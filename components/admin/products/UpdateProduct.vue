@@ -491,21 +491,6 @@ export default {
     },
   },
   computed: {
-    collectionInflationPercentage() {
-      let inflationPercentage = 0;
-      if (this.doc.type === "under-bounipun") {
-        const foundIndex = this.collections.findIndex(
-          (col) => col.value === this.doc.bounipun_collection
-        );
-        if (foundIndex === -1) return 0;
-        const collection = this.collections[foundIndex];
-        inflationPercentage = collection.inflationPercentage;
-      }
-      return inflationPercentage;
-    },
-    bounipunColors() {
-      return this.doc.colorSource === "bounipun-colors";
-    },
     colorSources() {
       /* show color sources according to collection selection */
       if (!this.underEscape)
@@ -574,97 +559,12 @@ export default {
         };
       });
     },
-    thirdPartyProduct() {
-      return this.doc.type === "third-party";
-    },
-    readyToShip() {
-      return this.doc.availabilityType === "ready-to-ship";
-    },
-    rtsAndUnderBounipun() {
-      return this.readyToShip && !this.thirdPartyProduct;
-    },
-    underAutograph() {
-      /* TODO: should first fetch the _id of the autograph doc in collections and then compare */
-      return (
-        this.doc.bounipun_collection === "60523a3648d11650a841b82a" &&
-        this.doc.type !== "third-party"
-      );
-    },
-    underEscape() {
-      return (
-        this.doc.bounipun_collection === "60522ab3be493200150ff835" &&
-        this.doc.type !== "third-party"
-      );
-    },
+
   },
   data() {
     return {
       editMode: false,
       doc: baseDoc(),
-      types: [
-        {
-          name: "Select Type",
-          value: null,
-        },
-        {
-          name: "Under Bounipun",
-          value: "under-bounipun",
-        },
-        {
-          name: "Third Party",
-          value: "third-party",
-        },
-      ],
-      availabilityTypes: [
-        {
-          name: "Select Availablity Type",
-          value: "",
-        },
-        {
-          name: "Made To Order",
-          value: "made-to-order",
-        },
-        {
-          name: "Ready To Ship",
-          value: "ready-to-ship",
-        },
-      ],
-      colorSourceTypes: [
-        {
-          name: "Select Source",
-          value: "",
-        },
-        {
-          name: "Bounipun Colors",
-          value: "bounipun-colors",
-        },
-        {
-          name: "Custom",
-          value: "custom",
-        },
-      ],
-      genders: [
-        {
-          name: "Select Preferred Gender",
-          value: "",
-        },
-        {
-          name: "For Her",
-          value: "for-her",
-        },
-        {
-          name: "For Him",
-          value: "for-him",
-        },
-        {
-          name: "For Him & Her",
-          value: "for-him-and-her",
-        },
-        {
-          name: "N/A",
-          value: "na",
-        },
-      ],
       baseColors: [],
       loading: false,
       updated: false,
@@ -684,28 +584,6 @@ export default {
     this.fetchActiveCurrencies();
   },
   methods: {
-    async fetchActiveCurrencies() {
-      const request = await this.$post("/findDocuments", {
-        model: "currency",
-        filters: {
-          adminEnabled: true,
-          status: true,
-        },
-      });
-
-      if (request.resolved == false) {
-        return;
-      }
-
-      const currencies = request.response;
-
-      this.currencies = currencies;
-
-      this.currencies.forEach(({ code }) => {
-        const dbPrice = this.doc.directPricing[code];
-        this.doc.directPricing[code] = dbPrice === undefined ? dbPrice : "";
-      });
-    },
     async addNewRTSEntry(color) {
       console.log(color);
   
@@ -756,7 +634,6 @@ export default {
       /* check price validity */
       let allPricesSet = this.checkAllPrices(rtsProduct.directPrice, rtsProduct.directPricing);
       if(allPricesSet === false) {
-        console.log('prices not set')
         return;
       }
 
@@ -797,84 +674,12 @@ export default {
       color.showRTSPanel = !color.showRTSPanel;
       this.$forceUpdate();
     },
-    setMainColor(index) {
-      /* if value set to true, turn all other main image flags off */
-
-      for (let i = 0; i < this.doc.colors.length; i++) {
-        this.doc.colors[i].mainColor = false;
-      }
-
-      setTimeout(() => {
-        this.doc.colors[index].mainColor = true;
-        this.doc.colors[index].status = true;
-        this.$forceUpdate();
-      }, 100);
-    },
-    isActiveColor(index) {
-      return this.doc.colors[index].mainColor;
-    },
-    async fetchBaseColors() {
-      const result = await this.$fetchCollection("base_colors");
-      if (!result.fetched || result.docs.length === 0) {
-        return;
-      }
-
-      /* base colors array */
-      this.baseColors = result.docs.map((color) => {
-        return {
-          name: color.name.toUpperCase(),
-          value: color.name,
-        };
-      });
-
-      this.baseColors.unshift({
-        name: "Select Color",
-        value: "",
-      });
-    },
     /* populateVariant */
     populateVariants(variants) {
       variants.forEach((variant) => {
         let match = this.variants.find(({ _id }) => _id === variant._id);
         match.checked = true;
       });
-    },
-    /* image list updated */
-    imageListUpdated(list, index) {
-      // console.log(list, index);
-      this.doc.colors[index].images = list;
-    },
-    /* add new color */
-    addNewColor(color) {
-      // console.log(color);
-      this.doc.colors.push({
-        _id: color._id,
-        name: color.name,
-        code: color.code,
-        images: [],
-        disclaimer: "",
-        mainColor: false,
-        status: false,
-        key: uuidv4(),
-      });
-    },
-    colorDeselected(color) {
-      /* find key of the deselected color */
-      const foundIndex = this.doc.colors.findIndex(
-        (col) => col._id === color._id
-      );
-      console.log(color, foundIndex, "DESELECTED");
-      /* remove color */
-      this.removeColor(foundIndex);
-    },
-    /* remove color */
-    removeColor(key, direct = false) {
-      // if (this.doc.colors.length === 1)
-      //     return;
-      const tobeRemoved = this.doc.colors[key];
-      this.doc.colors.splice(key, 1);
-      if (this.bounipunColors && direct)
-        this.$refs.colorPicker.deselectColor(tobeRemoved);
     },
     /* fabric selection */
     fabricSelectionUpdated(variant) {
@@ -909,32 +714,6 @@ export default {
         delete details.rtsDirectFabric;
       }
 
-      // check price validitity
-      function checkValidPrice(price) {
-        if (typeof price === "number") {
-          return true;
-        }
-        if (price === undefined || price === null) return false;
-
-        return price.trim() !== "";
-      }
-
-      /* check all prices INR as well as non INR */
-      function checkAllPrices(INRPrice, NonINRPrices) {
-        const INRPriceValid = checkValidPrice(INRPrice);
-        if (INRPriceValid === false) {
-          return false;
-        }
-
-        /* check non INR Pricing */
-        const currencyCodes = Object.keys(NonINRPrices);
-        const nonINRSet = currencyCodes.every((code) =>
-          checkValidPrice(NonINRPrices[code])
-        );
-
-        return nonINRSet;
-      }
-
       /* all prices not set flag */
       let allPricesSet = false;
 
@@ -946,15 +725,13 @@ export default {
           const { fabrics } = variant;
 
           const basePriceSetForAllFabrics = fabrics.every((fabric) => {
-            return checkAllPrices(fabric.price, fabric.pricing);
+            return this.checkAllPrices(fabric.price, fabric.pricing);
           });
-
-          console.log(basePriceSetForAllFabrics, variant.name);
 
           return basePriceSetForAllFabrics;
         });
       } else {
-        allPricesSet = checkAllPrices(
+        allPricesSet = this.checkAllPrices(
           this.doc.directPrice,
           this.doc.directPricing
         );
@@ -990,11 +767,6 @@ export default {
           ? this.collectionInflationPercentage
           : false;
 
-      /*   this.setNonINRPrices(
-        this.doc.directPricing,
-        this.doc.directPrice,
-        inflationPercentage
-      ); */
       this.setNonINRPrices(nonINRPricing, INRPrice, inflationPercentage);
     },
     setNonINRPrices(nonINRPricing, INRPrice, inflationPercentage) {
@@ -1032,17 +804,7 @@ export default {
       }
       this.$forceUpdate();
     },
-    async deleteDocument() {
-      this.loading = true;
-      const result = await this.$deleteDocument(this.model, this.doc._id);
-      this.loading = false;
 
-      if (!result.deleted) return;
-
-      this.$emit("updated");
-      this.resetForm();
-      this.$flash(this);
-    },
     populateForm(details) {
       const {
         _id,
@@ -1108,15 +870,10 @@ export default {
 
       this.editMode = true;
     },
-    closeForm() {
-      this.resetForm();
-      this.$emit("resetVariants");
-      this.$emit("close");
-    },
-    resetForm() {
-      this.populateForm(baseDoc());
-      this.editMode = false;
-    },
+      resetForm() {
+        this.populateForm(baseDoc());
+        this.editMode = false;
+      },
   },
 };
 </script>
