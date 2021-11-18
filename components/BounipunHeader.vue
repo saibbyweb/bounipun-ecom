@@ -1,8 +1,8 @@
 <template>
   <div :class="[{ 'dark-mode': darkMode }, 'header']">
     <!-- menu -->
-    <div class="menu center" @click="$emit('showMenu')">
-      <img class="action-icon" :src="getIconPath('menu.png')" />
+    <div class="menu center">
+      <img class="action-icon" :src="getIconPath('menu.png')" @click="$emit('showMenu')"/>
 
       <img
         @click.stop="$router.push('/my-account')"
@@ -18,6 +18,10 @@
         :src="getIconPath('whatsapp-aa.svg')"
       />
       <!-- </router-link> -->
+
+
+    <CurrencySelector />
+
     </div>
 
     <!-- logo -->

@@ -12,6 +12,8 @@ export const state = () => ({
   globalConfig: {},
   user: {},
   currency: "INR",
+  /* v2 compatible */
+  preferredCurrency: "",
   combinedDeliveryConsent: false,
   coupon: {
     applied: false,
@@ -71,6 +73,9 @@ export const mutations = {
   },
   setCookieConsent(state, value) {
     state.cookieConsent = value;
+  },
+  setPreferredCurrency(state, currency) {
+    state.preferredCurrency = currency;
   },
   /* load state from local storage */
   loadPersistedState(state) {

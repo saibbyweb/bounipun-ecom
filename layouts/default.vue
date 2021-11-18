@@ -60,8 +60,10 @@ export default {
       );
     });
 
-    setTimeout(() => {
-      this.$store.dispatch("customerV2/fetchActiveCurrencies");
+    setTimeout(async () => {
+      await this.$store.dispatch("customerV2/fetchActiveCurrencies");
+      await this.$store.dispatch("customerV2/fetchStoreLocation");
+
       this.$store.dispatch("customer/fetchCart");
       this.$store.dispatch("customer/fetchProfile");
       this.$store.dispatch("customer/fetchStoreLocation");
