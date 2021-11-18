@@ -166,4 +166,6 @@ export const methods = {
   },
 };
 
+// methods.updateWholeStore();
+
 export default { model, methods };

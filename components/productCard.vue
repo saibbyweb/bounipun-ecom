@@ -20,31 +20,6 @@
 
     <!-- main image container -->
     <div class="main-image-container center">
-      <!-- TODO: size was 165% -->
-      <!-- <slideshow
-        ref="slideshow"
-        :images="slideshowImages"
-        extraClass="search-slideshow"
-        :dots="true"
-        :mSlideWidth="48"
-        mSlideHeight="315px"
-        :dSlideWidth="29"
-        dSlideHeight="400px"
-        size="cover"
-      /> -->
-
-      <!-- <slideshow
-        ref="slideshow"
-        :images="slideshowImages"
-        extraClass="search-slideshow"
-        :dots="true"
-        :mSlideWidth="100"
-        mSlideHeight="60vh"
-        :dSlideWidth="29"
-        dSlideHeight="400px"
-        size="cover"
-      /> -->
-
       <slideshow
         ref="slideshow"
         :images="slideshowImages"
@@ -121,19 +96,22 @@
 
         <!-- if made on order and lowest and highest is not same -->
         <span v-if="!readyToShip && !lowestAndHighestPriceisSame" class="price">
-          {{ currency + "" + formatCurrency(adjustPrice(lowestVariantPrice)) }}
+          {{ formatCurrency(lowestVariantPrice) }}
           -
-          {{ currency + "" + formatCurrency(adjustPrice(highestVariantPirce)) }}
+          {{  formatCurrency(highestVariantPirce) }}
         </span>
+
         <!-- if made on order and lowest and highest same -->
         <span v-if="!readyToShip && lowestAndHighestPriceisSame" class="price">
-          {{ currency + "" + formatCurrency(adjustPrice(highestVariantPirce)) }}
+          {{  formatCurrency(highestVariantPirce) }}
         </span>
 
         <!-- if ready to ship -->
         <span v-if="readyToShip" class="price">
-          {{ currency + "" + formatCurrency(adjustPrice(product.directPrice)) }}
+          {{  formatCurrency(directPrice) }}
         </span>
+
+
       </div>
     </div>
 
@@ -154,8 +132,9 @@
 
 <script>
 import { mapGetters } from "vuex";
-
+import CurrencyHelper from "../helpers/currencyHelper.js";
 export default {
+   mixins: [CurrencyHelper],
   props: {
     gridView: {
       type: Boolean,
@@ -203,9 +182,6 @@ export default {
       return this.gridView
         ? { width: 48, height: "315px" }
         : { width: 100, height: "67vh" };
-    },
-    currency() {
-      return this.$store.state.customer.currency + " ";
     },
     imagePath() {
       if (this.product.notProvided || this.product.colors.length === 0)
@@ -331,24 +307,23 @@ export default {
         return 'N/A'
       return this.product.bounipun_collection.name;
     },
-    lowestVariantPricex() {
-      if (this.product.type === "third-party") return this.product.directPrice;
-
-      let allPrices = [];
-      this.product.variants.forEach((variant) => {
-        variant.fabrics.forEach((fabric) => {
-          // console.log(fabric.price);
-          allPrices.push(fabric.price);
-        });
-      });
-
-      return Math.min(...allPrices);
+    directPrice() {
+      if(this.currencyIsINR)
+        return this.product.directPrice;
+      else
+        return this.product.directPricing[this.currency]
     },
     lowestVariantPrice() {
-      return this.product.priceRange.startsAt;
+      if(this.currencyIsINR)
+        return this.product.priceRange.startsAt;
+      else
+        return this.product.pricingRange[this.currency].startsAt
     },
     highestVariantPirce() {
-      return this.product.priceRange.endsAt;
+      if(this.currencyIsINR)
+        return this.product.priceRange.endsAt;
+      else
+        return this.product.pricingRange[this.currency].endsAt
     },
     lowestAndHighestPriceisSame() {
       return this.lowestVariantPrice === this.highestVariantPirce;
@@ -438,14 +413,6 @@ export default {
     };
   },
   methods: {
-    adjustPrice(price) {
-      price = parseInt(price);
-      return this.$store.getters["customer/adjustPrice"](price);
-    },
-    formatCurrency(adjustedPrice) {
-      adjustedPrice = parseFloat(adjustedPrice);
-      return this.$store.getters["customer/formatCurrency"](adjustedPrice);
-    },
     async toggleWishlist() {
       /* if user is not logged in, move to login page */
       if (!this.$store.state.customer.authorized) {

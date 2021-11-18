@@ -100,7 +100,7 @@ export const methods = {
     if (details.type !== "third-party")
       parent = await collections
         .findOne({ _id: details.bounipun_collection })
-        .select("slug");
+        .select("slug lock");
 
     /* new product slug */
     details.slug = parent.slug + "/" + details.alias;
@@ -171,7 +171,7 @@ export const methods = {
         for (const code of currencyCodes) {
           pricingRange[code] = {
             startsAt: Math.min(...nonINRPrices[code]),
-            endAt: Math.max(...nonINRPrices[code]),
+            endsAt: Math.max(...nonINRPrices[code]),
           };
         }
         details.pricingRange = pricingRange;

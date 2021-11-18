@@ -2,6 +2,7 @@ import cookies from "js-cookie";
 import { getCountryIndex } from "../helpers/countryCodes";
 import sumBy from "lodash/sumBy";
 
+
 export const state = () => ({
   cookieConsent: false,
   persistedStateLoaded: false,
@@ -239,6 +240,10 @@ export const getters = {
     }
   },
   formatCurrency: (state) => (adjustedPrice) => {
+
+    // return currencyFormatter.format(adjustedPrice, { code })
+  
+
     let formattedNumber = adjustedPrice;
     /* if currence is INR, return as is */
     if (state.currency === "INR") {

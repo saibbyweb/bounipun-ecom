@@ -24,7 +24,9 @@
       <span class="fabric"> {{ item.fabricInfo1 }} </span>
       <!-- price -->
       <span class="price">
-        {{ currency }} {{ formatCurrency(adjustPrice(item.price)) }}
+        <!-- {{ currency }} {{ formatCurrency(adjustPrice(item.price)) }} -->
+
+        {{ formatCurrency(cartItemPrice) }}
       </span>
       <!-- qty -->
       <span v-if="!allowUpdate" class="qty"> Qty: {{ item.quantity }} </span>
@@ -49,14 +51,19 @@
     />
     <!-- total product price -->
     <p class="total-product-price">
-      {{ currency }}
-      {{ formatCurrency(item.quantity * adjustPrice(item.price)) }}
+      <!-- {{ currency }} -->
+      <!-- {{ formatCurrency(item.quantity * adjustPrice(item.price)) }} -->
+
+      {{ formatCurrency(totalCartItemPrice) }}
     </p>
   </div>
 </template>
 
 <script>
+import CurrencyHelper from "../helpers/currencyHelper.js";
+
 export default {
+  mixins: [CurrencyHelper],
   props: {
     item: Object,
     allowUpdate: {
@@ -76,8 +83,14 @@ export default {
     };
   },
   computed: {
-    currency() {
-      return this.$store.state.customer.currency + " ";
+    cartItemPrice() {
+      if(this.currencyIsINR)
+        return this.item.price;
+      else
+        return this.item.pricing[this.currency];
+    },
+    totalCartItemPrice() {
+      return this.cartItemPrice * this.item.quantity;
     }
   },
   mounted() {},
@@ -94,14 +107,6 @@ export default {
     },
     getS3Path(fileName) {
       return this.$getImage(fileName,'productPages');
-    },
-    adjustPrice(price) {
-      price = parseInt(price);
-      return this.$store.getters["customer/adjustPrice"](price);
-    },
-    formatCurrency(adjustedPrice) {
-      adjustedPrice = parseFloat(adjustedPrice);
-      return this.$store.getters["customer/formatCurrency"](adjustedPrice);
     },
     emitUpdateQuantity(item, operation) {
       this.$emit("updateQuantity", { item: item.cartEntry, operation });

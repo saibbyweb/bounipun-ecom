@@ -290,7 +290,6 @@ export const methods = {
                 .populate('colors._id', { name: 1 })
                 .populate('rtsDirectVariant', { name: 1 })
                 .populate('rtsDirectFabric', { name: 1 })
-                .select('name slug styleId type availabilityType directPrice variants.fabrics.price colors.name colors.code colors.images colors.status rtsDirectVaraint rtsDirectFabric lock')
                 .lean();
             allProductPromises.push(fetchProduct);
         }
@@ -336,6 +335,7 @@ export const methods = {
                 fabricName: '',
                 fabricInfo1: '',
                 price: 0,
+                pricing: {},
                 quantity: item.quantity,
                 cartEntry: item
             };
@@ -380,7 +380,9 @@ export const methods = {
             }
 
             /* price: defaults to direct price */
-            cartItem.price = parseInt(product.directPrice);
+            // cartItem.price = parseInt(product.directPrice);
+            cartItem.price = product.directPrice;
+            cartItem.pricing = product.directPricing;
 
             /* if under bounipun, set collection name */
             if (product.type === 'under-bounipun') {
@@ -408,6 +410,7 @@ export const methods = {
                 cartItem.fabricInfo1 = selectedFabric._id.info1;
                 /* price (depends on ready to ship or made to order */
                 cartItem.price = selectedFabric.price;
+                cartItem.pricing = selectedFabric.pricing;
             }
 
             /* if under bounipun and ready to ship */
