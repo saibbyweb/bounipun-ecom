@@ -527,13 +527,12 @@ router.post('/ipLookup', userAuth('customer', false), async (req, res) => {
     let response = { resolved: false, countryCode: 'IN', dump: {} };
 
     const { user } = req.body;
-
-    console.log(req.ip, typeof req.ip);
+    console.log('⌛️ IP Lookup requested for: ',req.ip);
     response.dump = { ip: req.ip, type: typeof req.ip }
 
     /* if user is logged in, fetch country code from account */
     if (user.status === true) {
-        console.log('LOGGED IN, IP fetched from account')
+        console.log('🗃  Country IsoCode fetched from user account')
         response.countryCode = user.countryIsoCode;
         response.resolved = true;
         res.send(response);
@@ -542,16 +541,20 @@ router.post('/ipLookup', userAuth('customer', false), async (req, res) => {
 
     /* validate ip */
     if (req.ip === '::1' || req.ip.includes('::ffff')) {
+        console.log('🖥  Accessed via localhost as guest')
         response.resolved = true;
         res.send(response);
         return;
     }
-
+    const usIP = '206.189.205.251'
+    console.log(`⌛️ Fetching details from IP Regsitry`);
     /* otherwise do an country lookup */
     const { response: lookupResponse, error } = await task(axios.get(`https://api.ipregistry.co/${req.ip}?key=${ipRegistryKey}`));
 
+    
     /* if error */
     if (error) {
+        console.log('❌  Something went wrong, could not fetch details from IP Registry');
         res.send(response);
         return;
     }
@@ -559,8 +562,8 @@ router.post('/ipLookup', userAuth('customer', false), async (req, res) => {
     /* if match found */
     if (lookupResponse.data.location.country.code) {
         // response.dump = lookupResponse.data.location.country;
-        console.log('IP Looked-Up');
         response.countryCode = lookupResponse.data.location.country.code;
+        console.log('✅ Details fetched from IP Registry ; Country IsoCode: ', response.countryCode);
         // response.countryCode = "IN"
         response.resolved = true;
     }

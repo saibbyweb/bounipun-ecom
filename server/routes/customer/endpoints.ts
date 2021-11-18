@@ -12,6 +12,7 @@ const router = server.express.Router();
 /* get document with any filter */
 router.post('/findDocument', async (req, res) => {
     const { model, filters } = req.body;
+    console.log(`🔸🔸 finding model: ${model} with filters: ${JSON.stringify(filters)} `);
     const collection = db.model(model);
     let documentFetch: any = collection.findOne(filters).lean();
 
@@ -53,7 +54,8 @@ router.post('/findDocument', async (req, res) => {
 /* get document with any filter */
 router.post('/findDocuments', async (req, res) => {
     const { model, filters } = req.body;
-    console.log(model, filters);
+    console.log(`🔸🔸 finding model: ${model} with filters: ${JSON.stringify(filters)} `);
+
     const collection = db.model(model);
     let documentFetch: any = collection.find(filters).lean();
 
@@ -67,7 +69,6 @@ router.post('/findDocuments', async (req, res) => {
                 .populate('rtsDirectVariant')
             break;
         case 'collections':
-            console.log('hey col')
             documentFetch.sort('order');
             break;
         case 'color_categories':

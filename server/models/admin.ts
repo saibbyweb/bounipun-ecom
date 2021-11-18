@@ -48,7 +48,7 @@ const adminExpressAuth = async (req, res, next, accessLevel, strictMode = true) 
     req.body.admin = { status: false };
     /* no cookie is found, mark user as guest */
     if (req.cookies.swecom_bounipun_admin === undefined) {
-        console.log('ADMIN_COOKIE_NOT_PROVIDED');
+        console.log('❌ ADMIN_COOKIE_NOT_PROVIDED');
         res.send({ adminNotAuthorized: true })
         return;
     }
