@@ -61,6 +61,7 @@ export default {
     });
 
     setTimeout(() => {
+      this.$store.dispatch("customerV2/fetchActiveCurrencies");
       this.$store.dispatch("customer/fetchCart");
       this.$store.dispatch("customer/fetchProfile");
       this.$store.dispatch("customer/fetchStoreLocation");
