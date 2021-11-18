@@ -8,9 +8,9 @@ export const state = () => ({
 });
 
 export const mutations = {
-    setActiveCurrencies(state, currencies) {
-        state.activeCurrencies = currencies;
-    }
+  setActiveCurrencies(state, currencies) {
+    state.activeCurrencies = currencies;
+  },
 };
 export const actions = {
   async fetchActiveCurrencies({ commit }) {
@@ -21,17 +21,27 @@ export const actions = {
         clientEnabled: true,
       },
     });
-    
-    /* if request failed, set INR as the only active currency else set currencies received*/   
-    let currencyList = ["INR"]
-    commit("setActiveCurrencies", request.resolved === false ? currencyList : [...currencyList,...request.response.map(c => c.code)]);
+
+    /* if request failed, set INR as the only active currency else set currencies received*/
+    let currencyList = ["INR"];
+    commit(
+      "setActiveCurrencies",
+      request.resolved === false
+        ? currencyList
+        : [...currencyList, ...request.response.map((c) => c.code)]
+    );
   },
   async fetchStoreLocation({ commit }) {
-    // fetch store location along with currency
+    // fetch store location
     // if fetched location is INDIA, set currency as INR
+    
+    // if fetch location is not INDIA, check whether persisted state has any preferred currency
+    // if yes, check if that currency is available in active currencies
+    // if yes, set that as main currency
+
     // if fetched location is not INDIA, check whether location currency exists in active currencies
     // if yes, set location currency as main currency
-    // if not, check if user has already selected some other currency as main currency
+    
     // if not, set USD as main currency
   },
 };

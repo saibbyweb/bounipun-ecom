@@ -77,6 +77,7 @@ backup/
 server/frontend
 uploads
 /products
+ngrok
 
 # vuepress build output
 .vuepress/dist
