@@ -197,11 +197,21 @@ export const getters = {
     if (state.cart.length === 0) return false;
     return [...new Set(state.cart.map((product) => product._id))];
   },
-  getCartTotal(state, getters) {
+  getCartTotal({globalRemoteCart}, getters, rootState) {
+    const { customerV2 } = rootState;
+    const { currency } = customerV2;
+
+    console.log(currency, globalRemoteCart);
+
     return sumBy(
-      state.globalRemoteCart,
-      (item) => getters.adjustPrice(item.price) * item.quantity
+      globalRemoteCart,
+      (item) => {
+        const cartItemPrice = currency === "INR" ? item.price : item.pricing[currency]
+        return cartItemPrice * item.quantity
+      }
     );
+
+
   },
   /* discount amount per item */
   getDiscountAmountPerItem() {

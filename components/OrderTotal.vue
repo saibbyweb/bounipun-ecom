@@ -5,14 +5,14 @@
       <p class="name">
         Cart Total: <span class="count"> {{ cartCount }} Items (s) </span>
       </p>
-      <span class="value"> {{ currency }} {{ cartTotal }} </span>
+      <span class="value"> {{ cartTotal }} </span>
     </div>
     <hr />
     <!-- discount -->
     <div v-if="couponApplied" class="data-point flex between">
       <span class="name green"> Discount: </span>
       <span class="value green small">
-        - {{ currency }} {{ discountValue }}
+        - {{ discountValue }}
       </span>
     </div>
 
@@ -21,25 +21,27 @@
     <!-- sub total -->
     <div v-if="couponApplied" class="data-point flex between">
       <span class="name"> Sub-Total: </span>
-      <span class="value"> {{ currency }} {{ subTotal }} </span>
+      <span class="value">  {{ subTotal }} </span>
     </div>
     <hr v-if="couponApplied" />
+
     <!-- shipping charge -->
     <div class="data-point flex between">
       <span class="name"> Shipping: </span>
       <span v-if="!zeroShippingCharge" class="value small">
-        {{ `+ ${currency} ${shippingCharge}` }}
+        +{{ shippingCharge }}
       </span>
       <span v-else class="value green small">
         Free Shipping
       </span>
     </div>
     <hr />
+
     <!-- taxes -->
     <div class="data-point flex between">
       <span class="name"> Taxes: </span>
       <span v-if="!zeroTaxes" class="value small">
-        {{ `+ ${currency} ${taxes}` }}
+        + {{ taxes }}
       </span>
       <span v-else class="value green small"> Tax Included </span>
     </div>
@@ -52,13 +54,15 @@
         Grand Total: <br />
         <!-- <span class="count"> {{ cartCount }} Items(s) </span> -->
       </p>
-      <span class="value"> {{ ` ${currency} ${formatCurrency(grandTotal)}` }} </span>
+      <span class="value"> {{ formatCurrency(grandTotal) }} </span>
     </div>
   </div>
 </template>
 
 <script>
+import CurrencyHelper from "../helpers/currencyHelper.js";
 export default {
+  mixins: [CurrencyHelper],
   mounted() {
     setTimeout(() => {
       if (this.initializeCheckout) this.createPaymentIntent();
@@ -72,11 +76,8 @@ export default {
     deliveryAddress: Object
   },
   computed: {
-    currency() {
-      return this.$store.state.customer.currency + " ";
-    },
     gatewayName() {
-      return this.currency.trim() === "INR" ? "razorpay" : "stripe";
+      return this.currency === "INR" ? "razorpay" : "stripe";
     },
     cartEmpty: function() {
       return this.$store.state.customer.globalRemoteCart.length === 0;
@@ -140,10 +141,6 @@ export default {
     }
   },
   methods: {
-    formatCurrency(adjustedPrice) {
-      adjustedPrice = parseFloat(adjustedPrice);
-      return this.$store.getters["customer/formatCurrency"](adjustedPrice);
-    },
     async createPaymentIntent() {
       const paymentIntentFetch = await this.$post("/createPaymentIntent", {
         intentType: "order",
