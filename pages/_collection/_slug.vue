@@ -112,17 +112,10 @@
             <div class="price-and-actions">
               <div class="price">
                 <h5>
-                  {{ currency }}
                   {{
                     thirdPartyProduct || readyToShip
-                      ? formatCurrency(adjustPrice(product.directPrice))
-                      : formatCurrency(
-                          adjustPrice(
-                            variants[activeVariantIndex].fabrics[
-                              activeFabricIndex
-                            ].price
-                          )
-                        )
+                      ? formatCurrency(directPrice)
+                      : formatCurrency(selectedFabricPrice)
                   }}
                 </h5>
                 <p>Taxes and Shipping Included</p>
@@ -268,7 +261,7 @@
                 <span class="name"> {{ fabric.name }} </span>
                 <span class="info"> {{ fabric.info1 }} </span>
                 <span class="price">
-                  {{ currency }} {{ formatCurrency(adjustPrice(fabric.price)) }}
+                   {{ formatCurrency(getFabricPrice(fabric)) }}
                 </span>
               </div>
             </div>
@@ -353,10 +346,10 @@
 </template>
 
 <script>
-import "vue-inner-image-zoom/lib/vue-inner-image-zoom.css";
-import InnerImageZoom from "vue-inner-image-zoom";
+import CurrencyHelper from "../../helpers/currencyHelper.js";
 
 export default {
+  mixins: [CurrencyHelper],
   head() {
     return {
       title: `${this.product.name} | Bounipun Kashmir`,
@@ -375,9 +368,6 @@ export default {
     if (process.client) {
       window.removeEventListener("scroll", this.handleScroll);
     }
-  },
-  components: {
-    "inner-image-zoom": InnerImageZoom,
   },
   mounted() {
     const slug = this.$route.params.collection + "/" + this.$route.params.slug;
@@ -426,8 +416,11 @@ export default {
     };
   },
   computed: {
-    currency() {
-      return this.$store.state.customer.currency + " ";
+    directPrice() {
+      if(this.currencyIsINR)
+        return this.product.directPrice;
+      else
+        return this.product.directPricing[this.currency]
     },
     collectionName() {
       if (!this.product.thirdParty)
@@ -508,6 +501,15 @@ export default {
       if (selectedFabric === undefined) return { name: "", info1: "" };
 
       return selectedFabric;
+    },
+    selectedFabricPrice() {
+      if(this.selectedFabric === undefined) {
+        return 'fetching...'
+      }
+      if(this.currencyIsINR)
+        return this.selectedFabric.price
+      else
+      return this.selectedFabric.pricing[this.currency]
     },
     variantNote() {
       return this.product.bounipun_collection.variantNote;
@@ -594,6 +596,11 @@ export default {
     },
   },
   methods: {
+    getFabricPrice(fabric) {
+        if(this.currencyIsINR)
+          return fabric.price;
+        return fabric.pricing[this.currency];
+    },
     async toggleWishlist() {
       /* if user is not logged in, move to login page */
       if (!this.$store.state.customer.authorized) {
@@ -629,10 +636,6 @@ export default {
     adjustPrice(price) {
       price = parseInt(price);
       return this.$store.getters["customer/adjustPrice"](price);
-    },
-    formatCurrency(adjustedPrice) {
-      adjustedPrice = parseFloat(adjustedPrice);
-      return this.$store.getters["customer/formatCurrency"](adjustedPrice);
     },
     detailsSectionScrolled(event) {
       if (this.windowWidth < 768) return;
@@ -780,6 +783,7 @@ export default {
             _id: fabric._id._id,
             name: fabric._id.name,
             price: fabric.price,
+            pricing: fabric.pricing,
             code: fabric._id.code,
             info1: fabric._id.info1,
             description: fabric._id.description,

@@ -134,7 +134,7 @@
 import { mapGetters } from "vuex";
 import CurrencyHelper from "../helpers/currencyHelper.js";
 export default {
-   mixins: [CurrencyHelper],
+  mixins: [CurrencyHelper],
   props: {
     gridView: {
       type: Boolean,

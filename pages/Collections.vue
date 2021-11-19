@@ -447,6 +447,7 @@ export default {
       return matchedColors;
     },
     adjustProduct(product, cIndex) {
+      console.log(product,'-- adjust product')
       let adjustedProduct = {
         ...product,
       };
