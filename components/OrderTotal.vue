@@ -5,7 +5,7 @@
       <p class="name">
         Cart Total: <span class="count"> {{ cartCount }} Items (s) </span>
       </p>
-      <span class="value"> {{ cartTotal }} </span>
+      <span class="value"> {{ formatCurrency(cartTotal) }} </span>
     </div>
     <hr />
     <!-- discount -->

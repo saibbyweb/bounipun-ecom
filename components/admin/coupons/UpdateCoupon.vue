@@ -49,9 +49,19 @@
     <div class="log">
       <label class="label"> Usage Log </label>
       <div class="flex center col">
-        <div class="item flex around" v-for="(item, index) in doc.log" :key="index">
-          <span> Redeemed on: <br> {{ $formatDate(item.usedOn) }}</span>
-          <span> Order Number: <br> {{ item.order }}</span>
+        <div
+          class="item flex around"
+          v-for="(item, index) in doc.log"
+          :key="index"
+        >
+          <span>
+            Redeemed on: <br />
+            {{ $formatDate(item.usedOn) }}</span
+          >
+          <span>
+            Order Number: <br />
+            {{ item.order }}</span
+          >
         </div>
       </div>
     </div>
@@ -82,62 +92,81 @@
 </template>
 
 <script>
+const baseDoc = () => ({
+  _id: "",
+  code: "",
+  type: "",
+  value: "",
+  currency: "all",
+  validity: "",
+  validityRange: {
+    start: new Date(),
+    end: new Date(),
+  },
+  log: [],
+  description: "",
+  status: false,
+});
 export default {
   props: {
-    model: String
+    model: String,
   },
   data() {
     return {
       editMode: false,
-      doc: {
-        _id: "",
-        code: "",
-        type: "",
-        value: "",
-        currency: "",
-        validity: "",
-        validityRange: {
-          start: new Date(),
-          end: new Date()
-        },
-        log: [],
-        description: "",
-        status: false
-      },
+      doc: baseDoc(),
       couponTypes: [
         {
           name: "Select Type",
-          value: null
+          value: null,
         },
         {
           name: "Percentage",
-          value: "percentage"
+          value: "percentage",
         },
         {
           name: "Cash Discount",
-          value: "direct-discount"
-        }
+          value: "direct-discount",
+        },
       ],
       currencies: [
         {
           name: "Select Currency",
-          value: null
+          value: null,
         },
-        {
-          name: "Indian Rupee",
-          value: "INR"
-        },
-        {
-          name: "United States Dollar",
-          value: "USD"
-        }
       ],
       loading: false,
-      updated: false
+      updated: false,
     };
   },
-  mounted() {},
+  mounted() {
+    this.fetchActiveCurrencies();
+  },
   methods: {
+    async fetchActiveCurrencies() {
+      const request = await this.$post("/findDocuments", {
+        model: "currency",
+        filters: {
+          adminEnabled: true,
+          status: true,
+        },
+      });
+
+      if (request.resolved == false) {
+        return;
+      }
+
+      const currencies = request.response;
+
+      this.currencies = currencies.map((c) => ({
+        name: c.name,
+        value: c.code,
+      }));
+      this.currencies.unshift(
+        { name: "All Currencies", value: "all" },
+        { name: "Indian Rupee", value: "INR" }
+      );
+    },
     async updateDocument() {
       this.doc.code = this.doc.code.toUpperCase();
 
@@ -177,7 +206,7 @@ export default {
         validityRange,
         log,
         description,
-        status
+        status,
       } = details;
       this.doc = {
         _id,
@@ -189,7 +218,7 @@ export default {
         validityRange,
         log,
         description,
-        status
+        status,
       };
       this.editMode = true;
     },
@@ -198,24 +227,10 @@ export default {
       this.$emit("close");
     },
     resetForm() {
-      this.populateForm({
-        _id: "",
-        code: "",
-        type: "",
-        value: "",
-        currency: "",
-        validity: "",
-        validityRange: {
-          start: new Date(),
-          end: new Date()
-        },
-        log: [],
-        description: "",
-        status: false
-      });
+      this.populateForm(baseDoc());
       this.editMode = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -240,14 +255,14 @@ export default {
 
 .log {
   .item {
-    border:1px dashed #efefef;
+    border: 1px dashed #efefef;
     width: 100%;
     span {
-      font-size:11px;
+      font-size: 11px;
       background-color: $dark_gray;
-      color:white;
-      padding:2px;
-      margin:5px;
+      color: white;
+      padding: 2px;
+      margin: 5px;
     }
   }
 }

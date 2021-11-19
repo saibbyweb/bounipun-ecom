@@ -32,7 +32,7 @@ export const methods = {
         const findActiveCoupon: any = model.findOne({
             code: code.toUpperCase(),
             status: true,
-            currency,
+            // currency,
             validity: { $gt: 0 },
             "validityRange.start": { $lte: new Date() },
             "validityRange.end": { $gte: new Date().setHours(0, 0, 0, 0) }
@@ -45,6 +45,11 @@ export const methods = {
         if (error || response === null) {
             return false;
         }
+
+        /* if coupon found, validate coupon currency */
+        const couponValid = response.currency === 'all' || response.currency === currency
+        if(!couponValid)
+            return false;
 
         console.log(response);
         return response;
