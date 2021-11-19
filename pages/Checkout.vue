@@ -85,6 +85,7 @@
 </template>
 
 <script>
+import currencyHelper from "../helpers/currencyHelper.js";
 import sumBy from "lodash/sumBy";
 import { loadStripe } from "@stripe/stripe-js";
 const style = {
@@ -124,6 +125,7 @@ const demoDeliveryAddress = {
 };
 
 export default {
+  mixins: [currencyHelper],
   head() {
     return {
       title: "Checkout | Bounipun Kashmir"
@@ -151,7 +153,7 @@ export default {
     /* create payment intent */
 
     /* according to currency, setup payment options */
-    if (this.currency.trim() !== "INR") this.initializeStripe();
+    if (this.currency !== "INR") this.initializeStripe();
     // if (this.currency.trim() === "INR") this.fetchRazorpayOrderId();
     // else this.initializeStripe();
   },
@@ -178,23 +180,14 @@ export default {
     };
   },
   computed: {
-    currency() {
-      return this.$store.state.customer.currency + " ";
-    },
     cartEmpty: function() {
       return this.$store.state.customer.globalRemoteCart.length === 0;
-    },
-    subTotal() {
-      return sumBy(
-        this.$store.state.customer.globalRemoteCart,
-        item => this.adjustPrice(item.price) * item.quantity
-      );
     },
     coupon() {
       return this.$store.state.customer.coupon;
     },
     gatewayName() {
-      return this.currency.trim() === "INR" ? "razorpay" : "stripe";
+      return this.currency === "INR" ? "razorpay" : "stripe";
     },
     stripeBillingAddress() {
       return {
@@ -255,10 +248,6 @@ export default {
             break;
         }
       }
-    },
-    adjustPrice(price) {
-      price = parseInt(price);
-      return this.$store.getters["customer/adjustPrice"](price);
     },
     async initializeStripe() {
       this.stripe = await loadStripe(this.stripePK);

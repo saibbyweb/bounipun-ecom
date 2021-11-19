@@ -583,7 +583,7 @@ export const methods = {
             grandTotal: grandTotal.toFixed(2),
         }
     },
-    async createOrderPayload(cart, amountToBeCharged, currency, couponCode, deliveryAddress, combinedDeliveryConsent) {
+    async createOrderPayload(cart, amountToBeCharged, currency, couponCode, deliveryAddress, combinedDeliveryConsent, zeroDecimal) {
         const cartItems = await this.getCartItems(cart);
         /* total order quantity */
         const totalOrderQuantity = sumBy(cartItems, item => item.quantity);
@@ -598,7 +598,7 @@ export const methods = {
         /* extracting details */
         const { subTotal, coupon, discountValue, shippingCharge, tax, grandTotal } = orderTotal;
 
-        console.log('GRAND TOTAL-->', grandTotal, amountToBeCharged);
+        console.log('GRAND TOTAL-->', grandTotal, amountToBeCharged, zeroDecimal);
 
         /* if amount doesn't match */
         if (grandTotal !== amountToBeCharged) {
@@ -610,7 +610,13 @@ export const methods = {
         let gatewayToken;
 
         /* set amount for gateway (as a whole number) */
-        let amount: any = (grandTotal * 100).toFixed(2);
+        let amount: any;
+        if(zeroDecimal)
+            amount = grandTotal;
+        else
+            amount = (grandTotal * 100).toFixed(2);
+        
+        /* parse int */
         amount = parseInt(amount)
 
         if (currency === "INR") {
@@ -632,14 +638,12 @@ export const methods = {
 
             const stripePaymentIntent = await paymentMethods.createStripePaymentIntent({
                 amount,
-                currency: "usd",
+                currency,
                 description: 'Bounipun Payment',
             });
 
             gatewayToken = stripePaymentIntent.client_secret;
         }
-
-        /* TODO: check finesse and mbm purchasing routine */
 
 
         /* construct order details */

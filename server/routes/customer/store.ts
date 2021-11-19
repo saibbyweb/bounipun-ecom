@@ -6,6 +6,7 @@ import { methods as messageMethods } from "@models/message";
 import { methods as notificationMethods } from "@models/notification";
 import { methods as unlockMethods } from "@models/unlock";
 import { methods as globalConfigMethods } from "@models/globalConfig";
+import { methods as currencyMethods } from "@models/currency"
 
 let { sendContactFormEmailToAdmin } = notificationMethods;
 sendContactFormEmailToAdmin =
@@ -128,6 +129,7 @@ router.post("/createPaymentIntent", userAuth("customer"), async (req, res) => {
     intentId: "",
     gatewayToken: "",
     amount: 0,
+    currency: ""
   };
 
   /* TODO: verify gateway */
@@ -142,6 +144,13 @@ router.post("/createPaymentIntent", userAuth("customer"), async (req, res) => {
     combinedDeliveryConsent,
   } = req.body;
 
+  let zeroDecimal = false;
+
+  if(currency !== "INR") {
+      const currencyDetails = await currencyMethods.getCurrency(currency);
+      zeroDecimal = currencyDetails.zeroDecimal;
+  }
+
   /* payload (can be for order or anything) */
   let payload;
 
@@ -154,7 +163,8 @@ router.post("/createPaymentIntent", userAuth("customer"), async (req, res) => {
         currency,
         couponCode,
         deliveryAddress,
-        combinedDeliveryConsent
+        combinedDeliveryConsent,
+        zeroDecimal
       );
 
       /* if verification failed, stop execution */
@@ -184,6 +194,7 @@ router.post("/createPaymentIntent", userAuth("customer"), async (req, res) => {
   response.gatewayToken = payload.gatewayToken;
   response.intentId = paymentIntent._id;
   response.amount = amountToBeCharged * 100;
+  response.currency = currency;
   response.resolved = true;
 
   res.send(response);
