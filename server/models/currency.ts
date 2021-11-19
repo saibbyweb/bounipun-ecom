@@ -164,6 +164,12 @@ export const methods = {
     console.log('✅ WHOLE STORE UPDATED')
 
   },
+  async getCurrency(code) {
+    const currency = await model.findOne({code});
+    if(currency === null)
+      return false;
+    return currency;
+  }
 };
 
 // methods.updateWholeStore();

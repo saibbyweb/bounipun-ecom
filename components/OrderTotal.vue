@@ -12,7 +12,7 @@
     <div v-if="couponApplied" class="data-point flex between">
       <span class="name green"> Discount: </span>
       <span class="value green small">
-        - {{ discountValue }}
+        - {{ formatCurrency(discountValue) }}
       </span>
     </div>
 
@@ -21,7 +21,7 @@
     <!-- sub total -->
     <div v-if="couponApplied" class="data-point flex between">
       <span class="name"> Sub-Total: </span>
-      <span class="value">  {{ subTotal }} </span>
+      <span class="value">  {{ formatCurrency(subTotal) }} </span>
     </div>
     <hr v-if="couponApplied" />
 
@@ -29,7 +29,7 @@
     <div class="data-point flex between">
       <span class="name"> Shipping: </span>
       <span v-if="!zeroShippingCharge" class="value small">
-        +{{ shippingCharge }}
+        +{{ formatCurrency(shippingCharge) }}
       </span>
       <span v-else class="value green small">
         Free Shipping
@@ -104,7 +104,7 @@ export default {
       return discountValue.toFixed(2);
     },
     shippingCharge() {
-      /* calculate the total number of item in total (sum of all quantities) */
+      /* calculate the total number of items in total (sum of all quantities) */
       const totalCartItems = this.$store.getters["customer/getTotalCartItems"];
       const shippingCharge =
         this.$store.getters["customer/getShippingCharge"] * totalCartItems;

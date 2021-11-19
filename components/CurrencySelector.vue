@@ -32,6 +32,7 @@ export default {
         updateStoreCurrency({target}) {
             this.$store.commit('customerV2/setStoreCurrency', target.value);
             this.$store.commit('customer/setPreferredCurrency', target.value);
+            this.$store.dispatch('customer/fetchGlobalConfig');
         }
     }
 }

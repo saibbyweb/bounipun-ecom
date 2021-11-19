@@ -227,13 +227,17 @@ export const getters = {
   getTotalCartItems(state) {
     return sumBy(state.globalRemoteCart, (item) => item.quantity);
   },
-  getShippingCharge(state) {
-    return state.currency === "INR"
+  getShippingCharge(state, getters, { customerV2 }) {
+    const { currency } = customerV2;
+
+    return currency === "INR"
       ? state.globalConfig.domesticShippingCharge
       : state.globalConfig.internationalShippingCharge;
+
   },
-  getTaxPercentage(state) {
-    return state.currency === "INR"
+  getTaxPercentage(state, getters, { customerV2 }) {
+    const { currency } = customerV2;
+    return currency === "INR"
       ? state.globalConfig.gstPercentage
       : state.globalConfig.internationalTaxPercentage;
   },
@@ -322,9 +326,14 @@ export const actions = {
     commit("setCountryIndex", countryIndex);
   },
   /* fetch store global config */
-  async fetchGlobalConfig({ state, commit }) {
+  async fetchGlobalConfig({ state, commit, rootState }) {
+    const { customerV2 } = rootState;
+    const { currency } = customerV2;
+
     /* fetch global config from server */
-    const fetchConfigRequest = await this.$post("/fetchGlobalConfig");
+    const fetchConfigRequest = await this.$post("/fetchGlobalConfig", {
+      currency
+    });
     /* if request failed */
     if (fetchConfigRequest.resolved === false) return;
     /* extract global config */
@@ -335,11 +344,15 @@ export const actions = {
     commit("setGlobalConfig", { ...globalConfig });
   },
   /* fetch coupon */
-  async fetchCoupon({ state, commit }, couponCode) {
+  async fetchCoupon({ commit, rootState }, couponCode) {
+    const { customerV2 } = rootState;
+    const { currency } = customerV2;
+
     const fetchCouponRequest = await this.$post("/fetchCoupon", {
       couponCode,
-      currency: state.currency,
+      currency: currency,
     });
+
     /* if request failed */
     if (fetchCouponRequest.resolved == false) {
       commit("setCoupon", { applied: false, code: "" });
