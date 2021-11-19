@@ -51,7 +51,6 @@ export const methods = {
         if(!couponValid)
             return false;
 
-        console.log(response);
         return response;
 
     },

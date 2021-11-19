@@ -54,13 +54,10 @@ export const actions = {
     /* extract country iso code */
     const { countryCode } = ipLookup.response;
 
-    console.log(countryCode, "-- API RESPONSE COUNTRY ISO CODE");
-    console.log(preferredCurrency, "-- PREFERRED CURRENCY");
     /*  if fetched location is INDIA, set currency as INR */
     if (countryCode === "IN") {
       commit("setStoreCurrency", "INR");
-      // commit("setActiveCurrencies", activeCurrencies.filter(c => c === "INR"));
-      console.log("INR SET AS CURRENCY");
+      commit("setActiveCurrencies", ["INR"]);
       return;
     }
 
@@ -78,7 +75,6 @@ export const actions = {
     );
     if (currencyIndex !== -1) {
       const currency = activeCurrencies[currencyIndex];
-      console.log("PREFERRED MATCH FOUND CURRENCY", currency);
       commit("setStoreCurrency", currency);
       return;
     }
@@ -87,7 +83,6 @@ export const actions = {
     // if yes, set location currency as main currency
     const countryMatch = getCountry(countryCode);
     if (countryMatch !== false) {
-      console.log("COUNTRY MATCH FOUND", countryMatch, activeCurrencies);
 
       const currencyIndex = activeCurrencies.findIndex(
         (c) => c === countryMatch.currency
@@ -98,7 +93,7 @@ export const actions = {
         return;
       }
     }
-    console.log("NO MATCH FOUND AT ALL - CURRENCIES");
+
     // if not, set USD as main currency
     commit("setStoreCurrency", "USD");
   },

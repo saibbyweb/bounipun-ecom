@@ -5,7 +5,7 @@ import { methods as paymentIntentMethods } from "@models/paymentIntent";
 import { methods as messageMethods } from "@models/message";
 import { methods as notificationMethods } from "@models/notification";
 import { methods as unlockMethods } from "@models/unlock";
-import { methods as currencyMethods } from "@models/currency";
+import { methods as globalConfigMethods } from "@models/globalConfig";
 
 let { sendContactFormEmailToAdmin } = notificationMethods;
 sendContactFormEmailToAdmin =
@@ -46,50 +46,16 @@ router.post("/fetchGlobalConfig", async (req, res) => {
   console.log("CURRENCY PROVIDED", req.body.currency);
   const { currency } = req.body;
   let response = { resolved: false, globalConfig: {} };
-  const fetchGlobalConfig: any = db
-    .model("globalConfig")
-    .findOne({ bounipun_id: "saibbyweb" })
-    .select(
-      "currencyMultiplier dollarValue domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage shippingDisclaimerDomestic shippingDisclaimerInternational"
-    )
-    .lean();
 
-  /* config */
-  const { response: config, error } = await task(fetchGlobalConfig);
-
-  /* if error occurred */
-  if (error || config === null) {
-    res.send(response);
-    return;
-  }
-
-  /* get currency from req, if not INR or DOLLAR, convert shipping charge from dollars to the currency provided */
-  if (currency !== "INR" || currency !== "USD") {
-
-    console.log("⚖️ Interational shipping charge needs conversion to ", currency);
-    const dollarDetails = await currencyMethods.getCurrency("USD");
-    const storeCurrency = await currencyMethods.getCurrency(currency);
-
-    console.log("Current Ex. rate of USD: ", dollarDetails.exchangeRateINR);
-    console.log(`Current Ex. rate of ${currency}: `, storeCurrency.exchangeRateINR);
-
-    /* set in dollars */
-    let { internationalShippingCharge: charge } = config;
-    charge = parseFloat(charge);
-    console.log('Shipping charge: ', charge, ' USD')
-
-    /* convert to INR */
-    charge =
-    charge * dollarDetails.exchangeRateINR;
-    /* again convert to store currency */
-    charge =
-    charge / storeCurrency.exchangeRateINR;
-
-    config.internationalShippingCharge = charge.toFixed(2);
+  /* fetch global config */
+  const config = await globalConfigMethods.getGlobalConfig(currency);
     
-    console.log('✅ converted to: ', config.internationalShippingCharge,currency);
+  /* if config couldn't be fetched */
+  if(config === false) {
+      res.send(response);
+      return;
   }
-
+  
   response.globalConfig = config;
   response.resolved = true;
 
@@ -175,8 +141,6 @@ router.post("/createPaymentIntent", userAuth("customer"), async (req, res) => {
     deliveryAddress,
     combinedDeliveryConsent,
   } = req.body;
-
-  console.log("COMBINED_DELIVERY_CONSENT", combinedDeliveryConsent);
 
   /* payload (can be for order or anything) */
   let payload;

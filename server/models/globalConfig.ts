@@ -1,5 +1,5 @@
 import { mongoose, task } from "@helpers/essentials";
-
+import { methods as currencyMethods } from "./currency";
 /* schema */
 const schema = new mongoose.Schema({
     bounipun_id: String,
@@ -43,12 +43,51 @@ export const methods = {
             ...config
         });
     },
-    async getGlobalConfig() {
-        const config = await model.findOne({ bounipun_id: "saibbyweb" }).select('currencyMultiplier dollarValue domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage shippingDisclaimerDomestic shippingDisclaimerInternational');
+    async getGlobalConfig(currency) {
+        const fetchGlobalConfig: any = model
+        .findOne({ bounipun_id: "saibbyweb" })
+        .select(
+          "currencyMultiplier dollarValue domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage shippingDisclaimerDomestic shippingDisclaimerInternational"
+        )
+        .lean();
+    
+      /* config */
+      const { response: config, error } = await task(fetchGlobalConfig);
+    
+      /* if error occurred */
+      if (error || config === null) {
+        res.send(response);
+        return false;
+      }
+    
+      /* get currency from req, if not INR or DOLLAR, convert shipping charge from dollars to the currency provided */
+      if (currency !== "INR" && currency !== "USD") {
+    
+        console.log("⚖️ Interational shipping charge needs conversion to ", currency);
+        const dollarDetails = await currencyMethods.getCurrency("USD");
+        const storeCurrency = await currencyMethods.getCurrency(currency);
+    
+        console.log("Current Ex. rate of USD: ", dollarDetails.exchangeRateINR);
+        console.log(`Current Ex. rate of ${currency}: `, storeCurrency.exchangeRateINR);
+    
+        /* set in dollars */
+        let { internationalShippingCharge: charge } = config;
+        charge = parseFloat(charge);
+        console.log('Shipping charge: ', charge, ' USD')
+    
+        /* convert to INR */
+        charge =
+        charge * dollarDetails.exchangeRateINR;
+        /* again convert to store currency */
+        charge =
+        charge / storeCurrency.exchangeRateINR;
+    
+        config.internationalShippingCharge = charge.toFixed(2);
+        
+        console.log('✅ converted to: ', config.internationalShippingCharge,currency);
+      }
 
-        // console.log(config);
-
-        return config === null ? false : config;
+      return config;
     }
 }
 

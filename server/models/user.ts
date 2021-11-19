@@ -482,10 +482,15 @@ export const methods = {
     },
     /* calculate shipping charge */
     calculateShippingCharge(totalOrderQuantity, currency, globalConfig) {
+        const { domesticShippingCharge: domestic, internationalShippingCharge: international } = globalConfig;
+
         /* get shipping charge per item (acc. to currency) */
-        const shippingChargePerItem = currency === "INR" ? globalConfig.domesticShippingCharge : globalConfig.internationalShippingCharge;
+        const shippingChargePerItem = currency === "INR" ? domestic : international;
 
         /* calculate total shipping charge */
+        console.log(totalOrderQuantity, '--total order quantity');
+        console.log(domestic, international, currency);
+
         const shippingCharge = shippingChargePerItem * totalOrderQuantity;
         return shippingCharge.toFixed(2);
     },
@@ -509,17 +514,21 @@ export const methods = {
     /* calculate grand total */
     async calculateOrderTotal(cartItems, totalOrderQuantity, currency, couponCode) {
         /* fetch global config */
-        const globalConfig: any = await globalConfigMethods.getGlobalConfig();
+        const globalConfig: any = await globalConfigMethods.getGlobalConfig(currency);
 
         /* if config couldn't be fetched */
         if (!globalConfig)
             return false;
 
-        cartItems.forEach(item => {
-            item.price = this.adjustPrice(currency, item.price, globalConfig);
-        });
+        // cartItems.forEach(item => {
+        //     item.price = this.adjustPrice(currency, item.price, globalConfig);
+        // });
 
-        let cartTotal = sumBy(cartItems, item => item.price * item.quantity);
+        let cartTotal = sumBy(cartItems, item => {
+            const cartItemPrice = currency === "INR" ? item.price : item.pricing[currency]
+            // return item.price * item.quantity
+            return cartItemPrice * item.quantity
+        });
 
         /* cart total */
         // let cartTotal = sumBy(cartItems, item => this.adjustPrice(currency, item.price, globalConfig) * item.quantity);
@@ -545,11 +554,16 @@ export const methods = {
             /* set discount value */
             discountValue = couponDetails.discountValue;
         }
+
+        console.log(discountValue, '-- discount value')
         /* calculate sub-total */
         subTotal = cartTotal - discountValue;
+        console.log(subTotal, '-- sub total')
 
         /* shipping charge */
         shippingCharge = this.calculateShippingCharge(totalOrderQuantity, currency, globalConfig);
+
+        console.log(shippingCharge,'-- shipping charge')
         /* taxes */
         taxes = this.calculateTaxes(subTotal, currency, globalConfig);
 
@@ -572,7 +586,7 @@ export const methods = {
     async createOrderPayload(cart, amountToBeCharged, currency, couponCode, deliveryAddress, combinedDeliveryConsent) {
         const cartItems = await this.getCartItems(cart);
         /* total order quantity */
-        const totalOrderQuantity = sumBy(cart, item => item.quantity);
+        const totalOrderQuantity = sumBy(cartItems, item => item.quantity);
 
         /* grand total should be equal to amount to be charged (PROVIDE COUPON) */
         const orderTotal = await this.calculateOrderTotal(cartItems, totalOrderQuantity, currency, couponCode);

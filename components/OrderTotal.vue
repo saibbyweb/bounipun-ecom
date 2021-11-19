@@ -114,6 +114,7 @@ export default {
       return this.shippingCharge === "0.00";
     },
     taxes() {
+      /* not used at all (taxes are included) */
       const taxPercentage = this.$store.getters["customer/getTaxPercentage"];
       const taxableAmount = this.subTotal * (taxPercentage / 100);
       return taxableAmount.toFixed(2);
