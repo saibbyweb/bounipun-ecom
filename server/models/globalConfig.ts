@@ -56,7 +56,6 @@ export const methods = {
     
       /* if error occurred */
       if (error || config === null) {
-        res.send(response);
         return false;
       }
     

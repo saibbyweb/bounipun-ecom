@@ -382,3 +382,16 @@ p {
 a {
   text-decoration: none;
 }
+
+.onlyDesktop {
+  @media(max-width: 768px) {
+    display: none;
+  }
+}
+
+.onlyMobile {
+  display: none;
+  @media(max-width: 768px) {
+    display: initial;
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-    <div class="currency-selector flex">
+    <div class="currency-selector flex center" v-if="storeCurrency !== 'INR'">
         <select :value="storeCurrency" @change="updateStoreCurrency" class="select">
             <option v-for="currency in currecnyList" :key="currency" :value="currency"> {{ currency }} </option>
         </select>
@@ -41,12 +41,21 @@ export default {
 <style lang="scss" scoped>
 .currency-selector {
     .select {
-        padding:5px 10px;
+        padding:1px 3px;
+        // padding: 0;
         font-size:16px;
         font-family: $font_2;
         color:white;
         background: transparent;
-        border:none;
+        // border:none;
+        border: 1px solid #efefef56;
+
+        @media(max-width: 768px) {
+            font-size:12px;
+            // padding:5px 1px;
+            padding: 0;
+            
+        }
     }
 }
 </style>

@@ -20,7 +20,7 @@
       <!-- </router-link> -->
 
 
-    <CurrencySelector />
+    <CurrencySelector class="onlyDesktop"/>
 
     </div>
 

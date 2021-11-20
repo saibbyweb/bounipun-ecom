@@ -4,19 +4,16 @@
       <!-- header -->
       <div class="header">
         <h4 v-if="$store.state.customer.authorized" class="white">
-          {{ greeting }},<br />
-          {{
-            $store.state.customer.user !== undefined
-              ? $store.state.customer.user.firstName
-              : ""
-          }}
+          <span class="greeting"> {{ greeting }} </span>
+          ,
+          <span class="name">
+            {{
+              $store.state.customer.user !== undefined
+                ? $store.state.customer.user.firstName
+                : ""
+            }}
+          </span>
         </h4>
-
-        <img
-          class="close"
-          src="/icons/light/close.png"
-          @click="$emit('closeMenu')"
-        />
 
         <h4
           v-if="!$store.state.customer.authorized"
@@ -25,6 +22,11 @@
         >
           Login / Register
         </h4>
+
+        <!-- currency selector -->
+        <div class="onlyMobile currency-selector">
+          <CurrencySelector />
+        </div>
       </div>
 
       <!-- menu items -->
@@ -43,7 +45,7 @@
       <!-- <button class="clear item">The Bounipun Lab</button> -->
       <!-- <button class="clear item">Story</button> -->
 
-      <div v-if="$store.state.customer.authorized" style="margin-bottom: 10px;">
+      <div v-if="$store.state.customer.authorized" style="margin-bottom: 10px">
         <!-- acc items -->
         <button @click="navigate('/my-account')" class="sub-heading clear item">
           My Account
@@ -75,13 +77,16 @@
         </button> -->
       </div>
 
-    
       <!-- links -->
       <button class="clear link" @click="navigate('/faq')">FAQs</button>
       <!-- <button class="clear link">Help</button> -->
       <!-- <button class="clear link">About Us</button> -->
-      <button class="clear link" @click="navigate('/terms')">Terms of Use</button>
-      <button class="clear link" @click="navigate('/privacy-policy')">Privacy Policy</button>
+      <button class="clear link" @click="navigate('/terms')">
+        Terms of Use
+      </button>
+      <button class="clear link" @click="navigate('/privacy-policy')">
+        Privacy Policy
+      </button>
 
       <br />
 
@@ -124,7 +129,7 @@ export default {
     },
     collections() {
       return this.$store.state.customer.collections;
-    }
+    },
   },
   methods: {
     navigate(route, type) {
@@ -135,11 +140,11 @@ export default {
         this.$router.push({
           path: "/collections",
           query: {
-            slug: route.slug
+            slug: route.slug,
           },
           params: {
-            collectionId: route._id
-          }
+            collectionId: route._id,
+          },
         });
         return;
       }
@@ -155,7 +160,6 @@ export default {
       // );
       /* if collections not fetched */
       // if (!collections.fetched) return;
-
       // this.collections = collections.docs;
     },
     async logout() {
@@ -169,8 +173,8 @@ export default {
       await this.$store.dispatch("customer/fetchGlobalConfig");
       this.$forceUpdate();
       this.$emit("closeMenu");
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -201,7 +205,7 @@ export default {
 
     .header {
       background: $primary_dark;
-      height: 10vh;
+      height:7vh;
       width: 100%;
       margin-bottom: 10px;
       display: flex;
@@ -209,6 +213,7 @@ export default {
       align-items: center;
       padding: 0 10px;
       box-sizing: border-box;
+      position: relative;
 
       .close {
         height: 25px;
@@ -232,6 +237,25 @@ export default {
         cursor: pointer;
         text-align: center;
         text-transform: uppercase;
+      }
+
+      .currency-selector {
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right: 5%;
+      }
+
+      span {
+        color: white;
+        &.greeting {
+          font-size: 11px;
+        }
+
+        &.name {
+
+          font-size: 12px;
+        }
       }
     }
 
