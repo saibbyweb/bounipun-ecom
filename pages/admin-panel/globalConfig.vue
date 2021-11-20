@@ -1,44 +1,70 @@
 <template>
-  <div class="global-config">
-    <!-- currency multiplier -->
-    <InputBox
-      type="number"
-      label="Currency Multiplier (e.g 1.2 means 20% increment)"
-      v-model="doc.currencyMultiplier"
-    />
-    <!-- dollar value -->
-    <InputBox
-      type="number"
-      label="Normalized Dollar Value (in INR)"
-      v-model="doc.dollarValue"
-    />
-    <!-- domestic shipping charge -->
-    <InputBox
-      type="number"
-      label="Domestic Shipping Charge per Item (INR)"
-      v-model="doc.domesticShippingCharge"
-    />
-    <!-- international shipping charge -->
-    <InputBox
-      type="number"
-      label="International Shipping Charge per Item (USD)"
-      v-model="doc.internationalShippingCharge"
-    />
+  <div class="global-config flex start">
+    <div class="main-config">
+      <h3> Main Config </h3>
+      <!-- currency multiplier -->
+      <InputBox
+        type="number"
+        label="Currency Multiplier (e.g 1.2 means 20% increment)"
+        v-model="doc.currencyMultiplier"
+      />
+      <!-- dollar value -->
+      <InputBox
+        type="number"
+        label="Normalized Dollar Value (in INR)"
+        v-model="doc.dollarValue"
+      />
+      <!-- domestic shipping charge -->
+      <InputBox
+        type="number"
+        label="Domestic Shipping Charge per Item (INR)"
+        v-model="doc.domesticShippingCharge"
+      />
+      <!-- international shipping charge -->
+      <InputBox
+        type="number"
+        label="International Shipping Charge per Item (USD)"
+        v-model="doc.internationalShippingCharge"
+      />
 
-    <!-- shipping disclaimer (domestic) -->
-    <TextBox
-      label="Shipping Disclaimer (Domestic)"
-      v-model="doc.shippingDisclaimerDomestic"
-    />
+      <!-- shipping disclaimer (domestic) -->
+      <TextBox
+        label="Shipping Disclaimer (Domestic)"
+        v-model="doc.shippingDisclaimerDomestic"
+      />
 
-    <!-- shipping disclaimer (international) -->
-    <TextBox
-      label="Shipping Disclaimer (International)"
-      v-model="doc.shippingDisclaimerInternational"
-    />
+      <!-- shipping disclaimer (international) -->
+      <TextBox
+        label="Shipping Disclaimer (International)"
+        v-model="doc.shippingDisclaimerInternational"
+      />
+      <!-- actions -->
+      <div class="actions">
+        <!-- action complete gif -->
+        <img v-if="updated" class="action-complete" src="/complete.gif" />
+        <!-- update document -->
+        <button @click="updateDocument" class="action">
+          Update Global Config
+        </button>
+      </div>
+    </div>
+    <!-- currency exchange  -->
+    <div class="currency-prices flex col">
+      <h3> Currency Exchange Rates </h3>
+      <div
+        class="currency-update flex"
+        v-for="currency in currencies"
+        :key="currency.code"
+      >
+        <InputBox
+          type="number"
+          :label="`${currency.code}`"
+          v-model="currency.exchangeRateINR"
+        />
+      </div>
+      <button class="action" @click="updateExchangeRates"> Update Exchange Rates </button>
+    </div>
 
-
-    
     <!-- gst percentage -->
 
     <!-- <InputBox
@@ -48,7 +74,6 @@
       :disabled="true"
     /> -->
 
-
     <!-- international tax percentage -->
     <!-- <InputBox
       type="number"
@@ -56,16 +81,6 @@
       v-model="doc.internationalTaxPercentage"
       :disabled="true"
     /> -->
-
-    <!-- actions -->
-    <div class="actions">
-      <!-- action complete gif -->
-      <img v-if="updated" class="action-complete" src="/complete.gif" />
-      <!-- update document -->
-      <button @click="updateDocument" class="action">
-        Update Global Config
-      </button>
-    </div>
   </div>
 </template>
 
@@ -74,6 +89,7 @@ export default {
   layout: "admin",
   mounted() {
     this.fetchConfig();
+    this.fetchActiveCurrencies();
   },
   data() {
     return {
@@ -87,16 +103,40 @@ export default {
         shippingDisclaimerDomestic: "",
         shippingDisclaimerInternational: "",
         gstPercentage: "",
-        internationalTaxPercentage: ""
+        internationalTaxPercentage: "",
       },
+      currencies: [],
       loading: true,
-      updated: false
+      updated: false,
     };
   },
   methods: {
+    async updateExchangeRates() {
+      for(const currency of this.currencies) {
+        console.log(currency.code, currency.exchangeRateINR);
+        await this.$updateDocument('currency', currency, true);
+      }
+    },
+    async fetchActiveCurrencies() {
+      const request = await this.$post("/findDocuments", {
+        model: "currency",
+        filters: {
+          adminEnabled: true,
+          status: true,
+        },
+      });
+
+      if (request.resolved == false) {
+        return;
+      }
+
+      const currencies = request.response;
+
+      this.currencies = currencies;
+    },
     async fetchConfig() {
       const data = await this.$fetchData(this.model, {
-        bounipun_id: "saibbyweb"
+        bounipun_id: "saibbyweb",
       });
 
       if (data.fetched !== true) return;
@@ -112,7 +152,7 @@ export default {
         shippingDisclaimerDomestic: doc.shippingDisclaimerDomestic,
         shippingDisclaimerInternational: doc.shippingDisclaimerInternational,
         gstPercentage: doc.gstPercentage,
-        internationalTaxPercentage: doc.internationalTaxPercentage
+        internationalTaxPercentage: doc.internationalTaxPercentage,
       };
     },
     async updateDocument() {
@@ -121,8 +161,8 @@ export default {
       if (!result.updated) return;
 
       this.$flash(this);
-    }
-  }
+    },
+  },
 };
 </script>
 
