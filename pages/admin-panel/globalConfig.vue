@@ -1,19 +1,20 @@
 <template>
   <div class="global-config flex start">
-    <div class="main-config">
-      <h3> Main Config </h3>
+    <div class="main-config flex col center">
+      <h3>Main Config</h3>
+      <br />
       <!-- currency multiplier -->
-      <InputBox
+      <!-- <InputBox
         type="number"
         label="Currency Multiplier (e.g 1.2 means 20% increment)"
         v-model="doc.currencyMultiplier"
-      />
+      /> -->
       <!-- dollar value -->
-      <InputBox
+      <!-- <InputBox
         type="number"
         label="Normalized Dollar Value (in INR)"
         v-model="doc.dollarValue"
-      />
+      /> -->
       <!-- domestic shipping charge -->
       <InputBox
         type="number"
@@ -38,31 +39,41 @@
         label="Shipping Disclaimer (International)"
         v-model="doc.shippingDisclaimerInternational"
       />
-      <!-- actions -->
-      <div class="actions">
-        <!-- action complete gif -->
-        <img v-if="updated" class="action-complete" src="/complete.gif" />
-        <!-- update document -->
-        <button @click="updateDocument" class="action">
-          Update Global Config
-        </button>
-      </div>
+      <br />
+
+      <!-- action complete gif -->
+      <img v-if="updated" class="action-complete" src="/complete.gif" />
+      <!-- update document -->
+      <button @click="updateDocument" class="action">Update Main Config</button>
     </div>
-    <!-- currency exchange  -->
-    <div class="currency-prices flex col">
-      <h3> Currency Exchange Rates </h3>
+
+    <div class="currency-prices flex col center">
+      <h3>Currency Exchange Rates</h3>
+      <br />
       <div
         class="currency-update flex"
         v-for="currency in currencies"
         :key="currency.code"
       >
+        <!-- currency exchange  -->
         <InputBox
           type="number"
           :label="`${currency.code}`"
           v-model="currency.exchangeRateINR"
         />
+
+        <!-- default inflation percentage -->
+        <InputSlider
+          v-model="currency.defaultInflationPercentage"
+          :label="`Inflation % (${currency.code})`"
+        />
       </div>
-      <button class="action" @click="updateExchangeRates"> Update Exchange Rates </button>
+      <br />
+      <button class="action" @click="updateExchangeRates">
+        Update Exchange Rates
+      </button>
+        <!-- action complete gif -->
+      <img v-if="exchangeRateUpdated" class="action-complete" src="/complete.gif" />
     </div>
 
     <!-- gst percentage -->
@@ -108,14 +119,16 @@ export default {
       currencies: [],
       loading: true,
       updated: false,
-    };
+      exchangeRateUpdated: false
+    }
   },
   methods: {
     async updateExchangeRates() {
-      for(const currency of this.currencies) {
-        console.log(currency.code, currency.exchangeRateINR);
-        await this.$updateDocument('currency', currency, true);
+      for (const currency of this.currencies) {
+        await this.$updateDocument("currency", currency, true);
       }
+      this.exchangeRateUpdated = true;
+      setTimeout(() => this.exchangeRateUpdated = false, 2000);
     },
     async fetchActiveCurrencies() {
       const request = await this.$post("/findDocuments", {
@@ -168,7 +181,24 @@ export default {
 
 <style lang="scss" scoped>
 .global-config {
-  width: 60%;
-  padding: 20px 40px;
+  width: 100%;
+
+  > div {
+    border: 1px solid #efefef;
+    padding: 20px 40px;
+  }
+
+  .main-config {
+    width: 40%;
+  }
+
+  .currency-prices {
+    width: 60%;
+
+    > div {
+      width: 100%;
+    }
+    // padding:10px;
+  }
 }
 </style>

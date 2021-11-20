@@ -53,9 +53,13 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .range-slider {
   width: 100%; /* Width of the outside container */
+}
+
+.label {
+  font-size: 14px;
 }
 
 /* The slider itself */

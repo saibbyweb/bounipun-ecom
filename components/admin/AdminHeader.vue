@@ -134,7 +134,7 @@ export default {
           path: "/admin-panel/admins",
           desc: "...",
         },
-          {
+        {
           name: "Content Unlock",
           path: "/admin-panel/unlock",
           desc: "...",
@@ -153,14 +153,28 @@ export default {
     isSuperAdmin() {
       return this.$store.state.admin.admin.access_level === "1";
     },
+    isSuhaib() {
+      return this.$store.state.admin.admin.phoneNumber === "9906697711";
+    },
     authorizedPages() {
-      if (this.isSuperAdmin) return this.items;
+      if (this.isSuhaib) return this.items;
+
+      const items = this.items.filter((item) => item.name !== "Currencies");
+
+      if (this.isSuperAdmin) return items;
       /* filter out super admin pages for other access levels */
-      const superAdminPages = ["Coupons", "Configuration", "Sales", "Product Lists", "Users", "Admins"];
-      return this.items.filter(
+      const superAdminPages = [
+        "Coupons",
+        "Configuration",
+        "Sales",
+        "Product Lists",
+        "Users",
+        "Admins",
+      ];
+      return items.filter(
         (item) => superAdminPages.findIndex((page) => page === item.name) === -1
       );
-    }
+    },
   },
   methods: {
     setActive(item, index) {
