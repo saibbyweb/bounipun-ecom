@@ -426,7 +426,7 @@ export const methods = {
         });
 
         cartItems = cartItems.filter(item => item !== false)
-        // console.log(itemsToBeRemoved)
+
         return cartItems;
     },
     async clearUserCart(userId) {
@@ -730,8 +730,14 @@ export const methods = {
             shippingCharge,
             /* add shipping and taxes here */
             items: cartItems.map(item => {
-                let itemAmount: any = item.price * item.quantity;
+
+                const itemPrice = paymentIntent.currency === "INR" ? item.price : item.pricing[paymentIntent.currency];
+
+                let itemAmount: any = itemPrice * item.quantity;
                 itemAmount = itemAmount.toFixed(2);
+
+                // let itemAmount: any = item.price * item.quantity;
+                // itemAmount = itemAmount.toFixed(2);
 
                 let itemTotal: any = itemAmount - discountPerItem;
                 itemTotal = itemTotal.toFixed(2);

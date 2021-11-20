@@ -8,9 +8,9 @@ export default {
     },
   },
   methods: {
-    formatCurrency(price) {
+    formatCurrency(price, currency = false) {
       price = parseFloat(price);
-      return this.$store.getters["customerV2/formatCurrency"](price);
+      return this.$store.getters["customerV2/formatCurrency"](price, currency);
     },
   },
 };

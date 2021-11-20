@@ -45,7 +45,7 @@
           </span> -->
             <span class="price">
               Amount Paid:
-              <b> {{ order.currency }} {{ formatCurrency(subOrder.itemTotal) }} </b>
+              <b>  {{ formatCurrency(subOrder.itemTotal,order.currency) }} </b>
             </span>
           </div>
         </div>
@@ -86,7 +86,9 @@
 </template>
 
 <script>
+import CurrencyHelper from "../../helpers/currencyHelper.js"
 export default {
+  mixins: [CurrencyHelper],
   head() {
     return {
       title: "My Orders | Bounipun Kashmir"
@@ -114,10 +116,6 @@ export default {
   methods: {
     getImagePath(image) {
       return this.$getImage(image, 'productPages');
-    },
-    formatCurrency(adjustedPrice) {
-      adjustedPrice = parseFloat(adjustedPrice);
-      return this.$store.getters["customer/formatCurrency"](adjustedPrice);
     },
     checkIfCancellable(orderedAt) {
       orderedAt = new Date(orderedAt);

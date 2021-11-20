@@ -5,7 +5,9 @@
       <span class="status"> Cancelled </span>
       <div class="details flex col">
         <span class="by"> By: {{ localItem.cancellation.by }}</span>
-        <span class="reason"> Reason: {{ localItem.cancellation.reason }} </span>
+        <span class="reason">
+          Reason: {{ localItem.cancellation.reason }}
+        </span>
       </div>
     </div>
 
@@ -70,7 +72,10 @@
       <!-- main image -->
       <div
         class="image-container"
-        :style="`background-image: url( ${$getImage(localItem.mainImage,'productPages')} )`"
+        :style="`background-image: url( ${$getImage(
+          localItem.mainImage,
+          'productPages'
+        )} )`"
       >
         <!-- <img :src="item.mainImage" /> -->
       </div>
@@ -90,7 +95,9 @@
         <!-- fabric info 1-->
         <span class="fabric"> {{ localItem.fabricInfo1 }} </span>
         <!-- price -->
-        <span class="price"> {{ currency }} {{ localItem.price }} </span>
+        <span class="price">
+          {{ orderCurrency === "INR" ? formatCurrency(localItem.price)  : formatCurrency(localItem.pricing[orderCurrency], orderCurrency) }}
+        </span>
         <!-- quantity -->
         <span class="quantity"> Quantity: {{ localItem.quantity }} </span>
       </div>
@@ -98,7 +105,7 @@
       <!-- total product price -->
       <!-- <p class="total-product-price">INR {{ localItem.quantity * localItem.price }}</p> -->
       <p class="total-product-price">
-        {{ currency }} {{ localItem.itemTotal }}
+        {{ formatCurrency(localItem.itemTotal, orderCurrency) }}
       </p>
     </div>
     <!-- actions -->
@@ -155,24 +162,26 @@
 </template>
 
 <script>
+import currencyHelper from "../../../helpers/currencyHelper.js";
 export default {
+  mixins: [currencyHelper],
   props: {
     orderId: String,
     item: Object,
-    currency: {
+    orderCurrency: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
   watch: {
     item(newVal) {
       this.localItem = newVal;
-    }
+    },
   },
   computed: {
     cancelled() {
       return this.localItem.status === "cancelled";
-    }
+    },
   },
   data() {
     return {
@@ -180,47 +189,43 @@ export default {
       allStatusUpdates: [
         {
           name: "Pending",
-          value: "pending"
+          value: "pending",
         },
         {
           name: "Confirmed",
-          value: "confirmed"
+          value: "confirmed",
         },
         {
           name: "Shipped",
-          value: "shipped"
+          value: "shipped",
         },
         {
           name: "Delayed",
-          value: "delayed"
+          value: "delayed",
         },
         {
           name: "Delivered",
-          value: "delivered"
-        }
+          value: "delivered",
+        },
       ],
       updated: false,
       showCancellationForm: false,
       cancellationReasons: [
         "Communicated by customer via phone / email / whatsapp",
-        "Cannot be fulfilled"
+        "Cannot be fulfilled",
       ],
       selectedReason: "",
-      orderCancelled: false
+      orderCancelled: false,
     };
   },
   methods: {
-    formatCurrency(adjustedPrice) {
-      adjustedPrice = parseFloat(adjustedPrice);
-      return this.$store.getters["customer/formatCurrency"](adjustedPrice);
-    },
     async updateOrder() {
       const pushUpdate = await this.$post("/updateOrderItemDetails", {
         orderId: this.orderId,
         subOrderId: this.item._id,
         status: this.localItem.status,
         trackingId: this.localItem.trackingId,
-        trackingUrl: this.localItem.trackingUrl
+        trackingUrl: this.localItem.trackingUrl,
       });
 
       /* if request not resolved */
@@ -236,15 +241,15 @@ export default {
       const canceOrderRequest = await this.$post("/cancelSubOrder", {
         orderId: this.orderId,
         subOrderId: this.localItem._id,
-        reason: this.selectedReason
-      })
+        reason: this.selectedReason,
+      });
 
       if (canceOrderRequest.resolved === false) return;
 
       this.orderCancelled = true;
-      this.$emit("orderCancelled")
-    }
-  }
+      this.$emit("orderCancelled");
+    },
+  },
 };
 </script>
 
@@ -262,7 +267,7 @@ export default {
 
     .status {
       width: 10%;
-      padding-left:5px;
+      padding-left: 5px;
     }
     .details {
       width: 70%;
@@ -272,12 +277,11 @@ export default {
       color: white;
       font-size: 12px;
     }
-
   }
 
   .cancellation-msg {
     font-size: 12px;
-    padding:10px;
+    padding: 10px;
   }
 
   .cancel-btn {

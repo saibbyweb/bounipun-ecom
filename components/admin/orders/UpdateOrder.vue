@@ -54,11 +54,11 @@
       <label class="label"> Ordered Item(s): </label>
       <div class="item" v-for="(subOrder, index) in doc.items" :key="index">
         <OrderItem
-          :orderId="doc._id"
+        :orderId="doc._id"
           :item="subOrder"
           :allowUpdate="false"
           @subOrderUpdated="refetchDoc"
-          :currency="doc.currency"
+          :orderCurrency="doc.currency"
         />
       </div>
     </div>

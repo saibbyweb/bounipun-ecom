@@ -19,8 +19,8 @@ export const mutations = {
 
 /* getters */
 export const getters = {
-  formatCurrency: (state) => (price) => {
-    return currencyFormatter.format(price, { code: state.currency })
+  formatCurrency: (state) => (price, currency) => {
+    return currencyFormatter.format(price, { code: currency === false ? state.currency : currency })
   },
 };
 

@@ -28,6 +28,7 @@ const schema = new mongoose.Schema({
         gstPercentage: String,
         fabricName: String,
         price: String,
+        pricing: Object,
         quantity: String,
         cartEntry: Object,
         itemAmount: Number,
