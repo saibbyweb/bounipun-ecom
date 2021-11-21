@@ -2,15 +2,16 @@ import { mongoose, ObjectId } from "@helpers/essentials";
 
 /* schema */
 const schema = new mongoose.Schema({
+    name: String,
     details: mongoose.Schema.Types.Mixed,
-    type: String,
+    description: String,
     status: String
 },{
     timestamps: true
 });
 
 /* model */
-const modelName = 'pages';
+const modelName = 'lab';
 const model = mongoose.model(modelName, schema);
 
 /* helper methods */
