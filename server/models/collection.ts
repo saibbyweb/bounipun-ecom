@@ -22,7 +22,7 @@ const schema = new mongoose.Schema({
     status: Boolean
 }, {
     timestamps: true
-});
+})
 
 /* model */
 const model = mongoose.model('collections', schema);

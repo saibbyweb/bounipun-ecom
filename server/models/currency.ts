@@ -1,5 +1,6 @@
 import { db, mongoose } from "@helpers/essentials";
 import { methods as productMethods } from "./product";
+// import allCurrencies from "../../helpers/currencies"
 /* schema */
 const schema = new mongoose.Schema(
   {
@@ -170,8 +171,9 @@ export const methods = {
       return false;
     return currency;
   }
-};
-
+}
+// console.log(allCurrencies.length);
 // methods.updateWholeStore();
+// methods.loadAllCurrencies();
 
-export default { model, methods };
+export default { model, methods }

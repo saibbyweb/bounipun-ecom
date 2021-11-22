@@ -15,16 +15,6 @@
     <!-- Description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
 
-    <!-- questions -->
-    <!-- <div class="questions">
-        <label class="label"> Questions: </label>
-        <div class="question" v-for="(question,index) in doc.questions" :key="question.key">
-               <label class="label que"> Question #{{ index + 1 }} </label>
-               <InputBox label="Title" v-model="question.title" />
-               <TextBox label="Answer" v-model="question.answer" />
-               <img class="delete" src="/icons/dark/remove-cart-item.png" @click="removeQuestion(index)" />
-        </div>
-    </div> -->
     <div class="flex around center" style="width:100%">
    <label class="label"> Questions: </label>
        <!-- drag toggle -->

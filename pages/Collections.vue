@@ -1,11 +1,11 @@
 <template>
-  <div class="center-col page -wh" >
+  <div class="center-col page -wh">
     <!-- collection header -->
     <div
       class="c-header center"
       :class="{ isEscape, collectionLocked }"
       :style="{
-        backgroundImage: `url(${getCollectionImage(collection.image)})`,
+        backgroundImage: `url(${getCollectionImage(collectionImage)})`,
       }"
     >
       <h2 v-if="collection.image === ''" class="heading">
@@ -15,20 +15,21 @@
 
     <!-- main text block -->
     <div
-      v-if="
-        collection.mainTextBlock !== undefined &&
-        collection.mainTextBlock.visible
-      "
+      v-if="collection.mainTextBlock !== undefined &&
+        collection.mainTextBlock.visible"
       class="main-text-block center-col pad"
     >
       <h2 class="text-1">{{ collection.mainTextBlock.text1 }}</h2>
       <p class="text-2">{{ collection.mainTextBlock.text2 }}</p>
-      <p class="text-3">{{ collection.mainTextBlock.text3 }}</p>
+      <p v-if="!collectionLocked" class="text-3">{{ collection.mainTextBlock.text3 }}</p>
+      <p v-else class="text-3"> {{ collection.lockedText }} </p>
     </div>
+
+    
 
     <!-- filter sort toggles -->
     <FilterSortToggles
-    v-if="!collectionLocked"
+      v-if="!collectionLocked"
       @openFilters="
         filtersOpen = true;
         sortOpen = false;
@@ -67,7 +68,6 @@
       "
       class="collection-items"
     >
-
       <product-card
         v-for="(product, index) in products"
         :key="index"
@@ -111,7 +111,7 @@
     </div>
 
     <!-- if collection locked -->
-    <div v-if="collectionLocked" class="locked">
+    <div v-if="collectionLockedAndUserAuthorized" class="locked">
       <h2 class="heading" v-if="collectionLocked">
         🔒 This collection is locked
       </h2>
@@ -119,20 +119,21 @@
       <!-- unlock content -->
       <UnlockContent />
     </div>
+    <!-- ask for login -->
+    <div v-if="collectionLocked && !$store.state.customer.authorized" class="flex center col login">
+      <p class="text"> Please login first to 🔓 unlock this collection </p>
+      <button class="action" @click="$router.push('/login')"> Access Bounipun Account </button>
+    </div>
   </div>
 </template>
 
 <script>
-import productCard from "../components/productCard.vue";
 
 export default {
   head() {
     return {
       title: `${this.collection.name} | Bounipun Kashmir`,
     };
-  },
-  components: {
-    productCard,
   },
   data() {
     return {
@@ -175,6 +176,15 @@ export default {
     },
   },
   computed: {
+    collectionImage() {
+      return this.collectionLocked
+        ? this.collection.lockedImage
+        : this.collection.image
+    },
+    collectionText() {
+      const { collection } = this;
+      return this.collectionLocked ? collection.lockText : (mainTextBlock)
+    },
     collectionLocked() {
       /* if collection is locked */
       if (this.collection.lock === true) {
@@ -190,6 +200,10 @@ export default {
       }
 
       return false;
+    },
+    collectionLockedAndUserAuthorized() {
+      const customer = this.$store.state.customer;
+      return this.collectionLocked && customer.authorized === true;
     },
     isEscape() {
       return this.$route.query.slug.toUpperCase() === "ESCAPE";
@@ -302,7 +316,7 @@ export default {
       this.$store.commit("customer/setLoading", true);
       const fetchPaginatedResults = this.$axios.$post("/searchProducts", {
         rawCriterion: this.rawCriterion,
-        lockCheck: this.collection.lock
+        lockCheck: this.collection.lock,
       });
 
       /* wait for request to resolve */
@@ -447,7 +461,7 @@ export default {
       return matchedColors;
     },
     adjustProduct(product, cIndex) {
-      console.log(product,'-- adjust product')
+      console.log(product, "-- adjust product");
       let adjustedProduct = {
         ...product,
       };
@@ -586,7 +600,7 @@ export default {
   width: 100%;
 
   &.collectionLocked {
-    margin-top:0;
+    margin-top: 0;
   }
 
   &.isEscape {
@@ -656,6 +670,16 @@ export default {
     padding-left: 10%;
     font-size: 13px;
     color: $gray;
+  }
+
+}
+
+.login {
+  border:1px solid #d0d0d0e8;
+  padding:2% 8%;
+  .text {
+    font-family: $font_2;
+    padding-bottom: 10px;
   }
 }
 </style>

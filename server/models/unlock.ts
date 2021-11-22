@@ -45,10 +45,13 @@ export const methods = {
     },
     /* check for expiry and black list  */
     async validateUnlockCode(code, user, applying = false) {
+
+        const validity = applying ? { $gt: 0 } : { $gte: 0 }
+
         const checkValidity: any = model.findOne({
             code: code.toUpperCase(),
             status: true,
-            validity: { $gt: 0 },
+            validity,
             "validityRange.start": { $lte: new Date() },
             "validityRange.end": { $gte: new Date().setHours(0, 0, 0, 0) }
         }).select('code blackList log');

@@ -82,8 +82,14 @@ const schema = new mongoose.Schema({
     ],
     /* content unlock */
     contentUnlock: {
-        code: String,
-        status: Boolean
+        type: {
+            code: String,
+            status: Boolean,
+        },
+        default: {
+            code: '',
+            status: false
+        }
     },
     /* status */
     status: {
@@ -864,5 +870,23 @@ export const methods = {
         return cancelSubOrder === null ? false : cancelSubOrder;
     }
 }
+
+
+async function updateUsersWithContentUnlockDefaults() {
+    const allUsers = await model.find({});
+    console.log(allUsers.length, '-- USER LENGTH');
+    for(const user of allUsers) {
+        // console.log(user.contentUnlock);
+        // if(user.contentUnlock === undefined) {
+        //     console.log(user.firstName);
+        // }
+        await model.findOneAndUpdate({_id: user._id}, { contentUnlock : {
+            status: false,
+            code: ''
+        }});
+    }
+}
+
+// updateUsersWithContentLockDefault();
 
 export default { model, methods }

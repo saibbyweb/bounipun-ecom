@@ -13,7 +13,9 @@
     "start": "NODE_ENV=production node dist/server.js",
     "start:dev": "yarn run frontend:dev && yarn run server:dev",
     "up": "yarn run build && yarn run start",
-    "stripe:listen": "stripe listen --forward-to localhost:3000/stripeWebhook" 
+    "stripe:listen": "stripe listen --forward-to localhost:3000/stripeWebhook" ,
+    "backup-prod": "./db-transport backup bounipun-ecom-prod",
+    "staging-db-restore": "./db-transport restore bounipun-ecom-stage"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.5",
