@@ -253,7 +253,6 @@ router.post('/searchProducts', userAuth('customer', false), async (req, res) => 
     /* text match + filters */
     criterion.match = {
         status: true,
-        lock: unlocked,
         'colors.status': true,
         $or: [
             { name: { $regex: rawCriterion.search.term, $options: "i" } },
@@ -265,6 +264,10 @@ router.post('/searchProducts', userAuth('customer', false), async (req, res) => 
         ], ...filters
     }
 
+    /* append lock filter, if user is not unlocked */
+    if(unlocked === false) {
+        criterion.match = {...criterion.match, lock: false }
+    }
     /* sort by fields */
     criterion.sort = rawCriterion.sortBy;
 

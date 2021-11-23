@@ -147,7 +147,7 @@ export default {
       this.$store.dispatch("customer/fetchProfile");
 
       /* update store location */
-      this.$store.dispatch("customer/fetchStoreLocation");
+      await this.$store.dispatch("customerV2/fetchStoreLocation");
 
       /* navigate homepage */
       this.$router.push("/");

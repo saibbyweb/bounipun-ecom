@@ -104,8 +104,11 @@ export const methods = {
 
     /* new product slug */
     details.slug = parent.slug + "/" + details.alias;
+
     /* set product lock as collection lock  */
-    details.lock = parent.lock;
+    if(parent.lock === true) {
+      details.lock = true;
+    }
 
     /* verify slug automicity */
     let filter: any = { slug: details.slug };
@@ -196,11 +199,6 @@ export const methods = {
     }
 
     return details;
-
-    /* add lowest and highest price */
-    // console.log(details.directPricing,'-- Direct Pricing');
-    console.log(details.alias, "-- FINAL ALIAS");
-    console.log(details.slug, "-- FINAL SLUG");
   },
   async updateAllProductsUnderCollection(
     collectionId,

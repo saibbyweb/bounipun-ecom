@@ -8,8 +8,13 @@
       @orderCancelled="fetchOrders"
     />
 
+    <div class="page-header center">
+      <h2 class="title">My Orders</h2>
+    </div>
+
+
     <!-- loop through every order -->
-    <div v-for="order in orders" :key="order._id">
+    <div v-for="order in orders" :key="order._id" class="flex wrap">
       <div
         class="order-item"
         v-for="(subOrder, index) in order.items"
@@ -154,7 +159,7 @@ export default {
   .order-item {
     box-shadow: 1px 1px 15px rgba(51, 51, 51, 0.16);
     margin: 20px;
-    height: 300px;
+    min-height: 300px;
     overflow: hidden;
     width: 40vw;
 
@@ -237,7 +242,8 @@ export default {
     }
 
     @media (max-width: 768px) {
-      height: 65vw;
+      // height: 65vw;
+      min-height: 190px;
       width: 90vw;
       margin: 20px 0;
 

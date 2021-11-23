@@ -169,7 +169,8 @@ export default {
       this.$store.commit("customer/unauthorize");
       this.$router.push("/");
       await this.$store.dispatch("customer/fetchCart");
-      await this.$store.dispatch("customer/fetchStoreLocation");
+      /* re-set store currency */
+      await this.$store.dispatch("customerV2/fetchStoreLocation");
       await this.$store.dispatch("customer/fetchGlobalConfig");
       this.$forceUpdate();
       this.$emit("closeMenu");
@@ -205,7 +206,7 @@ export default {
 
     .header {
       background: $primary_dark;
-      height:7vh;
+      height: 7vh;
       width: 100%;
       margin-bottom: 10px;
       display: flex;
@@ -253,7 +254,6 @@ export default {
         }
 
         &.name {
-
           font-size: 12px;
         }
       }

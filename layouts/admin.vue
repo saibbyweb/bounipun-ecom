@@ -41,8 +41,10 @@ export default {
     });
 
     setTimeout(() => {
-      if (this.$store.state.admin.authorized === false)
+      if (this.$store.state.admin.authorized === false) {
         this.$router.push("/admin-panel/login");
+        return;
+      }
       this.$store.dispatch("admin/fetchProfile");
     }, 100);
   },

@@ -380,9 +380,7 @@
     <!-- lock status -->
     <Toggle
       v-model="doc.lock"
-      label="Lock Status"
-      :disabled="false"
-      
+      label="Lock Status"      
       activeText="🔒 Locked"
       inactiveText="Unlocked"
     />

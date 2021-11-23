@@ -15,7 +15,7 @@ export default function ({ $axios, store, router, redirect }) {
 
         if(response.data.adminNotAuthorized === true) {
             store.commit("admin/unauthorize");
-            setTimeout(() => redirect('/'),1000);
+            setTimeout(() => redirect('/admin-panel/login'),1000);
             // router.push('/admin-panel/login');
         }
     })

@@ -353,11 +353,13 @@ export default {
         return;
       }
       /* TODO: should work but not tested */
-      this.shiftCart();
-      /* fetch profile */
-      this.$store.dispatch("customer/fetchProfile");
-      /* and move back to homepage */
+      await this.shiftCart();
+        /* set user auth to true */
       this.$store.commit("customer/setAuthorization", true);
+      /* fetch profile */
+      await this.$store.dispatch("customer/fetchProfile");
+      /* re-set store currency */
+      await this.$store.dispatch("customerV2/fetchStoreLocation");
 
       /* collect delivery address */
       let deliveryAddress = {};
@@ -369,8 +371,8 @@ export default {
       deliveryAddress.countryDialCode = this.countryDialCode;
 
       if (this.saveNewAddress) await this.saveAddressToProfile(deliveryAddress);
-
-      this.$router.push({ name: "checkout", params: { deliveryAddress } });
+      /* probably refresh here or re-fetch store location */
+      this.$router.push({ name: "Checkout", params: { deliveryAddress } });
     },
     async shiftCart() {
       const { resolved, response } = await this.$post("/shiftCart", {
