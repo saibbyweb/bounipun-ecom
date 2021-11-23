@@ -315,7 +315,7 @@ export const actions = {
     if (ipLookup.resolved === false) return;
     /* if match found, set store currency accordingly */
     const countryIsoCode = ipLookup.response.countryCode;
-    commit("setStoreCurrency", countryIsoCode);
+    // commit("setStoreCurrency", countryIsoCode);
     /* figure out dial code */
     const countryIndex = getCountryIndex(countryIsoCode);
 
@@ -323,7 +323,7 @@ export const actions = {
       return;
     }
     /* set country index */
-    commit("setCountryIndex", countryIndex);
+    // commit("setCountryIndex", countryIndex);
   },
   /* fetch store global config */
   async fetchGlobalConfig({ state, commit, rootState }) {

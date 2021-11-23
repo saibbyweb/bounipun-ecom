@@ -1,4 +1,4 @@
-import { getCountry } from "../helpers/countryCodes";
+import { getCountry, getCountryIndex } from "../helpers/countryCodes";
 import currencyFormatter from "currency-formatter";
 
 export const state = () => ({
@@ -20,7 +20,9 @@ export const mutations = {
 /* getters */
 export const getters = {
   formatCurrency: (state) => (price, currency) => {
-    return currencyFormatter.format(price, { code: currency === false ? state.currency : currency })
+    return currencyFormatter.format(price, {
+      code: currency === false ? state.currency : currency,
+    });
   },
 };
 
@@ -54,6 +56,13 @@ export const actions = {
     /* extract country iso code */
     const { countryCode } = ipLookup.response;
 
+    /* set country index */
+    const countryIndex = getCountryIndex(countryCode);
+    if (countryIndex !== -1) {
+      console.log("country index updated: ", countryIndex, countryCode);
+      commit("customer/setCountryIndex", countryIndex, { root: true });
+    }
+
     /*  if fetched location is INDIA, set currency as INR */
     if (countryCode === "IN") {
       commit("setStoreCurrency", "INR");
@@ -83,7 +92,6 @@ export const actions = {
     // if yes, set location currency as main currency
     const countryMatch = getCountry(countryCode);
     if (countryMatch !== false) {
-
       const currencyIndex = activeCurrencies.findIndex(
         (c) => c === countryMatch.currency
       );
