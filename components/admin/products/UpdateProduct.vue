@@ -248,14 +248,24 @@
               <!-- <InputBox label="Direct Price:" v-model="color.rtsDirectPrice" /> -->
 
               <!-- RTS PANEL PRICING -->
-              <div class="rts-pricing flex col" style="width: 100%; margin:10px 0;">
-                <button
+              <div
+                class="rts-pricing flex col"
+                style="width: 100%; margin: 10px 0"
+              >
+                <!-- <button
                   @click="
                     setSuggestedPrices(color.directPricing, color.directPrice)
                   "
                 >
                   Set Suggested Prices
-                </button>
+                </button> -->
+
+                <Toggle
+                  v-model="enableRTSSuggestedPricing"
+                  activeText="Enabled"
+                  label="Auto Calculations"
+                />
+
                 <!-- direct price (INR) -->
                 <div class="currency-box">
                   <span class="code flex center"> INR </span>
@@ -263,6 +273,7 @@
                     class="price shadow"
                     type="text"
                     v-model="color.directPrice"
+                    @input="baseRTSDirectPriceUpdated(color)"
                     placeholder="Price (INR)"
                   />
                 </div>
@@ -332,18 +343,25 @@
     </div>
 
     <!-- direct pricing -->
-    <div v-if="thirdPartyProduct || readyToShip">
-      <button @click="setSuggestedPrices(doc.directPricing, doc.directPrice)">
+    <div v-if="thirdPartyProduct || readyToShip" class="flex center col">
+      <!-- <button @click="setSuggestedPrices(doc.directPricing, doc.directPrice)">
         Set Suggested Prices
-      </button>
+      </button> -->
+
+      <Toggle
+        v-model="enableSuggestedPricing"
+        activeText="Enabled"
+        label="Auto Calculations"
+      />
 
       <!-- direct price (INR) -->
       <div class="currency-box">
-        <span class="code flex center"> Direct Price (INR) </span>
+        <span class="code flex center"> Price (INR) </span>
         <input
           class="price shadow"
           type="text"
           v-model="doc.directPrice"
+          @input="baseDirectPriceUpdated"
           placeholder="Price (INR)"
         />
       </div>
@@ -380,7 +398,7 @@
     <!-- lock status -->
     <Toggle
       v-model="doc.lock"
-      label="Lock Status"      
+      label="Lock Status"
       activeText="🔒 Locked"
       inactiveText="Unlocked"
     />
@@ -557,7 +575,6 @@ export default {
         };
       });
     },
-
   },
   data() {
     return {
@@ -575,6 +592,8 @@ export default {
         status: false,
         msg: "",
       },
+      enableSuggestedPricing: true,
+      enableRTSSuggestedPricing: true
     };
   },
   mounted() {
@@ -584,7 +603,6 @@ export default {
   methods: {
     async addNewRTSEntry(color) {
       console.log(color);
-  
 
       const selectedVariant = this.variants.find(
         (variant) => variant.value === color.rtsVariant
@@ -630,8 +648,11 @@ export default {
       };
 
       /* check price validity */
-      let allPricesSet = this.checkAllPrices(rtsProduct.directPrice, rtsProduct.directPricing);
-      if(allPricesSet === false) {
+      let allPricesSet = this.checkAllPrices(
+        rtsProduct.directPrice,
+        rtsProduct.directPricing
+      );
+      if (allPricesSet === false) {
         return;
       }
 
@@ -759,6 +780,14 @@ export default {
       this.editMode = true;
       this.$flash(this);
     },
+    baseDirectPriceUpdated() {
+      if (this.enableSuggestedPricing)
+        this.setSuggestedPrices(this.doc.directPricing, this.doc.directPrice);
+    },
+    baseRTSDirectPriceUpdated(color) {
+        if(this.enableRTSSuggestedPricing)
+          this.setSuggestedPrices(color.directPricing, color.directPrice);
+    },
     setSuggestedPrices(nonINRPricing, INRPrice) {
       const inflationPercentage =
         this.doc.type === "under-bounipun"
@@ -869,10 +898,10 @@ export default {
 
       this.editMode = true;
     },
-      resetForm() {
-        this.populateForm(baseDoc());
-        this.editMode = false;
-      },
+    resetForm() {
+      this.populateForm(baseDoc());
+      this.editMode = false;
+    },
   },
 };
 </script>
