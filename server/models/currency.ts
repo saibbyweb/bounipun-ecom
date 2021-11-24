@@ -68,13 +68,14 @@ export const methods = {
       const price: number =
         (INRPrice * inflationMultiplier) / currency.exchangeRateINR;
 
-      /* in non inr pricing hasnt been defined yet */
+      /* in non inr pricing hasnt been defined yet */23
       if (nonINRPricing === undefined) nonINRPricing = {};
 
-      nonINRPricing[code] = price;
-      nonINRPricing[code] = currency.zeroDecimal
-        ? parseInt(price.toString())
-        : parseFloat(price.toString()).toFixed(2);
+      // nonINRPricing[code] = price;
+      // nonINRPricing[code] = currency.zeroDecimal
+      //   ? parseInt(price.toString())
+      //   : parseFloat(price.toString()).toFixed(2);
+        nonINRPricing[code] = parseInt(price.toString())
     }
     return nonINRPricing;
   },
@@ -152,7 +153,7 @@ export const methods = {
       .select("inflationPercentage");
 
     console.log(collections.length,'--collections');
-
+23
     if (collections.length === 0) return;
 
     /* update non inr pricing for every collection, one by one */

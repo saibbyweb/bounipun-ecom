@@ -373,6 +373,14 @@ router.post("/updateNonINRPricing", adminAuth("1", true), async (req, res) => {
 
   res.send({ total: totalUpdated });
 });
+
+/* update whole store */
+router.post("/updateWholeStore", adminAuth("1", true), async(req, res) => {
+    console.log('Whole store pricing update:');
+    await currencyMethods.updateWholeStore();
+    res.send({ resolved : true });
+});
+
 /* update order (of lists in admin panel) */
 router.post("/updateOrder", async (req, res) => {
   const { model, newList } = req.body;

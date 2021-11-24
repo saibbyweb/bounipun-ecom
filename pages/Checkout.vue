@@ -30,16 +30,15 @@
           </span>
           <span> {{ deliveryAddress.addressLine1 }}</span>
           <span> {{ deliveryAddress.addressLine2 }} </span>
-          <span> {{ deliveryAddress.state || '' }} </span>
+          <span> {{ deliveryAddress.state || "" }} </span>
           <span> {{ deliveryAddress.city }} </span>
           <span> {{ deliveryAddress.postalCode }} </span>
           <span> {{ deliveryAddress.mobileNumber }} </span>
           <!-- <span> {{ deliveryAddress.email }} </span> -->
-  
         </div>
 
         <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
-       
+
         <div class="order-total-container">
           <OrderTotal
             v-if="!cartEmpty"
@@ -98,17 +97,17 @@ const style = {
       fontSize: "22px",
       fontSmoothing: "antialiased",
       ":-webkit-autofill": {
-        color: "#fce883"
+        color: "#fce883",
       },
       "::placeholder": {
-        color: "green"
-      }
+        color: "green",
+      },
     },
     invalid: {
       iconColor: "#FFC7EE",
-      color: "red"
-    }
-  }
+      color: "red",
+    },
+  },
 };
 
 /* demo delivery address */
@@ -121,41 +120,43 @@ const demoDeliveryAddress = {
   addressLine2: "Rawalpora, Near Masjid",
   city: "Srinagar",
   postalCode: "190005",
-  countryIsoCode: "US"
+  countryIsoCode: "US",
 };
 
 export default {
   mixins: [currencyHelper],
   head() {
     return {
-      title: "Checkout | Bounipun Kashmir"
+      title: "Checkout | Bounipun Kashmir",
     };
   },
   mounted() {
-    /* this page should not be accessible to guest */
-    if (!this.$store.state.customer.authorized) return;
-    
-    /* set keys according to environment */
-    this.setKeys();
+    const work = async () => {
+      /* this page should not be accessible to guest */
+      if (!this.$store.state.customer.authorized) return;
 
-    /* fetch updated cart from user account */
-    this.$store.dispatch("customer/fetchCart");
-    this.$store.dispatch("customer/fetchCoupon", this.coupon.code);
-    this.$store.dispatch("customer/fetchGlobalConfig");
+      /* set keys according to environment */
+      this.setKeys();
 
-    /* decide which gateway is to be used */
+      /* fetch updated cart from user account */
+      await this.$store.dispatch("customer/fetchCart");
+      await this.$store.dispatch("customer/fetchCoupon", this.coupon.code);
+      await this.$store.dispatch("customer/fetchGlobalConfig");
 
-    /* if cart is empty redirect to cart | homepage */
-    if (this.cartEmpty) {
-      this.$router.push("/");
-      return;
-    }
-    /* create payment intent */
+      /* decide which gateway is to be used */
 
-    /* according to currency, setup payment options */
-    if (this.currency !== "INR") this.initializeStripe();
-    // if (this.currency.trim() === "INR") this.fetchRazorpayOrderId();
-    // else this.initializeStripe();
+      /* if cart is empty redirect to cart | homepage */
+      if (this.cartEmpty) {
+        this.$router.push("/");
+        return;
+      }
+      /* create payment intent */
+
+      /* according to currency, setup payment options */
+      if (this.currency !== "INR") this.initializeStripe();
+    };
+
+    work();
   },
   data() {
     return {
@@ -167,7 +168,7 @@ export default {
       paymentIntentId: "",
       paymentError: {
         status: false,
-        msg: ""
+        msg: "",
       },
       gatewayToken: "",
       enableCheckout: false,
@@ -176,11 +177,11 @@ export default {
       combinedDeliveryConsent: true,
       razorpayKeyId: "",
       stripePK: "",
-      processingStripe: false
+      processingStripe: false,
     };
   },
   computed: {
-    cartEmpty: function() {
+    cartEmpty: function () {
       return this.$store.state.customer.globalRemoteCart.length === 0;
     },
     coupon() {
@@ -201,9 +202,9 @@ export default {
             " | " +
             this.deliveryAddress.addressLine2,
           postal_code: this.deliveryAddress.postalCode,
-          country: this.deliveryAddress.countryIsoCode
-        }
-      }
+          country: this.deliveryAddress.countryIsoCode,
+        },
+      };
     },
     stripeShippingObject() {
       return {
@@ -212,38 +213,41 @@ export default {
             this.deliveryAddress.addressLine1 +
             " " +
             this.deliveryAddress.addressLine2,
-          country: this.deliveryAddress.countryIsoCode
+          country: this.deliveryAddress.countryIsoCode,
         },
         name:
-          this.deliveryAddress.firstName + " " + this.deliveryAddress.surName
+          this.deliveryAddress.firstName + " " + this.deliveryAddress.surName,
       };
     },
     maximumShippingTime() {
       const allTimes = this.$store.state.customer.globalRemoteCart.map(
-        item => item.shippingTime
+        (item) => item.shippingTime
       );
       const maximumShippingTime = Math.max(...allTimes);
       return maximumShippingTime;
-    }
+    },
   },
   methods: {
     setKeys() {
       /* if environment is dev, use test keys */
-      if(process.env.NODE_ENV === 'development' || process.env.MODE === 'development') {
+      if (
+        process.env.NODE_ENV === "development" ||
+        process.env.MODE === "development"
+      ) {
         this.razorpayKeyId = process.env.VITE_RAZORPAY_KEY_ID_TEST;
         this.stripePK = process.env.VITE_STRIPE_PK_TEST;
         return;
       }
-      
+
       /* if environment is production, set live key only on main domain */
-      if(process.env.NODE_ENV === 'production') {
-        switch(window.location.hostname) {
-          case 'bounipun.in':
-            this.razorpayKeyId = process.env.RAZORPAY_KEY_ID_PROD
+      if (process.env.NODE_ENV === "production") {
+        switch (window.location.hostname) {
+          case "bounipun.in":
+            this.razorpayKeyId = process.env.RAZORPAY_KEY_ID_PROD;
             this.stripePK = process.env.STRIPE_PK_PROD;
             break;
           default:
-            this.razorpayKeyId = process.env.RAZORPAY_KEY_ID_TEST
+            this.razorpayKeyId = process.env.RAZORPAY_KEY_ID_TEST;
             this.stripePK = process.env.STRIPE_PK_TEST;
             break;
         }
@@ -253,7 +257,7 @@ export default {
       this.stripe = await loadStripe(this.stripePK);
       this.elements = this.stripe.elements();
       const element = this.elements.create("card", { hidePostalCode: true });
-      element.on("change", event => {
+      element.on("change", (event) => {
         this.paymentError.status = false;
         if (event.complete) this.enableCheckout = true;
         else this.enableCheckout = false;
@@ -279,19 +283,16 @@ export default {
         description: "Test Transaction",
         image: "https://example.com/your_logo",
         order_id: orderId, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-        handler: async response => {
+        handler: async (response) => {
           console.log(response);
 
-          const {
-            razorpay_order_id,
-            razorpay_payment_id,
-            razorpay_signature
-          } = response;
+          const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+            response;
 
           // /* complete checkout routine */
           const completeCheckout = await this.$post("/razorpayPaymentSuccess", {
             razorpay_order_id,
-            transactionId: razorpay_payment_id
+            transactionId: razorpay_payment_id,
           });
 
           if (completeCheckout.resolved === false) {
@@ -299,18 +300,18 @@ export default {
           }
 
           /* move to order placed page */
-          this.$store.dispatch('customer/fetchCart');
+          this.$store.dispatch("customer/fetchCart");
           this.$router.push("/order-placed-successfully");
         },
         prefill: {
           name:
             this.deliveryAddress.firstName + " " + this.deliveryAddress.surName,
           email: this.deliveryAddress.email,
-          contact: this.deliveryAddress.mobileNumber
+          contact: this.deliveryAddress.mobileNumber,
         },
         theme: {
-          color: "#3399cc"
-        }
+          color: "#3399cc",
+        },
       };
 
       /* razorpay anchor */
@@ -325,23 +326,20 @@ export default {
       return;
     },
     async stripeCheckout() {
-      if(this.processingStripe) return;
+      if (this.processingStripe) return;
 
       this.processingStripe = true;
-      
-      const cardElement = this.elements.getElement("card");
-      this.$store.commit('customer/setLoading', true);
-      /* create payment methods from card details  */
-      const {
-        paymentMethod,
-        error: pmError
-      } = await this.stripe.createPaymentMethod({
-        type: "card",
-        card: cardElement,
-        billing_details: this.stripeBillingAddress
-      });
-      this.$store.commit('customer/setLoading', false);
 
+      const cardElement = this.elements.getElement("card");
+      this.$store.commit("customer/setLoading", true);
+      /* create payment methods from card details  */
+      const { paymentMethod, error: pmError } =
+        await this.stripe.createPaymentMethod({
+          type: "card",
+          card: cardElement,
+          billing_details: this.stripeBillingAddress,
+        });
+      this.$store.commit("customer/setLoading", false);
 
       /* if error occured while generating payment method */
       if (pmError) {
@@ -356,18 +354,17 @@ export default {
       console.log(paymentMethod);
 
       /* process card payment */
-      this.$store.commit('customer/setLoading', true);
+      this.$store.commit("customer/setLoading", true);
 
       const { error } = await this.stripe.confirmCardPayment(
         this.gatewayToken,
         {
           payment_method: paymentMethod.id,
-          shipping: this.stripeShippingObject
+          shipping: this.stripeShippingObject,
         }
       );
-      this.$store.commit('customer/setLoading', false);
+      this.$store.commit("customer/setLoading", false);
       this.processingStripe = false;
-
 
       /* if error occurred while processing card payment */
       if (error) {
@@ -380,10 +377,10 @@ export default {
       }
 
       /* move to order placed page */
-      this.$store.dispatch('customer/fetchCart');
+      this.$store.dispatch("customer/fetchCart");
       this.$router.push("/order-placed-successfully");
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -15,12 +15,12 @@
     <!-- sur name -->
     <InputBox v-model="doc.surName" label="Sur Name" disabled />
     <!-- country iso code -->
-    <InputBox v-model="doc.countryIsoCode" label="Country ISO Code" disabled />
+    <InputBox v-model="doc.countryIsoCode" label="Country ISO Code" :disabled="false" />
     <!-- country dial code -->
     <InputBox
       v-model="doc.countryDialCode"
       label="Country Dial Code"
-      disabled
+       :disabled="false" 
     />
     <!-- phone number -->
     <InputBox v-model="doc.phoneNumber" label="Phone Number" disabled />
@@ -46,14 +46,14 @@
         {{ editMode ? "Apply Changes" : "Add" }}
       </button>
       <!-- delete document -->
-      <!-- <button
+      <button
         v-if="editMode"
         @click="deleteDocument"
         class="action delete"
         :disabled="loading"
       >
         Delete
-      </button> -->
+      </button>
     </div>
   </div>
 </template>

@@ -1,6 +1,7 @@
 import { mongoose, ObjectId, db } from "@helpers/essentials";
 import slugify from "slugify";
-
+import * as fs from "fs"  
+const request = require("request")
 // const db = mongoose.connection;
 
 /* schema */
@@ -262,6 +263,36 @@ export const methods = {
     );
     console.log('Updated: ', updated.slug, ' ✅');
   },
+  async downloadImages() {
+    const AWSBASE = 'https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/';
+    const parentDir = './productImages/';
+    this.createDir(parentDir);
+
+    const allProducts = await model.find();
+    for(const product of allProducts) {
+      const productDir = parentDir + slugify(product.styleId) + '-' + slugify(product.name) + '/'
+      this.createDir(productDir) 
+      const colors = product.colors;
+      for(const color of colors) {
+        const colorDir = productDir + slugify(color.name) + '/';
+        this.createDir(colorDir);
+        /* start download images */
+        const images = color.images;
+        for(const image of images) {
+          const uri = AWSBASE + image.path;
+          this.downloadFile(uri, colorDir+image.path)
+        }
+      }
+    }
+  },
+  async createDir(path) {
+    !fs.existsSync(path) && fs.mkdirSync(path, { recursive: true })
+  },
+  async downloadFile(uri, filename) {
+    request(uri).pipe(fs.createWriteStream(filename)).on('close', () => console.log('Download Complete'))
+  }
 };
+//
+// methods.downloadImages();
 
 export default { model, methods };

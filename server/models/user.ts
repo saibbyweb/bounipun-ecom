@@ -151,6 +151,12 @@ const expressAuth = async (req, res, next, usergroup, strictMode) => {
     /* extract user from session */
     const { user } = session;
 
+    /* TODO: check user status (whether user exists or not (removed from db or blocked by admin)) */
+    if(user === null) {
+        res.send({notAuthorized: true });
+        return;
+    }
+
     /* if session valid, check for any additional checks*/
     if (req.body.lockCheck === true) {
         console.log('🔸🔸 Request asked for lock access check');

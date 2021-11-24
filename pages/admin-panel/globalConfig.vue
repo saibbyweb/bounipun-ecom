@@ -105,6 +105,7 @@ export default {
   data() {
     return {
       model: "globalConfig",
+      previousRates: {},
       doc: {
         _id: "",
         currencyMultiplier: "",
@@ -129,6 +130,23 @@ export default {
       }
       this.exchangeRateUpdated = true;
       setTimeout(() => this.exchangeRateUpdated = false, 2000);
+      
+
+      const ratesIntact = this.currencies.every((currency, i) => {
+         console.log(this.currencies[i].exchangeRateINR, this.previousRates[i].exchangeRateINR)
+          return this.currencies[i].exchangeRateINR == this.previousRates[i].exchangeRateINR
+      });
+
+      this.previousRates = JSON.parse(JSON.stringify(this.currencies));
+      console.log(ratesIntact,'-- rates intact');
+
+      if(ratesIntact === false) {
+        console.log('UPDATE WHOLE STORE');
+        await this.updateWholeStore();
+      }
+    },
+    async updateWholeStore() {
+        await this.$post('/updateWholeStore')
     },
     async fetchActiveCurrencies() {
       const request = await this.$post("/findDocuments", {
@@ -144,9 +162,10 @@ export default {
       }
 
       const currencies = request.response;
-
+      this.previousRates = JSON.parse(JSON.stringify(currencies));
       this.currencies = currencies;
     },
+    
     async fetchConfig() {
       const data = await this.$fetchData(this.model, {
         bounipun_id: "saibbyweb",

@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { VueHammer } from "vue2-hammer";
-import Switches from "vue-switches";
+// import Switches from "vue-switches";
 import RockerSwitch from "vue-rocker-switch";
 import "vue-rocker-switch/dist/vue-rocker-switch.css";
 import VueEllipseProgress from 'vue-ellipse-progress';
@@ -17,7 +17,7 @@ import VueWindowSize from "vue-window-size";
 
 Vue.use(VueHammer);
 Vue.use(VueEllipseProgress);
-Vue.component("Switches", Switches);
+// Vue.component("Switches", Switches);
 Vue.component("RockerSwitch", RockerSwitch);
 Vue.component("Autocomplete", Autocomplete);
 

@@ -795,10 +795,11 @@ export default {
           (INRPrice * (1 + inflationPercentage / 100)) /
           currencyDetails.exchangeRateINR;
 
-        nonINRPricing[code] = price;
-        nonINRPricing[code] = currencyDetails.zeroDecimal
-          ? parseInt(price)
-          : parseFloat(price).toFixed(2);
+        // nonINRPricing[code] = price;
+        // nonINRPricing[code] = currencyDetails.zeroDecimal
+        //   ? parseInt(price)
+        //   : parseFloat(price).toFixed(2);
+        nonINRPricing[code] = parseInt(price);
       }
       this.$forceUpdate();
     },
