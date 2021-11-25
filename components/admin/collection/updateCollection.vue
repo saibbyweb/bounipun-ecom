@@ -109,7 +109,7 @@
       />
 
       <!-- locked text -->
-      <TextBox v-model="doc.lockedText" label="Locked Text" />
+      <TextBox v-model="doc.lockedText" label="Locked Text (Paragraph):" />
       <!-- lock toggle -->
       <Toggle
         v-model="doc.lock"

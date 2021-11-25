@@ -2,6 +2,7 @@
   <div class="center-col page -wh">
     <!-- collection header -->
     <div
+      v-if="collectionImageProvided"
       class="c-header center"
       :class="{ isEscape, collectionLocked }"
       :style="{
@@ -22,7 +23,7 @@
       <h2 class="text-1">{{ collection.mainTextBlock.text1 }}</h2>
       <p class="text-2">{{ collection.mainTextBlock.text2 }}</p>
       <p v-if="!collectionLocked" class="text-3">{{ collection.mainTextBlock.text3 }}</p>
-      <p v-else class="text-3"> {{ collection.lockedText }} </p>
+      <p v-else class="text-2"> {{ collection.lockedText }} </p>
     </div>
 
     
@@ -176,6 +177,9 @@ export default {
     },
   },
   computed: {
+    collectionImageProvided() {
+        return this.collectionImage !== ""
+    },
     collectionImage() {
       return this.collectionLocked
         ? this.collection.lockedImage
@@ -585,7 +589,9 @@ export default {
       this.escapeProduct = groupedData;
     },
     getCollectionImage(image) {
-      if (image === undefined) return "/default-image.png";
+      // if (image === undefined) return "/default-image.png";
+      if (image === undefined) return "";
+
       return this.$getOriginalPath(image);
     },
   },
@@ -645,7 +651,7 @@ export default {
 }
 
 .locked {
-  padding: 10%;
+  padding: 1% 10%;
 
   .heading {
     font-family: $font_2_bold;
