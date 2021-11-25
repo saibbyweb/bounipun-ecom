@@ -15,12 +15,16 @@
     <!-- sur name -->
     <InputBox v-model="doc.surName" label="Sur Name" disabled />
     <!-- country iso code -->
-    <InputBox v-model="doc.countryIsoCode" label="Country ISO Code" :disabled="false" />
+    <InputBox
+      v-model="doc.countryIsoCode"
+      label="Country ISO Code"
+      :disabled="false"
+    />
     <!-- country dial code -->
     <InputBox
       v-model="doc.countryDialCode"
       label="Country Dial Code"
-       :disabled="false" 
+      :disabled="false"
     />
     <!-- phone number -->
     <InputBox v-model="doc.phoneNumber" label="Phone Number" disabled />
@@ -28,9 +32,25 @@
     <InputBox v-model="doc.usergroup" label="Usergroup" disabled />
 
     <!-- content unlock code -->
-    <InputBox v-model="doc.contentUnlock.code" label="Content Unlock Code" disabled />
+    <InputBox
+      v-model="doc.contentUnlock.code"
+      label="Content Unlock Code"
+      disabled
+    />
     <!-- content unlock status -->
-    <Toggle v-model="doc.contentUnlock.status" activeText="✅" inactiveText="❌" label="Content Unlock" :disabled="true" />
+    <Toggle
+      v-model="doc.contentUnlock.status"
+      activeText="✅"
+      inactiveText="❌"
+      label="Content Unlock"
+      :disabled="true"
+    />
+
+    <!-- created at -->
+    <div>
+      <label class="label"> Joined at: </label>
+      <span class="value" style="font-size:13px;"> {{ $formatDate(doc.createdAt) }}  </span> 
+    </div>
 
     <!-- status -->
     <Toggle v-model="doc.status" label="Status:" />
@@ -61,7 +81,7 @@
 <script>
 export default {
   props: {
-    model: String
+    model: String,
   },
   data() {
     return {
@@ -76,12 +96,13 @@ export default {
         usergroup: "",
         contentUnlock: {
           status: false,
-          code: ''
+          code: "",
         },
-        status: false
+        createdAt: "",
+        status: false,
       },
       loading: false,
-      updated: false
+      updated: false,
     };
   },
   methods: {
@@ -121,7 +142,8 @@ export default {
         phoneNumber,
         usergroup,
         contentUnlock,
-        status
+        createdAt,
+        status,
       } = details;
       this.doc = {
         _id,
@@ -131,8 +153,12 @@ export default {
         countryIsoCode,
         phoneNumber,
         usergroup,
-        contentUnlock: contentUnlock === undefined ? { status: false, code:''} : contentUnlock,
-        status
+        contentUnlock:
+          contentUnlock === undefined
+            ? { status: false, code: "" }
+            : contentUnlock,
+        createdAt,
+        status,
       };
       this.editMode = true;
     },
@@ -151,13 +177,14 @@ export default {
         usergroup: "",
         contentUnlock: {
           status: false,
-          code: ''
+          code: "",
         },
-        status: false
+        createdAt: "",
+        status: false,
       });
 
       this.editMode = false;
-    }
-  }
+    },
+  },
 };
 </script>
