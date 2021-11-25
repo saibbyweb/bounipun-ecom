@@ -1,6 +1,6 @@
 <template>
   <div class="input-box">
-    <label class="label"> {{ label }} </label>
+    <label class="label"> {{ label }} :</label>
 
     <div
       v-if="!disabled"

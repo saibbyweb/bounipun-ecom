@@ -555,14 +555,14 @@ export default {
     },
     whatsAppShareLink() {
       const BASE_SHARE_URL = "https://wa.me/?text=";
-      let msg = `Check out this Bounipun special: ${location.host}/products?_id=${this.product._id}`;
+      let msg = `Check out this Bounipun special: ${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`;
       msg = encodeURI(msg);
       return BASE_SHARE_URL + msg;
     },
     facebookShareLink() {
       const BASE_SHARE_URL = "https://www.facebook.com/sharer/sharer.php?u=";
       const link =
-        BASE_SHARE_URL + `${location.host}/products?_id=${this.product._id}`;
+        BASE_SHARE_URL + `${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`;
       return link;
     },
     shippingTime() {

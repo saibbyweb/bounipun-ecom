@@ -145,7 +145,7 @@ export default {
         "_id",
         "styleId",
         "name",
-        "Slug",
+        "colors",
         "availabilityType",
         "Collection",
         "status",
@@ -314,7 +314,8 @@ export default {
           _id,
           styleId,
           name,
-          slug,
+          //slug,
+          colors,
           availabilityType,
           bounipun_collection,
           status,
@@ -328,13 +329,18 @@ export default {
               foundCollection !== undefined
                 ? foundCollection.name
                 : "NOT AVAILABLE";
-          }6
+          }
+          
+          /* active colors */
+          const activeColors = colors.filter(color => color.status)
+
 
           return {
             _id,
             styleId,
             name,
-            slug,
+            colors: `Active: ${activeColors.length} - Total: ${colors.length}`,
+            //slug,
             availabilityType,
             // bounipun_collection: foundCollection !== undefined ? foundCollection.name : "Third Party",
             bounipun_collection:

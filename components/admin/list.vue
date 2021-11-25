@@ -451,7 +451,7 @@ export default {
     transition: all 0.3s ease-in-out;
     border-right: 1px solid #cbcbcb;
     overflow: hidden;
-    font-size: 13px;
+    font-size: 12.5px;
     padding: 5px;
     font-family: $font_2;
 
