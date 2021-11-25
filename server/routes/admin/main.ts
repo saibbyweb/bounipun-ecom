@@ -188,6 +188,19 @@ router.post("/fetchCollection", async (req, res) => {
   res.send(documents);
 });
 
+/* fetch product count per collection */
+router.post("/fetchProductCountPerCollection", async(req, res) => {
+  /* get all collections */
+  const collections = await db.model('collections').find().select('_id')
+  let details = {}
+  for(const collection of collections) {
+      const products = await db.model('products').find({bounipun_collection: collection._id}).select('_id').lean()
+      details[collection._id] = products.length;
+  }
+
+  res.send(details);
+});
+
 /* fetch paginated results */
 router.post("/fetchPaginatedResults", async (req, res) => {
   /* destructure data from request body */

@@ -76,17 +76,24 @@ export default {
         "_id",
         "name",
         "Slug",
-        "Estimated Time of Delivery",
+        "Product Count",
         "order",
         "status",
       ],
       dragEnabled: false,
+      productCount: null,
     };
   },
   mounted() {
     // this.fetchList();
+    this.fetchProductCount();
   },
   methods: {
+    async fetchProductCount() {
+      const count = await this.$post("/fetchProductCountPerCollection");
+      if (count.resolved == false) return;
+      this.productCount = count.response;
+    },
     clearFilters(dragEnabled) {
       this.dragEnabled = dragEnabled;
 
@@ -132,29 +139,43 @@ export default {
         return;
       }
 
-      /* extract list */
-      this.list = result.docs.map(
-        ({
-          _id,
-          name,
-          slug,
-          // description,
-          edt,
-          order,
-          status,
-        }) => {
-          return {
+      const work = () => {
+        console.log('work called')
+        /* extract list */
+        this.list = result.docs.map(
+          ({
             _id,
             name,
             slug,
             // description,
-            edt: edt + " weeks",
+            // edt,
             order,
             status,
-          };
+          }) => {
+            return {
+              _id,
+              name,
+              slug,
+              count: this.productCount[_id],
+              // description,
+              // edt: edt + " weeks",
+              order,
+              status,
+            };
+          }
+        );
+      };
+
+
+      const timer = setInterval(() => {
+        if(this.productCount === null) {
+          return;
         }
-      );
-    }
+        work();
+        clearInterval(timer);
+      },150);
+
+    },
   },
 };
 </script>
