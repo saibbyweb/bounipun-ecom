@@ -32,7 +32,7 @@
 
       <!-- headings -->
       <div class="item shadow headings" :style="adjustItem()">
-        <span class="heading" v-for="(heading, index) in headings" :key="index">
+        <span class="heading" v-for="(heading, index) in headings" :key="heading+index">
           {{ heading }}
           <img
             @click="toggleSort(heading)"
@@ -210,6 +210,8 @@ export default {
       else this.selectedList.splice(foundIndex, 1);
     },
     async onDragEnd($event) {
+      console.log('ON DRAG END WAS CALLED');
+
       if (!this.dragEnabled) return;
 
       /* get the order of the whole array */

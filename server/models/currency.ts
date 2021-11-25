@@ -153,7 +153,6 @@ export const methods = {
       .select("inflationPercentage");
 
     console.log(collections.length,'--collections');
-23
     if (collections.length === 0) return;
 
     /* update non inr pricing for every collection, one by one */

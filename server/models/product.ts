@@ -73,6 +73,10 @@ const schema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    onSale: {
+      type: ObjectId, ref: 'sales',
+      default: null
+    },
     status: Boolean,
   },
   {
@@ -147,7 +151,8 @@ export const methods = {
       /* add lowest and highest variant price */
       let allPrices = [];
       let nonINRPrices = {};
-
+      
+      /* saving all price and non - inr pricing for calculating pricing ranges */
       details.variants.forEach((variant) => {
         variant.fabrics.forEach((fabric) => {
           allPrices.push(fabric.price);

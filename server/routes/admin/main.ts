@@ -194,10 +194,13 @@ router.post("/fetchProductCountPerCollection", async(req, res) => {
   const collections = await db.model('collections').find().select('_id')
   let details = {}
   for(const collection of collections) {
-      const products = await db.model('products').find({bounipun_collection: collection._id}).select('_id').lean()
-      details[collection._id] = products.length;
+      let colorCount = 0;
+      const products: any = await db.model('products').find({bounipun_collection: collection._id}).select('_id colors').lean()
+      for(const product of products)
+        colorCount+= product.colors.length;
+      
+      details[collection._id] = `${products.length} products / ${colorCount} colors `;
   }
-
   res.send(details);
 });
 

@@ -402,7 +402,17 @@
       activeText="🔒 Locked"
       inactiveText="Unlocked"
     />
+    
+    <!-- sale status -->
+    <div>
+      <label class="label">
+        On Sale:
+      </label>
 
+      <span>
+      {{ doc.sale !== undefined && doc.sale !== null ? 'YUP' : 'NOPE'}}
+      </span>
+    </div>
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
 
@@ -466,6 +476,7 @@ const baseDoc = () => ({
   stock: "",
   // etd: "",
   lock: false,
+  sale: null,
   status: false,
 });
 
@@ -856,6 +867,7 @@ export default {
         rtsDirectFabric,
         // etd,
         lock,
+        sale,
         status,
       } = details;
       this.doc = {
@@ -880,6 +892,7 @@ export default {
         stock: stock === undefined ? "" : stock,
         // etd: etd === null ? "" : etd.toString(),
         lock,
+        sale,
         status,
       };
 

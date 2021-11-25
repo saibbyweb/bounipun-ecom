@@ -19,7 +19,7 @@
         :model="model"
         @documentFetched="documentFetched"
         @sortToggled="sortToggled"
-        custom_css="10% 25% 25% 15% 10% 15%"
+        custom_css="10% 25% 15% 25% 10% 15%"
         @clearFilters="clearFilters"
         @refetchList="updateList()"
         :isDraggable="true"

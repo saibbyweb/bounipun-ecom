@@ -9,7 +9,8 @@
     <!-- product list -->
     <SelectBox :options="allProductLists" v-model="doc.list" label="Select Product List" />
     <!-- discount percentage -->
-    <InputBox label="Discount Percentage" v-model="doc.discountPercentage" type="number" />
+    <!-- <InputBox label="Discount Percentage" v-model="doc.discountPercentage" type="number" /> -->
+    <InputSlider label="Discount Percentage" v-model="doc.discountPercentage" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
     <!-- publish toggle -->

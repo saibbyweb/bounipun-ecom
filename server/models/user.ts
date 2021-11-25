@@ -277,6 +277,7 @@ export const methods = {
     userAuth: (userGroup, strictMode = true) => (...args: [req: any, res: any, next: any]) => {
         return expressAuth(...args, userGroup, strictMode)
     },
+    /* pricing retrieved */
     async getCartItems(cart, unlocked = false) {
 
         /*  if cart is empty */
@@ -321,6 +322,8 @@ export const methods = {
             // console.log(product.name, product.colors)
             product.colors = product.colors.filter(color => color.status === true);
         });
+
+        /* TODO: check for sale and update pricing */
 
         /* TODO: you should clear cart from user database and return */
 

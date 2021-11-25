@@ -30,14 +30,6 @@ const model = mongoose.model('collections', schema);
 export const methods = {
     register: async () => {
         console.log('registered')
-        const allDocs = await model.find();
-
-        let i = 0;
-        for (const doc of allDocs) {
-            await model.findOneAndUpdate({ _id: doc._id }, { order: i });
-            i++;
-        }
-
     },
     async updateCollection(details, editMode) {
         const collections = model;

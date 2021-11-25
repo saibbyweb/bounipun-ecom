@@ -3,6 +3,7 @@ import { server, db, task, mongoose } from "@helpers/essentials";
 import admin from "@helpers/admin";
 import customer from "@helpers/customer";
 import { methods as userMethods } from "@models/user";
+import { methods as saleMethods } from "@models/sale";
 
 const { userAuth } = userMethods;
 
@@ -197,7 +198,7 @@ router.get('/getSearchFilters', async (req, res) => {
     res.send(response);
 })
 
-/* search products */
+/* search products (pricing retrieved) */
 router.post('/searchProducts', userAuth('customer', false), async (req, res) => {
     /* destructure data from request body */
     const { rawCriterion, unlocked } = req.body;
@@ -280,59 +281,57 @@ router.post('/searchProducts', userAuth('customer', false), async (req, res) => 
     /* identify the color which matched */
 
     let paginatedResults: any = await customer.getPaginationResults('products', criterion);
+    
+    /* TODO: check if products are under any active sale (if yes, re-calculate pricing) */
+    
+    // saleMethods.normalizePricing(paginatedResults);
 
     res.send(paginatedResults);
 });
 
 /* fetch cart items */
-router.post('/fetchCartDetails', async (req, res) => {
-    let response = { resolved: false, cartDetails: [], variants: [], fabrics: [] }
-    const { listOfProductIds } = req.body;
+// router.post('/fetchCartDetails', async (req, res) => {
+//     let response = { resolved: false, cartDetails: [], variants: [], fabrics: [] }
+//     const { listOfProductIds } = req.body;
 
-    if (listOfProductIds.length === 0) {
-        res.send(response);
-        return;
-    }
+//     if (listOfProductIds.length === 0) {
+//         res.send(response);
+//         return;
+//     }
 
-    /* fetch product details from ids */
-    const productDetailsFetch: any = db.model('products')
-        .find({ _id: { $in: listOfProductIds } })
-        .populate('bounipun_collection', 'name')
-        .populate('variants._id', 'name')
-        .populate('variants.fabrics._id', 'name info1')
-        .lean()
-    const { response: details, error } = await task(productDetailsFetch);
+//     /* fetch product details from ids */
+//     const productDetailsFetch: any = db.model('products')
+//         .find({ _id: { $in: listOfProductIds } })
+//         .populate('bounipun_collection', 'name')
+//         .populate('variants._id', 'name')
+//         .populate('variants.fabrics._id', 'name info1')
+//         .lean()
+//     const { response: details, error } = await task(productDetailsFetch);
 
-    /* if error occurred */
-    if (error) {
-        res.send(response);
-        return;
-    }
+//     /* if error occurred */
+//     if (error) {
+//         res.send(response);
+//         return;
+//     }
 
-    response.cartDetails = details;
+//     response.cartDetails = details;
 
-    res.send(response);
+//     res.send(response);
 
-});
+// });
 
-/* fetch related products */
+/* fetch related products (pricing retrieved) */
 router.post('/fetchRelatedProducts', async (req, res) => {
     let response = { resolved: false, products: [] }
     const limit = 4;
 
     let { currentProductId, currentProductDate } = req.body;
-    // currentProductId = '60fe5049ab93f400158ed562';
-    // currentProductDate = '2021-07-26T06:03:53.692+00:00';
-
-    // console.log(currentProductId, currentProductDate);
 
     /* check if current product id and current product date is not provided */
     if (currentProductId === undefined || currentProductDate === undefined) {
         res.send(response);
         return;
     }
-
-
 
     /* fetch products added after the  current product */
     let relatedProducts: any = await db.model('products')
@@ -360,13 +359,12 @@ router.post('/fetchRelatedProducts', async (req, res) => {
     response.products = relatedProducts;
     response.resolved = true;
 
-  //  const names = relatedProducts.map((product: any) => product.name);
-    // console.log(names);
+    /* TODO: check for sale and update pricing */
 
     res.send(response);
 });
 
-
+/* pricing retrieved */
 router.post('/fetchRecentlyViewed', async (req, res) => {
     let response = { resolved: false, products: [] };
     const limit = 4;
@@ -396,6 +394,8 @@ router.post('/fetchRecentlyViewed', async (req, res) => {
 
     response.products = recentlyViewedProducts;
     response.resolved = true;
+
+     /* TODO: check for sale and update pricing */
 
     res.send(response);
 });
