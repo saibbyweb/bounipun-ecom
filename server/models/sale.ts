@@ -182,7 +182,14 @@ export const methods = {
     /* populate list */
     const productList: any = await db.model('product_lists').findOne({_id: sale.list});
     /* loop through the list */
-    console.log(productList.list);
+    // console.log(productList.list);
+    for(const productId of productList.list) {
+      console.log(productId, sale._id, sale.status);
+      const updateFields = {sale: sale.status ? sale._id : null }
+      console.log(updateFields);
+      const result: any = await db.model('products').findOneAndUpdate({_id: productId}, updateFields, { returnOriginal: false});
+      console.log(result.sale);
+    }
     /* (if status true) loop through every product and attach sale id to the product */
     /* (if status false)  loop through every product and detach sale id from the product */
     /* what if the sale was deleted, need a method to clear sale flags from products having invalid sale id */

@@ -42,7 +42,7 @@ export default {
                 _id: "",
                 name: "",
                 list: "",
-                discountPercentage: "",
+                discountPercentage: 0,
                 description: "",
                 status: false
             },

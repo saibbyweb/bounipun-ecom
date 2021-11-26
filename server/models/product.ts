@@ -73,7 +73,7 @@ const schema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    onSale: {
+    sale: {
       type: ObjectId, ref: 'sales',
       default: null
     },
