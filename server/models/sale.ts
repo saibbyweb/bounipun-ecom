@@ -178,27 +178,28 @@ export const methods = {
   },
   /* update product sale flags */
   async updateProductSaleFlags(sale) {
+    console.log(sale.status, '- sale status')
     /* populate list */
     const productList: any = await db
       .model("product_lists")
-      .findOne({ _id: sale.list });
+      .findOne({ _id: sale.list })
+      .select("list");
 
     /* loop through the list */
     for (const productId of productList.list) {
-
       const updateFields = { sale: sale.status ? sale._id : null };
 
       const result: any = await db
         .model("products")
         .findOneAndUpdate({ _id: productId }, updateFields, {
           returnOriginal: false,
-        });
+        }).select('name sale').lean();
+
+        console.log(`☑️  ${result.name} updated with sale: ${result.sale}`)
     }
     /* what if the sale was deleted, need a method to clear sale flags from products having invalid sale id */
     /* TODO: if product is already under any VALID sale, keep record of them */
-
   },
-  
 };
 
 export default { model, methods };

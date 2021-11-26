@@ -27,7 +27,6 @@ export const methods = {
     console.log("registered");
   },
   async updateProductSaleFlags(productListId, oldList, newList) {
-    console.log("sale flag update routine");
 
     /* check if product list is under any active sale */
     const activeSale = await db
@@ -35,7 +34,7 @@ export const methods = {
       .findOne({ list: productListId, status: true })
       .select("_id");
     if (activeSale === null) {
-      console.log("product list not under sale");
+      console.log("🔸 Product list not under any active sale.");
       return;
     }
 
@@ -49,11 +48,11 @@ export const methods = {
     );
 
     console.log(
-      `${newlyAddedProducts.length} newly added products, ${removedProducts.length} removed products`
+      `🟢 ${newlyAddedProducts.length} products added, 🔴 ${removedProducts.length} products removed`
     );
 
     if (newlyAddedProducts.length === 0 && removedProducts.length === 0) {
-      console.log("LIST INTACT, NO FLAGS TO BE UPDATED");
+      console.log("🟢 Product list unchanged, no need to update product sale flags.");
       return;
     }
 
@@ -71,7 +70,7 @@ export const methods = {
         .findOneAndUpdate({ _id: productId }, { sale: null });
     }
 
-    console.log("flag update complete");
+    console.log("✅ Product sale flag updates complete");
   },
 };
 

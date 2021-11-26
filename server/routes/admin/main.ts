@@ -332,8 +332,16 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
 router.post("/deleteDocument", adminAuth("1", true), async (req, res) => {
   const { model, _id } = req.body;
   const collection = db.model(model);
-  console.log(_id, model);
-  const result = await collection.findByIdAndDelete({ _id });
+  const result: any = await collection.findByIdAndDelete({ _id });
+
+  switch(model) {
+    case 'sales':
+      if(result.status) {
+          result.status = false;
+          await saleMethods.updateProductSaleFlags(result);
+      }
+      break;
+  }
   console.log(result);
   res.send(result);
 });
