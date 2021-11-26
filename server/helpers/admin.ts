@@ -1,9 +1,8 @@
 import { db, ObjectId, mongoose } from "@helpers/essentials";
-import { product, collection, homepageLayouts, faq, ticker } from "@models";
+import { product, collection, homepageLayouts, faq, ticker, sales } from "@models";
 
 export default {
   async specialUpdate(model, details, editMode) {
-    console.log("special update called", model, editMode);
     switch (model) {
       case "products":
         /* do the meta calculation here */
@@ -21,10 +20,8 @@ export default {
       case "ticker":
         await ticker.methods.updateTickers(details, editMode);
         break;
-      case "sales":
-        // await sale.methods.updateSale(details, editMode);
-        break;
       default:
+        console.log("▫️  No pre-update case for:", model);
         break;
     }
     return { updated: false };

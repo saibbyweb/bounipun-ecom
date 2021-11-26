@@ -4,10 +4,8 @@ import { mongoose, ObjectId } from "@helpers/essentials"
 const schema = new mongoose.Schema({
     name: String,
     list: [{
-        _id: {
             type: ObjectId,
             ref: 'products'
-        }
     }],
     description: String,
     status: Boolean

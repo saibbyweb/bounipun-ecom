@@ -7,6 +7,7 @@ import { methods as adminMethods } from "@models/admin";
 import { methods as sessionMethods } from "@models/session";
 import { methods as notificationMethods } from "@models/notification";
 import { methods as currencyMethods } from "@models/currency";
+import { methods as saleMethods } from "@models/sale";
 
 let { orderUpdateEmailToCustomer } = notificationMethods;
 orderUpdateEmailToCustomer =
@@ -131,13 +132,13 @@ router.post("/getDocument", async (req, res) => {
 
         break;
       case "product_lists":
-        document = await document.populate("list._id", "name styleId");
+        // document = await document.populate("list", "name styleId");
         // console.log(document);
-        document.list.forEach((product) => {
-          if (product._id === null) return;
-          product.name = `${product._id.styleId} - (${product._id.name})`;
-          product._id = product._id._id;
-        });
+        // document.list.forEach((product) => {
+        //   if (product._id === null) return;
+        //   product.name = `${product._id.styleId} - (${product._id.name})`;
+        //   product._id = product._id._id;
+        // });
         break;
       default:
         break;
@@ -313,8 +314,13 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
     res.send({ updated: false, message: "Could not save document." });
     return;
   }
-
-  console.log(result);
+  
+  /* post update */
+  switch(model) {
+    case 'sales':
+      await saleMethods.updateProducts(result)
+      break;
+  }
 
   res.send(result);
 });

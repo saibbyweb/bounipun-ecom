@@ -60,6 +60,10 @@ export const methods = {
 
     return { allINRPrices, allNonINRPrices };
   },
+  /* calculate discounted prices */
+  getDiscountedPrices(INRPrice, NonINRPricing, discountPercentage) {
+
+  },
   async normalizePricing(products) {
     /* list of products along with adjusted pricing */
     let normalizedProducts = [];
@@ -131,7 +135,7 @@ export const methods = {
 
         /* calculate inr price range and non-inr pricing range */
       } else {
-        const { INRPrice, NonINRPricing } = this.getDiscountPrices(
+        const { INRPrice, NonINRPricing } = this.getDiscountedPrices(
           directPrice,
           directPricing,
           discountPercentage
@@ -164,8 +168,8 @@ export const methods = {
 
         for (const code of currencyCodes) {
           pricingRange[code] = {
-            startsAt: Math.min(...nonINRPrices[code]),
-            endsAt: Math.max(...nonINRPrices[code]),
+            startsAt: Math.min(...allNonINRPrices[code]),
+            endsAt: Math.max(...allNonINRPrices[code]),
           };
         }
         product.pricingRange = pricingRange;
@@ -174,6 +178,16 @@ export const methods = {
       normalizedProducts.push(product);
     }
   },
+  async updateProducts(sale) {
+    /* populate list */
+    const productList: any = await db.model('product_lists').findOne({_id: sale.list});
+    /* loop through the list */
+    console.log(productList.list);
+    /* (if status true) loop through every product and attach sale id to the product */
+    /* (if status false)  loop through every product and detach sale id from the product */
+    /* what if the sale was deleted, need a method to clear sale flags from products having invalid sale id */
+    /* TODO: if product is already under any VALID sale, keep record of them */
+  }
 };
 
 export default { model, methods };
