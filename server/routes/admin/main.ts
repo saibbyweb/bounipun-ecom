@@ -8,6 +8,7 @@ import { methods as sessionMethods } from "@models/session";
 import { methods as notificationMethods } from "@models/notification";
 import { methods as currencyMethods } from "@models/currency";
 import { methods as saleMethods } from "@models/sale";
+import { methods as productListMethods } from "@models/productLists"
 
 let { orderUpdateEmailToCustomer } = notificationMethods;
 orderUpdateEmailToCustomer =
@@ -302,7 +303,7 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
       result = await collection.findOneAndUpdate(
         { _id: details._id },
         details,
-        { upsert: true, returnOriginal: false }
+        { upsert: true, returnOriginal: model === 'product_lists' ? true : false }
       );
     } else {
       delete details._id;
@@ -318,8 +319,10 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
   /* post update */
   switch(model) {
     case 'sales':
-      await saleMethods.updateProducts(result)
+      await saleMethods.updateProductSaleFlags(result)
       break;
+    case "product_lists":
+      await productListMethods.updateProductSaleFlags(result._id, result.list, details.list);
   }
 
   res.send(result);

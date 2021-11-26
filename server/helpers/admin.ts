@@ -1,5 +1,5 @@
 import { db, ObjectId, mongoose } from "@helpers/essentials";
-import { product, collection, homepageLayouts, faq, ticker, sales } from "@models";
+import { product, collection, homepageLayouts, faq, ticker, productLists } from "@models";
 
 export default {
   async specialUpdate(model, details, editMode) {

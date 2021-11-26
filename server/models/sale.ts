@@ -61,9 +61,7 @@ export const methods = {
     return { allINRPrices, allNonINRPrices };
   },
   /* calculate discounted prices */
-  getDiscountedPrices(INRPrice, NonINRPricing, discountPercentage) {
-
-  },
+  getDiscountedPrices(INRPrice, NonINRPricing, discountPercentage) {},
   async normalizePricing(products) {
     /* list of products along with adjusted pricing */
     let normalizedProducts = [];
@@ -178,23 +176,29 @@ export const methods = {
       normalizedProducts.push(product);
     }
   },
-  async updateProducts(sale) {
+  /* update product sale flags */
+  async updateProductSaleFlags(sale) {
     /* populate list */
-    const productList: any = await db.model('product_lists').findOne({_id: sale.list});
+    const productList: any = await db
+      .model("product_lists")
+      .findOne({ _id: sale.list });
+
     /* loop through the list */
-    // console.log(productList.list);
-    for(const productId of productList.list) {
-      console.log(productId, sale._id, sale.status);
-      const updateFields = {sale: sale.status ? sale._id : null }
-      console.log(updateFields);
-      const result: any = await db.model('products').findOneAndUpdate({_id: productId}, updateFields, { returnOriginal: false});
-      console.log(result.sale);
+    for (const productId of productList.list) {
+
+      const updateFields = { sale: sale.status ? sale._id : null };
+
+      const result: any = await db
+        .model("products")
+        .findOneAndUpdate({ _id: productId }, updateFields, {
+          returnOriginal: false,
+        });
     }
-    /* (if status true) loop through every product and attach sale id to the product */
-    /* (if status false)  loop through every product and detach sale id from the product */
     /* what if the sale was deleted, need a method to clear sale flags from products having invalid sale id */
     /* TODO: if product is already under any VALID sale, keep record of them */
-  }
+
+  },
+  
 };
 
 export default { model, methods };
