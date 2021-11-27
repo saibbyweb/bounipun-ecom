@@ -232,8 +232,14 @@ export default {
         this.loading = true;
         const result = await this.$deleteDocument(this.model, this.doc._id);
         this.loading = false;
-  
-        if (!result.deleted) return;
+
+        if (!result.deleted) {
+          this.errorToast.status = true;
+          this.errorToast.msg =
+            result.msg !== undefined ? result.msg : "Something went wrong";
+          setTimeout(() => (this.errorToast.status = false), 2200);
+          return;
+        }
   
         this.$emit("updated");
         this.resetForm();

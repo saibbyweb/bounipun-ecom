@@ -199,9 +199,7 @@ export const methods = {
     }
 
     /* TODO*/
-    /* Don't let product list to be deleted, if its present in any sale */
     /* Don't let sale to be updated, if product list consist of products already under another active sale */
-    /* Don't let product to be deleted if under any (active) sale */
     /* Add calendar for validity range for UpdateSale.vue */
     /* write get discounted prcies methods */
     /* Finalize normalizedProducts methods */

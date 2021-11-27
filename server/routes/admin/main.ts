@@ -342,6 +342,13 @@ router.post("/deleteDocument", adminAuth("1", true), async (req, res) => {
         return;
       }
       break;
+    case 'products':
+      const inAList: any = await db.model('product_lists').findOne({list: _id}).select('name');
+      if(inAList !== null) {
+        res.send({deleted: false, msg: `Product present in: ${inAList.name}`});
+        return;
+      }
+      break;
   }
 
   const result: any = await collection.findByIdAndDelete({ _id });
