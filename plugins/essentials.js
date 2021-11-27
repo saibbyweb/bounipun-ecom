@@ -188,7 +188,7 @@ export default (context, inject) => {
 
   /* delete document api */
   const deleteDocument = async (model, _id) => {
-    let result = { deleted: false, doc: {} };
+    let result = { deleted: false, doc: {}, msg: '' };
     const deleteAttempt = context.$axios.$post("/deleteDocument", {
       model,
       _id
@@ -200,7 +200,8 @@ export default (context, inject) => {
     const { response, error } = await task(deleteAttempt);
     $store.commit("admin/setLoading", false);
 
-    if (error) {
+    if (error || response.deleted === false) {
+      result.msg = response.msg !== undefined ? response.msg : "";
       return result;
     }
 

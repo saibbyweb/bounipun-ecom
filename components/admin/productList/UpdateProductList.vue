@@ -59,6 +59,14 @@
       >
         Delete
       </button>
+
+      <!-- error toast -->
+      <Toast
+        v-if="errorToast.status"
+        :msg="errorToast.msg"
+        :show="errorToast.status"
+        :error="true"
+      />
     </div>
   </div>
 </template>
@@ -81,6 +89,10 @@ export default {
       allProducts: [],
       loading: false,
       updated: false,
+      errorToast: {
+        status: false,
+        msg: "",
+      },
     };
   },
   computed: {
@@ -108,13 +120,13 @@ export default {
       this.doc.list.push(data.selectedObject._id);
     },
     getProductName(productId) {
-    //   setTimeout(() => {
-        const foundIndex = this.allProducts.findIndex(
-          ({ _id }) => _id === productId
-        );
-        if (foundIndex !== -1) return this.allProducts[foundIndex].name;
-        else return "Not found";
-    //   }, 1000);
+      //   setTimeout(() => {
+      const foundIndex = this.allProducts.findIndex(
+        ({ _id }) => _id === productId
+      );
+      if (foundIndex !== -1) return this.allProducts[foundIndex].name;
+      else return "Not found";
+      //   }, 1000);
     },
     async fetchAllProducts() {
       const result = await this.$fetchCollection("products");
@@ -148,7 +160,14 @@ export default {
       const result = await this.$deleteDocument(this.model, this.doc._id);
       this.loading = false;
 
-      if (!result.deleted) return;
+      if (!result.deleted) {
+        console.log(result);
+        this.errorToast.status = true;
+        this.errorToast.msg =
+          result.msg !== undefined ? result.msg : "Something went wrong";
+        setTimeout(() => (this.errorToast.status = false), 2200);
+        return;
+      }
 
       this.$emit("updated");
       this.resetForm();

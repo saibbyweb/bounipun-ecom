@@ -197,8 +197,14 @@ export const methods = {
 
         console.log(`☑️  ${result.name} updated with sale: ${result.sale}`)
     }
-    /* what if the sale was deleted, need a method to clear sale flags from products having invalid sale id */
-    /* TODO: if product is already under any VALID sale, keep record of them */
+
+    /* TODO*/
+    /* Don't let product list to be deleted, if its present in any sale */
+    /* Don't let sale to be updated, if product list consist of products already under another active sale */
+    /* Don't let product to be deleted if under any (active) sale */
+    /* Add calendar for validity range for UpdateSale.vue */
+    /* write get discounted prcies methods */
+    /* Finalize normalizedProducts methods */
   },
 };
 

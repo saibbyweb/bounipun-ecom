@@ -332,8 +332,21 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
 router.post("/deleteDocument", adminAuth("1", true), async (req, res) => {
   const { model, _id } = req.body;
   const collection = db.model(model);
-  const result: any = await collection.findByIdAndDelete({ _id });
+  
+  /* pre-delete */
+  switch(model) {
+    case 'product_lists':
+      const underSale: any = await db.model('sales').findOne({list: _id}).select('name');
+      if(underSale !== null) {
+        res.send({deleted: false, msg: `Product list could not be delete. It is already under any sale: ${underSale.name}`});
+        return;
+      }
+      break;
+  }
 
+  const result: any = await collection.findByIdAndDelete({ _id });
+  
+  /* post-delete */
   switch(model) {
     case 'sales':
       if(result.status) {
@@ -342,7 +355,6 @@ router.post("/deleteDocument", adminAuth("1", true), async (req, res) => {
       }
       break;
   }
-  console.log(result);
   res.send(result);
 });
 /* populate $_ids */
