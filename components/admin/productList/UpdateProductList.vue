@@ -146,7 +146,13 @@ export default {
       );
       this.loading = false;
 
-      if (!result.updated) return;
+      if (!result.updated) {
+        this.errorToast.status = true;
+        this.errorToast.msg =
+          result.msg !== undefined ? result.msg : "Something went wrong";
+        setTimeout(() => (this.errorToast.status = false), 2200);
+        return;
+      }
 
       this.$emit("updated");
       // this.populateForm(result.doc);

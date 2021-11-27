@@ -1,8 +1,9 @@
 import { db, ObjectId, mongoose } from "@helpers/essentials";
-import { product, collection, homepageLayouts, faq, ticker, sales } from "@models";
+import { product, collection, homepageLayouts, faq, ticker, productLists, sales } from "@models";
 
 export default {
   async specialUpdate(model, details, editMode) {
+    let response;
     switch (model) {
       case "products":
         /* do the meta calculation here */
@@ -20,8 +21,12 @@ export default {
       case "ticker":
         await ticker.methods.updateTickers(details, editMode);
         break;
+      case 'product_lists':
+        response = await productLists.methods.checkForProductWithActiveSale(details, editMode);
+        return response;
+        break;
       case "sales":
-        const response = await sales.methods.checkForProductsWithActiveSale(details, editMode);
+        response = await sales.methods.checkForProductsWithActiveSale(details, editMode);
         return response;
         break;
       default:

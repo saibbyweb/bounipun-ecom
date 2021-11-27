@@ -328,7 +328,7 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
       await saleMethods.updateProductSaleFlags(result._id, originalDoc, details)
       break;
     case "product_lists":
-      await productListMethods.updateProductSaleFlags(result._id, result.list, details.list);
+      await productListMethods.updateProductSaleFlags(result._id, originalDoc.list, details.list);
   }
 
   res.send(result);
@@ -344,7 +344,7 @@ router.post("/deleteDocument", adminAuth("1", true), async (req, res) => {
     case 'product_lists':
       const underSale: any = await db.model('sales').findOne({list: _id}).select('name');
       if(underSale !== null) {
-        res.send({deleted: false, msg: `Product list could not be delete. It is already under any sale: ${underSale.name}`});
+        res.send({deleted: false, msg: `Product list could not be delete. It is already under sale: ${underSale.name}`});
         return;
       }
       break;
@@ -364,7 +364,7 @@ router.post("/deleteDocument", adminAuth("1", true), async (req, res) => {
     case 'sales':
       if(result.status) {
           result.status = false;
-          await saleMethods.updateProductSaleFlags(result);
+          await saleMethods.updateFlagsForProductList(result.list, result._id, false);
       }
       break;
   }

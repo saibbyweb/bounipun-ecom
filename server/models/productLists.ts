@@ -27,7 +27,6 @@ export const methods = {
     console.log("registered");
   },
   async updateProductSaleFlags(productListId, oldList, newList) {
-
     /* check if product list is under any active sale */
     const activeSale = await db
       .model("sales")
@@ -52,7 +51,9 @@ export const methods = {
     );
 
     if (newlyAddedProducts.length === 0 && removedProducts.length === 0) {
-      console.log("🟢 Product list unchanged, no need to update product sale flags.");
+      console.log(
+        "🟢 Product list unchanged, no need to update product sale flags."
+      );
       return;
     }
 
@@ -71,6 +72,52 @@ export const methods = {
     }
 
     console.log("✅ Product sale flag updates complete");
+  },
+  async checkForProductWithActiveSale(details, editMode) {
+    if (!editMode) {
+      return;
+    }
+    /* fetch sale id for this product list */
+    const sale: any = await db
+      .model("sales")
+      .findOne({ list: details._id })
+      .select("_id name")
+      .lean();
+    if (sale === null) {
+      console.log("The product list not linked with any sale.");
+      return { allGood: true };
+    }
+    /* for every product in the new list, sale id should match or be null */
+    for (const productId of details.list) {
+      const product: any = await db
+        .model("products")
+        .findOne({ _id: productId })
+        .select("name sale")
+        .populate("sale")
+        .lean();
+
+      if (product === null) continue;
+
+      if(product.sale?._id.toString() === sale._id.toString()) {
+          console.log('Same sale ids found')
+          continue;
+      }
+      console.log(product.sale?._id, sale._id, "--> sale ids");
+
+      if (
+        product.sale !== undefined &&
+        product.sale !== null &&
+        product.sale._id.toString() !== sale._id.toString()
+      ) {
+        const msg = `Product ${product.name} belongs to a different sale: ${product.sale.name}, cannot be added`;
+
+        console.log(msg);
+
+        return { updated: false, msg };
+      }
+
+    }
+    return { allGood: true };
   },
 };
 

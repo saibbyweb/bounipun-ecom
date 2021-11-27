@@ -55,6 +55,14 @@
       >
         Delete
       </button>
+
+      <!-- error toast -->
+      <Toast
+        v-if="errorToast.status"
+        :msg="errorToast.msg"
+        :show="errorToast.status"
+        :error="true"
+      />
     </div>
   </div>
 </template>
@@ -79,6 +87,10 @@ export default {
       allProductLists: [],
       loading: false,
       updated: false,
+      errorToast: {
+        status: false,
+        msg: "",
+      },
     };
   },
   mounted() {
@@ -108,8 +120,11 @@ export default {
       this.loading = false;
 
       if (!result.updated) {
-            console.log(result, '-- sale update failed')
-          return;
+        this.errorToast.status = true;
+        this.errorToast.msg =
+          result.msg !== undefined ? result.msg : "Something went wrong";
+        setTimeout(() => (this.errorToast.status = false), 2200);
+        return;
       }
 
       this.$emit("updated");
@@ -128,13 +143,22 @@ export default {
       this.$flash(this);
     },
     populateForm(details) {
-      const { _id, name, list, discountPercentage, validityRange, description, status } =
-        details;
+      const {
+        _id,
+        name,
+        list,
+        discountPercentage,
+        validityRange,
+        description,
+        status,
+      } = details;
       this.doc = {
         _id,
         name,
         list,
-        validityRange: validityRange ? validityRange : { start: new Date(), end: new Date() },
+        validityRange: validityRange
+          ? validityRange
+          : { start: new Date(), end: new Date() },
         discountPercentage: discountPercentage.toString(),
         description,
         status,

@@ -216,6 +216,23 @@ export const methods = {
     }
   },
   async checkForProductsWithActiveSale(details, editMode) {
+    
+    try {
+
+    /* if list is already under some sale */
+    const filter = { list: details.list };
+    if (editMode) filter["_id"] = { $ne: details._id };
+    const underSale: any = await db
+      .model("sales")
+      .findOne(filter)
+      .select("name");
+    if (underSale !== null) {
+      return {
+        updated: false,
+        msg: `Product list is already under a different sale: ${underSale.name}`,
+      };
+    }
+
     /* product list */
     const productList: any = await db
       .model("product_lists")
@@ -227,21 +244,30 @@ export const methods = {
       const product: any = await db
         .model("products")
         .findOne({ _id: productId })
-        .select("name sale");
+        .select("name sale")
+        .populate("sale");
+
       if (product === null) continue;
+      console.log(product.sale?._id, details._id,'--> sale ids');
+
       /* TODO: needa check : if product belongs to a differnt sale */
       if (
         product.sale !== undefined &&
         product.sale !== null &&
-        product.sale != details._id
+        product.sale?._id.toString() !== details._id.toString()
       ) {
-        console.log(
-          `Product ${product.name} belongs to a different sale ${product.sale}, current sale id: ${details._id}, cannot continue`
-        );
-        return { updated: false, oneMore: 'already' }
+        const msg = `Product ${product.name} belongs to a different sale: ${product.sale.name}, cannot continue`;
+
+        console.log(msg);
+
+        return { updated: false, msg };
       }
     }
-    return { allGood: true }
+    return { allGood: true };
+  }
+  catch(e) {
+    console.log(e);
+  }
   },
 };
 
