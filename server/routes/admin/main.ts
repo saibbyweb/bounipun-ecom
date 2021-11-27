@@ -286,11 +286,11 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
   const { model, details, editMode } = req.body;
 
   /* check if special update is required */
-  const specialUpdate = await admin.specialUpdate(model, details, editMode);
+  const specialUpdate: any = await admin.specialUpdate(model, details, editMode);
 
   /* if special update processed */
-  if (specialUpdate.updated) {
-    res.send({ updated: true });
+  if (specialUpdate.updated === false) {
+    res.send({ ...specialUpdate });
     return;
   }
 
@@ -303,7 +303,7 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
       result = await collection.findOneAndUpdate(
         { _id: details._id },
         details,
-        { upsert: true, returnOriginal: model === 'product_lists' ? true : false }
+        { upsert: true, returnOriginal: model === 'product_lists' || model === 'sales' ? true : false }
       );
     } else {
       delete details._id;
@@ -315,11 +315,17 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
     res.send({ updated: false, message: "Could not save document." });
     return;
   }
+
+  /* TODO: add _id to result */
+  const originalDoc = JSON.parse(JSON.stringify(result));
+  if(editMode && (model === 'product_lists' || model === 'sales')) {
+    result = details;
+  }
   
   /* post update */
   switch(model) {
     case 'sales':
-      await saleMethods.updateProductSaleFlags(result)
+      await saleMethods.updateProductSaleFlags(result._id, originalDoc, details)
       break;
     case "product_lists":
       await productListMethods.updateProductSaleFlags(result._id, result.list, details.list);

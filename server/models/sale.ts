@@ -177,32 +177,71 @@ export const methods = {
     }
   },
   /* update product sale flags */
-  async updateProductSaleFlags(sale) {
-    console.log(sale.status, '- sale status')
-    /* populate list */
+  async updateProductSaleFlags(saleId, oldSale, newSale) {
+    console.log(newSale.status, "- sale status");
+
+    /* if LIST changed, add null sale flag to product from old list */
+    if (oldSale.list !== newSale.list) {
+      console.log("List changed update required for old products");
+      await this.updateFlagsForProductList(oldSale.list, null, false);
+    }
+
+    await this.updateFlagsForProductList(newSale.list, saleId, newSale.status);
+
+    /* TODO*/
+    /* Don't let sale to be updated, if product list consist of products already under another active sale */
+    /* write get discounted prcies methods */
+    /* Finalize normalizedProducts methods */
+  },
+  async updateFlagsForProductList(listId, saleId, flag) {
+    /* product list */
     const productList: any = await db
       .model("product_lists")
-      .findOne({ _id: sale.list })
+      .findOne({ _id: listId })
       .select("list");
 
     /* loop through the list */
     for (const productId of productList.list) {
-      const updateFields = { sale: sale.status ? sale._id : null };
+      const updateFields = { sale: flag ? saleId : null };
 
       const result: any = await db
         .model("products")
         .findOneAndUpdate({ _id: productId }, updateFields, {
           returnOriginal: false,
-        }).select('name sale').lean();
+        })
+        .select("name sale")
+        .lean();
 
-        console.log(`☑️  ${result.name} updated with sale: ${result.sale}`)
+      console.log(`☑️  ${result.name} updated with sale: ${result.sale}`);
     }
+  },
+  async checkForProductsWithActiveSale(details, editMode) {
+    /* product list */
+    const productList: any = await db
+      .model("product_lists")
+      .findOne({ _id: details.list })
+      .select("list");
 
-    /* TODO*/
-    /* Don't let sale to be updated, if product list consist of products already under another active sale */
-    /* Add calendar for validity range for UpdateSale.vue */
-    /* write get discounted prcies methods */
-    /* Finalize normalizedProducts methods */
+    /* loop through the list */
+    for (const productId of productList.list) {
+      const product: any = await db
+        .model("products")
+        .findOne({ _id: productId })
+        .select("name sale");
+      if (product === null) continue;
+      /* TODO: needa check : if product belongs to a differnt sale */
+      if (
+        product.sale !== undefined &&
+        product.sale !== null &&
+        product.sale != details._id
+      ) {
+        console.log(
+          `Product ${product.name} belongs to a different sale ${product.sale}, current sale id: ${details._id}, cannot continue`
+        );
+        return { updated: false, oneMore: 'already' }
+      }
+    }
+    return { allGood: true }
   },
 };
 

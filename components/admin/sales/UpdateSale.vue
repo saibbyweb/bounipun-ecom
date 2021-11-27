@@ -107,7 +107,10 @@ export default {
       );
       this.loading = false;
 
-      if (!result.updated) return;
+      if (!result.updated) {
+            console.log(result, '-- sale update failed')
+          return;
+      }
 
       this.$emit("updated");
       this.populateForm(result.doc);
