@@ -1,4 +1,3 @@
-
 import { server, db, task, mongoose } from "@helpers/essentials";
 import admin from "@helpers/admin";
 import customer from "@helpers/customer";
@@ -284,7 +283,7 @@ router.post('/searchProducts', userAuth('customer', false), async (req, res) => 
     
     /* TODO: check if products are under any active sale (if yes, re-calculate pricing) */
     
-    // saleMethods.normalizePricing(paginatedResults);
+    paginatedResults.docs = await saleMethods.normalizePricing(paginatedResults.docs);
 
     res.send(paginatedResults);
 });
@@ -360,7 +359,7 @@ router.post('/fetchRelatedProducts', async (req, res) => {
     response.resolved = true;
 
     /* TODO: check for sale and update pricing */
-
+    
     res.send(response);
 });
 
@@ -391,12 +390,12 @@ router.post('/fetchRecentlyViewed', async (req, res) => {
         res.send(response);
         return;
     }
-
+    
+    recentlyViewedProducts = await saleMethods.normalizePricing(recentlyViewedProducts);
     response.products = recentlyViewedProducts;
     response.resolved = true;
 
      /* TODO: check for sale and update pricing */
-
     res.send(response);
 });
 

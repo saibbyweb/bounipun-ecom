@@ -279,7 +279,6 @@ export const methods = {
     },
     /* pricing retrieved */
     async getCartItems(cart, unlocked = false) {
-
         /*  if cart is empty */
         if (cart.length === 0)
             return [];

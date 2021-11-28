@@ -75,7 +75,7 @@ export const methods = {
   },
   async checkForProductWithActiveSale(details, editMode) {
     if (!editMode) {
-      return;
+      return { allGood: true };
     }
     /* fetch sale id for this product list */
     const sale: any = await db

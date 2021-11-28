@@ -41,7 +41,6 @@ export const methods = {
 
     /* if error occured or code not valid */
     if (error || saleDoc === null) {
-      console.log("Sale Invalid");
       return false;
     }
 
@@ -61,13 +60,31 @@ export const methods = {
     return { allINRPrices, allNonINRPrices };
   },
   /* calculate discounted prices */
-  getDiscountedPrices(INRPrice, NonINRPricing, discountPercentage) {},
+  getDiscountedPrices(INRPrice, NonINRPricing, discountPercentage) {
+    console.log(`🟡 Original INR Price: ${INRPrice}`);
+
+    INRPrice = INRPrice - (INRPrice / 100) * discountPercentage;
+    console.log(`🔵 Discounted INR Price: ${INRPrice}`);
+
+    /* loop through every currency code */
+    const currencyCodes = Object.keys(NonINRPricing);
+    if (currencyCodes.length === 0) return {};
+
+    for (const code of currencyCodes) {
+      const price: any = NonINRPricing[code];
+      console.log(`🟡 Original ${code} Price: ${price}`);
+      NonINRPricing[code] = parseInt(price - (price / 100) * discountPercentage)
+      console.log(`🔵  Discounted ${code} Price: ${NonINRPricing[code]}`);
+    }
+
+    return { INRPrice, NonINRPricing };
+  },
   async normalizePricing(products) {
     /* list of products along with adjusted pricing */
     let normalizedProducts = [];
     /* hashmap of all valid sale details fetched during this routine */
     let validSales = {};
-    /* hashmao of all invalid sales (with value = true) */
+    /* hashmap of all invalid sales (with value = true) */
     let invalidSales = {};
 
     /* loop through every product */
@@ -78,6 +95,9 @@ export const methods = {
         product.sale == undefined ||
         invalidSales[product.sale]
       ) {
+        console.log(
+          `✅ Product ${product.name} not under any sale, returned as is.`
+        );
         normalizedProducts.push(product);
         continue;
       }
@@ -88,6 +108,9 @@ export const methods = {
         const saleDetails = await this.validateSale(product.sale);
         /* (if sale is invalid, store invalid sale details, and save product as is) */
         if (saleDetails === false) {
+          console.log(
+            `🚫 Product ${product.name} found under invalid sale, returned as is.`
+          );
           invalidSales[product.sale] = true;
           normalizedProducts.push(product);
           continue;
@@ -98,6 +121,9 @@ export const methods = {
 
       /* extract discount percentage */
       const { discountPercentage } = validSales[product.sale];
+      console.log(
+        `🔹 Discount percentage to be applied to ${product.name} :  ${discountPercentage} %`
+      );
 
       /* extract variants, availability type, directPrice, directPricing */
       let { variants, availabilityType, directPrice, directPricing } = product;
@@ -173,8 +199,11 @@ export const methods = {
         product.pricingRange = pricingRange;
       }
       /* save product with new values in normalized products array */
+      console.log('Adding normalized product:', product.name, product.pricingRange)
       normalizedProducts.push(product);
     }
+    
+    return normalizedProducts;
   },
   /* update product sale flags */
   async updateProductSaleFlags(saleId, oldSale, newSale) {
@@ -189,7 +218,6 @@ export const methods = {
     await this.updateFlagsForProductList(newSale.list, saleId, newSale.status);
 
     /* TODO*/
-    /* Don't let sale to be updated, if product list consist of products already under another active sale */
     /* write get discounted prcies methods */
     /* Finalize normalizedProducts methods */
   },
@@ -216,9 +244,6 @@ export const methods = {
     }
   },
   async checkForProductsWithActiveSale(details, editMode) {
-    
-    try {
-
     /* if list is already under some sale */
     const filter = { list: details.list };
     if (editMode) filter["_id"] = { $ne: details._id };
@@ -248,7 +273,7 @@ export const methods = {
         .populate("sale");
 
       if (product === null) continue;
-      console.log(product.sale?._id, details._id,'--> sale ids');
+      console.log(product.sale?._id, details._id, "--> sale ids");
 
       /* TODO: needa check : if product belongs to a differnt sale */
       if (
@@ -264,10 +289,6 @@ export const methods = {
       }
     }
     return { allGood: true };
-  }
-  catch(e) {
-    console.log(e);
-  }
   },
 };
 
