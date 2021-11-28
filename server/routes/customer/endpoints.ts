@@ -354,11 +354,10 @@ router.post('/fetchRelatedProducts', async (req, res) => {
             .populate('colors._id')
             .populate('rtsDirectVariant')
     }
-
+    
+    relatedProducts = await saleMethods.normalizePricing(relatedProducts);
     response.products = relatedProducts;
     response.resolved = true;
-
-    /* TODO: check for sale and update pricing */
     
     res.send(response);
 });

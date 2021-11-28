@@ -4,6 +4,7 @@ import { methods as sessionMethods } from "@models/session";
 import sumBy from "lodash/sumBy";
 import { methods as paymentMethods } from "@models/payment";
 import { methods as paymentIntentMethods } from "@models/paymentIntent";
+import { methods as saleMethods } from "@models/sale";
 import axios from "axios";
 import { methods as notificationMethods } from "@models/notification";
 import { methods as unlockMethods } from "@models/unlock";
@@ -312,10 +313,11 @@ router.post("/fetchWishlist", userAuth("customer"), async (req, res) => {
 
   /* filter products which are inactive and also check for locked products */
   products = products.filter((product) => {
-    if (product.lock === true && unlocked === false) return;
+    if (product.lock === true && unlocked === false) return false;
     return product.status === true;
   });
-
+  
+  products = await saleMethods.normalizePricing(products);
   response.products = products;
   response.resolved = true;
   res.send(response);
@@ -324,7 +326,6 @@ router.post("/fetchWishlist", userAuth("customer"), async (req, res) => {
 router.post("/cartActions", userAuth("customer"), async (req, res) => {
   const { user, action, cartItem } = req.body;
   const { cart } = user;
-  console.log("%cuser.ts line:314 cart", "color: #007acc;", cart);
 
   let search: any = false;
 
