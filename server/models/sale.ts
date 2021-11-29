@@ -285,13 +285,12 @@ export const methods = {
         .populate("sale");
 
       if (product === null) continue;
-      console.log(product.sale?._id, details._id, "--> sale ids");
 
       /* TODO: needa check : if product belongs to a differnt sale */
       if (
         product.sale !== undefined &&
         product.sale !== null &&
-        product.sale?._id.toString() !== details._id.toString()
+        product.sale._id.toString() !== details._id.toString()
       ) {
         const msg = `Product ${product.name} belongs to a different sale: ${product.sale.name}, cannot continue`;
 

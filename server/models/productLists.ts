@@ -98,11 +98,11 @@ export const methods = {
 
       if (product === null) continue;
 
-      if(product.sale?._id.toString() === sale._id.toString()) {
+      if(product.sale._id !== undefined && product.sale._id.toString() === sale._id.toString()) {
           console.log('Same sale ids found')
           continue;
       }
-      console.log(product.sale?._id, sale._id, "--> sale ids");
+      console.log(product.sale._id, sale._id, "--> sale ids");
 
       if (
         product.sale !== undefined &&
