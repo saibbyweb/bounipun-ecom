@@ -37,9 +37,9 @@
     </div>
 
     <!-- description -->
-    <TextBox v-model="doc.description" label="Description" />
+    <TextBox v-model="doc.description" label="Description" :internal="true" />
     <!-- publish toggle -->
-    <Toggle v-model="doc.status" label="Status" />
+    <!-- <Toggle v-model="doc.status" label="Status" /> -->
     <!-- update button -->
     <div class="center-space">
       <!-- loading bar -->

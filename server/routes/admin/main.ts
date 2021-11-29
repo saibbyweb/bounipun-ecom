@@ -9,6 +9,7 @@ import { methods as notificationMethods } from "@models/notification";
 import { methods as currencyMethods } from "@models/currency";
 import { methods as saleMethods } from "@models/sale";
 import { methods as productListMethods } from "@models/productLists"
+import axios from "axios";
 
 let { orderUpdateEmailToCustomer } = notificationMethods;
 orderUpdateEmailToCustomer =
@@ -208,8 +209,11 @@ router.post("/fetchProductCountPerCollection", async(req, res) => {
 
 /* fetch paginated results */
 router.post("/fetchPaginatedResults", async (req, res) => {
+  
   /* destructure data from request body */
   const { model, rawCriterion, requestedBy } = req.body;
+
+  console.log(`🔸 Paginated results requested for model: ${model}`)
 
   /* construct criterion from raw criterion */
   let criterion: any = {};
@@ -242,6 +246,7 @@ router.post("/fetchPaginatedResults", async (req, res) => {
         "variants._id",
       ]),
     };
+    
   } else if (model === "products" && requestedBy === "default") {
     const objectided = admin.setObjectIds(rawCriterion.filters, [
       "bounipun_collection",
@@ -252,16 +257,19 @@ router.post("/fetchPaginatedResults", async (req, res) => {
       $regex: rawCriterion.search.term,
       $options: "i",
     };
+    
   } else if (model === "colors" && requestedBy === "default") {
     criterion.match = {
       ...textSearch,
       ...admin.setObjectIds(rawCriterion.filters, ["category"]),
     };
-  } else
+    
+  } else {
     criterion.match[rawCriterion.search.key] = {
       $regex: rawCriterion.search.term,
       $options: "i",
     };
+  }
 
   /* sort by fields */
   criterion.sort = rawCriterion.sortBy;
@@ -385,7 +393,7 @@ router.post("/populate", adminAuth("1", true), async (req, res) => {
 router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
   let response = { resolved: false };
   const { _ids, model, type } = req.body;
-  console.log(_ids, model, type);
+  console.log(`🔸 Bulk update requested for ${model}, action type: ${type}, for ${_ids.length} documenets`)
   let updateFields: any = {};
 
   switch (type) {
@@ -396,10 +404,12 @@ router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
       updateFields.status = false;
       break;
   }
+
   const bulkUpdated = await db
     .model(model)
     .updateMany({ _id: { $in: _ids } }, updateFields);
-  console.log(bulkUpdated);
+
+  console.log(`✅ Updated ${bulkUpdated.nModified} docs successfully`)
   response.resolved = true;
   res.send(response);
 });

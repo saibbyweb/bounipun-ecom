@@ -70,11 +70,6 @@ export default {
           desc: "Manage bounipun colors",
         },
         {
-          name: "Product Lists",
-          path: "/admin-panel/productLists",
-          desc: "Manage bounipun colors",
-        },
-        {
           name: "Homepage Layouts",
           path: "/admin-panel/homepageLayouts",
           desc: "Manage Homepage Layouts",
@@ -83,6 +78,11 @@ export default {
           name: "[NEW] Homepage",
           path: "/admin-panel/homepage",
           desc: "Manage Homepage Layouts",
+        },
+        {
+          name: "Product Lists",
+          path: "/admin-panel/productLists",
+          desc: "Manage bounipun colors",
         },
         {
           name: "Sales",

@@ -15,7 +15,7 @@
 
       <!-- action bar -->
       <div v-if="selectedList.length > 0" class="action-bar">
-        <div class="actions">
+        <div class="actions flex">
           <button
             class="action"
             v-for="action in actions"
@@ -24,15 +24,29 @@
           >
             {{ action.name }}
           </button>
-          <button class="action" @click="selectedList = []">
-            Clear Selection ( {{ selectedList.length }} items)
+          <button class="action" @click="clearSelection">
+            Clear Selection (
+            {{ selectAll ? totalMatches : selectedList.length }} items)
           </button>
         </div>
       </div>
 
       <!-- headings -->
       <div class="item shadow headings" :style="adjustItem()">
-        <span class="heading" v-for="(heading, index) in headings" :key="heading+index">
+        <!-- select all -->
+        <div class="selector">
+          <input
+            ref="selectAll"
+            class="check"
+            type="checkbox"
+            @click.stop="toggleSelectAll()"
+          />
+        </div>
+        <span
+          class="heading"
+          v-for="(heading, index) in headings"
+          :key="heading + index"
+        >
           {{ heading }}
           <img
             @click="toggleSort(heading)"
@@ -61,8 +75,10 @@
               <!-- selector -->
               <div class="selector">
                 <input
+                  ref="selectCheckbox"
                   class="check"
                   type="checkbox"
+                  :class="{ selectAll }"
                   :checked="
                     selectedList.findIndex((id) => id === item._id) !== -1
                   "
@@ -84,13 +100,13 @@
     </div>
 
     <div
-    v-if="showUpdateToast"
+      v-if="showUpdateToast"
       style="
         position: fixed;
         width: 100%;
         height: 10%;
         bottom: 5%;
-        left:0;
+        left: 0;
         z-index: 3;
       "
     >
@@ -149,6 +165,7 @@ export default {
     list(newVal) {
       this.localList = newVal;
       this.selected = null;
+      if (this.selectAll) this.toggleSelectAll(true);
     },
   },
   mounted() {
@@ -157,6 +174,7 @@ export default {
   data() {
     return {
       selected: null,
+      selectAll: false,
       loading: false,
       sortBy: {},
       dragEnabled: false,
@@ -179,16 +197,63 @@ export default {
       }
       return colCSS;
     },
+    totalMatches() {
+      const totalMatches = this.$parent.$refs?.pagination?.totalMatches;
+      return totalMatches ? totalMatches : 0;
+    },
   },
   methods: {
+    clearSelection() {
+      this.selectedList = [];
+      this.selectAll = false;
+      /* check all visible boxes */
+      this.$refs.selectAll.checked = false;
+      this.$refs.selectCheckbox.forEach(
+        (checkbox) => (checkbox.checked = false)
+      );
+    },
+    toggleSelectAll(preSelected = false) {
+      this.selectAll = preSelected === false ? !this.selectAll : preSelected;
+      this.selectedList = this.selectAll ? ["updateAll"] : [];
+      /* check all visible boxes */
+      setTimeout(() => {
+        this.$refs.selectCheckbox.forEach(
+          (checkbox) => (checkbox.checked = this.selectAll)
+        );
+      }, 200);
+    },
     async takeBulkAction(type) {
+      let allIds = [];
+
+      /* if selcet all was selected */
+      if (this.selectAll) {
+        /* fetch current raw criterion */
+        const rawCriterion = this.$parent.$refs.pagination.rawCriterionComputed;
+        rawCriterion.limit = 999999;
+        
+        /* fetch all results matching the criterion */
+        const paginatedResults = await this.$fetchPaginatedResults(
+          this.model,
+          rawCriterion,
+          "default"
+        );
+
+        /* if not results found */
+        if (!paginatedResults.fetched || paginatedResults.docs.length === 0) {
+          return;
+        }
+        
+        /* map all ids  */
+        const {docs} = paginatedResults;
+        allIds = docs.map(({_id}) => _id);
+      }
+
       const request = await this.$post("/takeBulkAction", {
-        _ids: this.selectedList,
+        _ids: this.selectAll ? allIds : this.selectedList,
         model: this.model,
         type,
       });
 
-      console.log(request, "--bulk action");
 
       if (request.resolved === false) {
         console.log("Update Failed");
@@ -203,14 +268,18 @@ export default {
       this.$emit("updated");
     },
     toggleSelect(_id) {
-      console.log(_id);
+      if (this.selectAll) {
+        console.log("SELECT ALL ALREADY CLICKED");
+        return;
+      }
+
       //if id is not already present in the list, push it in, else pop it out
       const foundIndex = this.selectedList.findIndex((id) => id === _id);
       if (foundIndex === -1) this.selectedList.push(_id);
       else this.selectedList.splice(foundIndex, 1);
     },
     async onDragEnd($event) {
-      console.log('ON DRAG END WAS CALLED');
+      console.log("ON DRAG END WAS CALLED");
 
       if (!this.dragEnabled) return;
 
@@ -400,6 +469,11 @@ export default {
       height: 15px;
       width: 15px;
       cursor: pointer;
+
+      &.selectAll {
+        background-color: rgb(91, 91, 190);
+        pointer-events: none;
+      }
     }
   }
 

@@ -49,6 +49,15 @@ export default {
         this.fetchResults();
     },
     computed: {
+        rawCriterionComputed() {
+            return {
+                search: this.rawCriterion.search,
+                filters: this.filterCriteria,
+                sortBy: this.sortByCriteria,
+                cursor: this.cursor,
+                limit: this.rawCriterion.limit
+            }
+        },
         totalPages() {
             // if(this.totalMatches === 0)
             //     return 0;
