@@ -307,7 +307,7 @@ router.post("/fetchWishlist", userAuth("customer"), async (req, res) => {
       populate: {
         path: "bounipun_collection colors._id rtsDirectVariant variants._id",
       },
-    });
+    }).lean();
 
   let products = details.wishlist.map((item) => item.product);
 

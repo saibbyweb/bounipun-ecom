@@ -73,7 +73,9 @@ export const methods = {
     for (const code of currencyCodes) {
       const price: any = NonINRPricing[code];
       console.log(`🟡 Original ${code} Price: ${price}`);
-      NonINRPricing[code] = parseInt(price - (price / 100) * discountPercentage)
+      NonINRPricing[code] = parseInt(
+        price - (price / 100) * discountPercentage
+      );
       console.log(`🔵  Discounted ${code} Price: ${NonINRPricing[code]}`);
     }
 
@@ -89,6 +91,8 @@ export const methods = {
 
     /* loop through every product */
     for (const product of products) {
+      product.saleDetails = false;
+
       /* if product is not under sale, save product as is */
       if (
         product.sale === null ||
@@ -118,9 +122,13 @@ export const methods = {
         /* if sale is valid, store it in valid sales hashmap */
         validSales[product.sale] = saleDetails;
       }
+      /* extract discount name and percentage */
+      const { discountPercentage, name: saleName } = validSales[product.sale];
 
-      /* extract discount percentage */
-      const { discountPercentage } = validSales[product.sale];
+      /* attach sale details to the product */
+      product.saleDetails = { name: saleName, discountPercentage };
+      console.log('SALE DETAILS ATTACHED')
+
       console.log(
         `🔹 Discount percentage to be applied to ${product.name} :  ${discountPercentage} %`
       );
@@ -199,7 +207,11 @@ export const methods = {
         product.pricingRange = pricingRange;
       }
       /* save product with new values in normalized products array */
-      console.log('Adding normalized product:', product.name, product.pricingRange)
+      console.log(
+        "Adding normalized product:",
+        product.name,
+        product.pricingRange
+      );
       normalizedProducts.push(product);
     }
 

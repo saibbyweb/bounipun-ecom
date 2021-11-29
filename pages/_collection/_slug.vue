@@ -7,6 +7,12 @@
 
     <div v-if="productFetched" class="product-page flex start">
       <div ref="productImages" class="product-images">
+      
+          <!-- discount percentage -->
+    <span class="discount" v-if="product.saleDetails">
+      -{{ product.saleDetails.discountPercentage }}%</span
+    >
+    
         <!-- product image slideshow container with thumbnails (515px DEFAULT HEIGHT, 40 WIDTH)  -->
         <slideshow
           ref="slideshow"
@@ -261,7 +267,7 @@
                 <span class="name"> {{ fabric.name }} </span>
                 <span class="info"> {{ fabric.info1 }} </span>
                 <span class="price">
-                   {{ formatCurrency(getFabricPrice(fabric)) }}
+                  {{ formatCurrency(getFabricPrice(fabric)) }}
                 </span>
               </div>
             </div>
@@ -412,15 +418,13 @@ export default {
       scrollPosition: 0,
       sticky: false,
       desktopSticky: false,
-      preLoadMessage: "Loading product details..."
+      preLoadMessage: "Loading product details...",
     };
   },
   computed: {
     directPrice() {
-      if(this.currencyIsINR)
-        return this.product.directPrice;
-      else
-        return this.product.directPricing[this.currency]
+      if (this.currencyIsINR) return this.product.directPrice;
+      else return this.product.directPricing[this.currency];
     },
     collectionName() {
       if (!this.product.thirdParty)
@@ -503,13 +507,11 @@ export default {
       return selectedFabric;
     },
     selectedFabricPrice() {
-      if(this.selectedFabric === undefined) {
-        return 'fetching...'
+      if (this.selectedFabric === undefined) {
+        return "fetching...";
       }
-      if(this.currencyIsINR)
-        return this.selectedFabric.price
-      else
-      return this.selectedFabric.pricing[this.currency]
+      if (this.currencyIsINR) return this.selectedFabric.price;
+      else return this.selectedFabric.pricing[this.currency];
     },
     variantNote() {
       return this.product.bounipun_collection.variantNote;
@@ -562,7 +564,8 @@ export default {
     facebookShareLink() {
       const BASE_SHARE_URL = "https://www.facebook.com/sharer/sharer.php?u=";
       const link =
-        BASE_SHARE_URL + `${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`;
+        BASE_SHARE_URL +
+        `${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`;
       return link;
     },
     shippingTime() {
@@ -597,9 +600,8 @@ export default {
   },
   methods: {
     getFabricPrice(fabric) {
-        if(this.currencyIsINR)
-          return fabric.price;
-        return fabric.pricing[this.currency];
+      if (this.currencyIsINR) return fabric.price;
+      return fabric.pricing[this.currency];
     },
     async toggleWishlist() {
       /* if user is not logged in, move to login page */
@@ -700,17 +702,20 @@ export default {
       return this.$getOriginalPath(image);
     },
     async fetchProduct(slug) {
-      const productFetch = this.$axios.post("/fetchProduct", { slug, lockCheck: true });
+      const productFetch = this.$axios.post("/fetchProduct", {
+        slug,
+        lockCheck: true,
+      });
       const { response, error } = await this.$task(productFetch);
 
       if (error) {
         alert("Couldnt fetch product.");
         return;
       }
-      
+
       /* if product not found */
-      if(response.data.resolved === false) {
-        this.preLoadMessage = "Product not found :("
+      if (response.data.resolved === false) {
+        this.preLoadMessage = "Product not found :(";
         return;
       }
 
@@ -750,10 +755,10 @@ export default {
 
       this.product = result.doc;
       this.productFetched = true;
-    
+
       // set stock for ready to ship
-      if(this.product.availabilityType === "ready-to-ship")
-        this.stockLimit = parseInt(this.product.stock)
+      if (this.product.availabilityType === "ready-to-ship")
+        this.stockLimit = parseInt(this.product.stock);
 
       /* add product to recently viewed */
       this.addToRecentlyViewed();
@@ -771,7 +776,7 @@ export default {
       /* fetch main color */
       const mainColorIndex = this.product.colors.findIndex(
         (color) => color.mainColor === true
-      )
+      );
 
       if (mainColorIndex !== -1) this.activeColorIndex = mainColorIndex;
     },
@@ -905,6 +910,27 @@ export default {
     width: 30%;
     position: relative;
     overflow: hidden;
+
+    /* discount */
+    .discount {
+      position: absolute;
+      top: 9%;
+      left: 10%;
+      z-index: 1;
+      font-family: $font_2_semibold;
+      font-size: 14px;
+      background-color: rgb(53, 145, 53);
+      color: white;
+      padding: 2px 4px;
+      opacity: 0.8;
+
+      @media (max-width: 768px) {
+        font-size: 16px;
+        left: 4%;
+          top: 9%;
+      }
+    }
+
     /* collection name, vertical */
     .collection-vertical {
       display: none;

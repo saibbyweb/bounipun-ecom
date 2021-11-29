@@ -7,6 +7,11 @@
       singleView: !gridView,
     }"
   >
+    <!-- discount percentage -->
+    <span class="discount" v-if="product.saleDetails">
+      -{{ product.saleDetails.discountPercentage }}%</span
+    >
+
     <!-- wishlist icon -->
     <img
       @click.stop="toggleWishlist"
@@ -98,20 +103,18 @@
         <span v-if="!readyToShip && !lowestAndHighestPriceisSame" class="price">
           {{ formatCurrency(lowestVariantPrice) }}
           -
-          {{  formatCurrency(highestVariantPirce) }}
+          {{ formatCurrency(highestVariantPirce) }}
         </span>
 
         <!-- if made on order and lowest and highest same -->
         <span v-if="!readyToShip && lowestAndHighestPriceisSame" class="price">
-          {{  formatCurrency(highestVariantPirce) }}
+          {{ formatCurrency(highestVariantPirce) }}
         </span>
 
         <!-- if ready to ship -->
         <span v-if="readyToShip" class="price">
-          {{  formatCurrency(directPrice) }}
+          {{ formatCurrency(directPrice) }}
         </span>
-
-
       </div>
     </div>
 
@@ -303,27 +306,20 @@ export default {
     collectionName() {
       if (typeof this.product.bounipun_collection === "string")
         return this.product.bounipun_collection;
-      if(this.product.bounipun_collection === null)
-        return 'N/A'
+      if (this.product.bounipun_collection === null) return "N/A";
       return this.product.bounipun_collection.name;
     },
     directPrice() {
-      if(this.currencyIsINR)
-        return this.product.directPrice;
-      else
-        return this.product.directPricing[this.currency]
+      if (this.currencyIsINR) return this.product.directPrice;
+      else return this.product.directPricing[this.currency];
     },
     lowestVariantPrice() {
-      if(this.currencyIsINR)
-        return this.product.priceRange.startsAt;
-      else
-        return this.product.pricingRange[this.currency].startsAt
+      if (this.currencyIsINR) return this.product.priceRange.startsAt;
+      else return this.product.pricingRange[this.currency].startsAt;
     },
     highestVariantPirce() {
-      if(this.currencyIsINR)
-        return this.product.priceRange.endsAt;
-      else
-        return this.product.pricingRange[this.currency].endsAt
+      if (this.currencyIsINR) return this.product.priceRange.endsAt;
+      else return this.product.pricingRange[this.currency].endsAt;
     },
     lowestAndHighestPriceisSame() {
       return this.lowestVariantPrice === this.highestVariantPirce;
@@ -487,6 +483,26 @@ export default {
   // border: 1px dashed #efefef;
   cursor: pointer;
 
+  /* discount */
+  .discount {
+    position: absolute;
+    top: 10px;
+    left: 10%;
+    z-index: 1;
+    font-family: $font_2_semibold;
+    font-size: 14px;
+    background-color: rgb(53, 145, 53);
+    color: white;
+    padding: 2px 4px;
+    opacity: 0.8;
+
+    @media (max-width: 768px) {
+      font-size: 12px;
+      left: 4%;
+      top: 10px;
+    }
+  }
+
   .wishlist {
     position: absolute;
     width: 18px;
@@ -642,7 +658,7 @@ export default {
       width: 100%;
       // height: 650px;
       box-sizing: content-box;
-      padding-bottom:25px;
+      padding-bottom: 25px;
       height: 91vh;
       border-bottom: 1px solid #efefef;
       margin: 0px;

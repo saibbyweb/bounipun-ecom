@@ -344,6 +344,7 @@ router.post('/fetchRelatedProducts', async (req, res) => {
         .populate('bounipun_collection', 'name')
         .populate('colors._id')
         .populate('rtsDirectVariant')
+        .lean();
 
     //  console.log(relatedProducts.length);
     /* if related prdocucts are lesser than limit, fetch related products added before the current product */
@@ -356,6 +357,7 @@ router.post('/fetchRelatedProducts', async (req, res) => {
             .populate('bounipun_collection')
             .populate('colors._id')
             .populate('rtsDirectVariant')
+            .lean();
     }
     
     relatedProducts = await saleMethods.normalizePricing(relatedProducts);
@@ -387,6 +389,7 @@ router.post('/fetchRecentlyViewed', async (req, res) => {
         .populate('bounipun_collection', 'name')
         .populate('colors._id')
         .populate('rtsDirectVariant')
+        .lean();
 
     if (recentlyViewedProducts.length === 0) {
         res.send(response);
