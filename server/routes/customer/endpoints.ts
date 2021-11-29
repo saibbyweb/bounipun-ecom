@@ -164,7 +164,10 @@ router.post('/fetchProduct', userAuth('customer', false), async (req, res) => {
     });
 
     document = await document;
-    res.json(document);
+    /* normalize pricing */
+    document = await saleMethods.normalizePricing([document]);
+    console.log(document[0])
+    res.json(document[0]);
 
 });
 

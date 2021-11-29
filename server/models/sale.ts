@@ -202,7 +202,7 @@ export const methods = {
       console.log('Adding normalized product:', product.name, product.pricingRange)
       normalizedProducts.push(product);
     }
-    
+
     return normalizedProducts;
   },
   /* update product sale flags */
