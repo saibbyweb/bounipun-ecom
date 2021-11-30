@@ -292,7 +292,46 @@ router.post("/fetchLocalCart", async (req, res) => {
   res.send(cartItems);
 });
 
-/* detch wishlist */
+/* fetch product list */
+router.post("/fetchProductList", userAuth("customer"), async (req, res) => {
+  /* unlocked */
+  const { unlocked, slug } = req.body;
+  /* response to be sent back */
+  let response = { resolved: false, products: [] };
+
+  const productList: any = await db
+    .model("product_lists")
+    .findOne({ slug, status: true })
+    .populate({
+      path: 'list',
+      populate: { path: "bounipun_collection colors._id rtsDirectVariant variants._id" }
+    })
+    .lean();
+  
+    /* if product list not found */
+  if(productList !== null) {
+    console.log('Product list not found')
+    res.send(response);
+    return;
+  }
+
+  console.log(`Product List ${productList.name} found for slug ${slug}`)
+
+  let products = productList.list;
+
+  /* filter products which are inactive and also check for locked products */
+  products = products.filter((product) => {
+    if (product.lock === true && unlocked === false) return false;
+    return product.status === true;
+  });
+
+  products = await saleMethods.normalizePricing(products);
+  response.products = products;
+  response.resolved = true;
+  res.send(response);
+});
+
+/* fetch wishlist */
 router.post("/fetchWishlist", userAuth("customer"), async (req, res) => {
   const { unlocked } = req.body;
 
@@ -307,7 +346,8 @@ router.post("/fetchWishlist", userAuth("customer"), async (req, res) => {
       populate: {
         path: "bounipun_collection colors._id rtsDirectVariant variants._id",
       },
-    }).lean();
+    })
+    .lean();
 
   let products = details.wishlist.map((item) => item.product);
 
@@ -316,7 +356,7 @@ router.post("/fetchWishlist", userAuth("customer"), async (req, res) => {
     if (product.lock === true && unlocked === false) return false;
     return product.status === true;
   });
-  
+
   products = await saleMethods.normalizePricing(products);
   response.products = products;
   response.resolved = true;

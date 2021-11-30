@@ -43,16 +43,15 @@ export default {
       handler(to, from) {
         this.products = [];
         this.list = { name: 'fetching...'};
-        console.log(to.params.listSlug, "--param slug--");
-        // this.fetchResults(to.params.slug);
+        this.fetchResults(to.params.listSlug);
       },
       immediate: true,
     },
   },
   methods: {
-    async fetchResults() {
+    async fetchResults(listSlug) {
       const listItems = await this.$axios.$post("/fetchProductList", {
-        slug: this.$route.params.listSlug,
+        slug: listSlug,
         lockCheck: true,
       });
       /* if list not fetched */
