@@ -83,6 +83,13 @@ export const methods = {
 
     console.log("✅ Product sale flag updates complete");
   },
+  async updateProductLockFlags(list, lockFlag) {
+    const products = await db.model("products").updateMany({ _id: { $in: list } }, {
+      lock: lockFlag
+    });
+
+    console.log(`✅ Updated ${products.nModified} docs successfully`)
+  },
   async checkForProductWithActiveSale(details, editMode) {
     if (!editMode) {
       return { allGood: true };
@@ -116,7 +123,6 @@ export const methods = {
         console.log("Same sale ids found");
         continue;
       }
-   
 
       if (
         product.sale !== undefined &&

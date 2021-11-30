@@ -337,6 +337,7 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
       break;
     case "product_lists":
       await productListMethods.updateProductSaleFlags(result._id, originalDoc.list, details.list);
+      await productListMethods.updateProductLockFlags(details.list, details.lock);
   }
 
   res.send(result);
