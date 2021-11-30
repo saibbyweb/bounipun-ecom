@@ -25,7 +25,7 @@
     </div>
 
     <!-- logo -->
-    <div class="logo center" @click="$router.push('/')">
+    <div class="logo center" @click="$router.push('/lists/list-1')">
       <img src="/icons/light/logo.png" />
     </div>
 

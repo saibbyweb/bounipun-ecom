@@ -297,7 +297,7 @@ router.post("/fetchProductList", userAuth("customer"), async (req, res) => {
   /* unlocked */
   const { unlocked, slug } = req.body;
   /* response to be sent back */
-  let response = { resolved: false, products: [] };
+  let response = { resolved: false, products: [], name: '' };
 
   const productList: any = await db
     .model("product_lists")
@@ -309,7 +309,7 @@ router.post("/fetchProductList", userAuth("customer"), async (req, res) => {
     .lean();
   
     /* if product list not found */
-  if(productList !== null) {
+  if(productList === null) {
     console.log('Product list not found')
     res.send(response);
     return;
@@ -326,6 +326,7 @@ router.post("/fetchProductList", userAuth("customer"), async (req, res) => {
   });
 
   products = await saleMethods.normalizePricing(products);
+  response.name = productList.name;
   response.products = products;
   response.resolved = true;
   res.send(response);

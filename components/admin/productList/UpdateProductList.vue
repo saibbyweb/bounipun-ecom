@@ -16,6 +16,14 @@
     <!-- list slug -->
     <InputBox label="List Slug" v-model="doc.slug" />
 
+    <!-- set product list header -->
+    <UploadImage
+      ref="imageUploader"
+      :multipleUpload="false"
+      label="Set Product List Header Image"
+      @updated="imageListUpdated($event, 'image')"
+    />
+
     <!-- product autocomplete list -->
     <client-only>
       <autocomplete
@@ -41,6 +49,30 @@
 
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
+
+    <!-- lock -->
+    <div class="section">
+      <label class="label"> Product List Lock </label>
+      <!-- locked image -->
+      <UploadImage
+        ref="lockedImageUploader"
+        :multipleUpload="false"
+        label="Set Locked Header Image"
+        @updated="imageListUpdated($event, 'lockedImage')"
+      />
+
+      <!-- locked text -->
+      <TextBox v-model="doc.lockedText" label="Locked Text (Paragraph):" />
+      <!-- lock toggle -->
+      <Toggle
+        v-model="doc.lock"
+        label="🔒 Lock"
+        width="90px"
+        activeText="Enabled"
+        inactiveText="Unlocked"
+      />
+    </div>
+
     <!-- publish toggle -->
     <!-- <Toggle v-model="doc.status" label="Status" /> -->
     <!-- update button -->
@@ -81,6 +113,11 @@ const baseDoc = () => ({
   name: "",
   slug: "",
   list: [],
+  image: "",
+  text: "",
+  lockedImage: "",
+  lockedText: "",
+  lock: "",
   description: "",
   status: false,
 });
@@ -117,6 +154,16 @@ export default {
     this.fetchAllProducts();
   },
   methods: {
+    imageListUpdated(list, type) {
+      switch (type) {
+        case "image":
+          this.doc.image = list.length > 0 ? list[0].path : "";
+          break;
+        case "lockedImage":
+          this.doc.lockedImage = list.length > 0 ? list[0].path : "";
+          break;
+      }
+    },
     removeProduct(index) {
       this.doc.list.splice(index, 1);
     },
@@ -186,13 +233,30 @@ export default {
       this.$flash(this);
     },
     populateForm(details) {
-      const { _id, name, list, slug, description, status } = details;
+      const {
+        _id,
+        name,
+        list,
+        slug,
+        image,
+        text,
+        lockedImage,
+        lockedText,
+        lock,
+        description,
+        status,
+      } = details;
 
       this.doc = {
         _id,
         name,
         list,
-        slug: slug === undefined ? '' : slug,
+        slug: slug === undefined ? "" : slug,
+        image,
+        text,
+        lockedImage,
+        lockedText,
+        lock,
         description,
         status,
       };
@@ -204,6 +268,8 @@ export default {
       this.$emit("close");
     },
     resetForm() {
+      this.$refs.imageUploader.clearFileSelection();
+      this.$refs.lockedImageUploader.clearFileSelection();
       this.populateForm(baseDoc());
       this.editMode = false;
     },

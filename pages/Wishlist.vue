@@ -72,7 +72,7 @@ export default {
         /* filter out inactive colors */
         product.colors = product.colors.filter(color => color.status === true);
         product.variants.sort((a, b) => a._id.order - b._id.order);
-        /* TODO: what's up with rtsDirectVariant  */
+
         if (
           product.rtsDirectVariant !== undefined ||
           product.rtsDirectVariant === ""
