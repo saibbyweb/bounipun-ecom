@@ -13,6 +13,9 @@
     <!-- product list name -->
     <InputBox label="Product List Name" v-model="doc.name" />
 
+    <!-- list slug -->
+    <InputBox label="List Slug" v-model="doc.slug" />
+
     <!-- product autocomplete list -->
     <client-only>
       <autocomplete
@@ -72,6 +75,15 @@
 </template>
 
 <script>
+/* base doc */
+const baseDoc = () => ({
+  _id: "",
+  name: "",
+  slug: "",
+  list: [],
+  description: "",
+  status: false,
+});
 export default {
   props: {
     model: String,
@@ -79,13 +91,7 @@ export default {
   data() {
     return {
       editMode: false,
-      doc: {
-        _id: "",
-        name: "",
-        list: [],
-        description: "",
-        status: false,
-      },
+      doc: baseDoc(),
       allProducts: [],
       loading: false,
       updated: false,
@@ -155,9 +161,9 @@ export default {
       }
 
       this.$emit("updated");
-      // this.populateForm(result.doc);
+      this.populateForm(result.doc);
       /* only update the id */
-      this.doc._id = result.doc._id;
+      // this.doc._id = result.doc._id;
       this.editMode = true;
       this.$flash(this);
     },
@@ -180,12 +186,13 @@ export default {
       this.$flash(this);
     },
     populateForm(details) {
-      const { _id, name, list, description, status } = details;
+      const { _id, name, list, slug, description, status } = details;
 
       this.doc = {
         _id,
         name,
         list,
+        slug: slug === undefined ? '' : slug,
         description,
         status,
       };
@@ -197,13 +204,7 @@ export default {
       this.$emit("close");
     },
     resetForm() {
-      this.populateForm({
-        _id: "",
-        name: "",
-        list: [],
-        description: "",
-        status: false,
-      });
+      this.populateForm(baseDoc());
       this.editMode = false;
     },
   },

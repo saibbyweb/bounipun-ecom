@@ -1,4 +1,5 @@
 import { mongoose, ObjectId, db } from "@helpers/essentials";
+import slugify from "slugify";
 
 /* schema */
 const schema = new mongoose.Schema(
@@ -10,6 +11,10 @@ const schema = new mongoose.Schema(
         ref: "products",
       },
     ],
+    slug: {
+      type: String,
+      default: "",
+    },
     description: String,
     status: Boolean,
   },
@@ -98,11 +103,15 @@ export const methods = {
 
       if (product === null) continue;
 
-      if(product.sale._id !== undefined && product.sale._id.toString() === sale._id.toString()) {
-          console.log('Same sale ids found')
-          continue;
+      if (
+        product.sale !== undefined &&
+        product.sale._id !== undefined &&
+        product.sale._id.toString() === sale._id.toString()
+      ) {
+        console.log("Same sale ids found");
+        continue;
       }
-      console.log(product.sale._id, sale._id, "--> sale ids");
+   
 
       if (
         product.sale !== undefined &&
@@ -115,9 +124,27 @@ export const methods = {
 
         return { updated: false, msg };
       }
-
     }
     return { allGood: true };
+  },
+  async fixSlug(details, editMode) {
+    /* if slug not provide, creat one  */
+    if (details.slug === "")
+      details.slug = slugify(details.name, { lower: true });
+
+    /* verify slug automicity */
+    let filter: any = { slug: details.slug };
+
+    /* if edit mode, skip the existing product */
+    if (editMode) filter._id = { $ne: details._id };
+
+    /* slug found */
+    const slugFound = await model.findOne(filter);
+
+    /* if slug already exists, update alias and slug */
+    if (slugFound !== null) {
+      details.slug = `${details.slug}-${Date.now()}`;
+    }
   },
 };
 

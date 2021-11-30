@@ -1061,6 +1061,6 @@ async function updateUsersWithContentUnlockDefaults() {
   }
 }
 
-// updateUsersWithContentLockDefault();
+//updateUsersWithContentUnlockDefaults();
 
 export default { model, methods };

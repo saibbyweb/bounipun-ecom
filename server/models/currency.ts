@@ -30,17 +30,17 @@ export const methods = {
     // methods.loadAllCurrencies();
   },
   async loadAllCurrencies() {
-    // for(const currency of allCurrencies) {
-    // const point = {
-    //     name: currency.name,
-    //     code: currency.code,
-    //     exchangeRateINR: 100,
-    //     zeroDecimal: currency.zeroDecimal,
-    //     adminEnabled: false,
-    //     clientEnabled: false
-    // }
-    //  await new model(point).save();
-    // }
+    for(const currency of allCurrencies) {
+    const point = {
+        name: currency.name,
+        code: currency.code,
+        exchangeRateINR: 100,
+        zeroDecimal: currency.zeroDecimal,
+        adminEnabled: false,
+        clientEnabled: false
+    }
+     await new model(point).save();
+    }
   },
   setNonINRPricing(
     nonINRPricing,

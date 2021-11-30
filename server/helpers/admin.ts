@@ -22,6 +22,7 @@ export default {
         await ticker.methods.updateTickers(details, editMode);
         break;
       case 'product_lists':
+        await productLists.methods.fixSlug(details, editMode)
         response = await productLists.methods.checkForProductWithActiveSale(details, editMode);
         return response;
         break;
