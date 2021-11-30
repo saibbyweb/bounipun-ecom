@@ -24,29 +24,33 @@
       @updated="imageListUpdated($event, 'image')"
     />
 
-    <!-- product autocomplete list -->
-    <client-only>
-      <autocomplete
-        inputClass="small"
-        ref="autocomplete"
-        :source="allProductsExceptSelected"
-        @enter="addProduct"
-        @selected="addProduct"
-      >
-      </autocomplete>
-    </client-only>
+    <br />
 
-    <div class="list">
-      <div
-        class="selected"
-        v-for="(product, index) in doc.list"
-        :key="product._id"
-      >
-        <span> {{ getProductName(product) }} </span>
-        <img @click="removeProduct(index)" src="/icons/light/trash.png" />
+    <!-- product autocomplete list -->
+    <div class="section">
+      <client-only>
+        <label class="label"> List of Products: </label>
+        <autocomplete
+          inputClass="small"
+          ref="autocomplete"
+          :source="allProductsExceptSelected"
+          @enter="addProduct"
+          @selected="addProduct"
+        >
+        </autocomplete>
+      </client-only>
+
+      <div class="list">
+        <div
+          class="selected"
+          v-for="(product, index) in doc.list"
+          :key="product._id"
+        >
+          <span> {{ getProductName(product) }} </span>
+          <img @click="removeProduct(index)" src="/icons/light/trash.png" />
+        </div>
       </div>
     </div>
-
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
 
@@ -332,9 +336,15 @@ export default {
   }
 }
 
-// .contents {
-//     /deep/ li {
-//         font-size: 10px !important;
-//     }
-// }
+.section {
+  margin-top: 10px;
+  padding-top: 10px;
+  border: 3px dotted #efefef;
+
+  .label {
+    color: #333333;
+    font-size: 12px;
+    padding-top: 10px;
+  }
+}
 </style>
