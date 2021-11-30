@@ -17,7 +17,7 @@
         class="action apply"
         :class="{ applied: unlockCodeApplied }"
       >
-        {{ unlockCodeApplied ? "Unlocking..." : "Apply Unlock Code" }}
+        {{ unlockCodeApplied ? "Unlocking..." : "Unlock Bounipun Premium" }}
       </button>
 
       <!-- code error -->

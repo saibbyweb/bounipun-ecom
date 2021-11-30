@@ -25,6 +25,26 @@
         />
       </div>
     </div>
+
+    <!-- list is locked -->
+    <div v-if="listLockedAndUserAuthorized" class="locked">
+      <h2 class="heading" v-if="listLocked">
+        🔒 This product List is locked
+      </h2>
+      <br />
+      <!-- unlock content -->
+      <UnlockContent />
+    </div>
+    <!-- ask for login -->
+    <div
+      v-if="productListLocked && !$store.state.customer.authorized"
+      class="flex center col login"
+    >
+      <p class="text">Please login first to 🔓 unlock this collection</p>
+      <button class="action" @click="$router.push('/login')">
+        Access Bounipun Account
+      </button>
+    </div>
   </div>
 </template>
 
@@ -74,6 +94,10 @@ export default {
       }
 
       return false;
+    },
+    listLockedAndUserAuthorized() {
+      const customer = this.$store.state.customer;
+      return this.listLocked && customer.authorized === true;
     },
   },
   watch: {
@@ -159,6 +183,16 @@ export default {
   .text-3 {
     font-family: $font_4;
     font-size: 19px;
+  }
+}
+
+.locked {
+  padding: 1% 10%;
+
+  .heading {
+    font-family: $font_2_bold;
+    text-transform: uppercase;
+    text-align: center;
   }
 }
 </style>

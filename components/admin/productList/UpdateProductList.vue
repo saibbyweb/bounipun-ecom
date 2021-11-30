@@ -2,6 +2,29 @@
   <div class="contents">
     <CancelUpdate @close="closeForm" />
     <h2 class="heading">{{ editMode ? "Update" : "Add New" }} Product List</h2>
+
+    <!-- preview link -->
+    <div class="center">
+      <a
+        v-if="editMode"
+        :href="`/lists/${doc.slug}`"
+        target="_blank"
+      >
+        <span
+          style="
+            background: #333;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+            padding: 2px 4px;
+            border-radius: 2px;
+          "
+        >
+          Preview Product List ➚
+        </span>
+      </a>
+    </div>
+
     <!-- product list id -->
     <InputBox
       v-if="editMode"
