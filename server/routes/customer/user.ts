@@ -297,7 +297,7 @@ router.post("/fetchProductList", userAuth("customer"), async (req, res) => {
   /* unlocked */
   const { unlocked, slug } = req.body;
   /* response to be sent back */
-  let response = { resolved: false, products: [], name: '' };
+  let response = { resolved: false, listDetails: {} };
 
   const productList: any = await db
     .model("product_lists")
@@ -326,8 +326,9 @@ router.post("/fetchProductList", userAuth("customer"), async (req, res) => {
   });
 
   products = await saleMethods.normalizePricing(products);
-  response.name = productList.name;
-  response.products = products;
+  productList.list = products;
+  
+  response.listDetails = productList;
   response.resolved = true;
   res.send(response);
 });

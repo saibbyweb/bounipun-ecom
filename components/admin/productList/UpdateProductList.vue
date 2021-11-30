@@ -13,6 +13,9 @@
     <!-- product list name -->
     <InputBox label="Product List Name" v-model="doc.name" />
 
+    <!-- text -->
+    <TextBox v-model="doc.text" label="Text (Paragraph):" />
+
     <!-- list slug -->
     <InputBox label="List Slug" v-model="doc.slug" />
 

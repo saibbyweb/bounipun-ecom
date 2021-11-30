@@ -1,14 +1,25 @@
 <template>
-  <div class="center-col page -wh">
-    <div class="page-header center">
-      <h2 class="title">{{ listName }}</h2>
+  <div class="page -wh">
+    <!-- list header -->
+    <div
+      v-if="listImageProvided"
+      class="c-header center"
+      :style="{
+        backgroundImage: `url(${getListImage(listImage)})`,
+      }"
+    ></div>
+
+    <!-- main text block -->
+    <div class="main-text-block flex center col">
+      <h2 class="text-1">{{ list.name }}</h2>
+      <p class="text-2">{{ listText }}</p>
     </div>
 
     <!-- product list -->
     <div class="flex center">
       <div class="product-list flex center wrap">
         <product-card
-          v-for="(product, index) in products"
+          v-for="(product, index) in list.list"
           :key="index"
           :product="product"
         />
@@ -21,15 +32,49 @@
 export default {
   head() {
     return {
-      title: `${this.listName} | Bounipun Kashmir`,
+      title: `${this.list.name} | Bounipun Kashmir`,
     };
   },
   data() {
     return {
       gridView: true,
-      products: [],
-      listName: "fetching...",
+      list: {
+        products: [],
+        name: "fetching...",
+        text: "fetching...",
+        lockedText: "",
+        image: "",
+        lockedImage: "",
+        lock: false,
+      },
     };
+  },
+  computed: {
+    listImageProvided() {
+      return this.listImage !== "";
+    },
+    listImage() {
+      return this.listLocked ? this.list.lockedImage : this.list.image;
+    },
+    listText() {
+      return this.listLocked ? this.list.lockedText : this.list.text;
+    },
+    listLocked() {
+      /* if collection is locked */
+      if (this.list.lock === true) {
+        const customer = this.$store.state.customer;
+        switch (customer.authorized) {
+          case true:
+            return !(customer.user.contentUnlock.status === true);
+            break;
+          case false:
+            return true;
+            break;
+        }
+      }
+
+      return false;
+    },
   },
   watch: {
     $route: {
@@ -44,6 +89,10 @@ export default {
     },
   },
   methods: {
+    getListImage(image) {
+      if (image === undefined) return "";
+      return this.$getOriginalPath(image);
+    },
     async fetchResults(listSlug) {
       const productList = await this.$axios.$post("/fetchProductList", {
         slug: listSlug,
@@ -52,14 +101,13 @@ export default {
       /* if list not fetched */
       if (productList.resolved === false) return;
 
-      /* extract products and list name*/
-      let { products, name } = productList;
+      const { listDetails } = productList;
+
       /* set list name */
-      this.listName = name;
-      products.forEach((product) => {
+      listDetails.list.forEach((product) => {
         /* sort variants */
         product.variants.sort((a, b) => a._id.order - b._id.order);
-            if (
+        if (
           product.rtsDirectVariant !== undefined ||
           product.rtsDirectVariant === ""
         )
@@ -67,10 +115,50 @@ export default {
       });
 
       /* filter out products with no active colors */
-      products = products.filter((product) => product.colors.length > 0);
-
-      this.products = products;
+      listDetails.list = listDetails.list.filter(
+        (product) => product.colors.length > 0
+      );
+      this.list = listDetails;
+      this.$forceUpdate();
     },
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.c-header {
+  height: 40vw;
+  margin-top: 5vh;
+  background-size: cover;
+  width: 100%;
+
+  .heading {
+    color: $primary_dark;
+    text-transform: uppercase;
+    font-family: $font_1_bold;
+    font-size: 10vw;
+  }
+}
+.main-text-block {
+  padding: 5%;
+
+  .text-1 {
+    font-family: $font_3_bold;
+    margin-bottom: 10px;
+    font-size: 26px;
+    text-transform: uppercase;
+  }
+
+  .text-2 {
+    font-size: 14px;
+    text-align: justify;
+    margin-bottom: 5px;
+    font-family: $font_1;
+  }
+
+  .text-3 {
+    font-family: $font_4;
+    font-size: 19px;
+  }
+}
+</style>

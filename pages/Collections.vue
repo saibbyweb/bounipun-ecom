@@ -187,7 +187,7 @@ export default {
     },
     collectionText() {
       const { collection } = this;
-      return this.collectionLocked ? collection.lockText : (mainTextBlock)
+      return this.collectionLocked ? collection.lockedText : (mainTextBlock)
     },
     collectionLocked() {
       /* if collection is locked */
