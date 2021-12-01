@@ -167,6 +167,8 @@ router.post("/createPaymentIntent", userAuth("customer"), async (req, res) => {
         zeroDecimal
       );
 
+
+
       /* if verification failed, stop execution */
       if (payload === false) {
         res.send(response);

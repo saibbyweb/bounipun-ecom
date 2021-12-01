@@ -512,7 +512,11 @@ export const methods = {
       }
 
       /* extract discount percentage */
-      const { discountPercentage } = validSales[product.sale];
+      const { discountPercentage, name: saleName  } = validSales[product.sale];
+      
+      /* sale details */
+      product.saleDetails = { name: saleName, discountPercentage };
+
       console.log(
         `🔹 Discount percentage to be applied to ${product.productName} :  ${discountPercentage} %`
       );
@@ -855,8 +859,6 @@ export const methods = {
       gatewayToken
     );
 
-    console.log(paymentIntent);
-
     if (paymentIntent === false) {
       console.log("PAYMENT INTENT INVALID");
       return false;
@@ -905,8 +907,7 @@ export const methods = {
         let itemAmount: any = itemPrice * item.quantity;
         itemAmount = itemAmount.toFixed(2);
 
-        // let itemAmount: any = item.price * item.quantity;
-        // itemAmount = itemAmount.toFixed(2);
+        console.log(item.saleDetals,'---------------> SALE DETAILS');
 
         let itemTotal: any = itemAmount - discountPerItem;
         itemTotal = itemTotal.toFixed(2);

@@ -41,6 +41,7 @@ const schema = new mongoose.Schema({
         timeline: Array,
         trackingId: String,
         trackingUrl: String,
+        saleDetails: Object,
         delivered: String
     }],
 
