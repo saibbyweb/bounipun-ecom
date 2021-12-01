@@ -74,11 +74,11 @@ export const methods = {
         .findOneAndUpdate({ _id: productId }, { sale: activeSale._id });
     }
 
-    /* remove sale flag for removed products */
+    /* remove sale flag for removed products [also unlock by] */
     for (const productId of removedProducts) {
       await db
         .model("products")
-        .findOneAndUpdate({ _id: productId }, { sale: null });
+        .findOneAndUpdate({ _id: productId }, { sale: null, lock: false });
     }
 
     console.log("✅ Product sale flag updates complete");
@@ -117,6 +117,7 @@ export const methods = {
 
       if (
         product.sale !== undefined &&
+        product.sale !== null &&
         product.sale._id !== undefined &&
         product.sale._id.toString() === sale._id.toString()
       ) {

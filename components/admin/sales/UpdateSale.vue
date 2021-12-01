@@ -32,8 +32,16 @@
 
     <!-- discount percentage -->
     <InputSlider label="Discount Percentage" v-model="doc.discountPercentage" />
-    <!-- description -->
-    <TextBox v-model="doc.description" label="Description" :internal="true" />
+
+      <!-- description -->
+      <TextBox
+        v-model="doc.description"
+        label="Description"
+        :internal="true"
+      />
+
+      
+
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
     <!-- update button -->
@@ -91,6 +99,7 @@ export default {
         status: false,
         msg: "",
       },
+      
     };
   },
   mounted() {

@@ -37,8 +37,23 @@
         :from-date="doc.validityRange.start"
       />
     </client-only>
-    <!-- description -->
-    <TextBox v-model="doc.description" label="Description" :internal="true" />
+
+    <!-- invitation template -->
+    <div class="section">
+      <label class="label"> Invitation: </label>
+      <InputBox v-model="clientName" label="Client Name" :internal="true" />
+      <InputBox v-model="link" label="Link" :internal="true" />
+
+      <!-- description -->
+      <TextBox
+        v-model="doc.description"
+        label="Invitation Template:"
+        :internal="true"
+      />
+      <label class="label"> Client Template: </label><br />
+      <span style="font-size: 13px"> {{ clientTemplate }} </span>
+      <button @click="copyToClipBoard(clientTemplate)"> COPY </button>
+    </div>
 
     <!-- log -->
     <div class="log">
@@ -82,25 +97,32 @@
     </div>
 
     <!-- black list -->
-    <div  class="black-list">
+    <div class="black-list">
       <div v-if="doc.log.length > 0">
-      <label class="label"> Black List: </label>
-      <autocomplete
-        inputClass="small"
-        ref="autocomplete"
-        :source="nonBlacklisted"
-        @enter="addToBlackList"
-        @selected="addToBlackList"
-      >
-      </autocomplete>
+        <label class="label"> Black List: </label>
+        <autocomplete
+          inputClass="small"
+          ref="autocomplete"
+          :source="nonBlacklisted"
+          @enter="addToBlackList"
+          @selected="addToBlackList"
+        >
+        </autocomplete>
       </div>
 
       <div class="list">
-        <div class="selected" v-for="(blacklisted,index) in doc.blackList" :key="index">
-            <span> {{ blacklisted.name }} </span>
-            <img @click="removeFromBlacklist(index)" src="/icons/light/trash.png" />
+        <div
+          class="selected"
+          v-for="(blacklisted, index) in doc.blackList"
+          :key="index"
+        >
+          <span> {{ blacklisted.name }} </span>
+          <img
+            @click="removeFromBlacklist(index)"
+            src="/icons/light/trash.png"
+          />
         </div>
-    </div>
+      </div>
 
       <!-- publish toggle -->
       <Toggle v-model="doc.status" label="Status" />
@@ -176,13 +198,25 @@ export default {
       loading: false,
       updated: false,
       customersUnlocked: [],
+      clientName: "",
+      link: "",
     };
   },
   computed: {
+    clientTemplate() {
+      let temp = this.doc.description.replace("##client##", this.clientName);
+      temp = temp.replace("##code##", this.doc.code);
+      temp = temp.replace("##link##", this.link);
+      return temp;
+    },
     nonBlacklisted() {
-      return this.unlockedCustomersWithIds.filter(entry => {
-        return this.doc.blackList.findIndex(blacklisted => blacklisted.customer === entry.customer) === -1
-      })
+      return this.unlockedCustomersWithIds.filter((entry) => {
+        return (
+          this.doc.blackList.findIndex(
+            (blacklisted) => blacklisted.customer === entry.customer
+          ) === -1
+        );
+      });
     },
     unlockedCustomersWithIds() {
       if (this.customersUnlocked.length === 0)
@@ -197,13 +231,22 @@ export default {
       });
 
       return list;
- 
     },
   },
   methods: {
+    copyToClipBoard(textToCopy) {
+      const tmpTextField = document.createElement("textarea");
+      tmpTextField.textContent = textToCopy;
+      tmpTextField.setAttribute("style", "position:absolute; right:200%;");
+      document.body.appendChild(tmpTextField);
+      tmpTextField.select();
+      tmpTextField.setSelectionRange(0, 99999); /*For mobile devices*/
+      document.execCommand("copy");
+      tmpTextField.remove();
+    },
     async updateDocument() {
       this.doc.code = this.doc.code.toUpperCase();
-      
+
       /* update black list (should be string of user _ids) */
       // this.doc.blackList = this.doc.blackList.map(blackListed => blackListed.name);
 
@@ -287,7 +330,7 @@ export default {
       }
     },
     addToBlackList(data) {
-      if(data.selectedObject.customer === false) {
+      if (data.selectedObject.customer === false) {
         this.populateUsageLog();
         return;
       }
@@ -302,35 +345,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .list {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+
+  .selected {
+    background: #d68595;
+    color: white;
+    border-radius: 20px;
+    padding: 7px;
+    margin: 2px;
     display: flex;
-    justify-content: flex-start;
     align-items: center;
-    flex-wrap: wrap;
+    justify-content: center;
+    width: fit-content;
 
-    .selected {
-        background: #d68595;
-        color: white;
-        border-radius: 20px;
-        padding: 7px;
-        margin: 2px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: fit-content;
-
-        span {
-            font-size: 12px;
-            color: white;
-        }
-
-        img {
-            margin-left: 1vw;
-            width: 2vw;
-            cursor: pointer;
-        }
+    span {
+      font-size: 12px;
+      color: white;
     }
+
+    img {
+      margin-left: 1vw;
+      width: 2vw;
+      cursor: pointer;
+    }
+  }
 }
 
 .section {
@@ -362,6 +404,17 @@ export default {
       padding: 2px;
       margin: 5px;
     }
+  }
+}
+.section {
+  margin-top: 10px;
+  padding-top: 10px;
+  border: 3px dotted #efefef;
+
+  .label {
+    color: #333333;
+    font-size: 12px;
+    padding-top: 10px;
   }
 }
 </style>

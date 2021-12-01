@@ -104,7 +104,7 @@
     </div>
 
     <!-- publish toggle -->
-    <!-- <Toggle v-model="doc.status" label="Status" /> -->
+    <Toggle v-model="doc.status" label="Page Visibility" />
     <!-- update button -->
     <div class="center-space">
       <!-- loading bar -->

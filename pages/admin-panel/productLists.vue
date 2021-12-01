@@ -72,8 +72,8 @@ export default {
         limit: 20,
       },
       list: [],
-      sortByFields: ["name", "status"],
-      headings: ["_id", "name", "Total Products", "status"],
+      sortByFields: ["name"],
+      headings: ["_id", "name", "Total Products", "Page Visibility"],
     };
   },
   mounted() {
