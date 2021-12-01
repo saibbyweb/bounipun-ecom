@@ -347,6 +347,7 @@ export const methods = {
     let cartItems = cart.map((item) => {
       let cartItem = {
         productId: item.product,
+        styleId: "",
         productName: "",
         slug: "",
         colorName: "",
@@ -390,6 +391,7 @@ export const methods = {
       }
 
       /* product name */
+      cartItem.styleId = product.styleId;
       cartItem.productName = product.name;
       cartItem.sale = product.sale;
       /* slug */
@@ -729,7 +731,7 @@ export const methods = {
         value: taxes,
       },
       grandTotal: grandTotal.toFixed(2),
-    };
+    }
   },
   async createOrderPayload(
     cart,
@@ -906,8 +908,6 @@ export const methods = {
 
         let itemAmount: any = itemPrice * item.quantity;
         itemAmount = itemAmount.toFixed(2);
-
-        console.log(item.saleDetals,'---------------> SALE DETAILS');
 
         let itemTotal: any = itemAmount - discountPerItem;
         itemTotal = itemTotal.toFixed(2);

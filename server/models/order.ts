@@ -18,6 +18,7 @@ const schema = new mongoose.Schema({
     // items: Array,
     items: [{
         _id: ObjectId,
+        styleId: String,
         productId: ObjectId,
         productName: String,
         colorName: String,

@@ -42,10 +42,16 @@
     </div>
 
     <!-- combined delivery consent -->
-    <br>
+    <br />
     <div class="combined-delivery-consent">
       <label class="label"> Combined Delivery Consent: </label>
-      <span class="note"> {{ doc.combinedDeliveryConsent ? 'Opted for combined delivery' : 'Individual Deliveries preferred.'}} </span>
+      <span class="note">
+        {{
+          doc.combinedDeliveryConsent
+            ? "Opted for combined delivery"
+            : "Individual Deliveries preferred."
+        }}
+      </span>
     </div>
 
     <!-- order items -->
@@ -54,7 +60,7 @@
       <label class="label"> Ordered Item(s): </label>
       <div class="item" v-for="(subOrder, index) in doc.items" :key="index">
         <OrderItem
-        :orderId="doc._id"
+          :orderId="doc._id"
           :item="subOrder"
           :allowUpdate="false"
           @subOrderUpdated="refetchDoc"
@@ -119,13 +125,13 @@ const baseDoc = () => ({
     addressLine1: "",
     addressLine2: "",
     city: "",
-    postalCode: ""
+    postalCode: "",
   },
-  status: false
+  status: false,
 });
 export default {
   props: {
-    model: String
+    model: String,
   },
   data() {
     return {
@@ -133,7 +139,7 @@ export default {
       doc: baseDoc(),
       allProductLists: [],
       loading: false,
-      updated: false
+      updated: false,
     };
   },
   mounted() {
@@ -146,8 +152,8 @@ export default {
       );
     },
     inDevelopment() {
-      return process.env.NODE_ENV === 'development'
-    }
+      return process.env.NODE_ENV === "development";
+    },
   },
   methods: {
     async updateDocument() {
@@ -177,14 +183,13 @@ export default {
       this.$flash(this);
     },
     async refetchDoc() {
-      const result = await this.$fetchDocument('orders', this.doc._id, "admin");
+      const result = await this.$fetchDocument("orders", this.doc._id, "admin");
 
       if (!result.fetched) {
         return;
       }
-      console.log(result,'--FROM REFETCH DOC')
+      console.log(result, "--FROM REFETCH DOC");
       this.populateForm(result.doc);
-
     },
     populateForm(details) {
       console.log("POPULATE WAS CALLED");
@@ -201,7 +206,7 @@ export default {
         discountValue,
         shippingCharge,
         deliveryAddress,
-        status
+        status,
       } = details;
 
       this.doc = {
@@ -216,7 +221,7 @@ export default {
         combinedDeliveryConsent,
         shippingCharge,
         discountValue,
-        deliveryAddress
+        deliveryAddress,
       };
       this.editMode = true;
       this.$forceUpdate();
@@ -228,8 +233,96 @@ export default {
     resetForm() {
       this.populateForm(baseDoc());
       this.editMode = false;
-    }
-  }
+    },
+    downloadInvoice() {
+      let invoiceItems = [];
+      const props = {
+        outputType: "save",
+        returnJsPDFDocObject: true,
+        fileName: "Invoice 2021",
+        orientationLandscape: true,
+        logo: {
+          src: "https://bounipun.in/icons/light/logo.png",
+          width: 56.4, //aspect ratio = width/height
+          height: 14.5,
+          margin: {
+            top: 0, //negative or positive num, from the current position
+            left: 0, //negative or positive num, from the current position
+          },
+        },
+        business: {
+          name: "Bounipun Kashmir",
+          address:
+            "H-30 Integrated Textile and Handicraft Park Zakura, Srinagar, Jammu and Kashmir, India, 190006",
+          phone: "(+91) 91030-77655, (+91) 78897-77377",
+          email: "care@bounipun.in",
+          email_1: "contact@bounipun.in",
+          website: "www.bounipun.in",
+        },
+        contact: {
+          label: "Invoice issued for:",
+          name: "Suhaib Khan",
+          address: "H.no.54, Chinar Enclave, Rawalpora",
+          phone: "(+91) 99066-97711",
+          email: "hello@saibbyweb.com",
+          otherInfo: "Srinagar, Jammu and Kashmir",
+        },
+        invoice: {
+          label: "Invoice #: BP-ORDER-009",
+          num: " ",
+          invDate: "Payment Date: 30 June, 2021 - 15:36:31 IST  ",
+          invGenDate: "",
+          headerBorder: false,
+          tableBodyBorder: false,
+          header: [
+            "#",
+            "StyleId",
+            "Product Description",
+            "Color",
+            "HSN Code",
+            "Qty",
+            "Total",
+          ],
+          table: Array.from(Array(5), (item, index) => [
+            index + 1,
+            "Fading Tradition ",
+            "Lorem Ipsum is simply dummy text ",
+            200.5,
+            4.5,
+            "m2",
+            400.5,
+          ]),
+          invTotalLabel: "Total:",
+          invTotal: "145,250.50",
+          invCurrency: "ALL",
+          row1: {
+            col1: "VAT:",
+            col2: "20",
+            col3: "%",
+            style: {
+              fontSize: 10, //optional, default 12
+            },
+          },
+          row2: {
+            col1: "SubTotal:",
+            col2: "116,199.90",
+            col3: "ALL",
+            style: {
+              fontSize: 10, //optional, default 12
+            },
+          },
+          invDescLabel: "Invoice Note",
+          invDesc:
+            "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary.",
+        },
+        footer: {
+          text: "The invoice is created on a computer and is valid without the signature and stamp.",
+        },
+        pageEnable: true,
+        pageLabel: "Page ",
+      };
+    },
+  },
 };
 </script>
 
@@ -268,8 +361,8 @@ export default {
   }
 }
 .combined-delivery-consent {
-  display:flex;
-  
+  display: flex;
+
   .note {
     background-color: rgb(73, 73, 159);
     color: white;
