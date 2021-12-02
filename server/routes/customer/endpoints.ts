@@ -33,10 +33,9 @@ router.post("/findDocument", async (req, res) => {
       });
       break;
     case "homepages":
-      documentFetch.populate(
-        "collectionBlocks.bounipun_collection",
-        "name slug"
-      );
+      documentFetch
+        .populate("collectionBlocks.bounipun_collection", "name slug")
+        .populate("productListBlocks.productList", "name slug");
       break;
     default:
       break;

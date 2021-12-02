@@ -103,7 +103,7 @@
           />
 
           <div class="cta center">
-            <button class="action">{{ block.buttonText }}</button>
+            <button class="action" @click="$router.push(`/lists/${block.productList.slug}`)">{{ block.buttonText }}</button>
           </div>
         </div>
 
