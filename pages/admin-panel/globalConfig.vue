@@ -51,7 +51,7 @@
       <h3>Currency Exchange Rates</h3>
       <br />
       <div
-        class="currency-update flex"
+        class="currency-update flex center"
         v-for="currency in currencies"
         :key="currency.code"
       >
@@ -63,10 +63,18 @@
         />
 
         <!-- default inflation percentage -->
+        <div class="inflation-slider flex center col" style="width:50%;">
+        <span v-if="!showInflationSlider" style="font-size:12px;"> For future use </span>
+        <button v-if="!showInflationSlider" @click="showInflationSlider = true" class="action small"> Show Inflation Slider </button>
+
         <InputSlider
+        v-show="showInflationSlider"
           v-model="currency.defaultInflationPercentage"
           :label="`Inflation % (${currency.code})`"
         />
+
+        </div>
+
       </div>
       <br />
       <button class="action" @click="updateExchangeRates">
@@ -120,7 +128,8 @@ export default {
       currencies: [],
       loading: true,
       updated: false,
-      exchangeRateUpdated: false
+      exchangeRateUpdated: false,
+      showInflationSlider: false
     }
   },
   methods: {
