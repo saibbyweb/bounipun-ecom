@@ -85,15 +85,20 @@
     </div>
 
     <!-- inflation slider -->
+    <div class="section">
     <InputSlider v-model="doc.inflationPercentage" label="Inflation Percentage (for outside India)" />
+
     
-    <div class="flex center">
-    <button @click="resetProductPrices" class="sub-action"> Update All International Product Prices <br>for {{ doc.name }} at {{ doc.inflationPercentage }} % inflation</button> 
+    <div v-if="inflationChanged" class="flex center">
+      <span style="font-size:12px; width:60%; text-align:center; padding-left:1%;"> To update all international prices for products under {{ doc.name}}, click here:  👉</span>
+    <button @click="resetProductPrices" class="sub-action"> Update Prices </button> 
     </div>
+
+        </div>
     
     <!-- price reset confirmation -->
     <div v-if="pricesReset" style="position:fixed; z-index:3; bottom:10px; left:0; width:100%;height:20%;">
-       <Toast :msg="`${totalProductsReset} Products updated.`" :show="pricesReset" />
+       <Toast :msg="`${totalProductsReset} Product(s) updated with new price(s).`" :show="pricesReset" />
     </div>
 
 
@@ -183,8 +188,14 @@ export default {
       loading: false,
       updated: false,
       pricesReset: false,
-      totalProductsReset: 0
+      totalProductsReset: 0,
+      fetchedInflationPercentage: -1
     };
+  },
+  computed: {
+    inflationChanged() {
+      return this.fetchedInflationPercentage != this.doc.inflationPercentage;
+    }
   },
   methods: {
     async resetProductPrices() {
@@ -196,9 +207,11 @@ export default {
       
       /* show feed on update */
       if(request.resolved ===  true) {
+        /* save document */
+        this.updateDocument();
         this.pricesReset = true;
         this.totalProductsReset = request.response.total;
-        setTimeout(() => this.pricesReset = false, 3000)
+        setTimeout(() => this.pricesReset = false,4500)
       }
     },
     imageListUpdated(list, type) {
@@ -272,6 +285,8 @@ export default {
         lock,
         status,
       };
+      /* set initailly fetched percentage */
+      this.fetchedInflationPercentage = this.doc.inflationPercentage;
       this.editMode = true;
     },
     closeForm() {
