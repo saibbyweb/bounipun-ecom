@@ -98,7 +98,6 @@ export default {
             this.fetchResults();
         },
         async fetchResults() {
-            console.log('hit endpoint and fetch results');
             const rawCriterion = {
                 search: this.rawCriterion.search,
                 filters: this.filterCriteria,

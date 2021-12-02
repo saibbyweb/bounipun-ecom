@@ -331,6 +331,13 @@ export default {
           active: false,
         };
       });
+
+      /*  set default sort */
+      if(this.model === 'products') {
+        this.sortBy['styleId'].order = -1;
+        this.sortBy["styleId"].active = true;
+      }
+
     },
     optimizeValue(value, propIndex) {
       if (typeof value === "boolean") {

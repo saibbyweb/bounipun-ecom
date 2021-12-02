@@ -137,7 +137,12 @@ export default {
           bounipun_collection: "default",
           availabilityType: "default",
         },
-        sortBy: {},
+        sortBy: {
+          styleId: {
+            active:true,
+            order: 1
+          }
+        },
         limit: 10,
       },
       list: [],
