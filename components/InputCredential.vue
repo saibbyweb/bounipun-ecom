@@ -152,6 +152,10 @@ input::-webkit-inner-spin-button {
           font-size:1.7vw;
           color: #efefef;
         }
+
+        @media(max-width: 768px) {
+          font-size:30px;
+        }
       }
 
       &.textarea {

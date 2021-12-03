@@ -206,7 +206,7 @@ export default {
     clientTemplate() {
       let temp = this.doc.description.replace("##client##", this.clientName);
       temp = temp.replace("##code##", this.doc.code);
-      temp = temp.replace("##link##", this.link);
+      temp = temp.replace("##link##", `${this.link}&code=${this.doc.code}`);
       return temp;
     },
     nonBlacklisted() {

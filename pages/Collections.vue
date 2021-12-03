@@ -1,5 +1,5 @@
 <template>
-  <div class="center-col page -wh">
+  <div class="flex col page -wh">
     <!-- collection header -->
     <div
       v-if="collectionImageProvided"

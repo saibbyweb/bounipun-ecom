@@ -42,6 +42,10 @@ export default {
       unlockCodeApplied: false,
     };
   },
+  mounted() {
+    if(this.$route.query.code)
+      this.unlockCode = this.$route.query.code;
+  },
   methods: {
     async applyUnlockCode() {
       /* clear error */

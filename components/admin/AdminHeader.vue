@@ -135,7 +135,7 @@ export default {
           desc: "...",
         },
         {
-          name: "Content Unlock",
+          name: "Premium Access Codes",
           path: "/admin-panel/unlock",
           desc: "...",
         },
