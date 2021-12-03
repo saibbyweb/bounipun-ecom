@@ -4,11 +4,13 @@
       <!-- code input box -->
       <InputCredential
         v-model="unlockCode"
-        label="Enter Unlock Code"
+        label=""
         :uppercase="true"
         :checked="unlockCodeApplied"
         :disabled="unlockCodeApplied"
         @input="unlockCodeError.status = false"
+        :isUnlocker="true"
+        placeholder="Enter Premium Access Code"
       />
 
       <!-- apply button -->
@@ -17,7 +19,7 @@
         class="action apply"
         :class="{ applied: unlockCodeApplied }"
       >
-        {{ unlockCodeApplied ? "Unlocking..." : "Unlock Bounipun Premium" }}
+        {{ unlockCodeApplied ? "Unlocking..." : "Activate Bounipun Premium" }}
       </button>
 
       <!-- code error -->
@@ -75,3 +77,30 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.action {
+  &.apply {
+    background: radial-gradient(
+        ellipse farthest-corner at right bottom,
+        #fedb37 0%,
+        #fdb931 8%,
+        #d69b1b 30%,
+        #cc9b2a 40%,
+        transparent 80%
+      ),
+      radial-gradient(
+        ellipse farthest-corner at left top,
+        #d1b464 0%,
+        #c7b06f 8%,
+        #e2cd93 25%,
+        #e9b12d 62.5%,
+        #d5a22a 100%
+      );
+
+    &:hover {
+      color: #474747;
+    }
+  }
+}
+</style>

@@ -7,7 +7,7 @@
         v-for="(collection, index) in collections"
         :key="index"
       >
-        {{ collection.lock ? "🔒" : "" }}
+        {{ collection.lock ? "" : "" }}
         {{ collection.name }}
       </button>
     </div>

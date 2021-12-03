@@ -113,10 +113,9 @@
 
     <!-- if collection locked -->
     <div v-if="collectionLockedAndUserAuthorized" class="locked">
-      <h2 class="heading" v-if="collectionLocked">
+      <!-- <h2 class="heading" v-if="collectionLocked">
         🔒 This collection is locked
-      </h2>
-      <br />
+      </h2> -->
       <!-- unlock content -->
       <UnlockContent />
     </div>
@@ -599,6 +598,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .c-header {
   height: 40vw;
   margin-top: 5vh;
@@ -622,7 +622,7 @@ export default {
 }
 
 .main-text-block {
-  padding: 5%;
+  padding: 5% 5% 2% 5%;
 
   .text-1 {
     font-family: $font_3_bold;
@@ -657,6 +657,12 @@ export default {
     font-family: $font_2_bold;
     text-transform: uppercase;
     text-align: center;
+  }
+
+  width:60%;
+
+  @media(max-width: 768px) {
+    width:100%;
   }
 }
 

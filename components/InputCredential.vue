@@ -17,7 +17,8 @@
         :value="value"
         @input="emitInput"
         :disabled="disabled"
-        :class="{ isMobileNumber, uppercase, textarea }"
+        :class="{ isMobileNumber, uppercase, textarea, isUnlocker }"
+        :placeholder="placeholder"
       />
     </div>
   </div>
@@ -37,12 +38,17 @@ export default {
       type: Boolean,
       default: false
     },
+    isUnlocker: {
+      type: Boolean,
+      default: false
+    },
+    placeholder: { type: String, default: '' },
     textarea: { type: Boolean, default: false},
     countryDialCode: String,
     error: {
       status: Boolean,
       msg: String
-    }
+    },
   },
   data() {
     return {
@@ -135,6 +141,17 @@ input::-webkit-inner-spin-button {
 
       &.isMobileNumber {
         text-indent: 16%;
+      }
+
+      &.isUnlocker {
+        font-size:50px;
+        box-shadow: none;
+        border-bottom: 1px solid #efefef;
+        text-align: center;
+        &::placeholder {
+          font-size:1.7vw;
+          color: #efefef;
+        }
       }
 
       &.textarea {

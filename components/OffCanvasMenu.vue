@@ -38,7 +38,7 @@
         v-for="(collection, index) in collections"
         :key="index"
       >
-        {{ collection.lock ? "🔒" : "" }}
+        {{ collection.lock ? "" : "" }}
         {{ collection.name }}
       </button>
       <!-- <button class="clear item"> Categories </button> -->
