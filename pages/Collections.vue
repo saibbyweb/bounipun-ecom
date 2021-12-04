@@ -112,12 +112,14 @@
     </div>
 
     <!-- if collection locked -->
+    <div class="flex center">
     <div v-if="collectionLockedAndUserAuthorized" class="locked">
       <!-- <h2 class="heading" v-if="collectionLocked">
         🔒 This collection is locked
       </h2> -->
       <!-- unlock content -->
       <UnlockContent />
+    </div>
     </div>
     <!-- ask for login -->
     <div v-if="collectionLocked && !$store.state.customer.authorized" class="flex center col login">
@@ -652,14 +654,14 @@ export default {
 
 .locked {
   padding: 1% 10%;
-
+  width:60%;
   .heading {
     font-family: $font_2_bold;
     text-transform: uppercase;
     text-align: center;
   }
 
-  width:60%;
+
 
   @media(max-width: 768px) {
     width:100%;

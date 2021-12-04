@@ -36,18 +36,18 @@ export default {
     checked: { type: Boolean, default: false },
     isMobileNumber: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isUnlocker: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    placeholder: { type: String, default: '' },
-    textarea: { type: Boolean, default: false},
+    placeholder: { type: String, default: "" },
+    textarea: { type: Boolean, default: false },
     countryDialCode: String,
     error: {
       status: Boolean,
-      msg: String
+      msg: String,
     },
   },
   data() {
@@ -60,8 +60,8 @@ export default {
       this.$emit("input", $event.target.value);
       if (this.clearError && this.$parent.error !== undefined)
         this.$parent.error.status = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -71,11 +71,10 @@ export default {
   flex-direction: column;
   box-sizing: border-box;
   width: 100%;
-  padding:2% 5%;
+  padding: 2% 5%;
 
-  @media(max-width: 768px) {
-  padding: 5%;
-
+  @media (max-width: 768px) {
+    padding: 5%;
   }
 
   .label {
@@ -91,7 +90,6 @@ export default {
   .input-box {
     position: relative;
     width: 100%;
-
 
     .country-code {
       position: absolute;
@@ -120,10 +118,10 @@ export default {
       }
     }
     input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
 
     .field {
       width: 100%;
@@ -144,17 +142,22 @@ input::-webkit-inner-spin-button {
       }
 
       &.isUnlocker {
-        font-size:50px;
+        font-size: 50px;
         box-shadow: none;
         border-bottom: 1px solid #efefef;
         text-align: center;
         &::placeholder {
-          font-size:1.7vw;
+          font-size: 1.7vw;
           color: #efefef;
         }
 
-        @media(max-width: 768px) {
-          font-size:30px;
+        @media (max-width: 768px) {
+          font-size: 30px;
+
+          &::placeholder {
+            font-size: 3.4vw;
+            color: #efefef;
+          }
         }
       }
 
