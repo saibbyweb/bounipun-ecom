@@ -20,6 +20,14 @@ const schema: Schema = new mongoose.Schema({
         },
         usedOn: Date
     }],
+    timeline: [{
+        user: {
+            type: ObjectId,
+            ref: 'users'
+        },
+        action: String,
+        taken: Date
+    }],
     blackList: [{
         name: String,
         customer: {
@@ -93,12 +101,14 @@ export const methods = {
             code: code.toUpperCase()
         });
 
+        const currentTimestamp = new Date();
+
         switch (action) {
             /* add user to log */
             case 'push':
                 unlockDoc.log.push({
                     user,
-                    usedOn: new Date()
+                    usedOn: currentTimestamp
                 });
                 unlockDoc.validity = unlockDoc.validity - 1;
                 break;
@@ -108,6 +118,13 @@ export const methods = {
                     unlockDoc.log.splice(foundIndex, 1);
                 break;
         }
+
+        /* add action to timeline */
+        if(unlockDoc.timeline === undefined)
+            unlockDoc.timeline = [];
+        
+        unlockDoc.timeline.push({ user, action : action === 'push' ? 'Applied' : 'Removed', taken: currentTimestamp })
+
         /*  re-save doc */
         await unlockDoc.save();
 

@@ -52,10 +52,10 @@
       />
       <label class="label"> Client Template: </label><br />
       <span style="font-size: 13px"> {{ clientTemplate }} </span>
-      <button @click="copyToClipBoard(clientTemplate)"> COPY </button>
+      <button @click="copyToClipBoard(clientTemplate)">COPY</button>
     </div>
 
-    <!-- log -->
+    <!-- current log -->
     <div class="log">
       <label class="label"> Usage Log </label>
       <button
@@ -93,6 +93,30 @@
             {{ customersUnlocked[index].surName }}
           </span>
         </div>
+      </div>
+    </div>
+
+    <!-- timeline -->
+    <div class="timeline">
+      <label class="label"> Complete Timeline: </label>
+      <div
+        class="item flex around"
+        v-for="(item, index) in doc.timeline"
+        :key="index"
+      >
+        <span>
+          Action: <br />
+          {{ item.action }}</span
+        >
+        <span>
+          Used on: <br />
+          {{ $formatDate(item.taken) }}</span
+        >
+
+        <span>
+          Customer: <br />
+          {{ item.user }}</span
+        >
       </div>
     </div>
 
@@ -164,6 +188,7 @@ const baseDoc = () => ({
     end: new Date(),
   },
   log: [],
+  timeline: [],
   blackList: [],
   description: "",
   status: false,
@@ -292,6 +317,7 @@ export default {
         validity,
         validityRange,
         log,
+        timeline,
         blackList,
         description,
         status,
@@ -303,6 +329,7 @@ export default {
         validity: validity.toString(),
         validityRange,
         log,
+        timeline: timeline === undefined ? [] : timeline,
         blackList,
         description,
         status,
