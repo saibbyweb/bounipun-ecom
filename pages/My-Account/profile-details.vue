@@ -72,9 +72,9 @@ export default {
       this.profile = profile;
     },
     async updateProfile() {
-      // await this.$post('/updateProfile', { profile: this.profile });
-      // this.updated = true;
-      // setTimeout(() => this.updated = false, 1500);
+      await this.$post('/updateProfile', { profile: this.profile });
+      this.updated = true;
+      setTimeout(() => this.updated = false, 1500);
     }
   }
 };

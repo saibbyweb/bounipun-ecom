@@ -56,73 +56,83 @@
     </div>
 
     <!-- current log -->
-    <div class="log">
-      <label class="label"> Usage Log </label>
-      <button
-        style="
-          font-size: 11px;
-          padding: 2px 5px;
-          background-color: #333333;
-          color: white;
-        "
-        v-if="doc.log.length > 0"
-        @click="populateUsageLog()"
-      >
-        Fetch Names
-      </button>
-
+    <div class="log current">
+      <label class="label"> Current Log: </label>
       <div class="flex center col">
         <div
           class="item flex around"
           v-for="(item, index) in doc.log"
           :key="index"
         >
-          <span>
-            Used on: <br />
+          <!-- <span style="width:5%;">
+            <b> S.no: </b>
+            {{ index + 1 }}</span
+          > -->
+
+          <span class="flag" v-if="customersUnlocked.length > 0">
+            <b> Country: </b> <br />
+            {{
+              unlockedCustomersWithIds[item.user].countryIsoCode +
+              " " +
+              getCountry(unlockedCustomersWithIds[item.user].countryIsoCode)
+            }}
+          </span>
+          <span v-if="customersUnlocked.length > 0">
+            <b> Name: </b> <br />
+            {{ unlockedCustomersWithIds[item.user].name }}
+          </span>
+
+          <span class="timestamp">
+            <b> Used on: </b> <br />
             {{ $formatDate(item.usedOn) }}</span
           >
 
-          <span>
+          <!-- <span>
             Customer ID: <br />
             {{ item.user }}</span
-          >
-
-          <span v-if="customersUnlocked.length > 0">
-            Name: <br />
-            {{ customersUnlocked[index].firstName }}
-            {{ customersUnlocked[index].surName }}
-          </span>
+          > -->
         </div>
       </div>
     </div>
+    <br />
 
     <!-- timeline -->
-    <div class="timeline">
+    <div class="log timeline">
       <label class="label"> Complete Timeline: </label>
       <div
         class="item flex around"
         v-for="(item, index) in doc.timeline"
         :key="index"
       >
-        <span>
-          Action: <br />
-          {{ item.action }}</span
-        >
-        <span>
-          Used on: <br />
-          {{ $formatDate(item.taken) }}</span
-        >
+        <span class="flag" v-if="customersUnlocked.length > 0">
+          <b> Country: </b> <br />
+          {{
+            unlockedCustomersWithIds[item.user].countryIsoCode +
+            " " +
+            getCountry(unlockedCustomersWithIds[item.user].countryIsoCode)
+          }}
+        </span>
+
+        <span v-if="customersUnlocked.length > 0">
+          <b>Name: </b> <br />
+          {{ unlockedCustomersWithIds[item.user].name }}
+        </span>
 
         <span>
-          Customer: <br />
-          {{ item.user }}</span
+          <b>Action:</b> <br />
+          {{ item.action }}</span
+        >
+
+        <span class="timestamp">
+          <b> Used on:</b> <br />
+          {{ $formatDate(item.taken) }}</span
         >
       </div>
     </div>
 
     <!-- black list -->
     <div class="black-list">
-      <div v-if="doc.log.length > 0">
+      <div v-if="customersUnlocked.length > 0">
         <label class="label"> Black List: </label>
         <autocomplete
           inputClass="small"
@@ -177,6 +187,7 @@
 </template>
 
 <script>
+import { getCountry } from "../../../helpers/countryCodes";
 /* base doc */
 const baseDoc = () => ({
   _id: "",
@@ -235,25 +246,37 @@ export default {
       return temp;
     },
     nonBlacklisted() {
-      return this.unlockedCustomersWithIds.filter((entry) => {
-        return (
+      const list = this.customersUnlocked.map((entry) => {
+        const notBlacklisted =
           this.doc.blackList.findIndex(
-            (blacklisted) => blacklisted.customer === entry.customer
-          ) === -1
-        );
+            (blacklisted) => blacklisted.customer == entry._id
+          ) === -1;
+
+        if (notBlacklisted) {
+          const item = {
+            name: this.unlockedCustomersWithIds[entry._id].name,
+            customer: entry._id,
+          };
+
+          return item;
+        }
+        return false;
       });
+
+      return list.filter((customer) => customer !== false);
     },
     unlockedCustomersWithIds() {
-      if (this.customersUnlocked.length === 0)
-        return [{ name: "Click to fetch names!", customer: false }];
+      if (this.customersUnlocked.length === 0) return {};
 
-      let list = this.doc.log.map((item, index) => {
-        const { firstName, surName } = this.customersUnlocked[index];
-        return {
+      let list = {};
+      for (const customer of this.customersUnlocked) {
+        const { _id, firstName, surName, countryIsoCode } = customer;
+        list[_id] = {
           name: firstName + " " + surName,
-          customer: item.user,
+          countryIsoCode,
+          customer: _id,
         };
-      });
+      }
 
       return list;
     },
@@ -309,7 +332,7 @@ export default {
       this.resetForm();
       this.$flash(this);
     },
-    populateForm(details) {
+    async populateForm(details) {
       const {
         _id,
         code,
@@ -334,6 +357,7 @@ export default {
         description,
         status,
       };
+      await this.populateUsageLog();
       this.editMode = true;
     },
     closeForm() {
@@ -346,10 +370,20 @@ export default {
       this.editMode = false;
     },
     async populateUsageLog() {
+      /* collection user ids */
+      let allIds = [];
+      const currentLogIds = this.doc.log.map((item) => item.user);
+      const timelineIds = this.doc.timeline.map((item) => item.user);
+      allIds = [...currentLogIds, ...timelineIds];
+      /* remove duplicates */
+      allIds = [...new Set(allIds)];
+
+      console.log(allIds.length);
+
       const result = await this.$axios.$post("/populate", {
         model: "users",
-        fields: "firstName surName",
-        _ids: this.doc.log.map((item) => item.user),
+        fields: "firstName surName countryIsoCode",
+        _ids: allIds,
       });
 
       if (result.length > 0) {
@@ -366,6 +400,13 @@ export default {
     },
     removeFromBlacklist(index) {
       this.doc.blackList.splice(index, 1);
+    },
+    getCountry(isoCode) {
+      const country = getCountry(isoCode);
+      if (country === false) {
+        return " ";
+      }
+      return country.unicodeFlag;
     },
   },
 };
@@ -425,11 +466,28 @@ export default {
     border: 1px dashed #efefef;
     width: 100%;
     span {
-      font-size: 11px;
-      background-color: $dark_gray;
-      color: white;
+      font-size: 12px;
+      color: rgb(51, 51, 51);
       padding: 2px;
       margin: 5px;
+
+      b {
+        font-size: 11px;
+        box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.172);
+        background-color: rgb(134, 172, 243);
+        color: white;
+        border-radius: 2px;
+        padding: 1px 6px;
+      }
+
+      &.flag {
+        font-size: 13px;
+        width: 10%;
+      }
+
+      &.timestamp {
+        width: 25%;
+      }
     }
   }
 }
