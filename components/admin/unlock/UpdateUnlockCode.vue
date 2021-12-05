@@ -42,7 +42,8 @@
     <div class="section">
       <label class="label"> Invitation: </label>
       <InputBox v-model="clientName" label="Client Name" :internal="true" />
-      <InputBox v-model="link" label="Link" :internal="true" />
+
+      <SelectBox :internal="true" label="Select Link" :options="allSlugs" v-model="link" />
 
       <!-- description -->
       <TextBox
@@ -236,7 +237,8 @@ export default {
       customersUnlocked: [],
       clientName: "",
       link: "",
-    };
+      allSlugs: []
+    }
   },
   computed: {
     clientTemplate() {
@@ -281,7 +283,20 @@ export default {
       return list;
     },
   },
+  mounted() {
+    this.getListofLockablePages();
+  },
   methods: {
+    async getListofLockablePages() {
+      const {docs: allCollections} = await this.$fetchData("collections",{}, true);
+      const {docs: allProductLists} = await this.$fetchData("product_lists", {}, true);
+
+      const collectionSlugs = allCollections.map(col => '/collections?slug=' + col.slug);
+      const productListSlugs = allProductLists.map(list => '/lists/' + list.slug + '?c=1');
+      
+      const allSlugs = [...collectionSlugs, ...productListSlugs].map(slug => ({name: location.host + slug, value:location.host + slug }));
+      this.allSlugs = allSlugs;
+    },
     copyToClipBoard(textToCopy) {
       const tmpTextField = document.createElement("textarea");
       tmpTextField.textContent = textToCopy;
