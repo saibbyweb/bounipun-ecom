@@ -5,11 +5,7 @@
 
     <!-- preview link -->
     <div class="center">
-      <a
-        v-if="editMode"
-        :href="`/lists/${doc.slug}`"
-        target="_blank"
-      >
+      <a v-if="editMode" :href="`/lists/${doc.slug}`" target="_blank">
         <span
           style="
             background: #333;
@@ -55,7 +51,12 @@
     <!-- product autocomplete list -->
     <div class="section">
       <client-only>
-        <label class="label"> List of Products: </label>
+        <label class="label"> List of Products: ({{ doc.list.length }})</label>
+        <button class="action small" @click="toggleSelectAll">
+          Select All
+        </button>
+        <br />
+        <br />
         <autocomplete
           inputClass="small"
           ref="autocomplete"
@@ -65,7 +66,8 @@
         >
         </autocomplete>
       </client-only>
-
+      <br>
+      <!-- list of products selected -->
       <div class="list">
         <div
           class="selected"
@@ -77,6 +79,7 @@
         </div>
       </div>
     </div>
+
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
 
@@ -147,7 +150,7 @@ const baseDoc = () => ({
   text: "",
   lockedImage: "",
   lockedText: "",
-  lock: "",
+  lock: false,
   description: "",
   status: false,
 });
@@ -166,6 +169,7 @@ export default {
         status: false,
         msg: "",
       },
+      allSelected: false,
     };
   },
   computed: {
@@ -184,6 +188,14 @@ export default {
     this.fetchAllProducts();
   },
   methods: {
+    toggleSelectAll() {
+      this.allSelected = !this.allSelected;
+      this.doc.list = [];
+      if (!this.allSelected) {
+        return;
+      }
+      this.doc.list = this.allProducts.map((pro) => pro._id);
+    },
     imageListUpdated(list, type) {
       switch (type) {
         case "image":
@@ -301,6 +313,7 @@ export default {
       this.$refs.imageUploader.clearFileSelection();
       this.$refs.lockedImageUploader.clearFileSelection();
       this.populateForm(baseDoc());
+      this.allSelected = false;
       this.editMode = false;
     },
   },
@@ -318,7 +331,7 @@ export default {
     background: #d68595;
     color: white;
     border-radius: 20px;
-    padding: 7px;
+    padding: 2px 4px;
     margin: 2px;
     display: flex;
     align-items: center;

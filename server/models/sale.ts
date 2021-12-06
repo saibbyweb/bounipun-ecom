@@ -267,7 +267,7 @@ export const methods = {
       return {
         updated: false,
         msg: `Product list is already under a different sale: ${underSale.name}`,
-      };
+      }
     }
 
     /* product list */
