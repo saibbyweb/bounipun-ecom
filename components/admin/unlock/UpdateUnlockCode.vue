@@ -44,16 +44,22 @@
       <InputBox v-model="clientName" label="Client Name" :internal="true" />
 
       <SelectBox :internal="true" label="Select Link" :options="allSlugs" v-model="link" />
-
+      
       <!-- description -->
       <TextBox
         v-model="doc.description"
         label="Invitation Template:"
+        :nonAdmin="true"
         :internal="true"
       />
+      <div class="flex center">
+      <span style="font-size:12px; color: gray; text-align:center; width:100%;"> Variable that can be used within ##: [client, link, start, end ]</span>
+      </div>
+      <br/>
+
       <label class="label"> Client Template: </label><br />
       <span style="font-size: 13px"> {{ clientTemplate }} </span>
-      <button @click="copyToClipBoard(clientTemplate)">COPY</button>
+      <button @click="copyToClipBoard(clientTemplate)" class="copy">COPY</button>
     </div>
 
     <!-- current log -->
@@ -245,6 +251,8 @@ export default {
       let temp = this.doc.description.replace("##client##", this.clientName);
       temp = temp.replace("##code##", this.doc.code);
       temp = temp.replace("##link##", `${this.link}&code=${this.doc.code}`);
+      temp = temp.replace('##start##', this.$formatDate(this.doc.validityRange.start, true))
+      temp = temp.replace('##end##', this.$formatDate(this.doc.validityRange.end, true));
       return temp;
     },
     nonBlacklisted() {
@@ -464,6 +472,18 @@ export default {
   padding: 5px 5px 30px 5px;
   border-radius: 5px;
   overflow: hidden;
+
+  .copy {
+    transition: all 0.1s ease-in-out;
+    background-color: rgb(77, 181, 230);
+    color: white;
+    &:hover {
+        background-color: rgb(218, 206, 45);
+    }
+    &:active {
+      background-color: rgb(32, 211, 113);
+    }
+  }
 }
 
 .label {

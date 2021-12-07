@@ -256,7 +256,7 @@ export default (context, inject) => {
   };
 
   /* format date */
-  const formatDate = function(date) {
+  const formatDate = function(date, onlyDate = false) {
     date = new Date(date);
     const months = [
       "January",
@@ -272,16 +272,18 @@ export default (context, inject) => {
       "November",
       "December"
     ];
-    return (
-      date.getDate() +
-      " " +
-      months[date.getMonth()] +
-      ", " +
-      date.getFullYear() +
-      " - " +
-      date.toLocaleTimeString()
-      + " IST"
-    );
+
+    const day = date.getDate() +
+    " " +
+    months[date.getMonth()] +
+    ", " +
+    date.getFullYear();
+
+    if(onlyDate)
+      return day;
+
+    return day + " - " + date.toLocaleTimeString() + " IST"
+
   };
 
   inject("fetchCollection", fetchCollection);
