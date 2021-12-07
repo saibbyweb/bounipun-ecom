@@ -25,10 +25,10 @@
       label="Select Currency"
     />
     <!-- coupon type -->
-    <InputBox label="Value" v-model="doc.value" type="number" />
+    <InputBox label="Percentage (or Value)" v-model="doc.value" type="number" />
     <!-- coupon validity -->
     <InputBox
-      label="Validity (Total number of allowed uses)"
+      label="Total number of allowed uses)"
       v-model="doc.validity"
       type="number"
     />
