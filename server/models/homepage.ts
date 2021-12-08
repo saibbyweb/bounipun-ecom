@@ -69,7 +69,7 @@ const model = mongoose.model('homepages', schema);
 /* helper methods */
 export const methods = {
     register() {
-        console.log('registered');
+        console.log('registered homepages');
     },
     async updateLayouts(details, editMode) {
         if (details.status === false)

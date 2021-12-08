@@ -29,13 +29,13 @@
     </div>
     <!-- update lab form -->
     <div :class="{ updating: showForm }" class="update">
-      <!-- <UpdateCoupon
+      <UpdateLab
         v-show="showForm"
         ref="updateComponent"
         @updated="updateList"
         :model="model"
         @close="showForm = false"
-      /> -->
+      />
       <AddNewItem v-if="!showForm" label="Bounipun Lab Layout" @showForm="showForm = true" />
     </div>
   </div>

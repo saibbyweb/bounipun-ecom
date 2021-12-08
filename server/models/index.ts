@@ -26,6 +26,7 @@ import notification from "./notification";
 import unlock from "./unlock";
 import currency from "./currency";
 import pages from "./pages";
+import lab from "./lab";
 
 const register = function () {
   imageUpload.methods.register();
@@ -56,6 +57,7 @@ const register = function () {
   unlock.methods.register();
   currency.methods.register();
   pages.methods.register();
+  lab.methods.register();
 };
 
 export {
@@ -87,5 +89,6 @@ export {
   unlock,
   currency,
   pages,
-  register
+  lab,
+  register,
 };

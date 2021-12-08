@@ -11,7 +11,7 @@ const schema = new mongoose.Schema({
 });
 
 /* model */
-const modelName = 'lab';
+const modelName = 'pages';
 const model = mongoose.model(modelName, schema);
 
 /* helper methods */

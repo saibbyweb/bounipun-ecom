@@ -140,6 +140,11 @@ export default {
           desc: "...",
         },
         {
+          name: "Lab",
+          path: "/admin-panel/lab",
+          desc: '...'
+        },
+        {
           name: "Currencies",
           path: "/admin-panel/currency",
           onlyDev: true,
