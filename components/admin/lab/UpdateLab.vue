@@ -21,7 +21,8 @@
 
     <!-- loop through all collection blocks -->
     <div class="blocks">
-      <label class="label"> Hero Blocks </label>
+      <label class="label"> Hero Blocks: </label>
+      <br /> <br/>
       <Accordion
         v-for="(heroBlock, index) in doc.heroBlocks"
         :key="heroBlock.key"
@@ -126,6 +127,8 @@ export default {
       }
     },
     removeBlock(property, index) {
+      if(this.doc[property].length <= 1)
+        return;
       this.doc[property].splice(index, 1);
     },
     async updateDocument() {
@@ -206,7 +209,7 @@ export default {
 
 .blocks {
   padding: 2%;
-
+  border: 1px solid #efefef;
   .block {
     border: 2px dotted #efefef;
     position: relative;
@@ -220,7 +223,7 @@ export default {
 
   .label {
     font-family: $font_2_bold;
-    font-size: 15px;
+    font-size: 14px;
   }
 }
 
