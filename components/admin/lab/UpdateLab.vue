@@ -1,7 +1,9 @@
 <template>
   <div class="contents">
     <CancelUpdate @close="closeForm" />
-    <h2 class="heading">{{ editMode ? "Update" : "Add New" }} Bounipun Lab Layout </h2>
+    <h2 class="heading">
+      {{ editMode ? "Update" : "Add New" }} Bounipun Lab Layout
+    </h2>
     <!-- FAQ ID -->
     <InputBox
       v-if="editMode"
@@ -12,6 +14,17 @@
     />
     <!-- Layout name -->
     <InputBox label="Layout Name" v-model="doc.name" />
+    <!-- Page title -->
+    <InputBox label="Page Title" v-model="doc.title" />
+    <!-- Page tagline -->
+    <InputBox label="Page Title" v-model="doc.tagline" />
+    <!-- loop through all collection blocks -->
+    <div class="blocks">
+      <div class="block" v-for="heroBlock in doc.heroBlocks" :key="heroBlock.key">
+        
+      </div>
+    </div>
+
     <!-- Description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
 
@@ -34,7 +47,7 @@
         class="action delete"
         :disabled="loading"
       >
-        Delete 
+        Delete
       </button>
     </div>
   </div>
@@ -42,43 +55,43 @@
 
 <script>
 import { v4 as uuidv4 } from "uuid";
+
+/* base doc */
+const baseDoc = () => ({
+  _id: "",
+  name: "",
+  title: "",
+  taglin: "",
+  heroBlocks: [{name: "", paragraph: "", visible: false, key: uuidv4()}],
+  description: "",
+  status: false,
+});
+
 export default {
   props: {
-    model: String
+    model: String,
   },
   data() {
     return {
       editMode: false,
-      doc: {
-        _id: "",
-        name: "",
-        description: "",
-        questions: [
-          {
-            title: "",
-            answer: "",
-            key: uuidv4()
-          }
-        ],
-        status: false
-      },
+      doc: baseDoc(),
       dragEnabled: false,
       loading: false,
-      updated: false
-    };
+      updated: false,
+    }
   },
-  mounted() {},
   methods: {
     onDragEnd(event) {},
-    addNewQuestion() {
-      this.doc.questions.push({
-        title: "",
-        answer: "",
-        key: uuidv4()
+    addNewHeroBlock() {
+      this.doc.heroBlocks.push({
+        name: "",
+        paragraph: "",
+        status: false,
+        key: uuidv4(),
       });
     },
-    removeQuestion(index) {
-      this.doc.questions.splice(index, 1);
+    removeBlock(property, index) {
+      this.doc[property].splice(index, 1);
     },
     async updateDocument() {
       this.loading = true;
@@ -92,7 +105,10 @@ export default {
       if (!result.updated) return;
 
       this.$emit("updated");
-      result.doc.questions = result.doc.questions.map(que => ({...que, key : uuidv4()}));
+      result.doc.heroBlocks = result.doc.heroBlocks.map((block) => ({
+        ...block,
+        key: uuidv4(),
+      }));
       this.populateForm(result.doc);
       this.$flash(this);
     },
@@ -108,14 +124,11 @@ export default {
       this.$flash(this);
     },
     populateForm(details) {
-      const { _id, name, questions, description, status } = details;
-      this.doc = {
-        _id,
-        name,
-        questions,
-        description,
-        status
-      };
+      const keys = Object.keys(details);
+      for(const key of keys) {
+        if(details[key] !== undefined)
+          this.doc[key] = details[key];
+      }
       this.editMode = true;
     },
     closeForm() {
@@ -123,16 +136,10 @@ export default {
       this.$emit("close");
     },
     resetForm() {
-      this.populateForm({
-        _id: "",
-        name: "",
-        questions: [],
-        description: "",
-        status: false
-      });
+      this.populateForm(baseDoc());
       this.editMode = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
