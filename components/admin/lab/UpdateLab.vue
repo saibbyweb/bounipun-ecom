@@ -17,11 +17,35 @@
     <!-- Page title -->
     <InputBox label="Page Title" v-model="doc.title" />
     <!-- Page tagline -->
-    <InputBox label="Page Title" v-model="doc.tagline" />
+    <InputBox label="Page Tagline" v-model="doc.tagline" />
+
     <!-- loop through all collection blocks -->
     <div class="blocks">
-      <div class="block" v-for="heroBlock in doc.heroBlocks" :key="heroBlock.key">
-        
+      <label class="label"> Hero Blocks </label>
+      <Accordion
+        v-for="(heroBlock, index) in doc.heroBlocks"
+        :key="heroBlock.key"
+        :heading="`#${index + 1} - ${heroBlock.name}`"
+      >
+        <div class="block">
+          <img
+            class="delete"
+            src="/icons/dark/remove-cart-item.png"
+            @click="removeBlock('heroBlocks', index)"
+          />
+          <!-- hero block name -->
+          <InputBox label="Hero Block Name" v-model="heroBlock.name" />
+          <!-- hero block paragraph -->
+          <TextBox label="Hero Block Paragraph" v-model="heroBlock.paragraph" />
+          <!-- visibility toggle -->
+          <Toggle v-model="heroBlock.visible" label="Visibility" />
+        </div>
+      </Accordion>
+      <!-- add new hero block wrapper -->
+      <div class="flex center">
+        <button class="action" @click="addNewBlock('heroBlocks')">
+          Add New Hero Block
+        </button>
       </div>
     </div>
 
@@ -62,7 +86,14 @@ const baseDoc = () => ({
   name: "",
   title: "",
   taglin: "",
-  heroBlocks: [{name: "", paragraph: "", visible: false, key: uuidv4()}],
+  heroBlocks: [
+    {
+      name: "",
+      paragraph: "",
+      visible: false,
+      key: uuidv4(),
+    },
+  ],
   description: "",
   status: false,
 });
@@ -78,17 +109,21 @@ export default {
       dragEnabled: false,
       loading: false,
       updated: false,
-    }
+    };
   },
   methods: {
     onDragEnd(event) {},
-    addNewHeroBlock() {
-      this.doc.heroBlocks.push({
-        name: "",
-        paragraph: "",
-        status: false,
-        key: uuidv4(),
-      });
+    addNewBlock(type) {
+      switch (type) {
+        case "heroBlocks":
+          this.doc.heroBlocks.push({
+            name: "",
+            paragraph: "",
+            status: false,
+            key: uuidv4(),
+          });
+          break;
+      }
     },
     removeBlock(property, index) {
       this.doc[property].splice(index, 1);
@@ -125,9 +160,8 @@ export default {
     },
     populateForm(details) {
       const keys = Object.keys(details);
-      for(const key of keys) {
-        if(details[key] !== undefined)
-          this.doc[key] = details[key];
+      for (const key of keys) {
+        if (details[key] !== undefined) this.doc[key] = details[key];
       }
       this.editMode = true;
     },
@@ -155,6 +189,7 @@ export default {
 .ghost {
   opacity: 0;
 }
+
 .section {
   position: relative;
   margin: 10px;
@@ -164,15 +199,28 @@ export default {
 }
 
 .label {
-  font-family: $font_2_bold;
-  color: $gray;
-  text-transform: uppercase;
-  font-size: 10px;
-  padding: 2%;
-  margin-left: 5px;
-  font-weight: 900;
   &.que {
     font-size: 13px;
+  }
+}
+
+.blocks {
+  padding: 2%;
+
+  .block {
+    border: 2px dotted #efefef;
+    position: relative;
+    .delete {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      width: 6%;
+    }
+  }
+
+  .label {
+    font-family: $font_2_bold;
+    font-size: 15px;
   }
 }
 
@@ -189,6 +237,7 @@ export default {
       cursor: pointer;
     }
   }
+
   margin-bottom: 10px;
 }
 
