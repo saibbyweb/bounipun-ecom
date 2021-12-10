@@ -148,7 +148,7 @@ export default {
         text-align: center;
         &::placeholder {
           font-size: 1.7vw;
-          color: #efefef;
+          color: #9d9d9d;
         }
 
         @media (max-width: 768px) {
@@ -156,7 +156,6 @@ export default {
 
           &::placeholder {
             font-size: 3.4vw;
-            color: #efefef;
           }
         }
       }

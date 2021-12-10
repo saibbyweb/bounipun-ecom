@@ -56,6 +56,7 @@
 
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
+    
     <!-- update button -->
     <div class="center-space">
       <!-- loading bar -->
