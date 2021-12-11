@@ -36,7 +36,11 @@
         :model="model"
         @close="showForm = false"
       />
-      <AddNewItem v-if="!showForm" label="Bounipun Lab Layout" @showForm="showForm = true" />
+      <AddNewItem
+        v-if="!showForm"
+        label="Bounipun Lab Layout"
+        @showForm="showForm = true"
+      />
     </div>
   </div>
 </template>
@@ -64,7 +68,7 @@ export default {
       list: [],
       sortByFields: ["description", "status"],
       headings: ["_id", "name", "description", "status"],
-    };
+    }
   },
   async mounted() {
     // await this.fetchList();
@@ -81,9 +85,21 @@ export default {
       };
     },
     documentFetched(doc) {
+      const updateComponent = this.$refs.updateComponent;
       this.showForm = true;
       this.editMode = true;
-      this.$refs.updateComponent.populateForm(doc);
+      updateComponent.populateForm(doc);
+
+      const { heroImage } = doc;
+      if (heroImage !== "" || heroImage !== undefined) {
+        updateComponent.$refs.imageUploader_heroImage.assignImages([
+          {
+            _id: "",
+            mainImage: false,
+            path: heroImage,
+          },
+        ]);
+      }
     },
     resultsFetched(result) {
       if (result.docs.length === 0) {
@@ -94,7 +110,10 @@ export default {
       /* extract list */
       this.list = result.docs.map(({ _id, name, description, status }) => {
         return {
-          _id, name, description, status
+          _id,
+          name,
+          description,
+          status,
         };
       });
     },

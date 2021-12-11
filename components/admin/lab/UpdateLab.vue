@@ -18,11 +18,19 @@
     <InputBox label="Page Title" v-model="doc.title" />
     <!-- Page tagline -->
     <InputBox label="Page Tagline" v-model="doc.tagline" />
+    <!-- set hero image -->
+    <UploadImage
+      :multiple="false"
+      ref="imageUploader_heroImage"
+      label="Set Hero Image"
+      @updated="imageListUpdated($event, 'heroImage')"
+    />
 
     <!-- loop through all collection blocks -->
     <div class="blocks">
       <label class="label"> Hero Blocks: </label>
-      <br /> <br/>
+      <br />
+      <br />
       <Accordion
         v-for="(heroBlock, index) in doc.heroBlocks"
         :key="heroBlock.key"
@@ -86,7 +94,8 @@ const baseDoc = () => ({
   _id: "",
   name: "",
   title: "",
-  taglin: "",
+  tagline: "",
+  heroImage:"",
   heroBlocks: [
     {
       name: "",
@@ -114,6 +123,13 @@ export default {
   },
   methods: {
     onDragEnd(event) {},
+    imageListUpdated(list, property) {
+      switch(property) {
+        case 'heroImage':
+          this.doc.heroImage = list.length > 0 ? list[0].path : "";
+          break;
+      }
+    },
     addNewBlock(type) {
       switch (type) {
         case "heroBlocks":
@@ -127,8 +143,7 @@ export default {
       }
     },
     removeBlock(property, index) {
-      if(this.doc[property].length <= 1)
-        return;
+      if (this.doc[property].length <= 1) return;
       this.doc[property].splice(index, 1);
     },
     async updateDocument() {

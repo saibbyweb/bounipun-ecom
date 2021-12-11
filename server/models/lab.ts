@@ -7,6 +7,8 @@ const schema = new mongoose.Schema(
     title: String,
     /* tagline below the page */
     tagline: String,
+    /* hero image */
+    heroImage: String,
     /* hero blocks */
     heroBlocks: [{ name: String, paragraph: String, visible: Boolean }],
     description: String,
