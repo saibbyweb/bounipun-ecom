@@ -18,12 +18,20 @@
     <InputBox label="Page Title" v-model="doc.title" />
     <!-- Page tagline -->
     <InputBox label="Page Tagline" v-model="doc.tagline" />
-    <!-- set hero image -->
+    <!-- set hero image (desktop) -->
     <UploadImage
       :multiple="false"
       ref="imageUploader_heroImage"
-      label="Set Hero Image"
+      label="Set Hero Image (Desktop)"
       @updated="imageListUpdated($event, 'heroImage')"
+    />
+
+        <!-- set hero image (mobile) -->
+    <UploadImage
+      :multiple="false"
+      ref="imageUploader_heroImageMobile"
+      label="Set Hero Image (Mobile)"
+      @updated="imageListUpdated($event, 'heroImageMobile')"
     />
 
     <!-- loop through all collection blocks -->
@@ -96,6 +104,7 @@ const baseDoc = () => ({
   title: "",
   tagline: "",
   heroImage:"",
+  heroImageMobile: "",
   heroBlocks: [
     {
       name: "",
@@ -126,7 +135,8 @@ export default {
     imageListUpdated(list, property) {
       switch(property) {
         case 'heroImage':
-          this.doc.heroImage = list.length > 0 ? list[0].path : "";
+        case 'heroImageMobile':
+          this.doc[property] = list.length > 0 ? list[0].path : "";
           break;
       }
     },

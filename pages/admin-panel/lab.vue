@@ -68,7 +68,7 @@ export default {
       list: [],
       sortByFields: ["description", "status"],
       headings: ["_id", "name", "description", "status"],
-    }
+    };
   },
   async mounted() {
     // await this.fetchList();
@@ -91,12 +91,19 @@ export default {
       updateComponent.populateForm(doc);
 
       const { heroImage } = doc;
-      if (heroImage !== "" || heroImage !== undefined) {
-        updateComponent.$refs.imageUploader_heroImage.assignImages([
+
+      this.setSingleImage('heroImage', doc)
+      this.setSingleImage('heroImageMobile', doc);
+
+    },
+    setSingleImage(property, doc) {
+           const updateComponent = this.$refs.updateComponent;
+      if (doc[property] !== "" || doc[property] !== undefined) {
+        updateComponent.$refs[`imageUploader_${property}`].assignImages([
           {
             _id: "",
             mainImage: false,
-            path: heroImage,
+            path: doc[property],
           },
         ]);
       }
