@@ -51,7 +51,9 @@
             @click="removeBlock('heroBlocks', index)"
           />
           <!-- hero block name -->
-          <InputBox label="Hero Block Name" v-model="heroBlock.name" />
+          <InputBox label="Hero Block Name" v-model="heroBlock.name" @input="setAlias($event, heroBlock)"/>
+          <!-- hero name alias -->
+          <InputBox label="Alias" v-model="heroBlock.alias" :disabled="true" />
           <!-- hero block paragraph -->
           <TextBox label="Hero Block Paragraph" v-model="heroBlock.paragraph" />
           <!-- visibility toggle -->
@@ -63,6 +65,16 @@
         <button class="action" @click="addNewBlock('heroBlocks')">
           Add New Hero Block
         </button>
+      </div>
+    </div>
+
+
+    <!-- loop through all heroBlocks -->
+    <div class="hero-block-details">
+      <div class="hero-block-detail" v-for="heroBlock in doc.heroBlock" :key="heroBlock.newKey()">
+        <div class="sub-elements" v-for="subElements in doc.heroBlockDetails[heroBlock.alias]" :key="subElements.newKey()">
+          
+        </div>
       </div>
     </div>
 
@@ -81,6 +93,9 @@
       <button @click="updateDocument" class="action" :disabled="loading">
         {{ editMode ? "Apply Changes" : "Add New Layout" }}
       </button>
+
+
+
       <!-- delete document -->
       <button
         v-if="editMode"
@@ -96,6 +111,7 @@
 
 <script>
 import { v4 as uuidv4 } from "uuid";
+import slugify from "slugify";
 
 /* base doc */
 const baseDoc = () => ({
@@ -111,7 +127,11 @@ const baseDoc = () => ({
       paragraph: "",
       visible: false,
       key: uuidv4(),
+      newKey:() => uuidv4()
     },
+  ],
+  heroBlockDetails: [
+    
   ],
   description: "",
   status: false,
@@ -131,7 +151,12 @@ export default {
     };
   },
   methods: {
-    onDragEnd(event) {},
+    setAlias(value, heroBlock) {
+      heroBlock.alias = slugify(value.toLowerCase());
+    },
+    newKey() {
+      return uuidv4();
+    },
     imageListUpdated(list, property) {
       switch(property) {
         case 'heroImage':
@@ -145,6 +170,7 @@ export default {
         case "heroBlocks":
           this.doc.heroBlocks.push({
             name: "",
+            alias: "",
             paragraph: "",
             status: false,
             key: uuidv4(),
@@ -171,6 +197,7 @@ export default {
       result.doc.heroBlocks = result.doc.heroBlocks.map((block) => ({
         ...block,
         key: uuidv4(),
+        newKey: () => uuidv4()
       }));
       this.populateForm(result.doc);
       this.$flash(this);

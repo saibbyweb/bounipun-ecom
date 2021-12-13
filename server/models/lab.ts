@@ -12,7 +12,7 @@ const schema = new mongoose.Schema(
     /* hero image mobile */
     heroImageMobile: String,
     /* hero blocks */
-    heroBlocks: [{ name: String, paragraph: String, visible: Boolean }],
+    heroBlocks: [{ name: String, alias: String, paragraph: String, visible: Boolean }],
     description: String,
     status: Boolean,
   },
