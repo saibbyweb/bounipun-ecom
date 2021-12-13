@@ -72,8 +72,9 @@
     <!-- loop through all heroBlocks -->
     <div class="hero-block-details">
       <div class="hero-block-detail" v-for="heroBlock in doc.heroBlock" :key="heroBlock.newKey()">
-        <div class="sub-elements" v-for="subElements in doc.heroBlockDetails[heroBlock.alias]" :key="subElements.newKey()">
-          
+        <div class="sub-elements" v-for="subElements in doc.heroBlockDetails[heroBlock.key]" :key="subElements.newKey()">
+            <span> This one is for: {{ heroBlock.name }} </span>
+
         </div>
       </div>
     </div>
@@ -93,8 +94,6 @@
       <button @click="updateDocument" class="action" :disabled="loading">
         {{ editMode ? "Apply Changes" : "Add New Layout" }}
       </button>
-
-
 
       <!-- delete document -->
       <button
@@ -168,13 +167,17 @@ export default {
     addNewBlock(type) {
       switch (type) {
         case "heroBlocks":
+          const key = uuidv4();
           this.doc.heroBlocks.push({
             name: "",
             alias: "",
             paragraph: "",
             status: false,
-            key: uuidv4(),
+            key
           });
+
+          /* create an object for block detail */
+          this.doc.heroBlockDetails[key] = {}
           break;
       }
     },
