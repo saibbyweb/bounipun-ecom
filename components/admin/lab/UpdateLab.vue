@@ -26,7 +26,7 @@
       @updated="imageListUpdated($event, 'heroImage')"
     />
 
-        <!-- set hero image (mobile) -->
+    <!-- set hero image (mobile) -->
     <UploadImage
       :multiple="false"
       ref="imageUploader_heroImageMobile"
@@ -51,7 +51,11 @@
             @click="removeBlock('heroBlocks', index)"
           />
           <!-- hero block name -->
-          <InputBox label="Hero Block Name" v-model="heroBlock.name" @input="setAlias($event, heroBlock)"/>
+          <InputBox
+            label="Hero Block Name"
+            v-model="heroBlock.name"
+            @input="setAlias($event, heroBlock)"
+          />
           <!-- hero name alias -->
           <InputBox label="Alias" v-model="heroBlock.alias" :disabled="true" />
           <!-- hero block paragraph -->
@@ -68,14 +72,24 @@
       </div>
     </div>
 
-
     <!-- loop through all heroBlocks -->
-    <div class="hero-block-details">
-      <div class="hero-block-detail" v-for="heroBlock in doc.heroBlock" :key="heroBlock.newKey()">
-        <div class="sub-elements" v-for="subElements in doc.heroBlockDetails[heroBlock.key]" :key="subElements.newKey()">
-            <span> This one is for: {{ heroBlock.name }} </span>
-
-        </div>
+    <div class="hero-block-details" v-if="doc.heroBlocks.length > 0">
+      <div
+        class="hero-block-detail"
+        v-for="heroBlock in doc.heroBlocks"
+        :key="heroBlock"
+      >
+        <!-- image 1 -->
+        <!-- title -->
+        <InputBox
+          :label="`Title for [${heroBlock.name}]`"
+          v-model="doc.heroBlockDetails[heroBlock.key].title"
+        />
+        <!-- paragraph -->
+        <TextBox
+          :label="`Paragraph for [${heroBlock.name}]`"
+          v-model="doc.heroBlockDetails[heroBlock.key].paragraph"
+        />
       </div>
     </div>
 
@@ -113,28 +127,30 @@ import { v4 as uuidv4 } from "uuid";
 import slugify from "slugify";
 
 /* base doc */
-const baseDoc = () => ({
-  _id: "",
-  name: "",
-  title: "",
-  tagline: "",
-  heroImage:"",
-  heroImageMobile: "",
-  heroBlocks: [
-    {
-      name: "",
-      paragraph: "",
-      visible: false,
-      key: uuidv4(),
-      newKey:() => uuidv4()
-    },
-  ],
-  heroBlockDetails: [
-    
-  ],
-  description: "",
-  status: false,
-});
+const baseDoc = () => {
+  const key = uuidv4();
+
+  return {
+    _id: "",
+    name: "",
+    title: "",
+    tagline: "",
+    heroImage: "",
+    heroImageMobile: "",
+    heroBlocks: [
+      {
+        name: "",
+        paragraph: "",
+        visible: false,
+        key: key,
+        newKey: () => uuidv4(),
+      },
+    ],
+    heroBlockDetails: { [key]: { title: "", paragraph: "" } },
+    description: "",
+    status: false,
+  };
+};
 
 export default {
   props: {
@@ -157,9 +173,9 @@ export default {
       return uuidv4();
     },
     imageListUpdated(list, property) {
-      switch(property) {
-        case 'heroImage':
-        case 'heroImageMobile':
+      switch (property) {
+        case "heroImage":
+        case "heroImageMobile":
           this.doc[property] = list.length > 0 ? list[0].path : "";
           break;
       }
@@ -173,11 +189,14 @@ export default {
             alias: "",
             paragraph: "",
             status: false,
-            key
+            key,
           });
 
           /* create an object for block detail */
-          this.doc.heroBlockDetails[key] = {}
+          this.doc.heroBlockDetails[key] = {
+            title: "",
+            paragraph: "",
+          };
           break;
       }
     },
@@ -197,11 +216,13 @@ export default {
       if (!result.updated) return;
 
       this.$emit("updated");
+
       result.doc.heroBlocks = result.doc.heroBlocks.map((block) => ({
         ...block,
         key: uuidv4(),
-        newKey: () => uuidv4()
+        newKey: () => uuidv4(),
       }));
+
       this.populateForm(result.doc);
       this.$flash(this);
     },
@@ -265,9 +286,11 @@ export default {
 .blocks {
   padding: 2%;
   border: 1px solid #efefef;
+
   .block {
     border: 2px dotted #efefef;
     position: relative;
+
     .delete {
       position: absolute;
       right: 5px;

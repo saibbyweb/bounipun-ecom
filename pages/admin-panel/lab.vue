@@ -46,6 +46,7 @@
 </template>
 
 <script>
+import { v4 as uuidv4} from "uuid"
 export default {
   layout: "admin",
   data() {
@@ -88,16 +89,33 @@ export default {
       const updateComponent = this.$refs.updateComponent;
       this.showForm = true;
       this.editMode = true;
+
+      doc.heroBlocks = doc.heroBlocks.map((block) => ({
+        ...block,
+        key: uuidv4(),
+        newKey: () => uuidv4(),
+      }));
+
+      /* hero block details */
+      if (!doc.heroBlockDetails) {
+        doc.heroBlockDetails = {};
+        doc.heroBlocks.forEach((block) => {
+          doc.heroBlockDetails[block.key] = {
+            title: "",
+            paragraph: "",
+          };
+        });
+      }
+
       updateComponent.populateForm(doc);
 
       const { heroImage } = doc;
 
-      this.setSingleImage('heroImage', doc)
-      this.setSingleImage('heroImageMobile', doc);
-
+      this.setSingleImage("heroImage", doc);
+      this.setSingleImage("heroImageMobile", doc);
     },
     setSingleImage(property, doc) {
-           const updateComponent = this.$refs.updateComponent;
+      const updateComponent = this.$refs.updateComponent;
       if (doc[property] !== "" || doc[property] !== undefined) {
         updateComponent.$refs[`imageUploader_${property}`].assignImages([
           {
