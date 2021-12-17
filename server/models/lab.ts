@@ -12,20 +12,22 @@ const schema = new mongoose.Schema(
     /* hero image mobile */
     heroImageMobile: String,
     /* hero blocks */
-    heroBlocks: [{ name: String, paragraph: String, visible: Boolean }],
+    heroBlocks: [{ name: String, paragraph: String, visible: Boolean, key: String }],
+    heroBlockDetails: Array,
     description: String,
     status: Boolean,
   },
   {
     timestamps: true,
   }
-);
+)
 
-const model = mongoose.model('lab', schema);
+const model = mongoose.model('lab', schema)
+
 export const methods = {
     register() {
         console.log('registered lab');
     }
 }
 
-export default { model, methods };
+export default { model, methods }

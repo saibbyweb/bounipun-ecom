@@ -89,7 +89,7 @@ export default {
       const updateComponent = this.$refs.updateComponent;
       this.showForm = true;
       this.editMode = true;
-
+      /* TODO: save key in database, use same key while retrieving */
       doc.heroBlocks = doc.heroBlocks.map((block) => ({
         ...block,
         key: uuidv4(),
@@ -101,6 +101,7 @@ export default {
         doc.heroBlockDetails = {};
         doc.heroBlocks.forEach((block) => {
           doc.heroBlockDetails[block.key] = {
+            image: "",
             title: "",
             paragraph: "",
           };
@@ -113,17 +114,27 @@ export default {
 
       this.setSingleImage("heroImage", doc);
       this.setSingleImage("heroImageMobile", doc);
+
+      const heroBlockKeys = Object.keys(doc.heroBlockDetails);
+
+      for(const key of heroBlockKeys) {
+        this.setSingleImage(`heroBlockDetails[${key}]`, doc, `heroBlockDetails_${key}`)
+      }
+  
     },
-    setSingleImage(property, doc) {
+    setSingleImage(property, doc, ref = false) {
       const updateComponent = this.$refs.updateComponent;
+      const refPart = !ref ? property : ref;
       if (doc[property] !== "" || doc[property] !== undefined) {
-        updateComponent.$refs[`imageUploader_${property}`].assignImages([
+
+        updateComponent.$refs[`imageUploader_${refPart}`].assignImages([
           {
             _id: "",
             mainImage: false,
             path: doc[property],
           },
         ]);
+
       }
     },
     resultsFetched(result) {

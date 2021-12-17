@@ -80,6 +80,12 @@
         :key="heroBlock"
       >
         <!-- image 1 -->
+        <UploadImage
+          :multiple="false"
+          :ref="`imageUploader_heroBlockDetails_${heroBlock.key}`"
+          :label="`Set Hero Block Detail Image for [${heroBlock.name}]`"
+          @updated="imageListUpdated($event, 'heroBlockDetailImage', heroBlock.key)"
+        />
         <!-- title -->
         <InputBox
           :label="`Title for [${heroBlock.name}]`"
@@ -146,7 +152,7 @@ const baseDoc = () => {
         newKey: () => uuidv4(),
       },
     ],
-    heroBlockDetails: { [key]: { title: "", paragraph: "" } },
+    heroBlockDetails: { [key]: { title: "", paragraph: "", image: "" } },
     description: "",
     status: false,
   };
@@ -172,11 +178,14 @@ export default {
     newKey() {
       return uuidv4();
     },
-    imageListUpdated(list, property) {
+    imageListUpdated(list, property, key) {
       switch (property) {
         case "heroImage":
         case "heroImageMobile":
           this.doc[property] = list.length > 0 ? list[0].path : "";
+          break;
+        case "heroBlockDetails":
+          this.doc.heroBlockDetails[key].image = list.length > 0 ? list[0].path : "";
           break;
       }
     },
