@@ -89,12 +89,13 @@ export default {
       const updateComponent = this.$refs.updateComponent;
       this.showForm = true;
       this.editMode = true;
-      /* TODO: save key in database, use same key while retrieving */
-      doc.heroBlocks = doc.heroBlocks.map((block) => ({
-        ...block,
-        key: uuidv4(),
-        newKey: () => uuidv4(),
-      }));
+
+      /* TODO: save key in database, use same key while retrieving2 */
+      // doc.heroBlocks = doc.heroBlocks.map((block) => ({
+      //   ...block,
+      //   key: uuidv4(),
+      //   // newKey: () => uuidv4(),
+      // }));
 
       /* hero block details */
       if (!doc.heroBlockDetails) {
@@ -115,11 +116,11 @@ export default {
       this.setSingleImage("heroImage", doc);
       this.setSingleImage("heroImageMobile", doc);
 
-      const heroBlockKeys = Object.keys(doc.heroBlockDetails);
+      // const heroBlockKeys = Object.keys(doc.heroBlockDetails);
 
-      for(const key of heroBlockKeys) {
-        this.setSingleImage(`heroBlockDetails[${key}]`, doc, `heroBlockDetails_${key}`)
-      }
+      // for(const key of heroBlockKeys) {
+      //   this.setSingleImage(`heroBlockDetails[${key}]`, doc, `heroBlockDetails_${key}`)
+      // }
   
     },
     setSingleImage(property, doc, ref = false) {

@@ -73,19 +73,19 @@
     </div>
 
     <!-- loop through all heroBlocks -->
-    <div class="hero-block-details" v-if="doc.heroBlocks.length > 0">
+    <div class="hero-block-details" v-if="Object.keys(doc.heroBlockDetails).length > 0">
       <div
         class="hero-block-detail"
         v-for="heroBlock in doc.heroBlocks"
-        :key="heroBlock"
+        :key="heroBlock.key"
       >
         <!-- image 1 -->
-        <UploadImage
+        <!-- <UploadImage
           :multiple="false"
           :ref="`imageUploader_heroBlockDetails_${heroBlock.key}`"
           :label="`Set Hero Block Detail Image for [${heroBlock.name}]`"
           @updated="imageListUpdated($event, 'heroBlockDetailImage', heroBlock.key)"
-        />
+        /> -->
         <!-- title -->
         <InputBox
           :label="`Title for [${heroBlock.name}]`"
@@ -149,7 +149,7 @@ const baseDoc = () => {
         paragraph: "",
         visible: false,
         key: key,
-        newKey: () => uuidv4(),
+        // newKey: () => uuidv4(),
       },
     ],
     heroBlockDetails: { [key]: { title: "", paragraph: "", image: "" } },
@@ -226,11 +226,11 @@ export default {
 
       this.$emit("updated");
 
-      result.doc.heroBlocks = result.doc.heroBlocks.map((block) => ({
-        ...block,
-        key: uuidv4(),
-        newKey: () => uuidv4(),
-      }));
+      // result.doc.heroBlocks = result.doc.heroBlocks.map((block) => ({
+      //   ...block,
+      //   key: uuidv4(),
+      //   newKey: () => uuidv4(),
+      // }));
 
       this.populateForm(result.doc);
       this.$flash(this);
@@ -247,6 +247,9 @@ export default {
       this.$flash(this);
     },
     populateForm(details) {
+      console.log(details);
+      console.log('details to be populated');
+
       const keys = Object.keys(details);
       for (const key of keys) {
         if (details[key] !== undefined) this.doc[key] = details[key];
