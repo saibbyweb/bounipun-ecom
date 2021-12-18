@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { v4 as uuidv4} from "uuid"
+import { v4 as uuidv4 } from "uuid";
 export default {
   layout: "admin",
   data() {
@@ -116,26 +116,47 @@ export default {
       this.setSingleImage("heroImage", doc);
       this.setSingleImage("heroImageMobile", doc);
 
-      // const heroBlockKeys = Object.keys(doc.heroBlockDetails);
+      const heroBlockKeys = Object.keys(doc.heroBlockDetails);
 
-      // for(const key of heroBlockKeys) {
-      //   this.setSingleImage(`heroBlockDetails[${key}]`, doc, `heroBlockDetails_${key}`)
-      // }
-  
+      setTimeout(() => {
+        for (const key of heroBlockKeys) {
+          this.setSingleImage(
+            `heroBlockDetails`,
+            doc,
+            `heroBlockDetails_${key}`, key
+          );
+        }
+      }, 500);
     },
-    setSingleImage(property, doc, ref = false) {
+    setSingleImage(property, doc, ref = false, key = false) {
       const updateComponent = this.$refs.updateComponent;
       const refPart = !ref ? property : ref;
       if (doc[property] !== "" || doc[property] !== undefined) {
+        const ref = `imageUploader_${refPart}`;
+        console.log(ref, "-- ULTIMATE REF--");
 
-        updateComponent.$refs[`imageUploader_${refPart}`].assignImages([
+        let imageComp = updateComponent.$refs[ref];
+
+        // if (imageComp === undefined) {
+        //   setTimeout(() => console.log(updateComponent.$refs[ref]), 1000);
+        // }
+
+        if (Array.isArray(imageComp)) {
+          console.log("image comp is an array", ref);
+          imageComp = imageComp[0];
+        }
+
+        if (imageComp === undefined) return;
+
+        const finalPath = !key ? doc[property] : doc[property][key]['image'] 
+
+        imageComp.assignImages([
           {
             _id: "",
             mainImage: false,
-            path: doc[property],
+            path:finalPath,
           },
         ]);
-
       }
     },
     resultsFetched(result) {

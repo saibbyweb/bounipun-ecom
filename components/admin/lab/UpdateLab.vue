@@ -80,12 +80,12 @@
         :key="heroBlock.key"
       >
         <!-- image 1 -->
-        <!-- <UploadImage
+        <UploadImage
           :multiple="false"
           :ref="`imageUploader_heroBlockDetails_${heroBlock.key}`"
           :label="`Set Hero Block Detail Image for [${heroBlock.name}]`"
-          @updated="imageListUpdated($event, 'heroBlockDetailImage', heroBlock.key)"
-        /> -->
+          @updated="imageListUpdated($event, 'heroBlockDetails', heroBlock.key)"
+        />
         <!-- title -->
         <InputBox
           :label="`Title for [${heroBlock.name}]`"
@@ -203,6 +203,7 @@ export default {
 
           /* create an object for block detail */
           this.doc.heroBlockDetails[key] = {
+            image: "",
             title: "",
             paragraph: "",
           };
@@ -210,8 +211,14 @@ export default {
       }
     },
     removeBlock(property, index) {
+      let deletedItems = [];
       if (this.doc[property].length <= 1) return;
-      this.doc[property].splice(index, 1);
+      deletedItems = this.doc[property].splice(index, 1);
+      
+      const removedBlock = deletedItems[0];
+      delete this.doc.heroBlockDetails[removedBlock.key];
+      // remove corresponding heroBlockDetail
+
     },
     async updateDocument() {
       this.loading = true;
