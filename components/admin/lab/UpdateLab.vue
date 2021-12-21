@@ -74,11 +74,12 @@
 
     <!-- loop through all heroBlocks -->
     <div class="hero-block-details" v-if="Object.keys(doc.heroBlockDetails).length > 0">
-      <div
-        class="hero-block-detail"
-        v-for="heroBlock in doc.heroBlocks"
+      <Accordion
+           v-for="heroBlock in doc.heroBlocks"
         :key="heroBlock.key"
-      >
+        :heading="`Details for: ${heroBlock.name}`">
+
+      <div class="hero-block-detail">
         <!-- image 1 -->
         <UploadImage
           :multiple="false"
@@ -86,6 +87,19 @@
           :label="`Set Hero Block Detail Image for [${heroBlock.name}]`"
           @updated="imageListUpdated($event, 'heroBlockDetails', heroBlock.key)"
         />
+
+        <!-- image 2 -->
+        <UploadImage
+          :multiple="false"
+          :ref="`imageUploader_heroBlockDetails_${heroBlock.key}`"
+          :label="`Set Hero Block Detail Image for [${heroBlock.name}]`"
+          @updated="imageListUpdated($event, 'heroBlockDetails', heroBlock.key)"
+        />
+
+
+        <div class="flex center" style="padding:10px;">
+        <button class="action small" @click="addNewImageBox()"> + Add 1 more image </button>
+        </div>
         <!-- title -->
         <InputBox
           :label="`Title for [${heroBlock.name}]`"
@@ -97,6 +111,7 @@
           v-model="doc.heroBlockDetails[heroBlock.key].paragraph"
         />
       </div>
+      </Accordion>
     </div>
 
     <!-- Description -->
@@ -321,6 +336,14 @@ export default {
   .label {
     font-family: $font_2_bold;
     font-size: 14px;
+  }
+}
+
+.hero-block-details {
+  padding: 2%;
+  .hero-block-detail {
+    border: 1px dotted #efefef;
+    box-sizing: border-box;
   }
 }
 
