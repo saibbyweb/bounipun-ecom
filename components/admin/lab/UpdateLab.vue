@@ -20,7 +20,7 @@
     <InputBox label="Page Tagline" v-model="doc.tagline" />
     <!-- set hero image (desktop) -->
     <UploadImage
-      :multiple="false"
+      :multipleUpload="false"
       ref="imageUploader_heroImage"
       label="Set Hero Image (Desktop)"
       @updated="imageListUpdated($event, 'heroImage')"
@@ -28,7 +28,7 @@
 
     <!-- set hero image (mobile) -->
     <UploadImage
-      :multiple="false"
+      :multipleUpload="false"
       ref="imageUploader_heroImageMobile"
       label="Set Hero Image (Mobile)"
       @updated="imageListUpdated($event, 'heroImageMobile')"
