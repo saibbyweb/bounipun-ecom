@@ -125,21 +125,27 @@ export default {
             doc,
             `heroBlockDetails_${key}`, key
           );
+             this.setSingleImage(
+            `heroBlockDetails`,
+            doc,
+            `heroBlockDetails2_${key}`, key, 'image2'
+          );
         }
       }, 500);
     },
-    setSingleImage(property, doc, ref = false, key = false) {
+    setSingleImage(property, doc, ref = false, key = false, lastProp='image') {
       const updateComponent = this.$refs.updateComponent;
       const refPart = !ref ? property : ref;
       if (doc[property] !== "" || doc[property] !== undefined) {
+      
         const ref = `imageUploader_${refPart}`;
-        console.log(ref, "-- ULTIMATE REF--");
 
         let imageComp = updateComponent.$refs[ref];
 
-        // if (imageComp === undefined) {
-        //   setTimeout(() => console.log(updateComponent.$refs[ref]), 1000);
-        // }
+        if (imageComp === undefined) {
+          console.log('image comp not defined')
+          return;
+        }
 
         if (Array.isArray(imageComp)) {
           console.log("image comp is an array", ref);
@@ -148,7 +154,7 @@ export default {
 
         if (imageComp === undefined) return;
 
-        const finalPath = !key ? doc[property] : doc[property][key]['image'] 
+        const finalPath = !key ? doc[property] : doc[property][key][lastProp]
 
         imageComp.assignImages([
           {

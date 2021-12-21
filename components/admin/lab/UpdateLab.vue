@@ -80,26 +80,25 @@
         :heading="`Details for: ${heroBlock.name}`">
 
       <div class="hero-block-detail">
+
+        <div class="flex center">
         <!-- image 1 -->
         <UploadImage
-          :multiple="false"
+          :multipleUpload="false"
           :ref="`imageUploader_heroBlockDetails_${heroBlock.key}`"
-          :label="`Set Hero Block Detail Image for [${heroBlock.name}]`"
+          :label="`Block Detail Image [1] for [${heroBlock.name}]`"
           @updated="imageListUpdated($event, 'heroBlockDetails', heroBlock.key)"
         />
 
         <!-- image 2 -->
         <UploadImage
-          :multiple="false"
-          :ref="`imageUploader_heroBlockDetails_${heroBlock.key}`"
-          :label="`Set Hero Block Detail Image for [${heroBlock.name}]`"
-          @updated="imageListUpdated($event, 'heroBlockDetails', heroBlock.key)"
+          :multipleUpload="false"
+          :ref="`imageUploader_heroBlockDetails2_${heroBlock.key}`"
+          :label="`Block Detail Image [2] for [${heroBlock.name}]`"
+          @updated="imageListUpdated($event, 'heroBlockDetails2', heroBlock.key)"
         />
+</div>
 
-
-        <div class="flex center" style="padding:10px;">
-        <button class="action small" @click="addNewImageBox()"> + Add 1 more image </button>
-        </div>
         <!-- title -->
         <InputBox
           :label="`Title for [${heroBlock.name}]`"
@@ -202,6 +201,8 @@ export default {
         case "heroBlockDetails":
           this.doc.heroBlockDetails[key].image = list.length > 0 ? list[0].path : "";
           break;
+        case "heroBlockDetails2":
+          this.doc.heroBlockDetails[key].image2 = list.length > 0 ? list[0].path : ""
       }
     },
     addNewBlock(type) {
@@ -219,6 +220,7 @@ export default {
           /* create an object for block detail */
           this.doc.heroBlockDetails[key] = {
             image: "",
+            image2: "",
             title: "",
             paragraph: "",
           };
