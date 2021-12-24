@@ -286,6 +286,8 @@ export default {
     },
     resetForm() {
       this.populateForm(baseDoc());
+      this.$refs.imageUploader_heroImage.clearFileSelection();
+      this.$refs.imageUploader_heroImageMobile.clearFileSelection();
       this.editMode = false;
     },
   },

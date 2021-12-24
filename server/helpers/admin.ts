@@ -1,5 +1,14 @@
 import { db, ObjectId, mongoose } from "@helpers/essentials";
-import { product, collection, homepageLayouts, faq, ticker, productLists, sales } from "@models";
+import {
+  product,
+  collection,
+  homepageLayouts,
+  faq,
+  ticker,
+  productLists,
+  sales,
+  lab
+} from "@models";
 
 export default {
   async specialUpdate(model, details, editMode) {
@@ -21,14 +30,21 @@ export default {
       case "ticker":
         await ticker.methods.updateTickers(details, editMode);
         break;
-      case 'product_lists':
-        await productLists.methods.fixSlug(details, editMode)
-        response = await productLists.methods.checkForProductWithActiveSale(details, editMode);
+      case "product_lists":
+        await productLists.methods.fixSlug(details, editMode);
+        response = await productLists.methods.checkForProductWithActiveSale(
+          details,
+          editMode
+        );
         return response;
-        break;
       case "sales":
-        response = await sales.methods.checkForProductsWithActiveSale(details, editMode);
+        response = await sales.methods.checkForProductsWithActiveSale(
+          details,
+          editMode
+        );
         return response;
+      case 'lab':
+        await lab.methods.updateLab(details, editMode);
         break;
       default:
         console.log("▫️  No pre-update case for:", model);

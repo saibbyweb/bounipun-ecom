@@ -1,4 +1,4 @@
-import { mongoose, ObjectId, task } from "@helpers/essentials";
+import { mongoose, db, ObjectId, task } from "@helpers/essentials";
 
 const schema = new mongoose.Schema(
   {
@@ -12,7 +12,15 @@ const schema = new mongoose.Schema(
     /* hero image mobile */
     heroImageMobile: String,
     /* hero blocks */
-    heroBlocks: [{ name: String, alias: String, paragraph: String, visible: Boolean, key: String }],
+    heroBlocks: [
+      {
+        name: String,
+        alias: String,
+        paragraph: String,
+        visible: Boolean,
+        key: String,
+      },
+    ],
     heroBlockDetails: Object,
     description: String,
     status: Boolean,
@@ -20,14 +28,36 @@ const schema = new mongoose.Schema(
   {
     timestamps: true,
   }
-)
+);
 
-const model = mongoose.model('lab', schema)
+const model = mongoose.model("lab", schema);
 
 export const methods = {
-    register() {
-        console.log('registered lab');
-    }
-}
+  register() {
+    console.log("registered lab");
+  },
+  async updateLab(details, editMode) {
+    if (details.status === false) return;
+    console.log('Other lab documents need status update')
 
-export default { model, methods }
+    let filter: any = {};
+    /* if edit mode, skip the existing layout */
+    if (editMode)
+        filter._id = { $ne: details._id };
+
+    const matchedDocs : any = await model.find(filter);
+
+    /* if no matched layouts found */
+    if (matchedDocs === null)
+        return;
+
+    /* update status for all matched layouts */
+    for (const doc of matchedDocs) {
+        const updated: any = await model.findOneAndUpdate({ _id: doc._id }, { status: false }, { returnOriginal: false });
+        console.log(updated.status);
+    }
+    
+  },
+};
+
+export default { model, methods };
