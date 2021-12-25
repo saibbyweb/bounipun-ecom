@@ -142,7 +142,7 @@
         India.</p>
       </Accordion>
 
-      <p style="text-align: center;">Last updated: 29th July, 2021</p>
+      <p style="text-align: center;">Last Updated: 29th July, 2021</p>
     </div>
   </div>
 </template>
