@@ -16,7 +16,8 @@
     "up": "yarn run build && yarn run start",
     "stripe:listen": "stripe listen --forward-to localhost:3000/stripeWebhook",
     "backup-prod": "./db-transport backup bounipun-ecom-prod",
-    "staging-db-restore": "./db-transport restore bounipun-ecom-stage"
+    "staging-db-restore": "./db-transport restore bounipun-ecom-stage",
+    "ssh-prod": "ssh -i ssh_keys/bounipun_ecom saibbyweb@143.110.182.246"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.12.5",
