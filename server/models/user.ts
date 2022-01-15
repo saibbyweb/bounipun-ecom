@@ -362,6 +362,7 @@ export const methods = {
         price: 0,
         pricing: {},
         sale: null,
+        askForPrice: false,
         quantity: item.quantity,
         cartEntry: item,
       };
@@ -394,6 +395,8 @@ export const methods = {
       cartItem.styleId = product.styleId;
       cartItem.productName = product.name;
       cartItem.sale = product.sale;
+      cartItem.askForPrice = product.askForPrice !== undefined ? product.askForPrice : false;
+
       /* slug */
       cartItem.slug = product.slug;
       /* color name */

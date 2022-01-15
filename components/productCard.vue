@@ -99,22 +99,52 @@
         </span>
         <span class="collection"> {{ collectionName }} </span>
 
-        <!-- if made on order and lowest and highest is not same -->
-        <span v-if="!readyToShip && !lowestAndHighestPriceisSame" class="price">
-          {{ formatCurrency(lowestVariantPrice) }}
-          -
-          {{ formatCurrency(highestVariantPirce) }}
-        </span>
+        <!-- show price is askForPrice is false -->
+        <div v-if="!product.askForPrice" class="price-box">
+          <!-- if made on order and lowest and highest is not same -->
+          <span
+            v-if="!readyToShip && !lowestAndHighestPriceisSame"
+            class="price"
+          >
+            {{ formatCurrency(lowestVariantPrice) }}
+            -
+            {{ formatCurrency(highestVariantPirce) }}
+          </span>
 
-        <!-- if made on order and lowest and highest same -->
-        <span v-if="!readyToShip && lowestAndHighestPriceisSame" class="price">
-          {{ formatCurrency(highestVariantPirce) }}
-        </span>
+          <!-- if made on order and lowest and highest same -->
+          <span
+            v-if="!readyToShip && lowestAndHighestPriceisSame"
+            class="price"
+          >
+            {{ formatCurrency(highestVariantPirce) }}
+          </span>
 
-        <!-- if ready to ship -->
-        <span v-if="readyToShip" class="price">
-          {{ formatCurrency(directPrice) }}
-        </span>
+          <!-- if ready to ship -->
+          <span v-if="readyToShip" class="price">
+            {{ formatCurrency(directPrice) }}
+          </span>
+        </div>
+
+        <!-- show ask for price -->
+        <div
+          v-else
+          class="ask-for-price flex center"
+          style="background-color: rgb(74 74 74); padding: 0 7px"
+        >
+          <!-- <img
+            style="width:12%;margin-right:2px;"
+              class="action-icon whatsapp"
+              src="/icons/light/whatsapp-aa.svg"
+            /> -->
+
+          <span
+            @click.stop="askForPrice"
+            style="text-transform: capitalize; color: white"
+            class="text"
+          >
+            Ask For Price
+          </span>
+        </div>
       </div>
     </div>
 
@@ -409,6 +439,12 @@ export default {
     };
   },
   methods: {
+    askForPrice(event) {
+      const BASE_SHARE_URL = "https://wa.me/?text=";
+      let msg = `Hi there, I would like to get a price quote for: ${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`;
+      msg = encodeURI(msg);
+      window.open(BASE_SHARE_URL + msg,'_blank');
+    },
     async toggleWishlist() {
       /* if user is not logged in, move to login page */
       if (!this.$store.state.customer.authorized) {

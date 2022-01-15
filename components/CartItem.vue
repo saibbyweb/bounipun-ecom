@@ -5,7 +5,6 @@
       class="image-container"
       :style="`background-image: url(${getS3Path(item.mainImage)})`"
     >
-      <!-- <img :src="item.mainImage" /> -->
     </div>
 
     <!-- details and quantity -->
@@ -23,9 +22,7 @@
       <!-- fabric info 1-->
       <span class="fabric"> {{ item.fabricInfo1 }} </span>
       <!-- price -->
-      <span class="price">
-        <!-- {{ currency }} {{ formatCurrency(adjustPrice(item.price)) }} -->
-
+      <span v-if="!item.askForPrice" class="price">
         {{ formatCurrency(cartItemPrice) }}
       </span>
       <!-- qty -->
@@ -50,10 +47,7 @@
       src="/icons/dark/remove-cart-item.png"
     />
     <!-- total product price -->
-    <p class="total-product-price">
-      <!-- {{ currency }} -->
-      <!-- {{ formatCurrency(item.quantity * adjustPrice(item.price)) }} -->
-
+    <p v-if="!item.askForPrice" class="total-product-price">
       {{ formatCurrency(totalCartItemPrice) }}
     </p>
   </div>

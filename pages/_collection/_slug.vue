@@ -7,12 +7,11 @@
 
     <div v-if="productFetched" class="product-page flex start">
       <div ref="productImages" class="product-images">
-      
-          <!-- discount percentage -->
-    <span class="discount" v-if="product.saleDetails">
-      -{{ product.saleDetails.discountPercentage }}%</span
-    >
-    
+        <!-- discount percentage -->
+        <span class="discount" v-if="product.saleDetails">
+          -{{ product.saleDetails.discountPercentage }}%</span
+        >
+
         <!-- product image slideshow container with thumbnails (515px DEFAULT HEIGHT, 40 WIDTH)  -->
         <slideshow
           ref="slideshow"
@@ -54,7 +53,7 @@
             <a :href="facebookShareLink" target="_blank">
               <img src="/icons/dark/social/facebook.png" />
             </a>
-       
+
             <a :href="whatsAppShareLink" target="_blank">
               <img src="/icons/dark/social/whatsapp.png" />
             </a>
@@ -114,7 +113,7 @@
               </div>
             </div>
             <!-- price and add to cart -->
-            <div class="price-and-actions">
+            <div v-if="!product.askForPrice" class="price-and-actions">
               <div class="price">
                 <h5>
                   {{
@@ -133,7 +132,32 @@
                 </button>
                 <button class="arrow">></button>
               </div>
+
               <span style="font-size: 9px">
+                Standard Shipping: {{ shippingTime }} week(s)
+              </span>
+            </div>
+
+            <!-- show ask for price -->
+
+            <div
+              v-if="product.askForPrice === true"
+              class="ask-for-price flex col center"
+            >
+              <a :href="getAPriceLink" target="_blank">
+                <span
+                  class="text"
+                  style="
+                    background-color: rgb(74 74 74);
+                    padding: 0 7px;
+                    margin-bottom: 3px;
+                    color: white;
+                  "
+                >
+                  Ask for Price
+                </span>
+              </a>
+              <span class="text" style="font-size: 9px">
                 Standard Shipping: {{ shippingTime }} week(s)
               </span>
             </div>
@@ -560,6 +584,12 @@ export default {
       msg = encodeURI(msg);
       return BASE_SHARE_URL + msg;
     },
+    getAPriceLink() {
+      const BASE_SHARE_URL = "https://wa.me/?text=";
+      let msg = `Hi there, I would like to get a price quote for: ${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`;
+      msg = encodeURI(msg);
+      return BASE_SHARE_URL + msg;
+    },
     facebookShareLink() {
       const BASE_SHARE_URL = "https://www.facebook.com/sharer/sharer.php?u=";
       const link =
@@ -926,7 +956,7 @@ export default {
       @media (max-width: 768px) {
         font-size: 16px;
         left: 4%;
-          top: 9%;
+        top: 9%;
       }
     }
 
