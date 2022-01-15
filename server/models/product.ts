@@ -77,6 +77,10 @@ const schema = new mongoose.Schema(
       type: ObjectId, ref: 'sales',
       default: null
     },
+    askForPrice: {
+      type: Boolean, 
+      default: false
+    },
     status: Boolean,
   },
   {

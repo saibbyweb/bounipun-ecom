@@ -77,10 +77,12 @@
         :activeColor="product.actualIndex"
         :gridView="gridView"
       />
-
-      <h3 v-if="products.length === 0">
+      
+      <!-- if no products found -->
+      <h3 v-if="products.length === 0 && !$store.state.customer.loading">
         No products matched for {{ collection.name }}
       </h3>
+
     </div>
 
     <!-- if colllection is escape -->
@@ -162,6 +164,7 @@ export default {
       filterDataFetched: false,
       colorCategories: [],
       escapeProduct: [],
+      loading: false
     };
   },
   watch: {

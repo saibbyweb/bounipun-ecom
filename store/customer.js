@@ -323,7 +323,7 @@ export const actions = {
       return;
     }
     /* set country index */
-    // commit("setCountryIndex", countryIndex);
+    commit("setCountryIndex", countryIndex);
   },
   /* fetch store global config */
   async fetchGlobalConfig({ state, commit, rootState }) {

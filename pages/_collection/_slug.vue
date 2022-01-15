@@ -54,8 +54,7 @@
             <a :href="facebookShareLink" target="_blank">
               <img src="/icons/dark/social/facebook.png" />
             </a>
-            <!-- <img src="/icons/dark/social/pinterest.png" /> -->
-            <!-- <img src="/icons/dark/social/instagram.png" /> -->
+       
             <a :href="whatsAppShareLink" target="_blank">
               <img src="/icons/dark/social/whatsapp.png" />
             </a>

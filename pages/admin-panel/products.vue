@@ -253,8 +253,8 @@ export default {
     documentFetched(doc) {
       this.showForm = true;
       this.editMode = true;
+      console.log(doc,'--fetched document');
       setTimeout(() => this.populateForm(doc), 1500);
-      // this.populateForm(doc, updateComponent);
     },
     /* populate form */
     populateForm(doc) {

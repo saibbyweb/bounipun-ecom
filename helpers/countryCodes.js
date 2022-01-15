@@ -1,147 +1,112 @@
 let allCountries = [{
-	"name": "Bangladesh",
-	"currency": "BDT",
-	"unicodeFlag": "🇧🇩",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Flag_of_Bangladesh.svg",
-	"dialCode": "+880",
-	"isoCode": "BD"
+	"name": "Afghanistan",
+	"currency": "AFN",
+	"unicodeFlag": "🇦🇫",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Afghanistan_%281928%29.svg",
+	// "flag": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_the_Taliban.svg",
+	"dialCode": "+93",
+	"isoCode": "AF"
 }, {
-	"name": "Belgium",
+	"name": "Aland Islands",
 	"currency": "EUR",
-	"unicodeFlag": "🇧🇪",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/65/Flag_of_Belgium.svg",
-	"dialCode": "+32",
-	"isoCode": "BE"
-}, {
-	"name": "Burkina Faso",
-	"currency": "XOF",
-	"unicodeFlag": "🇧🇫",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/31/Flag_of_Burkina_Faso.svg",
-	"dialCode": "+226",
-	"isoCode": "BF"
-}, {
-	"name": "Bulgaria",
-	"currency": "BGN",
-	"unicodeFlag": "🇧🇬",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Bulgaria.svg",
-	"dialCode": "+359",
-	"isoCode": "BG"
-}, {
-	"name": "Bosnia and Herzegovina",
-	"currency": "BAM",
-	"unicodeFlag": "🇧🇦",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bf/Flag_of_Bosnia_and_Herzegovina.svg",
-	"dialCode": "+387",
-	"isoCode": "BA"
-}, {
-	"name": "Barbados",
-	"currency": "BBD",
-	"unicodeFlag": "🇧🇧",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Flag_of_Barbados.svg",
-	"dialCode": "+1-246",
-	"isoCode": "BB"
-}, {
-	"name": "Wallis and Futuna",
-	"currency": "XPF",
-	"unicodeFlag": "🇼🇫",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Flag_of_Wallis_and_Futuna.svg",
-	"dialCode": "+681",
-	"isoCode": "WF"
-}, {
-	"name": "Saint Barthelemy",
-	"currency": "EUR",
-	"unicodeFlag": "🇧🇱",
-	"dialCode": "+590",
+	"unicodeFlag": "🇦🇽",
+	"dialCode": "+358-18",
 	"isoCode": ""
 }, {
-	"name": "Bermuda",
-	"currency": "BMD",
-	"unicodeFlag": "🇧🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bf/Flag_of_Bermuda.svg",
-	"dialCode": "+1-441",
-	"isoCode": "BM"
+	"name": "Albania",
+	"currency": "ALL",
+	"unicodeFlag": "🇦🇱",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/36/Flag_of_Albania.svg",
+	"dialCode": "+355",
+	"isoCode": "AL"
 }, {
-	"name": "Brunei",
-	"currency": "BND",
-	"unicodeFlag": "🇧🇳",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Flag_of_Brunei.svg",
-	"dialCode": "+673",
-	"isoCode": "BN"
+	"name": "Algeria",
+	"currency": "DZD",
+	"unicodeFlag": "🇩🇿",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_Algeria.svg",
+	"dialCode": "+213",
+	"isoCode": "DZ"
 }, {
-	"name": "Bolivia",
-	"currency": "BOB",
-	"unicodeFlag": "🇧🇴",
-	"dialCode": "+591",
-	"isoCode": ""
-}, {
-	"name": "Bahrain",
-	"currency": "BHD",
-	"unicodeFlag": "🇧🇭",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Bahrain.svg",
-	"dialCode": "+973",
-	"isoCode": "BH"
-}, {
-	"name": "Burundi",
-	"currency": "BIF",
-	"unicodeFlag": "🇧🇮",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/5/50/Flag_of_Burundi.svg",
-	"dialCode": "+257",
-	"isoCode": "BI"
-}, {
-	"name": "Benin",
-	"currency": "XOF",
-	"unicodeFlag": "🇧🇯",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Flag_of_Benin.svg",
-	"dialCode": "+229",
-	"isoCode": "BJ"
-}, {
-	"name": "Bhutan",
-	"currency": "BTN",
-	"unicodeFlag": "🇧🇹",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/91/Flag_of_Bhutan.svg",
-	"dialCode": "+975",
-	"isoCode": "BT"
-}, {
-	"name": "Jamaica",
-	"currency": "JMD",
-	"unicodeFlag": "🇯🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Flag_of_Jamaica.svg",
-	"dialCode": "+1-876",
-	"isoCode": "JM"
-}, {
-	"name": "Bouvet Island",
-	"currency": "NOK",
-	"unicodeFlag": "🇧🇻",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d9/Flag_of_Norway.svg",
-	"dialCode": "",
-	"isoCode": "BV"
-}, {
-	"name": "Botswana",
-	"currency": "BWP",
-	"unicodeFlag": "🇧🇼",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_Botswana.svg",
-	"dialCode": "+267",
-	"isoCode": "BW"
-}, {
-	"name": "Samoa",
-	"currency": "WST",
-	"unicodeFlag": "🇼🇸",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/31/Flag_of_Samoa.svg",
-	"dialCode": "+685",
-	"isoCode": "WS"
-}, {
-	"name": "Bonaire, Saint Eustatius and Saba ",
+	"name": "American Samoa",
 	"currency": "USD",
-	"unicodeFlag": "🇧🇶",
-	"dialCode": "+599",
+	"unicodeFlag": "🇦🇸",
+	"dialCode": "+1-684",
 	"isoCode": ""
 }, {
-	"name": "Brazil",
-	"currency": "BRL",
-	"unicodeFlag": "🇧🇷",
-	"flag": "https://upload.wikimedia.org/wikipedia/en/0/05/Flag_of_Brazil.svg",
-	"dialCode": "+55",
-	"isoCode": "BR"
+	"name": "Andorra",
+	"currency": "EUR",
+	"unicodeFlag": "🇦🇩",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Andorra.svg",
+	"dialCode": "+376",
+	"isoCode": "AD"
+}, {
+	"name": "Angola",
+	"currency": "AOA",
+	"unicodeFlag": "🇦🇴",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Flag_of_Angola.svg",
+	"dialCode": "+244",
+	"isoCode": "AO"
+}, {
+	"name": "Anguilla",
+	"currency": "XCD",
+	"unicodeFlag": "🇦🇮",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Flag_of_Anguilla.svg",
+	"dialCode": "+1-264",
+	"isoCode": "AI"
+}, {
+	"name": "Antarctica",
+	"unicodeFlag": "🇦🇶",
+	"dialCode": "",
+	"isoCode": ""
+}, {
+	"name": "Antigua and Barbuda",
+	"currency": "XCD",
+	"unicodeFlag": "🇦🇬",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/89/Flag_of_Antigua_and_Barbuda.svg",
+	"dialCode": "+1-268",
+	"isoCode": "AG"
+}, {
+	"name": "Argentina",
+	"currency": "ARS",
+	"unicodeFlag": "🇦🇷",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Argentina.svg",
+	"dialCode": "+54",
+	"isoCode": "AR"
+}, {
+	"name": "Armenia",
+	"currency": "AMD",
+	"unicodeFlag": "🇦🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Flag_of_Armenia.svg",
+	"dialCode": "+374",
+	"isoCode": "AM"
+}, {
+	"name": "Aruba",
+	"currency": "AWG",
+	"unicodeFlag": "🇦🇼",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Flag_of_Aruba.svg",
+	"dialCode": "+297",
+	"isoCode": "AW"
+}, {
+	"name": "Australia",
+	"currency": "AUD",
+	"unicodeFlag": "🇦🇺",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg",
+	"dialCode": "+61",
+	"isoCode": "AU"
+}, {
+	"name": "Austria",
+	"currency": "EUR",
+	"unicodeFlag": "🇦🇹",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg",
+	"dialCode": "+43",
+	"isoCode": "AT"
+}, {
+	"name": "Azerbaijan",
+	"currency": "AZN",
+	"unicodeFlag": "🇦🇿",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/dd/Flag_of_Azerbaijan.svg",
+	"dialCode": "+994",
+	"isoCode": "AZ"
 }, {
 	"name": "Bahamas",
 	"currency": "BSD",
@@ -150,12 +115,26 @@ let allCountries = [{
 	"dialCode": "+1-242",
 	"isoCode": "BS"
 }, {
-	"name": "Jersey",
-	"currency": "GBP",
-	"unicodeFlag": "🇯🇪",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Flag_of_Jersey.svg",
-	"dialCode": "+44-1534",
-	"isoCode": "JE"
+	"name": "Bahrain",
+	"currency": "BHD",
+	"unicodeFlag": "🇧🇭",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Bahrain.svg",
+	"dialCode": "+973",
+	"isoCode": "BH"
+}, {
+	"name": "Bangladesh",
+	"currency": "BDT",
+	"unicodeFlag": "🇧🇩",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Flag_of_Bangladesh.svg",
+	"dialCode": "+880",
+	"isoCode": "BD"
+}, {
+	"name": "Barbados",
+	"currency": "BBD",
+	"unicodeFlag": "🇧🇧",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/e/ef/Flag_of_Barbados.svg",
+	"dialCode": "+1-246",
+	"isoCode": "BB"
 }, {
 	"name": "Belarus",
 	"currency": "BYR",
@@ -164,6 +143,13 @@ let allCountries = [{
 	"dialCode": "+375",
 	"isoCode": "BY"
 }, {
+	"name": "Belgium",
+	"currency": "EUR",
+	"unicodeFlag": "🇧🇪",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/65/Flag_of_Belgium.svg",
+	"dialCode": "+32",
+	"isoCode": "BE"
+}, {
 	"name": "Belize",
 	"currency": "BZD",
 	"unicodeFlag": "🇧🇿",
@@ -171,74 +157,453 @@ let allCountries = [{
 	"dialCode": "+501",
 	"isoCode": "BZ"
 }, {
-	"name": "Russia",
-	"currency": "RUB",
-	"unicodeFlag": "🇷🇺",
-	"dialCode": "+7",
-	"isoCode": "RU"
-}, {
-	"name": "Rwanda",
-	"currency": "RWF",
-	"unicodeFlag": "🇷🇼",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/17/Flag_of_Rwanda.svg",
-	"dialCode": "+250",
-	"isoCode": "RW"
-}, {
-	"name": "Serbia",
-	"currency": "RSD",
-	"unicodeFlag": "🇷🇸",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/ff/Flag_of_Serbia.svg",
-	"dialCode": "+381",
-	"isoCode": "RS"
-}, {
-	"name": "Timor-Leste",
-	"currency": "USD",
-	"unicodeFlag": "🇹🇱",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/26/Flag_of_East_Timor.svg",
-	"dialCode": "+670",
-	"isoCode": "TL"
-}, {
-	"name": "Réunion",
-	"currency": "EUR",
-	"unicodeFlag": "🇷🇪",
-	"flag": "https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg",
-	"dialCode": "+262",
-	"isoCode": "RE"
-}, {
-	"name": "Turkmenistan",
-	"currency": "TMT",
-	"unicodeFlag": "🇹🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Turkmenistan.svg",
-	"dialCode": "+993",
-	"isoCode": "TM"
-}, {
-	"name": "Tajikistan",
-	"currency": "TJS",
-	"unicodeFlag": "🇹🇯",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Flag_of_Tajikistan.svg",
-	"dialCode": "+992",
-	"isoCode": "TJ"
-}, {
-	"name": "Romania",
-	"currency": "RON",
-	"unicodeFlag": "🇷🇴",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Romania.svg",
-	"dialCode": "+40",
-	"isoCode": "RO"
-}, {
-	"name": "Tokelau",
-	"currency": "NZD",
-	"unicodeFlag": "🇹🇰",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/8e/Flag_of_Tokelau.svg",
-	"dialCode": "+690",
-	"isoCode": "TK"
-}, {
-	"name": "Guinea-Bissau",
+	"name": "Benin",
 	"currency": "XOF",
-	"unicodeFlag": "🇬🇼",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_Guinea-Bissau.svg",
-	"dialCode": "+245",
-	"isoCode": "GW"
+	"unicodeFlag": "🇧🇯",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Flag_of_Benin.svg",
+	"dialCode": "+229",
+	"isoCode": "BJ"
+}, {
+	"name": "Bermuda",
+	"currency": "BMD",
+	"unicodeFlag": "🇧🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bf/Flag_of_Bermuda.svg",
+	"dialCode": "+1-441",
+	"isoCode": "BM"
+}, {
+	"name": "Bhutan",
+	"currency": "BTN",
+	"unicodeFlag": "🇧🇹",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/91/Flag_of_Bhutan.svg",
+	"dialCode": "+975",
+	"isoCode": "BT"
+}, {
+	"name": "Bolivia",
+	"currency": "BOB",
+	"unicodeFlag": "🇧🇴",
+	"dialCode": "+591",
+	"isoCode": ""
+}, {
+	"name": "Bonaire, Saint Eustatius and Saba ",
+	"currency": "USD",
+	"unicodeFlag": "🇧🇶",
+	"dialCode": "+599",
+	"isoCode": ""
+}, {
+	"name": "Bosnia and Herzegovina",
+	"currency": "BAM",
+	"unicodeFlag": "🇧🇦",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bf/Flag_of_Bosnia_and_Herzegovina.svg",
+	"dialCode": "+387",
+	"isoCode": "BA"
+}, {
+	"name": "Botswana",
+	"currency": "BWP",
+	"unicodeFlag": "🇧🇼",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_Botswana.svg",
+	"dialCode": "+267",
+	"isoCode": "BW"
+}, {
+	"name": "Bouvet Island",
+	"currency": "NOK",
+	"unicodeFlag": "🇧🇻",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d9/Flag_of_Norway.svg",
+	"dialCode": "",
+	"isoCode": "BV"
+}, {
+	"name": "Brazil",
+	"currency": "BRL",
+	"unicodeFlag": "🇧🇷",
+	"flag": "https://upload.wikimedia.org/wikipedia/en/0/05/Flag_of_Brazil.svg",
+	"dialCode": "+55",
+	"isoCode": "BR"
+}, {
+	"name": "British Indian Ocean Territory",
+	"currency": "USD",
+	"unicodeFlag": "🇮🇴",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/65/Flag_of_the_Commissioner_of_the_British_Indian_Ocean_Territory.svg",
+	"dialCode": "+246",
+	"isoCode": "IO"
+}, {
+	"name": "British Virgin Islands",
+	"currency": "USD",
+	"unicodeFlag": "🇻🇬",
+	"dialCode": "+1-284",
+	"isoCode": ""
+}, {
+	"name": "Brunei",
+	"currency": "BND",
+	"unicodeFlag": "🇧🇳",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Flag_of_Brunei.svg",
+	"dialCode": "+673",
+	"isoCode": "BN"
+}, {
+	"name": "Bulgaria",
+	"currency": "BGN",
+	"unicodeFlag": "🇧🇬",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Bulgaria.svg",
+	"dialCode": "+359",
+	"isoCode": "BG"
+}, {
+	"name": "Burkina Faso",
+	"currency": "XOF",
+	"unicodeFlag": "🇧🇫",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/31/Flag_of_Burkina_Faso.svg",
+	"dialCode": "+226",
+	"isoCode": "BF"
+}, {
+	"name": "Burundi",
+	"currency": "BIF",
+	"unicodeFlag": "🇧🇮",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/5/50/Flag_of_Burundi.svg",
+	"dialCode": "+257",
+	"isoCode": "BI"
+}, {
+	"name": "Cambodia",
+	"currency": "KHR",
+	"unicodeFlag": "🇰🇭",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_Cambodia.svg",
+	"dialCode": "+855",
+	"isoCode": "KH"
+}, {
+	"name": "Cameroon",
+	"currency": "XAF",
+	"unicodeFlag": "🇨🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Flag_of_Cameroon.svg",
+	"dialCode": "+237",
+	"isoCode": "CM"
+}, {
+	"name": "Canada",
+	"currency": "CAD",
+	"unicodeFlag": "🇨🇦",
+	"flag": "https://upload.wikimedia.org/wikipedia/en/c/cf/Flag_of_Canada.svg",
+	"dialCode": "+1",
+	"isoCode": "CA"
+}, {
+	"name": "Cape Verde",
+	"currency": "CVE",
+	"unicodeFlag": "🇨🇻",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/38/Flag_of_Cape_Verde.svg",
+	"dialCode": "+238",
+	"isoCode": "CV"
+}, {
+	"name": "Cayman Islands",
+	"currency": "KYD",
+	"unicodeFlag": "🇰🇾",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Flag_of_the_Cayman_Islands.svg",
+	"dialCode": "+1-345",
+	"isoCode": "KY"
+}, {
+	"name": "Central African Republic",
+	"currency": "XAF",
+	"unicodeFlag": "🇨🇫",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Flag_of_the_Central_African_Republic.svg",
+	"dialCode": "+236",
+	"isoCode": "CF"
+}, {
+	"name": "Chad",
+	"currency": "XAF",
+	"unicodeFlag": "🇹🇩",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Flag_of_Chad.svg",
+	"dialCode": "+235",
+	"isoCode": "TD"
+}, {
+	"name": "Chile",
+	"currency": "CLP",
+	"unicodeFlag": "🇨🇱",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/78/Flag_of_Chile.svg",
+	"dialCode": "+56",
+	"isoCode": "CL"
+}, {
+	"name": "China",
+	"currency": "CNY",
+	"unicodeFlag": "🇨🇳",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg",
+	"dialCode": "+86",
+	"isoCode": "CN"
+}, {
+	"name": "Christmas Island",
+	"currency": "AUD",
+	"unicodeFlag": "🇨🇽",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/67/Flag_of_Christmas_Island.svg",
+	"dialCode": "+61",
+	"isoCode": "CX"
+}, {
+	"name": "Cocos (Keeling) Islands",
+	"currency": "AUD",
+	"unicodeFlag": "🇨🇨",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/74/Flag_of_the_Cocos_%28Keeling%29_Islands.svg",
+	"dialCode": "+166",
+	"isoCode": "CC"
+}, {
+	"name": "Cocos Islands",
+	"currency": "AUD",
+	"unicodeFlag": "🇨🇨",
+	"dialCode": "+61",
+	"isoCode": ""
+}, {
+	"name": "Colombia",
+	"currency": "COP",
+	"unicodeFlag": "🇨🇴",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Colombia.svg",
+	"dialCode": "+57",
+	"isoCode": "CO"
+}, {
+	"name": "Comoros",
+	"currency": "KMF",
+	"unicodeFlag": "🇰🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/94/Flag_of_the_Comoros.svg",
+	"dialCode": "+269",
+	"isoCode": "KM"
+}, {
+	"name": "Cook Islands",
+	"currency": "NZD",
+	"unicodeFlag": "🇨🇰",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/35/Flag_of_the_Cook_Islands.svg",
+	"dialCode": "+682",
+	"isoCode": "CK"
+}, {
+	"name": "Costa Rica",
+	"currency": "CRC",
+	"unicodeFlag": "🇨🇷",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_Costa_Rica_%28state%29.svg",
+	"dialCode": "+506",
+	"isoCode": "CR"
+}, {
+	"name": "Croatia",
+	"currency": "HRK",
+	"unicodeFlag": "🇭🇷",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Croatia.svg",
+	"dialCode": "+385",
+	"isoCode": "HR"
+}, {
+	"name": "Cuba",
+	"currency": "CUP",
+	"unicodeFlag": "🇨🇺",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Flag_of_Cuba.svg",
+	"dialCode": "+53",
+	"isoCode": "CU"
+}, {
+	"name": "Curacao",
+	"currency": "ANG",
+	"unicodeFlag": "🇨🇼",
+	"dialCode": "+599",
+	"isoCode": ""
+}, {
+	"name": "Cyprus",
+	"currency": "EUR",
+	"unicodeFlag": "🇨🇾",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_Cyprus.svg",
+	"dialCode": "+357",
+	"isoCode": "CY"
+}, {
+	"name": "Czech Republic",
+	"currency": "CZK",
+	"unicodeFlag": "🇨🇿",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_Czech_Republic.svg",
+	"dialCode": "+420",
+	"isoCode": "CZ"
+}, {
+	"name": "Democratic Republic of the Congo",
+	"currency": "CDF",
+	"unicodeFlag": "🇨🇩",
+	"dialCode": "+243",
+	"isoCode": ""
+}, {
+	"name": "Denmark",
+	"currency": "DKK",
+	"unicodeFlag": "🇩🇰",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Flag_of_Denmark.svg",
+	"dialCode": "+45",
+	"isoCode": "DK"
+}, {
+	"name": "Djibouti",
+	"currency": "DJF",
+	"unicodeFlag": "🇩🇯",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/34/Flag_of_Djibouti.svg",
+	"dialCode": "+253",
+	"isoCode": "DJ"
+}, {
+	"name": "Dominica",
+	"currency": "XCD",
+	"unicodeFlag": "🇩🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Flag_of_Dominica.svg",
+	"dialCode": "+1-767",
+	"isoCode": "DM"
+}, {
+	"name": "Dominican Republic",
+	"currency": "DOP",
+	"unicodeFlag": "🇩🇴",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_the_Dominican_Republic.svg",
+	"dialCode": "+1-809 and 1-829",
+	"isoCode": "DO"
+}, {
+	"name": "Ecuador",
+	"currency": "USD",
+	"unicodeFlag": "🇪🇨",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Flag_of_Ecuador.svg",
+	"dialCode": "+593",
+	"isoCode": "EC"
+}, {
+	"name": "Egypt",
+	"currency": "EGP",
+	"unicodeFlag": "🇪🇬",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Egypt.svg",
+	"dialCode": "+20",
+	"isoCode": "EG"
+}, {
+	"name": "El Salvador",
+	"currency": "USD",
+	"unicodeFlag": "🇸🇻",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/34/Flag_of_El_Salvador.svg",
+	"dialCode": "+503",
+	"isoCode": "SV"
+}, {
+	"name": "Equatorial Guinea",
+	"currency": "XAF",
+	"unicodeFlag": "🇬🇶",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/31/Flag_of_Equatorial_Guinea.svg",
+	"dialCode": "+240",
+	"isoCode": "GQ"
+}, {
+	"name": "Eritrea",
+	"currency": "ERN",
+	"unicodeFlag": "🇪🇷",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/29/Flag_of_Eritrea.svg",
+	"dialCode": "+291",
+	"isoCode": "ER"
+}, {
+	"name": "Estonia",
+	"currency": "EUR",
+	"unicodeFlag": "🇪🇪",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Flag_of_Estonia.svg",
+	"dialCode": "+372",
+	"isoCode": "EE"
+}, {
+	"name": "Ethiopia",
+	"currency": "ETB",
+	"unicodeFlag": "🇪🇹",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/71/Flag_of_Ethiopia.svg",
+	"dialCode": "+251",
+	"isoCode": "ET"
+}, {
+	"name": "Falkland Islands",
+	"currency": "FKP",
+	"unicodeFlag": "🇫🇰",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_the_Falkland_Islands.svg",
+	"dialCode": "+500",
+	"isoCode": "FK"
+}, {
+	"name": "Faroe Islands",
+	"currency": "DKK",
+	"unicodeFlag": "🇫🇴",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Flag_of_the_Faroe_Islands.svg",
+	"dialCode": "+298",
+	"isoCode": "FO"
+}, {
+	"name": "Fiji",
+	"currency": "FJD",
+	"unicodeFlag": "🇫🇯",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Fiji.svg",
+	"dialCode": "+679",
+	"isoCode": "FJ"
+}, {
+	"name": "Finland",
+	"currency": "EUR",
+	"unicodeFlag": "🇫🇮",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_Finland.svg",
+	"dialCode": "+358",
+	"isoCode": "FI"
+}, {
+	"name": "France",
+	"currency": "EUR",
+	"unicodeFlag": "🇫🇷",
+	"flag": "https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg",
+	"dialCode": "+33",
+	"isoCode": "FR"
+}, {
+	"name": "French Polynesia",
+	"currency": "XPF",
+	"unicodeFlag": "🇵🇫",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/db/Flag_of_French_Polynesia.svg",
+	"dialCode": "+689",
+	"isoCode": "PF"
+}, {
+	"name": "French Southern Territories",
+	"currency": "EUR",
+	"unicodeFlag": "🇹🇫",
+	"dialCode": "",
+	"isoCode": ""
+}, {
+	"name": "Gabon",
+	"currency": "XAF",
+	"unicodeFlag": "🇬🇦",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/04/Flag_of_Gabon.svg",
+	"dialCode": "+241",
+	"isoCode": "GA"
+}, {
+	"name": "Gambia",
+	"currency": "GMD",
+	"unicodeFlag": "🇬🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_The_Gambia.svg",
+	"dialCode": "+220",
+	"isoCode": "GM"
+}, {
+	"name": "Georgia",
+	"currency": "GEL",
+	"unicodeFlag": "🇬🇪",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Flag_of_Georgia.svg",
+	"dialCode": "+995",
+	"isoCode": "GE"
+}, {
+	"name": "Germany",
+	"currency": "EUR",
+	"unicodeFlag": "🇩🇪",
+	"flag": "https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg",
+	"dialCode": "+49",
+	"isoCode": "DE"
+}, {
+	"name": "Ghana",
+	"currency": "GHS",
+	"unicodeFlag": "🇬🇭",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Ghana.svg",
+	"dialCode": "+233",
+	"isoCode": "GH"
+}, {
+	"name": "Gibraltar",
+	"currency": "GIP",
+	"unicodeFlag": "🇬🇮",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/02/Flag_of_Gibraltar.svg",
+	"dialCode": "+350",
+	"isoCode": "GI"
+}, {
+	"name": "Greece",
+	"currency": "EUR",
+	"unicodeFlag": "🇬🇷",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Greece.svg",
+	"dialCode": "+30",
+	"isoCode": "GR"
+}, {
+	"name": "Greenland",
+	"currency": "DKK",
+	"unicodeFlag": "🇬🇱",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_Greenland.svg",
+	"dialCode": "+299",
+	"isoCode": "GL"
+}, {
+	"name": "Grenada",
+	"currency": "XCD",
+	"unicodeFlag": "🇬🇩",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_Grenada.svg",
+	"dialCode": "+1-473",
+	"isoCode": "GD"
+}, {
+	"name": "Guadeloupe",
+	"currency": "EUR",
+	"unicodeFlag": "🇬🇵",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Flag_of_Guadeloupe_%28local%29_variant.svg",
+	"dialCode": "+590",
+	"isoCode": "GP"
 }, {
 	"name": "Guam",
 	"currency": "USD",
@@ -254,89 +619,12 @@ let allCountries = [{
 	"dialCode": "+502",
 	"isoCode": "GT"
 }, {
-	"name": "South Georgia and the South Sandwich Islands",
-	"currency": "GBP",
-	"unicodeFlag": "🇬🇸",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Flag_of_South_Georgia_and_the_South_Sandwich_Islands.svg",
-	"dialCode": "",
-	"isoCode": "GS"
-}, {
-	"name": "Greece",
-	"currency": "EUR",
-	"unicodeFlag": "🇬🇷",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Greece.svg",
-	"dialCode": "+30",
-	"isoCode": "GR"
-}, {
-	"name": "Equatorial Guinea",
-	"currency": "XAF",
-	"unicodeFlag": "🇬🇶",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/31/Flag_of_Equatorial_Guinea.svg",
-	"dialCode": "+240",
-	"isoCode": "GQ"
-}, {
-	"name": "Guadeloupe",
-	"currency": "EUR",
-	"unicodeFlag": "🇬🇵",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Flag_of_Guadeloupe_%28local%29_variant.svg",
-	"dialCode": "+590",
-	"isoCode": "GP"
-}, {
-	"name": "Japan",
-	"currency": "JPY",
-	"unicodeFlag": "🇯🇵",
-	"flag": "https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg",
-	"dialCode": "+81",
-	"isoCode": "JP"
-}, {
-	"name": "Guyana",
-	"currency": "GYD",
-	"unicodeFlag": "🇬🇾",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_Guyana.svg",
-	"dialCode": "+592",
-	"isoCode": "GY"
-}, {
 	"name": "Guernsey",
 	"currency": "GBP",
 	"unicodeFlag": "🇬🇬",
 	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_Guernsey.svg",
 	"dialCode": "+44-1481",
 	"isoCode": "GG"
-}, {
-	"name": "Georgia",
-	"currency": "GEL",
-	"unicodeFlag": "🇬🇪",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Flag_of_Georgia.svg",
-	"dialCode": "+995",
-	"isoCode": "GE"
-}, {
-	"name": "Grenada",
-	"currency": "XCD",
-	"unicodeFlag": "🇬🇩",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_Grenada.svg",
-	"dialCode": "+1-473",
-	"isoCode": "GD"
-}, {
-	"name": "United Kingdom",
-	"currency": "GBP",
-	"unicodeFlag": "🇬🇧",
-	"flag": "https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg",
-	"dialCode": "+44",
-	"isoCode": "GB"
-}, {
-	"name": "Gabon",
-	"currency": "XAF",
-	"unicodeFlag": "🇬🇦",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/04/Flag_of_Gabon.svg",
-	"dialCode": "+241",
-	"isoCode": "GA"
-}, {
-	"name": "El Salvador",
-	"currency": "USD",
-	"unicodeFlag": "🇸🇻",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/34/Flag_of_El_Salvador.svg",
-	"dialCode": "+503",
-	"isoCode": "SV"
 }, {
 	"name": "Guinea",
 	"currency": "GNF",
@@ -345,61 +633,19 @@ let allCountries = [{
 	"dialCode": "+224",
 	"isoCode": "GN"
 }, {
-	"name": "Gambia",
-	"currency": "GMD",
-	"unicodeFlag": "🇬🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_The_Gambia.svg",
-	"dialCode": "+220",
-	"isoCode": "GM"
+	"name": "Guinea-Bissau",
+	"currency": "XOF",
+	"unicodeFlag": "🇬🇼",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_Guinea-Bissau.svg",
+	"dialCode": "+245",
+	"isoCode": "GW"
 }, {
-	"name": "Greenland",
-	"currency": "DKK",
-	"unicodeFlag": "🇬🇱",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/09/Flag_of_Greenland.svg",
-	"dialCode": "+299",
-	"isoCode": "GL"
-}, {
-	"name": "Gibraltar",
-	"currency": "GIP",
-	"unicodeFlag": "🇬🇮",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/02/Flag_of_Gibraltar.svg",
-	"dialCode": "+350",
-	"isoCode": "GI"
-}, {
-	"name": "Ghana",
-	"currency": "GHS",
-	"unicodeFlag": "🇬🇭",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Ghana.svg",
-	"dialCode": "+233",
-	"isoCode": "GH"
-}, {
-	"name": "Oman",
-	"currency": "OMR",
-	"unicodeFlag": "🇴🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/dd/Flag_of_Oman.svg",
-	"dialCode": "+968",
-	"isoCode": "OM"
-}, {
-	"name": "Tunisia",
-	"currency": "TND",
-	"unicodeFlag": "🇹🇳",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Flag_of_Tunisia.svg",
-	"dialCode": "+216",
-	"isoCode": "TN"
-}, {
-	"name": "Jordan",
-	"currency": "JOD",
-	"unicodeFlag": "🇯🇴",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/c0/Flag_of_Jordan.svg",
-	"dialCode": "+962",
-	"isoCode": "JO"
-}, {
-	"name": "Croatia",
-	"currency": "HRK",
-	"unicodeFlag": "🇭🇷",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Croatia.svg",
-	"dialCode": "+385",
-	"isoCode": "HR"
+	"name": "Guyana",
+	"currency": "GYD",
+	"unicodeFlag": "🇬🇾",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/99/Flag_of_Guyana.svg",
+	"dialCode": "+592",
+	"isoCode": "GY"
 }, {
 	"name": "Haiti",
 	"currency": "HTG",
@@ -408,19 +654,12 @@ let allCountries = [{
 	"dialCode": "+509",
 	"isoCode": "HT"
 }, {
-	"name": "Hungary",
-	"currency": "HUF",
-	"unicodeFlag": "🇭🇺",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Flag_of_Hungary.svg",
-	"dialCode": "+36",
-	"isoCode": "HU"
-}, {
-	"name": "Hong Kong",
-	"currency": "HKD",
-	"unicodeFlag": "🇭🇰",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Flag_of_Hong_Kong.svg",
-	"dialCode": "+852",
-	"isoCode": "HK"
+	"name": "Heard Island and McDonald Islands",
+	"currency": "AUD",
+	"unicodeFlag": "🇭🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg",
+	"dialCode": "+ ",
+	"isoCode": "HM"
 }, {
 	"name": "Honduras",
 	"currency": "HNL",
@@ -429,65 +668,47 @@ let allCountries = [{
 	"dialCode": "+504",
 	"isoCode": "HN"
 }, {
-	"name": "Heard Island and McDonald Islands",
-	"currency": "AUD",
-	"unicodeFlag": "🇭🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg",
-	"dialCode": "+ ",
-	"isoCode": "HM"
+	"name": "Hong Kong",
+	"currency": "HKD",
+	"unicodeFlag": "🇭🇰",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/5/5b/Flag_of_Hong_Kong.svg",
+	"dialCode": "+852",
+	"isoCode": "HK"
 }, {
-	"name": "Venezuela",
-	"currency": "VEF",
-	"unicodeFlag": "🇻🇪",
-	"dialCode": "+58",
-	"isoCode": "VE"
+	"name": "Hungary",
+	"currency": "HUF",
+	"unicodeFlag": "🇭🇺",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Flag_of_Hungary.svg",
+	"dialCode": "+36",
+	"isoCode": "HU"
 }, {
-	"name": "Vatican City State (Holy See)",
-	"currency": "EUR",
-	"unicodeFlag": "🇻🇦",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/00/Flag_of_the_Vatican_City.svg",
-	"dialCode": "+379",
-	"isoCode": "VA"
+	"name": "Iceland",
+	"currency": "ISK",
+	"unicodeFlag": "🇮🇸",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Flag_of_Iceland.svg",
+	"dialCode": "+354",
+	"isoCode": "IS"
 }, {
-	"name": "Puerto Rico",
-	"currency": "USD",
-	"unicodeFlag": "🇵🇷",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/28/Flag_of_Puerto_Rico.svg",
-	"dialCode": "+1-787 and 1-939",
-	"isoCode": "PR"
+	"name": "India",
+	"currency": "INR",
+	"unicodeFlag": "🇮🇳",
+	"flag": "https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg",
+	"dialCode": "+91",
+	"isoCode": "IN"
 }, {
-	"name": "Palestinian Territory",
-	"currency": "ILS",
-	"unicodeFlag": "🇵🇸",
-	"dialCode": "+970",
-	"isoCode": ""
+	"name": "Indonesia",
+	"currency": "IDR",
+	"unicodeFlag": "🇮🇩",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Indonesia.svg",
+	"dialCode": "+62",
+	"isoCode": "ID"
 }, {
-	"name": "Palau",
-	"currency": "USD",
-	"unicodeFlag": "🇵🇼",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Palau.svg",
-	"dialCode": "+680",
-	"isoCode": "PW"
-}, {
-	"name": "Portugal",
-	"currency": "EUR",
-	"unicodeFlag": "🇵🇹",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Portugal.svg",
-	"dialCode": "+351",
-	"isoCode": "PT"
-}, {
-	"name": "Svalbard and Jan Mayen",
-	"currency": "NOK",
-	"unicodeFlag": "🇸🇯",
-	"dialCode": "+47",
-	"isoCode": ""
-}, {
-	"name": "Paraguay",
-	"currency": "PYG",
-	"unicodeFlag": "🇵🇾",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/27/Flag_of_Paraguay.svg",
-	"dialCode": "+595",
-	"isoCode": "PY"
+	"name": "Iran",
+	"currency": "IRR",
+	"unicodeFlag": "🇮🇷",
+	"flag": " https://upload.wikimedia.org/wikipedia/commons/c/ca/Flag_of_Iran.svg",
+	"dialCode": "+98",
+	"isoCode": "IR"
 }, {
 	"name": "Iraq",
 	"currency": "IQD",
@@ -496,19 +717,459 @@ let allCountries = [{
 	"dialCode": "+964",
 	"isoCode": "IQ"
 }, {
+	"name": "Ireland",
+	"currency": "EUR",
+	"unicodeFlag": "🇮🇪",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/45/Flag_of_Ireland.svg",
+	"dialCode": "+353",
+	"isoCode": "IE"
+}, {
+	"name": "Isle of Man",
+	"currency": "GBP",
+	"unicodeFlag": "🇮🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_the_Isle_of_Man.svg",
+	"dialCode": "+44-1624",
+	"isoCode": "IM"
+}, {
+	"name": "Israel",
+	"currency": "ILS",
+	"unicodeFlag": "🇮🇱",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_Israel.svg",
+	"dialCode": "+972",
+	"isoCode": "IL"
+}, {
+	"name": "Italy",
+	"currency": "EUR",
+	"unicodeFlag": "🇮🇹",
+	"flag": "https://upload.wikimedia.org/wikipedia/en/0/03/Flag_of_Italy.svg",
+	"dialCode": "+39",
+	"isoCode": "IT"
+}, {
+	"name": "Ivory Coast",
+	"currency": "XOF",
+	"unicodeFlag": "🇨🇮",
+	"dialCode": "+225",
+	"isoCode": ""
+}, {
+	"name": "Jamaica",
+	"currency": "JMD",
+	"unicodeFlag": "🇯🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/0a/Flag_of_Jamaica.svg",
+	"dialCode": "+1-876",
+	"isoCode": "JM"
+}, {
+	"name": "Japan",
+	"currency": "JPY",
+	"unicodeFlag": "🇯🇵",
+	"flag": "https://upload.wikimedia.org/wikipedia/en/9/9e/Flag_of_Japan.svg",
+	"dialCode": "+81",
+	"isoCode": "JP"
+}, {
+	"name": "Jersey",
+	"currency": "GBP",
+	"unicodeFlag": "🇯🇪",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Flag_of_Jersey.svg",
+	"dialCode": "+44-1534",
+	"isoCode": "JE"
+}, {
+	"name": "Jordan",
+	"currency": "JOD",
+	"unicodeFlag": "🇯🇴",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/c0/Flag_of_Jordan.svg",
+	"dialCode": "+962",
+	"isoCode": "JO"
+}, {
+	"name": "Kazakhstan",
+	"currency": "KZT",
+	"unicodeFlag": "🇰🇿",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Flag_of_Kazakhstan.svg",
+	"dialCode": "+7",
+	"isoCode": "KZ"
+}, {
+	"name": "Kenya",
+	"currency": "KES",
+	"unicodeFlag": "🇰🇪",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/49/Flag_of_Kenya.svg",
+	"dialCode": "+254",
+	"isoCode": "KE"
+}, {
+	"name": "Kiribati",
+	"currency": "AUD",
+	"unicodeFlag": "🇰🇮",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Flag_of_Kiribati.svg",
+	"dialCode": "+686",
+	"isoCode": "KI"
+}, {
+	"name": "Kosovo",
+	"currency": "EUR",
+	"unicodeFlag": "🇽🇰",
+	"dialCode": "",
+	"isoCode": ""
+}, {
+	"name": "Kuwait",
+	"currency": "KWD",
+	"unicodeFlag": "🇰🇼",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Flag_of_Kuwait.svg",
+	"dialCode": "+965",
+	"isoCode": "KW"
+}, {
+	"name": "Kyrgyzstan",
+	"currency": "KGS",
+	"unicodeFlag": "🇰🇬",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Flag_of_Kyrgyzstan.svg",
+	"dialCode": "+996",
+	"isoCode": "KG"
+}, {
+	"name": "Laos",
+	"currency": "LAK",
+	"unicodeFlag": "🇱🇦",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/5/56/Flag_of_Laos.svg",
+	"dialCode": "+856",
+	"isoCode": "LA"
+}, {
+	"name": "Latvia",
+	"currency": "EUR",
+	"unicodeFlag": "🇱🇻",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/84/Flag_of_Latvia.svg",
+	"dialCode": "+371",
+	"isoCode": "LV"
+}, {
+	"name": "Lebanon",
+	"currency": "LBP",
+	"unicodeFlag": "🇱🇧",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/5/59/Flag_of_Lebanon.svg",
+	"dialCode": "+961",
+	"isoCode": "LB"
+}, {
+	"name": "Lesotho",
+	"currency": "LSL",
+	"unicodeFlag": "🇱🇸",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Flag_of_Lesotho.svg",
+	"dialCode": "+266",
+	"isoCode": "LS"
+}, {
+	"name": "Liberia",
+	"currency": "LRD",
+	"unicodeFlag": "🇱🇷",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Flag_of_Liberia.svg",
+	"dialCode": "+231",
+	"isoCode": "LR"
+}, {
+	"name": "Libya",
+	"currency": "LYD",
+	"unicodeFlag": "🇱🇾",
+	"dialCode": "+218",
+	"isoCode": ""
+}, {
+	"name": "Liechtenstein",
+	"currency": "CHF",
+	"unicodeFlag": "🇱🇮",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/47/Flag_of_Liechtenstein.svg",
+	"dialCode": "+423",
+	"isoCode": "LI"
+}, {
+	"name": "Lithuania",
+	"currency": "LTL",
+	"unicodeFlag": "🇱🇹",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/11/Flag_of_Lithuania.svg",
+	"dialCode": "+370",
+	"isoCode": "LT"
+}, {
+	"name": "Luxembourg",
+	"currency": "EUR",
+	"unicodeFlag": "🇱🇺",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/da/Flag_of_Luxembourg.svg",
+	"dialCode": "+352",
+	"isoCode": "LU"
+}, {
+	"name": "Macau",
+	"currency": "MOP",
+	"unicodeFlag": "🇲🇴",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/63/Flag_of_Macau.svg",
+	"dialCode": "+853",
+	"isoCode": "MO"
+}, {
+	"name": "Macedonia",
+	"currency": "MKD",
+	"unicodeFlag": "🇲🇰",
+	"dialCode": "+389",
+	"isoCode": ""
+}, {
+	"name": "Madagascar",
+	"currency": "MGA",
+	"unicodeFlag": "🇲🇬",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_Madagascar.svg",
+	"dialCode": "+261",
+	"isoCode": "MG"
+}, {
+	"name": "Malawi",
+	"currency": "MWK",
+	"unicodeFlag": "🇲🇼",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Flag_of_Malawi.svg",
+	"dialCode": "+265",
+	"isoCode": "MW"
+}, {
+	"name": "Malaysia",
+	"currency": "MYR",
+	"unicodeFlag": "🇲🇾",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/66/Flag_of_Malaysia.svg",
+	"dialCode": "+60",
+	"isoCode": "MY"
+}, {
+	"name": "Maldives",
+	"currency": "MVR",
+	"unicodeFlag": "🇲🇻",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Flag_of_Maldives.svg",
+	"dialCode": "+960",
+	"isoCode": "MV"
+}, {
+	"name": "Mali",
+	"currency": "XOF",
+	"unicodeFlag": "🇲🇱",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/92/Flag_of_Mali.svg",
+	"dialCode": "+223",
+	"isoCode": "ML"
+}, {
+	"name": "Malta",
+	"currency": "EUR",
+	"unicodeFlag": "🇲🇹",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Malta.svg",
+	"dialCode": "+356",
+	"isoCode": "MT"
+}, {
+	"name": "Marshall Islands",
+	"currency": "USD",
+	"unicodeFlag": "🇲🇭",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Flag_of_the_Marshall_Islands.svg",
+	"dialCode": "+692",
+	"isoCode": "MH"
+}, {
+	"name": "Martinique",
+	"currency": "EUR",
+	"unicodeFlag": "🇲🇶",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/64/Snake_Flag_of_Martinique.svg",
+	"dialCode": "+596",
+	"isoCode": "MQ"
+}, {
+	"name": "Mauritania",
+	"currency": "MRO",
+	"unicodeFlag": "🇲🇷",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/43/Flag_of_Mauritania.svg",
+	"dialCode": "+222",
+	"isoCode": "MR"
+}, {
+	"name": "Mauritius",
+	"currency": "MUR",
+	"unicodeFlag": "🇲🇺",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_Mauritius.svg",
+	"dialCode": "+230",
+	"isoCode": "MU"
+}, {
+	"name": "Mayotte",
+	"currency": "EUR",
+	"unicodeFlag": "🇾🇹",
+	"flag": "https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg",
+	"dialCode": "+262",
+	"isoCode": "YT"
+}, {
+	"name": "Mexico",
+	"currency": "MXN",
+	"unicodeFlag": "🇲🇽",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Flag_of_Mexico.svg",
+	"dialCode": "+52",
+	"isoCode": "MX"
+}, {
+	"name": "Micronesia",
+	"currency": "USD",
+	"unicodeFlag": "🇫🇲",
+	"dialCode": "+691",
+	"isoCode": ""
+}, {
+	"name": "Moldova",
+	"currency": "MDL",
+	"unicodeFlag": "🇲🇩",
+	"dialCode": "+373",
+	"isoCode": ""
+}, {
+	"name": "Monaco",
+	"currency": "EUR",
+	"unicodeFlag": "🇲🇨",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Flag_of_Monaco.svg",
+	"dialCode": "+377",
+	"isoCode": "MC"
+}, {
+	"name": "Mongolia",
+	"currency": "MNT",
+	"unicodeFlag": "🇲🇳",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Flag_of_Mongolia.svg",
+	"dialCode": "+976",
+	"isoCode": "MN"
+}, {
+	"name": "Montenegro",
+	"currency": "EUR",
+	"unicodeFlag": "🇲🇪",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/64/Flag_of_Montenegro.svg",
+	"dialCode": "+382",
+	"isoCode": "ME"
+}, {
+	"name": "Montserrat",
+	"currency": "XCD",
+	"unicodeFlag": "🇲🇸",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Flag_of_Montserrat.svg",
+	"dialCode": "+1-664",
+	"isoCode": "MS"
+}, {
+	"name": "Morocco",
+	"currency": "MAD",
+	"unicodeFlag": "🇲🇦",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Morocco.svg",
+	"dialCode": "+212",
+	"isoCode": "MA"
+}, {
+	"name": "Mozambique",
+	"currency": "MZN",
+	"unicodeFlag": "🇲🇿",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Flag_of_Mozambique.svg",
+	"dialCode": "+258",
+	"isoCode": "MZ"
+}, {
+	"name": "Myanmar",
+	"currency": "MMK",
+	"unicodeFlag": "🇲🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Flag_of_Myanmar.svg",
+	"dialCode": "+95",
+	"isoCode": "MM"
+}, {
+	"name": "Namibia",
+	"currency": "NAD",
+	"unicodeFlag": "🇳🇦",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/00/Flag_of_Namibia.svg",
+	"dialCode": "+264",
+	"isoCode": "NA"
+}, {
+	"name": "Nauru",
+	"currency": "AUD",
+	"unicodeFlag": "🇳🇷",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/30/Flag_of_Nauru.svg",
+	"dialCode": "+674",
+	"isoCode": "NR"
+}, {
+	"name": "Nepal",
+	"currency": "NPR",
+	"unicodeFlag": "🇳🇵",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Flag_of_Nepal.svg",
+	"dialCode": "+977",
+	"isoCode": "NP"
+}, {
+	"name": "Netherlands",
+	"currency": "EUR",
+	"unicodeFlag": "🇳🇱",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/20/Flag_of_the_Netherlands.svg",
+	"dialCode": "+31",
+	"isoCode": "NL"
+}, {
+	"name": "New Caledonia",
+	"currency": "XPF",
+	"unicodeFlag": "🇳🇨",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/26/Flags_of_New_Caledonia.svg",
+	"dialCode": "+687",
+	"isoCode": "NC"
+}, {
+	"name": "New Zealand",
+	"currency": "NZD",
+	"unicodeFlag": "🇳🇿",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Flag_of_New_Zealand.svg",
+	"dialCode": "+64",
+	"isoCode": "NZ"
+}, {
+	"name": "Nicaragua",
+	"currency": "NIO",
+	"unicodeFlag": "🇳🇮",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Nicaragua.svg",
+	"dialCode": "+505",
+	"isoCode": "NI"
+}, {
+	"name": "Niger",
+	"currency": "XOF",
+	"unicodeFlag": "🇳🇪",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/f4/Flag_of_Niger.svg",
+	"dialCode": "+227",
+	"isoCode": "NE"
+}, {
+	"name": "Nigeria",
+	"currency": "NGN",
+	"unicodeFlag": "🇳🇬",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/79/Flag_of_Nigeria.svg",
+	"dialCode": "+234",
+	"isoCode": "NG"
+}, {
+	"name": "Niue",
+	"currency": "NZD",
+	"unicodeFlag": "🇳🇺",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_Niue.svg",
+	"dialCode": "+683",
+	"isoCode": "NU"
+}, {
+	"name": "Norfolk Island",
+	"currency": "AUD",
+	"unicodeFlag": "🇳🇫",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Norfolk_Island.svg",
+	"dialCode": "+672",
+	"isoCode": "NF"
+}, {
+	"name": "North Korea",
+	"currency": "KPW",
+	"unicodeFlag": "🇰🇵",
+	"dialCode": "+850",
+	"isoCode": ""
+}, {
+	"name": "Northern Mariana Islands",
+	"currency": "USD",
+	"unicodeFlag": "🇲🇵",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Flag_of_the_Northern_Mariana_Islands.svg",
+	"dialCode": "+1-670",
+	"isoCode": "MP"
+}, {
+	"name": "Norway",
+	"currency": "NOK",
+	"unicodeFlag": "🇳🇴",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d9/Flag_of_Norway.svg",
+	"dialCode": "+47",
+	"isoCode": "NO"
+}, {
+	"name": "Oman",
+	"currency": "OMR",
+	"unicodeFlag": "🇴🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/dd/Flag_of_Oman.svg",
+	"dialCode": "+968",
+	"isoCode": "OM"
+}, {
+	"name": "Pakistan",
+	"currency": "PKR",
+	"unicodeFlag": "🇵🇰",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/32/Flag_of_Pakistan.svg",
+	"dialCode": "+92",
+	"isoCode": "PK"
+}, {
+	"name": "Palau",
+	"currency": "USD",
+	"unicodeFlag": "🇵🇼",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Palau.svg",
+	"dialCode": "+680",
+	"isoCode": "PW"
+}, {
+	"name": "Palestinian Territory",
+	"currency": "ILS",
+	"unicodeFlag": "🇵🇸",
+	"dialCode": "+970",
+	"isoCode": ""
+}, {
 	"name": "Panama",
 	"currency": "PAB",
 	"unicodeFlag": "🇵🇦",
 	"flag": "https://upload.wikimedia.org/wikipedia/commons/a/ab/Flag_of_Panama.svg",
 	"dialCode": "+507",
 	"isoCode": "PA"
-}, {
-	"name": "French Polynesia",
-	"currency": "XPF",
-	"unicodeFlag": "🇵🇫",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/db/Flag_of_French_Polynesia.svg",
-	"dialCode": "+689",
-	"isoCode": "PF"
 }, {
 	"name": "Papua New Guinea",
 	"currency": "PGK",
@@ -517,19 +1178,19 @@ let allCountries = [{
 	"dialCode": "+675",
 	"isoCode": "PG"
 }, {
+	"name": "Paraguay",
+	"currency": "PYG",
+	"unicodeFlag": "🇵🇾",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/27/Flag_of_Paraguay.svg",
+	"dialCode": "+595",
+	"isoCode": "PY"
+}, {
 	"name": "Peru",
 	"currency": "PEN",
 	"unicodeFlag": "🇵🇪",
 	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Peru.svg",
 	"dialCode": "+51",
 	"isoCode": "PE"
-}, {
-	"name": "Pakistan",
-	"currency": "PKR",
-	"unicodeFlag": "🇵🇰",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/32/Flag_of_Pakistan.svg",
-	"dialCode": "+92",
-	"isoCode": "PK"
 }, {
 	"name": "Philippines",
 	"currency": "PHP",
@@ -552,1162 +1213,19 @@ let allCountries = [{
 	"dialCode": "+48",
 	"isoCode": "PL"
 }, {
-	"name": "Saint Pierre and Miquelon",
+	"name": "Portugal",
 	"currency": "EUR",
-	"unicodeFlag": "🇵🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/74/Flag_of_Saint-Pierre_and_Miquelon.svg",
-	"dialCode": "+508",
-	"isoCode": "PM"
+	"unicodeFlag": "🇵🇹",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Flag_of_Portugal.svg",
+	"dialCode": "+351",
+	"isoCode": "PT"
 }, {
-	"name": "Zambia",
-	"currency": "ZMK",
-	"unicodeFlag": "🇿🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/06/Flag_of_Zambia.svg",
-	"dialCode": "+260",
-	"isoCode": "ZM"
-}, {
-	"name": "Western Sahara",
-	"currency": "MAD",
-	"unicodeFlag": "🇪🇭",
-	"dialCode": "+212",
-	"isoCode": ""
-}, {
-	"name": "Estonia",
-	"currency": "EUR",
-	"unicodeFlag": "🇪🇪",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/8f/Flag_of_Estonia.svg",
-	"dialCode": "+372",
-	"isoCode": "EE"
-}, {
-	"name": "Egypt",
-	"currency": "EGP",
-	"unicodeFlag": "🇪🇬",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Egypt.svg",
-	"dialCode": "+20",
-	"isoCode": "EG"
-}, {
-	"name": "Cocos (Keeling) Islands",
-	"currency": "AUD",
-	"unicodeFlag": "🇨🇨",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/74/Flag_of_the_Cocos_%28Keeling%29_Islands.svg",
-	"dialCode": "+166",
-	"isoCode": "CC"
-}, {
-	"name": "South Africa",
-	"currency": "ZAR",
-	"unicodeFlag": "🇿🇦",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/a/af/Flag_of_South_Africa.svg",
-	"dialCode": "+27",
-	"isoCode": "ZA"
-}, {
-	"name": "Ecuador",
+	"name": "Puerto Rico",
 	"currency": "USD",
-	"unicodeFlag": "🇪🇨",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/e/e8/Flag_of_Ecuador.svg",
-	"dialCode": "+593",
-	"isoCode": "EC"
-}, {
-	"name": "Italy",
-	"currency": "EUR",
-	"unicodeFlag": "🇮🇹",
-	"flag": "https://upload.wikimedia.org/wikipedia/en/0/03/Flag_of_Italy.svg",
-	"dialCode": "+39",
-	"isoCode": "IT"
-}, {
-	"name": "Vietnam",
-	"currency": "VND",
-	"unicodeFlag": "🇻🇳",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg",
-	"dialCode": "+84",
-	"isoCode": "VN"
-}, {
-	"name": "Solomon Islands",
-	"currency": "SBD",
-	"unicodeFlag": "🇸🇧",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/74/Flag_of_the_Solomon_Islands.svg",
-	"dialCode": "+677",
-	"isoCode": "SB"
-}, {
-	"name": "Ethiopia",
-	"currency": "ETB",
-	"unicodeFlag": "🇪🇹",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/71/Flag_of_Ethiopia.svg",
-	"dialCode": "+251",
-	"isoCode": "ET"
-}, {
-	"name": "Somalia",
-	"currency": "SOS",
-	"unicodeFlag": "🇸🇴",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Flag_of_Somalia.svg",
-	"dialCode": "+252",
-	"isoCode": "SO"
-}, {
-	"name": "Zimbabwe",
-	"currency": "ZWL",
-	"unicodeFlag": "🇿🇼",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Flag_of_Zimbabwe.svg",
-	"dialCode": "+263",
-	"isoCode": "ZW"
-}, {
-	"name": "Saudi Arabia",
-	"currency": "SAR",
-	"unicodeFlag": "🇸🇦",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Flag_of_Saudi_Arabia.svg",
-	"dialCode": "+966",
-	"isoCode": "SA"
-}, {
-	"name": "Spain",
-	"currency": "EUR",
-	"unicodeFlag": "🇪🇸",
-	"flag": "https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg",
-	"dialCode": "+34",
-	"isoCode": "ES"
-}, {
-	"name": "Eritrea",
-	"currency": "ERN",
-	"unicodeFlag": "🇪🇷",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/29/Flag_of_Eritrea.svg",
-	"dialCode": "+291",
-	"isoCode": "ER"
-}, {
-	"name": "Montenegro",
-	"currency": "EUR",
-	"unicodeFlag": "🇲🇪",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/64/Flag_of_Montenegro.svg",
-	"dialCode": "+382",
-	"isoCode": "ME"
-}, {
-	"name": "Moldova",
-	"currency": "MDL",
-	"unicodeFlag": "🇲🇩",
-	"dialCode": "+373",
-	"isoCode": ""
-}, {
-	"name": "Madagascar",
-	"currency": "MGA",
-	"unicodeFlag": "🇲🇬",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_Madagascar.svg",
-	"dialCode": "+261",
-	"isoCode": "MG"
-}, {
-	"name": "Saint Martin",
-	"currency": "EUR",
-	"unicodeFlag": "🇲🇫",
-	"dialCode": "+590",
-	"isoCode": ""
-}, {
-	"name": "Morocco",
-	"currency": "MAD",
-	"unicodeFlag": "🇲🇦",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/2c/Flag_of_Morocco.svg",
-	"dialCode": "+212",
-	"isoCode": "MA"
-}, {
-	"name": "Monaco",
-	"currency": "EUR",
-	"unicodeFlag": "🇲🇨",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Flag_of_Monaco.svg",
-	"dialCode": "+377",
-	"isoCode": "MC"
-}, {
-	"name": "Uzbekistan",
-	"currency": "UZS",
-	"unicodeFlag": "🇺🇿",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/84/Flag_of_Uzbekistan.svg",
-	"dialCode": "+998",
-	"isoCode": "UZ"
-}, {
-	"name": "Myanmar",
-	"currency": "MMK",
-	"unicodeFlag": "🇲🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Flag_of_Myanmar.svg",
-	"dialCode": "+95",
-	"isoCode": "MM"
-}, {
-	"name": "Mali",
-	"currency": "XOF",
-	"unicodeFlag": "🇲🇱",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/92/Flag_of_Mali.svg",
-	"dialCode": "+223",
-	"isoCode": "ML"
-}, {
-	"name": "Macau",
-	"currency": "MOP",
-	"unicodeFlag": "🇲🇴",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/63/Flag_of_Macau.svg",
-	"dialCode": "+853",
-	"isoCode": "MO"
-}, {
-	"name": "Mongolia",
-	"currency": "MNT",
-	"unicodeFlag": "🇲🇳",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/4c/Flag_of_Mongolia.svg",
-	"dialCode": "+976",
-	"isoCode": "MN"
-}, {
-	"name": "Marshall Islands",
-	"currency": "USD",
-	"unicodeFlag": "🇲🇭",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Flag_of_the_Marshall_Islands.svg",
-	"dialCode": "+692",
-	"isoCode": "MH"
-}, {
-	"name": "Macedonia",
-	"currency": "MKD",
-	"unicodeFlag": "🇲🇰",
-	"dialCode": "+389",
-	"isoCode": ""
-}, {
-	"name": "Mauritius",
-	"currency": "MUR",
-	"unicodeFlag": "🇲🇺",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_Mauritius.svg",
-	"dialCode": "+230",
-	"isoCode": "MU"
-}, {
-	"name": "Malta",
-	"currency": "EUR",
-	"unicodeFlag": "🇲🇹",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Malta.svg",
-	"dialCode": "+356",
-	"isoCode": "MT"
-}, {
-	"name": "Malawi",
-	"currency": "MWK",
-	"unicodeFlag": "🇲🇼",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d1/Flag_of_Malawi.svg",
-	"dialCode": "+265",
-	"isoCode": "MW"
-}, {
-	"name": "Maldives",
-	"currency": "MVR",
-	"unicodeFlag": "🇲🇻",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Flag_of_Maldives.svg",
-	"dialCode": "+960",
-	"isoCode": "MV"
-}, {
-	"name": "Martinique",
-	"currency": "EUR",
-	"unicodeFlag": "🇲🇶",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/64/Snake_Flag_of_Martinique.svg",
-	"dialCode": "+596",
-	"isoCode": "MQ"
-}, {
-	"name": "Northern Mariana Islands",
-	"currency": "USD",
-	"unicodeFlag": "🇲🇵",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/e/e0/Flag_of_the_Northern_Mariana_Islands.svg",
-	"dialCode": "+1-670",
-	"isoCode": "MP"
-}, {
-	"name": "Montserrat",
-	"currency": "XCD",
-	"unicodeFlag": "🇲🇸",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Flag_of_Montserrat.svg",
-	"dialCode": "+1-664",
-	"isoCode": "MS"
-}, {
-	"name": "Mauritania",
-	"currency": "MRO",
-	"unicodeFlag": "🇲🇷",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/43/Flag_of_Mauritania.svg",
-	"dialCode": "+222",
-	"isoCode": "MR"
-}, {
-	"name": "Isle of Man",
-	"currency": "GBP",
-	"unicodeFlag": "🇮🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_the_Isle_of_Man.svg",
-	"dialCode": "+44-1624",
-	"isoCode": "IM"
-}, {
-	"name": "Uganda",
-	"currency": "UGX",
-	"unicodeFlag": "🇺🇬",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Flag_of_Uganda.svg",
-	"dialCode": "+256",
-	"isoCode": "UG"
-}, {
-	"name": "Tanzania",
-	"currency": "TZS",
-	"unicodeFlag": "🇹🇿",
-	"dialCode": "+255",
-	"isoCode": ""
-}, {
-	"name": "Malaysia",
-	"currency": "MYR",
-	"unicodeFlag": "🇲🇾",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/66/Flag_of_Malaysia.svg",
-	"dialCode": "+60",
-	"isoCode": "MY"
-}, {
-	"name": "Mexico",
-	"currency": "MXN",
-	"unicodeFlag": "🇲🇽",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Flag_of_Mexico.svg",
-	"dialCode": "+52",
-	"isoCode": "MX"
-}, {
-	"name": "Israel",
-	"currency": "ILS",
-	"unicodeFlag": "🇮🇱",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_Israel.svg",
-	"dialCode": "+972",
-	"isoCode": "IL"
-}, {
-	"name": "France",
-	"currency": "EUR",
-	"unicodeFlag": "🇫🇷",
-	"flag": "https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg",
-	"dialCode": "+33",
-	"isoCode": "FR"
-}, {
-	"name": "British Indian Ocean Territory",
-	"currency": "USD",
-	"unicodeFlag": "🇮🇴",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/65/Flag_of_the_Commissioner_of_the_British_Indian_Ocean_Territory.svg",
-	"dialCode": "+246",
-	"isoCode": "IO"
-}, {
-	"name": "Saint Helena",
-	"currency": "SHP",
-	"unicodeFlag": "🇸🇭",
-	"dialCode": "+290",
-	"isoCode": ""
-}, {
-	"name": "Finland",
-	"currency": "EUR",
-	"unicodeFlag": "🇫🇮",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_Finland.svg",
-	"dialCode": "+358",
-	"isoCode": "FI"
-}, {
-	"name": "Fiji",
-	"currency": "FJD",
-	"unicodeFlag": "🇫🇯",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/ba/Flag_of_Fiji.svg",
-	"dialCode": "+679",
-	"isoCode": "FJ"
-}, {
-	"name": "Falkland Islands",
-	"currency": "FKP",
-	"unicodeFlag": "🇫🇰",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_the_Falkland_Islands.svg",
-	"dialCode": "+500",
-	"isoCode": "FK"
-}, {
-	"name": "Micronesia",
-	"currency": "USD",
-	"unicodeFlag": "🇫🇲",
-	"dialCode": "+691",
-	"isoCode": ""
-}, {
-	"name": "Faroe Islands",
-	"currency": "DKK",
-	"unicodeFlag": "🇫🇴",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/3c/Flag_of_the_Faroe_Islands.svg",
-	"dialCode": "+298",
-	"isoCode": "FO"
-}, {
-	"name": "Nicaragua",
-	"currency": "NIO",
-	"unicodeFlag": "🇳🇮",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Nicaragua.svg",
-	"dialCode": "+505",
-	"isoCode": "NI"
-}, {
-	"name": "Netherlands",
-	"currency": "EUR",
-	"unicodeFlag": "🇳🇱",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/20/Flag_of_the_Netherlands.svg",
-	"dialCode": "+31",
-	"isoCode": "NL"
-}, {
-	"name": "Norway",
-	"currency": "NOK",
-	"unicodeFlag": "🇳🇴",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d9/Flag_of_Norway.svg",
-	"dialCode": "+47",
-	"isoCode": "NO"
-}, {
-	"name": "Namibia",
-	"currency": "NAD",
-	"unicodeFlag": "🇳🇦",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/00/Flag_of_Namibia.svg",
-	"dialCode": "+264",
-	"isoCode": "NA"
-}, {
-	"name": "Vanuatu",
-	"currency": "VUV",
-	"unicodeFlag": "🇻🇺",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_Vanuatu.svg",
-	"dialCode": "+678",
-	"isoCode": "VU"
-}, {
-	"name": "New Caledonia",
-	"currency": "XPF",
-	"unicodeFlag": "🇳🇨",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/26/Flags_of_New_Caledonia.svg",
-	"dialCode": "+687",
-	"isoCode": "NC"
-}, {
-	"name": "Niger",
-	"currency": "XOF",
-	"unicodeFlag": "🇳🇪",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/f4/Flag_of_Niger.svg",
-	"dialCode": "+227",
-	"isoCode": "NE"
-}, {
-	"name": "Norfolk Island",
-	"currency": "AUD",
-	"unicodeFlag": "🇳🇫",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Norfolk_Island.svg",
-	"dialCode": "+672",
-	"isoCode": "NF"
-}, {
-	"name": "Nigeria",
-	"currency": "NGN",
-	"unicodeFlag": "🇳🇬",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/79/Flag_of_Nigeria.svg",
-	"dialCode": "+234",
-	"isoCode": "NG"
-}, {
-	"name": "New Zealand",
-	"currency": "NZD",
-	"unicodeFlag": "🇳🇿",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Flag_of_New_Zealand.svg",
-	"dialCode": "+64",
-	"isoCode": "NZ"
-}, {
-	"name": "Nepal",
-	"currency": "NPR",
-	"unicodeFlag": "🇳🇵",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Flag_of_Nepal.svg",
-	"dialCode": "+977",
-	"isoCode": "NP"
-}, {
-	"name": "Nauru",
-	"currency": "AUD",
-	"unicodeFlag": "🇳🇷",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/30/Flag_of_Nauru.svg",
-	"dialCode": "+674",
-	"isoCode": "NR"
-}, {
-	"name": "Niue",
-	"currency": "NZD",
-	"unicodeFlag": "🇳🇺",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_Niue.svg",
-	"dialCode": "+683",
-	"isoCode": "NU"
-}, {
-	"name": "Cook Islands",
-	"currency": "NZD",
-	"unicodeFlag": "🇨🇰",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/35/Flag_of_the_Cook_Islands.svg",
-	"dialCode": "+682",
-	"isoCode": "CK"
-}, {
-	"name": "Kosovo",
-	"currency": "EUR",
-	"unicodeFlag": "🇽🇰",
-	"dialCode": "",
-	"isoCode": ""
-}, {
-	"name": "Ivory Coast",
-	"currency": "XOF",
-	"unicodeFlag": "🇨🇮",
-	"dialCode": "+225",
-	"isoCode": ""
-}, {
-	"name": "Switzerland",
-	"currency": "CHF",
-	"unicodeFlag": "🇨🇭",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/08/Flag_of_Switzerland_%28Pantone%29.svg",
-	"dialCode": "+41",
-	"isoCode": "CH"
-}, {
-	"name": "Colombia",
-	"currency": "COP",
-	"unicodeFlag": "🇨🇴",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Colombia.svg",
-	"dialCode": "+57",
-	"isoCode": "CO"
-}, {
-	"name": "China",
-	"currency": "CNY",
-	"unicodeFlag": "🇨🇳",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fa/Flag_of_the_People%27s_Republic_of_China.svg",
-	"dialCode": "+86",
-	"isoCode": "CN"
-}, {
-	"name": "Cameroon",
-	"currency": "XAF",
-	"unicodeFlag": "🇨🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Flag_of_Cameroon.svg",
-	"dialCode": "+237",
-	"isoCode": "CM"
-}, {
-	"name": "Chile",
-	"currency": "CLP",
-	"unicodeFlag": "🇨🇱",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/78/Flag_of_Chile.svg",
-	"dialCode": "+56",
-	"isoCode": "CL"
-}, {
-	"name": "Cocos Islands",
-	"currency": "AUD",
-	"unicodeFlag": "🇨🇨",
-	"dialCode": "+61",
-	"isoCode": ""
-}, {
-	"name": "Canada",
-	"currency": "CAD",
-	"unicodeFlag": "🇨🇦",
-	"flag": "https://upload.wikimedia.org/wikipedia/en/c/cf/Flag_of_Canada.svg",
-	"dialCode": "+1",
-	"isoCode": "CA"
-}, {
-	"name": "Republic of the Congo",
-	"currency": "XAF",
-	"unicodeFlag": "🇨🇬",
-	"dialCode": "+242",
-	"isoCode": ""
-}, {
-	"name": "Central African Republic",
-	"currency": "XAF",
-	"unicodeFlag": "🇨🇫",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Flag_of_the_Central_African_Republic.svg",
-	"dialCode": "+236",
-	"isoCode": "CF"
-}, {
-	"name": "Democratic Republic of the Congo",
-	"currency": "CDF",
-	"unicodeFlag": "🇨🇩",
-	"dialCode": "+243",
-	"isoCode": ""
-}, {
-	"name": "Czech Republic",
-	"currency": "CZK",
-	"unicodeFlag": "🇨🇿",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_Czech_Republic.svg",
-	"dialCode": "+420",
-	"isoCode": "CZ"
-}, {
-	"name": "Cyprus",
-	"currency": "EUR",
-	"unicodeFlag": "🇨🇾",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d4/Flag_of_Cyprus.svg",
-	"dialCode": "+357",
-	"isoCode": "CY"
-}, {
-	"name": "Christmas Island",
-	"currency": "AUD",
-	"unicodeFlag": "🇨🇽",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/67/Flag_of_Christmas_Island.svg",
-	"dialCode": "+61",
-	"isoCode": "CX"
-}, {
-	"name": "Costa Rica",
-	"currency": "CRC",
-	"unicodeFlag": "🇨🇷",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_Costa_Rica_%28state%29.svg",
-	"dialCode": "+506",
-	"isoCode": "CR"
-}, {
-	"name": "Curacao",
-	"currency": "ANG",
-	"unicodeFlag": "🇨🇼",
-	"dialCode": "+599",
-	"isoCode": ""
-}, {
-	"name": "Cape Verde",
-	"currency": "CVE",
-	"unicodeFlag": "🇨🇻",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/38/Flag_of_Cape_Verde.svg",
-	"dialCode": "+238",
-	"isoCode": "CV"
-}, {
-	"name": "Cuba",
-	"currency": "CUP",
-	"unicodeFlag": "🇨🇺",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bd/Flag_of_Cuba.svg",
-	"dialCode": "+53",
-	"isoCode": "CU"
-}, {
-	"name": "Swaziland",
-	"currency": "SZL",
-	"unicodeFlag": "🇸🇿",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fb/Flag_of_Eswatini.svg",
-	"dialCode": "+268",
-	"isoCode": "SZ"
-}, {
-	"name": "Syria",
-	"currency": "SYP",
-	"unicodeFlag": "🇸🇾",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/5/53/Flag_of_Syria.svg",
-	"dialCode": "+963",
-	"isoCode": "SY"
-}, {
-	"name": "Sint Maarten",
-	"currency": "ANG",
-	"unicodeFlag": "🇸🇽",
-	"dialCode": "+599",
-	"isoCode": ""
-}, {
-	"name": "Kyrgyzstan",
-	"currency": "KGS",
-	"unicodeFlag": "🇰🇬",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/c7/Flag_of_Kyrgyzstan.svg",
-	"dialCode": "+996",
-	"isoCode": "KG"
-}, {
-	"name": "Kenya",
-	"currency": "KES",
-	"unicodeFlag": "🇰🇪",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/49/Flag_of_Kenya.svg",
-	"dialCode": "+254",
-	"isoCode": "KE"
-}, {
-	"name": "South Sudan",
-	"currency": "SSP",
-	"unicodeFlag": "🇸🇸",
-	"dialCode": "+211",
-	"isoCode": ""
-}, {
-	"name": "Suriname",
-	"currency": "SRD",
-	"unicodeFlag": "🇸🇷",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/60/Flag_of_Suriname.svg",
-	"dialCode": "+597",
-	"isoCode": "SR"
-}, {
-	"name": "Kiribati",
-	"currency": "AUD",
-	"unicodeFlag": "🇰🇮",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Flag_of_Kiribati.svg",
-	"dialCode": "+686",
-	"isoCode": "KI"
-}, {
-	"name": "Cambodia",
-	"currency": "KHR",
-	"unicodeFlag": "🇰🇭",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/83/Flag_of_Cambodia.svg",
-	"dialCode": "+855",
-	"isoCode": "KH"
-}, {
-	"name": "Saint Kitts and Nevis",
-	"currency": "XCD",
-	"unicodeFlag": "🇰🇳",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Saint_Kitts_and_Nevis.svg",
-	"dialCode": "+1-869",
-	"isoCode": "KN"
-}, {
-	"name": "Comoros",
-	"currency": "KMF",
-	"unicodeFlag": "🇰🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/94/Flag_of_the_Comoros.svg",
-	"dialCode": "+269",
-	"isoCode": "KM"
-}, {
-	"name": "Sao Tome and Principe",
-	"currency": "STD",
-	"unicodeFlag": "🇸🇹",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Flag_of_Sao_Tome_and_Principe.svg",
-	"dialCode": "+239",
-	"isoCode": "ST"
-}, {
-	"name": "Slovakia",
-	"currency": "EUR",
-	"unicodeFlag": "🇸🇰",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Flag_of_Slovakia.svg",
-	"dialCode": "+421",
-	"isoCode": "SK"
-}, {
-	"name": "South Korea",
-	"currency": "KRW",
-	"unicodeFlag": "🇰🇷",
-	"dialCode": "+82",
-	"isoCode": ""
-}, {
-	"name": "Slovenia",
-	"currency": "EUR",
-	"unicodeFlag": "🇸🇮",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Flag_of_Slovenia.svg",
-	"dialCode": "+386",
-	"isoCode": "SI"
-}, {
-	"name": "North Korea",
-	"currency": "KPW",
-	"unicodeFlag": "🇰🇵",
-	"dialCode": "+850",
-	"isoCode": ""
-}, {
-	"name": "Kuwait",
-	"currency": "KWD",
-	"unicodeFlag": "🇰🇼",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/a/aa/Flag_of_Kuwait.svg",
-	"dialCode": "+965",
-	"isoCode": "KW"
-}, {
-	"name": "Senegal",
-	"currency": "XOF",
-	"unicodeFlag": "🇸🇳",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Flag_of_Senegal.svg",
-	"dialCode": "+221",
-	"isoCode": "SN"
-}, {
-	"name": "San Marino",
-	"currency": "EUR",
-	"unicodeFlag": "🇸🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Flag_of_San_Marino.svg",
-	"dialCode": "+378",
-	"isoCode": "SM"
-}, {
-	"name": "Sierra Leone",
-	"currency": "SLL",
-	"unicodeFlag": "🇸🇱",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/17/Flag_of_Sierra_Leone.svg",
-	"dialCode": "+232",
-	"isoCode": "SL"
-}, {
-	"name": "Seychelles",
-	"currency": "SCR",
-	"unicodeFlag": "🇸🇨",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Flag_of_Seychelles.svg",
-	"dialCode": "+248",
-	"isoCode": "SC"
-}, {
-	"name": "Kazakhstan",
-	"currency": "KZT",
-	"unicodeFlag": "🇰🇿",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Flag_of_Kazakhstan.svg",
-	"dialCode": "+7",
-	"isoCode": "KZ"
-}, {
-	"name": "Cayman Islands",
-	"currency": "KYD",
-	"unicodeFlag": "🇰🇾",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/0f/Flag_of_the_Cayman_Islands.svg",
-	"dialCode": "+1-345",
-	"isoCode": "KY"
-}, {
-	"name": "Singapore",
-	"currency": "SGD",
-	"unicodeFlag": "🇸🇬",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Singapore.svg",
-	"dialCode": "+65",
-	"isoCode": "SG"
-}, {
-	"name": "Sweden",
-	"currency": "SEK",
-	"unicodeFlag": "🇸🇪",
-	"flag": "https://upload.wikimedia.org/wikipedia/en/4/4c/Flag_of_Sweden.svg",
-	"dialCode": "+46",
-	"isoCode": "SE"
-}, {
-	"name": "Sudan",
-	"currency": "SDG",
-	"unicodeFlag": "🇸🇩",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_Sudan.svg",
-	"dialCode": "+249",
-	"isoCode": "SD"
-}, {
-	"name": "Dominican Republic",
-	"currency": "DOP",
-	"unicodeFlag": "🇩🇴",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_the_Dominican_Republic.svg",
-	"dialCode": "+1-809 and 1-829",
-	"isoCode": "DO"
-}, {
-	"name": "Dominica",
-	"currency": "XCD",
-	"unicodeFlag": "🇩🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/c4/Flag_of_Dominica.svg",
-	"dialCode": "+1-767",
-	"isoCode": "DM"
-}, {
-	"name": "Djibouti",
-	"currency": "DJF",
-	"unicodeFlag": "🇩🇯",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/34/Flag_of_Djibouti.svg",
-	"dialCode": "+253",
-	"isoCode": "DJ"
-}, {
-	"name": "Denmark",
-	"currency": "DKK",
-	"unicodeFlag": "🇩🇰",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Flag_of_Denmark.svg",
-	"dialCode": "+45",
-	"isoCode": "DK"
-}, {
-	"name": "British Virgin Islands",
-	"currency": "USD",
-	"unicodeFlag": "🇻🇬",
-	"dialCode": "+1-284",
-	"isoCode": ""
-}, {
-	"name": "Germany",
-	"currency": "EUR",
-	"unicodeFlag": "🇩🇪",
-	"flag": "https://upload.wikimedia.org/wikipedia/en/b/ba/Flag_of_Germany.svg",
-	"dialCode": "+49",
-	"isoCode": "DE"
-}, {
-	"name": "Yemen",
-	"currency": "YER",
-	"unicodeFlag": "🇾🇪",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/89/Flag_of_Yemen.svg",
-	"dialCode": "+967",
-	"isoCode": "YE"
-}, {
-	"name": "Algeria",
-	"currency": "DZD",
-	"unicodeFlag": "🇩🇿",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/77/Flag_of_Algeria.svg",
-	"dialCode": "+213",
-	"isoCode": "DZ"
-}, {
-	"name": "United States",
-	"currency": "USD",
-	"unicodeFlag": "🇺🇸",
-	"flag": "https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg",
-	"dialCode": "+1",
-	"isoCode": "US"
-}, {
-	"name": "Uruguay",
-	"currency": "UYU",
-	"unicodeFlag": "🇺🇾",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Uruguay.svg",
-	"dialCode": "+598",
-	"isoCode": "UY"
-}, {
-	"name": "Mayotte",
-	"currency": "EUR",
-	"unicodeFlag": "🇾🇹",
-	"flag": "https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg",
-	"dialCode": "+262",
-	"isoCode": "YT"
-}, {
-	"name": "United States Minor Outlying Islands",
-	"currency": "USD",
-	"unicodeFlag": "🇺🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg",
-	"dialCode": "+1",
-	"isoCode": "UM"
-}, {
-	"name": "Lebanon",
-	"currency": "LBP",
-	"unicodeFlag": "🇱🇧",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/5/59/Flag_of_Lebanon.svg",
-	"dialCode": "+961",
-	"isoCode": "LB"
-}, {
-	"name": "Saint Lucia",
-	"currency": "XCD",
-	"unicodeFlag": "🇱🇨",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Saint_Lucia.svg",
-	"dialCode": "+1-758",
-	"isoCode": "LC"
-}, {
-	"name": "Laos",
-	"currency": "LAK",
-	"unicodeFlag": "🇱🇦",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/5/56/Flag_of_Laos.svg",
-	"dialCode": "+856",
-	"isoCode": "LA"
-}, {
-	"name": "Tuvalu",
-	"currency": "AUD",
-	"unicodeFlag": "🇹🇻",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/38/Flag_of_Tuvalu.svg",
-	"dialCode": "+688",
-	"isoCode": "TV"
-}, {
-	"name": "Taiwan",
-	"currency": "TWD",
-	"unicodeFlag": "🇹🇼",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/72/Flag_of_the_Republic_of_China.svg",
-	"dialCode": "+886",
-	"isoCode": "TW"
-}, {
-	"name": "Trinidad and Tobago",
-	"currency": "TTD",
-	"unicodeFlag": "🇹🇹",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/64/Flag_of_Trinidad_and_Tobago.svg",
-	"dialCode": "+1-868",
-	"isoCode": "TT"
-}, {
-	"name": "Turkey",
-	"currency": "TRY",
-	"unicodeFlag": "🇹🇷",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Flag_of_Turkey.svg",
-	"dialCode": "+90",
-	"isoCode": "TR"
-}, {
-	"name": "Sri Lanka",
-	"currency": "LKR",
-	"unicodeFlag": "🇱🇰",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/11/Flag_of_Sri_Lanka.svg",
-	"dialCode": "+94",
-	"isoCode": "LK"
-}, {
-	"name": "Liechtenstein",
-	"currency": "CHF",
-	"unicodeFlag": "🇱🇮",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/47/Flag_of_Liechtenstein.svg",
-	"dialCode": "+423",
-	"isoCode": "LI"
-}, {
-	"name": "Latvia",
-	"currency": "EUR",
-	"unicodeFlag": "🇱🇻",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/84/Flag_of_Latvia.svg",
-	"dialCode": "+371",
-	"isoCode": "LV"
-}, {
-	"name": "Tonga",
-	"currency": "TOP",
-	"unicodeFlag": "🇹🇴",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Tonga.svg",
-	"dialCode": "+676",
-	"isoCode": "TO"
-}, {
-	"name": "Lithuania",
-	"currency": "LTL",
-	"unicodeFlag": "🇱🇹",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/11/Flag_of_Lithuania.svg",
-	"dialCode": "+370",
-	"isoCode": "LT"
-}, {
-	"name": "Luxembourg",
-	"currency": "EUR",
-	"unicodeFlag": "🇱🇺",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/da/Flag_of_Luxembourg.svg",
-	"dialCode": "+352",
-	"isoCode": "LU"
-}, {
-	"name": "Liberia",
-	"currency": "LRD",
-	"unicodeFlag": "🇱🇷",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Flag_of_Liberia.svg",
-	"dialCode": "+231",
-	"isoCode": "LR"
-}, {
-	"name": "Lesotho",
-	"currency": "LSL",
-	"unicodeFlag": "🇱🇸",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Flag_of_Lesotho.svg",
-	"dialCode": "+266",
-	"isoCode": "LS"
-}, {
-	"name": "Thailand",
-	"currency": "THB",
-	"unicodeFlag": "🇹🇭",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Flag_of_Thailand.svg",
-	"dialCode": "+66",
-	"isoCode": "TH"
-}, {
-	"name": "French Southern Territories",
-	"currency": "EUR",
-	"unicodeFlag": "🇹🇫",
-	"dialCode": "",
-	"isoCode": ""
-}, {
-	"name": "Togo",
-	"currency": "XOF",
-	"unicodeFlag": "🇹🇬",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/68/Flag_of_Togo.svg",
-	"dialCode": "+228",
-	"isoCode": "TG"
-}, {
-	"name": "Chad",
-	"currency": "XAF",
-	"unicodeFlag": "🇹🇩",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Flag_of_Chad.svg",
-	"dialCode": "+235",
-	"isoCode": "TD"
-}, {
-	"name": "Turks and Caicos Islands",
-	"currency": "USD",
-	"unicodeFlag": "🇹🇨",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Flag_of_the_Turks_and_Caicos_Islands.svg",
-	"dialCode": "+1-649",
-	"isoCode": "TC"
-}, {
-	"name": "Libya",
-	"currency": "LYD",
-	"unicodeFlag": "🇱🇾",
-	"dialCode": "+218",
-	"isoCode": ""
-}, {
-	"name": "Vatican",
-	"currency": "EUR",
-	"unicodeFlag": "🇻🇦",
-	"dialCode": "+379",
-	"isoCode": ""
-}, {
-	"name": "Saint Vincent and the Grenadines",
-	"currency": "XCD",
-	"unicodeFlag": "🇻🇨",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Flag_of_Saint_Vincent_and_the_Grenadines.svg",
-	"dialCode": "+1-784",
-	"isoCode": "VC"
-}, {
-	"name": "United Arab Emirates",
-	"currency": "AED",
-	"unicodeFlag": "🇦🇪",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_United_Arab_Emirates.svg",
-	"dialCode": "+971",
-	"isoCode": "AE"
-}, {
-	"name": "Andorra",
-	"currency": "EUR",
-	"unicodeFlag": "🇦🇩",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/19/Flag_of_Andorra.svg",
-	"dialCode": "+376",
-	"isoCode": "AD"
-}, {
-	"name": "Antigua and Barbuda",
-	"currency": "XCD",
-	"unicodeFlag": "🇦🇬",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/89/Flag_of_Antigua_and_Barbuda.svg",
-	"dialCode": "+1-268",
-	"isoCode": "AG"
-}, {
-	"name": "Afghanistan",
-	"currency": "AFN",
-	"unicodeFlag": "🇦🇫",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Afghanistan.svg",
-	"dialCode": "+93",
-	"isoCode": "AF"
-}, {
-	"name": "Anguilla",
-	"currency": "XCD",
-	"unicodeFlag": "🇦🇮",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Flag_of_Anguilla.svg",
-	"dialCode": "+1-264",
-	"isoCode": "AI"
-}, {
-	"name": "U.S. Virgin Islands",
-	"currency": "USD",
-	"unicodeFlag": "🇻🇮",
-	"dialCode": "+1-340",
-	"isoCode": ""
-}, {
-	"name": "Iceland",
-	"currency": "ISK",
-	"unicodeFlag": "🇮🇸",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Flag_of_Iceland.svg",
-	"dialCode": "+354",
-	"isoCode": "IS"
-}, {
-	"name": "Iran",
-	"currency": "IRR",
-	"unicodeFlag": "🇮🇷",
-	"flag": " https://upload.wikimedia.org/wikipedia/commons/c/ca/Flag_of_Iran.svg",
-	"dialCode": "+98",
-	"isoCode": "IR"
-}, {
-	"name": "Armenia",
-	"currency": "AMD",
-	"unicodeFlag": "🇦🇲",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Flag_of_Armenia.svg",
-	"dialCode": "+374",
-	"isoCode": "AM"
-}, {
-	"name": "Albania",
-	"currency": "ALL",
-	"unicodeFlag": "🇦🇱",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/36/Flag_of_Albania.svg",
-	"dialCode": "+355",
-	"isoCode": "AL"
-}, {
-	"name": "Angola",
-	"currency": "AOA",
-	"unicodeFlag": "🇦🇴",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Flag_of_Angola.svg",
-	"dialCode": "+244",
-	"isoCode": "AO"
-}, {
-	"name": "Antarctica",
-	"unicodeFlag": "🇦🇶",
-	"dialCode": "",
-	"isoCode": ""
-}, {
-	"name": "American Samoa",
-	"currency": "USD",
-	"unicodeFlag": "🇦🇸",
-	"dialCode": "+1-684",
-	"isoCode": ""
-}, {
-	"name": "Argentina",
-	"currency": "ARS",
-	"unicodeFlag": "🇦🇷",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Flag_of_Argentina.svg",
-	"dialCode": "+54",
-	"isoCode": "AR"
-}, {
-	"name": "Australia",
-	"currency": "AUD",
-	"unicodeFlag": "🇦🇺",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/88/Flag_of_Australia_%28converted%29.svg",
-	"dialCode": "+61",
-	"isoCode": "AU"
-}, {
-	"name": "Austria",
-	"currency": "EUR",
-	"unicodeFlag": "🇦🇹",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/41/Flag_of_Austria.svg",
-	"dialCode": "+43",
-	"isoCode": "AT"
-}, {
-	"name": "Aruba",
-	"currency": "AWG",
-	"unicodeFlag": "🇦🇼",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Flag_of_Aruba.svg",
-	"dialCode": "+297",
-	"isoCode": "AW"
-}, {
-	"name": "India",
-	"currency": "INR",
-	"unicodeFlag": "🇮🇳",
-	"flag": "https://upload.wikimedia.org/wikipedia/en/4/41/Flag_of_India.svg",
-	"dialCode": "+91",
-	"isoCode": "IN"
-}, {
-	"name": "Aland Islands",
-	"currency": "EUR",
-	"unicodeFlag": "🇦🇽",
-	"dialCode": "+358-18",
-	"isoCode": ""
-}, {
-	"name": "Azerbaijan",
-	"currency": "AZN",
-	"unicodeFlag": "🇦🇿",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/dd/Flag_of_Azerbaijan.svg",
-	"dialCode": "+994",
-	"isoCode": "AZ"
-}, {
-	"name": "Ireland",
-	"currency": "EUR",
-	"unicodeFlag": "🇮🇪",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/45/Flag_of_Ireland.svg",
-	"dialCode": "+353",
-	"isoCode": "IE"
-}, {
-	"name": "Indonesia",
-	"currency": "IDR",
-	"unicodeFlag": "🇮🇩",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Indonesia.svg",
-	"dialCode": "+62",
-	"isoCode": "ID"
-}, {
-	"name": "Ukraine",
-	"currency": "UAH",
-	"unicodeFlag": "🇺🇦",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/49/Flag_of_Ukraine.svg",
-	"dialCode": "+380",
-	"isoCode": "UA"
+	"unicodeFlag": "🇵🇷",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/28/Flag_of_Puerto_Rico.svg",
+	"dialCode": "+1-787 and 1-939",
+	"isoCode": "PR"
 }, {
 	"name": "Qatar",
 	"currency": "QAR",
@@ -1716,12 +1234,495 @@ let allCountries = [{
 	"dialCode": "+974",
 	"isoCode": "QA"
 }, {
-	"name": "Mozambique",
-	"currency": "MZN",
-	"unicodeFlag": "🇲🇿",
-	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Flag_of_Mozambique.svg",
-	"dialCode": "+258",
-	"isoCode": "MZ"
+	"name": "Republic of the Congo",
+	"currency": "XAF",
+	"unicodeFlag": "🇨🇬",
+	"dialCode": "+242",
+	"isoCode": ""
+}, {
+	"name": "Réunion",
+	"currency": "EUR",
+	"unicodeFlag": "🇷🇪",
+	"flag": "https://upload.wikimedia.org/wikipedia/en/c/c3/Flag_of_France.svg",
+	"dialCode": "+262",
+	"isoCode": "RE"
+}, {
+	"name": "Romania",
+	"currency": "RON",
+	"unicodeFlag": "🇷🇴",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/73/Flag_of_Romania.svg",
+	"dialCode": "+40",
+	"isoCode": "RO"
+}, {
+	"name": "Russia",
+	"currency": "RUB",
+	"unicodeFlag": "🇷🇺",
+	"dialCode": "+7",
+	"isoCode": "RU"
+}, {
+	"name": "Rwanda",
+	"currency": "RWF",
+	"unicodeFlag": "🇷🇼",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/17/Flag_of_Rwanda.svg",
+	"dialCode": "+250",
+	"isoCode": "RW"
+}, {
+	"name": "Saint Barthelemy",
+	"currency": "EUR",
+	"unicodeFlag": "🇧🇱",
+	"dialCode": "+590",
+	"isoCode": ""
+}, {
+	"name": "Saint Helena",
+	"currency": "SHP",
+	"unicodeFlag": "🇸🇭",
+	"dialCode": "+290",
+	"isoCode": ""
+}, {
+	"name": "Saint Kitts and Nevis",
+	"currency": "XCD",
+	"unicodeFlag": "🇰🇳",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Saint_Kitts_and_Nevis.svg",
+	"dialCode": "+1-869",
+	"isoCode": "KN"
+}, {
+	"name": "Saint Lucia",
+	"currency": "XCD",
+	"unicodeFlag": "🇱🇨",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Flag_of_Saint_Lucia.svg",
+	"dialCode": "+1-758",
+	"isoCode": "LC"
+}, {
+	"name": "Saint Martin",
+	"currency": "EUR",
+	"unicodeFlag": "🇲🇫",
+	"dialCode": "+590",
+	"isoCode": ""
+}, {
+	"name": "Saint Pierre and Miquelon",
+	"currency": "EUR",
+	"unicodeFlag": "🇵🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/74/Flag_of_Saint-Pierre_and_Miquelon.svg",
+	"dialCode": "+508",
+	"isoCode": "PM"
+}, {
+	"name": "Saint Vincent and the Grenadines",
+	"currency": "XCD",
+	"unicodeFlag": "🇻🇨",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Flag_of_Saint_Vincent_and_the_Grenadines.svg",
+	"dialCode": "+1-784",
+	"isoCode": "VC"
+}, {
+	"name": "Samoa",
+	"currency": "WST",
+	"unicodeFlag": "🇼🇸",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/31/Flag_of_Samoa.svg",
+	"dialCode": "+685",
+	"isoCode": "WS"
+}, {
+	"name": "San Marino",
+	"currency": "EUR",
+	"unicodeFlag": "🇸🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Flag_of_San_Marino.svg",
+	"dialCode": "+378",
+	"isoCode": "SM"
+}, {
+	"name": "Sao Tome and Principe",
+	"currency": "STD",
+	"unicodeFlag": "🇸🇹",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/4f/Flag_of_Sao_Tome_and_Principe.svg",
+	"dialCode": "+239",
+	"isoCode": "ST"
+}, {
+	"name": "Saudi Arabia",
+	"currency": "SAR",
+	"unicodeFlag": "🇸🇦",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/0d/Flag_of_Saudi_Arabia.svg",
+	"dialCode": "+966",
+	"isoCode": "SA"
+}, {
+	"name": "Senegal",
+	"currency": "XOF",
+	"unicodeFlag": "🇸🇳",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fd/Flag_of_Senegal.svg",
+	"dialCode": "+221",
+	"isoCode": "SN"
+}, {
+	"name": "Serbia",
+	"currency": "RSD",
+	"unicodeFlag": "🇷🇸",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/ff/Flag_of_Serbia.svg",
+	"dialCode": "+381",
+	"isoCode": "RS"
+}, {
+	"name": "Seychelles",
+	"currency": "SCR",
+	"unicodeFlag": "🇸🇨",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Flag_of_Seychelles.svg",
+	"dialCode": "+248",
+	"isoCode": "SC"
+}, {
+	"name": "Sierra Leone",
+	"currency": "SLL",
+	"unicodeFlag": "🇸🇱",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/17/Flag_of_Sierra_Leone.svg",
+	"dialCode": "+232",
+	"isoCode": "SL"
+}, {
+	"name": "Singapore",
+	"currency": "SGD",
+	"unicodeFlag": "🇸🇬",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/48/Flag_of_Singapore.svg",
+	"dialCode": "+65",
+	"isoCode": "SG"
+}, {
+	"name": "Sint Maarten",
+	"currency": "ANG",
+	"unicodeFlag": "🇸🇽",
+	"dialCode": "+599",
+	"isoCode": ""
+}, {
+	"name": "Slovakia",
+	"currency": "EUR",
+	"unicodeFlag": "🇸🇰",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/e/e6/Flag_of_Slovakia.svg",
+	"dialCode": "+421",
+	"isoCode": "SK"
+}, {
+	"name": "Slovenia",
+	"currency": "EUR",
+	"unicodeFlag": "🇸🇮",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Flag_of_Slovenia.svg",
+	"dialCode": "+386",
+	"isoCode": "SI"
+}, {
+	"name": "Solomon Islands",
+	"currency": "SBD",
+	"unicodeFlag": "🇸🇧",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/74/Flag_of_the_Solomon_Islands.svg",
+	"dialCode": "+677",
+	"isoCode": "SB"
+}, {
+	"name": "Somalia",
+	"currency": "SOS",
+	"unicodeFlag": "🇸🇴",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Flag_of_Somalia.svg",
+	"dialCode": "+252",
+	"isoCode": "SO"
+}, {
+	"name": "South Africa",
+	"currency": "ZAR",
+	"unicodeFlag": "🇿🇦",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/a/af/Flag_of_South_Africa.svg",
+	"dialCode": "+27",
+	"isoCode": "ZA"
+}, {
+	"name": "South Georgia and the South Sandwich Islands",
+	"currency": "GBP",
+	"unicodeFlag": "🇬🇸",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Flag_of_South_Georgia_and_the_South_Sandwich_Islands.svg",
+	"dialCode": "",
+	"isoCode": "GS"
+}, {
+	"name": "South Korea",
+	"currency": "KRW",
+	"unicodeFlag": "🇰🇷",
+	"dialCode": "+82",
+	"isoCode": ""
+}, {
+	"name": "South Sudan",
+	"currency": "SSP",
+	"unicodeFlag": "🇸🇸",
+	"dialCode": "+211",
+	"isoCode": ""
+}, {
+	"name": "Spain",
+	"currency": "EUR",
+	"unicodeFlag": "🇪🇸",
+	"flag": "https://upload.wikimedia.org/wikipedia/en/9/9a/Flag_of_Spain.svg",
+	"dialCode": "+34",
+	"isoCode": "ES"
+}, {
+	"name": "Sri Lanka",
+	"currency": "LKR",
+	"unicodeFlag": "🇱🇰",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/11/Flag_of_Sri_Lanka.svg",
+	"dialCode": "+94",
+	"isoCode": "LK"
+}, {
+	"name": "Sudan",
+	"currency": "SDG",
+	"unicodeFlag": "🇸🇩",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/01/Flag_of_Sudan.svg",
+	"dialCode": "+249",
+	"isoCode": "SD"
+}, {
+	"name": "Suriname",
+	"currency": "SRD",
+	"unicodeFlag": "🇸🇷",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/60/Flag_of_Suriname.svg",
+	"dialCode": "+597",
+	"isoCode": "SR"
+}, {
+	"name": "Svalbard and Jan Mayen",
+	"currency": "NOK",
+	"unicodeFlag": "🇸🇯",
+	"dialCode": "+47",
+	"isoCode": ""
+}, {
+	"name": "Swaziland",
+	"currency": "SZL",
+	"unicodeFlag": "🇸🇿",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fb/Flag_of_Eswatini.svg",
+	"dialCode": "+268",
+	"isoCode": "SZ"
+}, {
+	"name": "Sweden",
+	"currency": "SEK",
+	"unicodeFlag": "🇸🇪",
+	"flag": "https://upload.wikimedia.org/wikipedia/en/4/4c/Flag_of_Sweden.svg",
+	"dialCode": "+46",
+	"isoCode": "SE"
+}, {
+	"name": "Switzerland",
+	"currency": "CHF",
+	"unicodeFlag": "🇨🇭",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/08/Flag_of_Switzerland_%28Pantone%29.svg",
+	"dialCode": "+41",
+	"isoCode": "CH"
+}, {
+	"name": "Syria",
+	"currency": "SYP",
+	"unicodeFlag": "🇸🇾",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/5/53/Flag_of_Syria.svg",
+	"dialCode": "+963",
+	"isoCode": "SY"
+}, {
+	"name": "Taiwan",
+	"currency": "TWD",
+	"unicodeFlag": "🇹🇼",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/7/72/Flag_of_the_Republic_of_China.svg",
+	"dialCode": "+886",
+	"isoCode": "TW"
+}, {
+	"name": "Tajikistan",
+	"currency": "TJS",
+	"unicodeFlag": "🇹🇯",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d0/Flag_of_Tajikistan.svg",
+	"dialCode": "+992",
+	"isoCode": "TJ"
+}, {
+	"name": "Tanzania",
+	"currency": "TZS",
+	"unicodeFlag": "🇹🇿",
+	"dialCode": "+255",
+	"isoCode": ""
+}, {
+	"name": "Thailand",
+	"currency": "THB",
+	"unicodeFlag": "🇹🇭",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Flag_of_Thailand.svg",
+	"dialCode": "+66",
+	"isoCode": "TH"
+}, {
+	"name": "Timor-Leste",
+	"currency": "USD",
+	"unicodeFlag": "🇹🇱",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/26/Flag_of_East_Timor.svg",
+	"dialCode": "+670",
+	"isoCode": "TL"
+}, {
+	"name": "Togo",
+	"currency": "XOF",
+	"unicodeFlag": "🇹🇬",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/68/Flag_of_Togo.svg",
+	"dialCode": "+228",
+	"isoCode": "TG"
+}, {
+	"name": "Tokelau",
+	"currency": "NZD",
+	"unicodeFlag": "🇹🇰",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/8e/Flag_of_Tokelau.svg",
+	"dialCode": "+690",
+	"isoCode": "TK"
+}, {
+	"name": "Tonga",
+	"currency": "TOP",
+	"unicodeFlag": "🇹🇴",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Flag_of_Tonga.svg",
+	"dialCode": "+676",
+	"isoCode": "TO"
+}, {
+	"name": "Trinidad and Tobago",
+	"currency": "TTD",
+	"unicodeFlag": "🇹🇹",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/64/Flag_of_Trinidad_and_Tobago.svg",
+	"dialCode": "+1-868",
+	"isoCode": "TT"
+}, {
+	"name": "Tunisia",
+	"currency": "TND",
+	"unicodeFlag": "🇹🇳",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Flag_of_Tunisia.svg",
+	"dialCode": "+216",
+	"isoCode": "TN"
+}, {
+	"name": "Turkey",
+	"currency": "TRY",
+	"unicodeFlag": "🇹🇷",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Flag_of_Turkey.svg",
+	"dialCode": "+90",
+	"isoCode": "TR"
+}, {
+	"name": "Turkmenistan",
+	"currency": "TMT",
+	"unicodeFlag": "🇹🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Flag_of_Turkmenistan.svg",
+	"dialCode": "+993",
+	"isoCode": "TM"
+}, {
+	"name": "Turks and Caicos Islands",
+	"currency": "USD",
+	"unicodeFlag": "🇹🇨",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Flag_of_the_Turks_and_Caicos_Islands.svg",
+	"dialCode": "+1-649",
+	"isoCode": "TC"
+}, {
+	"name": "Tuvalu",
+	"currency": "AUD",
+	"unicodeFlag": "🇹🇻",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/3/38/Flag_of_Tuvalu.svg",
+	"dialCode": "+688",
+	"isoCode": "TV"
+}, {
+	"name": "U.S. Virgin Islands",
+	"currency": "USD",
+	"unicodeFlag": "🇻🇮",
+	"dialCode": "+1-340",
+	"isoCode": ""
+}, {
+	"name": "Uganda",
+	"currency": "UGX",
+	"unicodeFlag": "🇺🇬",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Flag_of_Uganda.svg",
+	"dialCode": "+256",
+	"isoCode": "UG"
+}, {
+	"name": "Ukraine",
+	"currency": "UAH",
+	"unicodeFlag": "🇺🇦",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/4/49/Flag_of_Ukraine.svg",
+	"dialCode": "+380",
+	"isoCode": "UA"
+}, {
+	"name": "United Arab Emirates",
+	"currency": "AED",
+	"unicodeFlag": "🇦🇪",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Flag_of_the_United_Arab_Emirates.svg",
+	"dialCode": "+971",
+	"isoCode": "AE"
+}, {
+	"name": "United Kingdom",
+	"currency": "GBP",
+	"unicodeFlag": "🇬🇧",
+	"flag": "https://upload.wikimedia.org/wikipedia/en/a/ae/Flag_of_the_United_Kingdom.svg",
+	"dialCode": "+44",
+	"isoCode": "GB"
+}, {
+	"name": "United States",
+	"currency": "USD",
+	"unicodeFlag": "🇺🇸",
+	"flag": "https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg",
+	"dialCode": "+1",
+	"isoCode": "US"
+}, {
+	"name": "United States Minor Outlying Islands",
+	"currency": "USD",
+	"unicodeFlag": "🇺🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/en/a/a4/Flag_of_the_United_States.svg",
+	"dialCode": "+1",
+	"isoCode": "UM"
+}, {
+	"name": "Uruguay",
+	"currency": "UYU",
+	"unicodeFlag": "🇺🇾",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Uruguay.svg",
+	"dialCode": "+598",
+	"isoCode": "UY"
+}, {
+	"name": "Uzbekistan",
+	"currency": "UZS",
+	"unicodeFlag": "🇺🇿",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/84/Flag_of_Uzbekistan.svg",
+	"dialCode": "+998",
+	"isoCode": "UZ"
+}, {
+	"name": "Vanuatu",
+	"currency": "VUV",
+	"unicodeFlag": "🇻🇺",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Flag_of_Vanuatu.svg",
+	"dialCode": "+678",
+	"isoCode": "VU"
+}, {
+	"name": "Vatican",
+	"currency": "EUR",
+	"unicodeFlag": "🇻🇦",
+	"dialCode": "+379",
+	"isoCode": ""
+}, {
+	"name": "Vatican City State (Holy See)",
+	"currency": "EUR",
+	"unicodeFlag": "🇻🇦",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/00/Flag_of_the_Vatican_City.svg",
+	"dialCode": "+379",
+	"isoCode": "VA"
+}, {
+	"name": "Venezuela",
+	"currency": "VEF",
+	"unicodeFlag": "🇻🇪",
+	"dialCode": "+58",
+	"isoCode": "VE"
+}, {
+	"name": "Vietnam",
+	"currency": "VND",
+	"unicodeFlag": "🇻🇳",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/2/21/Flag_of_Vietnam.svg",
+	"dialCode": "+84",
+	"isoCode": "VN"
+}, {
+	"name": "Wallis and Futuna",
+	"currency": "XPF",
+	"unicodeFlag": "🇼🇫",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/d/d2/Flag_of_Wallis_and_Futuna.svg",
+	"dialCode": "+681",
+	"isoCode": "WF"
+}, {
+	"name": "Western Sahara",
+	"currency": "MAD",
+	"unicodeFlag": "🇪🇭",
+	"dialCode": "+212",
+	"isoCode": ""
+}, {
+	"name": "Yemen",
+	"currency": "YER",
+	"unicodeFlag": "🇾🇪",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/8/89/Flag_of_Yemen.svg",
+	"dialCode": "+967",
+	"isoCode": "YE"
+}, {
+	"name": "Zambia",
+	"currency": "ZMK",
+	"unicodeFlag": "🇿🇲",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/0/06/Flag_of_Zambia.svg",
+	"dialCode": "+260",
+	"isoCode": "ZM"
+}, {
+	"name": "Zimbabwe",
+	"currency": "ZWL",
+	"unicodeFlag": "🇿🇼",
+	"flag": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Flag_of_Zimbabwe.svg",
+	"dialCode": "+263",
+	"isoCode": "ZW"
 }]
 
 allCountries = allCountries.filter(country => country.isoCode !== "");

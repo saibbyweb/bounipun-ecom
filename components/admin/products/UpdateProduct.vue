@@ -402,6 +402,14 @@
       activeText="🔒 Locked"
       inactiveText="Unlocked"
     />
+
+        <!-- ask for price -->
+    <Toggle
+      v-model="doc.askForPrice"
+      label="Ask for Price:"
+      activeText="Yes"
+      inactiveText="No"
+    />
     
     <!-- sale status -->
     <div>
@@ -477,10 +485,10 @@ const baseDoc = () => ({
   // etd: "",
   lock: false,
   sale: null,
+  askForPrice: false,
   status: false,
 });
 
-import { v4 as uuidv4 } from "uuid";
 import updateProductHelper from "./updateProductHelper.js";
 
 export default {
@@ -868,6 +876,7 @@ export default {
         // etd,
         lock,
         sale,
+        askForPrice,
         status,
       } = details;
       this.doc = {
@@ -893,6 +902,7 @@ export default {
         // etd: etd === null ? "" : etd.toString(),
         lock,
         sale,
+        askForPrice,
         status,
       };
 

@@ -77,7 +77,7 @@ export default {
     if(this.adminMode) {
       this.$emit("input", '+91');
       this.$emit('setCountryIsoCode', 'IN');
-      this.selectedCountryIndex = 98;
+      this.selectedCountryIndex = 90;
       return;
     }
       
