@@ -3,14 +3,13 @@ import { methods as currencyMethods } from "./currency";
 /* schema */
 const schema = new mongoose.Schema({
     bounipun_id: String,
-    currencyMultiplier: Number,
-    dollarValue: Number,
     domesticShippingCharge: Number,
     internationalShippingCharge: Number,
     shippingDisclaimerDomestic: String,
     shippingDisclaimerInternational: String,
     gstPercentage: Number,
-    internationalTaxPercentage: Number
+    internationalTaxPercentage: Number,
+    features: [{ name: String, status: Boolean }]
 },
     {
         timestamps: true
@@ -38,6 +37,38 @@ export const methods = {
 
         await newConfig.save();
     },
+    async setNewFeature(featureName) {
+        /* get existing config */
+        const existingConfig = await this.getGlobalConfig();
+        let features = [];
+
+        if (existingConfig.features === undefined)
+            features = [{ name: featureName, status: false }]
+        else {
+            features = existingConfig.features;
+            features.push({ name: featureName, status: false });
+        }
+
+        await model.findOneAndUpdate({ bounipun_id: "saibbyweb" }, { features })
+    },
+    /* remove feature from feature list */
+    async removeFeature(featureName) {
+        /* get existing config */
+        const existingConfig = await this.getGlobalConfig();
+        let features = [];
+
+        if (existingConfig.features === undefined)
+            return false;
+
+        features = existingConfig.features;
+        const foundIndex = features.findIndex(f => f.name === featureName)
+        if(foundIndex !== -1)
+            features.splice(foundIndex, 1);
+        
+        await model.findOneAndUpdate({ bounipun_id: "saibbyweb" }, { features })
+
+        console.log(await this.getGlobalConfig())
+    },
     async updateGlobalConfig(config) {
         await model.findOneAndUpdate({ bounipun_id: "saibbyweb" }, {
             ...config
@@ -45,48 +76,46 @@ export const methods = {
     },
     async getGlobalConfig(currency) {
         const fetchGlobalConfig: any = model
-        .findOne({ bounipun_id: "saibbyweb" })
-        .select(
-          "currencyMultiplier dollarValue domesticShippingCharge internationalShippingCharge gstPercentage internationalTaxPercentage shippingDisclaimerDomestic shippingDisclaimerInternational"
-        )
-        .lean();
-    
-      /* config */
-      const { response: config, error } = await task(fetchGlobalConfig);
-    
-      /* if error occurred */
-      if (error || config === null) {
-        return false;
-      }
-    
-      /* get currency from req, if not INR or DOLLAR, convert shipping charge from dollars to the currency provided */
-      if (currency !== "INR" && currency !== "USD") {
-    
-        console.log("⚖️ Interational shipping charge needs conversion to ", currency);
-        const dollarDetails = await currencyMethods.getCurrency("USD");
-        const storeCurrency = await currencyMethods.getCurrency(currency);
-    
-        console.log("Current Ex. rate of USD: ", dollarDetails.exchangeRateINR);
-        console.log(`Current Ex. rate of ${currency}: `, storeCurrency.exchangeRateINR);
-    
-        /* set in dollars */
-        let { internationalShippingCharge: charge } = config;
-        charge = parseFloat(charge);
-        console.log('Shipping charge: ', charge, ' USD')
-    
-        /* convert to INR */
-        charge =
-        charge * dollarDetails.exchangeRateINR;
-        /* again convert to store currency */
-        charge =
-        charge / storeCurrency.exchangeRateINR;
-    
-        config.internationalShippingCharge = charge.toFixed(2);
-        
-        console.log('✅ converted to: ', config.internationalShippingCharge,currency);
-      }
+            .findOne({ bounipun_id: "saibbyweb" })
+            .select({ createdAt: 0, updatedAt: 0, bounipun_id: 0, __v: 0 })
+            .lean();
 
-      return config;
+        /* config */
+        const { response: config, error } = await task(fetchGlobalConfig);
+
+        /* if error occurred */
+        if (error || config === null) {
+            return false;
+        }
+
+        /* get currency from req, if not INR or DOLLAR, convert shipping charge from dollars to the currency provided */
+        if (currency !== "INR" && currency !== "USD") {
+
+            console.log("⚖️ Interational shipping charge needs conversion to ", currency);
+            const dollarDetails = await currencyMethods.getCurrency("USD");
+            const storeCurrency = await currencyMethods.getCurrency(currency);
+
+            console.log("Current Ex. rate of USD: ", dollarDetails.exchangeRateINR);
+            console.log(`Current Ex. rate of ${currency}: `, storeCurrency.exchangeRateINR);
+
+            /* set in dollars */
+            let { internationalShippingCharge: charge } = config;
+            charge = parseFloat(charge);
+            console.log('Shipping charge: ', charge, ' USD')
+
+            /* convert to INR */
+            charge =
+                charge * dollarDetails.exchangeRateINR;
+            /* again convert to store currency */
+            charge =
+                charge / storeCurrency.exchangeRateINR;
+
+            config.internationalShippingCharge = charge.toFixed(2);
+
+            console.log('✅ converted to: ', config.internationalShippingCharge, currency);
+        }
+
+        return config;
     }
 }
 
