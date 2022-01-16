@@ -28,13 +28,13 @@ export default {
 .sw-checkbox {
   
     .checkbox {
-        height: 15px;
-        width: 15px;
+        height: 12px;
+        width: 12px;
         margin-right:5px;
     }
     .label {
         font-family: $font_2;
-        font-size: 14px;
+        font-size: 10px;
         text-align: center;
         cursor: pointer;
 

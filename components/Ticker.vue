@@ -74,7 +74,7 @@ export default {
   width: 100%;
   height: 3vh;
   position: fixed;
-  z-index: 2;
+  z-index: 3;
   top: 0;
   left: 0;
   background-color: #202020;

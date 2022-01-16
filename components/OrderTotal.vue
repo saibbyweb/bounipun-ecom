@@ -52,7 +52,6 @@
     <div class="data-point grand-total flex between">
       <p class="name flex center col">
         Grand Total: <br />
-        <!-- <span class="count"> {{ cartCount }} Items(s) </span> -->
       </p>
       <span class="value"> {{ formatCurrency(grandTotal) }} </span>
     </div>
@@ -180,7 +179,7 @@ export default {
     .name {
       color: $gray;
       font-family: $font_1;
-      font-size: 14px;
+      font-size: 12px;
       text-transform: uppercase;
 
       &.green {
@@ -190,12 +189,12 @@ export default {
 
     .value {
       color: $dark_gray;
-      font-size: 17px;
+      font-size: 14px;
       font-family: $font_2;
 
       &.small {
         font-family: $font_2;
-        font-size: 15px;
+        font-size: 12px;
       }
 
       &.green {

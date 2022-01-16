@@ -3,7 +3,7 @@
     <div class="page-header center">
       <h2 class="title">Shopping Bag</h2>
     </div>
-
+    <!-- cart item + actions container -->
     <div v-if="!cartEmpty" class="cart-container flex">
       <!-- cart items -->
       <div class="cart-items flex center col">
@@ -83,6 +83,7 @@
       </div>
     </div>
 
+    <!-- cart empty -->
     <div v-if="cartEmpty" class="side-pad">
       <ActionResponse
         icon="/icons/cart_empty.png"
@@ -91,13 +92,11 @@
         action="Continue Shopping"
       />
     </div>
+
   </div>
 </template>
 
 <script>
-import sumBy from "lodash/sumBy";
-// import colorPickerVue from "../components/admin/colors/colorPicker.vue";
-// import InputBox from "../components/admin/input/InputBox.vue";
 export default {
   head() {
     return {
@@ -122,7 +121,6 @@ export default {
     },
     combinedDeliveryConsent: {
       handler(newVal) {
-        console.log(newVal, "--well");
         this.$store.commit("customer/setCombinedDeliveryConsent", newVal);
       },
       immediate: true
@@ -177,9 +175,7 @@ export default {
   },
   methods: {
     test() {
-        // if(process.env.NODE_ENV === 'production') {
         console.log(window.host);
-      // }
     },
     async applyCoupon() {
       if (this.couponApplied === false) {
@@ -253,20 +249,18 @@ export default {
   justify-content: flex-start;
   padding-left: 5%;
 
-
   .cart-items {
     width: 50%;
-    // overflow-y: scroll;
   }
   .actions {
     width: 30%;
     background-color:white;
     @media (min-width: 769px) {
-      position: fixed;
+      position: absolute;
       right: 5%;
       top: calc($pageMarginTop + 1vh);
-      height: 88vh;
-      z-index: 4;
+      height: 89vh;
+      z-index: 2;
       overflow: hidden;
       padding:1%;
     }
@@ -335,7 +329,7 @@ export default {
   span {
     &.value {
       color: $dark_gray;
-      font-size: 17px;
+      font-size: 13px;
     }
   }
 }
@@ -343,7 +337,7 @@ export default {
   .note {
     background-color: #32a77c;
     color: white;
-    padding: 4px 10px;
+    padding: 2px 10px;
     font-size: 12px;
     font-family: $font_1;
     // margin-top: 10px;
