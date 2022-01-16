@@ -1,6 +1,6 @@
 <template>
   <div class="input-box">
-    <label class="label"> {{ label }} :</label>
+    <label class="label" :style="labelCSS"> {{ label }} :</label>
 
     <div
       v-if="!disabled"
@@ -44,6 +44,10 @@ export default {
       type: String,
       default: "120px",
     },
+    labelCSS: {
+      type: String, 
+      default: ""
+    }
   },
   data() {
     return {

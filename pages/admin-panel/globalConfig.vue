@@ -28,11 +28,13 @@
         v-model="doc.shippingDisclaimerInternational"
       />
       <br />
-
+      <div class="flex center" style="width:100%">
       <!-- action complete gif -->
-      <img v-if="updated" class="action-complete" src="/complete.gif" />
+      <img v-if="updated.mainConfig" class="action-complete" src="/complete.gif" />
       <!-- update document -->
-      <button @click="updateDocument" class="action">Update Main Config</button>
+      <button @click="updateDocument('mainConfig')" class="action">Update Main Config</button>
+
+      </div>
     </div>
 
     <div class="currency-prices flex col center">
@@ -71,6 +73,8 @@
         </div>
       </div>
       <br />
+
+      
       <button class="action" @click="updateExchangeRates">
         Update Exchange Rates
       </button>
@@ -82,11 +86,29 @@
       />
     </div>
 
-    <div class="flex col center">
+    <div class="flex col center" style="width: 40%">
       <h3>Features Toggle</h3>
       <br />
-    </div>
 
+      <div class="feature" v-for="feature in doc.features" :key="feature._id">
+        <Toggle
+          v-model="feature.status"
+          :label="feature.name"
+          labelCSS="width:120px; font-size:12px"
+          width="150px"
+        />
+      </div>
+      <br />
+
+      <div class="flex center" style="width:100%">
+      <!-- action complete gif -->
+      <img v-if="updated.features" class="action-complete" src="/complete.gif" />
+      <!-- update document -->
+      <button @click="updateDocument('features')" class="action">
+        Update Features
+      </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -111,15 +133,24 @@ export default {
         shippingDisclaimerInternational: "",
         gstPercentage: "",
         internationalTaxPercentage: "",
+        features: [],
       },
       currencies: [],
       loading: true,
-      updated: false,
+      updated: {
+        mainConfig: false,
+        currenices: false,
+        features: false
+      },
       exchangeRateUpdated: false,
       showInflationSlider: false,
     };
   },
   methods: {
+    flash(prop) {
+      this.updated[prop] = true;
+      setTimeout(() => this.updated[prop] = false,1700);
+    },
     async updateExchangeRates() {
       for (const currency of this.currencies) {
         await this.$updateDocument("currency", currency, true);
@@ -185,18 +216,18 @@ export default {
       //   internationalTaxPercentage: doc.internationalTaxPercentage,
       // };
     },
-    async updateDocument() {
+    async updateDocument(prop) {
       const result = await this.$updateDocument(this.model, this.doc, true);
 
       if (!result.updated) return;
 
-      this.$flash(this);
+      this.flash(prop);
     },
   },
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" scoped="true">
 .global-config {
   width: 100%;
 
