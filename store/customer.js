@@ -21,6 +21,7 @@ export const state = () => ({
     code: "",
     /* more props added after fetching from server */
   },
+  giftMessage: {},
   collections: [],
   recentlyViewed: [],
   countryIndex: 0,
@@ -55,6 +56,9 @@ const findCartItem = (cart, cartItem) => {
 };
 
 export const mutations = {
+  setGiftMessage(state, value) {
+    state.giftMessage = value;
+  },
   addToRecentlyViewed(state, value) {
     /* value contains product id and color id */
     if (state.recentlyViewed === undefined) state.recentlyViewed = [];

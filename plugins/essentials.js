@@ -164,6 +164,22 @@ export default (context, inject) => {
     return result;
   };
 
+  /* feature available */
+  const featureAvailable = (featureName) => {
+    const config = $store.state.customer.globalConfig;
+    const { features } = config;
+    
+    if(features.length === 0 || features == undefined || features === null)
+      return false;
+    
+    /* find feature in features array */
+    const foundIndex = features.findIndex(f => f.name === featureName);
+    if(foundIndex === -1)
+      return false;
+    
+    return features[foundIndex].status;
+  }
+
   /* get image base s3 path */
   const getImageBaseS3Path = path => {
     if(process.env.MODE === 'developement')
@@ -299,4 +315,5 @@ export default (context, inject) => {
   inject("post", httpPostRequest);
   inject("vibrateDevice", vibrateDevice);
   inject("formatDate", formatDate);
+  inject("featureAvailable", featureAvailable);
 };

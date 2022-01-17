@@ -160,7 +160,6 @@ export default {
   },
   data() {
     return {
-      // deliveryAddress: demoDeliveryAddress,
       deliveryAddress: this.$route.params.deliveryAddress,
       remoteCartItems: this.$store.state.customer.globalRemoteCart,
       razorpayCheckout: null,

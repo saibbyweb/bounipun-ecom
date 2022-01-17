@@ -79,17 +79,17 @@
         </div>
 
         <!-- gift message -->
-        <div class="gift-box">
+        <div v-if="giftMessagesAvailable" class="gift-box">
           <Checkbox label="This order is a gift" v-model="gift.status" />
   
-          <GiftMessage v-if="gift.status" @close="gift.status = false" />
+          <GiftMessage v-if="gift.status" @close="gift.status = false" v-model="gift" />
         </div>
 
         <br />
 
         <!-- proceed to address page-->
         <div v-if="!cartEmpty" class="proceed flex center">
-          <button @click="$router.push('/delivery-address')" class="action">
+          <button @click="moveToDeliveryPage" class="action">
             Proceed To Buy
           </button>
         </div>
@@ -131,6 +131,7 @@ export default {
         from: "",
         message: "",
       },
+      giftMessagesAvailable: false
     };
   },
   watch: {
@@ -148,11 +149,13 @@ export default {
     // this.$ga.page('/cart');
     console.log("mounted");
 
-    setTimeout(() => {
+    setTimeout(async () => {
       this.couponCode = this.coupon.code;
       this.$store.dispatch("customer/fetchCart");
       this.$store.dispatch("customer/fetchCoupon", this.coupon.code);
-      this.$store.dispatch("customer/fetchGlobalConfig");
+      await this.$store.dispatch("customer/fetchGlobalConfig");
+      console.log('fetched global config')
+      this.giftMessagesAvailable = this.$featureAvailable('giftMessages')
     }, 300);
   },
   computed: {
@@ -195,8 +198,9 @@ export default {
     },
   },
   methods: {
-    test() {
-      console.log(window.host);
+    moveToDeliveryPage() {
+      this.$store.commit("customer/setGiftMessage", this.gift.status ? this.gift : {status: false});
+      this.$router.push('/delivery-address');
     },
     async applyCoupon() {
       if (this.couponApplied === false) {

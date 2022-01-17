@@ -49,7 +49,7 @@ export default {
     this.$store.commit("customer/loadPersistedState");
     /* listen for all mutations */
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "customer/setLoading") return;
+      if (mutation.type === "customer/setLoading" || mutation.type === "customer/setGiftMessage") return;
 
       console.log(mutation);
       // console.log(state.customer.cart);
