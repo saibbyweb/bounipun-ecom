@@ -74,6 +74,15 @@
           </div>
         </div>
 
+        <!-- gift message -->
+        <div class="gift-box flex center">
+            <Checkbox
+              label="This order is a gift"
+              v-model="gift.status"
+            />
+            <GiftMessage v-if="gift.status" @close="gift.status = false"/>
+        </div>
+
         <!-- proceed to address page-->
         <div v-if="!cartEmpty" class="proceed flex center">
           <button @click="$router.push('/delivery-address')" class="action">
@@ -101,7 +110,7 @@ export default {
   head() {
     return {
       title: "Cart | Bounipun Kashmir"
-    };
+    }
   },
   data() {
     return {
@@ -112,7 +121,13 @@ export default {
         message: "This coupon code is not valid"
       },
       remoteCartItems: this.$store.state.customer.globalRemoteCart,
-      combinedDeliveryConsent: true
+      combinedDeliveryConsent: true,
+      gift: {
+        status: false,
+        to: "",
+        from: "",
+        message: ""
+      }
     };
   },
   watch: {

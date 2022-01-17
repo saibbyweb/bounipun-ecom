@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import CurrencyHelper from "../helpers/currencyHelper.js";
+import CurrencyHelper from "../../helpers/currencyHelper.js";
 export default {
   mixins: [CurrencyHelper],
   mounted() {
