@@ -117,7 +117,7 @@ export default {
   display: flex;
   align-items: center;
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
-  margin: 5px;
+  margin: 10px;
   position: relative;
   height: 200px;
   width: 80%;

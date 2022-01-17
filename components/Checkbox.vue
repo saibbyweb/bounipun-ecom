@@ -34,7 +34,7 @@ export default {
     }
     .label {
         font-family: $font_2;
-        font-size: 10px;
+        font-size: 12px;
         text-align: center;
         cursor: pointer;
 

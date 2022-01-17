@@ -170,17 +170,17 @@ export default {
 .order-total {
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
   margin: 5% 0;
-  padding: 10px;
+  padding: 5px 10px;
   box-sizing: border-box;
 
   .data-point {
-    margin: 3px 0;
+    margin: 1px 0;
 
     .name {
       color: $gray;
       font-family: $font_1;
-      font-size: 12px;
-      text-transform: uppercase;
+      font-size: 13px;
+      // text-transform: uppercase;
 
       &.green {
         color: rgb(37, 154, 107);
@@ -189,7 +189,7 @@ export default {
 
     .value {
       color: $dark_gray;
-      font-size: 14px;
+      font-size: 15px;
       font-family: $font_2;
 
       &.small {
@@ -199,8 +199,7 @@ export default {
 
       &.green {
         color: rgb(37, 154, 107);
-        // font-family: $font_2_bold;
-        text-transform: uppercase;
+        // text-transform: uppercase;
       }
     }
   }

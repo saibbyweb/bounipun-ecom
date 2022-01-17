@@ -56,32 +56,36 @@
         <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
 
         <div class="delivery-specific">
-          <!-- shipping note -->
-          <p v-if="$store.state.customer.combinedDeliveryConsent" class="note">
-            Combined Standard shipping for the whole order:
-            {{ maximumShippingTime }} weeks
-          </p>
-          
           <!-- shipping disclaimer -->
-          <p class="note disclaimer"> {{ shippingDisclaimer }} </p>
+          <p class="note disclaimer">{{ shippingDisclaimer }}</p>
 
           <!-- consent for combined delivery -->
-          <div class="pad-10">
+          <div class="pad">
             <Checkbox
-              label="I would like receive all items in the order as a single package."
+              label="Receive all items in this order as a single package."
               v-model="combinedDeliveryConsent"
             />
+
+            <!-- shipping note -->
+            <p
+              v-if="$store.state.customer.combinedDeliveryConsent"
+              class="note"
+            >
+              Combined Standard shipping for the whole order:
+              {{ maximumShippingTime }} weeks
+            </p>
           </div>
+   
         </div>
 
         <!-- gift message -->
-        <div class="gift-box flex center">
-            <Checkbox
-              label="This order is a gift"
-              v-model="gift.status"
-            />
-            <GiftMessage v-if="gift.status" @close="gift.status = false"/>
+        <div class="gift-box">
+          <Checkbox label="This order is a gift" v-model="gift.status" />
+  
+          <GiftMessage v-if="gift.status" @close="gift.status = false" />
         </div>
+
+        <br />
 
         <!-- proceed to address page-->
         <div v-if="!cartEmpty" class="proceed flex center">
@@ -101,7 +105,6 @@
         action="Continue Shopping"
       />
     </div>
-
   </div>
 </template>
 
@@ -109,8 +112,8 @@
 export default {
   head() {
     return {
-      title: "Cart | Bounipun Kashmir"
-    }
+      title: "Cart | Bounipun Kashmir",
+    };
   },
   data() {
     return {
@@ -118,7 +121,7 @@ export default {
       couponCode: "",
       couponError: {
         status: false,
-        message: "This coupon code is not valid"
+        message: "This coupon code is not valid",
       },
       remoteCartItems: this.$store.state.customer.globalRemoteCart,
       combinedDeliveryConsent: true,
@@ -126,8 +129,8 @@ export default {
         status: false,
         to: "",
         from: "",
-        message: ""
-      }
+        message: "",
+      },
     };
   },
   watch: {
@@ -138,13 +141,12 @@ export default {
       handler(newVal) {
         this.$store.commit("customer/setCombinedDeliveryConsent", newVal);
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   mounted() {
     // this.$ga.page('/cart');
     console.log("mounted");
-
 
     setTimeout(() => {
       this.couponCode = this.coupon.code;
@@ -155,28 +157,32 @@ export default {
   },
   computed: {
     maximumShippingTime() {
-      if(this.cartEmpty)
-        return 1;
+      if (this.cartEmpty) return 1;
       const allTimes = this.$store.state.customer.globalRemoteCart.map(
-        item => item.shippingTime
+        (item) => item.shippingTime
       );
       const maximumShippingTime = Math.max(...allTimes);
       return maximumShippingTime;
     },
     shippingDisclaimer() {
-      if(this.$store.state.customer.currency === "INR")
-        return this.$store.state.customer.globalConfig.shippingDisclaimerDomestic
+      if (this.$store.state.customer.currency === "INR")
+        return this.$store.state.customer.globalConfig
+          .shippingDisclaimerDomestic;
       else
-        return this.$store.state.customer.globalConfig.shippingDisclaimerInternational
+        return this.$store.state.customer.globalConfig
+          .shippingDisclaimerInternational;
     },
     currency() {
       return this.$store.state.customer.currency + " ";
     },
-    cartEmpty: function() {
-      return this.$store.state.customer.globalRemoteCart === false || this.$store.state.customer.globalRemoteCart.length === 0
+    cartEmpty: function () {
+      return (
+        this.$store.state.customer.globalRemoteCart === false ||
+        this.$store.state.customer.globalRemoteCart.length === 0
+      );
     },
     cartLength() {
-      return this.$store.state.customer.globalRemoteCart
+      return this.$store.state.customer.globalRemoteCart;
     },
     coupon() {
       return this.$store.state.customer.coupon;
@@ -186,11 +192,11 @@ export default {
     },
     cartTotal() {
       return this.$store.getters["customer/getCartTotal"];
-    }
+    },
   },
   methods: {
     test() {
-        console.log(window.host);
+      console.log(window.host);
     },
     async applyCoupon() {
       if (this.couponApplied === false) {
@@ -227,7 +233,7 @@ export default {
       } else
         await this.$post("/cartActions", {
           action: "update-quantity",
-          cartItem: item
+          cartItem: item,
         });
 
       await this.$store.dispatch("customer/fetchCart");
@@ -240,25 +246,26 @@ export default {
       } else
         await this.$post("/cartActions", {
           action: "remove-from-cart",
-          cartItem
+          cartItem,
         });
 
       await this.$store.dispatch("customer/fetchCart");
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .cart {
-  margin-top: calc($pageMarginTop + 2vh); 
-  padding-top:6%;
-  min-height: 89vh;
+  margin-top: calc($pageMarginTop + 2vh);
+  padding-top: 6%;
+  min-height: 90vh;
 
   .title {
     font-size: 25px !important;
   }
 }
+
 .cart-container {
   width: 100%;
   justify-content: flex-start;
@@ -267,20 +274,22 @@ export default {
   .cart-items {
     width: 50%;
   }
+
   .actions {
     width: 30%;
-    background-color:white;
+    background-color: white;
+
     @media (min-width: 769px) {
       position: absolute;
       right: 5%;
       top: calc($pageMarginTop + 1vh);
-      height: 89vh;
+      min-height: 89vh;
       z-index: 2;
       overflow: hidden;
-      padding:1%;
+      padding: 1%;
     }
-    // background: red;
   }
+
   @media (max-width: 768px) {
     flex-direction: column;
     padding-left: 0%;
@@ -299,6 +308,8 @@ export default {
   .input {
     width: 70%;
     .apply {
+      padding: 1px;
+      font-size: 14px;
       width: 70%;
       background-color: #32a77c;
 
@@ -348,12 +359,13 @@ export default {
     }
   }
 }
+
 .delivery-specific {
   .note {
     background-color: #32a77c;
     color: white;
     padding: 2px 10px;
-    font-size: 12px;
+    font-size: 11px;
     font-family: $font_1;
     // margin-top: 10px;
     text-align: center;
@@ -362,6 +374,10 @@ export default {
       background-color: transparent;
     }
   }
+}
+
+.gift-box {
+  margin-top:10px;
 }
 
 .proceed {
