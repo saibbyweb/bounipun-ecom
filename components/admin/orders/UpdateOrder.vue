@@ -54,6 +54,12 @@
       </span>
     </div>
 
+    <!-- order is a gift -->
+    <div v-if="doc.giftMessage !== undefined && doc.giftMessage.status === true" class="order-is-a-gift">
+      <label class="label"> Gifting: </label>
+      <GiftMessage :value="doc.giftMessage" :disabled="true" />
+    </div>
+
     <!-- order items -->
     <div class="items">
       <!-- label order items -->
@@ -117,6 +123,7 @@ const baseDoc = () => ({
   discountValue: "",
   shippingCharge: "",
   combinedDeliveryConsent: false,
+  giftMessage: { status: false},
   deliveryAddress: {
     firstName: "",
     surName: "",
@@ -203,6 +210,7 @@ export default {
         amount,
         subTotal,
         combinedDeliveryConsent,
+        giftMessage,
         discountValue,
         shippingCharge,
         deliveryAddress,
@@ -219,6 +227,7 @@ export default {
         amount,
         subTotal,
         combinedDeliveryConsent,
+        giftMessage,
         shippingCharge,
         discountValue,
         deliveryAddress,

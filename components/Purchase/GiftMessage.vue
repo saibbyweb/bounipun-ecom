@@ -3,7 +3,7 @@
   <div class="gift-message">
     <div class="flex center">
       <label> To: </label>
-      <input class="text-box" type="text" :value="value.to" placeholder="To" @input="$emit('input', {...value, to: $event.target.value})" />
+      <input class="text-box" type="text" :value="value.to" placeholder="To" @input="$emit('input', {...value, to: $event.target.value})" :disabled="disabled" />
     </div>
 
     <div class="flex center">
@@ -14,6 +14,7 @@
         :value="value.from"
         placeholder="From"
         @input="$emit('input', {...value, from: $event.target.value})"
+        :disabled="disabled" 
       />
     </div>
     <div class="flex center">
@@ -24,6 +25,7 @@
         maxlength="50"
         placeholder="Personal Message within 50 characters"
         @input="$emit('input', {...value, message: $event.target.value})"
+        :disabled="disabled" 
       />
     </div>
   </div>
@@ -40,6 +42,10 @@ export default {
     error: {
       type: Object,
       default: { status: false, msg: "" }
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -73,6 +79,10 @@ export default {
     width: 80%;
     resize: none;
     border: 1px solid #efefef;
+
+    &:read-only {
+      background-color:white;
+    }
   }
 }
 </style>

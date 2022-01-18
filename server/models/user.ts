@@ -881,6 +881,7 @@ export const methods = {
       discountValue,
       shippingCharge,
       combinedDeliveryConsent,
+      giftMessage,
       coupon,
     } = paymentIntent.payload;
 
@@ -899,6 +900,7 @@ export const methods = {
       amount: paymentIntent.amount,
       currency: paymentIntent.currency,
       combinedDeliveryConsent: combinedDeliveryConsent,
+      giftMessage,
       deliveryAddress,
       subTotal,
       discountValue,
