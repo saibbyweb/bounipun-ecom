@@ -1,5 +1,4 @@
 import { mongoose, ObjectId, task } from "@helpers/essentials"
-// mongoose.set('debug', true);
 
 /* schema */
 const schema = new mongoose.Schema({

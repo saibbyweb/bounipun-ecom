@@ -1,6 +1,6 @@
 <template>
+<div class="gift-message-wrapper flex center col">
   <div class="gift-message">
-    <!-- <img class="close-btn" src="/icons/dark/close.png" @click="$emit('close')" /> -->
     <div class="flex center">
       <label> To: </label>
       <input class="text-box" type="text" :value="value.to" placeholder="To" @input="$emit('input', {...value, to: $event.target.value})" />
@@ -27,6 +27,8 @@
       />
     </div>
   </div>
+   <p class="msg error" v-if="error.status"> {{ error.msg }} </p>
+</div>
 </template>
 
 <script>
@@ -34,9 +36,17 @@ export default {
   props: {
     value: {
       type: Object,
-      // default: () => ({ status: false, to: "", from: "", message: "" }),
     },
+    error: {
+      type: Object,
+      default: { status: false, msg: "" }
+    }
   },
+  data() {
+    return {
+      error: { status: false, msg: ''}
+    }
+  }
 };
 </script>
 

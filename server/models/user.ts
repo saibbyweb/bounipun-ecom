@@ -743,7 +743,8 @@ export const methods = {
     couponCode,
     deliveryAddress,
     combinedDeliveryConsent,
-    zeroDecimal
+    zeroDecimal,
+    giftMessage
   ) {
     const cartItems = await this.getCartItems(cart);
     /* total order quantity */
@@ -821,6 +822,7 @@ export const methods = {
       subTotal: parseInt((subTotal * 100).toFixed(2)),
       shippingCharge: shippingCharge * 100,
       combinedDeliveryConsent,
+      giftMessage,
       /* TODO: need to check tax.value [may toFixed(2) will fix it] */
       /* TODO: get frontend and backend value EQUAL */
       tax: {

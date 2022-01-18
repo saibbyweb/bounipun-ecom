@@ -149,7 +149,8 @@ export default {
         gateway: this.gatewayName,
         couponCode: this.coupon.code,
         deliveryAddress: this.deliveryAddress,
-        combinedDeliveryConsent: this.$store.state.customer.combinedDeliveryConsent
+        combinedDeliveryConsent: this.$store.state.customer.combinedDeliveryConsent,
+        giftMessage: this.$store.state.customer.giftMessage
       });
 
       console.log(paymentIntentFetch);

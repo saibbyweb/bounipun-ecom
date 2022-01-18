@@ -142,6 +142,7 @@ router.post("/createPaymentIntent", userAuth("customer"), async (req, res) => {
     couponCode,
     deliveryAddress,
     combinedDeliveryConsent,
+    giftMessage
   } = req.body;
 
   let zeroDecimal = false;
@@ -164,11 +165,9 @@ router.post("/createPaymentIntent", userAuth("customer"), async (req, res) => {
         couponCode,
         deliveryAddress,
         combinedDeliveryConsent,
-        zeroDecimal
+        zeroDecimal,
+        giftMessage
       );
-
-
-
       /* if verification failed, stop execution */
       if (payload === false) {
         res.send(response);
@@ -179,7 +178,6 @@ router.post("/createPaymentIntent", userAuth("customer"), async (req, res) => {
     case "..gift_card_maybe":
       res.send(response);
       return;
-      break;
   }
 
   /* save payment intent in database */
@@ -198,6 +196,8 @@ router.post("/createPaymentIntent", userAuth("customer"), async (req, res) => {
   response.amount = amountToBeCharged * 100;
   response.currency = currency;
   response.resolved = true;
+
+  console.log(giftMessage);
 
   res.send(response);
 });

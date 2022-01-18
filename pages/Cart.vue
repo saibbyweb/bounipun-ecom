@@ -82,7 +82,7 @@
         <div v-if="giftMessagesAvailable" class="gift-box">
           <Checkbox label="This order is a gift" v-model="gift.status" />
   
-          <GiftMessage v-if="gift.status" @close="gift.status = false" v-model="gift" />
+          <GiftMessage v-if="gift.status" @close="gift.status = false" v-model="gift" :error="giftError" @input="giftError.status = false" />
         </div>
 
         <br />
@@ -131,7 +131,8 @@ export default {
         from: "",
         message: "",
       },
-      giftMessagesAvailable: false
+      giftMessagesAvailable: false,
+      giftError: { status: false, msg: ""}
     };
   },
   watch: {
@@ -147,7 +148,6 @@ export default {
   },
   mounted() {
     // this.$ga.page('/cart');
-    console.log("mounted");
 
     setTimeout(async () => {
       this.couponCode = this.coupon.code;
@@ -199,6 +199,19 @@ export default {
   },
   methods: {
     moveToDeliveryPage() {
+      const { to, from, message, status } = this.gift;
+
+      if(status) {
+        /* validate fields */
+        const validatedTo = to.trim() !== "";
+        const validatedFrom = from.trim() !== "";
+        const validated = validatedTo && validatedFrom;
+
+        if(!validated) 
+          return this.giftError = { status: true, msg: 'To & From field cannot be left blank'}
+        
+      }
+      
       this.$store.commit("customer/setGiftMessage", this.gift.status ? this.gift : {status: false});
       this.$router.push('/delivery-address');
     },
@@ -263,7 +276,7 @@ export default {
 .cart {
   margin-top: calc($pageMarginTop + 2vh);
   padding-top: 6%;
-  min-height: 90vh;
+  min-height: 105vh;
 
   .title {
     font-size: 25px !important;
