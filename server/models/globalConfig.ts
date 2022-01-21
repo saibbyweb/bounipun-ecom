@@ -119,4 +119,6 @@ export const methods = {
     }
 }
 
+// methods.setNewFeature('giftMessages');
+
 export default { model, methods };

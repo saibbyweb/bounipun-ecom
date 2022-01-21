@@ -4,9 +4,9 @@ import { mongoose, ObjectId, task } from "@helpers/essentials"
 const schema = new mongoose.Schema({
     name: String,
     /* main slideshow */
-    mainSlideshow: { slides : [{ _id: ObjectId, mainImage: Boolean, path: String }], visible: Boolean },
+    mainSlideshow: { slides : [{ _id: ObjectId, mainImage: Boolean, path: String, link: String }], visible: Boolean },
     /* desktop main slideshow */
-    desktopMainSlideshow: { slides : [{ _id: ObjectId, mainImage: Boolean, path: String }], visible: Boolean },
+    desktopMainSlideshow: { slides : [{ _id: ObjectId, mainImage: Boolean, path: String, link: String }], visible: Boolean },
     /* text block 1 */
     mainTextBlock: {
         text1: String, text2: String, text3: String, author: String, visible: Boolean

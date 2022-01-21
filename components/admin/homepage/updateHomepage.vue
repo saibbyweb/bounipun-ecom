@@ -25,6 +25,10 @@
         label="Set Desktop Slideshow Images:"
         @updated="imageListUpdated($event, 'desktopMainSlideshow')"
       />
+
+      <!--  desktop slide link -->
+      <InputBox v-for="(slide,index) in doc.desktopMainSlideshow.slides" :key="slide._id" :label="`Link for Slide #${index+1}`" v-model="slide.link" />
+
       <!-- visiblity toggle -->
       <Toggle
         v-model="doc.desktopMainSlideshow.visible"
@@ -45,6 +49,11 @@
         label="Set Slideshow Images:"
         @updated="imageListUpdated($event, 'mainSlideshow')"
       />
+
+          <!--  mobile slide link -->
+      <InputBox v-for="(slide,index) in doc.mainSlideshow.slides" :key="slide._id" :label="`Link for Slide #${index+1}`" v-model="slide.link" />
+
+
       <!-- visiblity toggle -->
       <Toggle
         v-model="doc.mainSlideshow.visible"
@@ -91,7 +100,7 @@
           <!-- remove collection block -->
           <button
             class="action delete"
-            style="font-size:9px;"
+            style="font-size: 9px"
             @click="removeBlock('collectionBlocks', index)"
           >
             Delete
@@ -155,7 +164,7 @@
           <!-- remove product list block -->
           <button
             class="action delete"
-            style="font-size:9px;"
+            style="font-size: 9px"
             @click="removeBlock('productListBlocks', index)"
           >
             Delete
@@ -351,7 +360,7 @@
 <script>
 import { v4 as uuidv4 } from "uuid";
 
-const baseDocument = {
+const baseDocument = () => ({
   _id: "",
   name: "",
   desktopMainSlideshow: {
@@ -362,7 +371,7 @@ const baseDocument = {
       // path: ""
       // }
     ],
-    visible: false
+    visible: false,
   },
   mainSlideshow: {
     slides: [
@@ -372,14 +381,14 @@ const baseDocument = {
       // path: ""
       // }
     ],
-    visible: false
+    visible: false,
   },
   mainTextBlock: {
     text1: "",
     text2: "",
     text3: "",
     author: "",
-    visible: false
+    visible: false,
   },
   collectionBlocks: [
     {
@@ -396,8 +405,8 @@ const baseDocument = {
       text3: "",
       buttonText: "",
       visible: false,
-      key: uuidv4()
-    }
+      key: uuidv4(),
+    },
   ],
   productListBlocks: [
     {
@@ -414,22 +423,22 @@ const baseDocument = {
       text2: "",
       buttonText: "",
       visible: false,
-      key: uuidv4()
-    }
+      key: uuidv4(),
+    },
   ],
   bounipunLab: {
     heading: "",
     paragraph: "",
     image: "",
     buttonText: "",
-    visible: false
+    visible: false,
   },
   quote: {
     logo: "",
     heading: "",
     paragraph: "",
     author: "",
-    visible: false
+    visible: false,
   },
   press: {
     logo: "",
@@ -443,18 +452,18 @@ const baseDocument = {
       {
         heading: "",
         paragraph: "",
-        key: uuidv4()
-      }
+        key: uuidv4(),
+      },
     ],
-    visible: false
+    visible: false,
   },
   instagram: {
     text: "",
-    visible: false
+    visible: false,
   },
   description: "",
-  status: false
-};
+  status: false,
+});
 
 export default {
   /* close form */
@@ -462,16 +471,16 @@ export default {
   /* add unique key to every block */
   /* fetch allCollections  */
   props: {
-    model: String
+    model: String,
   },
   data() {
     return {
       editMode: false,
-      doc: baseDocument,
+      doc: baseDocument(),
       allCollections: [],
       allProductLists: [],
       loading: false,
-      updated: false
+      updated: false,
     };
   },
   mounted() {
@@ -481,15 +490,18 @@ export default {
   methods: {
     /* set image list */
     imageListUpdated(list, property, index) {
+
       switch (property) {
         /* multiple */
-        case "desktopMainSlideshow":
-          this.doc.desktopMainSlideshow.slides = list;
-          console.log(this.doc.desktopMainSlideshow);
+        case "desktopMainSlideshow": {
+          let { slides } = this.doc.desktopMainSlideshow;
+          this.doc.desktopMainSlideshow.slides = list.map(item => ({...item, link: slides.find(s => s._id === item._id)?.link || ""  }));
           break;
+        }
         /* multiple */
         case "mainSlideshow":
-          this.doc.mainSlideshow.slides = list;
+          let { slides } = this.doc.mainSlideshow;
+          this.doc.mainSlideshow.slides = list.map(item => ({...item, link: slides.find(s => s._id === item._id)?.link || ""  }));
           break;
         /* multiple [indexed] */
         case "collectionBlock":
@@ -527,7 +539,7 @@ export default {
       this.doc.press.captions.push({
         heading: "",
         caption: "",
-        key: uuidv4()
+        key: uuidv4(),
       });
       this.$forceUpdate();
     },
@@ -541,12 +553,12 @@ export default {
       this.allCollections = result.docs.map(({ _id, name }) => {
         return {
           name,
-          value: _id
+          value: _id,
         };
       });
       this.allCollections.unshift({
         name: "Select Bounipun Collection",
-        value: ""
+        value: "",
       });
     },
     async fetchAllProductLists() {
@@ -554,12 +566,12 @@ export default {
       this.allProductLists = result.docs.map(({ _id, name }) => {
         return {
           name,
-          value: _id
+          value: _id,
         };
       });
       this.allProductLists.unshift({
         name: "Select Product List",
-        value: ""
+        value: "",
       });
     },
     /* add collection block */
@@ -570,15 +582,15 @@ export default {
           {
             _id: "",
             mainImage: false,
-            path: ""
-          }
+            path: "",
+          },
         ],
         text1: "",
         text2: "",
         text3: "",
         buttonText: "",
         visible: false,
-        key: uuidv4()
+        key: uuidv4(),
       });
     },
     /* add product list block */
@@ -589,15 +601,15 @@ export default {
           {
             _id: "",
             mainImage: false,
-            path: ""
-          }
+            path: "",
+          },
         ],
         moodImage: "",
         text1: "",
         text2: "",
         buttonText: "",
         visible: false,
-        key: uuidv4()
+        key: uuidv4(),
       });
     },
     /* remove collection or product list block */
@@ -610,10 +622,12 @@ export default {
       this.$emit("close");
     },
     resetForm() {
-      this.doc = baseDocument;
+      this.$refs.desktopMainSlideshow.clearFileSelection();
+      this.$refs.mainSlideshow.clearFileSelection();
+      this.doc = baseDocument();
+      console.log('doc was cleared');
     },
     async updateDocument() {
-      console.log(this.doc);
       // return;
 
       this.loading = true;
@@ -644,7 +658,7 @@ export default {
         press,
         instagram,
         description,
-        status
+        status,
       } = details;
       this.doc = {
         _id,
@@ -659,7 +673,7 @@ export default {
         press,
         instagram,
         description,
-        status
+        status,
       };
       this.editMode = true;
     },
@@ -673,8 +687,8 @@ export default {
       this.$emit("updated");
       this.resetForm();
       this.$flash(this);
-    }
-  }
+    },
+  },
 };
 </script>
 
