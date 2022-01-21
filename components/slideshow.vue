@@ -23,10 +23,11 @@
           >
             <div
               class="product-image"
-              :class="{ productPage }"
+              :class="{ productPage, clickable: links.length > 0 }"
               :key="index"
               v-for="(image, index) in onDemandImages"
               :style="getBackgroundImage(image)"
+              @click="navigateIfRequired(index)"
             ></div>
           </div>
         </div>
@@ -94,11 +95,7 @@ export default {
   props: {
     slideshowOptions: {
       type: Object,
-      default: () => {
-        return {
-          thumbnails: false
-        };
-      }
+      default: () => ({ thumbnails: false })
     },
     autoplay: {
       type: Boolean,
@@ -147,6 +144,10 @@ export default {
     productPage: {
       type: Boolean,
       default: false
+    },
+    links: {
+      type: Array,
+      default: () => []
     }
   },
   data() {
@@ -189,12 +190,10 @@ export default {
     }
   },
   destroyed() {
-    // alert('UNMOUNTED')
     this.clearAutoplayRoutine();
   },
   mounted() {
     if (this.autoplay) this.setAutoplayRoutine();
-    // setTimeout(() => this.imageZoom('slides-container','zoomed-in-image'),2000);
   },
   watch: {
     activeIndex: {
@@ -222,6 +221,11 @@ export default {
         height: this.slideHeight,
         backgroundPosition: "top center"
       };
+    },
+    navigateIfRequired(index) {
+      const linkAvailable = this.links[index] !== undefined && this.links[index] !== ""
+      if(!linkAvailable) return;
+      window.open(this.links[index], '_blank');
     },
     getThumbBackground(image) {
       return {
@@ -446,6 +450,10 @@ export default {
         overflow: hidden;
         background-position: center;
         background-repeat: no-repeat;
+
+        &.clickable {
+          cursor: pointer;
+        }
 
         &.productPage {
           cursor: cell;

@@ -19,6 +19,7 @@
       v-if="layout.mainSlideshow.visible && isMobile"
       size="cover"
       :images="fetchSlideshow(layout.mainSlideshow.slides)"
+      :links="fetchLinks(layout.mainSlideshow.slides)"
       mSlideHeight="120vw"
       dSlideHeight="90vh"
       :autoplay="true"
@@ -30,6 +31,7 @@
       v-if="layout.desktopMainSlideshow.visible && !isMobile"
       size="cover"
       :images="fetchSlideshow(layout.desktopMainSlideshow.slides)"
+       :links="fetchLinks(layout.desktopMainSlideshow.slides)"
       mSlideHeight="120vw"
       dSlideHeight="90vh"
       :dSlideWidth="100"
@@ -262,8 +264,11 @@ export default {
         image => this.$getOriginalPath(image.path)
       );
     },
-    fetchSlideshow(images) {
-      return images.map(image => this.$getOriginalPath(image.path));
+    fetchSlideshow(slides) {
+      return slides.map(slide => this.$getOriginalPath(slide.path));
+    },
+    fetchLinks(slides) {
+      return slides.map(slide => slide.link)
     }
   }
 };
