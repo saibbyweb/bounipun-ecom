@@ -15,6 +15,7 @@ const schema = new mongoose.Schema({
     image: String,
     inflationPercentage: Number,
     lock: { type: Boolean, default: false },
+    softLock: { type: Boolean, default: false },
     lockedImage: { type: String, default: '' },
     lockedText: { type: String, default: '' },
     order: Number,

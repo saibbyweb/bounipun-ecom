@@ -209,6 +209,9 @@ export default {
 
       return false;
     },
+    collectionSoftLocked() {
+      
+    },
     collectionLockedAndUserAuthorized() {
       const customer = this.$store.state.customer;
       return this.collectionLocked && customer.authorized === true;

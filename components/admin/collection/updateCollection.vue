@@ -101,10 +101,22 @@
        <Toast :msg="`${totalProductsReset} Product(s) updated with new price(s).`" :show="pricesReset" />
     </div>
 
+    <!-- soft lock -->
+    <div class="section">
+      <label class="label"> Soft Lock </label>
+      <Toggle
+        v-model="doc.softLock"
+        label="🔒 Soft Lock"
+        width="90px"
+        activeText="Enabled"
+        inactiveText="Unlocked"
+      />
+    </div>
+
 
     <!-- lock -->
     <div class="section">
-      <label class="label"> Collection Lock </label>
+      <label class="label"> Hard Lock </label>
       <!-- locked image -->
       <UploadImage
         ref="lockedImageUploader"
@@ -174,6 +186,7 @@ const baseDoc = () => ({
   lockedText: "",
   mainTextBlock: baseTextBlock(),
   lock: false,
+  softLock: false,
   status: false,
 });
 
@@ -265,6 +278,7 @@ export default {
         lockedText,
         mainTextBlock,
         lock,
+        softLock,
         status,
       } = details;
 
@@ -283,6 +297,7 @@ export default {
         mainTextBlock:
           mainTextBlock === undefined ? baseTextBlock() : mainTextBlock,
         lock,
+        softLock,
         status,
       };
       /* set initailly fetched percentage */
