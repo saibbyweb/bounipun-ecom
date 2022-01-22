@@ -16,17 +16,19 @@
 
     <!-- main text block -->
     <div
-      v-if="collection.mainTextBlock !== undefined &&
-        collection.mainTextBlock.visible"
+      v-if="
+        collection.mainTextBlock !== undefined &&
+        collection.mainTextBlock.visible
+      "
       class="main-text-block center-col pad"
     >
       <h2 class="text-1">{{ collection.mainTextBlock.text1 }}</h2>
       <p class="text-2">{{ collection.mainTextBlock.text2 }}</p>
-      <p v-if="!collectionLocked" class="text-3">{{ collection.mainTextBlock.text3 }}</p>
-      <p v-else class="text-2"> {{ collection.lockedText }} </p>
+      <p v-if="!collectionLocked" class="text-3">
+        {{ collection.mainTextBlock.text3 }}
+      </p>
+      <p v-else class="text-2">{{ collection.lockedText }}</p>
     </div>
-
-    
 
     <!-- filter sort toggles -->
     <FilterSortToggles
@@ -64,8 +66,8 @@
     <!-- if collections is not escape -->
     <div
       v-if="
-        (!collectionLocked && isEscape && !noFilterOrSortApplied) ||
-        (!collectionLocked && !isEscape)
+        (!collectionLocked && isEscape && !noFilterOrSortApplied && collectionSoftLockAccess) ||
+        (!collectionLocked && !isEscape && collectionSoftLockAccess)
       "
       class="collection-items"
     >
@@ -77,16 +79,15 @@
         :activeColor="product.actualIndex"
         :gridView="gridView"
       />
-      
+
       <!-- if no products found -->
       <h3 v-if="products.length === 0 && !$store.state.customer.loading">
         No products matched for {{ collection.name }}
       </h3>
-
     </div>
 
     <!-- if colllection is escape -->
-    <div v-if="!collectionLocked && isEscape && noFilterOrSortApplied">
+    <div v-if="!collectionLocked && isEscape && noFilterOrSortApplied && collectionSoftLockAccess">
       <!-- color categories -->
       <div
         class="color-categories"
@@ -115,24 +116,31 @@
 
     <!-- if collection locked -->
     <div class="flex center">
-    <div v-if="collectionLockedAndUserAuthorized" class="locked">
-      <!-- <h2 class="heading" v-if="collectionLocked">
+      <div v-if="collectionLockedAndUserAuthorized" class="locked">
+        <!-- <h2 class="heading" v-if="collectionLocked">
         🔒 This collection is locked
       </h2> -->
-      <!-- unlock content -->
-      <UnlockContent />
-    </div>
+        <!-- unlock content -->
+        <UnlockContent />
+      </div>
     </div>
     <!-- ask for login -->
-    <div v-if="collectionLocked && !$store.state.customer.authorized" class="flex center col login">
-      <p class="text"> Please login first to 🔓 unlock this collection </p>
-      <button class="action" @click="$router.push('/login')"> Access Bounipun Account </button>
+    <div
+      v-if="
+        (collectionLocked || collectionSoftLocked) &&
+        !$store.state.customer.authorized
+      "
+      class="flex center col login"
+    >
+      <p class="text">Please login first to unlock this collection</p>
+      <button class="action" @click="$router.push('/login')">
+        Access Bounipun Account
+      </button>
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
   head() {
     return {
@@ -164,7 +172,7 @@ export default {
       filterDataFetched: false,
       colorCategories: [],
       escapeProduct: [],
-      loading: false
+      loading: false,
     };
   },
   watch: {
@@ -182,16 +190,16 @@ export default {
   },
   computed: {
     collectionImageProvided() {
-        return this.collectionImage !== ""
+      return this.collectionImage !== "";
     },
     collectionImage() {
       return this.collectionLocked
         ? this.collection.lockedImage
-        : this.collection.image
+        : this.collection.image;
     },
     collectionText() {
       const { collection } = this;
-      return this.collectionLocked ? collection.lockedText : (mainTextBlock)
+      return this.collectionLocked ? collection.lockedText : mainTextBlock;
     },
     collectionLocked() {
       /* if collection is locked */
@@ -200,17 +208,22 @@ export default {
         switch (customer.authorized) {
           case true:
             return !(customer.user.contentUnlock.status === true);
-            break;
           case false:
             return true;
-            break;
         }
       }
 
       return false;
     },
     collectionSoftLocked() {
-      
+      if (this.collection.softLock === undefined) return false;
+      return this.collection.softLock;
+    },
+    collectionSoftLockAccess() {
+      if(!this.collectionSoftLocked)
+        return true;
+
+     return this.$store.state.customer.authorized;
     },
     collectionLockedAndUserAuthorized() {
       const customer = this.$store.state.customer;
@@ -606,7 +619,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 .c-header {
   height: 40vw;
   margin-top: 5vh;
@@ -660,17 +672,15 @@ export default {
 
 .locked {
   padding: 1% 10%;
-  width:60%;
+  width: 60%;
   .heading {
     font-family: $font_2_bold;
     text-transform: uppercase;
     text-align: center;
   }
 
-
-
-  @media(max-width: 768px) {
-    width:100%;
+  @media (max-width: 768px) {
+    width: 100%;
   }
 }
 
@@ -691,12 +701,11 @@ export default {
     font-size: 13px;
     color: $gray;
   }
-
 }
 
 .login {
-  border:1px solid #d0d0d0e8;
-  padding:2% 8%;
+  // border: 1px solid #d0d0d0e8;
+  padding: 2% 8%;
   .text {
     font-family: $font_2;
     padding-bottom: 10px;
