@@ -118,12 +118,12 @@
     <div class="section">
       <label class="label"> Hard Lock </label>
       <!-- locked image -->
-      <UploadImage
+      <!-- <UploadImage
         ref="lockedImageUploader"
         :multipleUpload="false"
         label="Set Locked Header Image"
         @updated="imageListUpdated($event, 'lockedImage')"
-      />
+      /> -->
 
       <!-- locked image -->
       <UploadImage
@@ -325,7 +325,7 @@ export default {
     },
     resetForm() {
       this.$refs.imageUploader.clearFileSelection();
-      this.$refs.lockedImageUploader.clearFileSelection();
+      // this.$refs.lockedImageUploader.clearFileSelection();
       this.$refs.lockedImagesUploader.clearFileSelection();
       this.populateForm(baseDoc());
       this.editMode = false;

@@ -37,7 +37,6 @@
       :dSlideWidth="100"
       :autoplay="true"
       :main="true"
-
     />
 
     <!-- main text block -->

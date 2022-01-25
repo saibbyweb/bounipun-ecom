@@ -2,7 +2,7 @@
   <div class="flex col page -wh">
     <!-- collection header -->
     <div
-      v-if="collectionImageProvided"
+      v-if="collectionImageProvided && !collectionLocked"
       class="c-header center"
       :class="{ isEscape, collectionLocked }"
       :style="{
@@ -12,6 +12,20 @@
       <h2 v-if="collection.image === ''" class="heading">
         {{ collection.name }}
       </h2>
+    </div>
+
+    <!-- locked images slideshow [DESKTOP] -->
+    <div v-if="collectionLocked" class="locked-image-slideshow center">
+      <!-- slideshow (DESKTOP) -->
+      <slideshow
+        size="cover"
+        :images="fetchSlideshow(collection.lockedImages)"
+        mSlideHeight="120vw"
+        dSlideHeight="90vh"
+        :dSlideWidth="100"
+        :autoplay="true"
+        :main="true"
+      />
     </div>
 
     <!-- main text block -->
@@ -66,7 +80,10 @@
     <!-- if collections is not escape -->
     <div
       v-if="
-        (!collectionLocked && isEscape && !noFilterOrSortApplied && collectionSoftLockAccess) ||
+        (!collectionLocked &&
+          isEscape &&
+          !noFilterOrSortApplied &&
+          collectionSoftLockAccess) ||
         (!collectionLocked && !isEscape && collectionSoftLockAccess)
       "
       class="collection-items"
@@ -87,7 +104,14 @@
     </div>
 
     <!-- if colllection is escape -->
-    <div v-if="!collectionLocked && isEscape && noFilterOrSortApplied && collectionSoftLockAccess">
+    <div
+      v-if="
+        !collectionLocked &&
+        isEscape &&
+        noFilterOrSortApplied &&
+        collectionSoftLockAccess
+      "
+    >
       <!-- color categories -->
       <div
         class="color-categories"
@@ -220,10 +244,9 @@ export default {
       return this.collection.softLock;
     },
     collectionSoftLockAccess() {
-      if(!this.collectionSoftLocked)
-        return true;
+      if (!this.collectionSoftLocked) return true;
 
-     return this.$store.state.customer.authorized;
+      return this.$store.state.customer.authorized;
     },
     collectionLockedAndUserAuthorized() {
       const customer = this.$store.state.customer;
@@ -252,6 +275,9 @@ export default {
     // if (this.isEscape) this.fetchCollectionProducts(this.$route.query.slug);
   },
   methods: {
+    fetchSlideshow(slides) {
+      return slides.map(slide => this.$getOriginalPath(slide.path));
+    },
     filtersUpdated(filterData) {
       this.filterData = filterData;
       // TODO: MAKE SURE the collection id is always present (filterData.collections)
