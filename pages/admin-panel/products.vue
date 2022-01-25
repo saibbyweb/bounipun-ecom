@@ -40,7 +40,7 @@
         :model="model"
         :actions="actions"
         :headings="headings"
-        custom_css="10% 10% 25% 20% 10% 15% 10%"
+        custom_css="5% 10% 25% 10% 15% 10% 15% 10%"
         :sortByFields="sortByFields"
         @documentFetched="documentFetched"
         @sortToggled="sortToggled"
@@ -151,6 +151,7 @@ export default {
         "styleId",
         "name",
         "colors",
+        "preview",
         "availabilityType",
         "Collection",
         "status",
@@ -339,12 +340,24 @@ export default {
           /* active colors */
           const activeColors = colors.filter(color => color.status)
 
+          let fullPreviewImagePath = "";
+          
+          try {
+            const previewImage = colors[0].images[0].path;
+            console.log(previewImage);
+            fullPreviewImagePath = this.$getOriginalPath(previewImage);
+          }
+          catch(e) {
+            console.log('something went wrong')
+          }
+
 
           return {
             _id,
             styleId,
             name,
-            colors: `Active: ${activeColors.length} - Total: ${colors.length}`,
+            colors: `🟢 ${activeColors.length} /  ${colors.length}`,
+            preview: fullPreviewImagePath,
             //slug,
             availabilityType,
             // bounipun_collection: foundCollection !== undefined ? foundCollection.name : "Third Party",

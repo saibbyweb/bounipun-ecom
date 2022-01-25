@@ -98,7 +98,7 @@
       />
 
       <!-- if no products found -->
-      <h3 v-if="products.length === 0 && !$store.state.customer.loading">
+      <h3 v-if="products.length === 0 && !$store.state.customer.loading && initialLoadComplete">
         No products matched for {{ collection.name }}
       </h3>
     </div>
@@ -197,6 +197,7 @@ export default {
       colorCategories: [],
       escapeProduct: [],
       loading: false,
+      initialLoadComplete: false
     };
   },
   watch: {
@@ -388,6 +389,9 @@ export default {
       } catch (err) {
         // console.log("Oops, `window` is not defined");
       }
+      
+      /* initial load complete */
+      this.initialLoadComplete = true;
 
       /* if no matches found, return */
       if (response.docs.length === 0) {

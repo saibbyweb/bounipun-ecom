@@ -42,8 +42,8 @@
             @click.stop="toggleSelectAll()"
           />
         </div>
-        <span
-          class="heading"
+        <div
+          class="span heading"
           v-for="(heading, index) in headings"
           :key="heading + index"
         >
@@ -54,7 +54,7 @@
             v-if="isSortable(heading)"
             src="/icons/light/sort.png"
           />
-        </span>
+        </div>
       </div>
       <client-only>
         <Draggable
@@ -86,13 +86,17 @@
                 />
               </div>
 
-              <span
+              <div
+              class="span"
                 :class="setClasses(propIndex, value)"
                 v-for="(value, propIndex) in Object.values(item)"
                 :key="value + propIndex"
               >
-                {{ optimizeValue(value, propIndex) }}
-              </span>
+              <img style="height:100px;" v-if="typeof value === 'string' && value.startsWith('https')" :src="value"  />
+              <span v-else> {{ optimizeValue(value, propIndex) }}</span>
+              </div>
+
+
             </div>
           </transition-group>
         </Draggable>
@@ -530,7 +534,7 @@ export default {
     }
   }
 
-  span {
+  div.span {
     transition: all 0.3s ease-in-out;
     border-right: 1px solid #cbcbcb;
     overflow: hidden;
