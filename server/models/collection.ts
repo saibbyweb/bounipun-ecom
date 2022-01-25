@@ -1,4 +1,4 @@
-import { mongoose } from "@helpers/essentials"
+import { mongoose, ObjectId } from "@helpers/essentials"
 import slugify from "slugify";
 import { product } from "@models"
 
@@ -17,6 +17,7 @@ const schema = new mongoose.Schema({
     lock: { type: Boolean, default: false },
     softLock: { type: Boolean, default: false },
     lockedImage: { type: String, default: '' },
+    lockedImages: [{ _id: ObjectId, path: String, mainImage: Boolean }],
     lockedText: { type: String, default: '' },
     order: Number,
     activeOrderLimit: { type: Number, default: 50 },

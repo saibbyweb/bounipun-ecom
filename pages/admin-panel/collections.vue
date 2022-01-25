@@ -132,6 +132,9 @@ export default {
 
       this.assignImages("imageUploader", doc.image);
       this.assignImages("lockedImageUploader", doc.lockedImage);
+
+      if(doc.lockedImages)
+        setTimeout(() => this.$refs.updateComponent.$refs['lockedImagesUploader'].assignImages(doc.lockedImages),1000);
     },
     resultsFetched(result) {
       if (result.docs.length === 0) {

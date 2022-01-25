@@ -125,6 +125,14 @@
         @updated="imageListUpdated($event, 'lockedImage')"
       />
 
+      <!-- locked image -->
+      <UploadImage
+        ref="lockedImagesUploader"
+        :multipleUpload="true"
+        label="Set Locked Header Image(s)"
+        @updated="imageListUpdated($event, 'lockedImages')"
+      />
+
       <!-- locked text -->
       <TextBox v-model="doc.lockedText" label="Locked Text (Paragraph):" />
       <!-- lock toggle -->
@@ -183,6 +191,7 @@ const baseDoc = () => ({
   image: "",
   inflationPercentage:0,
   lockedImage: "",
+  lockedImages: [],
   lockedText: "",
   mainTextBlock: baseTextBlock(),
   lock: false,
@@ -235,6 +244,10 @@ export default {
         case "lockedImage":
           this.doc.lockedImage = list.length > 0 ? list[0].path : "";
           break;
+        case "lockedImages":
+          console.log('locked image set', list.length);
+          this.doc.lockedImages = list;
+          break;
       }
     },
     async updateDocument(model, details, editMode) {
@@ -275,6 +288,7 @@ export default {
         image,
         inflationPercentage,
         lockedImage,
+        lockedImages,
         lockedText,
         mainTextBlock,
         lock,
@@ -293,6 +307,7 @@ export default {
         image,
         inflationPercentage: inflationPercentage == undefined ? 0 : inflationPercentage,
         lockedImage,
+        lockedImages: lockedImages || [],
         lockedText,
         mainTextBlock:
           mainTextBlock === undefined ? baseTextBlock() : mainTextBlock,
@@ -311,6 +326,7 @@ export default {
     resetForm() {
       this.$refs.imageUploader.clearFileSelection();
       this.$refs.lockedImageUploader.clearFileSelection();
+      this.$refs.lockedImagesUploader.clearFileSelection();
       this.populateForm(baseDoc());
       this.editMode = false;
     },
