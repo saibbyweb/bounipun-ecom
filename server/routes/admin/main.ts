@@ -397,6 +397,21 @@ router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
   console.log(`🔸 Bulk update requested for ${model}, action type: ${type}, for ${_ids.length} documenets`)
   let updateFields: any = {};
 
+  switch(model) {
+      case 'products':
+        if(type === "club-rts") {
+          console.log('🔸🔸 do the magic here and resond to the request here only');
+          /* make sure more than a single product is provided */
+          /* make sure all products provided are ready to ship */
+          /* make sure all products belong to the same collection */
+          /* make sure all products have exact same price */
+          /* rename the clubbed products (so that they can be deleted later) or mark them as inactive */
+          res.send({resolved: true});
+          return;
+        }
+        break;
+  }
+
   switch (type) {
     case "active":
       updateFields.status = true;

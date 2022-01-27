@@ -169,6 +169,10 @@ export default {
           name: "Mark as Inactive",
           type: "inactive",
         },
+        {
+          name: "Club RTS",
+          type: "club-rts"
+        }
       ],
     };
   },
