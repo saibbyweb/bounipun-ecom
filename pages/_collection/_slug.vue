@@ -139,7 +139,6 @@
             </div>
 
             <!-- show ask for price -->
-
             <div
               v-if="product.askForPrice === true"
               class="ask-for-price flex col center"
@@ -445,6 +444,9 @@ export default {
     };
   },
   computed: {
+    nonDiscountedPrice() {
+      // x - x * (20/100) = discountedPrice
+    },
     directPrice() {
       if (this.currencyIsINR) return this.product.directPrice;
       else return this.product.directPricing[this.currency];

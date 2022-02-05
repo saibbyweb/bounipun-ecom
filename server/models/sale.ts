@@ -112,9 +112,7 @@ export const methods = {
         const saleDetails = await this.validateSale(product.sale);
         /* (if sale is invalid, store invalid sale details, and save product as is) */
         if (saleDetails === false) {
-          console.log(
-            `🚫 Product ${product.name} found under invalid sale, returned as is.`
-          );
+          console.log(`🚫 Product ${product.name} found under invalid sale, returned as is.`);
           invalidSales[product.sale] = true;
           normalizedProducts.push(product);
           continue;
@@ -129,9 +127,7 @@ export const methods = {
       product.saleDetails = { name: saleName, discountPercentage };
       console.log('SALE DETAILS ATTACHED')
 
-      console.log(
-        `🔹 Discount percentage to be applied to ${product.name} :  ${discountPercentage} %`
-      );
+      console.log( `🔹 Discount percentage to be applied to ${product.name} :  ${discountPercentage} %`);
 
       /* extract variants, availability type, directPrice, directPricing */
       let { variants, availabilityType, directPrice, directPricing } = product;

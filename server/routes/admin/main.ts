@@ -332,11 +332,10 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
   
   /* post update */
   switch(model) {
-    case 'sales':
+  case 'sales':
       await saleMethods.updateProductSaleFlags(result._id, originalDoc, details)
       break;
     case "product_lists":
-      console.log(details);
       await productListMethods.updateProductSaleFlags(result._id, originalDoc.list, details.list);
       await productListMethods.updateProductLockFlags(details.list, details.lock);
   }
