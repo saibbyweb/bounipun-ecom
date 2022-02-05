@@ -289,7 +289,7 @@
               >
                 <span class="name"> {{ fabric.name }} </span>
                 <span class="info"> {{ fabric.info1 }} </span>
-                <span class="price">
+                <span v-if="!product.askForPrice" class="price">
                   {{ formatCurrency(getFabricPrice(fabric)) }}
                 </span>
               </div>

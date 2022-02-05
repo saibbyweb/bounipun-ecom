@@ -168,7 +168,7 @@
 export default {
   head() {
     return {
-      title: `${this.collection.name} | Bounipun Kashmir`,
+      title: `${this.collection?.name} | Bounipun Kashmir`,
     };
   },
   data() {
@@ -205,7 +205,7 @@ export default {
       this.products = [];
       this.escapeProduct = [];
       this.colorCategories = [];
-      this.collection = {};
+      this.collection = { name: 'fetching... '};
       // if (this.isEscape) {
       //   this.fetchCollectionProducts(this.$route.query.slug);
       //   return;
@@ -323,7 +323,7 @@ export default {
 
       /* get bounipun collection id */
       const bounipunCollection = this.filterData.collections.find(
-        (col) => col.name.toUpperCase() == this.$route.query.slug.toUpperCase()
+        (col) => col.slug.toUpperCase() == this.$route.query.slug.toUpperCase()
       );
 
       // TODO: added as expirement SET COLLECTION
