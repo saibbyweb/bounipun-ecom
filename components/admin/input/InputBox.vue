@@ -2,7 +2,7 @@
   <div class="input-box">
     <div style="display: flex; align-items: center">
       <div v-if="internal" class="internal"></div>
-      <label class="label"> {{ label }} </label>
+      <label :title="options && options.title ? options.title : ''" class="label"> {{ label }} </label>
     </div>
     <input
       class="input-box"

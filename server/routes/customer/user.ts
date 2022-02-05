@@ -293,9 +293,10 @@ router.post("/fetchLocalCart", async (req, res) => {
 });
 
 /* fetch product list */
-router.post("/fetchProductList", userAuth("customer"), async (req, res) => {
+router.post("/fetchProductList", userAuth("customer", false), async (req, res) => {
   /* unlocked */
   const { unlocked, slug } = req.body;
+  console.log(slug);
   /* response to be sent back */
   let response = { resolved: false, listDetails: {} };
 

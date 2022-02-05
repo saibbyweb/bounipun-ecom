@@ -222,10 +222,18 @@ export default {
         backgroundPosition: "top center"
       };
     },
+    isBounipunUrl(s) {
+      if(s === undefined || s=== null || s === "")
+        return false;
+      return s.includes('bounipun.in')
+    },
     navigateIfRequired(index) {
       const linkAvailable = this.links[index] !== undefined && this.links[index] !== ""
+
       if(!linkAvailable) return;
-      window.open(this.links[index], '_blank');
+      const link = this.links[index];
+
+      window.open(link, this.isBounipunUrl(link) ? '_self' : '_blank');
     },
     getThumbBackground(image) {
       return {

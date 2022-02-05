@@ -37,7 +37,7 @@
     </div>
     <!-- ask for login -->
     <div
-      v-if="productListLocked && !$store.state.customer.authorized"
+      v-if="listLocked && !$store.state.customer.authorized"
       class="flex center col login"
     >
       <p class="text">Please login first to 🔓 unlock this collection</p>

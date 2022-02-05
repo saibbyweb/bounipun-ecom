@@ -585,8 +585,8 @@ export default {
       return BASE_SHARE_URL + msg;
     },
     getAPriceLink() {
-      const BASE_SHARE_URL = "https://wa.me/?text=";
-      let msg = `Hi there, I would like to get a price quote for: ${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`;
+      const BASE_SHARE_URL = "https://wa.me/919103077655?text=";
+      let msg = `Hi there, I would like to get a price quote for this product: ${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`;
       msg = encodeURI(msg);
       return BASE_SHARE_URL + msg;
     },
