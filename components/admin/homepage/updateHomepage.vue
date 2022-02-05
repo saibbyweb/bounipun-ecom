@@ -27,7 +27,7 @@
       />
 
       <!--  desktop slide link -->
-      <InputBox v-for="(slide,index) in doc.desktopMainSlideshow.slides" :key="slide._id" :label="`Link for Slide #${index+1}`" v-model="slide.link" />
+      <InputBox v-for="(slide,index) in doc.desktopMainSlideshow.slides" :key="slide._id" :label="`Link for Slide #${index+1}`" v-model="slide.link" :options="{indicator: true}" />
 
       <!-- visiblity toggle -->
       <Toggle
@@ -51,7 +51,7 @@
       />
 
           <!--  mobile slide link -->
-      <InputBox v-for="(slide,index) in doc.mainSlideshow.slides" :key="slide._id" :label="`Link for Slide #${index+1}`" v-model="slide.link" />
+      <InputBox v-for="(slide,index) in doc.mainSlideshow.slides" :key="slide._id" :label="`Link for Slide #${index+1}`" v-model="slide.link" :options="{indicator: true}" />
 
 
       <!-- visiblity toggle -->

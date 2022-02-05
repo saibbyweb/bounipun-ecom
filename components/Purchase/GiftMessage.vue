@@ -1,13 +1,16 @@
 <template>
 <div class="gift-message-wrapper flex center col">
-  <div class="gift-message">
+  <div class="gift-message shadow">
+    <div class="header">
+      <span> Message Contents: </span>
+    </div>
     <div class="flex center">
-      <label> To: </label>
+      <!-- <label> To: </label> -->
       <input class="text-box" type="text" :value="value.to" placeholder="To" @input="$emit('input', {...value, to: $event.target.value})" :disabled="disabled" />
     </div>
 
     <div class="flex center">
-      <label> From </label>
+      <!-- <label> From </label> -->
       <input
         class="text-box"
         type="text"
@@ -18,16 +21,17 @@
       />
     </div>
     <div class="flex center">
-      <label> Note: </label>
+      <!-- <label> Note: </label> -->
       <textarea
         class="text-box"
         :value="value.message"
-        maxlength="50"
-        placeholder="Personal Message within 50 characters"
+        maxlength="150"
+        placeholder="Personal Message within 150 characters"
         @input="$emit('input', {...value, message: $event.target.value})"
         :disabled="disabled" 
       />
     </div>
+     <!-- <div class="header"></div> -->
   </div>
    <p class="msg error" v-if="error.status"> {{ error.msg }} </p>
 </div>
@@ -61,10 +65,27 @@ export default {
   position: relative;
   width: 100%;
   margin-top: 10px;
-  padding: 10px;
-  background-color: #5b6467;
-  background-image: linear-gradient(315deg, #5b6467 0%, #8b939a 74%);
-  border-radius: 5px;
+  padding-bottom:4px;
+  // padding: 10px;
+  // background-color: #5b6467;
+  // background-image: linear-gradient(315deg, #5b6467 0%, #8b939a 74%);
+  // box-shadow: 1px 1px 15px rgba(0,0,0,0.16);
+  // border-radius: 5px;
+
+  .header {
+    background-color: $brown;
+    height:25px; width:100%;
+    margin-bottom:7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding:0;
+
+    span {
+      color:white;
+      font-size:12px;
+    }
+  }
 
   .flex {
     margin: 3px 0;
@@ -76,9 +97,11 @@ export default {
   }
 
   .text-box {
-    width: 80%;
+    width: 97%;
     resize: none;
     border: 1px solid #efefef;
+    padding:3px;
+    margin:2px 6px;
 
     &:read-only {
       background-color:white;

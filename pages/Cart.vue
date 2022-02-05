@@ -80,7 +80,7 @@
 
         <!-- gift message -->
         <div v-if="giftMessagesAvailable" class="gift-box">
-          <Checkbox label="This order is a gift" v-model="gift.status" />
+          <Checkbox label="Personalized Message" v-model="gift.status" />
   
           <GiftMessage v-if="gift.status" @close="gift.status = false" v-model="gift" :error="giftError" @input="giftError.status = false" />
         </div>
@@ -207,8 +207,8 @@ export default {
         const validatedFrom = from.trim() !== "";
         const validated = validatedTo && validatedFrom;
 
-        if(!validated) 
-          return this.giftError = { status: true, msg: 'To & From field cannot be left blank'}
+        // if(!validated) 
+        //   return this.giftError = { status: true, msg: 'To & From field cannot be left blank'}
         
       }
       
