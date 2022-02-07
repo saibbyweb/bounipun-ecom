@@ -381,6 +381,12 @@ export default {
   head() {
     return {
       title: `${this.product.name} | Bounipun Kashmir`,
+      // <meta property="og:image" content="//cdn.example.com/uploads/images/webpage_300x200.png">
+      meta: [
+        { property: "og:image", content: this.firstProductImage }, 
+        { property: "og:title", content: `${this.product.name} | Bounipun Kashmir`},
+        // { property: "og:description", content: `${this.product.name} | Bounipun Kashmir`},
+      ],
     };
   },
   created() {
@@ -415,6 +421,7 @@ export default {
   },
   data() {
     return {
+      // firstProductImage: "https://bounipun.in/icons/light/logo.png",
       showShareIcons: false,
       showSlideshow: false,
       slideshowOptions: {
@@ -444,6 +451,16 @@ export default {
     };
   },
   computed: {
+    firstProductImage() {
+      if (
+        this.images &&
+        this.images.length > 0 &&
+        this.images[this.activeColorIndex] &&
+        this.images[this.activeColorIndex].length > 0
+      )
+        return this.images[this.activeColorIndex][0];
+      else return "https://bounipun.in/icons/light/logo.png";
+    },
     nonDiscountedPrice() {
       // x - x * (20/100) = discountedPrice
     },

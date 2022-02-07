@@ -7,6 +7,7 @@ import path from "path";
 import cors from "cors";
 import aws from "aws-sdk";
 import cookieParser from "cookie-parser";
+import prerender from "prerender-node";
 
 let connection = {};
 /* express app */
@@ -14,6 +15,8 @@ const app = express();
 app.use(express.json());
 /* cookie parser */
 app.use(cookieParser());
+/* add pre-render middleware */
+app.use(prerender).set('prerenderToken', 'SDZGlX0rQxIPjQ82Zkvu');
 
 /* configuring aws */
 aws.config.update({
