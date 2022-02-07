@@ -12,11 +12,13 @@ import prerender from "prerender-node";
 let connection = {};
 /* express app */
 const app = express();
+/* add pre-render middleware */
+app.use(prerender.set('prerenderToken', 'SDZGlX0rQxIPjQ82Zkvu'));
+
 app.use(express.json());
 /* cookie parser */
 app.use(cookieParser());
-/* add pre-render middleware */
-// app.use(prerender).set('prerenderToken', 'SDZGlX0rQxIPjQ82Zkvu');
+
 
 /* configuring aws */
 aws.config.update({
