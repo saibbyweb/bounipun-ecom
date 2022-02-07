@@ -383,14 +383,16 @@ export default {
       title: `${this.product.name} | Bounipun Kashmir`,
       // <meta property="og:image" content="//cdn.example.com/uploads/images/webpage_300x200.png">
       meta: [
-        { name: "description", content: "Online Luxury Store"},
         { property: "og:image", content: this.firstProductImage }, 
+        { property: "og:image:secure_url", content: this.firstProductImage},
         { property: "og:title", content: `${this.product.name}`},
         { property: "og:type", content: "article"},
         { property: "og:url", content: `https://${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`},
         { property: "og:description", content: `Product from Bounipun Kashmir`},
-        { property: "og:image:width", content: "630"},
-        { property: "og:image:height", content: "473"},
+        { property: "og:image:width", content: "300"},
+        { property: "og:image:height", content: "300"},
+        { property: "og:image:type", content: "image/jpeg"}
+
         // { property: "" , content: ""},
         // { property: "" , content: ""},
         // { property: "og:description", content: `${this.product.name} | Bounipun Kashmir`},
