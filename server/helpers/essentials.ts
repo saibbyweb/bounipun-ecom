@@ -16,7 +16,7 @@ app.use(express.json());
 /* cookie parser */
 app.use(cookieParser());
 /* add pre-render middleware */
-app.use(prerender).set('prerenderToken', 'SDZGlX0rQxIPjQ82Zkvu');
+// app.use(prerender).set('prerenderToken', 'SDZGlX0rQxIPjQ82Zkvu');
 
 /* configuring aws */
 aws.config.update({
