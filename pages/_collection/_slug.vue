@@ -384,7 +384,12 @@ export default {
       // <meta property="og:image" content="//cdn.example.com/uploads/images/webpage_300x200.png">
       meta: [
         { property: "og:image", content: this.firstProductImage }, 
-        { property: "og:title", content: `${this.product.name} | Bounipun Kashmir`},
+        { property: "og:title", content: `${this.product.name}`},
+        { property: "og:type" , content: "website"},
+        { property: "og:url" , content: `https://bounipun.in`},
+        { property: "og:description" , content: `${this.collectionName} Collection from Bounipun Kashmir`},
+        // { property: "" , content: ""},
+        // { property: "" , content: ""},
         // { property: "og:description", content: `${this.product.name} | Bounipun Kashmir`},
       ],
     };
