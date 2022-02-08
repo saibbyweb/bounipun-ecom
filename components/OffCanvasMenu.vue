@@ -87,17 +87,25 @@
       <button class="clear link" @click="navigate('/privacy-policy')">
         Privacy Policy
       </button>
+      <!-- logout button -->
+      <button
+        v-if="$store.state.customer.authorized"
+        class="clear link"
+        @click="logout()"
+      >
+        Logout
+      </button>
 
       <br />
 
       <!-- logout -->
-      <button
+      <!-- <button
         v-if="$store.state.customer.authorized"
         @click="logout()"
         class="clear link logout"
       >
         Logout
-      </button>
+      </button> -->
     </div>
     <div class="place-holder" @click="$emit('closeMenu')"></div>
   </div>

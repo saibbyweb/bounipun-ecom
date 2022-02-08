@@ -27,13 +27,13 @@
 
     <br>
     <!-- color picker -->
-    <client-only>
+    <!-- <client-only> -->
         <div class="center" style="position:relative;">
-            <verte model="hex" @input="colorPicked" style="position:absolute; right: 5%; top:50%;" menuPosition="right" :value="doc.hex" />
+            <verte model="hex" @input="colorPicked" style="position:absolute; right: 5%; top:50%; z-index:5" menuPosition="right" :value="doc.hex" />
             <!-- fabric name -->
             <InputBox label="HEX Color" v-model="doc.hex" />
         </div>
-    </client-only>
+    <!-- </client-only> -->
 
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />

@@ -101,7 +101,7 @@
                 <p>{{ product.styleId }}</p>
               </div>
               <!-- quantity picker and size chart-->
-              <div class="quantity-and-size">
+              <div class="quantity-and-size" v-if="!product.askForPrice">
                 <div class="quantity-picker">
                   <button @click="quantity > 1 && quantity--">-</button>
                   <button class="qty">{{ quantity }}</button>
@@ -115,6 +115,8 @@
             <!-- price and add to cart -->
             <div v-if="!product.askForPrice" class="price-and-actions">
               <div class="price">
+                <h5 style="text-decoration: line-through; font-size:15px; font-weight:100; color:#c54343; "> {{ formatCurrency(nonDiscountedPrice) }} </h5>
+
                 <h5>
                   {{
                     thirdPartyProduct || readyToShip
@@ -383,15 +385,22 @@ export default {
       title: `${this.product.name} | Bounipun Kashmir`,
       // <meta property="og:image" content="//cdn.example.com/uploads/images/webpage_300x200.png">
       meta: [
-        { property: "og:image", content: this.firstProductImage }, 
-        { property: "og:image:secure_url", content: this.firstProductImage},
-        { property: "og:title", content: `${this.product.name}`},
-        { property: "og:type", content: "article"},
-        { property: "og:url", content: `https://${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`},
-        { property: "og:description", content: `Product from Bounipun Kashmir`},
-        { property: "og:image:width", content: "300"},
-        { property: "og:image:height", content: "300"},
-        { property: "og:image:type", content: "image/jpeg"}
+        {
+          name: "description",
+          content: `${this.collectionName} from Bounipun Kashmir`,
+        },
+        { property: "og:image", content: this.firstProductImage },
+        { property: "og:image:secure_url", content: this.firstProductImage },
+        { property: "og:title", content: `${this.product.name}` },
+        { property: "og:type", content: "website" },
+        { property: "og:url", content: this.shareLink },
+        {
+          property: "og:description",
+          content: `${this.collectionName} from Bounipun Kashmir`,
+        },
+        { property: "og:image:width", content: "400" },
+        { property: "og:image:height", content: "400" },
+        { property: "og:image:type", content: "image/jpeg" },
 
         // { property: "" , content: ""},
         // { property: "" , content: ""},
@@ -472,15 +481,28 @@ export default {
       else return "https://bounipun.in/icons/light/logo.png";
     },
     nonDiscountedPrice() {
-      // x - x * (20/100) = discountedPrice
+      if(!this.product.saleDetails)
+       return 0;
+
+      let displayPrice;
+      if (this.thirdPartyProduct || this.readyToShip) 
+        displayPrice = this.directPrice;
+      else
+        displayPrice = this.selectedFabricPrice;
+       return displayPrice / (1 - (this.product.saleDetails.discountPercentage/100))
     },
     directPrice() {
       if (this.currencyIsINR) return this.product.directPrice;
       else return this.product.directPricing[this.currency];
     },
     collectionName() {
-      if (!this.product.thirdParty)
+      if (
+        !this.product.thirdParty &&
+        this.product.bounipun_collection &&
+        this.product.bounipun_collection.name
+      )
         return this.product.bounipun_collection.name;
+      return "";
     },
     preferredGender() {
       if (this.product.gender === undefined) return "";
@@ -607,23 +629,27 @@ export default {
         ? false
         : true;
     },
+    shareLink() {
+      let baseLink = `${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`;
+      if (window.location.hostname === "bounipun.in")
+        baseLink = "https://" + baseLink;
+      return baseLink;
+    },
     whatsAppShareLink() {
       const BASE_SHARE_URL = "https://wa.me/?text=";
-      let msg = `Check out this Bounipun special: ${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`;
+      let msg = `Check out this Bounipun special: ${this.shareLink}`;
       msg = encodeURI(msg);
       return BASE_SHARE_URL + msg;
     },
     getAPriceLink() {
       const BASE_SHARE_URL = "https://wa.me/919103077655?text=";
-      let msg = `Hi there, I would like to get a price quote for this product: ${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`;
+      let msg = `Hi there, I would like to get a price quote for this product: ${this.shareLink}`;
       msg = encodeURI(msg);
       return BASE_SHARE_URL + msg;
     },
     facebookShareLink() {
       const BASE_SHARE_URL = "https://www.facebook.com/sharer/sharer.php?u=";
-      const link =
-        BASE_SHARE_URL +
-        `${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`;
+      const link = BASE_SHARE_URL + this.shareLink;
       return link;
     },
     shippingTime() {
