@@ -448,7 +448,7 @@ export default {
 
     /* slider container */
     .slides-container {
-      // touch-action: pan-y !important;
+      touch-action: pan-y !important;
       display: flex;
       width: fit-content;
       margin-left: 0;
