@@ -115,7 +115,17 @@
             <!-- price and add to cart -->
             <div v-if="!product.askForPrice" class="price-and-actions">
               <div class="price">
-                <h5 style="text-decoration: line-through; font-size:15px; font-weight:100; color:#c54343; "> {{ formatCurrency(nonDiscountedPrice) }} </h5>
+                <h5
+                  v-if="product.saleDetails"
+                  style="
+                    text-decoration: line-through;
+                    font-size: 15px;
+                    font-weight: 100;
+                    color: #c54343;
+                  "
+                >
+                  {{ formatCurrency(nonDiscountedPrice) }}
+                </h5>
 
                 <h5>
                   {{
@@ -392,7 +402,7 @@ export default {
         { property: "og:image", content: this.firstProductImage },
         { property: "og:image:secure_url", content: this.firstProductImage },
         { property: "og:title", content: `${this.product.name}` },
-        { property: "og:type", content: "website" },
+        { property: "og:type", content: "article" },
         { property: "og:url", content: this.shareLink },
         {
           property: "og:description",
@@ -481,15 +491,15 @@ export default {
       else return "https://bounipun.in/icons/light/logo.png";
     },
     nonDiscountedPrice() {
-      if(!this.product.saleDetails)
-       return 0;
+      if (!this.product.saleDetails) return 0;
 
       let displayPrice;
-      if (this.thirdPartyProduct || this.readyToShip) 
+      if (this.thirdPartyProduct || this.readyToShip)
         displayPrice = this.directPrice;
-      else
-        displayPrice = this.selectedFabricPrice;
-       return displayPrice / (1 - (this.product.saleDetails.discountPercentage/100))
+      else displayPrice = this.selectedFabricPrice;
+      return (
+        displayPrice / (1 - this.product.saleDetails.discountPercentage / 100)
+      );
     },
     directPrice() {
       if (this.currencyIsINR) return this.product.directPrice;
