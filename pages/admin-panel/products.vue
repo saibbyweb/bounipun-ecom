@@ -209,11 +209,12 @@ export default {
     },
     async fetchVariants() {
       const result = await this.$fetchCollection("variants");
-      this.variants = result.docs.map(({ _id, name, code }) => {
+      this.variants = result.docs.map(({ _id, name, code, category }) => {
         return {
           name,
           _id,
           code,
+          category,
           value: _id,
           checked: false,
         };

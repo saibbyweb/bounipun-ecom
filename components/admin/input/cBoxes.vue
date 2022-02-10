@@ -1,30 +1,59 @@
 <template>
 <div class="checkboxes-container">
     <label class="label"> {{ label }} </label>
-    <div class="checkboxes center">
-        <div class="checkbox center-col" v-for="(option, index) in options" :key="index">
-            <input class="check-input" type="checkbox" :value="option.value" v-model="option.checked" />
-            <label class="label"> {{ option.name }} </label>
-        </div>
+    <!-- <div class="checkboxes center">
+      <div
+        class="checkbox center-col"
+        v-for="(option, index) in options"
+        :key="index"
+      >
+        <input
+          class="check-input"
+          type="checkbox"
+          :value="option.value"
+          v-model="option.checked"
+        />
+        <label class="label"> {{ option.name }} </label>
+      </div>
+    </div> -->
+
+    <!-- next level -->
+    <div v-for="category in categories" :key="category">
+        <!-- category -->
+        <!-- <span> Category Name: {{ category }} </span> -->
+        <Accordion :heading="category">
+            <div class="checkboxes center">
+                <div class="checkbox center-col" v-for="(option, index) in getOptionsUnderCategory(category)" :key="index">
+                    <input class="check-input" type="checkbox" :value="option.value" v-model="option.checked" />
+                    <label class="label"> {{ option.name }} </label>
+                </div>
+            </div>
+        </Accordion>
     </div>
 </div>
 </template>
 
 <script>
-import { v4 as uuidv4 } from "uuid";
-
 export default {
     props: {
         label: String,
         options: {
             type: Array,
-            default: () => []
-        }
-    }
-}
+            default: () => [],
+        },
+    },
+    computed: {
+        categories() {
+            return new Set(this.options.map((op) => op.category));
+        },
+    },
+    methods: {
+        getOptionsUnderCategory(category) {
+            return this.options.filter((op) => op.category === category);
+        },
+    },
+};
 </script>
-
-
 
 <style lang="scss" scoped>
 .checkboxes-container {
@@ -34,6 +63,7 @@ export default {
     padding: 2%;
     width: 100%;
 
+
     .label {
         font-family: $font_2_bold;
         color: $gray;
@@ -42,6 +72,7 @@ export default {
         padding: 1%;
         margin-left: 5px;
         font-weight: 900;
+        padding-bottom:20px;
     }
 
     .checkboxes {
@@ -52,7 +83,7 @@ export default {
 
         .checkbox {
             padding: 10px 15px;
-            margin: 10px;
+            margin: 10px;;
             width: 14%;
             box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.16);
 
