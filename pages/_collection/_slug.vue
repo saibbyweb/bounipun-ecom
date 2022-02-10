@@ -394,15 +394,16 @@ export default {
     return {
       title: `${this.product.name} | Bounipun Kashmir`,
       meta: [
-        { property: "og:image", content: this.firstProductImage },
-        { property: "og:image:secure_url", content: this.firstProductImage },
+        { property: "og:type", content: "website" },
+        { property: "description", content: `${this.collectionName} from Bounipun Kashmir` },
         { property: "og:title", content: `${this.product.name}` },
-        { property: "og:type", content: "article" },
-        { property: "og:url", content: this.shareLink },
         { property: "og:description", content: `${this.collectionName} from Bounipun Kashmir` },
-        { property: "og:image:width", content: "300" },
-        { property: "og:image:height", content: "300" },
-        { property: "og:image:type", content: "image/jpeg" },
+        { property: "og:image", content: this.firstProductImage },
+        { property: "og:url", content: this.shareLink },
+        // { property: "og:image:secure_url", content: this.firstProductImage },
+        // { property: "og:image:width", content: "300" },
+        // { property: "og:image:height", content: "300" },
+        // { property: "og:image:type", content: "image/jpeg" },
       ],
     };
   },
