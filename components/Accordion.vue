@@ -40,6 +40,11 @@ export default {
             active: false
         }
     },
+    watch: {
+        expanded(newVal) {
+            if(newVal) this.active = true;
+        }
+    },
     mounted() {
         if(this.expanded && this.$refs.content !== undefined) {
             this.active = true;

@@ -208,7 +208,7 @@ export default {
       });
     },
     async fetchVariants() {
-      const result = await this.$fetchCollection("variants");
+      const result = await this.$fetchCollection("variants", "admin");
       this.variants = result.docs.map(({ _id, name, code, category }) => {
         return {
           name,

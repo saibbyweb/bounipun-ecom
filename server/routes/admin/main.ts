@@ -178,9 +178,14 @@ router.post("/fetchCollection", async (req, res) => {
 
         res.send(groupedData);
         return;
-        break;
-      default:
-        break;
+      case "variants":
+        documents = await documents.populate("category", "name").lean();
+        documents = documents.map(doc => ({...doc, category: doc.category.name}))
+
+        console.log('sending back variants');
+        documents.forEach(doc => console.log(doc.category))
+        res.send(documents);
+        return;
     }
   }
 
