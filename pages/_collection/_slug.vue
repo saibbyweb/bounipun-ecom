@@ -686,6 +686,9 @@ export default {
       this.addOGMetaTag('og:type', 'website');
       this.addOGMetaTag('description',`${this.collectionName} from Bounipun Kashmir`);
       this.addOGMetaTag('og:title',`${this.product.name}`);
+      this.addOGMetaTag('og:description',`${this.collectionName} from Bounipun Kashmir`)
+      this.addOGMetaTag('og:image', this.firstProductImage);
+      this.addOGMetaTag('og:url', this.shareLink);
     },
     addOGMetaTag(property, content) {
       let meta = document.createElement('meta');
