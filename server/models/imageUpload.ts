@@ -71,10 +71,12 @@ export const resizeS3Image = async (fileName, resize: Number, newDirectory) => {
     // console.log(resizedImage, '--resized image')
 
     /* upload resized image to s3 */
+    console.log(fileName);
+    console.log(s3Image.ContentType)
     const saveResizedImage = await s3.putObject({
         Body: resizedImage,
         Bucket: 'bounipun-ecom',
-        ContentType: s3Image.ContentType,
+        ContentType: 'image/jpeg',
         Key: `${newDirectory}/${fileName}`,
         CacheControl: 'public, max-age=86400'
     }).promise();

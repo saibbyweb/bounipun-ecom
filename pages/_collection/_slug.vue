@@ -1591,9 +1591,6 @@ export default {
         ul {
           margin: 4px;
           padding-left: 15px;
-
-          li {
-          }
         }
 
         p {
