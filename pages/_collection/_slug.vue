@@ -394,12 +394,12 @@ export default {
     return {
       title: `${this.product.name} | Bounipun Kashmir`,
       meta: [
-        { property: "og:type", content: "website" },
-        { property: "description", content: `${this.collectionName} from Bounipun Kashmir` },
-        { property: "og:title", content: `${this.product.name}` },
-        { property: "og:description", content: `${this.collectionName} from Bounipun Kashmir` },
-        { property: "og:image", content: this.firstProductImage },
-        { property: "og:url", content: this.shareLink },
+        // { property: "og:type", content: "website" },
+        // { property: "description", content: `${this.collectionName} from Bounipun Kashmir` },
+        // { property: "og:title", content: `${this.product.name}` },
+        // { property: "og:description", content: `${this.collectionName} from Bounipun Kashmir` },
+        // { property: "og:image", content: this.firstProductImage },
+        // { property: "og:url", content: this.shareLink },
         // { property: "og:image:secure_url", content: this.firstProductImage },
         // { property: "og:image:width", content: "300" },
         // { property: "og:image:height", content: "300" },
@@ -682,6 +682,17 @@ export default {
     },
   },
   methods: {
+    addOGMetaTags() {
+      this.addOGMetaTag('og:type', 'website');
+      this.addOGMetaTag('description',`${this.collectionName} from Bounipun Kashmir`);
+      this.addOGMetaTag('og:title',`${this.product.name}`);
+    },
+    addOGMetaTag(property, content) {
+      let meta = document.createElement('meta');
+      meta.setAttribute('property', property);
+      meta.setAttribute('content', content);
+      document.head.insertAdjacentElement('afterbegin', meta);
+    },
     getFabricPrice(fabric) {
       if (this.currencyIsINR) return fabric.price;
       return fabric.pricing[this.currency];
@@ -951,6 +962,7 @@ export default {
       });
 
       this.$forceUpdate();
+      this.addOGMetaTags();
     },
     getMainImageCSS(color) {
       const images = color.images;
