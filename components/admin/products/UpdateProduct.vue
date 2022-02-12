@@ -574,7 +574,7 @@ export default {
     selectedVariantsWithFabricOptions() {
       return this.selectedVariants.map((variant) => {
         const fabrics = this.fabrics.filter((fabric) =>
-          fabric.code.startsWith(variant.code)
+          fabric.code.startsWith(variant.code.substring(0,2))
         );
 
         fabrics.forEach((fabric) => {
@@ -582,7 +582,7 @@ export default {
           this.currencies.forEach((currency) => {
             fabric.pricing[currency.code] = "";
           });
-        });
+        })
 
         return {
           _id: variant._id,
@@ -591,7 +591,7 @@ export default {
           fabrics: fabrics,
           // key: uuidv4()
           // fabrics: this.fabrics
-        };
+        }
       });
     },
   },
