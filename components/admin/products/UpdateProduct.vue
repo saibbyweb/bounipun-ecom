@@ -4,8 +4,8 @@
     <h2 class="heading">{{ editMode ? "Update" : "Add New" }} Product</h2>
 
     <!-- preview link -->
-    <div class="center">
-      <a v-if="editMode" :href="`/products?_id=${doc._id}`" target="_blank">
+    <div class="center" v-if="editMode">
+      <a :href="`/products?_id=${doc._id}`" target="_blank">
         <span
           style="
             background: #333;
@@ -19,6 +19,7 @@
           Preview Product ➚
         </span>
       </a>
+      <button @click="requestPrerender">Request Pre-render</button>
     </div>
 
     <!-- product id -->
@@ -403,22 +404,20 @@
       inactiveText="Unlocked"
     />
 
-        <!-- ask for price -->
+    <!-- ask for price -->
     <Toggle
       v-model="doc.askForPrice"
       label="Ask for Price:"
       activeText="Yes"
       inactiveText="No"
     />
-    
+
     <!-- sale status -->
     <div>
-      <label class="label">
-        On Sale:
-      </label>
+      <label class="label"> On Sale: </label>
 
       <span>
-      {{ doc.sale !== undefined && doc.sale !== null ? 'YUP' : 'NOPE'}}
+        {{ doc.sale !== undefined && doc.sale !== null ? "YUP" : "NOPE" }}
       </span>
     </div>
     <!-- publish toggle -->
@@ -574,7 +573,7 @@ export default {
     selectedVariantsWithFabricOptions() {
       return this.selectedVariants.map((variant) => {
         const fabrics = this.fabrics.filter((fabric) =>
-          fabric.code.startsWith(variant.code.substring(0,2))
+          fabric.code.startsWith(variant.code.substring(0, 2))
         );
 
         fabrics.forEach((fabric) => {
@@ -582,7 +581,7 @@ export default {
           this.currencies.forEach((currency) => {
             fabric.pricing[currency.code] = "";
           });
-        })
+        });
 
         return {
           _id: variant._id,
@@ -591,7 +590,7 @@ export default {
           fabrics: fabrics,
           // key: uuidv4()
           // fabrics: this.fabrics
-        }
+        };
       });
     },
   },
@@ -612,7 +611,7 @@ export default {
         msg: "",
       },
       enableSuggestedPricing: true,
-      enableRTSSuggestedPricing: true
+      enableRTSSuggestedPricing: true,
     };
   },
   mounted() {
@@ -620,6 +619,24 @@ export default {
     this.fetchActiveCurrencies();
   },
   methods: {
+    async requestPrerender() {
+      if (!this.selectedCollection) return;
+
+      const url = `https://bounipun.in/${this.doc.slug}`;
+      this.$store.commit("admin/setLoading", true);
+      const response = await this.$axios.get("/crawl", {
+        params: {
+          url,
+          totalColors:this.doc.colors.length
+        },
+      });
+      this.$store.commit("admin/setLoading", false);
+
+      // headers: {
+      //   "User-Agent":
+      //     "Mozilla/5.0 (compatible; saibbyweb/bingbot/2.0; +http://www.saibbyweb.com)",
+      // }
+    },
     async addNewRTSEntry(color) {
       console.log(color);
 
@@ -804,8 +821,8 @@ export default {
         this.setSuggestedPrices(this.doc.directPricing, this.doc.directPrice);
     },
     baseRTSDirectPriceUpdated(color) {
-        if(this.enableRTSSuggestedPricing)
-          this.setSuggestedPrices(color.directPricing, color.directPrice);
+      if (this.enableRTSSuggestedPricing)
+        this.setSuggestedPrices(color.directPricing, color.directPrice);
     },
     setSuggestedPrices(nonINRPricing, INRPrice) {
       const inflationPercentage =

@@ -82,6 +82,17 @@ export default {
         }
         return inflationPercentage;
       },
+      selectedCollection() {
+        if (this.doc.type === "under-bounipun") {
+          const foundIndex = this.collections.findIndex(
+            (col) => col.value === this.doc.bounipun_collection
+          );
+          if (foundIndex === -1) return false;
+          const collection = this.collections[foundIndex];
+          return collection;
+        }
+        return false;
+      },
       bounipunColors() {
         return this.doc.colorSource === "bounipun-colors";
       },

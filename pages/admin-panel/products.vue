@@ -226,11 +226,12 @@ export default {
     async fetchBounipunCollections() {
       const result = await this.$fetchCollection("collections");
       
-      this.collections = result.docs.map(({ _id, name, inflationPercentage }) => {
+      this.collections = result.docs.map(({ _id, name, inflationPercentage, slug }) => {
         return {
           name,
           value: _id,
-          inflationPercentage
+          inflationPercentage,
+          slug
         }
       });
 

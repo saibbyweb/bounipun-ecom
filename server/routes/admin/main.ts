@@ -1,4 +1,4 @@
-import { server, db, mongoose } from "@helpers/essentials";
+import { server, db, mongoose, task } from "@helpers/essentials";
 import admin from "@helpers/admin";
 import { uploader, methods as imageHelper } from "@models/imageUpload";
 import { register } from "@models";
@@ -180,7 +180,7 @@ router.post("/fetchCollection", async (req, res) => {
         return;
       case "variants":
         documents = await documents.populate("category", "name").lean();
-        documents = documents.map(doc => ({...doc, category: doc.category.name}))
+        documents = documents.map(doc => ({ ...doc, category: doc.category.name }))
 
         console.log('sending back variants');
         documents.forEach(doc => console.log(doc.category))
@@ -197,24 +197,24 @@ router.post("/fetchCollection", async (req, res) => {
 });
 
 /* fetch product count per collection */
-router.post("/fetchProductCountPerCollection", async(req, res) => {
+router.post("/fetchProductCountPerCollection", async (req, res) => {
   /* get all collections */
   const collections = await db.model('collections').find().select('_id')
   let details = {}
-  for(const collection of collections) {
-      let colorCount = 0;
-      const products: any = await db.model('products').find({bounipun_collection: collection._id}).select('_id colors').lean()
-      for(const product of products)
-        colorCount+= product.colors.length;
-      
-      details[collection._id] = `${products.length} products / ${colorCount} colors `;
+  for (const collection of collections) {
+    let colorCount = 0;
+    const products: any = await db.model('products').find({ bounipun_collection: collection._id }).select('_id colors').lean()
+    for (const product of products)
+      colorCount += product.colors.length;
+
+    details[collection._id] = `${products.length} products / ${colorCount} colors `;
   }
   res.send(details);
 });
 
 /* fetch paginated results */
 router.post("/fetchPaginatedResults", async (req, res) => {
-  
+
   /* destructure data from request body */
   const { model, rawCriterion, requestedBy } = req.body;
 
@@ -251,7 +251,7 @@ router.post("/fetchPaginatedResults", async (req, res) => {
         "variants._id",
       ]),
     };
-    
+
   } else if (model === "products" && requestedBy === "default") {
     const objectided = admin.setObjectIds(rawCriterion.filters, [
       "bounipun_collection",
@@ -262,13 +262,13 @@ router.post("/fetchPaginatedResults", async (req, res) => {
       $regex: rawCriterion.search.term,
       $options: "i",
     };
-    
+
   } else if (model === "colors" && requestedBy === "default") {
     criterion.match = {
       ...textSearch,
       ...admin.setObjectIds(rawCriterion.filters, ["category"]),
     };
-    
+
   } else {
     criterion.match[rawCriterion.search.key] = {
       $regex: rawCriterion.search.term,
@@ -331,13 +331,13 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
 
   /* TODO: add _id to result */
   const originalDoc = JSON.parse(JSON.stringify(result));
-  if(editMode && (model === 'product_lists' || model === 'sales')) {
+  if (editMode && (model === 'product_lists' || model === 'sales')) {
     result = details;
   }
-  
+
   /* post update */
-  switch(model) {
-  case 'sales':
+  switch (model) {
+    case 'sales':
       await saleMethods.updateProductSaleFlags(result._id, originalDoc, details)
       break;
     case "product_lists":
@@ -352,33 +352,33 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
 router.post("/deleteDocument", adminAuth("1", true), async (req, res) => {
   const { model, _id } = req.body;
   const collection = db.model(model);
-  
+
   /* pre-delete */
-  switch(model) {
+  switch (model) {
     case 'product_lists':
-      const underSale: any = await db.model('sales').findOne({list: _id}).select('name');
-      if(underSale !== null) {
-        res.send({deleted: false, msg: `Product list could not be delete. It is already under sale: ${underSale.name}`});
+      const underSale: any = await db.model('sales').findOne({ list: _id }).select('name');
+      if (underSale !== null) {
+        res.send({ deleted: false, msg: `Product list could not be delete. It is already under sale: ${underSale.name}` });
         return;
       }
       break;
     case 'products':
-      const inAList: any = await db.model('product_lists').findOne({list: _id}).select('name');
-      if(inAList !== null) {
-        res.send({deleted: false, msg: `Product present in: ${inAList.name}`});
+      const inAList: any = await db.model('product_lists').findOne({ list: _id }).select('name');
+      if (inAList !== null) {
+        res.send({ deleted: false, msg: `Product present in: ${inAList.name}` });
         return;
       }
       break;
   }
 
   const result: any = await collection.findByIdAndDelete({ _id });
-  
+
   /* post-delete */
-  switch(model) {
+  switch (model) {
     case 'sales':
-      if(result.status) {
-          result.status = false;
-          await saleMethods.updateFlagsForProductList(result.list, result._id, false);
+      if (result.status) {
+        result.status = false;
+        await saleMethods.updateFlagsForProductList(result.list, result._id, false);
       }
       break;
   }
@@ -402,19 +402,19 @@ router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
   console.log(`🔸 Bulk update requested for ${model}, action type: ${type}, for ${_ids.length} documenets`)
   let updateFields: any = {};
 
-  switch(model) {
-      case 'products':
-        if(type === "club-rts") {
-          console.log('🔸🔸 do the magic here and resond to the request here only');
-          /* make sure more than a single product is provided */
-          /* make sure all products provided are ready to ship */
-          /* make sure all products belong to the same collection */
-          /* make sure all products have exact same price */
-          /* rename the clubbed products (so that they can be deleted later) or mark them as inactive */
-          res.send({resolved: true});
-          return;
-        }
-        break;
+  switch (model) {
+    case 'products':
+      if (type === "club-rts") {
+        console.log('🔸🔸 do the magic here and resond to the request here only');
+        /* make sure more than a single product is provided */
+        /* make sure all products provided are ready to ship */
+        /* make sure all products belong to the same collection */
+        /* make sure all products have exact same price */
+        /* rename the clubbed products (so that they can be deleted later) or mark them as inactive */
+        res.send({ resolved: true });
+        return;
+      }
+      break;
   }
 
   switch (type) {
@@ -447,7 +447,7 @@ router.post("/updateNonINRPricing", adminAuth("1", true), async (req, res) => {
       filter = { type: "third-party" };
       break;
     case "all":
-      
+
       break;
     default:
       res.send({ total: 'No' });
@@ -464,10 +464,10 @@ router.post("/updateNonINRPricing", adminAuth("1", true), async (req, res) => {
 });
 
 /* update whole store */
-router.post("/updateWholeStore", adminAuth("1", true), async(req, res) => {
-    console.log('Whole store pricing update:');
-    await currencyMethods.updateWholeStore();
-    res.send({ resolved : true });
+router.post("/updateWholeStore", adminAuth("1", true), async (req, res) => {
+  console.log('Whole store pricing update:');
+  await currencyMethods.updateWholeStore();
+  res.send({ resolved: true });
 });
 
 /* update order (of lists in admin panel) */
@@ -671,5 +671,36 @@ router.post("/logoutAdmin", async (req, res) => {
 router.post("/fetchAdminProfile", adminAuth("0", false), async (req, res) => {
   const { admin } = req.body;
   res.send(admin);
+});
+
+/* crawler */
+router.get("/crawl", async (req, res) => {
+  console.log(req.query);
+  const { url, totalColors } = req.query as any;
+  
+  /* options */
+  const options = {
+      headers: {
+        "User-Agent":
+          "Mozilla/5.0 (compatible; saibbyweb/bingbot/2.0; +http://www.saibbyweb.com)",
+      }
+  }
+
+  /* initialize crawl requests with first request */
+  let crawlRequests = [axios.get(url, options)];
+
+  for (let i = 0; i < totalColors; i++) {
+    let request = axios.get(`${url}?activeColor=${i}`, options);
+    crawlRequests.push(request)
+  }
+
+  const {response, error} = await task(Promise.all(crawlRequests));
+
+  if (error) {
+    console.log('request failed');
+    res.send(false);
+  }
+  console.log(response.length);
+  res.send(true)
 });
 export default router;
