@@ -4,7 +4,8 @@
     <h2 class="heading">{{ editMode ? "Update" : "Add New" }} Product</h2>
 
     <!-- preview link -->
-    <div class="center" v-if="editMode">
+    <div class="flex col center" style="align-items:baseline; width:100%;" v-if="editMode">
+      <div class="center" style="width:100%;">
       <a :href="`/products?_id=${doc._id}`" target="_blank">
         <span
           style="
@@ -19,7 +20,9 @@
           Preview Product ➚
         </span>
       </a>
-      <button @click="requestPrerender">Request Pre-render</button>
+      <button style="background-color:#333; color:white;font-size:12px;border-radius:2px; margin:2px;padding:2px 6px;" @click="requestPrerender">Request Pre-render</button>
+     </div>
+      <span v-if="prerenderingSuccessful" style="text-align:center; width:100%; font-size:12px;"> ✅ Product pre-rendered for previews </span>
     </div>
 
     <!-- product id -->
@@ -596,6 +599,7 @@ export default {
   },
   data() {
     return {
+      prerenderingSuccessful: false,
       editMode: false,
       doc: baseDoc(),
       baseColors: [],
@@ -631,6 +635,8 @@ export default {
         },
       });
       this.$store.commit("admin/setLoading", false);
+      this.prerenderingSuccessful = true;
+      setTimeout(() => this.prerenderingSuccessful = false,3000);
 
       // headers: {
       //   "User-Agent":
