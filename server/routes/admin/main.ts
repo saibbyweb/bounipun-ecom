@@ -405,11 +405,28 @@ router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
   switch (model) {
     case 'products':
       if (type === "club-rts") {
-        console.log('🔸🔸 do the magic here and resond to the request here only');
-        /* make sure more than a single product is provided */
-        /* make sure all products provided are ready to ship */
-        /* make sure all products belong to the same collection */
-        /* make sure all products have exact same price */
+        /* make sure more than a one product is provided */
+        const moreThanOneProduct = _ids.length > 1;
+        if(!moreThanOneProduct) {
+          return res.send({resolved:false});
+        }
+
+        const products: any = await db.model('products').find({ _id: { $in: _ids } }).select('styleId availabilityType bounipunCollection directPrice');
+        /* make sure all products provided are ready to ship, belong to same collection, have exact same price and styleid */
+        const canBeClubbed = products.every(pro => 
+        pro.styleId === products[0].styleId &&
+        pro.availabilityType === 'ready-to-ship' && 
+        pro.bounipunCollection === products[0].bounipunCollection && 
+        pro.directPrice === products[0].directPrice);
+
+        console.log(canBeClubbed,'--canBeClubbed')
+        if(!canBeClubbed) {
+          return res.send({resolved:false});
+        }
+
+        /* create a new product */
+
+    
         /* rename the clubbed products (so that they can be deleted later) or mark them as inactive */
         res.send({ resolved: true });
         return;
@@ -677,13 +694,13 @@ router.post("/fetchAdminProfile", adminAuth("0", false), async (req, res) => {
 router.get("/crawl", async (req, res) => {
   console.log(req.query);
   const { url, totalColors } = req.query as any;
-  
+
   /* options */
   const options = {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (compatible; saibbyweb/bingbot/2.0; +http://www.saibbyweb.com)",
-      }
+    headers: {
+      "User-Agent":
+        "Mozilla/5.0 (compatible; saibbyweb/bingbot/2.0; +http://www.saibbyweb.com)",
+    }
   }
 
   /* initialize crawl requests with first request */
@@ -694,7 +711,7 @@ router.get("/crawl", async (req, res) => {
     crawlRequests.push(request)
   }
 
-  const {response, error} = await task(Promise.all(crawlRequests));
+  const { response, error } = await task(Promise.all(crawlRequests));
 
   if (error) {
     console.log('request failed');
