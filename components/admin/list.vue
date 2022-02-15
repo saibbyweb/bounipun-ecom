@@ -92,7 +92,7 @@
                 v-for="(value, propIndex) in Object.values(item)"
                 :key="value + propIndex"
               >
-              <img style="height:100px;" v-if="typeof value === 'string' && value.startsWith('https')" :src="value"  />
+              <img style="height:70px;" v-if="typeof value === 'string' && value.startsWith('https')" :src="value"  />
               <span v-else> {{ optimizeValue(value, propIndex) }}</span>
               </div>
 
@@ -260,11 +260,17 @@ export default {
 
 
       if (request.resolved === false) {
+        alert('Bulk operation failed.');
         console.log("Update Failed");
         return;
       }
 
-      console.log("Update probably succeeded");
+      console.log("Update probably succeeded", request);
+
+      /* if rts club */
+      if(request.response?.clubbedProduct) {
+        await this.$updateDocument('products', request.response.clubbedProduct, false);
+      }
 
       this.showUpdateToast = true;
       setTimeout(() => (this.showUpdateToast = false), 2000);

@@ -40,7 +40,7 @@
         :model="model"
         :actions="actions"
         :headings="headings"
-        custom_css="5% 10% 25% 10% 15% 10% 15% 10%"
+        custom_css="5% 15% 25% 10% 10% 10% 15% 10%"
         :sortByFields="sortByFields"
         @documentFetched="documentFetched"
         @sortToggled="sortToggled"

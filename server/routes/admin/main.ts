@@ -408,27 +408,65 @@ router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
         /* make sure more than a one product is provided */
         const moreThanOneProduct = _ids.length > 1;
         if(!moreThanOneProduct) {
+          console.log('Need more than 1 product');
           return res.send({resolved:false});
         }
 
-        const products: any = await db.model('products').find({ _id: { $in: _ids } }).select('styleId availabilityType bounipunCollection directPrice');
+        const products: any = await db.model('products').find({ _id: { $in: _ids } }).lean();
+        /* first matched product */
+        const baseProduct = products[0];
         /* make sure all products provided are ready to ship, belong to same collection, have exact same price and styleid */
         const canBeClubbed = products.every(pro => 
-        pro.styleId === products[0].styleId &&
+        pro.styleId === baseProduct.styleId &&
         pro.availabilityType === 'ready-to-ship' && 
-        pro.bounipunCollection === products[0].bounipunCollection && 
-        pro.directPrice === products[0].directPrice);
+        pro.bounipun_collection.toString() === baseProduct.bounipun_collection.toString() && 
+        pro.directPrice === baseProduct.directPrice);
 
         console.log(canBeClubbed,'--canBeClubbed')
         if(!canBeClubbed) {
-          return res.send({resolved:false});
+          return res.send({resolved:false, msg: "Products cannot be clubbed."});
         }
 
+        /* collect colors */
+        let colors = products.map(pro => pro.colors);
+        colors = colors.flat();
+        // console.log(colors);
+
+
+
         /* create a new product */
+        const clubbedProduct = {
+          alias: "",
+          availabilityType: "ready-to-ship",
+          bounipun_collection: baseProduct.bounipun_collection,
+          /* need to check for escape */
+          colorSource: "custom",
+          colors,
+          description: baseProduct.description,
+          directPrice:baseProduct.directPrice,
+          directPricing: baseProduct.directPricing,
+          rtsDirectVariant: baseProduct.rtsDirectVariant,
+          rtsDirectFabric: baseProduct.rtsDirectFabric,
+          stock: colors.length,
+          gender: baseProduct.gender,
+          // name: `${this.doc.name} - ${color.name}`,
+          name: baseProduct.name,
+          printNo: baseProduct.printNo || "",
+          slug: "",
+          status: true,
+          styleId: baseProduct.styleId,
+          type: "under-bounipun",
+          variants: [],
+          _id: "",
+        };
+       
         /* and remove old entries */
-    
+        const bulkUpdated = await db
+        .model(model)
+        .updateMany({ _id: { $in: _ids } }, {status: false, name: baseProduct.name + " -  TO BE REMOVED ❌"});
+
         /* rename the clubbed products (so that they can be deleted later) or mark them as inactive */
-        res.send({ resolved: true });
+        res.send({ clubbedProduct });
         return;
       }
       break;
