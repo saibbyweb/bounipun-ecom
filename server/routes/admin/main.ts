@@ -425,7 +425,7 @@ router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
         }
 
         /* create a new product */
-
+        /* and remove old entries */
     
         /* rename the clubbed products (so that they can be deleted later) or mark them as inactive */
         res.send({ resolved: true });
