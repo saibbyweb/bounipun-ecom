@@ -62,7 +62,7 @@
           <slideshow
             size="cover"
             :images="fetchSlideshow(block.slideshow)"
-            mSlideHeight="130vw"
+            mSlideHeight="154vw"
             dSlideHeight="70vh"
             :dSlideWidth="27"
             :dots="true"
@@ -97,7 +97,7 @@
           <slideshow
             size="cover"
             :images="fetchSlideshow(block.imageList)"
-            mSlideHeight="130vw"
+            mSlideHeight="154vw"
             dSlideHeight="70vh"
             :dSlideWidth="27"
             :dots="true"
@@ -362,7 +362,7 @@ export default {
 
     @media (max-width: 768px) {
       width: 100%;
-      height: 130vw;
+      height: 154vw;
     }
   }
 
