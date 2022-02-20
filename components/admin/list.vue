@@ -271,6 +271,11 @@ export default {
       if(request.response?.clubbedProduct) {
         await this.$updateDocument('products', request.response.clubbedProduct, false);
       }
+      else if(request.response?.splittedProducts) {
+        for(const newProduct of request.response.splittedProducts) {
+           await this.$updateDocument('products', newProduct, false);
+        }
+      }
 
       this.showUpdateToast = true;
       setTimeout(() => (this.showUpdateToast = false), 2000);

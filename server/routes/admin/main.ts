@@ -407,24 +407,24 @@ router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
       if (type === "club-rts") {
         /* make sure more than a one product is provided */
         const moreThanOneProduct = _ids.length > 1;
-        if(!moreThanOneProduct) {
+        if (!moreThanOneProduct) {
           console.log('Need more than 1 product');
-          return res.send({resolved:false});
+          return res.send({ resolved: false });
         }
 
         const products: any = await db.model('products').find({ _id: { $in: _ids } }).lean();
         /* first matched product */
         const baseProduct = products[0];
         /* make sure all products provided are ready to ship, belong to same collection, have exact same price and styleid */
-        const canBeClubbed = products.every(pro => 
-        pro.styleId === baseProduct.styleId &&
-        pro.availabilityType === 'ready-to-ship' && 
-        pro.bounipun_collection.toString() === baseProduct.bounipun_collection.toString() && 
-        pro.directPrice === baseProduct.directPrice);
+        const canBeClubbed = products.every(pro =>
+          pro.styleId === baseProduct.styleId &&
+          pro.availabilityType === 'ready-to-ship' &&
+          pro.bounipun_collection.toString() === baseProduct.bounipun_collection.toString() &&
+          pro.directPrice === baseProduct.directPrice)
 
-        console.log(canBeClubbed,'--canBeClubbed')
-        if(!canBeClubbed) {
-          return res.send({resolved:false, msg: "Products cannot be clubbed."});
+        console.log(canBeClubbed, '--canBeClubbed')
+        if (!canBeClubbed) {
+          return res.send({ resolved: false, msg: "Products cannot be clubbed." });
         }
 
         /* collect colors */
@@ -443,7 +443,7 @@ router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
           colorSource: "custom",
           colors,
           description: baseProduct.description,
-          directPrice:baseProduct.directPrice,
+          directPrice: baseProduct.directPrice,
           directPricing: baseProduct.directPricing,
           rtsDirectVariant: baseProduct.rtsDirectVariant,
           rtsDirectFabric: baseProduct.rtsDirectFabric,
@@ -459,14 +459,48 @@ router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
           variants: [],
           _id: "",
         };
-       
-        /* and remove old entries */
+
+        /* and mark old entries to be removed*/
         const bulkUpdated = await db
-        .model(model)
-        .updateMany({ _id: { $in: _ids } }, {status: false, name: baseProduct.name + " -  TO BE REMOVED ❌"});
+          .model(model)
+          .updateMany({ _id: { $in: _ids } }, { status: false, name: baseProduct.name + " -  TO BE REMOVED ❌" });
 
         /* rename the clubbed products (so that they can be deleted later) or mark them as inactive */
         res.send({ clubbedProduct });
+        return;
+      }
+      else if (type === "split-rts") {
+        /* make sure more than a one product is provided */
+        const justOneProduct = _ids.length === 1;
+        if (!justOneProduct) {
+          console.log('Only one product should be provided.')
+          return res.send(response)
+        }
+        /* product id */
+        const productId = _ids[0];
+        /* get product from database  */
+        const product: any = await db.model('products').findById(productId).lean();
+
+        /* check if its under bounipun */
+        if(product.availabilityType === "ready-to-ship" && product.type === "under-bounipun" && product.colors.length > 1) {
+          console.log('********* RTS split can be processed');
+        }
+        else {
+          return res.send(response);
+        }
+        
+        let splittedProducts = [];
+    
+            /* split colors into individual */
+        for(const color of product.colors) {
+          const splittedProduct = {...product, _id: '', alias: '', name: product.name + " - " + color.name, colors: [color], }
+          splittedProducts.push(splittedProduct);
+        }
+        
+        /* mark common product to be removed */
+        await db.model(model).findByIdAndUpdate(productId, { name: product.name + " -  TO BE REMOVED ❌", status: false });
+    
+        res.send({ splittedProducts });
         return;
       }
       break;

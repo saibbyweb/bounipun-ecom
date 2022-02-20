@@ -139,9 +139,9 @@ export default {
         },
         sortBy: {
           styleId: {
-            active:true,
-            order: 1
-          }
+            active: true,
+            order: 1,
+          },
         },
         limit: 10,
       },
@@ -171,8 +171,12 @@ export default {
         },
         {
           name: "Club RTS",
-          type: "club-rts"
-        }
+          type: "club-rts",
+        },
+        {
+          name: "Split RTS",
+          type: "split-rts",
+        },
       ],
     };
   },
@@ -203,7 +207,7 @@ export default {
           _id,
           checked: false,
           price: "",
-          pricing: {}
+          pricing: {},
         };
       });
     },
@@ -225,20 +229,22 @@ export default {
     },
     async fetchBounipunCollections() {
       const result = await this.$fetchCollection("collections");
-      
-      this.collections = result.docs.map(({ _id, name, inflationPercentage, slug }) => {
-        return {
-          name,
-          value: _id,
-          inflationPercentage,
-          slug
+
+      this.collections = result.docs.map(
+        ({ _id, name, inflationPercentage, slug }) => {
+          return {
+            name,
+            value: _id,
+            inflationPercentage,
+            slug,
+          };
         }
-      });
+      );
 
       this.collections.unshift({
         name: "Select Collection",
         value: "default",
-        inflationPercentage: 0
+        inflationPercentage: 0,
       });
 
       /* update collection name in list */
@@ -255,12 +261,11 @@ export default {
           item.type !== "third-party" ? bounipun_collection : "N/A";
         return item;
       });
-
     },
     documentFetched(doc) {
       this.showForm = true;
       this.editMode = true;
-      console.log(doc,'--fetched document');
+      console.log(doc, "--fetched document");
       setTimeout(() => this.populateForm(doc), 1500);
     },
     /* populate form */
@@ -342,21 +347,19 @@ export default {
                 ? foundCollection.name
                 : "NOT AVAILABLE";
           }
-          
+
           /* active colors */
-          const activeColors = colors.filter(color => color.status)
+          const activeColors = colors.filter((color) => color.status);
 
           let fullPreviewImagePath = "";
-          
+
           try {
             const previewImage = colors[0].images[0].path;
             console.log(previewImage);
             fullPreviewImagePath = this.$getOriginalPath(previewImage);
+          } catch (e) {
+            console.log("something went wrong");
           }
-          catch(e) {
-            console.log('something went wrong')
-          }
-
 
           return {
             _id,
