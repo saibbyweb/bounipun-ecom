@@ -162,7 +162,7 @@ const expressAuth = async (req, res, next, usergroup, strictMode) => {
   const { user } = session;
 
   /* TODO: check user status (whether user exists or not (removed from db or blocked by admin)) */
-  if (user === null) {
+  if (user === null || user.status === false) {
     res.send({ notAuthorized: true });
     return;
   }
