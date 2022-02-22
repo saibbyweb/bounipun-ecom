@@ -179,7 +179,7 @@
           <!-- bounipun colors  -->
           <div v-if="bounipunColors" class="colors">
             <h4 class="section-heading">
-              Select Color: ({{ product.colors.length }})
+              Available Colors: ({{ product.colors.length }})
             </h4>
 
             <!-- color category -->
@@ -221,7 +221,7 @@
           <!-- custom colors -->
           <div v-if="!bounipunColors" class="colors">
             <h4 class="section-heading">
-              Select Color ({{ product.colors.length }}) :
+              Available Colors ({{ product.colors.length }}) :
             </h4>
 
             <div class="color-boxes">
@@ -250,7 +250,7 @@
             v-if="!thirdPartyProduct && multiPriced && !readyToShip"
             class="variants-available"
           >
-            <h4 class="section-heading">Select Variant:</h4>
+            <h4 class="section-heading">Available Variants:</h4>
             <p class="section-paragraph">
               {{ variantNote }}
             </p>
@@ -286,14 +286,14 @@
             v-if="!thirdPartyProduct && multiPriced && !readyToShip"
             class="fabrics-available"
           >
-            <h4 class="section-heading">Select Fabric:</h4>
+            <h4 class="section-heading">Available Fabrics:</h4>
 
             <!-- fabrics available -->
             <div class="fabrics-container">
               <!-- fabric -->
               <div
                 @click="setActiveFabric(index)"
-                v-for="(fabric, index) in variants[activeVariantIndex].fabrics"
+                v-for="(fabric, index) in getActiveFabrics(activeVariantIndex)"
                 :key="index"
                 class="fabric center-col"
                 :style="setVariantColorToActiveFabric(index)"
@@ -682,6 +682,16 @@ export default {
     },
   },
   methods: {
+    getActiveFabrics(activeVariantIndex) {
+      const fabrics = this.variants[activeVariantIndex]?.fabrics;
+
+      /* TODO: check this out */
+      if(fabrics) {
+        return fabrics.filter(fab => fab.status === true)
+      }
+      else
+       return [];
+    },
     addOGMetaTags() {
       this.addOGMetaTag('og:type', 'website');
       this.addOGMetaTag('description',`${this.collectionName} from Bounipun Kashmir`);

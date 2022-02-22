@@ -31,8 +31,7 @@
       <!-- shipping and delivery -->
       <Accordion heading="Shipping and Delivery">
  <p>
-        We offer complimentary domestic and International shipping till 31st
-        December 2021, Offer can be extended or removed anytime without
+        We offer complimentary domestic and International shipping. However, this offer can be extended or removed anytime without
         informing, changes will reflect in your shopping cart.<br /><br />
 
         Thereafter minimum standard shipping charges per order will be Rs 300/=
