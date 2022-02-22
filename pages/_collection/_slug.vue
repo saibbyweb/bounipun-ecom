@@ -293,7 +293,7 @@
               <!-- fabric -->
               <div
                 @click="setActiveFabric(index)"
-                v-for="(fabric, index) in getActiveFabrics(activeVariantIndex)"
+                v-for="(fabric, index) in variants[activeVariantIndex].fabrics"
                 :key="index"
                 class="fabric center-col"
                 :style="setVariantColorToActiveFabric(index)"
@@ -310,7 +310,7 @@
           <!-- accordions -->
           <div class="accordions">
             <!-- detailed features -->
-            <Accordion heading="Detailed Features">
+            <Accordion heading="Detailed Features" :expanded="true">
               <!-- variant -->
               <!-- <p> Variant Specific Details</p> -->
               <ul v-if="!thirdPartyProduct">
@@ -682,16 +682,6 @@ export default {
     },
   },
   methods: {
-    getActiveFabrics(activeVariantIndex) {
-      const fabrics = this.variants[activeVariantIndex]?.fabrics;
-
-      /* TODO: check this out */
-      if(fabrics) {
-        return fabrics.filter(fab => fab.status === true)
-      }
-      else
-       return [];
-    },
     addOGMetaTags() {
       this.addOGMetaTag('og:type', 'website');
       this.addOGMetaTag('description',`${this.collectionName} from Bounipun Kashmir`);
@@ -888,7 +878,7 @@ export default {
       if (mainColorIndex !== -1) this.activeColorIndex = mainColorIndex;
     },
     setVariants() {
-      const variants = this.product.variants.map((variant) => {
+      let variants = this.product.variants.map((variant) => {
         /* map fabric details */
         let fabrics = variant.fabrics.map((fabric) => {
           return {
@@ -902,8 +892,12 @@ export default {
             writeUp: fabric._id.writeUp,
             detailsAndCare: fabric._id.detailsAndCare,
             order: fabric._id.order,
+            status: fabric._id.status
           };
         });
+
+        /* filter out inactive fabric */
+        fabrics = fabrics.filter(fab => fab.status === true);
 
         /* sort fabrics according to order */
         fabrics.sort((a, b) => a.order - b.order);
@@ -921,6 +915,9 @@ export default {
           fabrics,
         };
       });
+        
+      /* filter out variants which have no active fabrics */
+      variants = variants.filter(variant => variant.fabrics.length > 0);
 
       this.variants = variants.sort((a, b) => a.order - b.order);
 

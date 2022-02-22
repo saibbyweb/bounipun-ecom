@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
     detailsAndCare: String,
     writeUp: String,
     order: Number,
-    status: Boolean
+    status: { type: Boolean, default: false }
 }, {
     timestamps: true
 });
