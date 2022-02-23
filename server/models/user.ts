@@ -446,6 +446,11 @@ export const methods = {
         const selectedFabric = selectedVariant.fabrics.find(
           (fabric) => fabric._id._id.toString() === item.fabric.toString()
         );
+
+        if(selectedFabric === undefined) {
+          return false;
+        }
+        
         cartItem.fabricName = selectedFabric._id.name;
 
         /* fabric info 1 (if made to order) */
