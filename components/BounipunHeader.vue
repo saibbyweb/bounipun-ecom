@@ -2,7 +2,15 @@
   <div :class="[{ 'dark-mode': darkMode }, 'header']">
     <!-- menu -->
     <div class="menu center">
-      <img class="action-icon" :src="getIconPath('menu.png')" @click="$emit('showMenu')"/>
+      <!-- hamburger -->
+
+      <img
+        class="action-icon"
+        :src="getIconPath('menu.png')"
+        @click="$emit('showMenu')"
+      />
+
+      <!-- user account -->
 
       <img
         @click.stop="$router.push('/my-account')"
@@ -10,18 +18,20 @@
         class="action-icon account"
         :src="getIconPath('account-new.png')"
       />
+
       <!-- whatsapp -->
-      <!-- <router-link> -->
-      <img
-        @click="openInNewTab(whatsAppShareLink)"
-        class="action-icon whatsapp"
-        :src="getIconPath('whatsapp-aa.svg')"
-      />
-      <!-- </router-link> -->
+      <div style="display: flex; position: relative">
+        <!-- cart count -->
+        <div class="whatsapp-count">1</div>
 
+        <img
+          @click="openInNewTab(whatsAppShareLink)"
+          class="action-icon whatsapp"
+          :src="getIconPath('whatsapp-aa.svg')"
+        />
+      </div>
 
-    <CurrencySelector class="onlyDesktop"/>
-
+      <CurrencySelector class="onlyDesktop" />
     </div>
 
     <!-- logo -->
@@ -49,7 +59,12 @@
 
       <div class="action-icon">
         <!-- cart count -->
-        <span v-if="cartCount !== 0 && cartCount !== undefined" class="cart-count"> {{ cartCount }} </span>
+        <span
+          v-if="cartCount !== 0 && cartCount !== undefined"
+          class="cart-count"
+        >
+          {{ cartCount }}
+        </span>
         <img
           class="bag"
           :src="getIconPath('bag.png')"
@@ -79,7 +94,7 @@ export default {
   data() {
     return {
       // darkMode: this.$route.name === "products-collection" ? true : false
-      darkMode: true
+      darkMode: true,
     };
   },
   computed: {
@@ -91,13 +106,13 @@ export default {
       let msg = `Hi! Could you help me with a few queries!`;
       msg = encodeURI(msg);
       return BASE_SHARE_URL + msg;
-    }
+    },
   },
   watch: {
     $route(to, from) {
       console.log(to.name);
       // this.darkMode = to.name !== "index";
-    }
+    },
   },
   methods: {
     openInNewTab(link) {
@@ -114,8 +129,8 @@ export default {
     getIconPath(icon) {
       const directory = "/icons/light/";
       return directory + icon;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -124,7 +139,7 @@ export default {
   width: 100%;
   height: 10vh;
   position: fixed;
-  margin-top:3vh;
+  margin-top: 3vh;
   z-index: 3;
   top: 0;
   left: 0;
@@ -156,7 +171,7 @@ export default {
   .logo {
     height: inherit;
     cursor: pointer;
-    margin-top:1%;
+    margin-top: 1%;
 
     img {
       height: 70%;
@@ -183,15 +198,19 @@ export default {
     width: 1.7vw;
     margin: 4%;
     position: relative;
-      margin-left: 10px;
-      cursor: pointer;
-
+    margin-left: 10px;
+    cursor: pointer;
 
     .cart-count {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 16px;
+      width: 16px;
       background: #c54343;
       color: white;
       padding: 3px;
-      border-radius: 61%;
+      border-radius: 50%;
       font-size: 10px;
       position: absolute;
       right: -60%;
@@ -218,6 +237,27 @@ export default {
         margin-left: 8px;
         opacity: 1;
       }
+    }
+  }
+  .whatsapp-count {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #c54343;
+    color: white;
+    padding: 3px;
+    border-radius: 50%;
+    font-size: 10px;
+    position: absolute;
+    top: -10%;
+    right: -16%;
+    height: 16px;
+    width: 16px;
+    text-align: center;
+    z-index: 1;
+    @media (max-width: $breakpoint-tablet) {
+      right: -22%;
+      top: -20%;
     }
   }
 }
