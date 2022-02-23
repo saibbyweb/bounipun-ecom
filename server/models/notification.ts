@@ -167,7 +167,7 @@ export const methods = {
         
         await this.sendEmailNotification({
             to: 'admin',
-            receipt: ['contact@bounipun.in', 'hello@saibbyweb.com', 'suhaibzreason@gmail.com'],
+            receipt: ['contact@bounipun.in'],
             subject: 'New Contact Request | Bounipun Ecom',
             templateId: contactEmailTemplateId,
             templateData: details,
@@ -190,7 +190,7 @@ export const methods = {
 
         await this.sendEmailNotification({
             to: 'admin',
-            receipt: ['orders@bounipun.in','hello@saibbyweb.com', 'suhaibzreason@gmail.com'],
+            receipt: ['orders@bounipun.in'],
             subject: 'New Order Received',
             templateId: newOrderAdminTemplateId,
             templateData: details,
@@ -201,7 +201,7 @@ export const methods = {
     async orderCancelEmailToAdmin(details: AdminOrderCancelledEmailTemplate) {
         await this.sendEmailNotification({
             to: 'admin',
-            receipt: ['orders@bounipun.in','hello@saibbyweb.com', 'suhaibzreason@gmail.com'],
+            receipt: ['orders@bounipun.in'],
             subject: 'Order Cancelled by Customer',
             templateId: orderCancelledAdminTemplateId,
             templateData: details,
