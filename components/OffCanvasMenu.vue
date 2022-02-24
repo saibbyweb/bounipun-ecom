@@ -30,20 +30,30 @@
       </div>
 
       <!-- menu items -->
-      <button class="sub-heading clear item">Collections</button>
-      <!-- active collection list -->
+      <!-- <button class="sub-heading clear item">Collections</button> -->
+      <!-- active collection list (scarves) -->
+      <p class="item sub-heading"> Scarves </p>
       <button
         @click="navigate(collection, 'collection')"
-        class="clear item sub-item"
-        v-for="(collection, index) in collections"
+        class="clear item sub-item acc"
+        v-for="(collection, index) in scarves"
         :key="index"
       >
-        {{ collection.lock ? "" : "" }}
+        <!-- {{ collection.lock ? "" : "" }} -->
         {{ collection.name }}
       </button>
-      <!-- <button class="clear item"> Categories </button> -->
-      <!-- <button class="clear item">The Bounipun Lab</button> -->
-      <!-- <button class="clear item">Story</button> -->
+
+      <!-- active collection list (decor) -->
+       <p class="item sub-heading"> Décor </p>
+      <button
+        @click="navigate(collection, 'collection')"
+        class="clear item sub-item acc"
+        v-for="(collection, index) in decor"
+        :key="index"
+      >
+        <!-- {{ collection.lock ? "" : "" }} -->
+        {{ collection.name }}
+      </button>
 
       <div v-if="$store.state.customer.authorized" style="margin-bottom: 10px">
         <!-- acc items -->
@@ -113,14 +123,6 @@
 
 <script>
 export default {
-  data() {
-    return {
-      // collections: []
-    };
-  },
-  mounted() {
-    this.fetchCollections();
-  },
   computed: {
     greeting() {
       const time = new Date().getHours();
@@ -137,6 +139,16 @@ export default {
     },
     collections() {
       return this.$store.state.customer.collections;
+    },
+    scarves() {
+      return this.collections.filter(
+        (col) => col.name.toUpperCase() !== "WALL ART"
+      );
+    },
+    decor() {
+      return this.collections.filter(
+        (col) => this.scarves.findIndex((sc) => sc.name === col.name) === -1
+      );
     },
   },
   methods: {
@@ -157,18 +169,6 @@ export default {
         return;
       }
       this.$router.push(route);
-    },
-    async fetchCollections() {
-      // const collections = await this.$fetchData(
-      //   "collections",
-      //   {
-      //     status: true
-      //   },
-      //   true
-      // );
-      /* if collections not fetched */
-      // if (!collections.fetched) return;
-      // this.collections = collections.docs;
     },
     async logout() {
       const { resolved, response } = await this.$post("/logoutCustomer");
@@ -216,7 +216,7 @@ export default {
       background: $primary_dark;
       height: 7vh;
       width: 100%;
-      margin-bottom: 10px;
+      // margin-bottom: 10px;
       display: flex;
       justify-content: flex-start;
       align-items: center;
@@ -258,11 +258,11 @@ export default {
       span {
         color: white;
         &.greeting {
-          font-size: 11px;
+          font-size: 12px;
         }
 
         &.name {
-          font-size: 12px;
+          font-size: 13px;
         }
       }
     }

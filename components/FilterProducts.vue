@@ -285,6 +285,9 @@ export default {
         checked: false
       }));
 
+      /* TODO: temporary fix: filter out decor variants */
+      this.filterData.variants = this.filterData.variants.filter(variant => ['SQUARE', 'SHAWL', 'STOLE'].includes(variant.name.toUpperCase()) );
+
       this.$emit('dataFetched');
     }
   }
