@@ -50,6 +50,11 @@
           </div>
 
           <div :class="{ active: showShareIcons }" class="social">
+
+           <a :href="twitterShareLink" target="_blank">
+              <img src="/icons/dark/social/twitter.png" />
+            </a>
+
             <a :href="facebookShareLink" target="_blank">
               <img src="/icons/dark/social/facebook.png" />
             </a>
@@ -378,8 +383,6 @@
 
         <br />
         <br />
-
-        <!-- <inner-image-zoom class="product-image" :src="images[0]" :zoomSrc="images[0]" /> -->
       </div>
     </div>
   </div>
@@ -651,6 +654,19 @@ export default {
       const link = BASE_SHARE_URL + this.shareLink;
       return link;
     },
+    // https://twitter.com/intent/tweet?url=https://bounipun.in/autograph/mystic-maze?activeColor=0&text=Check%20out%20this%20Bounipun%20special:
+    twitterShareLink() {
+      const BASE_SHARE_URL = "https://twitter.com/intent/tweet";
+      const remoteLink = this.shareLink.replace('localhost:8080','https://bounipun.in')
+
+      const link =
+        BASE_SHARE_URL +
+        "?url=" +
+        encodeURI(remoteLink) +
+        "&text=" +
+        encodeURI("Check out this Bounipun special:");
+      return link;
+    },
     shippingTime() {
       if (this.product.availabilityType === "ready-to-ship") return "1";
 
@@ -683,18 +699,24 @@ export default {
   },
   methods: {
     addOGMetaTags() {
-      this.addOGMetaTag('og:type', 'website');
-      this.addOGMetaTag('description',`${this.collectionName} from Bounipun Kashmir`);
-      this.addOGMetaTag('og:title',`${this.product.name}`);
-      this.addOGMetaTag('og:description',`${this.collectionName} from Bounipun Kashmir`)
-      this.addOGMetaTag('og:image', this.firstProductImage);
-      this.addOGMetaTag('og:url', this.shareLink);
+      this.addOGMetaTag("og:type", "website");
+      this.addOGMetaTag(
+        "description",
+        `${this.collectionName} from Bounipun Kashmir`
+      );
+      this.addOGMetaTag("og:title", `${this.product.name}`);
+      this.addOGMetaTag(
+        "og:description",
+        `${this.collectionName} from Bounipun Kashmir`
+      );
+      this.addOGMetaTag("og:image", this.firstProductImage);
+      this.addOGMetaTag("og:url", this.shareLink);
     },
     addOGMetaTag(property, content) {
-      let meta = document.createElement('meta');
-      meta.setAttribute('property', property);
-      meta.setAttribute('content', content);
-      document.head.insertAdjacentElement('afterbegin', meta);
+      let meta = document.createElement("meta");
+      meta.setAttribute("property", property);
+      meta.setAttribute("content", content);
+      document.head.insertAdjacentElement("afterbegin", meta);
     },
     getFabricPrice(fabric) {
       if (this.currencyIsINR) return fabric.price;
@@ -892,12 +914,12 @@ export default {
             writeUp: fabric._id.writeUp,
             detailsAndCare: fabric._id.detailsAndCare,
             order: fabric._id.order,
-            status: fabric._id.status
+            status: fabric._id.status,
           };
         });
 
         /* filter out inactive fabric */
-        fabrics = fabrics.filter(fab => fab.status === true);
+        fabrics = fabrics.filter((fab) => fab.status === true);
 
         /* sort fabrics according to order */
         fabrics.sort((a, b) => a.order - b.order);
@@ -915,9 +937,9 @@ export default {
           fabrics,
         };
       });
-        
+
       /* filter out variants which have no active fabrics */
-      variants = variants.filter(variant => variant.fabrics.length > 0);
+      variants = variants.filter((variant) => variant.fabrics.length > 0);
 
       this.variants = variants.sort((a, b) => a.order - b.order);
 
