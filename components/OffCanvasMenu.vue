@@ -39,7 +39,6 @@
         v-for="(collection, index) in scarves"
         :key="index"
       >
-        <!-- {{ collection.lock ? "" : "" }} -->
         {{ collection.name }}
       </button>
 

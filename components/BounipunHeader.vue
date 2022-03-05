@@ -20,12 +20,14 @@
       />
 
       <!-- whatsapp -->
-      <div style="display: flex; position: relative">
+      <div
+        style="display: flex; position: relative"
+        class="pointer"
+        @click="openInNewTab(whatsAppShareLink)"
+      >
         <!-- cart count -->
         <div class="whatsapp-count">1</div>
-
         <img
-          @click="openInNewTab(whatsAppShareLink)"
           class="action-icon whatsapp"
           :src="getIconPath('whatsapp-aa.svg')"
         />
@@ -255,9 +257,12 @@ export default {
     width: 16px;
     text-align: center;
     z-index: 1;
+    font-family: "SF-Pro";
     @media (max-width: $breakpoint-tablet) {
-      right: -22%;
-      top: -20%;
+      right: -18%;
+      top: -10%;
+      height: 13px;
+      width: 13px;
     }
   }
 }
