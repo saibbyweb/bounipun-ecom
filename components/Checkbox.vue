@@ -31,6 +31,13 @@ export default {
         height: 12px;
         width: 12px;
         margin-right:5px;
+        appearance: none;
+        outline: 1px solid;
+        cursor: pointer;
+    }
+
+    .checkbox:checked {
+        background-color: #333;
     }
     .label {
         font-family: $font_2;
@@ -42,8 +49,8 @@ export default {
 
     @media(max-width: 768px) {
         .checkbox {
-            height:25px;
-            width:25px;
+            height:15px;
+            width:15px;
             margin-right:10px;
         }
     }

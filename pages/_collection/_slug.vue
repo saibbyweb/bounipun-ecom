@@ -713,8 +713,8 @@ export default {
       );
       this.addOGMetaTag("og:image", this.firstProductImage);
       this.addOGMetaTag("og:url", this.shareLink);
-      this.addOGMetaTag("twitter:card", "summary");
-      this.addOGMetaTag("twitter:site", "summary_large_image");
+      /* TODO: make a new build, delete cache and start fresh */
+      this.addOGMetaTag("twitter:card", "summary_large_image");
       this.addOGMetaTag("twitter:title", `${this.product.name}`);
       this.addOGMetaTag("twitter:image", this.firstProductImage);
       this.addOGMetaTag("twitter:description",`${this.collectionName} from Bounipun Kashmir`);

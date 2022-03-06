@@ -74,6 +74,7 @@ export default {
 
   .header {
     background-color: $brown;
+    background-color: #333;
     height:25px; width:100%;
     margin-bottom:7px;
     display: flex;

@@ -328,7 +328,8 @@ export default {
       padding: 1px;
       font-size: 14px;
       width: 70%;
-      background-color: #32a77c;
+      // background-color: #32a77c;
+      background-color: #333;
 
       &.applied {
         background-color: rgb(188, 34, 34);
@@ -379,7 +380,9 @@ export default {
 
 .delivery-specific {
   .note {
-    background-color: #32a77c;
+    // background-color: #32a77c;
+    background-color: #333;
+    margin-top:5px;
     color: white;
     padding: 2px 10px;
     font-size: 11px;
@@ -387,7 +390,8 @@ export default {
     // margin-top: 10px;
     text-align: center;
     &.disclaimer {
-      color: #32a77c;
+      // color: #32a77c;
+      color: #333;
       background-color: transparent;
     }
   }
