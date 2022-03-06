@@ -50,8 +50,7 @@
           </div>
 
           <div :class="{ active: showShareIcons }" class="social">
-
-           <a :href="twitterShareLink" target="_blank">
+            <a :href="twitterShareLink" target="_blank">
               <img src="/icons/dark/social/twitter.png" />
             </a>
 
@@ -657,7 +656,10 @@ export default {
     // https://twitter.com/intent/tweet?url=https://bounipun.in/autograph/mystic-maze?activeColor=0&text=Check%20out%20this%20Bounipun%20special:
     twitterShareLink() {
       const BASE_SHARE_URL = "https://twitter.com/intent/tweet";
-      const remoteLink = this.shareLink.replace('localhost:8080','https://bounipun.in')
+      const remoteLink = this.shareLink.replace(
+        "localhost:8080",
+        "https://bounipun.in"
+      );
 
       const link =
         BASE_SHARE_URL +
@@ -711,6 +713,11 @@ export default {
       );
       this.addOGMetaTag("og:image", this.firstProductImage);
       this.addOGMetaTag("og:url", this.shareLink);
+      this.addOGMetaTag("twitter:card", "summary");
+      this.addOGMetaTag("twitter:site", "summary_large_image");
+      this.addOGMetaTag("twitter:title", `${this.product.name}`);
+      this.addOGMetaTag("twitter:image", this.firstProductImage);
+      this.addOGMetaTag("twitter:description",`${this.collectionName} from Bounipun Kashmir`);
     },
     addOGMetaTag(property, content) {
       let meta = document.createElement("meta");

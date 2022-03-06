@@ -637,11 +637,6 @@ export default {
       this.$store.commit("admin/setLoading", false);
       this.prerenderingSuccessful = true;
       setTimeout(() => this.prerenderingSuccessful = false,3000);
-
-      // headers: {
-      //   "User-Agent":
-      //     "Mozilla/5.0 (compatible; saibbyweb/bingbot/2.0; +http://www.saibbyweb.com)",
-      // }
     },
     async addNewRTSEntry(color) {
       console.log(color);
