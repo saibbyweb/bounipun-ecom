@@ -142,7 +142,12 @@ export default {
         {
           name: "Lab",
           path: "/admin-panel/lab",
-          desc: '...'
+          desc: "...",
+        },
+        {
+          name: "Pop-ups",
+          path: "/admin-panel/popup",
+          desc: "...",
         },
         {
           name: "Currencies",

@@ -23,6 +23,9 @@ const model = mongoose.model("popup", schema);
 
 /* helper methods */
 export const methods = {
+    register() {
+        console.log('registered popup')
+    }
 }
 
 
