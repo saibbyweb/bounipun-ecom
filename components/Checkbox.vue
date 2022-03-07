@@ -44,7 +44,6 @@ export default {
         font-size: 12px;
         text-align: center;
         cursor: pointer;
-
     }
 
     @media(max-width: 768px) {

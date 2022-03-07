@@ -40,7 +40,7 @@
         :model="model"
         :actions="actions"
         :headings="headings"
-        custom_css="5% 15% 25% 10% 10% 10% 15% 10%"
+        custom_css="5% 10% 20% 8% 11% 10% 13% 15% 8%"
         :sortByFields="sortByFields"
         @documentFetched="documentFetched"
         @sortToggled="sortToggled"
@@ -79,7 +79,9 @@
 
 <script>
 import { v4 as uuidv4 } from "uuid";
+import CurrencyHelper from "../../helpers/currencyHelper.js";
 export default {
+  mixins: [CurrencyHelper],
   layout: "admin",
   data() {
     return {
@@ -154,6 +156,7 @@ export default {
         "preview",
         "availabilityType",
         "Collection",
+        "price (range)",
         "status",
       ],
       sortByFields: ["name", "styleId", "availabilityType", "status"],
@@ -335,6 +338,7 @@ export default {
           colors,
           availabilityType,
           bounipun_collection,
+          priceRange,
           status,
         }) => {
           /* resolve category name */
@@ -361,6 +365,13 @@ export default {
             console.log("something went wrong");
           }
 
+          /* calculate price range */
+          let priceRangeValue = '';
+          if(priceRange.startAt === priceRange.endsAt)
+            priceRangeValue = this.formatCurrency(priceRange.startAt,"INR",0);
+          else
+            priceRangeValue = this.formatCurrency(priceRange.startsAt,"INR",0) + " - " + this.formatCurrency(priceRange.endsAt,"INR",0);
+
           return {
             _id,
             styleId,
@@ -374,6 +385,7 @@ export default {
               bounipun_collection !== "" && bounipun_collection !== undefined
                 ? bounipun_collection
                 : "N/A",
+            priceRangeValue,
             status,
           };
         }

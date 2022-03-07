@@ -19,9 +19,10 @@ export const mutations = {
 
 /* getters */
 export const getters = {
-  formatCurrency: (state) => (price, currency) => {
+  formatCurrency: (state) => (price, currency,precision) => {
     return currencyFormatter.format(price, {
       code: currency === false ? state.currency : currency,
+      precision
     });
   },
 };
