@@ -15,8 +15,8 @@
         :list="list"
         :model="model"
         :headings="headings"
-        custom_css="10% 60% 20% 10%"
         :sortByFields="sortByFields"
+        custom_css="10% 35% 20% 15% 10% 10%"
         @documentFetched="documentFetched"
         @sortToggled="sortToggled"
       />
@@ -43,8 +43,6 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from "uuid";
-
 export default {
   layout: "admin",
   data() {
@@ -56,17 +54,30 @@ export default {
       rawCriterion: {
         search: {
           key: "name",
-          term: ""
+          term: "",
         },
         filters: {
-          type: "default"
+          type: "default",
         },
         sortBy: {},
-        limit: 20
+        limit: 20,
       },
       list: [],
-      sortByFields: ["name", "status"],
-      headings: ["_id", "name", "description", "status"]
+      sortByFields: [
+        "name",
+        "category",
+        "visibility",
+        "delay",
+        "status",
+      ],
+      headings: [
+        "_id",
+        "name",
+        "category",
+        "visibility",
+        "delay",
+        "status",
+      ],
     };
   },
   async mounted() {
@@ -80,13 +91,14 @@ export default {
       console.log(sortBy);
       this.rawCriterion = {
         ...this.rawCriterion,
-        sortBy
+        sortBy,
       };
     },
     documentFetched(doc) {
       this.showForm = true;
       this.editMode = true;
       this.$refs.updateComponent.populateForm(doc);
+      this.assignImages("imageUploader", doc.image);
     },
     resultsFetched(result) {
       if (result.docs.length === 0) {
@@ -95,15 +107,31 @@ export default {
       }
 
       /* extract list */
-      this.list = result.docs.map(({ _id, name, description, status }) => {
-        return {
-          _id,
-          name,
-          description,
-          status
-        };
-      });
-    }
-  }
+      this.list = result.docs.map(
+        ({ _id, name, category, visibility, delay, status }) => {
+          return {
+            _id,
+            name,
+            category,
+            visibility,
+            delay,
+            status,
+          };
+        }
+      );
+    },
+    assignImages(ref, image) {
+      if (image === "" || image === undefined) return;
+      setTimeout(() => {
+        this.$refs.updateComponent.$refs[ref].assignImages([
+          {
+            _id: "",
+            mainImage: false,
+            path: image,
+          },
+        ]);
+      }, 1200);
+    },
+  },
 };
 </script>

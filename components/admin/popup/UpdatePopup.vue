@@ -22,6 +22,17 @@
       @updated="imageListUpdated($event, 'image')"
     />
 
+    <!-- visibility -->
+    <label class="label"> Visibility </label>
+    <SelectBox
+      v-model="doc.visibility"
+      :options="[
+        { name: 'Guests', value: 'guests' },
+        { name: 'Registered Users', value: 'registered-users' },
+        { name: 'Both', value: 'both' },
+      ]"
+    />
+
     <!-- category -->
     <label class="label"> Category </label>
     <SelectBox
@@ -36,6 +47,13 @@
     <div v-if="doc.category === 'coupon'">
       <label class="label"> Available Coupons: </label>
       <SelectBox v-model="selectedCoupon" :options="couponList" />
+      <p
+        class="msg error"
+        style="width: 50%; text-align: center; float: right"
+        v-if="couponExpired"
+      >
+        Coupon Expired
+      </p>
     </div>
 
     <!-- popup text -->
@@ -52,6 +70,7 @@
       :max="60"
       :step="0.5"
     />
+
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
     <!-- publish toggle -->
@@ -114,6 +133,7 @@ export default {
       allCoupons: [],
       couponList: [],
       selectedCoupon: null,
+      couponExpired: false,
       loading: false,
       updated: false,
       errorToast: {
@@ -130,6 +150,15 @@ export default {
       if (newVal === null) return;
       this.doc.text = this.getCouponTextTemplate(newVal);
     },
+    editMode(newVal) {
+      if (newVal === true && this.doc.category === "coupon") {
+        this.couponList.shift();
+        this.couponList.unshift({
+          name: "Already Selected",
+          value: null,
+        });
+      }
+    },
   },
   methods: {
     imageListUpdated(list, type) {
@@ -140,8 +169,14 @@ export default {
       }
     },
     getCouponTextTemplate(couponId) {
+      this.couponExpired = false;
       const coupon = this.allCoupons.find((c) => c._id === couponId);
       if (coupon === undefined) return "";
+
+      /* check if coupon is expired or not */
+      if (new Date(coupon.validityRange.end).getTime() < new Date().getTime())
+        this.couponExpired = true;
+
       const unit = coupon.type === "percentage" ? "%" : coupon.currency;
       return `Use coupon code ${coupon.code} and get flat ${
         coupon.value
@@ -208,7 +243,7 @@ export default {
         delay,
         visibility,
         description,
-        status
+        status,
       } = details;
       this.doc = {
         _id,
@@ -221,7 +256,7 @@ export default {
         delay,
         visibility,
         description,
-        status
+        status,
       };
       this.editMode = true;
     },
