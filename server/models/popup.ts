@@ -11,6 +11,7 @@ const schema = new mongoose.Schema(
         persist: { type: Boolean, default: false },
         delay: { type: Number, default: 20 },
         visibility: { type: String, enum: ['guests', 'registered-users', 'both'] },
+        description: { type: String, default: '' },
         status: { type: Boolean, default: false }
     },
     {
