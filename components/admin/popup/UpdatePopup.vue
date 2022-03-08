@@ -83,7 +83,7 @@
       <img v-if="updated" class="action-complete" src="/complete.gif" />
       <!-- update document -->
       <button @click="updateDocument" class="action" :disabled="loading">
-        {{ editMode ? "Edit" : "Add" }} Sale
+        {{ editMode ? "Edit" : "Add" }} Popup
       </button>
       <!-- delete document -->
       <button
@@ -266,6 +266,7 @@ export default {
     },
     resetForm() {
       this.populateForm(baseDoc());
+      this.$refs.imageUploader.clearFileSelection();
       this.editMode = false;
     },
   },
