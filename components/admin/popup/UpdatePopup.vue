@@ -22,38 +22,49 @@
       @updated="imageListUpdated($event, 'image')"
     />
 
-    <!-- visibility -->
-    <label class="label"> Visibility </label>
-    <SelectBox
-      v-model="doc.visibility"
-      :options="[
-        { name: 'Guests', value: 'guests' },
-        { name: 'Registered Users', value: 'registered-users' },
-        { name: 'Both', value: 'both' },
-      ]"
-    />
+    <div class="flex center">
+      <!-- visibility -->
+      <div>
+        <label class="label"> Visibility </label>
+        <SelectBox
+          v-model="doc.visibility"
+          :options="[
+            { name: 'Guests', value: 'guests' },
+            { name: 'Registered Users', value: 'registered-users' },
+            { name: 'Both', value: 'both' },
+          ]"
+        />
+      </div>
+      <!-- category -->
+      <div>
+        <label class="label"> Category </label>
+        <SelectBox
+          v-model="doc.category"
+          :options="[
+            { name: 'Normal', value: 'normal' },
+            { name: 'Coupon', value: 'coupon' },
+          ]"
+        />
+      </div>
 
-    <!-- category -->
-    <label class="label"> Category </label>
-    <SelectBox
-      v-model="doc.category"
-      :options="[
-        { name: 'Normal', value: 'normal' },
-        { name: 'Coupon', value: 'coupon' },
-      ]"
-    />
-
-    <!-- coupon list (if category is coupon) -->
-    <div v-if="doc.category === 'coupon'">
-      <label class="label"> Available Coupons: </label>
-      <SelectBox v-model="selectedCoupon" :options="couponList" />
-      <p
-        class="msg error"
-        style="width: 50%; text-align: center; float: right"
-        v-if="couponExpired"
-      >
-        Coupon Expired
-      </p>
+      <!-- coupon list (if category is coupon) -->
+      <div v-if="doc.category === 'coupon'" style="position: relative">
+        <label class="label"> Available Coupons: </label>
+        <SelectBox v-model="selectedCoupon" :options="couponList" />
+        <p
+          class="msg error"
+          style="
+            text-align: center;
+            position: absolute;
+            bottom: -60%;
+            width: 100%;
+            left: 0;
+          "
+          v-if="couponExpired"
+        >
+          Coupon Expired
+        </p>
+      </div>
     </div>
 
     <!-- popup text -->
@@ -83,7 +94,7 @@
       <img v-if="updated" class="action-complete" src="/complete.gif" />
       <!-- update document -->
       <button @click="updateDocument" class="action" :disabled="loading">
-        {{ editMode ? "Edit" : "Add" }} Popup
+        {{ editMode ? "Apply Changes" : "Add Popup" }}
       </button>
       <!-- delete document -->
       <button
@@ -151,10 +162,15 @@ export default {
       this.doc.text = this.getCouponTextTemplate(newVal);
     },
     editMode(newVal) {
+      this.couponList.shift();
       if (newVal === true && this.doc.category === "coupon") {
-        this.couponList.shift();
         this.couponList.unshift({
           name: "Already Selected",
+          value: null,
+        });
+      } else if (newVal === false) {
+        this.couponList.unshift({
+          name: "Select Coupon:",
           value: null,
         });
       }
@@ -267,6 +283,8 @@ export default {
     resetForm() {
       this.populateForm(baseDoc());
       this.$refs.imageUploader.clearFileSelection();
+      this.selectedCoupon = null;
+      this.couponExpired= false;
       this.editMode = false;
     },
   },
