@@ -5,6 +5,7 @@ export const state = () => ({
   activeCurrencies: ["INR"],
   currency: "INR",
   preferredCurrency: "",
+  popups: [],
   persistedStateLoaded: false,
 });
 
