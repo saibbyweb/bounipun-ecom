@@ -55,9 +55,13 @@ export default {
       return this.$store.state.customer.popups ?? [];
     },
     eligiblePopups() {
-      const { popups } = this.$store.state.customer;
+      const { popups, popupsPopped } = this.$store.state.customer;
       /* do the magic here */
-      return popups;
+      const eligiblePopups = popups.filter((popup) => {
+        const alreadyExists = popupsPopped.findIndex((popId) => popId == popup._id) === -1;
+        return alreadyExists;
+      });
+      return eligiblePopups;
     },
   },
   mounted() {
