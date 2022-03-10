@@ -1,13 +1,9 @@
 <template>
-  <div class="login-page flex">
-    <!-- -->
-    <div class="bg"></div>
-
-    <!--  -->
-    <div class="login-form flex col around v-center shadow">
+  <div class="login-page flex center">
+    <div class="login-form flex col around v-center">
       <!-- heading  -->
       <div>
-        <h1>Admin Panel <sup> 8.0 </sup></h1>
+        <h1>Admin Panel <sup> 9.0 </sup></h1>
         <h3>
           Crafted with <span> ❤ </span> in Kashmir by
           <a href="https://saibbyweb.com" target="_blank"> @saibbyweb </a>
@@ -69,14 +65,14 @@ export default {
         status: false,
         message: "",
       },
-      unsubscribe: null
+      unsubscribe: null,
     };
   },
   beforeUnmount() {
     this.unsubscribe();
   },
   mounted() {
-        /* listen for all mutations */
+    /* listen for all mutations */
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type === "admin/setLoading") return;
 
@@ -87,7 +83,6 @@ export default {
         JSON.stringify(state.admin)
       );
     });
-
   },
   methods: {
     validatePhoneNumber() {
@@ -131,7 +126,6 @@ export default {
         platform: "web",
       });
 
- 
       /* if req not resolved, map error message */
       if (resolved === false) {
         this.error.message = response.message;
@@ -142,13 +136,13 @@ export default {
       /* and move back to homepage */
       this.$store.commit("admin/setAuthorization", true);
 
-            /* fetch profile */
+      /* fetch profile */
       this.$store.dispatch("admin/fetchProfile");
 
       /* navigate homepage */
       setTimeout(() => this.$router.push("/admin-panel"), 500);
       // this.$router.push("/");
-    }
+    },
   },
 };
 </script>
@@ -158,32 +152,37 @@ export default {
   padding: 0;
   margin-top: 0;
   min-height: 100vh;
-  background-image: url("/demo_images/maple.jpg");
+  // background-image: url("/demo_images/maple.jpg");
+  background-color: $primary_dark;
   background-size: cover;
 
   h1 {
     font-size: 17px;
     font-family: $font_1;
+    color:white;
 
     sup {
-      font-size: 10px;
+      font-size: 8px;
+      color:white;
     }
   }
 
   h3 {
-    font-size: 13px;
+    font-size: 10px;
     font-family: $font_2;
+     color:white;
     a {
-      color: rgb(172, 50, 50);
+      color:white;
       font-weight: 900;
     }
     span {
-      color: rgb(192, 19, 19);
+       color:white;
     }
   }
 
   .logo {
     width: 50%;
+    filter: invert(1);
   }
 
   .bg {
@@ -193,7 +192,22 @@ export default {
 
   .login-form {
     width: 35%;
-    background-color: rgba(238, 238, 238, 0.829);
+    height:100vh;
+    // background-color: rgb(0, 0, 0);
+    // background-color: rgba(238, 238, 238, 0.829);
+  }
+  .action {
+    border: 1px solid #efefef;
+  }
+
+  @media(max-width: 768px) {
+    .login-form {
+      width:100%;
+    }
+
+    .action {
+      width:70%;
+    }
   }
 }
 </style>
