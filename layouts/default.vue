@@ -36,9 +36,15 @@
     <Nuxt />
     <BounipunFooter />
 
-
-    <Popup v-for="popup in availablePopups" :key="popup._id" :image="popup.image" :text="popup.text" :persist="popup.persist" :actionURL="popup.actionURL" />
-
+    <Popup
+      v-for="popup in eligiblePopups"
+      :key="popup._id"
+      :_id="popup._id"
+      :image="popup.image"
+      :text="popup.text"
+      :persist="popup.persist"
+      :actionURL="popup.actionURL"
+    />
   </div>
 </template>
 
@@ -46,8 +52,13 @@
 export default {
   computed: {
     availablePopups() {
-      return this.$store.state.customerV2.popups ?? []
-    }
+      return this.$store.state.customer.popups ?? [];
+    },
+    eligiblePopups() {
+      const { popups } = this.$store.state.customer;
+      /* do the magic here */
+      return popups;
+    },
   },
   mounted() {
     this.$ga.page(this.$router);
@@ -76,7 +87,7 @@ export default {
     setTimeout(async () => {
       await this.$store.dispatch("customerV2/fetchActiveCurrencies");
       await this.$store.dispatch("customerV2/fetchStoreLocation");
-      this.$store.dispatch("customerV2/fetchPopups");
+      this.$store.dispatch("customer/fetchPopups");
 
       this.$store.dispatch("customer/fetchCart");
       this.$store.dispatch("customer/fetchProfile");

@@ -5,7 +5,6 @@ export const state = () => ({
   activeCurrencies: ["INR"],
   currency: "INR",
   preferredCurrency: "",
-  popups: [],
   persistedStateLoaded: false,
 });
 
@@ -15,11 +14,8 @@ export const mutations = {
   },
   setStoreCurrency(state, currency) {
     state.currency = currency;
-  },
-  setPopups(state, popups) {
-    state.popups = popups;
   }
-};
+}
 
 /* getters */
 export const getters = {
@@ -110,18 +106,5 @@ export const actions = {
     // if not, set USD as main currency
     commit("setStoreCurrency", "USD");
   },
-  async fetchPopups({state, commit}) {
-        /* fetch active currencies */
-        const request = await this.$post("/findDocuments", {
-          model: "popup",
-          filters: {
-            status: true,
-          },
-        });
 
-      if(request.resolved === false)
-      return;
-
-      commit("setPopups", request.response)
-  }
 };

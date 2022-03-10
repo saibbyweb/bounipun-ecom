@@ -2,7 +2,6 @@ import cookies from "js-cookie";
 import { getCountryIndex } from "../helpers/countryCodes";
 import sumBy from "lodash/sumBy";
 
-
 export const state = () => ({
   cookieConsent: false,
   persistedStateLoaded: false,
@@ -26,6 +25,8 @@ export const state = () => ({
   recentlyViewed: [],
   countryIndex: 0,
   currencyMultiplier: 1.3,
+  popups: [],
+  popupsPopped: [],
 });
 
 /* find cartItem helper  */
@@ -56,6 +57,14 @@ const findCartItem = (cart, cartItem) => {
 };
 
 export const mutations = {
+  setPopups(state, popups) {
+    state.popups = popups;
+  },
+  setPopupAsPopped(state, popId) {
+    if(state.popupsPopped.findIndex(id => id == popId)  !== -1)
+      return;
+    state.popupsPopped.push(popId);
+  },
   setGiftMessage(state, value) {
     state.giftMessage = value;
   },
@@ -180,7 +189,7 @@ export const mutations = {
   },
   setCollections(state, collections) {
     state.collections = collections;
-  }
+  },
 };
 
 export const getters = {
@@ -201,21 +210,17 @@ export const getters = {
     if (state.cart.length === 0) return false;
     return [...new Set(state.cart.map((product) => product._id))];
   },
-  getCartTotal({globalRemoteCart}, getters, rootState) {
+  getCartTotal({ globalRemoteCart }, getters, rootState) {
     const { customerV2 } = rootState;
     const { currency } = customerV2;
 
     console.log(currency, globalRemoteCart);
 
-    return sumBy(
-      globalRemoteCart,
-      (item) => {
-        const cartItemPrice = currency === "INR" ? item.price : item.pricing[currency]
-        return cartItemPrice * item.quantity
-      }
-    );
-
-
+    return sumBy(globalRemoteCart, (item) => {
+      const cartItemPrice =
+        currency === "INR" ? item.price : item.pricing[currency];
+      return cartItemPrice * item.quantity;
+    });
   },
   /* discount amount per item */
   getDiscountAmountPerItem() {
@@ -237,7 +242,6 @@ export const getters = {
     return currency === "INR"
       ? state.globalConfig.domesticShippingCharge
       : state.globalConfig.internationalShippingCharge;
-
   },
   getTaxPercentage(state, getters, { customerV2 }) {
     const { currency } = customerV2;
@@ -250,7 +254,7 @@ export const getters = {
     if (state.currency === "INR") {
       return dbPrice;
     } else {
-    /* if not then, multiply db price with currency multiplier and return */
+      /* if not then, multiply db price with currency multiplier and return */
       const inflatedPrice =
         (dbPrice * state.globalConfig.currencyMultiplier) /
         state.globalConfig.dollarValue;
@@ -258,9 +262,7 @@ export const getters = {
     }
   },
   formatCurrency: (state) => (adjustedPrice) => {
-
     // return currencyFormatter.format(adjustedPrice, { code })
-  
 
     let formattedNumber = adjustedPrice;
     /* if currence is INR, return as is */
@@ -275,10 +277,23 @@ export const getters = {
       }).format(adjustedPrice);
       return formattedNumber;
     }
-  }
+  },
 };
 
 export const actions = {
+  async fetchPopups({ state, commit }) {
+    /* fetch active currencies */
+    const request = await this.$post("/findDocuments", {
+      model: "popup",
+      filters: {
+        status: true,
+      },
+    });
+
+    if (request.resolved === false) return;
+
+    commit("setPopups", request.response);
+  },
   async fetchCollections({ state, commit }) {
     const collections = await this.$fetchData(
       "collections",
@@ -290,14 +305,14 @@ export const actions = {
     /* if collections not fetched */
     if (!collections.fetched) return;
 
-    commit("setCollections",collections.docs);
+    commit("setCollections", collections.docs);
   },
   async fetchCart({ state, commit }) {
     const endPoint = state.authorized ? "/fetchCart" : "/fetchLocalCart";
 
     const cartItems = await this.$post(endPoint, {
       cart: state.cart,
-      lockCheck: state.authorized ? true : false
+      lockCheck: state.authorized ? true : false,
     });
 
     if (cartItems.resolved === false) {
@@ -336,7 +351,7 @@ export const actions = {
 
     /* fetch global config from server */
     const fetchConfigRequest = await this.$post("/fetchGlobalConfig", {
-      currency
+      currency,
     });
     /* if request failed */
     if (fetchConfigRequest.resolved === false) return;

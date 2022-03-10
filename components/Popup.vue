@@ -1,18 +1,18 @@
 <template>
   <div class="popup-wrapper flex center" v-if="showPopup">
-      <div @click="openPopup" class="popup shadow">
-        <!-- close icon -->
-        <img
-          v-if="!persist"
-          class="close"
-          @click="closePopup"
-          src="/icons/dark/close.png"
-        />
-        <div class="image" :style="backgroundImageStyles"></div>
-        <div class="text">
-          <p>{{ text }}</p>
-        </div>
+    <div @click="takeAction" class="popup shadow">
+      <!-- close icon -->
+      <img
+        v-if="!persist"
+        class="close"
+        @click="closePopup"
+        src="/icons/dark/close.png"
+      />
+      <div class="image" :style="backgroundImageStyles"></div>
+      <div class="text">
+        <p>{{ text }}</p>
       </div>
+    </div>
   </div>
 </template>
 
@@ -24,6 +24,7 @@ export default {
     };
   },
   props: {
+    _id: String,
     image: String,
     text: String,
     actionURL: String,
@@ -40,11 +41,12 @@ export default {
   methods: {
     closePopup() {
       this.showPopup = false;
+      this.$store.commit("customer/setPopupAsPopped", this._id);
     },
-    openPopup() {
-        window.open(this.actionURL, '_blank');
-        this.showPopup = false;
-    }
+    takeAction() {
+      window.open(this.actionURL, "_blank");
+      this.closePopup();
+    },
   },
 };
 </script>
