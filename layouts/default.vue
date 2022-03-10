@@ -3,8 +3,8 @@
     <CookieNotice
       v-if="
         !$store.state.customer.cookieConsent &&
-          fakeLoaded &&
-          $route.path !== '/privacy-policy'
+        fakeLoaded &&
+        $route.path !== '/privacy-policy'
       "
     />
 
@@ -14,7 +14,7 @@
 
     <!-- ticker -->
     <Ticker />
-    
+
     <!-- bounipun header -->
     <BounipunHeader
       @showMenu="menuOpen = true"
@@ -35,6 +35,8 @@
     />
     <Nuxt />
     <BounipunFooter />
+
+    <Popup />
   </div>
 </template>
 
@@ -49,7 +51,11 @@ export default {
     this.$store.commit("customer/loadPersistedState");
     /* listen for all mutations */
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "customer/setLoading" || mutation.type === "customer/setGiftMessage") return;
+      if (
+        mutation.type === "customer/setLoading" ||
+        mutation.type === "customer/setGiftMessage"
+      )
+        return;
 
       console.log(mutation);
       // console.log(state.customer.cart);
@@ -63,7 +69,8 @@ export default {
     setTimeout(async () => {
       await this.$store.dispatch("customerV2/fetchActiveCurrencies");
       await this.$store.dispatch("customerV2/fetchStoreLocation");
-      
+      this.$store.dispatch("customerV2/fetchPopups");
+
       this.$store.dispatch("customer/fetchCart");
       this.$store.dispatch("customer/fetchProfile");
       this.$store.dispatch("customer/fetchStoreLocation");
@@ -80,7 +87,7 @@ export default {
       searchOpen: false,
       menuOpen: false,
       unsubscribe: null,
-      fakeLoaded: false
+      fakeLoaded: false,
     };
   },
   methods: {
@@ -92,8 +99,8 @@ export default {
       if (resolved === false) return;
 
       this.$store.commit("customer/setUser", response);
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -112,9 +119,9 @@ export default {
   }
 }
 .blockScroll {
-  height:100vh;
-  width:100%;
-  overflow-y:hidden;
+  height: 100vh;
+  width: 100%;
+  overflow-y: hidden;
 }
 body {
   margin: 0px;
