@@ -36,12 +36,19 @@
     <Nuxt />
     <BounipunFooter />
 
-    <Popup />
+
+    <Popup v-for="popup in availablePopups" :key="popup._id" :image="popup.image" :text="popup.text" :persist="popup.persist" :actionURL="popup.actionURL" />
+
   </div>
 </template>
 
 <script>
 export default {
+  computed: {
+    availablePopups() {
+      return this.$store.state.customerV2.popups ?? []
+    }
+  },
   mounted() {
     this.$ga.page(this.$router);
     // this.$ga.page('/');
