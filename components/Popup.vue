@@ -5,7 +5,7 @@
       <img
         v-if="!persist"
         class="close"
-        @click="closePopup"
+        @click.stop="closePopup"
         src="/icons/dark/close.png"
       />
       <div class="image" :style="backgroundImageStyles"></div>
@@ -20,7 +20,7 @@
 export default {
   data() {
     return {
-      showPopup: true,
+      showPopup: false,
     };
   },
   props: {
@@ -30,6 +30,11 @@ export default {
     actionURL: String,
     persist: Boolean,
     delayInMinutes: Number,
+  },
+  mounted() {
+    setTimeout(() => {
+      this.showPopup = true;
+    }, this.delayInMinutes * 60 * 1000);
   },
   computed: {
     backgroundImageStyles() {

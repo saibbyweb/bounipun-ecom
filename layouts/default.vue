@@ -37,13 +37,14 @@
     <BounipunFooter />
 
     <Popup
-      v-for="popup in eligiblePopups"
+      v-for="popup in availablePopups"
       :key="popup._id"
       :_id="popup._id"
       :image="popup.image"
       :text="popup.text"
       :persist="popup.persist"
       :actionURL="popup.actionURL"
+      :delayInMinutes="popup.delay"
     />
   </div>
 </template>
@@ -123,7 +124,7 @@ export default {
       this.$store.commit("customer/setUser", response);
     },
   },
-};
+}
 </script>
 
 <style lang="scss">

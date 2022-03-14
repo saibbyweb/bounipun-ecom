@@ -102,6 +102,7 @@ export const mutations = {
       persistedState.currencyMultiplier = 1.3;
       persistedState.currency = "INR";
       persistedState.countryIndex = 0;
+      persistedState.popups = [];
       Object.assign(state, persistedState);
     }
 
