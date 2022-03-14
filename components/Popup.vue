@@ -71,6 +71,7 @@ export default {
     height: 60vh;
     width: 40%;
     position: relative;
+    cursor: pointer;
   }
 
   .close {

@@ -37,7 +37,7 @@
     <BounipunFooter />
 
     <Popup
-      v-for="popup in availablePopups"
+      v-for="popup in eligiblePopups"
       :key="popup._id"
       :_id="popup._id"
       :image="popup.image"
@@ -46,6 +46,7 @@
       :actionURL="popup.actionURL"
       :delayInMinutes="popup.delay"
     />
+
   </div>
 </template>
 

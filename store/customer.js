@@ -283,6 +283,7 @@ export const getters = {
 
 export const actions = {
   async fetchPopups({ state, commit }) {
+
     /* fetch active currencies */
     const request = await this.$post("/findDocuments", {
       model: "popup",

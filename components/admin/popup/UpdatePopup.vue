@@ -2,6 +2,29 @@
   <div class="contents">
     <CancelUpdate @close="closeForm" />
     <h2 class="heading">{{ editMode ? "Update" : "Add New" }} Popup</h2>
+
+        <!-- preview link -->
+    <div class="center">
+      <a
+        v-if="editMode"
+        :href="`/popup-test`"
+        target="_blank"
+      >
+        <span
+          style="
+            background: #333;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+            padding: 2px 4px;
+            border-radius: 2px;
+          "
+        >
+          Preview Popup ➚
+        </span>
+
+      </a>
+    </div>
     <!-- Popup ID -->
     <InputBox
       v-if="editMode"
