@@ -36,7 +36,7 @@
     <Nuxt />
     <BounipunFooter />
 
-    <Popup
+<!--     <Popup
       v-for="popup in eligiblePopups"
       :key="popup._id"
       :_id="popup._id"
@@ -45,7 +45,7 @@
       :persist="popup.persist"
       :actionURL="popup.actionURL"
       :delayInMinutes="popup.delay"
-    />
+    /> -->
 
   </div>
 </template>
@@ -75,19 +75,12 @@ export default {
     this.$store.commit("customer/loadPersistedState");
     /* listen for all mutations */
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (
-        mutation.type === "customer/setLoading" ||
-        mutation.type === "customer/setGiftMessage"
-      )
+      if (mutation.type === "customer/setLoading" || mutation.type === "customer/setGiftMessage")
         return;
 
       console.log(mutation);
-      // console.log(state.customer.cart);
       /* save state in local storage */
-      window.localStorage.setItem(
-        "persistedState",
-        JSON.stringify(state.customer)
-      );
+      window.localStorage.setItem("persistedState",JSON.stringify(state.customer));
     });
 
     setTimeout(async () => {

@@ -14,11 +14,10 @@
     <div class="flex heading">
       <img src="/icons/light/logo.png" />
       <h1>Popup Test</h1>
-      <p>
-        Timer: <span> {{ time }} seconds </span>
-      </p>
+      <p> Timer: <span> {{ time }} seconds </span> </p>
     </div>
 
+    <!-- loading bar -->
     <div class="main-body flex center">
       <img src="/loading.gif" v-if="time < maximumDelayTimeInSeconds" />
     </div>
@@ -27,17 +26,11 @@
     <div class="log">
       <!-- counter -->
       <div class="counter flex col">
-        <p>
-          Active Popups:<span> {{ availablePopups.length }} </span>
-        </p>
-        <p>
-          Guest Popups:<span> {{ guestPopups.length }} </span>
-        </p>
-        <p>
-          Registered Popups:<span> {{ registeredUserPopups.length }} </span>
-        </p>
-        <p>
-          Eligible Popups:<span> {{ eligiblePopups.length }} </span>
+        <p> Active Popups:<span> {{ availablePopups.length }} </span> </p>
+        <p> Guest Popups:<span> {{ guestPopups.length }} </span> </p>
+        <p> Registered Popups:<span> {{ registeredUserPopups.length }} </span> </p>
+        <p> Eligible Popups:
+          <span> {{ eligiblePopups.length }} </span>
           <span
             @click="clearEligiblePopups"
             style="
@@ -116,15 +109,10 @@ export default {
       return this.$store.state.customer.popups ?? [];
     },
     guestPopups() {
-      return this.availablePopups.filter(
-        (popup) => popup.visibility === "guests" || popup.visibility === "both"
-      );
+      return this.availablePopups.filter((popup) => popup.visibility === "guests" || popup.visibility === "both");
     },
     registeredUserPopups() {
-      return this.availablePopups.filter(
-        (popup) =>
-          popup.visibility === "registered-users" || popup.visibility === "both"
-      );
+      return this.availablePopups.filter((popup) => popup.visibility === "registered-users" || popup.visibility === "both");
     },
     allottedPopups() {
       return this.$store.state.customer.authorized
