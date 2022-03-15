@@ -1,7 +1,7 @@
 <template>
   <div class="popup-test">
     <Popup
-      v-for="popup in eligiblePopups"
+      v-for="popup in availablePopups"
       :key="popup._id"
       :_id="popup._id"
       :image="popup.image"
@@ -30,14 +30,27 @@
         <p>
           Active Popups:<span> {{ availablePopups.length }} </span>
         </p>
-            <p>
+        <p>
           Guest Popups:<span> {{ guestPopups.length }} </span>
         </p>
-            <p>
+        <p>
           Registered Popups:<span> {{ registeredUserPopups.length }} </span>
         </p>
-           <p>
+        <p>
           Eligible Popups:<span> {{ eligiblePopups.length }} </span>
+          <span
+            @click="clearEligiblePopups"
+            style="
+              background-color: #c22323;
+              color: white;
+              padding: 2px 5px;
+              border-radius: 3px;
+              font-size: 10px;
+              cursor:pointer;
+            "
+          >
+            soft clear
+          </span>
         </p>
       </div>
 
@@ -96,12 +109,7 @@ export default {
     /* load persisted state */
     this.$store.commit("customer/loadPersistedState");
     await this.$store.dispatch("customer/fetchPopups");
-    this.timer = setInterval(() => {
-      if (this.time > this.maximumDelayTimeInSeconds) {
-        clearInterval(this.timer);
-      }
-      this.time++;
-    }, 1000);
+    this.resetTimer()
   },
   computed: {
     availablePopups() {
@@ -127,7 +135,8 @@ export default {
       const { popupsPopped } = this.$store.state.customer;
       /* filter out popups which havent been popped out yet */
       const eligiblePopups = this.allottedPopups.filter((popup) => {
-        const notPoppedYet = popupsPopped.findIndex((popId) => popId == popup._id) === -1;
+        const notPoppedYet =
+          popupsPopped.findIndex((popId) => popId == popup._id) === -1;
         return notPoppedYet;
       });
       return eligiblePopups;
@@ -135,6 +144,25 @@ export default {
     maximumDelayTimeInSeconds() {
       const onlyDelays = this.allottedPopups.map((popup) => popup.delay * 60);
       return Math.max(...onlyDelays);
+    },
+  },
+  methods: {
+    resetTimer() {
+      /* clear previously set timer */
+      if(this.timer)
+        clearInterval(this.timer);
+      /* reset timer */
+      this.time = 0;
+      this.timer = setInterval(() => {
+        if (this.time > this.maximumDelayTimeInSeconds) {
+          clearInterval(this.timer);
+        }
+        this.time++;
+      }, 1000);
+    },
+    clearEligiblePopups() {
+      this.$store.commit("customer/clearPopupsPopped");
+      this.resetTimer();
     },
   },
 };
@@ -182,7 +210,7 @@ export default {
     font-weight: 900;
   }
   .counter {
-    width:15%;
+    width: 18%;
   }
   .details {
     width: 70%;

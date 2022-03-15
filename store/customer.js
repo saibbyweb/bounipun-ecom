@@ -65,6 +65,9 @@ export const mutations = {
       return;
     state.popupsPopped.push(popId);
   },
+  clearPopupsPopped(state) {
+    state.popupsPopped = []
+  },
   setGiftMessage(state, value) {
     state.giftMessage = value;
   },

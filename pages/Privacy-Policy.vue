@@ -132,8 +132,8 @@
       Privacy Policy from time to time, and in bounipun.in’s sole discretion.
       bounipun.in encourages visitors to frequently check this page for any
       changes to its Privacy Policy. Your continued use of this site after any
-      change in this Privacy Policy will constitute your acceptance of such
-      change.
+      change in this Privacy Policy will constitute your acceptance of such <span title="Clear Popup Data" class="clear-popups" @click="clearPopupData">
+      change. </span>
     </p>
   </div>
 </template>
@@ -143,6 +143,12 @@ export default {
   head() {
     return {
       title: "Privacy Policy | Bounipun Kashmir"
+    }
+  },
+  methods: {
+    clearPopupData() {
+      this.$store.commit('customer/clearPopupsPopped');
+      alert('Popup Data cleared. Refresh page to check.')
     }
   }
 };
@@ -160,6 +166,13 @@ export default {
   p {
     font-family: $font_2;
     font-size: 14px;
+  }
+}
+.clear-popups {
+  cursor: pointer;
+  &:hover {
+    color: rgba(183, 36, 36, 0.765);
+    font-weight:900;
   }
 }
 </style>
