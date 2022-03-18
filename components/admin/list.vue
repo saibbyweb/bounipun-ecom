@@ -9,8 +9,8 @@
       >
         Toggle Drag
       </button>
-      <span v-if="dragEnabled">
-        You can now drag the items and adjust the order.
+      <span v-if="dragEnabled" style="font-size:14px;">
+        {{ dragMessage }}
       </span>
 
       <!-- action bar -->
@@ -153,6 +153,14 @@ export default {
       type: Array,
       default: () => [],
     },
+    dragMessage: {
+      type: String,
+      default: "You can now drag the items and adjust the order"
+    },
+    requiredFilterSet: {
+      type: Boolean,
+      default: false
+    }
   },
   watch: {
     sortByFields() {
@@ -297,6 +305,11 @@ export default {
       console.log("ON DRAG END WAS CALLED");
 
       if (!this.dragEnabled) return;
+
+      if(this.model === "products") {
+          alert(this.requiredFilterSet)
+        return;
+      }
 
       /* get the order of the whole array */
       let newList = this.localList.map((item, index) => ({

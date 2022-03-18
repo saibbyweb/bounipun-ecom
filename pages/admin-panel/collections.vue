@@ -150,8 +150,6 @@ export default {
             _id,
             name,
             slug,
-            // description,
-            // edt,
             order,
             status,
           }) => {
@@ -160,8 +158,6 @@ export default {
               name,
               slug,
               count: this.productCount[_id],
-              // description,
-              // edt: edt + " weeks",
               order,
               status,
             };

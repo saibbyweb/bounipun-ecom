@@ -81,6 +81,7 @@ const schema = new mongoose.Schema(
       type: Boolean, 
       default: false
     },
+    order: Number,
     status: Boolean,
   },
   {

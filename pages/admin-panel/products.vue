@@ -6,17 +6,20 @@
         :options="searchBy"
         v-model="rawCriterion.search.key"
         label="Search By"
+         :disabled="dragEnabled"
       />
       <input
         v-model="rawCriterion.search.term"
         class="search shadow"
         type="text"
         placeholder="Search for Products"
+         :disabled="dragEnabled"
       />
       <SelectBox
         :options="productTypes"
         v-model="rawCriterion.filters.type"
         label="Filter By"
+         :disabled="dragEnabled"
       />
       <!-- collections filter -->
       <SelectBox
@@ -29,6 +32,7 @@
         :options="availabilityTypes"
         v-model="rawCriterion.filters.availabilityType"
         label="Availability"
+         :disabled="dragEnabled"
       />
     </div>
 
@@ -40,11 +44,16 @@
         :model="model"
         :actions="actions"
         :headings="headings"
-        custom_css="5% 10% 20% 8% 11% 10% 13% 15% 8%"
+        custom_css="5% 10% 17% 8% 11% 10% 10% 15% 6% 8%"
         :sortByFields="sortByFields"
         @documentFetched="documentFetched"
         @sortToggled="sortToggled"
         @updated="updateList"
+        :isDraggable="true"
+        @clearFilters="clearFilters"
+        @refetchList="updateList()"
+        :requiredFilterSet="bounipunFilterSet"
+        dragMessage="Select a collection first & then drag items to adjust the order of products."
       />
       <Pagination
         ref="pagination"
@@ -157,9 +166,10 @@ export default {
         "availabilityType",
         "Collection",
         "price (range)",
+        "order",
         "status",
       ],
-      sortByFields: ["name", "styleId", "availabilityType", "status"],
+      sortByFields: ["name", "styleId", "availabilityType", "order", "status"],
       collections: [],
       variants: [],
       fabrics: [],
@@ -181,7 +191,23 @@ export default {
           type: "split-rts",
         },
       ],
+      dragEnabled: false,
+      bounipunFilter: "default"
     };
+  },
+  watch: {
+    rawCriterion: {
+      handler(newVal) {
+        this.bounipunFilter = newVal.filters.bounipun_collection
+        alert(this.bounipunFilter);
+      },
+      deep: true
+    }
+  },
+  computed: {
+    bounipunFilterSet() {
+      return this.bounipunFilter !== "default"
+    }
   },
   async mounted() {
     await this.fetchBounipunCollections();
@@ -198,6 +224,17 @@ export default {
         ...this.rawCriterion,
         sortBy,
       };
+    },
+    clearFilters(dragEnabled) {
+      this.dragEnabled = dragEnabled;
+
+      this.rawCriterion.filters = {
+          type: "default",
+          bounipun_collection: "default",
+          availabilityType: "default",
+      }
+
+      this.rawCriterion.search.term = "";
     },
     async fetchFabrics() {
       const result = await this.$fetchCollection("fabrics");
