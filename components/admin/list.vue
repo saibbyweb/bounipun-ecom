@@ -306,16 +306,25 @@ export default {
 
       if (!this.dragEnabled) return;
 
-      if(this.model === "products") {
-          alert(this.requiredFilterSet)
-        return;
-      }
-
       /* get the order of the whole array */
       let newList = this.localList.map((item, index) => ({
         _id: item._id,
         newOrder: index,
       }));
+      
+      /* if model is products */
+      if(this.model === "products") {
+        switch(this.requiredFilterSet) {
+          case true:
+            console.log('you can proceed');
+            break;
+          case false:
+            alert('Select a Collection First')
+              return;
+        }
+      
+      }
+
       /* set the order accordingly */
       const updateOrder = this.$axios.$post(this.dragUpdateEndpoint, {
         model: this.model,

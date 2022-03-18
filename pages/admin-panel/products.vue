@@ -154,7 +154,7 @@ export default {
             order: 1,
           },
         },
-        limit: 10,
+        limit: 15,
       },
       list: [],
       headings: [
@@ -199,7 +199,6 @@ export default {
     rawCriterion: {
       handler(newVal) {
         this.bounipunFilter = newVal.filters.bounipun_collection
-        alert(this.bounipunFilter);
       },
       deep: true
     }
@@ -235,6 +234,7 @@ export default {
       }
 
       this.rawCriterion.search.term = "";
+      this.rawCriterion.limit = dragEnabled ? 100 : 15;
     },
     async fetchFabrics() {
       const result = await this.$fetchCollection("fabrics");
@@ -376,6 +376,7 @@ export default {
           availabilityType,
           bounipun_collection,
           priceRange,
+          order,
           status,
         }) => {
           /* resolve category name */
@@ -423,6 +424,7 @@ export default {
                 ? bounipun_collection
                 : "N/A",
             priceRangeValue,
+            order: order === undefined ? 'N/A' : order,
             status,
           };
         }
