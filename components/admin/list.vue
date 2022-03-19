@@ -9,7 +9,7 @@
       >
         Toggle Drag
       </button>
-      <span v-if="dragEnabled" style="font-size:14px;">
+      <span v-if="dragEnabled" style="font-size: 14px">
         {{ dragMessage }}
       </span>
 
@@ -87,16 +87,18 @@
               </div>
 
               <div
-              class="span"
+                class="span"
                 :class="setClasses(propIndex, value)"
                 v-for="(value, propIndex) in Object.values(item)"
                 :key="value + propIndex"
               >
-              <img style="height:70px;" v-if="typeof value === 'string' && value.startsWith('https')" :src="value"  />
-              <span v-else> {{ optimizeValue(value, propIndex) }}</span>
+                <img
+                  style="height: 70px"
+                  v-if="typeof value === 'string' && value.startsWith('https')"
+                  :src="value"
+                />
+                <span v-else> {{ optimizeValue(value, propIndex) }}</span>
               </div>
-
-
             </div>
           </transition-group>
         </Draggable>
@@ -155,12 +157,12 @@ export default {
     },
     dragMessage: {
       type: String,
-      default: "You can now drag the items and adjust the order"
+      default: "You can now drag the items and adjust the order",
     },
     requiredFilterSet: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   watch: {
     sortByFields() {
@@ -242,7 +244,7 @@ export default {
         /* fetch current raw criterion */
         const rawCriterion = this.$parent.$refs.pagination.rawCriterionComputed;
         rawCriterion.limit = 999999;
-        
+
         /* fetch all results matching the criterion */
         const paginatedResults = await this.$fetchPaginatedResults(
           this.model,
@@ -254,21 +256,27 @@ export default {
         if (!paginatedResults.fetched || paginatedResults.docs.length === 0) {
           return;
         }
-        
+
         /* map all ids  */
-        const {docs} = paginatedResults;
-        allIds = docs.map(({_id}) => _id);
+        const { docs } = paginatedResults;
+        allIds = docs.map(({ _id }) => _id);
+      }
+
+      const finalIds = this.selectAll ? allIds : this.selectedList;
+
+      if (this.model === "products" && type === "set-higher-order") {
+        this.$emit("setHigherOrder", finalIds);
+        return;
       }
 
       const request = await this.$post("/takeBulkAction", {
-        _ids: this.selectAll ? allIds : this.selectedList,
+        _ids: finalIds,
         model: this.model,
         type,
       });
 
-
       if (request.resolved === false) {
-        alert('Bulk operation failed.');
+        alert("Bulk operation failed.");
         console.log("Update Failed");
         return;
       }
@@ -276,12 +284,15 @@ export default {
       console.log("Update probably succeeded", request);
 
       /* if rts club */
-      if(request.response?.clubbedProduct) {
-        await this.$updateDocument('products', request.response.clubbedProduct, false);
-      }
-      else if(request.response?.splittedProducts) {
-        for(const newProduct of request.response.splittedProducts) {
-           await this.$updateDocument('products', newProduct, false);
+      if (request.response?.clubbedProduct) {
+        await this.$updateDocument(
+          "products",
+          request.response.clubbedProduct,
+          false
+        );
+      } else if (request.response?.splittedProducts) {
+        for (const newProduct of request.response.splittedProducts) {
+          await this.$updateDocument("products", newProduct, false);
         }
       }
 
@@ -311,18 +322,17 @@ export default {
         _id: item._id,
         newOrder: index,
       }));
-      
+
       /* if model is products */
-      if(this.model === "products") {
-        switch(this.requiredFilterSet) {
+      if (this.model === "products") {
+        switch (this.requiredFilterSet) {
           case true:
-            console.log('you can proceed');
+            console.log("you can proceed");
             break;
           case false:
-            alert('Select a Collection First')
-              return;
+            alert("Select a Collection First");
+            return;
         }
-      
       }
 
       /* set the order accordingly */
@@ -370,11 +380,10 @@ export default {
       });
 
       /*  set default sort */
-      if(this.model === 'products') {
-        this.sortBy['styleId'].order = -1;
+      if (this.model === "products") {
+        this.sortBy["styleId"].order = -1;
         this.sortBy["styleId"].active = true;
       }
-
     },
     optimizeValue(value, propIndex) {
       if (typeof value === "boolean") {
@@ -436,7 +445,7 @@ export default {
       };
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

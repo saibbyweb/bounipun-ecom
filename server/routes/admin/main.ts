@@ -503,6 +503,11 @@ router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
         res.send({ splittedProducts });
         return;
       }
+      else if(type === "set-higher-order") {
+        console.log('do something here with orders');
+        res.send('I am on my way!');
+        return;
+      }
       break;
   }
 

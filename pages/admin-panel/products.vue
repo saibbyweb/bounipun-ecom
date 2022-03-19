@@ -6,20 +6,20 @@
         :options="searchBy"
         v-model="rawCriterion.search.key"
         label="Search By"
-         :disabled="dragEnabled"
+        :disabled="dragEnabled"
       />
       <input
         v-model="rawCriterion.search.term"
         class="search shadow"
         type="text"
         placeholder="Search for Products"
-         :disabled="dragEnabled"
+        :disabled="dragEnabled"
       />
       <SelectBox
         :options="productTypes"
         v-model="rawCriterion.filters.type"
         label="Filter By"
-         :disabled="dragEnabled"
+        :disabled="dragEnabled"
       />
       <!-- collections filter -->
       <SelectBox
@@ -32,7 +32,7 @@
         :options="availabilityTypes"
         v-model="rawCriterion.filters.availabilityType"
         label="Availability"
-         :disabled="dragEnabled"
+        :disabled="dragEnabled"
       />
     </div>
 
@@ -53,6 +53,7 @@
         @clearFilters="clearFilters"
         @refetchList="updateList()"
         :requiredFilterSet="bounipunFilterSet"
+        @setHigherOrder="setHigherOrder"
         dragMessage="Select a collection first & then drag items to adjust the order of products."
       />
       <Pagination
@@ -190,23 +191,31 @@ export default {
           name: "Split RTS",
           type: "split-rts",
         },
+        {
+          name: "Set Higher Order",
+          type: "set-higher-order",
+        },
       ],
       dragEnabled: false,
-      bounipunFilter: "default"
+      bounipunFilter: "default",
+      dragUpdateEndpoint: "/updateOrder",
     };
   },
   watch: {
     rawCriterion: {
       handler(newVal) {
-        this.bounipunFilter = newVal.filters.bounipun_collection
+        this.bounipunFilter = newVal.filters.bounipun_collection;
       },
-      deep: true
-    }
+      deep: true,
+    },
+    bounipunFilterSet(newVal) {
+      this.rawCriterion.limit = newVal ? 100 : 15;
+    },
   },
   computed: {
     bounipunFilterSet() {
-      return this.bounipunFilter !== "default"
-    }
+      return this.bounipunFilter !== "default";
+    },
   },
   async mounted() {
     await this.fetchBounipunCollections();
@@ -216,6 +225,27 @@ export default {
   methods: {
     updateList() {
       this.$refs.pagination.fetchResults();
+    },
+    async setHigherOrder(_ids) {
+      /* check if drag in enabled, also if bounipun collection filter is set */
+      return;
+      /* set the order accordingly */
+      const updateOrder = this.$axios.$post(this.dragUpdateEndpoint, {
+        model: this.model,
+        newList: _ids
+      });
+      
+        /* wait for request to resolve */
+      this.$store.commit("customer/setLoading", true);
+      const { response, error } = await this.$task(updateOrder);
+      this.$store.commit("customer/setLoading", false);
+ 
+       if (error) {
+        console.log("could not update order");
+        return;
+      }
+      /* refresh list */
+      this.updateList();
     },
     sortToggled(sortBy) {
       console.log(sortBy);
@@ -228,13 +258,13 @@ export default {
       this.dragEnabled = dragEnabled;
 
       this.rawCriterion.filters = {
-          type: "default",
-          bounipun_collection: "default",
-          availabilityType: "default",
-      }
+        type: "default",
+        bounipun_collection: "default",
+        availabilityType: "default",
+      };
 
       this.rawCriterion.search.term = "";
-      this.rawCriterion.limit = dragEnabled ? 100 : 15;
+      /* this.rawCriterion.limit = dragEnabled ? 100 : 15; */
     },
     async fetchFabrics() {
       const result = await this.$fetchCollection("fabrics");
@@ -404,11 +434,14 @@ export default {
           }
 
           /* calculate price range */
-          let priceRangeValue = '';
-          if(priceRange.startAt === priceRange.endsAt)
-            priceRangeValue = this.formatCurrency(priceRange.startAt,"INR",0);
+          let priceRangeValue = "";
+          if (priceRange.startAt === priceRange.endsAt)
+            priceRangeValue = this.formatCurrency(priceRange.startAt, "INR", 0);
           else
-            priceRangeValue = this.formatCurrency(priceRange.startsAt,"INR",0) + " - " + this.formatCurrency(priceRange.endsAt,"INR",0);
+            priceRangeValue =
+              this.formatCurrency(priceRange.startsAt, "INR", 0) +
+              " - " +
+              this.formatCurrency(priceRange.endsAt, "INR", 0);
 
           return {
             _id,
@@ -424,7 +457,7 @@ export default {
                 ? bounipun_collection
                 : "N/A",
             priceRangeValue,
-            order: order === undefined ? 'N/A' : order,
+            order: order === undefined ? "N/A" : order,
             status,
           };
         }
