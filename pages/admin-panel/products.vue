@@ -227,12 +227,19 @@ export default {
       this.$refs.pagination.fetchResults();
     },
     async setHigherOrder(_ids) {
-      /* check if drag in enabled, also if bounipun collection filter is set */
-      return;
+      /* TODO: check if drag in enabled, also if bounipun collection filter is set */
+      const conditionsMet = this.dragEnabled && this.bounipunFilterSet;
+      if(!conditionsMet) {
+        console.log('set higher order conditions not met');
+        return;
+      }
+
+      const newList = _ids.map(_id => ({_id, newOrder: -1 }))
+      
       /* set the order accordingly */
       const updateOrder = this.$axios.$post(this.dragUpdateEndpoint, {
         model: this.model,
-        newList: _ids
+        newList
       });
       
         /* wait for request to resolve */
