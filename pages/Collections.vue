@@ -181,7 +181,7 @@ export default {
           term: "",
         },
         filters: {},
-        sortBy: {},
+        sortBy: { order: 1 },
         limit: 50,
         cursor: 1,
       },
@@ -352,7 +352,7 @@ export default {
         this.rawCriterion.sortBy = {
           "priceRange.startsAt": parseInt(this.sortData.priceRange),
         };
-      } else this.rawCriterion.sortBy = {};
+      } else this.rawCriterion.sortBy = { order: 1};
 
       /* if escape, no filter applied but sort applied, reset sort */
       if (
@@ -360,7 +360,7 @@ export default {
         this.noFiltersApplied &&
         this.rawCriterion.sortBy["priceRange.startsAt"] !== undefined
       ) {
-        this.rawCriterion.sortBy = {};
+        this.rawCriterion.sortBy = { order: 1 };
       }
 
       /* TODO: should add lock check flag post raw criterion to the server */

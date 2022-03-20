@@ -63,7 +63,7 @@ router.post("/findDocuments", async (req, res) => {
   );
 
   const collection = db.model(model);
-  let documentFetch: any = collection.find(filters).lean();
+  let documentFetch: any = collection.find(filters).lean()
 
   /* act according to collection */
   switch (model) {
@@ -234,7 +234,7 @@ router.post(
     /* destructure data from request body */
     const { rawCriterion, unlocked } = req.body;
 
-    // console.log(rawCriterion);
+    console.log(rawCriterion);
 
     /* construct criterion from raw criterion */
     let criterion: any = {};
@@ -321,6 +321,7 @@ router.post(
     }
     /* sort by fields */
     criterion.sort = rawCriterion.sortBy;
+    console.log(criterion.sort)
 
     /* calculate number of docs to be skipped */
     criterion.skip = (rawCriterion.cursor - 1) * rawCriterion.limit;
