@@ -704,9 +704,9 @@ router.post("/loginAdmin", async (req, res) => {
 
   let otpVerified = false;
 
-  if (countryDialCode === "+91")
-    otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp);
-  else
+  // if (countryDialCode === "+91")
+  //   otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp);
+  // else
     otpVerified = await userMethods.verifyInternationalOtp(
       countryDialCode,
       phoneNumber,

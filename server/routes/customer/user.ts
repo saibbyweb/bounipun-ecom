@@ -32,9 +32,9 @@ router.post("/sendOtp", async (req, res) => {
   let sendOtpRequestStatus = false;
 
   /* if number is indian, use msg91 */
-  if (countryDialCode === "+91")
-    sendOtpRequestStatus = await userMethods.sendMsg91Otp(phoneNumber);
-  /* other wise use international sms gateway */ else
+  // if (countryDialCode === "+91")
+  //   sendOtpRequestStatus = await userMethods.sendMsg91Otp(phoneNumber);
+  // /* other wise use international sms gateway */ else
     sendOtpRequestStatus = await userMethods.sendInternationalOtp(
       countryDialCode,
       phoneNumber
@@ -74,9 +74,9 @@ router.post("/registerCustomer", async (req, res) => {
   /* otp verified status */
   let otpVerified = false;
 
-  if (countryDialCode === "+91")
-    otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp);
-  else
+  // if (countryDialCode === "+91")
+  //   otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp);
+  // else
     otpVerified = await userMethods.verifyInternationalOtp(
       countryDialCode,
       phoneNumber,
@@ -184,9 +184,9 @@ router.post("/loginCustomer", async (req, res) => {
 
   let otpVerified = false;
 
-  if (countryDialCode === "+91")
-    otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp);
-  else
+  // if (countryDialCode === "+91")
+  //   otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp);
+  // else
     otpVerified = await userMethods.verifyInternationalOtp(
       countryDialCode,
       phoneNumber,
