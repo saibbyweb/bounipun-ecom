@@ -68,8 +68,9 @@ export default {
 
   .popup {
     background-color: white;
-    height: 60vh;
-    width: 40%;
+    height: 540px;
+    max-height: 90vh;
+    width: 300px;
     position: relative;
     cursor: pointer;
   }
@@ -89,7 +90,7 @@ export default {
   }
 
   .image {
-    height: 70%;
+    height: 75%;
     width: 100%;
     background-size: cover;
     background-position: center;
@@ -99,6 +100,7 @@ export default {
     padding: 7% 5%;
     font-family: $font_1;
     text-align: center;
+    font-size:14px;
   }
 
   @media (max-width: 768px) {
