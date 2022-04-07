@@ -72,7 +72,7 @@ export default {
   }
   .label {
     font-family: $font_2;
-    font-size: 12px;
+    font-size: 11px;
     text-align: center;
     cursor: pointer;
   }

@@ -194,8 +194,8 @@ export default {
       font-family: $font_2;
 
       &.small {
-        font-family: $font_2;
-        font-size: 12px;
+        font-family: $font_1;
+        font-size: 13px;
       }
 
       &.green {

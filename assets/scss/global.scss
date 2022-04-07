@@ -228,16 +228,17 @@ span {
     width: 100%;
     height: 8vh;
     margin-bottom: 20px;
-
+    background-color:#efefef;
     @media (max-width: $breakpoint-tablet) {
       height: 10vw;
     }
 
     .title {
       color: $primary_dark;
-      font-family: $font_2_semibold;
+      font-family: $font_1_semibold;
       text-transform: uppercase;
-      font-size: 1.4vw;
+      font-size: 1.3vw;
+     
       @media (max-width: $breakpoint-tablet) {
         font-size: 5.4vw;
       }

@@ -1,5 +1,5 @@
 <template>
-  <div class="wishlist page -wh center-col">
+  <div class="wishlist page -wh">
     <div class="page-header center">
       <h2 class="title">Wishlist</h2>
     </div>
@@ -97,10 +97,9 @@ export default {
 }
 
 .wishlist {
-  margin-top: 10vh;
 
   .title {
-    padding-top: 10px;
+    // padding-top: 10px;
     font-size: 25px !important;
   }
 }

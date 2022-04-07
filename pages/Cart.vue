@@ -27,6 +27,7 @@
               :uppercase="true"
               :checked="couponApplied"
               :disabled="couponApplied"
+              :fullWidth="true"
               @input="couponError.status = false"
             />
 
@@ -274,9 +275,10 @@ export default {
 
 <style lang="scss" scoped>
 .cart {
-  margin-top: calc($pageMarginTop + 2vh);
+  // margin-top: calc($pageMarginTop + 2vh);
   padding-top: 6%;
-  min-height: 105vh;
+  min-height: 90vh;
+  display: grid;
 
   .title {
     font-size: 25px !important;
@@ -285,25 +287,26 @@ export default {
 
 .cart-container {
   width: 100%;
-  justify-content: flex-start;
-  padding-left: 5%;
+  justify-content: center;
+  align-items:flex-start;
+  // padding-left: 5%;
 
   .cart-items {
-    width: 50%;
+    width: 60%;
+    // background-color: hotpink;
   }
 
   .actions {
     width: 30%;
-    background-color: white;
+    // background-color: greenyellow;
 
     @media (min-width: 769px) {
-      position: absolute;
-      right: 5%;
-      top: calc($pageMarginTop + 1vh);
+      
+      // top: calc($pageMarginTop + 1vh);
       min-height: 89vh;
       z-index: 2;
       overflow: hidden;
-      padding: 1%;
+      padding: 0 1%;
     }
   }
 
@@ -323,18 +326,19 @@ export default {
 /* coupon box */
 .coupon-box {
   .input {
-    width: 70%;
+    width: 100%;
     .apply {
-      padding: 1px;
+      margin-top:4px;
+      // padding: 1px;
       font-size: 14px;
-      width: 70%;
+      // width: 70%;
       // background-color: #32a77c;
       background-color: #333;
 
       &.applied {
         background-color: rgb(188, 34, 34);
-        width: 30%;
-        font-size: 12px;
+        // width: 30%;
+        // font-size: 12px;
       }
     }
 

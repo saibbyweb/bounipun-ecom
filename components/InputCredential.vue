@@ -1,5 +1,5 @@
 <template>
-  <div class="input-credential">
+  <div class="input-credential" :class="{fullWidth}">
     <label class="label"> {{ label }} </label>
     <div class="input-box">
       <!-- country code -->
@@ -17,7 +17,7 @@
         :value="value"
         @input="emitInput"
         :disabled="disabled"
-        :class="{ isMobileNumber, uppercase, textarea, isUnlocker }"
+        :class="{ isMobileNumber, uppercase, textarea, isUnlocker, fullWidth }"
         :placeholder="placeholder"
       />
     </div>
@@ -35,6 +35,10 @@ export default {
     uppercase: { type: Boolean, default: false },
     checked: { type: Boolean, default: false },
     isMobileNumber: {
+      type: Boolean,
+      default: false,
+    },
+    fullWidth: {
       type: Boolean,
       default: false,
     },
@@ -73,8 +77,14 @@ export default {
   width: 100%;
   padding: 2% 5%;
 
+
+
   @media (max-width: 768px) {
     padding: 5%;
+  }
+
+    &.fullWidth {
+    padding: 2% 0;
   }
 
   .label {
@@ -132,6 +142,11 @@ export default {
       color: $gray;
       font-family: $font_2_semibold;
       letter-spacing: 1px;
+      
+
+      &.fullWidth {
+        box-sizing: border-box;
+      }
 
       &.uppercase {
         text-transform: uppercase;

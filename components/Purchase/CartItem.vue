@@ -124,28 +124,36 @@ export default {
   overflow: hidden;
   cursor: pointer;
 
-  @media (max-width: 768px) {
-    width: 90%;
-    height: 68vw;
-    margin: 10px;
-  }
+
 
   /* cart item thumbnail/image */
   .image-container {
-    width: 35%;
+    width: 13vw;
     height: 90%;
     background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;
+    margin-left: 8px;
 
     img {
       width: 100%;
     }
   }
+
+    @media (max-width: 768px) {
+    width: 90%;
+    height: 68vw;
+    margin: 10px;
+
+    .image-container {
+      width: 35%;
+    }
+  }
+
   /* cart item details and quantity input */
   .details-and-quantity {
     width: 65%;
-    padding-left: 4px;
+    padding-left: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -212,7 +220,12 @@ export default {
     position: absolute;
     right: 3%;
     top: 10%;
-    width: 6%;
+    width: 4%;
+    opacity: 0.6;
+    transition: opacity 0.2s ease-in-out;
+    &:hover {
+     opacity: 1;
+    }
   }
   /* total product price */
   .total-product-price {
