@@ -51,7 +51,7 @@ export default {
       .fake-check {
         height: 45%;
         width: 45%;
-        background-image: url("./icons/black_check.png");
+        background-image: url("/icons/black_check.png");
         background-size: cover;
         background-repeat: no-repeat;
       }
@@ -67,9 +67,6 @@ export default {
     cursor: pointer;
   }
 
-  .checkbox:checked {
-    //background-color: black;
-  }
   .label {
     font-family: $font_2;
     font-size: 11px;
@@ -87,7 +84,6 @@ export default {
       .fake-check {
         height: 40%;
         width: 40%;
-        background-image: url("./icons/black_check.png");
         background-size: cover;
         background-repeat: no-repeat;
       }
@@ -98,7 +94,6 @@ export default {
     .checkbox {
       height: 15px;
       width: 15px;
-    //   margin-right: 10px;
     }
   }
 }
