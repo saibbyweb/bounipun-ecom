@@ -80,7 +80,7 @@
 
         <!-- gift message -->
         <div v-if="giftMessagesAvailable" class="gift-box">
-          <Checkbox label="Personalized Message" v-model="gift.status" />
+          <Checkbox label="Personalised Gift Card Message" v-model="gift.status" />
   
           <GiftMessage v-if="gift.status" @close="gift.status = false" v-model="gift" :error="giftError" @input="giftError.status = false" />
         </div>

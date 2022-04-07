@@ -6,19 +6,19 @@
     </div>
     <div class="flex center">
       <!-- <label> To: </label> -->
-      <input class="text-box" type="text" :value="value.to" placeholder="To" @input="$emit('input', {...value, to: $event.target.value})" :disabled="disabled" />
+      <!-- <input class="text-box" type="text" :value="value.to" placeholder="To" @input="$emit('input', {...value, to: $event.target.value})" :disabled="disabled" /> -->
     </div>
 
     <div class="flex center">
       <!-- <label> From </label> -->
-      <input
+      <!-- <input
         class="text-box"
         type="text"
         :value="value.from"
         placeholder="From"
         @input="$emit('input', {...value, from: $event.target.value})"
         :disabled="disabled" 
-      />
+      /> -->
     </div>
     <div class="flex center">
       <!-- <label> Note: </label> -->
@@ -103,6 +103,7 @@ export default {
     border: 1px solid #efefef;
     padding:3px;
     margin:2px 6px;
+    height:85px;
 
     &:read-only {
       background-color:white;
