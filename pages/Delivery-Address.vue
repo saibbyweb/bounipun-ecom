@@ -1,5 +1,10 @@
 <template>
   <div class="delivery-page page -wh">
+
+    <div class="page-header center">
+      <h2 class="title">Delivery Address</h2>
+    </div>
+
     <!-- saved addresses -->
     <div
       v-if="loggedIn && !addressListEmpty"
@@ -438,8 +443,6 @@ export default {
   .container {
     justify-content: flex-start;
     padding: 0% 5%;
-    padding-top: 10vh;
-    // width:100%;
 
     .delivery-address {
       width: 50%;
@@ -456,12 +459,12 @@ export default {
     }
     .order-total-container {
       width: 30%;
-      margin-top: 3%;
+      margin-top: 2%;
+      
       @media (min-width: 769px) {
         position: fixed;
         right: 5%;
-        top: 10vh;
-        height: 100%;
+        top: 26vh;
       }
     }
     @media (max-width: 768px) {
