@@ -18,6 +18,14 @@
       v-model="doc.type"
       label="Select Coupon Type"
     />
+
+    <!-- coupon category -->
+    <SelectBox
+      :options="categoryTypes"
+      v-model="doc.category"
+      label="Select Coupon Category"
+    />
+
     <!-- currency type -->
     <SelectBox
       :options="currencies"
@@ -76,7 +84,7 @@
       <img v-if="updated" class="action-complete" src="/complete.gif" />
       <!-- update document -->
       <button @click="updateDocument" class="action" :disabled="loading">
-        {{ editMode ? "Edit" : "Add" }} Coupon
+        {{ editMode ? "Apply Changes" : "Add Coupon" }}
       </button>
       <!-- delete document -->
       <button
@@ -103,6 +111,7 @@ const baseDoc = () => ({
     start: new Date(),
     end: new Date(),
   },
+  category: '',
   log: [],
   description: "",
   status: false,
@@ -127,6 +136,20 @@ export default {
         {
           name: "Cash Discount",
           value: "direct-discount",
+        },
+      ],
+      categoryTypes: [
+         {
+          name: "Select Type",
+          value: null,
+        },
+        {
+          name: "General",
+          value: "general",
+        },
+        {
+          name: "Personal",
+          value: "personal",
         },
       ],
       currencies: [
@@ -205,6 +228,7 @@ export default {
         validity,
         validityRange,
         log,
+        category,
         description,
         status,
       } = details;
@@ -217,6 +241,7 @@ export default {
         validity: validity.toString(),
         validityRange,
         log,
+        category,
         description,
         status,
       };

@@ -13,6 +13,7 @@ const schema = new mongoose.Schema({
     },
     log: [{ order: String, usedOn: Date }],
     description: String,
+    category: { type: String, enum: ['personal', 'general'], default: '' },
     status: Boolean
 },
     {
@@ -48,7 +49,7 @@ export const methods = {
 
         /* if coupon found, validate coupon currency */
         const couponValid = response.currency === 'all' || response.currency === currency
-        if(!couponValid)
+        if (!couponValid)
             return false;
 
         return response;
@@ -62,7 +63,7 @@ export const methods = {
             $push: { log: { order: number, usedOn: new Date() } },
             $inc: { validity: -1 }
         });
-        console.log(updateLog,'--bro update log from coupon')
+        console.log(updateLog, '--bro update log from coupon')
         return updateLog === null ? false : true;
     }
 }

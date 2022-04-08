@@ -120,8 +120,11 @@ export default {
        margin-top: 5%;
 
       .post {
-        width: 43vw;
-        height: 43vw;
+        //width: 43vw;
+        //height: 43vw;
+        margin-top:5px;
+        width:29vw;
+        height:29vw;
       }
     }
   }
