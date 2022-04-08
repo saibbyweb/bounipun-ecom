@@ -55,7 +55,7 @@
         <p>Popup Details:</p>
         <div
           class="detail flex"
-          v-for="popup in availablePopups"
+          v-for="popup in eligiblePopups"
           :key="popup._id"
         >
           <div
@@ -111,6 +111,15 @@ export default {
   async mounted() {
     /* load persisted state */
     this.$store.commit("customer/loadPersistedState");
+        /* listen for all mutations */
+    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+      if (mutation.type === "customer/setLoading" || mutation.type === "customer/setGiftMessage")
+        return;
+
+      console.log(mutation);
+      /* save state in local storage */
+      window.localStorage.setItem("persistedState",JSON.stringify(state.customer));
+    });
   },
   methods: {
     setPopupData(popups) {

@@ -29,7 +29,7 @@ export default {
       guest: this.guestPopups,
       registeredUser: this.registeredUserPopups,
       allotted: this.allottedPopups,
-      eligible: this.eligiblePopups
+      eligible: this.eligiblePopups,
     });
   },
   computed: {
@@ -54,18 +54,18 @@ export default {
     },
     eligiblePopups() {
       const { popupsPopped } = this.$store.state.customer;
-      console.log(alert(JSON.stringify(popupsPopped)))
       // if there's a persistable popup which has been popped, set its delay timer to 6 seconds (0.1 min);
       const eligiblePopups = this.allottedPopups.map((popup) => {
-
         const alreadyPopped =
           popupsPopped.findIndex((popId) => popId == popup._id) !== -1;
         if (popup.persist && alreadyPopped) {
-            // alert('reset delay')
-        //  console.log(popup.name, "updated timer to 0.1 minutes");
-          return { ...popup, delay: 0.1 };
+          //  console.log(popup.name, "updated timer to 0.1 minutes");
+          return { ...popup, delay: 0.05 };
         } else return { ...popup };
       });
+
+      
+
       return eligiblePopups;
     },
   },
