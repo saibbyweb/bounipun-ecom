@@ -1,20 +1,16 @@
 <template>
   <div class="popup-test">
-    <Popup
-      v-for="popup in availablePopups"
-      :key="popup._id"
-      :_id="popup._id"
-      :image="popup.image"
-      :text="popup.text"
-      :persist="popup.persist"
-      :actionURL="popup.actionURL"
-      :delayInMinutes="popup.delay"
+    <PopupModals
+      @getMaxTime="setMaxTime"
+      @getPopupData="setPopupData"
     />
     <!-- popup test -->
     <div class="flex heading">
       <img src="/icons/light/logo.png" />
       <h1>Popup Test</h1>
-      <p> Timer: <span> {{ time }} seconds </span> </p>
+      <p>
+        Timer: <span> {{ time }} seconds </span>
+      </p>
     </div>
 
     <!-- loading bar -->
@@ -25,11 +21,18 @@
     <!-- log -->
     <div class="log">
       <!-- counter -->
-      <div class="counter flex col">
-        <p> Active Popups:<span> {{ availablePopups.length }} </span> </p>
-        <p> Guest Popups:<span> {{ guestPopups.length }} </span> </p>
-        <p> Registered Popups:<span> {{ registeredUserPopups.length }} </span> </p>
-        <p> Eligible Popups:
+      <div class="counter flex col" v-if="popupDataFetched">
+        <p>
+          Active Popups:<span> {{ availablePopups.length }} </span>
+        </p>
+        <p>
+          Guest Popups:<span> {{ guestPopups.length }} </span>
+        </p>
+        <p>
+          Registered Popups:<span> {{ registeredUserPopups.length }} </span>
+        </p>
+        <p>
+          Eligible Popups:
           <span> {{ eligiblePopups.length }} </span>
           <span
             @click="clearEligiblePopups"
@@ -39,7 +42,7 @@
               padding: 2px 5px;
               border-radius: 3px;
               font-size: 10px;
-              cursor:pointer;
+              cursor: pointer;
             "
           >
             soft clear
@@ -96,49 +99,35 @@ export default {
     return {
       time: 0,
       timer: null,
+      maximumDelayTimeInSeconds: 0,
+      availablePopups: [],
+      guestPopups: [],
+      registeredUserPopups: [],
+      eligiblePopups: [],
+      allottedPopups: [],
+      popupDataFetched: false
     };
   },
   async mounted() {
     /* load persisted state */
     this.$store.commit("customer/loadPersistedState");
-    await this.$store.dispatch("customer/fetchPopups");
-    this.resetTimer()
-  },
-  computed: {
-    availablePopups() {
-      return this.$store.state.customer.popups ?? [];
-    },
-    guestPopups() {
-      return this.availablePopups.filter((popup) => popup.visibility === "guests" || popup.visibility === "both");
-    },
-    registeredUserPopups() {
-      return this.availablePopups.filter((popup) => popup.visibility === "registered-users" || popup.visibility === "both");
-    },
-    allottedPopups() {
-      return this.$store.state.customer.authorized
-        ? this.registeredUserPopups
-        : this.guestPopups;
-    },
-    eligiblePopups() {
-      const { popupsPopped } = this.$store.state.customer;
-      /* filter out popups which havent been popped out yet */
-      const eligiblePopups = this.allottedPopups.filter((popup) => {
-        const notPoppedYet =
-          popupsPopped.findIndex((popId) => popId == popup._id) === -1;
-        return notPoppedYet;
-      });
-      return eligiblePopups;
-    },
-    maximumDelayTimeInSeconds() {
-      const onlyDelays = this.allottedPopups.map((popup) => popup.delay * 60);
-      return Math.max(...onlyDelays);
-    },
   },
   methods: {
+    setPopupData(popups) {
+      this.availablePopups = popups.available;
+      this.guestPopups = popups.guest;
+      this.registeredUserPopups = popups.registeredUser;
+      this.allottedPopups = popups.allotted;
+      this.eligiblePopups = popups.eligible;
+      this.popupDataFetched = true;
+    },
+    setMaxTime(time) {
+      this.maximumDelayTimeInSeconds = time;
+      this.resetTimer();
+    },
     resetTimer() {
       /* clear previously set timer */
-      if(this.timer)
-        clearInterval(this.timer);
+      if (this.timer) clearInterval(this.timer);
       /* reset timer */
       this.time = 0;
       this.timer = setInterval(() => {
@@ -150,7 +139,6 @@ export default {
     },
     clearEligiblePopups() {
       this.$store.commit("customer/clearPopupsPopped");
-      this.resetTimer();
     },
   },
 };

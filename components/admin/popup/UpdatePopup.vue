@@ -3,13 +3,9 @@
     <CancelUpdate @close="closeForm" />
     <h2 class="heading">{{ editMode ? "Update" : "Add New" }} Popup</h2>
 
-        <!-- preview link -->
+    <!-- preview link -->
     <div class="center">
-      <a
-        v-if="editMode"
-        :href="`/popup-test`"
-        target="_blank"
-      >
+      <a v-if="editMode" :href="`/popup-test`" target="_blank">
         <span
           style="
             background: #333;
@@ -22,7 +18,6 @@
         >
           Preview Popup ➚
         </span>
-
       </a>
     </div>
     <!-- Popup ID -->
@@ -35,7 +30,7 @@
     />
 
     <!-- popup name -->
-    <InputBox label="Popup Name" v-model="doc.name" />
+    <InputBox label="Popup Name" v-model="doc.name" :internal="true"/>
 
     <!-- popup image -->
     <UploadImage
@@ -307,7 +302,7 @@ export default {
       this.populateForm(baseDoc());
       this.$refs.imageUploader.clearFileSelection();
       this.selectedCoupon = null;
-      this.couponExpired= false;
+      this.couponExpired = false;
       this.editMode = false;
     },
   },

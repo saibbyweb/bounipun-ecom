@@ -32,9 +32,7 @@ export default {
     delayInMinutes: Number,
   },
   mounted() {
-    setTimeout(() => {
-      this.showPopup = true;
-    }, this.delayInMinutes * 60 * 1000);
+    setTimeout(() => { this.displayPopup() }, this.delayInMinutes * 60 * 1000);
   },
   computed: {
     backgroundImageStyles() {
@@ -44,13 +42,19 @@ export default {
     },
   },
   methods: {
+    displayPopup() {
+      this.showPopup = true;
+      /* dont pop if popup is not persisted (should only be used for guests)*/
+      if (this.persist) {
+        this.$store.commit("customer/setPopupAsPopped", this._id);
+      }
+    },
     closePopup() {
       this.showPopup = false;
-      this.$store.commit("customer/setPopupAsPopped", this._id);
     },
     takeAction() {
       window.open(this.actionURL, "_blank");
-      this.closePopup();
+      if (!this.persist) this.closePopup();
     },
   },
 };
@@ -100,7 +104,7 @@ export default {
     padding: 7% 5%;
     font-family: $font_1;
     text-align: center;
-    font-size:14px;
+    font-size: 14px;
   }
 
   @media (max-width: 768px) {
