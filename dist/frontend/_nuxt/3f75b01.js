@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[69],{697:function(n,e,t){"use strict";t.r(e);t(53);e.default={methods:{assignImages:function(n,image){var e=this;""!==image&&void 0!==image&&setTimeout((function(){e.$refs.updateComponent.$refs[n].assignImages([{_id:"",mainImage:!1,path:image}])}),1200)}}}}}]);
