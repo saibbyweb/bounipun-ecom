@@ -15,6 +15,12 @@
 
 <script>
 export default {
+  props: {
+    testMode: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       time: 0,
@@ -34,7 +40,8 @@ export default {
   },
   computed: {
     availablePopups() {
-      return this.$store.state.customer.popups ?? [];
+      const allPopups = this.$store.state.customer.popups;
+      return allPopups ? allPopups.filter(p => this.testMode ? true : p.status) : []
     },
     guestPopups() {
       return this.availablePopups.filter(

@@ -1,6 +1,7 @@
 <template>
   <div class="popup-test">
     <PopupModals
+      :testMode="true"
       @getMaxTime="setMaxTime"
       @getPopupData="setPopupData"
     />

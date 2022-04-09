@@ -64,7 +64,7 @@ export default {
 .popup-wrapper {
   background-color: rgba(42, 42, 42, 0.614);
   position: fixed;
-  z-index: 10;
+  z-index: 12;
   top: 0;
   left: 0;
   height: 100%;

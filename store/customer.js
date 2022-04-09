@@ -290,9 +290,9 @@ export const actions = {
     /* fetch active currencies */
     const request = await this.$post("/findDocuments", {
       model: "popup",
-      filters: {
-        status: true,
-      },
+      // filters: {
+      //   status: true,
+      // },
     });
 
     if (request.resolved === false) return;

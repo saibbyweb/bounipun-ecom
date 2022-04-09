@@ -36,7 +36,7 @@
     <UploadImage
       ref="imageUploader"
       :multipleUpload="false"
-      label="Set Popup Image Header"
+      label="Set Popup Image Header - 720px x 1280px (w x h)"
       @updated="imageListUpdated($event, 'image')"
     />
 
@@ -310,6 +310,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.contents {
+  position:relative;
+  overflow: scroll;
+  .demo-popup {
+    position: fixed;
+    top:15vh;
+    left:2vw;
+    background: red;
+    z-index: 10;
+  }
+}
+
 .section {
   position: relative;
   margin: 10px;

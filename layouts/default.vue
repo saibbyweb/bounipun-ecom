@@ -47,24 +47,20 @@
       :delayInMinutes="popup.delay"
     /> -->
 
+     <PopupModals
+      v-if="!dontShowPopups"
+    />
+
   </div>
 </template>
 
 <script>
 export default {
   computed: {
-    availablePopups() {
-      return this.$store.state.customer.popups ?? [];
-    },
-    eligiblePopups() {
-      const { popups, popupsPopped } = this.$store.state.customer;
-      /* do the magic here */
-      const eligiblePopups = popups.filter((popup) => {
-        const alreadyExists = popupsPopped.findIndex((popId) => popId == popup._id) === -1;
-        return alreadyExists;
-      });
-      return eligiblePopups;
-    },
+    dontShowPopups() {
+      const allowedRoutes = ['/login','/registration','/faq','/contact-us', '/terms', '/about-us','/press', '/privacy-policy','/']
+      return allowedRoutes.includes(this.$route.path)
+    }
   },
   mounted() {
     this.$ga.page(this.$router);
