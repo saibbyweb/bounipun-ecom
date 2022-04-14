@@ -10,8 +10,8 @@
       />
       <div class="image" :style="backgroundImageStyles"></div>
       <div class="text flex center col w-bold">
-        <p v-html="text2" class="text2">{{ text2 }}</p>
         <p v-html="text1" class="text1"></p>
+        <p v-html="text2" class="text2">{{ text2 }}</p>
         <button class="action">{{ text3 }}</button>
       </div>
     </div>
@@ -69,7 +69,7 @@ export default {
 
 <style lang="scss" scoped>
 .popup-wrapper {
-  background-color: rgba(42, 42, 42, 0.614);
+  background-color: rgba(42, 42, 42, 0.4);
   position: fixed;
   z-index: 12;
   top: 0;
@@ -116,13 +116,14 @@ export default {
     gap: 14px;
 
     .text1 {
-    }
-
-    .text2 {
       color: #454545;
       font-size: 19px;
       font-family: $font_4;
     }
+  }
+
+  .action {
+    width:100%;
   }
 
 

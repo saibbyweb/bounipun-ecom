@@ -36,7 +36,7 @@
     <UploadImage
       ref="imageUploader"
       :multipleUpload="false"
-      label="Set Popup Image Header - 300px x 400px (w x h)"
+      label="Set Popup Image Header - 310px x 400px (w x h)"
       @updated="imageListUpdated($event, 'image')"
     />
 
@@ -88,9 +88,9 @@
     <div class="section">
       <label class="label"> Popup Text Details </label>
     <!-- popup text (1) -->
-    <TextBox v-model="doc.text1" label="Popup Text #1 (Description)" :nonAdmin="true" style="padding:2.3%;" />
+    <TextBox v-model="doc.text1" label="Popup Text #1 (Heading)" />
     <!-- popup text (2) -->
-    <TextBox v-model="doc.text2" label="Popup Text #2" />
+    <TextBox v-model="doc.text2" label="Popup Text #2 (Description)" :nonAdmin="true" style="padding:2.3%;" />
     <!-- popup text (3) -->
     <InputBox v-model="doc.text3" label="Popup Text #3 (Button)" />
 
@@ -190,7 +190,7 @@ export default {
   watch: {
     selectedCoupon(newVal) {
       if (newVal === null) return;
-      this.doc.text1 = this.getCouponTextTemplate(newVal);
+      this.doc.text2 = this.getCouponTextTemplate(newVal);
     },
     editMode(newVal) {
       this.couponList.shift();
@@ -225,7 +225,7 @@ export default {
         this.couponExpired = true;
 
       const unit = coupon.type === "percentage" ? "%" : coupon.currency;
-      return `Use coupon code ${coupon.code} and get flat ${
+      return `Use coupon code <b> ${coupon.code} </b> and get flat ${
         coupon.value
       } ${unit} off on your order. Offer valid from ${this.$formatDate(
         coupon.validityRange.start,

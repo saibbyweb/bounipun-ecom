@@ -70,7 +70,7 @@ export default {
           popupsPopped.findIndex((popId) => popId == popup._id) !== -1;
         if (popup.persist && alreadyPopped) {
           //  console.log(popup.name, "updated timer to 0.1 minutes");
-          return { ...popup, delay: 0.05 };
+          return { ...popup, delay: 0.17 };
         } else return { ...popup };
       });
       return eligiblePopups;
