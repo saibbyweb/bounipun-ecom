@@ -9,8 +9,10 @@
         src="/icons/dark/close.png"
       />
       <div class="image" :style="backgroundImageStyles"></div>
-      <div class="text">
-        <p>{{ text }}</p>
+      <div class="text flex center col w-bold">
+        <p v-html="text2" class="text2">{{ text2 }}</p>
+        <p v-html="text1" class="text1"></p>
+        <button class="action">{{ text3 }}</button>
       </div>
     </div>
   </div>
@@ -27,12 +29,17 @@ export default {
     _id: String,
     image: String,
     text: String,
+    text1: String,
+    text2: String,
+    text3: String,
     actionURL: String,
     persist: Boolean,
     delayInMinutes: Number,
   },
   mounted() {
-    setTimeout(() => { this.displayPopup() }, this.delayInMinutes * 60 * 1000);
+    setTimeout(() => {
+      this.displayPopup();
+    }, this.delayInMinutes * 60 * 1000);
   },
   computed: {
     backgroundImageStyles() {
@@ -72,9 +79,9 @@ export default {
 
   .popup {
     background-color: white;
-    height: 540px;
-    max-height: 90vh;
-    width: 300px;
+    height: 570px;
+    // max-height: 90vh;
+    width: 310px;
     position: relative;
     cursor: pointer;
   }
@@ -94,7 +101,7 @@ export default {
   }
 
   .image {
-    height: 75%;
+    height: 400px;
     width: 100%;
     background-size: cover;
     background-position: center;
@@ -104,12 +111,28 @@ export default {
     padding: 7% 5%;
     font-family: $font_1;
     text-align: center;
-    font-size: 14px;
+    font-size: 13px;
+    height: 170px;
+    gap: 14px;
+
+    .text1 {
+    }
+
+    .text2 {
+      color: #454545;
+      font-size: 19px;
+      font-family: $font_4;
+    }
   }
+
 
   @media (max-width: 768px) {
     .popup {
-      width: 85%;
+      height: 580px;
+    }
+    .text {
+      height: 180px;
+      gap: 14px;
     }
   }
 }

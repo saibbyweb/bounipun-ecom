@@ -36,7 +36,7 @@
     <UploadImage
       ref="imageUploader"
       :multipleUpload="false"
-      label="Set Popup Image Header - 720px x 1280px (w x h)"
+      label="Set Popup Image Header - 300px x 400px (w x h)"
       @updated="imageListUpdated($event, 'image')"
     />
 
@@ -84,9 +84,19 @@
         </p>
       </div>
     </div>
+  
+    <div class="section">
+      <label class="label"> Popup Text Details </label>
+    <!-- popup text (1) -->
+    <TextBox v-model="doc.text1" label="Popup Text #1 (Description)" :nonAdmin="true" style="padding:2.3%;" />
+    <!-- popup text (2) -->
+    <TextBox v-model="doc.text2" label="Popup Text #2" />
+    <!-- popup text (3) -->
+    <InputBox v-model="doc.text3" label="Popup Text #3 (Button)" />
 
-    <!-- popup text -->
-    <TextBox v-model="doc.text" label="Popup Text" :nonAdmin="true" />
+    </div>
+
+
     <!-- input text (should have some helpers) -->
     <InputBox v-model="doc.actionURL" label="Action URL (on click):" />
     <!-- persist toggle -->
@@ -143,6 +153,9 @@ const baseDoc = () => ({
   image: "",
   category: "normal",
   text: "",
+  text1: "",
+  text2: "",
+  text3: "",
   actionURL: "",
   persist: false,
   delay: 20,
@@ -177,7 +190,7 @@ export default {
   watch: {
     selectedCoupon(newVal) {
       if (newVal === null) return;
-      this.doc.text = this.getCouponTextTemplate(newVal);
+      this.doc.text1 = this.getCouponTextTemplate(newVal);
     },
     editMode(newVal) {
       this.couponList.shift();
@@ -272,6 +285,9 @@ export default {
         image,
         category,
         text,
+        text1,
+        text2,
+        text3,
         actionURL,
         persist,
         delay,
@@ -285,6 +301,9 @@ export default {
         image,
         category,
         text,
+        text1, 
+        text2,
+        text3,
         actionURL,
         persist,
         delay,
@@ -325,6 +344,7 @@ export default {
 .section {
   position: relative;
   margin: 10px;
+  border: 1px dashed #efefef;
   padding: 5px 5px 30px 5px;
   border-radius: 5px;
   overflow: hidden;

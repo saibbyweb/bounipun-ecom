@@ -22,15 +22,15 @@ $font_4_bold: "Charmonman-Bold";
 
 $pageMarginTop: 20vh;
 
-@media(max-width: 768px) {
+@media (max-width: 768px) {
   $pageMarginTop: 13vh;
 }
 
 @mixin marginTop {
   margin-top: 20vh;
 
-  @media(max-width: 768px) {
-    margin-top:13vh;
+  @media (max-width: 768px) {
+    margin-top: 13vh;
   }
 }
 
@@ -117,7 +117,13 @@ $pageMarginTop: 20vh;
   src: url("assets/fonts/DancingScript-Regular.ttf") format("truetype");
 }
 
-
+.w-bold {
+  b {
+    font-family: "SF-Pro Bold";
+    font-size: 14px;
+    text-transform: uppercase;
+  }
+}
 
 body {
   margin: 0 !important;
@@ -177,7 +183,7 @@ button {
   }
 
   &.small {
-    font-size:11px;
+    font-size: 11px;
     padding: 1% 3%;
   }
 
@@ -204,7 +210,7 @@ span {
   min-height: 80vh;
   padding: 5%;
   @include marginTop;
-  
+
   @media (max-width: $breakpoint-tablet) {
     padding: 7%;
   }
@@ -228,7 +234,7 @@ span {
     width: 100%;
     height: 8vh;
     margin-bottom: 20px;
-    background-color:#efefef;
+    background-color: #efefef;
     @media (max-width: $breakpoint-tablet) {
       height: 10vw;
     }
@@ -238,7 +244,7 @@ span {
       font-family: $font_1_semibold;
       text-transform: uppercase;
       font-size: 1.3vw;
-     
+
       @media (max-width: $breakpoint-tablet) {
         font-size: 5.4vw;
       }
@@ -390,20 +396,19 @@ p {
   }
 }
 
-
 a {
   text-decoration: none;
 }
 
 .onlyDesktop {
-  @media(max-width: 768px) {
+  @media (max-width: 768px) {
     display: none;
   }
 }
 
 .onlyMobile {
   display: none;
-  @media(max-width: 768px) {
+  @media (max-width: 768px) {
     display: initial;
   }
 }

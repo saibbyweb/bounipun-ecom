@@ -1,6 +1,6 @@
 <template>
-  <div class="text-box" :class="{nonAdmin}">
-    <div style="display:flex; align-items:center;">
+  <div class="text-box" :class="{ nonAdmin }">
+    <div style="display: flex; align-items: center">
       <div v-if="internal" class="internal"></div>
       <label class="label"> {{ label }} </label>
     </div>
@@ -8,7 +8,7 @@
       class="textarea-box"
       @input="$emit('input', $event.target.value)"
       :value="value"
-     :disabled="disabled"
+      :disabled="disabled"
     >
     </textarea>
   </div>
@@ -21,28 +21,28 @@ export default {
     value: String,
     internal: {
       type: Boolean,
-      default: false
+      default: false,
     },
     nonAdmin: {
       type: Boolean,
-      default: false
+      default: false,
     },
     disabled: {
       type: Boolean,
-      default: false
-    }
-  }
+      default: false,
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 .text-box {
+  
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   padding: 2%;
   width: 100%;
-
 
   .internal {
     height: 10px;
@@ -71,11 +71,12 @@ export default {
     box-sizing: border-box;
     resize: none;
   }
-    &.nonAdmin {
-      padding: 5%;
-      .textarea-box {
-          height:150px;
-      }
+
+  &.nonAdmin {
+    padding: 5%;
+    .textarea-box {
+      height: 150px;
+    }
   }
 
 }

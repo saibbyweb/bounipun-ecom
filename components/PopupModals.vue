@@ -6,6 +6,9 @@
       :_id="popup._id"
       :image="popup.image"
       :text="popup.text"
+      :text1="popup.text1"
+      :text2="popup.text2"
+      :text3="popup.text3"
       :persist="popup.persist"
       :actionURL="popup.actionURL"
       :delayInMinutes="popup.delay"
@@ -70,9 +73,6 @@ export default {
           return { ...popup, delay: 0.05 };
         } else return { ...popup };
       });
-
-      
-
       return eligiblePopups;
     },
   },
