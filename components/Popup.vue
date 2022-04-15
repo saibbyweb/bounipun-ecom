@@ -103,6 +103,10 @@ export default {
     opacity: 0.6;
     transition: all 0.3s ease-in-out;
     cursor: pointer;
+    background-color:#efefef;
+    padding:1%;
+    // border-radius: 3px;
+
     &:hover {
       opacity: 1;
     }

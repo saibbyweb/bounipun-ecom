@@ -28,7 +28,7 @@
       :text1="doc.text1"
       :text2="doc.text2"
       :text3="doc.text3"
-      :persist="true"
+      :persist="false"
       :actionURL="doc.actionURL"
       :delayInMinutes="0"
     />
