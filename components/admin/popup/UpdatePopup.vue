@@ -28,7 +28,7 @@
       :text1="doc.text1"
       :text2="doc.text2"
       :text3="doc.text3"
-      :persist="doc.persist"
+      :persist="true"
       :actionURL="doc.actionURL"
       :delayInMinutes="0"
     />
@@ -138,7 +138,7 @@
       <!-- popup text (2) -->
       <TextBox
         v-model="doc.text2"
-        label="Popup Text #2 (Description)"
+        label="Popup Text #2 (Description - <b> ## </b> will make ## bold)"
         :nonAdmin="true"
         style="padding: 2.3%"
       />
