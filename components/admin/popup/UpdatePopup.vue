@@ -3,10 +3,47 @@
     <CancelUpdate @close="closeForm" />
     <h2 class="heading">{{ editMode ? "Update" : "Add New" }} Popup</h2>
 
+    <!-- close demo popup -->
+    <img
+    v-if="showDemo"
+      style="position: fixed; right: 0; top: 0; background-color: #111; padding: 1%;z-index:13; cursor: pointer;"
+      src="/icons/light/close.png"
+      @click="showDemo = false"
+    />
+
+    <!-- demo popup -->
+    <Popup
+      v-if="showDemo"
+      :_id="doc._id"
+      :image="doc.image"
+      :text="doc.text"
+      :text1="doc.text1"
+      :text2="doc.text2"
+      :text3="doc.text3"
+      :persist="true"
+      :actionURL="doc.actionURL"
+      :delayInMinutes="0"
+    />
+
     <!-- preview link -->
-    <div class="center">
+    <div class="center" style="gap:3px">
       <a v-if="editMode" :href="`/popup-test`" target="_blank">
         <span
+          style="
+            background: #333;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+            padding: 2px 4px;
+            border-radius: 2px;
+          "
+        >
+          Test Popup ➚
+        </span>
+      </a>
+      <a v-if="editMode" href="#">
+        <span
+          @click="showDemo = !showDemo"
           style="
             background: #333;
             text-align: center;
@@ -20,6 +57,7 @@
         </span>
       </a>
     </div>
+
     <!-- Popup ID -->
     <InputBox
       v-if="editMode"
@@ -30,7 +68,7 @@
     />
 
     <!-- popup name -->
-    <InputBox label="Popup Name" v-model="doc.name" :internal="true"/>
+    <InputBox label="Popup Name" v-model="doc.name" :internal="true" />
 
     <!-- popup image -->
     <UploadImage
@@ -84,18 +122,21 @@
         </p>
       </div>
     </div>
-  
+
     <div class="section">
       <label class="label"> Popup Text Details </label>
-    <!-- popup text (1) -->
-    <TextBox v-model="doc.text1" label="Popup Text #1 (Heading)" />
-    <!-- popup text (2) -->
-    <TextBox v-model="doc.text2" label="Popup Text #2 (Description)" :nonAdmin="true" style="padding:2.3%;" />
-    <!-- popup text (3) -->
-    <InputBox v-model="doc.text3" label="Popup Text #3 (Button)" />
-
+      <!-- popup text (1) -->
+      <TextBox v-model="doc.text1" label="Popup Text #1 (Heading)" />
+      <!-- popup text (2) -->
+      <TextBox
+        v-model="doc.text2"
+        label="Popup Text #2 (Description)"
+        :nonAdmin="true"
+        style="padding: 2.3%"
+      />
+      <!-- popup text (3) -->
+      <InputBox v-model="doc.text3" label="Popup Text #3 (Button)" />
     </div>
-
 
     <!-- input text (should have some helpers) -->
     <InputBox v-model="doc.actionURL" label="Action URL (on click):" />
@@ -182,6 +223,7 @@ export default {
         status: false,
         msg: "",
       },
+      showDemo: false,
     };
   },
   mounted() {
@@ -301,7 +343,7 @@ export default {
         image,
         category,
         text,
-        text1, 
+        text1,
         text2,
         text3,
         actionURL,
@@ -330,12 +372,12 @@ export default {
 
 <style lang="scss" scoped>
 .contents {
-  position:relative;
+  position: relative;
   overflow: scroll;
   .demo-popup {
     position: fixed;
-    top:15vh;
-    left:2vw;
+    top: 15vh;
+    left: 2vw;
     background: red;
     z-index: 10;
   }

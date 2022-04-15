@@ -126,7 +126,6 @@ export default {
     width:100%;
   }
 
-
   @media (max-width: 768px) {
     .popup {
       height: 580px;
