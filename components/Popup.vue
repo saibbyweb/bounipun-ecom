@@ -3,7 +3,7 @@
     <div @click="takeAction" class="popup shadow">
       <!-- close icon -->
       <img
-        v-if="!persist"
+        v-if="!persist && delayPassed >=4"
         class="close"
         @click.stop="closePopup"
         src="/icons/dark/close.png"
@@ -23,6 +23,8 @@ export default {
   data() {
     return {
       showPopup: false,
+      delayPassed: 0,
+      delayCounter: null,
     };
   },
   props: {
@@ -40,6 +42,12 @@ export default {
     setTimeout(() => {
       this.displayPopup();
     }, this.delayInMinutes * 60 * 1000);
+
+    this.delayCounter = setInterval(() => {
+      if (this.delayPassed >= 4) clearInterval(this.delayCounter);
+      this.delayPassed++;
+      console.log('incremented delay passed')
+    }, 1000);
   },
   computed: {
     backgroundImageStyles() {
@@ -123,7 +131,7 @@ export default {
   }
 
   .action {
-    width:100%;
+    width: 100%;
   }
 
   @media (max-width: 768px) {

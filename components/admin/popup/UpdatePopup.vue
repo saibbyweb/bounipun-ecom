@@ -5,8 +5,16 @@
 
     <!-- close demo popup -->
     <img
-    v-if="showDemo"
-      style="position: fixed; right: 0; top: 0; background-color: #111; padding: 1%;z-index:13; cursor: pointer;"
+      v-if="showDemo"
+      style="
+        position: fixed;
+        right: 0;
+        top: 0;
+        background-color: #111;
+        padding: 1%;
+        z-index: 13;
+        cursor: pointer;
+      "
       src="/icons/light/close.png"
       @click="showDemo = false"
     />
@@ -20,13 +28,13 @@
       :text1="doc.text1"
       :text2="doc.text2"
       :text3="doc.text3"
-      :persist="true"
+      :persist="doc.persist"
       :actionURL="doc.actionURL"
       :delayInMinutes="0"
     />
 
     <!-- preview link -->
-    <div class="center" style="gap:3px">
+    <div class="center" style="gap: 3px">
       <a v-if="editMode" :href="`/popup-test`" target="_blank">
         <span
           style="
