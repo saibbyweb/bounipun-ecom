@@ -468,6 +468,7 @@ export default {
       sticky: false,
       desktopSticky: false,
       preLoadMessage: "Loading product details...",
+      colorExplicitlyChoosen: false,
     };
   },
   computed: {
@@ -631,7 +632,13 @@ export default {
         : true;
     },
     shareLink() {
-      let baseLink = `${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`;
+      // let baseLink = `${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`;
+      let baseLink = `${location.host}/${this.product.slug}?activeColor=${
+        this.colorExplicitlyChoosen
+          ? this.activeColorIndex
+          : this.$route.query.activeColor
+      }`;
+
       if (window.location.hostname === "bounipun.in")
         baseLink = "https://" + baseLink;
       return baseLink;
@@ -717,7 +724,10 @@ export default {
       this.addOGMetaTag("twitter:card", "summary_large_image");
       this.addOGMetaTag("twitter:title", `${this.product.name}`);
       this.addOGMetaTag("twitter:image", this.firstProductImage);
-      this.addOGMetaTag("twitter:description",`${this.collectionName} from Bounipun Kashmir`);
+      this.addOGMetaTag(
+        "twitter:description",
+        `${this.collectionName} from Bounipun Kashmir`
+      );
     },
     addOGMetaTag(property, content) {
       let meta = document.createElement("meta");
@@ -975,6 +985,7 @@ export default {
       }
       this.activeColorIndex = activeIndex;
       this.$refs.slideshow.setActiveImage(0);
+      this.colorExplicitlyChoosen = true;
       /* scroll page to top */
       if (this.windowWidth < 768) window.scroll({ top: 0, behavior: "smooth" });
       else this.$refs.details.scroll({ top: 0, behavior: "smooth" });
