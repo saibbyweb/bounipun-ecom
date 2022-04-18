@@ -473,13 +473,20 @@ export default {
   },
   computed: {
     firstProductImage() {
+      /* TODO: DO SOME MAGIC HERE */
+      const index = this.colorExplicitlyChoosen
+          ? this.activeColorIndex
+          : this.$route.query.activeColor
+
+      // const index = this.activeColorIndex;
+
       if (
         this.images &&
         this.images.length > 0 &&
-        this.images[this.activeColorIndex] &&
-        this.images[this.activeColorIndex].length > 0
+        this.images[index] &&
+        this.images[index].length > 0
       )
-        return this.images[this.activeColorIndex][0];
+        return this.images[index][0];
       else return "https://bounipun.in/icons/light/logo.png";
     },
     nonDiscountedPrice() {
