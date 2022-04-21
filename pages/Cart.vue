@@ -18,7 +18,11 @@
       <!-- actions -->
       <div class="actions">
         <!-- coupon box -->
-        <div v-if="!cartEmpty" class="coupon-box flex col center">
+        <div
+          v-if="!cartEmpty"
+          class="coupon-box flex col center"
+          style="border: 1px dotted #a8a8a8; padding: 10px"
+        >
           <div class="input flex center col">
             <!-- code input box -->
             <InputCredential
@@ -39,6 +43,15 @@
             >
               {{ couponApplied ? "Remove" : "Apply Promo Code" }}
             </button>
+
+            <!-- coupon suggestions -->
+            <div
+              class="flex col center coupon-suggestions"
+              style="width: 100%; margin: 25px 0; row-gap: 30px"
+            >
+              <CouponSuggestion />
+              <CouponSuggestion />
+            </div>
           </div>
 
           <!-- coupon applied -->
@@ -55,7 +68,6 @@
         </div>
 
         <!-- TODO: show combined standard shipping note (dependent on global config and order history) -->
-
         <div class="delivery-specific">
           <!-- shipping disclaimer -->
           <p class="note disclaimer">{{ shippingDisclaimer }}</p>
@@ -76,14 +88,22 @@
               {{ maximumShippingTime }} weeks
             </p>
           </div>
-   
         </div>
 
         <!-- gift message -->
         <div v-if="giftMessagesAvailable" class="gift-box">
-          <Checkbox label="Personalised Gift Card Message" v-model="gift.status" />
-  
-          <GiftMessage v-if="gift.status" @close="gift.status = false" v-model="gift" :error="giftError" @input="giftError.status = false" />
+          <Checkbox
+            label="Personalised Gift Card Message"
+            v-model="gift.status"
+          />
+
+          <GiftMessage
+            v-if="gift.status"
+            @close="gift.status = false"
+            v-model="gift"
+            :error="giftError"
+            @input="giftError.status = false"
+          />
         </div>
 
         <br />
@@ -133,7 +153,7 @@ export default {
         message: "",
       },
       giftMessagesAvailable: false,
-      giftError: { status: false, msg: ""}
+      giftError: { status: false, msg: "" },
     };
   },
   watch: {
@@ -148,15 +168,13 @@ export default {
     },
   },
   mounted() {
-    // this.$ga.page('/cart');
-
     setTimeout(async () => {
       this.couponCode = this.coupon.code;
       this.$store.dispatch("customer/fetchCart");
       this.$store.dispatch("customer/fetchCoupon", this.coupon.code);
       await this.$store.dispatch("customer/fetchGlobalConfig");
-      console.log('fetched global config')
-      this.giftMessagesAvailable = this.$featureAvailable('giftMessages')
+      console.log("fetched global config");
+      this.giftMessagesAvailable = this.$featureAvailable("giftMessages");
     }, 300);
   },
   computed: {
@@ -202,19 +220,21 @@ export default {
     moveToDeliveryPage() {
       const { to, from, message, status } = this.gift;
 
-      if(status) {
+      if (status) {
         /* validate fields */
         const validatedTo = to.trim() !== "";
         const validatedFrom = from.trim() !== "";
         const validated = validatedTo && validatedFrom;
 
-        // if(!validated) 
+        // if(!validated)
         //   return this.giftError = { status: true, msg: 'To & From field cannot be left blank'}
-        
       }
-      
-      this.$store.commit("customer/setGiftMessage", this.gift.status ? this.gift : {status: false});
-      this.$router.push('/delivery-address');
+
+      this.$store.commit(
+        "customer/setGiftMessage",
+        this.gift.status ? this.gift : { status: false }
+      );
+      this.$router.push("/delivery-address");
     },
     async applyCoupon() {
       if (this.couponApplied === false) {
@@ -288,7 +308,7 @@ export default {
 .cart-container {
   width: 100%;
   justify-content: center;
-  align-items:flex-start;
+  align-items: flex-start;
   // padding-left: 5%;
 
   .cart-items {
@@ -301,7 +321,6 @@ export default {
     // background-color: greenyellow;
 
     @media (min-width: 769px) {
-      
       // top: calc($pageMarginTop + 1vh);
       min-height: 89vh;
       z-index: 2;
@@ -328,7 +347,7 @@ export default {
   .input {
     width: 100%;
     .apply {
-      margin-top:4px;
+      margin-top: 4px;
       // padding: 1px;
       font-size: 14px;
       // width: 70%;
@@ -386,7 +405,7 @@ export default {
   .note {
     // background-color: #32a77c;
     background-color: #333;
-    margin-top:5px;
+    margin-top: 5px;
     color: white;
     padding: 2px 10px;
     font-size: 11px;
@@ -402,7 +421,7 @@ export default {
 }
 
 .gift-box {
-  margin-top:10px;
+  margin-top: 10px;
 }
 
 .proceed {
