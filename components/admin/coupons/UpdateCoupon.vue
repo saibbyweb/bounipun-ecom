@@ -50,6 +50,9 @@
         :from-date="doc.validityRange.start"
       />
     </client-only>
+    
+    <!-- TODO: promo text for coupon (with auto generate option)-->
+
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
 

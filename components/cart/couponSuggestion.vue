@@ -1,13 +1,10 @@
 <template>
-  <div class="suggestion">
+  <div class="suggestion" @click="$emit('selection')">
     <label class="flex start">
-      <input class="selection" type="radio" name="suggestion" />
+      <input class="selection coupon-select" type="radio" name="suggestion" />
       <div class="flex start col text-details">
-        <span class="code"> BOUNIPUN121 </span>
-        <span class="text">
-          Get flat 5 % off on your order. Offer valid from 9 December, 2021 - 12
-          December, 2021. Hurry!
-        </span>
+        <span class="code"> {{ code}} </span>
+        <span class="text"> {{text }} </span>
       </div>
     </label>
   </div>
@@ -16,8 +13,12 @@
 <script>
 export default {
   props: {
-    code: String,
-    text: String,
+    code: { type: String, default: "BOUNIPUN121" },
+    text: {
+      type: String,
+      default:
+        " Get flat 5 % off on your order. Offer valid from 9 December, 2021 - 12 December, 2021. Hurry!",
+    },
   },
   methods: {},
 };

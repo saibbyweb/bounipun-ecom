@@ -49,8 +49,13 @@
               class="flex col center coupon-suggestions"
               style="width: 100%; margin: 25px 0; row-gap: 30px"
             >
-              <CouponSuggestion />
-              <CouponSuggestion />
+              <CouponSuggestion
+                v-for="suggestion in couponSuggestions"
+                @selection="selectCoupon(suggestion.code)"
+                :key="suggestion._id"
+                :code="suggestion.code"
+                :text="suggestion.text"
+              />
             </div>
           </div>
 
@@ -154,6 +159,7 @@ export default {
       },
       giftMessagesAvailable: false,
       giftError: { status: false, msg: "" },
+      couponSuggestions: [],
     };
   },
   watch: {
@@ -174,6 +180,7 @@ export default {
       this.$store.dispatch("customer/fetchCoupon", this.coupon.code);
       await this.$store.dispatch("customer/fetchGlobalConfig");
       console.log("fetched global config");
+      this.fetchCouponSuggestions();
       this.giftMessagesAvailable = this.$featureAvailable("giftMessages");
     }, 300);
   },
@@ -217,6 +224,23 @@ export default {
     },
   },
   methods: {
+    async selectCoupon(code) {
+      if (code === this.couponCode) return;
+      /* remove existing applied coupon */
+      await this.$store.commit("customer/setCoupon", {
+        applied: false,
+        code: "",
+      });
+      /* applying new code */
+      setTimeout(() => {
+        this.couponCode = code;
+        this.applyCoupon();
+      }, 100);
+    },
+    async fetchCouponSuggestions() {
+      const result = await this.$post('/fetchValidCoupons', {currency: this.$store.state.customer.currency});
+      this.couponSuggestions = result?.response?.coupons;
+    },
     moveToDeliveryPage() {
       const { to, from, message, status } = this.gift;
 
@@ -243,8 +267,12 @@ export default {
           this.couponCode
         );
         this.couponError.status = couponDetails === false;
-      } else
+      } else {
+        this.couponCode = ''
+        const radioButtons = document.getElementsByClassName('coupon-select')
+        radioButtons.forEach(button => button.checked = false)
         this.$store.commit("customer/setCoupon", { applied: false, code: "" });
+      }
     },
     adjustPrice(price) {
       price = parseInt(price);

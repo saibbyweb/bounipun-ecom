@@ -5,6 +5,7 @@ const schema = new mongoose.Schema({
     code: String,
     type: String,
     value: Number,
+    text: String,
     currency: String,
     validity: Number,
     validityRange: {
@@ -54,6 +55,33 @@ export const methods = {
 
         return response;
 
+    },
+    async getValidCoupons(currency) {
+        const findValidCoupons: any = model.find({
+            status: true,
+            validity: { $gt: 0 },
+            "validityRange.start": { $lte: new Date() },
+            "validityRange.end": { $gte: new Date().setHours(0, 0, 0, 0) }
+        }).select('_id code text type value currency');
+
+        /* find active coupons */
+        const { response, error } = await task(findValidCoupons);
+
+        /* if error occured or coupon not valid */
+        if (error || response === null) {
+            return false;
+        }
+
+        /* validate coupon currency */
+        const validCoupons = response.filter((coupon) => {
+            const couponValid = coupon.currency === 'all' || coupon.currency === currency
+            return couponValid;
+        });
+
+        // if (!couponValid)
+        //     return false;
+        console.log(validCoupons)
+        return validCoupons;
     },
     async updateCouponLog(couponCode, currency, number) {
         const updateLog = await model.findOneAndUpdate({

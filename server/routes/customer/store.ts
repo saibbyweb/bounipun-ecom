@@ -80,6 +80,20 @@ router.post("/fetchCoupon", userAuth("customer", false), async (req, res) => {
   res.send(response);
 });
 
+/* get valid coupons */
+router.post("/fetchValidCoupons", userAuth("customer", false), async (req, res) => {
+  /* response to be sent back */
+  let response = { resolved: false, coupons: [] };
+  /* extract currency from body */
+  const { currency } = req.body;
+  /* validate coupons */
+  const coupons = await couponMethods.getValidCoupons(currency);
+  /* set reponse */
+  response.resolved = true;
+  response.coupons = coupons;
+  res.send(response);
+});
+
 /* apply unlock code */
 router.post("/applyUnlockCode", userAuth("customer"), async (req, res) => {
   /* response to be send back */
