@@ -50,9 +50,17 @@
         :from-date="doc.validityRange.start"
       />
     </client-only>
-    
-    <!-- TODO: promo text for coupon (with auto generate option)-->
 
+    <!-- promo text for coupon (with auto generate option)-->
+    <TextBox
+      v-model="doc.text"
+      label="Suggestion Text (to be seen at the cart)"
+      :internal="false"
+    />
+    <!-- coupon suggestions text -->
+    <div class="flex center">
+      <button class="action small" @click="setText()" style="width:40%;"> Set coupon suggestion text </button>
+    </div>
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
 
@@ -114,8 +122,9 @@ const baseDoc = () => ({
     start: new Date(),
     end: new Date(),
   },
-  category: '',
+  category: "",
   log: [],
+  text: "",
   description: "",
   status: false,
 });
@@ -142,7 +151,7 @@ export default {
         },
       ],
       categoryTypes: [
-         {
+        {
           name: "Select Type",
           value: null,
         },
@@ -169,6 +178,24 @@ export default {
     this.fetchActiveCurrencies();
   },
   methods: {
+    setText() {
+      this.doc.text = this.getCouponTextTemplate();
+    },
+    getCouponTextTemplate() {
+      const coupon = this.doc;
+
+      /* check if coupon is expired or not */
+      if (new Date(coupon.validityRange.end).getTime() < new Date().getTime())
+        this.couponExpired = true;
+
+      const unit = coupon.type === "percentage" ? "%" : coupon.currency;
+      return `Use coupon code ${coupon.code} and get flat ${
+        coupon.value
+      } ${unit} off on your order. Offer valid from ${this.$formatDate(
+        coupon.validityRange.start,
+        true
+      )} - ${this.$formatDate(coupon.validityRange.end, true)}. Hurry!`;
+    },
     async fetchActiveCurrencies() {
       const request = await this.$post("/findDocuments", {
         model: "currency",
@@ -232,6 +259,7 @@ export default {
         validityRange,
         log,
         category,
+        text,
         description,
         status,
       } = details;
@@ -245,6 +273,7 @@ export default {
         validityRange,
         log,
         category,
+        text,
         description,
         status,
       };
