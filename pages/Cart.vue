@@ -21,7 +21,7 @@
         <div
           v-if="!cartEmpty"
           class="coupon-box flex col center"
-          style="border: 1px dotted #a8a8a8; padding: 10px"
+          :style="couponSuggestions.length > 0 ? `border: 0.5px dotted #a8a8a8; padding: 10px` : ''"
         >
           <div class="input flex center col">
             <!-- code input box -->
@@ -46,6 +46,7 @@
 
             <!-- coupon suggestions -->
             <div
+            v-if="couponSuggestions.length > 0"
               class="flex col center coupon-suggestions"
               style="width: 100%; margin: 25px 0; row-gap: 30px"
             >
