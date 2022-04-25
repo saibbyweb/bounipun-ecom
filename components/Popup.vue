@@ -68,7 +68,7 @@ export default {
       this.showPopup = false;
     },
     takeAction() {
-      window.open(this.actionURL, "_blank");
+      window.open(this.actionURL, "_self");
       if (!this.persist) this.closePopup();
     },
   },
