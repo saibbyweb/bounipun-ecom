@@ -150,6 +150,11 @@ export default {
           desc: "...",
         },
         {
+          name: "Payment Links",
+          path: "/admin-panel/paymentlinks",
+          desc: "...",
+        },
+        {
           name: "Currencies",
           path: "/admin-panel/currency",
           onlyDev: true,

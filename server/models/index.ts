@@ -28,6 +28,7 @@ import currency from "./currency";
 import pages from "./pages";
 import lab from "./lab";
 import popup from "./popup";
+import paymentLinks from "./paymentLinks";
 
 const register = function () {
   imageUpload.methods.register();
@@ -60,6 +61,7 @@ const register = function () {
   pages.methods.register();
   lab.methods.register();
   popup.methods.register();
+  paymentLinks.methods.register();
 };
 
 export {
@@ -93,5 +95,6 @@ export {
   pages,
   lab,
   popup,
+  paymentLinks,
   register,
 };

@@ -119,7 +119,8 @@ export const methods = {
         }
         /* if error occurred */
         catch (e) {
-            console.log(e);
+            console.log(e)
+            console.log(e.body?.errors);
             return false;
         }
 
@@ -190,7 +191,7 @@ export const methods = {
 
         await this.sendEmailNotification({
             to: 'admin',
-            receipt: ['orders@bounipun.in'],
+            receipt: ['orders@bounipun.in','hello@saibbyweb.com'],
             subject: 'New Order Received',
             templateId: newOrderAdminTemplateId,
             templateData: details,

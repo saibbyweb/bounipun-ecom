@@ -36,7 +36,7 @@
     <Nuxt />
     <BounipunFooter />
 
-<!--     <Popup
+    <!--     <Popup
       v-for="popup in eligiblePopups"
       :key="popup._id"
       :_id="popup._id"
@@ -47,10 +47,7 @@
       :delayInMinutes="popup.delay"
     /> -->
 
-     <PopupModals
-      v-if="!startedFromPopup && !dontShowPopups"
-    />
-
+    <PopupModals v-if="!startedFromPopup && !dontShowPopups" />
   </div>
 </template>
 
@@ -58,14 +55,27 @@
 export default {
   computed: {
     dontShowPopups() {
-      const allowedRoutes = ['/login','/registration','/faq','/contact-us', '/terms', '/about-us','/press', '/privacy-policy','/cart','/']
-      return allowedRoutes.includes(this.$route.path)
-    }
+      const allowedRoutes = [
+        "/login",
+        "/registration",
+        "/faq",
+        "/contact-us",
+        "/terms",
+        "/about-us",
+        "/press",
+        "/privacy-policy",
+        "/cart",
+        "/delivery-address",
+        "/order-placed-successfully",
+        "/Checkout",
+        "/",
+      ];
+      return allowedRoutes.includes(this.$route.path);
+    },
   },
   mounted() {
     this.$ga.page(this.$router);
-    if(this.$route.query.referrer)
-        this.startedFromPopup =  true;
+    if (this.$route.query.referrer) this.startedFromPopup = true;
     // this.$ga.page('/');
     // console.log(this.$ga,'---google analytic');
 
@@ -73,12 +83,18 @@ export default {
     this.$store.commit("customer/loadPersistedState");
     /* listen for all mutations */
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type === "customer/setLoading" || mutation.type === "customer/setGiftMessage")
+      if (
+        mutation.type === "customer/setLoading" ||
+        mutation.type === "customer/setGiftMessage"
+      )
         return;
 
       console.log(mutation);
       /* save state in local storage */
-      window.localStorage.setItem("persistedState",JSON.stringify(state.customer));
+      window.localStorage.setItem(
+        "persistedState",
+        JSON.stringify(state.customer)
+      );
     });
 
     setTimeout(async () => {
@@ -103,7 +119,7 @@ export default {
       menuOpen: false,
       unsubscribe: null,
       fakeLoaded: false,
-      startedFromPopup: false
+      startedFromPopup: false,
     };
   },
   methods: {
@@ -117,7 +133,7 @@ export default {
       this.$store.commit("customer/setUser", response);
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
