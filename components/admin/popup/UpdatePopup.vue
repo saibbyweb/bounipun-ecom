@@ -159,6 +159,10 @@
       :step="0.5"
     />
 
+    <!-- add seconds indicator -->
+    <div class="flex center">
+    <span style="background-color:#333;width:fit-content; padding:5px 10px; border-radius:20px;color:white; font-size:13px;"> {{ doc.delay * 60 }} seconds </span>
+    </div>
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
     <!-- publish toggle -->

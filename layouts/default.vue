@@ -48,7 +48,7 @@
     /> -->
 
      <PopupModals
-      v-if="!dontShowPopups"
+      v-if="!startedFromPopup && !dontShowPopups"
     />
 
   </div>
@@ -58,12 +58,14 @@
 export default {
   computed: {
     dontShowPopups() {
-      const allowedRoutes = ['/login','/registration','/faq','/contact-us', '/terms', '/about-us','/press', '/privacy-policy','/']
+      const allowedRoutes = ['/login','/registration','/faq','/contact-us', '/terms', '/about-us','/press', '/privacy-policy','/cart','/']
       return allowedRoutes.includes(this.$route.path)
     }
   },
   mounted() {
     this.$ga.page(this.$router);
+    if(this.$route.query.referrer)
+        this.startedFromPopup =  true;
     // this.$ga.page('/');
     // console.log(this.$ga,'---google analytic');
 
@@ -101,6 +103,7 @@ export default {
       menuOpen: false,
       unsubscribe: null,
       fakeLoaded: false,
+      startedFromPopup: false
     };
   },
   methods: {

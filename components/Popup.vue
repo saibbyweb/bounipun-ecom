@@ -68,7 +68,9 @@ export default {
       this.showPopup = false;
     },
     takeAction() {
-      window.open(this.actionURL, "_self");
+      /* TODO: tell vue that this is a continued session (use a query param) */
+      const queryPrefix = this.actionURL.includes('?') ? '&' : '?';
+      window.open(this.actionURL + queryPrefix + 'referrer=popup', "_self");
       if (!this.persist) this.closePopup();
     },
   },
