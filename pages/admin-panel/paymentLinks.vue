@@ -16,7 +16,7 @@
         :model="model"
         :headings="headings"
         :sortByFields="sortByFields"
-        custom_css="10% 35% 20% 15% 10% 10%"
+        custom_css="10% 35% 20% 35%"
         @documentFetched="documentFetched"
         @sortToggled="sortToggled"
       />
@@ -30,13 +30,13 @@
     </div>
     <!-- update payment links -->
     <div :class="{ updating: showForm }" class="update">
-      <!-- <UpdatePopup
+      <UpdatePaymentLink
         v-show="showForm"
         ref="updateComponent"
         @updated="updateList"
         :model="model"
         @close="showForm = false"
-      /> -->
+      />
       <AddNewItem v-if="!showForm" label="Payment Link" @showForm="showForm = true" />
     </div>
   </div>
@@ -49,7 +49,7 @@ export default {
     return {
       showForm: false,
       loading: false,
-      model: "paymentLink",
+      model: "paymentlink",
       /* rawCriterion */
       rawCriterion: {
         search: {
@@ -70,6 +70,7 @@ export default {
       ],
       headings: [
         "_id",
+        "name",
         "description",
         "status",
       ],
