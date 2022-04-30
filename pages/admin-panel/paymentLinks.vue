@@ -37,7 +37,11 @@
         :model="model"
         @close="showForm = false"
       />
-      <AddNewItem v-if="!showForm" label="Payment Link" @showForm="showForm = true" />
+      <AddNewItem
+        v-if="!showForm"
+        label="Payment Link"
+        @showForm="showForm = true"
+      />
     </div>
   </div>
 </template>
@@ -63,17 +67,8 @@ export default {
         limit: 20,
       },
       list: [],
-      sortByFields: [
-        "name",
-        "description",
-        "status",
-      ],
-      headings: [
-        "_id",
-        "name",
-        "description",
-        "status",
-      ],
+      sortByFields: ["name", "description", "status"],
+      headings: ["_id", "name", "description", "status"],
     };
   },
   async mounted() {
@@ -94,7 +89,7 @@ export default {
       this.showForm = true;
       this.editMode = true;
       this.$refs.updateComponent.populateForm(doc);
-    //   this.assignImages("imageUploader", doc.image);
+      //   this.assignImages("imageUploader", doc.image);
     },
     resultsFetched(result) {
       if (result.docs.length === 0) {
@@ -103,16 +98,14 @@ export default {
       }
 
       /* extract list */
-      this.list = result.docs.map(
-        ({ _id, name, description, status }) => {
-          return {
-            _id,
-            name,
-            description,
-            status,
-          };
-        }
-      );
+      this.list = result.docs.map(({ _id, name, description, status }) => {
+        return {
+          _id,
+          name,
+          description,
+          status,
+        };
+      });
     },
     assignImages(ref, image) {
       if (image === "" || image === undefined) return;
@@ -129,3 +122,7 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+
+</style>

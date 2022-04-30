@@ -46,7 +46,6 @@ const schema = new mongoose.Schema({
         saleDetails: Object,
         delivered: String
     }],
-
     /* all four field below are for sub-orders as well */
     status: String,
     delivered: Date,

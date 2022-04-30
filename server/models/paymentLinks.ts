@@ -1,4 +1,4 @@
-import { mongoose, ObjectId } from "@helpers/essentials";
+import { mongoose } from "@helpers/essentials";
 
 /* schema */
 const schema = new mongoose.Schema(

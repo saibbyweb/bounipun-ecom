@@ -1,7 +1,9 @@
 <template>
   <div class="contents">
     <CancelUpdate @close="closeForm" />
-    <h2 class="heading">{{ editMode ? "Update" : "Create New" }} Payment Link</h2>
+    <h2 class="heading">
+      {{ editMode ? "Update" : "Create New" }} Payment Link
+    </h2>
 
     <!-- preview link -->
     <div class="center" style="gap: 3px">
@@ -36,6 +38,20 @@
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
 
+    <!-- items -->
+    <div class="flex" v-for="item in doc.items" :key="item.doc">
+      <InputBox v-model="item.styleId" label="StyleID" />
+      <InputBox v-model="item.name" label="Name" />
+      <InputBox v-model="item.variantName" label="Variant" />
+      <InputBox v-model="item.collectionName" label="Collection Name" />
+      <InputBox v-model="item.colorName" label="Color Name" />
+      <InputBox v-model="item.hsnCode" label="HSN Code" />
+      <InputBox v-model="item.fabricName" label="Fabric Name" />
+      <InputBox v-model="item.quantity" label="Quantity" />
+      <InputBox v-model="item.rate" label="Rate" />
+      <InputBox v-model="item.total" label="Total" />
+    </div>
+
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
     <!-- update button -->
@@ -66,14 +82,30 @@
         :error="true"
       />
     </div>
+
   </div>
 </template>
 
 <script>
+/* base item */
+const baseItem = () => ({
+  styleId: "",
+  name: "",
+  variantName: "",
+  collectionName: "",
+  colorName: "",
+  hsnCode: "",
+  fabricName: "",
+  quantity: "",
+  rate: "",
+  total: "",
+})
+
 /* base doc */
 const baseDoc = () => ({
   _id: "",
   name: "",
+  items: [baseItem()],
   description: "",
   status: false,
 });
@@ -91,11 +123,10 @@ export default {
       errorToast: {
         status: false,
         msg: "",
-      }
-    }
+      },
+    };
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     async updateDocument() {
       this.loading = true;
@@ -130,17 +161,12 @@ export default {
       this.$flash(this);
     },
     populateForm(details) {
-      const {
-        _id,
-        name,
-        description,
-        status
-      } = details;
+      const { _id, name, description, status } = details;
       this.doc = {
         _id,
         name,
         description,
-        status
+        status,
       };
       this.editMode = true;
     },
@@ -160,13 +186,7 @@ export default {
 .contents {
   position: relative;
   overflow: scroll;
-  .demo-popup {
-    position: fixed;
-    top: 15vh;
-    left: 2vw;
-    background: red;
-    z-index: 10;
-  }
+  // padding-bottom: 25px;
 }
 
 .section {
