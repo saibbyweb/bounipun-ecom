@@ -6,6 +6,7 @@
     </div>
     <input
       class="input-box"
+      :style="css"
       :class="{ uppercase }"
       :type="type"
       :placeholder="placeholder"
@@ -47,6 +48,9 @@ export default {
     options: {
       type: Object,
     },
+    css: {
+      type: Object
+    }
   },
   methods: {
     isBounipunUrl(s) {
@@ -66,6 +70,11 @@ export default {
   padding: 2%;
   width: 100%;
   position: relative;
+
+  &:focus {
+    border: 1px solid rgba(0, 128, 0, 0.705) !important;
+    
+  }
 
   .internal {
     height: 10px;

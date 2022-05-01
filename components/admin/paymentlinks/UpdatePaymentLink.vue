@@ -35,27 +35,60 @@
     <!-- link name -->
     <InputBox label="Payment Link Name" v-model="doc.name" :internal="true" />
 
+    <!-- items -->
+    <div class="flex col" style="gap: 10px">
+      <label class="label"> Items: </label>
+      <Draggable
+        v-model="doc.items"
+        ghost-class="ghost"
+        :sort="true"
+        class="items"
+      >
+        <transition-group type="transition" name="flip-list">
+          <div
+            class="flex col link-item"
+            v-for="(item, index) in doc.items"
+            :key="item.key"
+          >
+            <div class="header">
+              <span> Item #{{ index + 1 }} </span>
+              <!-- product selector -->
+              <img @click="removeItem(index)" src="/icons/light/trash.png" />
+            </div>
+            <div class="flex center" style="gap:10px;">
+              <InputBox v-model="item.styleId" label="StyleID" />
+              <InputBox
+                v-model="item.name"
+                label="Name"
+                :css="{ width: '250px' }"
+              />
+              <InputBox v-model="item.variantName" label="Variant" />
+              <InputBox v-model="item.fabricName" label="Fabric" />
+              <InputBox v-model="item.colorName" label="Color" />
+            </div>
+            <div class="flex">
+              <InputBox v-model="item.collectionName" label="Collection" />
+              <InputBox v-model="item.hsnCode" label="HSN" />
+              <InputBox v-model="item.quantity" label="Quantity" />
+              <InputBox v-model="item.rate" label="Rate" />
+              <InputBox v-model="item.total" label="Total" :disabled="true" />
+            </div>
+          </div>
+        </transition-group>
+      </Draggable>
+      <!-- add new item -->
+      <div class="flex center">
+        <button @click="addNewItem()" class="action">Add New Item</button>
+      </div>
+    </div>
+
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
-
-    <!-- items -->
-    <div class="flex" v-for="item in doc.items" :key="item.doc">
-      <InputBox v-model="item.styleId" label="StyleID" />
-      <InputBox v-model="item.name" label="Name" />
-      <InputBox v-model="item.variantName" label="Variant" />
-      <InputBox v-model="item.collectionName" label="Collection Name" />
-      <InputBox v-model="item.colorName" label="Color Name" />
-      <InputBox v-model="item.hsnCode" label="HSN Code" />
-      <InputBox v-model="item.fabricName" label="Fabric Name" />
-      <InputBox v-model="item.quantity" label="Quantity" />
-      <InputBox v-model="item.rate" label="Rate" />
-      <InputBox v-model="item.total" label="Total" />
-    </div>
 
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
     <!-- update button -->
-    <div class="center-space">
+    <div class="center-space" style="width: 70%">
       <!-- loading bar -->
       <img v-if="loading" class="loading" src="/loading.gif" />
       <!-- action complete gif -->
@@ -82,13 +115,15 @@
         :error="true"
       />
     </div>
-
   </div>
 </template>
 
 <script>
+import { v4 as uuidv4 } from "uuid";
+
 /* base item */
 const baseItem = () => ({
+  key: uuidv4(),
   styleId: "",
   name: "",
   variantName: "",
@@ -99,7 +134,7 @@ const baseItem = () => ({
   quantity: "",
   rate: "",
   total: "",
-})
+});
 
 /* base doc */
 const baseDoc = () => ({
@@ -128,6 +163,12 @@ export default {
   },
   mounted() {},
   methods: {
+    addNewItem() {
+      this.doc.items.push(baseItem());
+    },
+    removeItem(index) {
+      this.doc.items.splice(index, 1);
+    },
     async updateDocument() {
       this.loading = true;
       const result = await this.$updateDocument(
@@ -161,10 +202,11 @@ export default {
       this.$flash(this);
     },
     populateForm(details) {
-      const { _id, name, description, status } = details;
+      const { _id, name, description, items, status } = details;
       this.doc = {
         _id,
         name,
+        items,
         description,
         status,
       };
@@ -206,5 +248,30 @@ export default {
   padding: 2%;
   margin-left: 5px;
   font-weight: 900;
+}
+
+.link-item {
+  border: 2px dotted #ababab;
+  .header {
+    overflow: hidden;
+    span {
+      padding: 3%;
+      background-color: #333;
+      color: white;
+    }
+    img {
+      position: absolute;
+      right: 0;
+      background-color: rgb(192, 28, 28);
+      opacity: 0.8;
+      height: 40px;
+      width: 40px;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
 }
 </style>
