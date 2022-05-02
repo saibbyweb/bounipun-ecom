@@ -1,5 +1,5 @@
 <template>
-  <div class="input-box">
+  <div class="input-box" :class="{slim}">
     <div style="display: flex; align-items: center">
       <div v-if="internal" class="internal"></div>
       <label :title="options && options.title ? options.title : ''" class="label"> {{ label }} </label>
@@ -50,6 +50,10 @@ export default {
     },
     css: {
       type: Object
+    },
+    slim: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -70,6 +74,10 @@ export default {
   padding: 2%;
   width: 100%;
   position: relative;
+
+  &.slim {
+    padding:1%;
+  }
 
   &:focus {
     border: 1px solid rgba(0, 128, 0, 0.705) !important;

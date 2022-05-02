@@ -23,17 +23,46 @@
       </a>
     </div>
 
-    <!-- payment link ID -->
-    <InputBox
-      v-if="editMode"
-      label="Pop ID"
-      v-model="doc._id"
-      disabled
-      :internal="true"
-    />
+    <div class="flex center" style="gap:5%; margin-top:20px;">
+      <div class="flex col" style="width: 40%;">
+        <!-- payment link ID -->
+        <InputBox
+          v-if="editMode"
+          label="Pop ID"
+          v-model="doc._id"
+          disabled
+          :internal="true"
+        />
 
-    <!-- link name -->
-    <InputBox label="Payment Link Name" v-model="doc.name" :internal="true" />
+        <!-- link name -->
+        <InputBox label="Link Name" v-model="doc.name" :internal="true" />
+
+        <!-- payee name -->
+        <InputBox label="Payee Name" v-model="doc.name" />
+
+        <!-- currency type -->
+        <SelectBox
+          :options="currencies"
+          v-model="doc.currency"
+          label="Select Currency"
+        />
+      </div>
+
+
+      <!-- validity range -->
+      <div class="validity-range flex col">
+      <label class="label"> Validity Range: </label>
+      <client-only>
+        <v-datepicker
+          color="blue"
+          is-range
+          v-model="doc.validityRange"
+          :from-date="doc.validityRange.start"
+        />
+      </client-only>
+      </div>
+
+    </div>
 
     <!-- items -->
     <div class="flex col" style="gap: 10px">
@@ -55,14 +84,14 @@
               <!-- product selector -->
               <img @click="removeItem(index)" src="/icons/light/trash.png" />
             </div>
-            <div class="flex center" style="gap:10px;">
+            <div class="flex center" style="gap: 10px">
               <InputBox v-model="item.styleId" label="StyleID" />
               <InputBox
                 v-model="item.name"
                 label="Name"
                 :css="{ width: '250px' }"
               />
-              <InputBox v-model="item.variantName" label="Variant" />
+              <InputBox v-model="item.variantName" label="Variant" :slim="true" />
               <InputBox v-model="item.fabricName" label="Fabric" />
               <InputBox v-model="item.colorName" label="Color" />
             </div>
@@ -140,6 +169,11 @@ const baseItem = () => ({
 const baseDoc = () => ({
   _id: "",
   name: "",
+  payeeName: "",
+  validityRange: {
+    start: new Date(),
+    end: new Date(),
+  },
   items: [baseItem()],
   description: "",
   status: false,
@@ -152,6 +186,7 @@ export default {
   data() {
     return {
       editMode: false,
+      currencies: [],
       doc: baseDoc(),
       loading: false,
       updated: false,
@@ -161,8 +196,34 @@ export default {
       },
     };
   },
-  mounted() {},
+  mounted() {
+    this.fetchActiveCurrencies();
+  },
   methods: {
+    async fetchActiveCurrencies() {
+      const request = await this.$post("/findDocuments", {
+        model: "currency",
+        filters: {
+          adminEnabled: true,
+          status: true,
+        },
+      });
+
+      if (request.resolved == false) {
+        return;
+      }
+
+      const currencies = request.response;
+
+      this.currencies = currencies.map((c) => ({
+        name: c.name,
+        value: c.code,
+      }));
+      this.currencies.unshift(
+        // { name: "All Currencies", value: "all" },
+        { name: "Indian Rupee", value: "INR" }
+      );
+    },
     addNewItem() {
       this.doc.items.push(baseItem());
     },
@@ -202,10 +263,20 @@ export default {
       this.$flash(this);
     },
     populateForm(details) {
-      const { _id, name, description, items, status } = details;
+      const {
+        _id,
+        name,
+        payeeName,
+        validityRange,
+        description,
+        items,
+        status,
+      } = details;
       this.doc = {
         _id,
         name,
+        payeeName,
+        validityRange,
         items,
         description,
         status,

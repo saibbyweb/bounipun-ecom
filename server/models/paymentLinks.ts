@@ -4,9 +4,11 @@ import { mongoose } from "@helpers/essentials";
 const schema = new mongoose.Schema(
     {
         name: String,
+        /* payee name */
+        payeeName: String,
         /* currency */
         currency: Number,
-        /* TODO: write VUE CRUD for items */
+        /* write VUE CRUD for items */
         items: [{
             styleId: String,
             name: String,
@@ -19,6 +21,10 @@ const schema = new mongoose.Schema(
             rate: Number,
             total: Number,
         }],
+        validityRange: {
+            start: Date,
+            end: Date
+        },
         /* amount */
         amount: Number,
         description: { type: String, default: '' },
