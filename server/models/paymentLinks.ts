@@ -8,7 +8,7 @@ const schema = new mongoose.Schema(
         payeeName: String,
         /* currency */
         currency: Number,
-        /* write VUE CRUD for items */
+        /* items */
         items: [{
             styleId: String,
             name: String,

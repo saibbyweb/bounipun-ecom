@@ -23,8 +23,8 @@
       </a>
     </div>
 
-    <div class="flex center" style="gap:5%; margin-top:20px;">
-      <div class="flex col" style="width: 40%;">
+    <div class="flex center" style="gap: 5%; margin-top: 20px">
+      <div class="flex col" style="width: 40%">
         <!-- payment link ID -->
         <InputBox
           v-if="editMode"
@@ -48,20 +48,18 @@
         />
       </div>
 
-
       <!-- validity range -->
       <div class="validity-range flex col">
-      <label class="label"> Validity Range: </label>
-      <client-only>
-        <v-datepicker
-          color="blue"
-          is-range
-          v-model="doc.validityRange"
-          :from-date="doc.validityRange.start"
-        />
-      </client-only>
+        <label class="label"> Validity Range: </label>
+        <client-only>
+          <v-datepicker
+            color="blue"
+            is-range
+            v-model="doc.validityRange"
+            :from-date="doc.validityRange.start"
+          />
+        </client-only>
       </div>
-
     </div>
 
     <!-- items -->
@@ -78,29 +76,80 @@
             class="flex col link-item"
             v-for="(item, index) in doc.items"
             :key="item.key"
+            style="padding-bottom: 10px"
           >
             <div class="header">
               <span> Item #{{ index + 1 }} </span>
               <!-- product selector -->
-              <img @click="removeItem(index)" src="/icons/light/trash.png" />
+              <img @click="removeItem(index)" src="/icons/light/trash.png" style="height:25px; width:25px;" />
             </div>
-            <div class="flex center" style="gap: 10px">
-              <InputBox v-model="item.styleId" label="StyleID" />
+
+            <div class="flex items">
+              <InputBox
+                v-model="item.styleId"
+                label="StyleID"
+                :slim="true"
+                :css="{ width: '90px' }"
+              />
               <InputBox
                 v-model="item.name"
-                label="Name"
+                label="Product Name"
+                :slim="true"
                 :css="{ width: '250px' }"
               />
-              <InputBox v-model="item.variantName" label="Variant" :slim="true" />
-              <InputBox v-model="item.fabricName" label="Fabric" />
-              <InputBox v-model="item.colorName" label="Color" />
-            </div>
-            <div class="flex">
-              <InputBox v-model="item.collectionName" label="Collection" />
-              <InputBox v-model="item.hsnCode" label="HSN" />
-              <InputBox v-model="item.quantity" label="Quantity" />
-              <InputBox v-model="item.rate" label="Rate" />
-              <InputBox v-model="item.total" label="Total" :disabled="true" />
+              <InputBox
+                v-model="item.variantName"
+                label="Variant"
+                :slim="true"
+                :css="{ width: '100px' }"
+              />
+              <InputBox
+                v-model="item.fabricName"
+                label="Fabric"
+                :slim="true"
+                :css="{ width: '140px' }"
+              />
+              <InputBox
+                v-model="item.colorName"
+                label="Color"
+                :slim="true"
+                :css="{ width: '130px' }"
+              />
+              <!-- </div> -->
+
+              <!-- <div class="flex items"> -->
+              <InputBox
+                v-model="item.collectionName"
+                label="Collection"
+                :slim="true"
+                :css="{ width: '100px' }"
+              />
+              <InputBox
+                v-model="item.hsnCode"
+                label="HSN"
+                :slim="true"
+                :css="{ width: '100px' }"
+              />
+              <InputBox
+                v-model="item.quantity"
+                label="Quantity"
+                type="number"
+                :slim="true"
+                :css="{ width: '80px' }"
+              />
+              <InputBox
+                v-model="item.rate"
+                :label="`Rate - (${doc.currency})`"
+                :slim="true"
+                :css="{ width: '100px' }"
+              />
+              <InputBox
+                :value="item.quantity * item.rate"
+                :label="`Total - (${doc.currency})`"
+                :disabled="true"
+                :slim="true"
+                :css="{ width: '100px' }"
+              />
             </div>
           </div>
         </transition-group>
@@ -175,6 +224,7 @@ const baseDoc = () => ({
     end: new Date(),
   },
   items: [baseItem()],
+  currency: 'INR',
   description: "",
   status: false,
 });
@@ -194,6 +244,7 @@ export default {
         status: false,
         msg: "",
       },
+      currency: 'INR'
     };
   },
   mounted() {
@@ -323,6 +374,7 @@ export default {
 
 .link-item {
   border: 2px dotted #ababab;
+      margin: 10px 0;
   .header {
     overflow: hidden;
     span {
@@ -343,6 +395,13 @@ export default {
         opacity: 1;
       }
     }
+  }
+
+  .items {
+    flex-wrap: wrap;
+    column-gap: 10px;
+    justify-content: flex-start;
+    align-items: center;
   }
 }
 </style>

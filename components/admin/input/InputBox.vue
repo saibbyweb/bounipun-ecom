@@ -1,12 +1,12 @@
 <template>
-  <div class="input-box" :class="{slim}">
+  <div class="input-box" :class="{slim}"   :style="css">
     <div style="display: flex; align-items: center">
       <div v-if="internal" class="internal"></div>
       <label :title="options && options.title ? options.title : ''" class="label"> {{ label }} </label>
     </div>
     <input
       class="input-box"
-      :style="css"
+     
       :class="{ uppercase }"
       :type="type"
       :placeholder="placeholder"
@@ -76,7 +76,7 @@ export default {
   position: relative;
 
   &.slim {
-    padding:1%;
+    padding:5px;
   }
 
   &:focus {
@@ -109,7 +109,7 @@ export default {
     color: $gray;
     text-transform: uppercase;
     font-size: 9px;
-    padding: 2%;
+    padding: 5px;
     margin-left: 5px;
     font-weight: 900;
   }
