@@ -119,9 +119,10 @@ router.post("/productIdToSlug", async (req, res) => {
 
 /* get product */
 router.post("/fetchProduct", userAuth("customer", false), async (req, res) => {
-  const { slug, unlocked } = req.body;
+  const { _id, slug, unlocked } = req.body;
   const collection = db.model("products");
-  const filters: any = { slug };
+  const filters: any = _id ? { _id } : { slug }
+
   /* if user is not unlocked, show only unlocked content */
   if (unlocked === false) filters.lock = false;
 

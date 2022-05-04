@@ -62,8 +62,6 @@
       </div>
     </div>
 
-      
-
     <!-- items -->
     <div class="flex col" style="gap: 10px">
       <label class="label"> Items: </label>
@@ -80,12 +78,22 @@
             :key="item.key"
             style="padding-bottom: 10px"
           >
-          <!-- item header -->
-            <div class="header">
+            <!-- item header -->
+            <div
+              class="header flex"
+              style="height: 40px; background-color: #efefef"
+            >
               <!-- index indicator -->
               <span> Item #{{ index + 1 }} </span>
               <!-- product selector -->
-              <Dropdown :source="allProducts" />
+              <!-- <div style="width:20vw; position: relative; overflow: scroll;"> -->
+              <Dropdown
+                :source="allProducts"
+                @selected="productSelected($event, index)"
+                @clearSelection="clearProductSelection(index)"
+                :css="{ width: '30%', zIndex: 13 }"
+              />
+              <!-- </div> -->
               <!-- remove item -->
               <img
                 @click="removeItem(index)"
@@ -93,38 +101,47 @@
                 style="height: 25px; width: 25px"
               />
             </div>
-          
+
             <div class="flex items">
               <InputBox
                 v-model="item.styleId"
                 label="StyleID"
+                :disabled="item._productSelected"
                 :slim="true"
                 :css="{ width: '90px' }"
               />
               <InputBox
                 v-model="item.name"
                 label="Product Name"
+                :disabled="item._productSelected"
                 :slim="true"
                 :css="{ width: '250px' }"
               />
+              
+              <!-- color selection -->
+              <InputBox
+                v-if="!item._productSelected"
+                v-model="item.colorName"
+                label="Color"
+                :slim="true"
+                :css="{ width: '130px' }"
+              />
+              <SelectBox v-else label="Color:" v-model="item.colorName" :options="item._colors" :slim="true"  />
+
               <InputBox
                 v-model="item.variantName"
                 label="Variant"
                 :slim="true"
                 :css="{ width: '100px' }"
               />
+
               <InputBox
                 v-model="item.fabricName"
                 label="Fabric"
                 :slim="true"
                 :css="{ width: '140px' }"
               />
-              <InputBox
-                v-model="item.colorName"
-                label="Color"
-                :slim="true"
-                :css="{ width: '130px' }"
-              />
+
               <!-- </div> -->
 
               <!-- <div class="flex items"> -->
@@ -132,7 +149,7 @@
                 v-model="item.collectionName"
                 label="Collection"
                 :slim="true"
-                :css="{ width: '100px' }"
+                :css="{ width: '120px' }"
               />
               <InputBox
                 v-model="item.hsnCode"
@@ -222,6 +239,10 @@ const baseItem = () => ({
   quantity: "",
   rate: "",
   total: "",
+  _productSelected: false,
+  _colors: [],
+  _variants: [],
+  _fabrics: [],
 });
 
 /* base doc */
@@ -263,13 +284,56 @@ export default {
     this.fetchAllProducts();
   },
   methods: {
+    clearProductSelection(index) {
+      this.doc.items[index]._productSelected = false;
+      this.$forceUpdate();
+    },
+    productSelected(payload, index) {
+      const { product } = payload;
+      this.doc.items[index] = {
+        ...this.doc.items[index],
+        styleId: product.styleId,
+        name: product.name,
+        collectionName: product.bounipunCollection,
+        quantity: 1,
+        _productSelected: true,
+      };
+
+      
+
+      /* fetch all details for the product */
+      this.fetchProductDetails(payload._id, index);
+    },
+    async fetchProductDetails(_id, itemIndex) {
+      const productFetch = this.$axios.post("/fetchProduct", {
+        _id,
+        lockCheck: true,
+      });
+      const { response, error } = await this.$task(productFetch);
+
+      if (error) {
+        alert("Couldnt fetch product.");
+        return;
+      }
+
+      const {colors, bounipun_collection} = response.data;
+      
+      /* set colors list */
+      this.doc.items[itemIndex]._colors = colors.map(color => ({name: color.name, value: color.name}));
+
+      /* set bounipun collection */
+      this.doc.items[itemIndex].collectionName = bounipun_collection ? bounipun_collection.name : "N/A"
+
+      this.$forceUpdate();
+    },
     async fetchAllProducts() {
       const result = await this.$fetchCollection("products");
-      this.allProducts = result.docs.map(({ _id, styleId, name }) => {
+      this.allProducts = result.docs.map((product) => {
+        const { _id, styleId, name } = product;
         return {
           _id,
           name: `${styleId} - (${name})`,
-         // rest
+          product,
         };
       });
     },
@@ -349,7 +413,7 @@ export default {
         _id,
         name,
         payeeName,
-        validityRange: validityRange ?? {start: new Date(), end: new Date()},
+        validityRange: validityRange ?? { start: new Date(), end: new Date() },
         items,
         description,
         status,
@@ -372,7 +436,6 @@ export default {
 .contents {
   position: relative;
   overflow: scroll;
-  // padding-bottom: 25px;
 }
 
 .section {
@@ -400,7 +463,8 @@ export default {
   .header {
     overflow: hidden;
     span {
-      padding: 3%;
+      font-size: 13px;
+      padding: 10px;
       background-color: #333;
       color: white;
     }

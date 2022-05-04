@@ -875,7 +875,7 @@ export default {
         return;
       }
 
-      /* if color data */
+      /* if color data [ESCAPE] */
       if (result.doc.colorData) {
         let colorCategories = result.doc.colorData;
         // const colorCategories = Object.keys(colorData);

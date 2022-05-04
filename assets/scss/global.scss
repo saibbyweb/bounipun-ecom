@@ -156,6 +156,7 @@ button {
   }
 
   &.action {
+    position: relative;
     background-color: $primary_dark;
     color: white;
     font-family: $font_1_semibold;
