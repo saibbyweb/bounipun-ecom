@@ -62,6 +62,8 @@
       </div>
     </div>
 
+      
+
     <!-- items -->
     <div class="flex col" style="gap: 10px">
       <label class="label"> Items: </label>
@@ -78,12 +80,20 @@
             :key="item.key"
             style="padding-bottom: 10px"
           >
+          <!-- item header -->
             <div class="header">
+              <!-- index indicator -->
               <span> Item #{{ index + 1 }} </span>
               <!-- product selector -->
-              <img @click="removeItem(index)" src="/icons/light/trash.png" style="height:25px; width:25px;" />
+              <Dropdown :source="allProducts" />
+              <!-- remove item -->
+              <img
+                @click="removeItem(index)"
+                src="/icons/light/trash.png"
+                style="height: 25px; width: 25px"
+              />
             </div>
-
+          
             <div class="flex items">
               <InputBox
                 v-model="item.styleId"
@@ -224,7 +234,7 @@ const baseDoc = () => ({
     end: new Date(),
   },
   items: [baseItem()],
-  currency: 'INR',
+  currency: "INR",
   description: "",
   status: false,
 });
@@ -244,13 +254,25 @@ export default {
         status: false,
         msg: "",
       },
-      currency: 'INR'
+      allProducts: [],
+      currency: "INR",
     };
   },
   mounted() {
     this.fetchActiveCurrencies();
+    this.fetchAllProducts();
   },
   methods: {
+    async fetchAllProducts() {
+      const result = await this.$fetchCollection("products");
+      this.allProducts = result.docs.map(({ _id, styleId, name }) => {
+        return {
+          _id,
+          name: `${styleId} - (${name})`,
+         // rest
+        };
+      });
+    },
     async fetchActiveCurrencies() {
       const request = await this.$post("/findDocuments", {
         model: "currency",
@@ -327,7 +349,7 @@ export default {
         _id,
         name,
         payeeName,
-        validityRange,
+        validityRange: validityRange ?? {start: new Date(), end: new Date()},
         items,
         description,
         status,
@@ -374,7 +396,7 @@ export default {
 
 .link-item {
   border: 2px dotted #ababab;
-      margin: 10px 0;
+  margin: 10px 0;
   .header {
     overflow: hidden;
     span {
