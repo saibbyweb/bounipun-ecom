@@ -117,7 +117,7 @@
                 :slim="true"
                 :css="{ width: '250px' }"
               />
-              
+
               <!-- color selection -->
               <InputBox
                 v-if="!item._productSelected"
@@ -126,20 +126,45 @@
                 :slim="true"
                 :css="{ width: '130px' }"
               />
-              <SelectBox v-else label="Color:" v-model="item.colorName" :options="item._colors" :slim="true"  />
+              <SelectBox
+                v-else
+                label="Color:"
+                v-model="item.colorName"
+                :options="item._colors"
+                :slim="true"
+              />
 
+              <!-- variant name -->
               <InputBox
+                v-if="!item._productSelected"
                 v-model="item.variantName"
                 label="Variant"
                 :slim="true"
                 :css="{ width: '100px' }"
               />
-
+              <SelectBox
+                v-else
+                label="Variant:"
+                v-model="item.variantName"
+                :options="item._variants"
+                @input="variantSelected($event, index)"
+                :slim="true"
+              />
+              
+              <!-- fabric name -->
               <InputBox
+                v-if="!item._productSelected"
                 v-model="item.fabricName"
                 label="Fabric"
                 :slim="true"
                 :css="{ width: '140px' }"
+              />
+              <SelectBox
+                v-else
+                label="Fabric:"
+                v-model="item.fabricName"
+                :options="item._fabrics"
+                :slim="true"
               />
 
               <!-- </div> -->
@@ -147,6 +172,7 @@
               <!-- <div class="flex items"> -->
               <InputBox
                 v-model="item.collectionName"
+                :disabled="item._productSelected"
                 label="Collection"
                 :slim="true"
                 :css="{ width: '120px' }"
@@ -242,6 +268,7 @@ const baseItem = () => ({
   _productSelected: false,
   _colors: [],
   _variants: [],
+  _variantWithFabrics: [],
   _fabrics: [],
 });
 
@@ -299,8 +326,6 @@ export default {
         _productSelected: true,
       };
 
-      
-
       /* fetch all details for the product */
       this.fetchProductDetails(payload._id, index);
     },
@@ -316,16 +341,37 @@ export default {
         return;
       }
 
-      const {colors, bounipun_collection} = response.data;
-      
+      const { colors, variants, bounipun_collection } = response.data;
+
       /* set colors list */
-      this.doc.items[itemIndex]._colors = colors.map(color => ({name: color.name, value: color.name}));
+      this.doc.items[itemIndex]._colors = colors.map((color) => ({
+        name: color.name,
+        value: color.name,
+      }));
+
+      /* set variants */
+      this.doc.items[itemIndex]._variantWithFabrics = variants;
+      this.doc.items[itemIndex]._variants = variants.map((variant) => ({
+        name: variant._id.name,
+        value: variant._id.name,
+      }));
 
       /* set bounipun collection */
-      this.doc.items[itemIndex].collectionName = bounipun_collection ? bounipun_collection.name : "N/A"
+      this.doc.items[itemIndex].collectionName = bounipun_collection
+        ? bounipun_collection.name
+        : "N/A";
 
       this.$forceUpdate();
     },
+    variantSelected(variantName, itemIndex) {
+      // alert(variantName);
+      // return;
+      const item = this.doc.items[itemIndex]
+      const selectedVariantIndex = item._variants.findIndex(variant => variant.name === variantName)
+      const selectedVariant = item._variantWithFabrics[selectedVariantIndex]
+      item._fabrics = selectedVariant.fabrics.map(fab => ({ name: `${fab._id.name} - ${fab._id.info1}`, value: fab._id.name}))
+      this.$forceUpdate();
+  },
     async fetchAllProducts() {
       const result = await this.$fetchCollection("products");
       this.allProducts = result.docs.map((product) => {

@@ -862,8 +862,8 @@ export default {
         return;
       }
 
-      let result = {};
-      result.doc = { ...response.data };
+      let result = {}
+      result.doc = { ...response.data }
 
       /* filter out inactive colors */
       result.doc.colors = result.doc.colors.filter(
