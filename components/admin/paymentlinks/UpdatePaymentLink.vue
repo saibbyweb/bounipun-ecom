@@ -45,6 +45,7 @@
           :options="currencies"
           v-model="doc.currency"
           label="Select Currency"
+          @input="currencyChanged"
         />
       </div>
 
@@ -136,7 +137,7 @@
 
               <!-- variant name -->
               <InputBox
-                v-if="!item._productSelected"
+                v-if="!item._productSelected || item._readyToShip"
                 v-model="item.variantName"
                 label="Variant"
                 :slim="true"
@@ -150,20 +151,21 @@
                 @input="variantSelected($event, index)"
                 :slim="true"
               />
-              
+
               <!-- fabric name -->
               <InputBox
-                v-if="!item._productSelected"
+                v-if="!item._productSelected || item._readyToShip"
                 v-model="item.fabricName"
                 label="Fabric"
                 :slim="true"
-                :css="{ width: '140px' }"
+                :css="{ width: '180px' }"
               />
               <SelectBox
                 v-else
                 label="Fabric:"
                 v-model="item.fabricName"
                 :options="item._fabrics"
+                @input="fabricSelected($event, index)"
                 :slim="true"
               />
 
@@ -188,12 +190,14 @@
                 label="Quantity"
                 type="number"
                 :slim="true"
+                @input="$forceUpdate()"
                 :css="{ width: '80px' }"
               />
               <InputBox
                 v-model="item.rate"
                 :label="`Rate - (${doc.currency})`"
                 :slim="true"
+                @input="$forceUpdate()"
                 :css="{ width: '100px' }"
               />
               <InputBox
@@ -270,6 +274,13 @@ const baseItem = () => ({
   _variants: [],
   _variantWithFabrics: [],
   _fabrics: [],
+  _fabricWithDetails: [],
+  _selectedFabricIndex: 0,
+  _thirdPartyProduct: false,
+  _multiPrice: false,
+  _readyToShip: false,
+  _directPrice: 0,
+  _directPricing: {},
 });
 
 /* base doc */
@@ -341,13 +352,50 @@ export default {
         return;
       }
 
-      const { colors, variants, bounipun_collection } = response.data;
+      const {
+        colors,
+        variants,
+        bounipun_collection,
+        type,
+        availabilityType,
+        directPrice,
+        directPricing,
+        rtsDirectVariant,
+        rtsDirectFabric
+      } = response.data;
+
+      /* set flags and values */
+      const item = this.doc.items[itemIndex];
+      item._thirdPartyProduct = type === "third-party";
+      item._multiPriced =
+        type === "third-party" ? false : availabilityType === "made-to-order";
+      item._readyToShip = availabilityType === "ready-to-ship";
+      item._directPrice = directPrice;
+      item._directPricing = directPricing;
+
+      /* set bounipun collection */
+      item.collectionName = bounipun_collection
+        ? bounipun_collection.name
+        : "N/A";
 
       /* set colors list */
-      this.doc.items[itemIndex]._colors = colors.map((color) => ({
+      item._colors = colors.map((color) => ({
         name: color.name,
         value: color.name,
       }));
+      
+      /* if item is ready to ship */
+      if (item._readyToShip) {
+        item.rate =
+          this.doc.currency === "INR"
+            ? item._directPrice
+            : item._directPricing[this.doc.currency];
+        item.variantName = rtsDirectVariant.name;
+        item.fabricName = rtsDirectFabric.name;
+        item.hsnCode = rtsDirectVariant.hsnCode;
+        this.$forceUpdate();
+        return;
+      }
 
       /* set variants */
       this.doc.items[itemIndex]._variantWithFabrics = variants;
@@ -356,22 +404,62 @@ export default {
         value: variant._id.name,
       }));
 
-      /* set bounipun collection */
-      this.doc.items[itemIndex].collectionName = bounipun_collection
-        ? bounipun_collection.name
-        : "N/A";
-
       this.$forceUpdate();
     },
     variantSelected(variantName, itemIndex) {
-      // alert(variantName);
-      // return;
-      const item = this.doc.items[itemIndex]
-      const selectedVariantIndex = item._variants.findIndex(variant => variant.name === variantName)
-      const selectedVariant = item._variantWithFabrics[selectedVariantIndex]
-      item._fabrics = selectedVariant.fabrics.map(fab => ({ name: `${fab._id.name} - ${fab._id.info1}`, value: fab._id.name}))
+      const item = this.doc.items[itemIndex];
+      const selectedVariantIndex = item._variants.findIndex(
+        (variant) => variant.name === variantName
+      );
+      const selectedVariant = item._variantWithFabrics[selectedVariantIndex];
+      item._fabrics = selectedVariant.fabrics.map((fab) => ({
+        name: `${fab._id.name} - ${fab._id.info1}`,
+        value: `${fab._id.name} - ${fab._id.info1}`,
+      }));
+
+      /* set hsn code */
+      item.hsnCode = selectedVariant._id.hsnCode;
+
+      /* all fabrics for the variant */
+      item._fabricWithDetails = selectedVariant.fabrics;
+      item.rate =
+        this.doc.currency === "INR"
+          ? selectedVariant.fabrics[0].price
+          : selectedVariant.fabrics[0].pricing[this.doc.currency];
       this.$forceUpdate();
-  },
+    },
+    fabricSelected(fabricName, itemIndex) {
+      const item = this.doc.items[itemIndex];
+      const selectedFabricIndex = item._fabrics.findIndex(
+        (fabric) => fabric.name === fabricName
+      );
+      item._selectedFabricIndex = selectedFabricIndex;
+      const selectedFabric = item._fabricWithDetails[selectedFabricIndex];
+      item.rate =
+        this.doc.currency === "INR"
+          ? selectedFabric.price
+          : selectedFabric.pricing[this.doc.currency];
+      this.$forceUpdate();
+    },
+    currencyChanged(newCurrency) {
+      this.doc.items.forEach((item) => {
+        if (item._readyToShip) {
+          item.rate =
+            this.doc.currency === "INR"
+              ? item._directPrice
+              : item._directPricing[this.doc.currency];
+          return;
+        }
+
+        const selectedFabric =
+          item._fabricWithDetails[item._selectedFabricIndex];
+        item.rate =
+          this.doc.currency === "INR"
+            ? selectedFabric.price
+            : selectedFabric.pricing[this.doc.currency];
+      });
+      this.$forceUpdate();
+    },
     async fetchAllProducts() {
       const result = await this.$fetchCollection("products");
       this.allProducts = result.docs.map((product) => {
@@ -521,6 +609,7 @@ export default {
       opacity: 0.8;
       height: 40px;
       width: 40px;
+      z-index: 4;
       cursor: pointer;
 
       &:hover {
