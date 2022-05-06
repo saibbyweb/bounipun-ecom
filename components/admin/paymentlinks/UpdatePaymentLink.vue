@@ -447,12 +447,18 @@ export default {
           item.rate =
             this.doc.currency === "INR"
               ? item._directPrice
-              : item._directPricing[this.doc.currency];
+              : item._directPricing?.[this.doc.currency];
           return;
         }
 
         const selectedFabric =
           item._fabricWithDetails[item._selectedFabricIndex];
+
+          if(selectedFabric === undefined) {
+            return;
+          }
+
+
         item.rate =
           this.doc.currency === "INR"
             ? selectedFabric.price
