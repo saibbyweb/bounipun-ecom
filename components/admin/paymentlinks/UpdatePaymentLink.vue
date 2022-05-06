@@ -38,7 +38,7 @@
         <InputBox label="Link Name" v-model="doc.name" :internal="true" />
 
         <!-- payee name -->
-        <InputBox label="Payee Name" v-model="doc.name" />
+        <InputBox label="Payee Name" v-model="doc.payeeName" />
 
         <!-- currency type -->
         <SelectBox
@@ -217,6 +217,9 @@
       </div>
     </div>
 
+    <!-- total amount -->
+    <h1> {{ totalAmount }} </h1>
+
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
 
@@ -255,6 +258,21 @@
 
 <script>
 import { v4 as uuidv4 } from "uuid";
+/* additional item props */
+const additionalItemProps = {
+  _productSelected: false,
+  _colors: [],
+  _variants: [],
+  _variantWithFabrics: [],
+  _fabrics: [],
+  _fabricWithDetails: [],
+  _selectedFabricIndex: 0,
+  _thirdPartyProduct: false,
+  _multiPrice: false,
+  _readyToShip: false,
+  _directPrice: 0,
+  _directPricing: {},
+};
 
 /* base item */
 const baseItem = () => ({
@@ -269,18 +287,7 @@ const baseItem = () => ({
   quantity: "",
   rate: "",
   total: "",
-  _productSelected: false,
-  _colors: [],
-  _variants: [],
-  _variantWithFabrics: [],
-  _fabrics: [],
-  _fabricWithDetails: [],
-  _selectedFabricIndex: 0,
-  _thirdPartyProduct: false,
-  _multiPrice: false,
-  _readyToShip: false,
-  _directPrice: 0,
-  _directPricing: {},
+  ...additionalItemProps,
 });
 
 /* base doc */
@@ -288,12 +295,13 @@ const baseDoc = () => ({
   _id: "",
   name: "",
   payeeName: "",
-  validityRange: {
+  currency: "INR",
+  items: [baseItem()],
+    validityRange: {
     start: new Date(),
     end: new Date(),
   },
-  items: [baseItem()],
-  currency: "INR",
+  amount: 0,
   description: "",
   status: false,
 });
@@ -321,9 +329,29 @@ export default {
     this.fetchActiveCurrencies();
     this.fetchAllProducts();
   },
+  watch: {
+    doc: {
+      handler() {
+        this.calculateTotalAmount();
+      },
+      deep: true
+    }
+  },
   methods: {
+    calculateTotalAmount() {
+      let sum = 0;
+      this.doc.items.forEach(item => {
+        sum = sum + (item.quantity * item.rate)
+      });
+      this.totalAmount = sum;
+      this.$forceUpdate();
+    },
     clearProductSelection(index) {
-      this.doc.items[index]._productSelected = false;
+      // this.doc.items[index]._productSelected = false;
+      Object.keys(additionalItemProps).forEach(key => {
+        this.doc.items[index][key] = additionalItemProps[key];
+      });
+
       this.$forceUpdate();
     },
     productSelected(payload, index) {
@@ -361,7 +389,7 @@ export default {
         directPrice,
         directPricing,
         rtsDirectVariant,
-        rtsDirectFabric
+        rtsDirectFabric,
       } = response.data;
 
       /* set flags and values */
@@ -383,7 +411,7 @@ export default {
         name: color.name,
         value: color.name,
       }));
-      
+
       /* if item is ready to ship */
       if (item._readyToShip) {
         item.rate =
@@ -403,7 +431,8 @@ export default {
         name: variant._id.name,
         value: variant._id.name,
       }));
-
+      
+      this.calculateTotalAmount();
       this.$forceUpdate();
     },
     variantSelected(variantName, itemIndex) {
@@ -426,6 +455,8 @@ export default {
         this.doc.currency === "INR"
           ? selectedVariant.fabrics[0].price
           : selectedVariant.fabrics[0].pricing[this.doc.currency];
+      this.calculateTotalAmount();
+
       this.$forceUpdate();
     },
     fabricSelected(fabricName, itemIndex) {
@@ -439,6 +470,8 @@ export default {
         this.doc.currency === "INR"
           ? selectedFabric.price
           : selectedFabric.pricing[this.doc.currency];
+      this.calculateTotalAmount();
+
       this.$forceUpdate();
     },
     currencyChanged(newCurrency) {
@@ -454,16 +487,17 @@ export default {
         const selectedFabric =
           item._fabricWithDetails[item._selectedFabricIndex];
 
-          if(selectedFabric === undefined) {
-            return;
-          }
-
+        if (selectedFabric === undefined) {
+          return;
+        }
 
         item.rate =
           this.doc.currency === "INR"
             ? selectedFabric.price
             : selectedFabric.pricing[this.doc.currency];
       });
+      this.calculateTotalAmount();
+
       this.$forceUpdate();
     },
     async fetchAllProducts() {
@@ -500,6 +534,9 @@ export default {
         // { name: "All Currencies", value: "all" },
         { name: "Indian Rupee", value: "INR" }
       );
+      this.calculateTotalAmount();
+
+      this.$forceUpdate();
     },
     addNewItem() {
       this.doc.items.push(baseItem());
@@ -544,7 +581,9 @@ export default {
         _id,
         name,
         payeeName,
+        currency,
         validityRange,
+        amount,
         description,
         items,
         status,
@@ -553,7 +592,9 @@ export default {
         _id,
         name,
         payeeName,
+        currency,
         validityRange: validityRange ?? { start: new Date(), end: new Date() },
+        amount,
         items,
         description,
         status,

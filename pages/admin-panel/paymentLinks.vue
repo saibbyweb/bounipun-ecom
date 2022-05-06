@@ -30,13 +30,22 @@
     </div>
     <!-- update payment links -->
     <div :class="{ updating: showForm }" class="update">
-      <UpdatePaymentLink
+      <!-- <UpdatePaymentLink
         v-show="showForm"
         ref="updateComponent"
         @updated="updateList"
         :model="model"
         @close="showForm = false"
-      />
+      /> -->
+
+      <UPL 
+       v-show="showForm"
+        ref="updateComponent"
+        @updated="updateList"
+        :model="model"
+        @close="showForm = false"/>
+
+        
       <AddNewItem
         v-if="!showForm"
         label="Payment Link"
