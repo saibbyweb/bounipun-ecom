@@ -112,6 +112,7 @@
         :css="{ width: '100px' }"
       />
       <InputBox
+        type="number"
         :value="itemTotal"
         :label="`Total - (${currency})`"
         :disabled="true"
@@ -174,6 +175,7 @@ export default {
   watch: {
     itemTotal(newValue) {
         this.item.total = newValue;
+        this.$emit('totalChanged')
     },
     index: {
         handler(newValue) {

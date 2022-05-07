@@ -6,6 +6,12 @@ const schema = new mongoose.Schema(
         name: String,
         /* payee name */
         payeeName: String,
+        /* country code */
+        countryCode: String,
+        /* phone number */
+        phoneNumber: String,
+        /* email */
+        email: String,
         /* currency */
         currency: Number,
         /* items */

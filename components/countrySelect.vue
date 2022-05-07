@@ -1,6 +1,11 @@
 <template>
   <!-- country selection -->
-  <div v-click-outside="hideCountries" v-if="countryCodes.length !== 0" class="country-select">
+  <div
+    v-click-outside="hideCountries"
+    v-if="countryCodes.length !== 0"
+    class="country-select"
+    :style="css"
+  >
     <div
       @click="showCountrySelectList"
       class="selected-country"
@@ -8,7 +13,7 @@
     >
       <img :src="selectedCountry.flag" />
       <span> {{ selectedCountry.name }} </span>
-      <span v-if="selectedCountry !== ''" style="margin-left: 4px;">
+      <span v-if="selectedCountry !== ''" style="margin-left: 4px">
         ({{ selectedCountry.dialCode }})
       </span>
     </div>
@@ -35,7 +40,7 @@
       >
         <img :src="country.flag" />
         <span> {{ country.name }} </span>
-        <span style="margin-left: 4px;"> ({{ country.dialCode }}) </span>
+        <span style="margin-left: 4px"> ({{ country.dialCode }}) </span>
       </div>
 
       <!-- no results found -->
@@ -48,54 +53,54 @@
 
 <script>
 import countryData from "@/helpers/countryCodes.js";
-import ClickOutside from 'vue-click-outside'
+import ClickOutside from "vue-click-outside";
 
 export default {
   directives: {
-    ClickOutside
+    ClickOutside,
   },
   props: {
     lock: {
       type: Boolean,
-      default: true
+      default: true,
     },
     adminMode: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
+    css: Object
   },
   data() {
     return {
       countryCodes: countryData,
       selectedCountryIndex: this.$store.state.customer.countryIndex,
       countrySearchTerm: "",
-      showCountrySelect: false
-    }
+      showCountrySelect: false,
+    };
   },
   mounted() {
-
-    if(this.adminMode) {
-      this.$emit("input", '+91');
-      this.$emit('setCountryIsoCode', 'IN');
+    if (this.adminMode) {
+      this.$emit("input", "+91");
+      this.$emit("setCountryIsoCode", "IN");
       this.selectedCountryIndex = 90;
       return;
     }
-      
+
     this.$emit("input", this.selectedCountryCode);
-    this.$emit('setCountryIsoCode', this.selectedCountryIsoCode);
+    this.$emit("setCountryIsoCode", this.selectedCountryIsoCode);
   },
   watch: {
     selectedCountryCode(newVal) {
       this.$emit("input", newVal);
-      this.$emit('setCountryIsoCode', this.selectedCountryIsoCode);
+      this.$emit("setCountryIsoCode", this.selectedCountryIsoCode);
     },
     customerCountryIndex(newVal) {
       this.selectedCountryIndex = newVal;
-    }
+    },
   },
   computed: {
-      customerCountryIndex() {
-      return this.$store.state.customer.countryIndex
+    customerCountryIndex() {
+      return this.$store.state.customer.countryIndex;
     },
     selectedCountry() {
       if (this.matchedCountries.length === 0) return "";
@@ -106,7 +111,7 @@ export default {
       return this.matchedCountries[this.selectedCountryIndex].dialCode;
     },
     selectedCountryIsoCode() {
-      if(this.matchedCountries.length === 0) return "";
+      if (this.matchedCountries.length === 0) return "";
       return this.matchedCountries[this.selectedCountryIndex].isoCode;
     },
     matchedCountries() {
@@ -114,27 +119,26 @@ export default {
 
       this.selectedCountryIndex = 0;
 
-      return this.countryCodes.filter(country => {
+      return this.countryCodes.filter((country) => {
         return country.name
           .toUpperCase()
           .startsWith(this.countrySearchTerm.toUpperCase());
       });
-    }
+    },
   },
   methods: {
     showCountrySelectList() {
-      if(!this.lock)
-        this.showCountrySelect = true
+      if (!this.lock) this.showCountrySelect = true;
     },
     hideCountries() {
-      this.showCountrySelect = false
+      this.showCountrySelect = false;
     },
     selectCountry(index) {
       this.selectedCountryIndex = index;
       this.showCountrySelect = false;
       // this.formData.countryCode.value = this.matchedCountries[this.selectedCountryIndex].dialCode;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -159,15 +163,21 @@ export default {
     align-items: center;
     padding: 2%;
     width: 100%;
+    cursor: pointer;
+    &:hover {
+      background-color: #efefef;
+    }
 
     &.adminMode {
-        background-color: white;
-    border-bottom: 2px solid white;
+      background-color: white;
+      border-bottom: 2px solid white;
     }
 
     span {
       font-size: 14px;
       font-family: $font_2;
+      cursor: pointer;
+
       // color:white;
     }
 
@@ -180,9 +190,9 @@ export default {
       margin-right: 10px;
     }
 
-    @media(max-width: 768px) {
+    @media (max-width: 768px) {
       img {
-        width:10%;
+        width: 10%;
       }
     }
   }
@@ -217,6 +227,7 @@ export default {
       justify-content: flex-start;
       align-items: center;
       padding: 2%;
+      cursor: pointer;
       // background-color: #e7e7e7;
 
       img {

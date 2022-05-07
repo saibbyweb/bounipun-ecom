@@ -34,11 +34,39 @@
           :internal="true"
         />
 
-        <!-- link name -->
-        <InputBox label="Link Name" v-model="doc.name" :internal="true" />
+        <label class="label" style="text-align: left; width: 90%">
+          Phone Number (with country code)
+        </label>
+        <span class="desc">
+          Payment cannot be made without OTP verifying the number
+        </span>
+
+        <div class="section flex center col">
+          <!-- country selection -->
+          <label class="label" style="text-align: left; width: 90%">
+            Country:
+          </label>
+
+          <CountrySelect
+            v-model="doc.countryCode"
+            :css="{ width: '90%' }"
+            :lock="false"
+          />
+
+          <DeliveryInput
+            v-model="doc.phoneNumber"
+            label="Phone Number"
+            :isMobileNumber="true"
+            :countryCode="doc.countryCode"
+            :error="{ status: false }"
+          />
+        </div>
 
         <!-- payee name -->
         <InputBox label="Payee Name" v-model="doc.payeeName" />
+
+        <!-- client email -->
+        <InputBox type="email" label="Email" v-model="doc.email" />
 
         <!-- currency type -->
         <SelectBox
@@ -50,6 +78,9 @@
 
       <!-- validity range -->
       <div class="validity-range flex col">
+        <!-- link name -->
+        <InputBox label="Link Name" v-model="doc.name" :internal="true" />
+        <br />
         <label class="label"> Validity Range: </label>
         <client-only>
           <v-datepicker
@@ -81,6 +112,7 @@
             :allProducts="allProducts"
             @update="updateItems"
             @remove="removeItem"
+            @totalChanged="calculateAmount"
           />
         </transition-group>
       </Draggable>
@@ -91,6 +123,12 @@
     </div>
 
     <!-- total amount -->
+    <div class="total-amount">
+        <span> Total Payable Amount: </span>
+      <h1>{{ doc.amount }} {{ doc.currency}} </h1>
+    </div>
+
+    <!-- TODO: generate SMS (box and send option) -->
 
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
@@ -141,6 +179,9 @@ const baseDoc = () => ({
   _id: "",
   name: "",
   payeeName: "",
+  countryCode: "",
+  phoneNumber: "",
+  email: "",
   currency: "INR",
   items: [baseItem()],
   validityRange: {
@@ -168,6 +209,7 @@ export default {
         status: false,
         msg: "",
       },
+      countryDialCode: "+91",
       allProducts: [],
       currency: "INR",
     };
@@ -177,8 +219,12 @@ export default {
     this.fetchAllProducts();
   },
   methods: {
+    calculateAmount() {
+      this.doc.amount = this.items.reduce((sum, curr) => sum + curr.total, 0);
+    },
     updateItems(payload) {
-        this.items[payload.index] = payload.value;
+      //   this.items[payload.index] = payload.value;
+      this.$set(this.items, payload.index, payload.value);
     },
     async fetchAllProducts() {
       const result = await this.$fetchCollection("products");
@@ -300,7 +346,7 @@ export default {
   border: 1px dashed #efefef;
   padding: 5px 5px 30px 5px;
   border-radius: 5px;
-  overflow: hidden;
+  //   overflow: hidden;
 }
 
 .label {
@@ -311,5 +357,27 @@ export default {
   padding: 2%;
   margin-left: 5px;
   font-weight: 900;
+}
+
+.desc {
+  font-size: 11px;
+  margin-left: 3%;
+  color: gray;
+}
+.total-amount {
+  position: fixed;
+  bottom: 30%;
+  left: 10%;
+  background: #333;
+
+  padding: 10px 20px;
+
+  span {
+      color: white;
+  }
+
+  h1 {
+    color: white;
+  }
 }
 </style>
