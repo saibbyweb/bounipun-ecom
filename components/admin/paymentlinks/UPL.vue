@@ -73,7 +73,13 @@
         class="items"
       >
         <transition-group type="transition" name="flip-list">
-         <PaymentLinkItem v-for="(item, index) in doc.items" :key="index" :allProducts="allProducts" />
+          <PaymentLinkItem
+            v-for="(item, index) in doc.items"
+            :currency="doc.currency"
+            :key="index"
+            :index="index"
+            :allProducts="allProducts"
+          />
         </transition-group>
       </Draggable>
       <!-- add new item -->
@@ -83,7 +89,6 @@
     </div>
 
     <!-- total amount -->
-
 
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
@@ -120,7 +125,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import { v4 as uuidv4 } from "uuid";
@@ -163,7 +167,7 @@ const baseDoc = () => ({
   payeeName: "",
   currency: "INR",
   items: [baseItem()],
-    validityRange: {
+  validityRange: {
     start: new Date(),
     end: new Date(),
   },
@@ -196,9 +200,7 @@ export default {
     this.fetchAllProducts();
   },
   methods: {
-    currencyChanged(newCurrency) {
-     
-    },
+    currencyChanged(newCurrency) {},
     async fetchAllProducts() {
       const result = await this.$fetchCollection("products");
       this.allProducts = result.docs.map((product) => {
@@ -335,40 +337,5 @@ export default {
   padding: 2%;
   margin-left: 5px;
   font-weight: 900;
-}
-
-.link-item {
-  border: 2px dotted #ababab;
-  margin: 10px 0;
-  .header {
-    overflow: hidden;
-    span {
-      font-size: 13px;
-      padding: 10px;
-      background-color: #333;
-      color: white;
-    }
-    img {
-      position: absolute;
-      right: 0;
-      background-color: rgb(192, 28, 28);
-      opacity: 0.8;
-      height: 40px;
-      width: 40px;
-      z-index: 4;
-      cursor: pointer;
-
-      &:hover {
-        opacity: 1;
-      }
-    }
-  }
-
-  .items {
-    flex-wrap: wrap;
-    column-gap: 10px;
-    justify-content: flex-start;
-    align-items: center;
-  }
 }
 </style>
