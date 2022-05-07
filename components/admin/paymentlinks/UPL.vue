@@ -45,7 +45,6 @@
           :options="currencies"
           v-model="doc.currency"
           label="Select Currency"
-          @input="currencyChanged"
         />
       </div>
 
@@ -75,10 +74,13 @@
         <transition-group type="transition" name="flip-list">
           <PaymentLinkItem
             v-for="(item, index) in doc.items"
+            :initialValue="item"
             :currency="doc.currency"
-            :key="index"
+            :key="item.key"
             :index="index"
             :allProducts="allProducts"
+            @update="updateItems"
+            @remove="removeItem"
           />
         </transition-group>
       </Draggable>
@@ -128,36 +130,10 @@
 
 <script>
 import { v4 as uuidv4 } from "uuid";
-/* additional item props */
-const additionalItemProps = {
-  _productSelected: false,
-  _colors: [],
-  _variants: [],
-  _variantWithFabrics: [],
-  _fabrics: [],
-  _fabricWithDetails: [],
-  _selectedFabricIndex: 0,
-  _thirdPartyProduct: false,
-  _multiPrice: false,
-  _readyToShip: false,
-  _directPrice: 0,
-  _directPricing: {},
-};
 
 /* base item */
 const baseItem = () => ({
   key: uuidv4(),
-  styleId: "",
-  name: "",
-  variantName: "",
-  collectionName: "",
-  colorName: "",
-  hsnCode: "",
-  fabricName: "",
-  quantity: "",
-  rate: "",
-  total: "",
-  ...additionalItemProps,
 });
 
 /* base doc */
@@ -185,6 +161,7 @@ export default {
       editMode: false,
       currencies: [],
       doc: baseDoc(),
+      items: [],
       loading: false,
       updated: false,
       errorToast: {
@@ -200,7 +177,9 @@ export default {
     this.fetchAllProducts();
   },
   methods: {
-    currencyChanged(newCurrency) {},
+    updateItems(payload) {
+        this.items[payload.index] = payload.value;
+    },
     async fetchAllProducts() {
       const result = await this.$fetchCollection("products");
       this.allProducts = result.docs.map((product) => {
@@ -231,19 +210,14 @@ export default {
         name: c.name,
         value: c.code,
       }));
-      this.currencies.unshift(
-        // { name: "All Currencies", value: "all" },
-        { name: "Indian Rupee", value: "INR" }
-      );
-      this.calculateTotalAmount();
-
-      this.$forceUpdate();
+      this.currencies.unshift({ name: "Indian Rupee", value: "INR" });
     },
     addNewItem() {
       this.doc.items.push(baseItem());
     },
     removeItem(index) {
       this.doc.items.splice(index, 1);
+      this.items.splice(index, 1);
     },
     async updateDocument() {
       this.loading = true;

@@ -13,7 +13,7 @@
       />
       <!-- remove item -->
       <img
-        @click="removeItem(index)"
+        @click="$emit('remove', index)"
         src="/icons/light/trash.png"
         style="height: 25px; width: 25px"
       />
@@ -99,20 +99,20 @@
         :css="{ width: '100px' }"
       />
       <InputBox
-        v-model="item.quantity"
+        v-model.number="item.quantity"
         label="Quantity"
         type="number"
         :slim="true"
         :css="{ width: '80px' }"
       />
       <InputBox
-        v-model="item.rate"
+        v-model.number="item.rate"
         :label="`Rate - (${currency})`"
         :slim="true"
         :css="{ width: '100px' }"
       />
       <InputBox
-        :value="item.quantity * item.rate"
+        :value="itemTotal"
         :label="`Total - (${currency})`"
         :disabled="true"
         :slim="true"
@@ -132,13 +132,14 @@ const baseItem = () => ({
   colorName: "",
   hsnCode: "",
   fabricName: "",
-  quantity: "",
-  rate: "",
-  total: "",
+  quantity: 0,
+  rate: 0,
+  total: 0,
 });
 
 export default {
   props: {
+    initialValue: Object,
     allProducts: Array,
     index: Number,
     currency: String,
@@ -147,13 +148,68 @@ export default {
     currencyIsINR() {
       return this.currency === "INR";
     },
+    itemTotal() {
+        return this.item.rate * this.item.quantity;
+    }
   },
   data() {
     return {
       item: baseItem(),
       productSelected: false,
-      product: {},
+      product: {
+        readyToShip: false,
+        thirdPartyProduct: false,
+        multiPriced: false,
+        colors: [],
+        variants: [],
+        variantData: [],
+        farbicData: [],
+        fabrics: [],
+        directPrice: 0,
+        directPricing: {},
+      },
+      selectedFabricName: "",
     };
+  },
+  watch: {
+    itemTotal(newValue) {
+        this.item.total = newValue;
+    },
+    index: {
+        handler(newValue) {
+            this.$emit('update', {index: newValue, value: this.item})
+        },
+        immediate: true
+    },
+    item: {
+        handler(newValue) {
+            this.$emit('update', {index: this.index, value: newValue})
+        },
+        deep: true,
+        immediate: true
+    },
+    initialValue: {
+      handler() {
+        Object.keys(initialValue).forEach((key) => {
+          this.item[key] = initialValue[key];
+        });
+      },
+      deep: true,
+    },
+    currency(newCurrency) {
+      if (this.productSelected && !this.product.readyToShip) {
+      }
+      if (this.productSelected) {
+        switch (this.product.readyToShip) {
+          case true:
+            this.item.rate = this.getPriceForRTS();
+            break;
+          case false:
+            this.fabricSelected(this.selectedFabricName);
+            break;
+        }
+      }
+    },
   },
   methods: {
     handleProductSelection(payload) {
@@ -206,7 +262,7 @@ export default {
         value: color.name,
       }));
       /* set first color as selected */
-      setTimeout(() => item.colorName = product.colors[0]?.value, 400);
+      setTimeout(() => (item.colorName = product.colors[0]?.value), 400);
 
       /* set product flags and values */
       product.thirdPartyProduct = type === "third-party";
@@ -219,7 +275,7 @@ export default {
 
       /* if item is ready to ship, set price, variant and fabric name */
       if (product.readyToShip) {
-        item.rate = currency === "INR" ? directPrice : directPricing[currency];
+        item.rate = this.getPriceForRTS();
         item.variantName = rtsDirectVariant.name;
         item.fabricName = rtsDirectFabric.name;
         item.hsnCode = rtsDirectVariant.hsnCode;
@@ -234,7 +290,7 @@ export default {
       }));
 
       /* set first variant as selected one */
-      this.variantSelected(product.variants[0].value)
+      this.variantSelected(product.variants[0].value);
     },
     variantSelected(variantName) {
       const { item, product } = this;
@@ -243,8 +299,8 @@ export default {
       );
       /* if variant not found */
       if (foundIndex === -1) return;
-    
-     /* set variant name */
+
+      /* set variant name */
       item.variantName = product.variants[foundIndex].value;
 
       const selectedVariant = product.variantData[foundIndex];
@@ -260,11 +316,10 @@ export default {
       item.hsnCode = selectedVariant._id.hsnCode;
 
       /* set first fabric as selected one */
-      setTimeout(() => this.fabricSelected(product.fabrics[0].value), 300)
-      
+      setTimeout(() => this.fabricSelected(product.fabrics[0].value), 150);
     },
     fabricSelected(fabricName) {
-      const { item, product, currency } = this;
+      const { item, product } = this;
       const foundIndex = product.fabrics.findIndex(
         (fabric) => fabric.name === fabricName
       );
@@ -273,21 +328,28 @@ export default {
 
       /* set fabric name */
       item.fabricName = product.fabrics[foundIndex].value;
-
+      this.selectedFabricName = item.fabricName;
       const selectedFabric = product.fabricData[foundIndex];
+
       /* update item rate */
       item.rate = this.getPriceFromFabric(selectedFabric);
     },
     getPriceFromFabric(fabric) {
       return this.currencyIsINR ? fabric.price : fabric.pricing[this.currency];
     },
+    getPriceForRTS() {
+      return this.currencyIsINR
+        ? this.product.directPrice
+        : this.product.directPricing[this.currency];
+    },
     clearProductSelection() {
+      /* set default values for each item */
       const defaultItem = baseItem();
       Object.keys(this.item).forEach((key) => {
         this.item[key] = defaultItem[key];
       });
+      this.productSelected = false;
     },
-    removeItem(index) {},
   },
 };
 </script>
