@@ -81,7 +81,7 @@
         label="Fabric:"
         v-model="item.fabricName"
         :options="product.fabrics"
-        @input="fabricSelected($event, index)"
+        @input="fabricSelected"
         :slim="true"
       />
 
@@ -143,6 +143,11 @@ export default {
     index: Number,
     currency: String,
   },
+  computed: {
+    currencyIsINR() {
+      return this.currency === "INR";
+    },
+  },
   data() {
     return {
       item: baseItem(),
@@ -201,7 +206,7 @@ export default {
         value: color.name,
       }));
       /* set first color as selected */
-      item.colorName = product.colors[0]?.value;
+      setTimeout(() => item.colorName = product.colors[0]?.value, 400);
 
       /* set product flags and values */
       product.thirdPartyProduct = type === "third-party";
@@ -222,41 +227,59 @@ export default {
       }
 
       /* if item is made to order, set variants */
-      product.variantsData = variants;
+      product.variantData = variants;
       product.variants = variants.map((variant) => ({
         name: variant._id.name,
         value: variant._id.name,
       }));
+
       /* set first variant as selected one */
-      item.variantName = product.variants[0]?.value;
+      this.variantSelected(product.variants[0].value)
     },
     variantSelected(variantName) {
-      const { item, product, currency } = this;
+      const { item, product } = this;
       const foundIndex = product.variants.findIndex(
         (variant) => variant.name === variantName
       );
       /* if variant not found */
       if (foundIndex === -1) return;
+    
+     /* set variant name */
+      item.variantName = product.variants[foundIndex].value;
 
-      const selectedVariant = product.variantsData[foundIndex];
+      const selectedVariant = product.variantData[foundIndex];
 
+      /* save fabric data */
+      product.fabricData = selectedVariant.fabrics;
       product.fabrics = selectedVariant.fabrics.map((fab) => ({
         name: `${fab._id.name} - ${fab._id.info1}`,
         value: `${fab._id.name} - ${fab._id.info1}`,
       }));
 
-      /* set first fabric as selected one */
-      item.fabricName = product.fabrics[0]?.value;
-
       /* set hsn code */
       item.hsnCode = selectedVariant._id.hsnCode;
-        
-      item.rate =
-        currency === "INR"
-          ? selectedVariant.fabrics[0].price
-          : selectedVariant.fabrics[0].pricing[currency];
-    
-    /* create fabric change handler */
+
+      /* set first fabric as selected one */
+      setTimeout(() => this.fabricSelected(product.fabrics[0].value), 300)
+      
+    },
+    fabricSelected(fabricName) {
+      const { item, product, currency } = this;
+      const foundIndex = product.fabrics.findIndex(
+        (fabric) => fabric.name === fabricName
+      );
+      /* if fabric not found */
+      if (foundIndex === -1) return;
+
+      /* set fabric name */
+      item.fabricName = product.fabrics[foundIndex].value;
+
+      const selectedFabric = product.fabricData[foundIndex];
+      /* update item rate */
+      item.rate = this.getPriceFromFabric(selectedFabric);
+    },
+    getPriceFromFabric(fabric) {
+      return this.currencyIsINR ? fabric.price : fabric.pricing[this.currency];
     },
     clearProductSelection() {
       const defaultItem = baseItem();
