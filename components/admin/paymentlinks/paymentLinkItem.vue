@@ -1,7 +1,8 @@
 <template>
   <div class="flex col link-item" style="padding-bottom: 10px">
     <!-- item header -->
-    <div class="header flex" style="height: 40px; background-color: #efefef">
+    <div class="header flex" style="height: 40px; background-color: #efefef;" 
+    :style="productSelected ? 'background-color: #238e5a85;' :  'background-color:#efefef;' ">
       <!-- index indicator -->
       <span> Item #{{ index + 1 }} </span>
       <!-- product selector -->
@@ -41,7 +42,7 @@
         v-model="item.colorName"
         label="Color"
         :slim="true"
-        :css="{ width: '130px' }"
+        :css="{ width: '150px' }"
       />
       <SelectBox
         v-else
@@ -74,7 +75,7 @@
         v-model="item.fabricName"
         label="Fabric"
         :slim="true"
-        :css="{ width: '180px' }"
+        :css="{ width: '210px' }"
       />
       <SelectBox
         v-else

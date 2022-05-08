@@ -243,7 +243,7 @@ export default {
 
     .cancel-update {
       position: absolute;
-      top: 10px;
+      top: 1px;
       right: 10px;
       width: 10%;
     }

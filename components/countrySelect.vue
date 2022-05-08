@@ -60,6 +60,7 @@ export default {
     ClickOutside,
   },
   props: {
+    initialValue: String,
     lock: {
       type: Boolean,
       default: true,
@@ -68,7 +69,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    css: Object
+    css: Object,
   },
   data() {
     return {
@@ -90,6 +91,18 @@ export default {
     this.$emit("setCountryIsoCode", this.selectedCountryIsoCode);
   },
   watch: {
+    initialValue: {
+      handler(newValue) {
+        const foundIndex = this.matchedCountries.findIndex(
+          (c) => c.dialCode === newValue
+        );
+
+        if (foundIndex !== -1) {
+          this.selectCountry(foundIndex);
+        }
+      },
+      immediate: true,
+    },
     selectedCountryCode(newVal) {
       this.$emit("input", newVal);
       this.$emit("setCountryIsoCode", this.selectedCountryIsoCode);

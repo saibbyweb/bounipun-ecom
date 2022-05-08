@@ -49,6 +49,7 @@
 
           <CountrySelect
             v-model="doc.countryCode"
+            :initialValue="`${countryCode}`"
             :css="{ width: '90%' }"
             :lock="false"
           />
@@ -179,7 +180,7 @@ const baseDoc = () => ({
   _id: "",
   name: "",
   payeeName: "",
-  countryCode: "",
+  countryCode: "+91",
   phoneNumber: "",
   email: "",
   currency: "INR",
@@ -327,6 +328,7 @@ export default {
         description,
         status,
       };
+      this.countryCode = this.doc.countryCode;
       this.editMode = true;
     },
     closeForm() {
