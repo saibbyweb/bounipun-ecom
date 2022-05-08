@@ -361,8 +361,10 @@ export default {
 
 <style lang="scss" scoped>
 .link-item {
-  border: 2px dotted #ababab;
-  margin: 10px 0;
+  border: 1px dashed #ababab;
+  margin: 2px 0;
+  border-radius: 7px;
+  overflow: hidden;
   .header {
     overflow: hidden;
     span {

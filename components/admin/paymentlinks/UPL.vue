@@ -97,13 +97,13 @@
     <!-- items -->
     <div class="flex col" style="gap: 10px">
       <label class="label"> Items: </label>
-      <Draggable
+      <!-- <Draggable
         v-model="doc.items"
         ghost-class="ghost"
         :sort="true"
         class="items"
       >
-        <transition-group type="transition" name="flip-list">
+        <transition-group type="transition" name="flip-list"> -->
           <PaymentLinkItem
             v-for="(item, index) in doc.items"
             :initialValue="item"
@@ -115,8 +115,8 @@
             @remove="removeItem"
             @totalChanged="calculateAmount"
           />
-        </transition-group>
-      </Draggable>
+        <!-- </transition-group>
+      </Draggable> -->
       <!-- add new item -->
       <div class="flex center">
         <button @click="addNewItem()" class="action">Add New Item</button>
@@ -125,12 +125,32 @@
 
     <!-- total amount -->
     <div class="total-amount">
-        <span> Total Payable Amount: </span>
-      <h1>{{ doc.amount }} {{ doc.currency}} </h1>
+      <span> Total Payable Amount: </span>
+      <h1>{{ doc.amount }} {{ doc.currency }}</h1>
     </div>
 
-    <!-- TODO: generate SMS (box and send option) -->
-
+    <!-- notify client (box and send option) -->
+    <div v-if="editMode" class="section notify-client flex col center">
+      <TextBox
+        v-model="notifyClientText"
+        label="Invite Text"
+        :internal="true"
+      />
+      <!-- send payment link -->
+      <div class="actions flex around">
+        <!-- sms invoice -->
+        <button class="action small" @click="notifyVia('sms')">
+          SMS Invoice to {{ doc.countryCode + doc.phoneNumber }}
+        </button>
+        <!-- email invoice  -->
+        <button class="action small" @click="notifyVia('email')">
+          Email Invoice to {{ doc.email }}
+        </button>
+      </div>
+      <!-- info -->
+      <br/>
+      <span v-if="notify.done" class="msg info" style="background-color: #efefef; padding: 2px 7px; font-size: 13px;"> {{ notify.msg }} </span>
+    </div>
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
 
@@ -213,6 +233,11 @@ export default {
       countryDialCode: "+91",
       allProducts: [],
       currency: "INR",
+      notifyClientText: "",
+      notify: {
+        done: false,
+        msg: "",
+      },
     };
   },
   mounted() {
@@ -220,6 +245,22 @@ export default {
     this.fetchAllProducts();
   },
   methods: {
+    notifyVia(mode) {
+      switch (mode) {
+        case "sms":
+          this.notify.msg = `✅ Invoice sent to ${this.doc.countryCode}${this.doc.phoneNumber}`;
+          this.notify.done = true;
+          break;
+        case "email":
+            this.notify.msg = `❌ Could not send email invoice to ${this.doc.email}`
+            this.notify.done = true;
+          break;
+      }
+      setTimeout(() => (this.notify.done = false), 5000);
+    },
+    setNotifyClientText() {
+      return `Hi ${this.doc.payeeName}, view your Bounipun invoice at https://bounipun.in/paymentlinks/${this.doc._id}`;
+    },
     calculateAmount() {
       this.doc.amount = this.items.reduce((sum, curr) => sum + curr.total, 0);
     },
@@ -271,7 +312,7 @@ export default {
       this.loading = true;
       const result = await this.$updateDocument(
         this.model,
-        {...this.doc, items: this.items},
+        { ...this.doc, items: this.items },
         this.editMode
       );
       this.loading = false;
@@ -329,6 +370,8 @@ export default {
         status,
       };
       this.countryCode = this.doc.countryCode;
+      this.notifyClientText = this.setNotifyClientText();
+
       this.editMode = true;
     },
     closeForm() {
@@ -382,11 +425,18 @@ export default {
   padding: 10px 20px;
 
   span {
-      color: white;
+    color: white;
   }
 
   h1 {
     color: white;
+  }
+}
+
+.actions {
+  .action {
+    text-transform: lowercase;
+    font-family: $font_1;
   }
 }
 </style>
