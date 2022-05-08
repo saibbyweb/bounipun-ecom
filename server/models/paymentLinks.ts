@@ -13,14 +13,14 @@ const schema = new mongoose.Schema(
         /* email */
         email: String,
         /* currency */
-        currency: Number,
+        currency: String,
         /* items */
         items: [{
             styleId: String,
             name: String,
+            colorName: String,
             variantName: String,
             collectionName: String,
-            colorName: String,
             hsnCode: String,
             fabricName: String,
             quantity: String,

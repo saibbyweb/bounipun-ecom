@@ -66,7 +66,7 @@
         <InputBox label="Payee Name" v-model="doc.payeeName" />
 
         <!-- client email -->
-        <InputBox type="email" label="Email" v-model="doc.email" />
+        <InputBox type="text" label="Email" v-model="doc.email" />
 
         <!-- currency type -->
         <SelectBox
@@ -107,7 +107,7 @@
             v-for="(item, index) in doc.items"
             :initialValue="item"
             :currency="doc.currency"
-            :key="item.key"
+            :key="item.key ? item.key : item._id"
             :index="index"
             :allProducts="allProducts"
             @update="updateItems"
@@ -264,12 +264,13 @@ export default {
     removeItem(index) {
       this.doc.items.splice(index, 1);
       this.items.splice(index, 1);
+      this.calculateAmount();
     },
     async updateDocument() {
       this.loading = true;
       const result = await this.$updateDocument(
         this.model,
-        this.doc,
+        {...this.doc, items: this.items},
         this.editMode
       );
       this.loading = false;
@@ -302,6 +303,9 @@ export default {
         _id,
         name,
         payeeName,
+        countryCode,
+        phoneNumber,
+        email,
         currency,
         validityRange,
         amount,
@@ -313,6 +317,9 @@ export default {
         _id,
         name,
         payeeName,
+        countryCode,
+        phoneNumber,
+        email,
         currency,
         validityRange: validityRange ?? { start: new Date(), end: new Date() },
         amount,

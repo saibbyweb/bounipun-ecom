@@ -191,12 +191,14 @@ export default {
         immediate: true
     },
     initialValue: {
-      handler() {
-        Object.keys(initialValue).forEach((key) => {
-          this.item[key] = initialValue[key];
+      handler(newValue) {
+        Object.keys(newValue).forEach((key) => {
+          this.item[key] = newValue[key];
         });
+        this.$forceUpdate()
       },
       deep: true,
+      immediate: true
     },
     currency(newCurrency) {
       if (this.productSelected && !this.product.readyToShip) {
