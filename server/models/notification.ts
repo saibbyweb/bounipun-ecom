@@ -120,7 +120,6 @@ export const methods = {
         /* if error occurred */
         catch (e) {
             console.log(e)
-            console.log(e.body?.errors);
             return false;
         }
 
