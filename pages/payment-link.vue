@@ -25,26 +25,37 @@
         <span class="link-name"> {{ linkDetails.name }} </span>
       </p>
     </div>
-  
-  <br/>
+
+    <br />
 
     <!-- invoice details  -->
     <div v-if="linkDetailsFetched">
       <div class="invoice-details flex">
-               <!-- payee details -->
+        <!-- payee details -->
         <div class="payee-details flex col">
-           <h3 class="heading"> Payment Details </h3>
-           <div class="payee flex col shadow">
-               <label class="label"> Customer Name:</label>
-               <span>  {{ linkDetails.payeeName }} </span>
-                <label class="label"> Phone Number:</label>
-               <span> {{ linkDetails.countryCode }} {{ linkDetails.phoneNumber }} </span>
-                <label class="label"> Email:</label>
-               <span> {{ linkDetails.email }} </span>
-               <label class="label"> Amount Payable:</label>
-               <span> {{ linkDetails.amount }} {{ linkDetails.currency}} </span>
-           </div>
+          <h3 class="heading">Payment Details</h3>
+          <div class="payee flex col shadow">
+            <label class="label"> Customer Name:</label>
+            <span> {{ linkDetails.payeeName }} </span>
+            <label class="label"> Phone Number:</label>
+            <span>
+              {{ linkDetails.countryCode }} {{ linkDetails.phoneNumber }}
+            </span>
+            <label class="label"> Email:</label>
+            <span> {{ linkDetails.email }} </span>
+            <label class="label"> Amount Payable:</label>
+            <span> {{ formatCurrency(linkDetails.amount,linkDetails.currency) }} </span>
+            <label class="label"> Due Date:</label>
+            <span>
+              {{
+                linkDetails.validityRange
+                  ? $formatDate(linkDetails.validityRange.end, true)
+                  : ""
+              }}
+            </span>
+          </div>
         </div>
+
         <!-- items -->
         <div class="items flex col">
           <h3 class="heading">Items</h3>
@@ -57,39 +68,35 @@
             <p class="serial-number flex center">{{ index + 1 }}</p>
             <!-- details -1  -->
             <div class="details-1 flex col">
-              <div class="flex">
+              <div class="flex col">
                 <!-- name -->
                 <span class="name"> {{ item.name }} &nbsp; </span>
                 <!-- color name -->
-                <span class="color-name"> / {{ item.colorName }}</span>
-              </div>
-
-              <!-- flex -->
-              <div class="flex">
-                <!-- collection -->
+                <span class="color-name"> {{ item.colorName }}</span>
+                  <!-- collection -->
                 <span class="collection"> {{ item.collectionName }} </span>
-              </div>
-
-              <div class="flex">
                 <!-- variant -->
-                <span class="variant"> {{ item.variantName }} / &nbsp; </span>
-                <!-- fabric -->
+
+                <span class="variant"> {{ item.variantName }} &nbsp; </span>
+  <!-- fabric -->
                 <span class="fabric"> {{ item.fabricName }} </span>
               </div>
+
+
             </div>
             <!-- detail - 2 -->
-            <div class="details-2 flex col">
+            <div class="details-2 flex around">
               <!-- quantity -->
-              <span>  {{ item.rate }} {{ linkDetails.currency }} x {{ item.quantity }} </span>
-              <!-- rate -->
-              <!-- <span> Rate:  </span> -->
+              <span>
+                {{ formatCurrency(item.rate,linkDetails.currency) }}  x {{ item.quantity }}
+              </span>
+                  <!-- total -->
+              <span class="total">
+               {{ formatCurrency(item.total,linkDetails.currency) }}
+              </span>
             </div>
 
-            <!-- detail - 2 -->
-            <div class="details-3 flex col">
-              <!-- total -->
-              <span class="total"> {{ item.total }} {{ linkDetails.currency }} </span>
-            </div>
+    
           </div>
           <!-- <table>
             <tr>
@@ -120,11 +127,11 @@
               <td>{{ item.total }} {{ linkDetails.currency }}</td>
             </tr>
           </table> -->
-        </div>   
+        </div>
       </div>
-<br />
-          <!-- confirm mobile number -->
-               <button class="action"> Confirm Phone Number & Continue</button>
+      <br />
+      <!-- confirm mobile number -->
+      <button class="action">Confirm Phone Number</button>
 
       <!-- send otp & verify otp-->
       <div class="verify-number"></div>
@@ -137,7 +144,9 @@
 </template>
 
 <script>
+import CurrencyHelper from "../helpers/currencyHelper.js";
 export default {
+     mixins: [CurrencyHelper],
   data() {
     return {
       steps: ["Verify OTP", "Delivery Address", "Finalize Payment"],
@@ -179,7 +188,6 @@ export default {
   text-align: center;
 }
 .steps {
-  //   gap: 10px;
   .step {
     .circle {
       height: 35px;
@@ -192,7 +200,7 @@ export default {
       font-size: 18px;
     }
     .connector {
-      width: 200px;
+      width: 20vw;
       height: 5px;
       background-color: rgb(180, 180, 180);
     }
@@ -221,13 +229,25 @@ export default {
 }
 
 .invoice-details {
-    width:100%;
-    column-gap:10px;
+  width: 100%;
+  column-gap: 10px;
+
+  @media (max-width: 768px) {
+    flex-direction: column-reverse;
+
+    row-gap: 20px;
+    .items {
+      width: 100%;
+    }
+    .payee-details {
+      width: 100%;
+    }
+  }
 }
 
 .items {
   width: 50%;
-  row-gap:10px;
+  row-gap: 10px;
   .item {
     border: 1px solid #efefef;
   }
@@ -262,14 +282,15 @@ export default {
       color: $dark_gray;
     }
     &.total {
-        color: $dark_gray;
+      color: $dark_gray;
       font-family: $font_1_bold;
-      font-size:15px;
+      font-size: 15px;
     }
   }
   .item {
-    height: 90px;
-    
+    // height: 120px;
+    padding: 7px 5px;
+
     column-gap: 30px;
 
     span {
@@ -278,7 +299,7 @@ export default {
 
     .serial-number {
       text-align: center;
-      width: 7%;
+      width: 6%;
       height: 100%;
       padding: 10px;
       font-size: 18px;
@@ -288,36 +309,54 @@ export default {
     }
 
     .details-1 {
-      width: 57%;
+      width: 45%;
     }
     .details-2 {
-      width: 15%;
+      width: 37%;
     }
-    .details-3 {
-      width: 15%;
+  
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      height: auto;
+      padding: 10px 0;
+      .serial-number {
+        display: none;
+      }
+      .details-1,
+      .details-2,
+      .details-3 {
+        width: 90%;
+      }
+
+      .details-2 {
+              margin-top: 20px;
+    justify-content: space-between;
+    gap: 30px;
+      }
     }
   }
 }
 
 .payee-details {
-    width:50%;
-    row-gap: 10px;
+  width: 50%;
+  row-gap: 10px;
 
-    .payee {
-        padding:10px 20px;
-        row-gap: 5px;
-        label {
-            font-size:14px;
-            color: $gray;
-        }
-        span {
-            font-family: $font_1_bold;
-            font-size:15px;
-        }
-        .action {
-            width:50%;
-        }
+  .payee {
+    padding: 10px 20px;
+    row-gap: 3px;
+    label {
+      font-size: 14px;
+      color: $gray;
     }
+    span {
+      font-family: $font_1_semibold;
+      font-weight: 100;
+      font-size: 15px;
+    }
+    .action {
+      width: 50%;
+    }
+  }
 }
-
 </style>
