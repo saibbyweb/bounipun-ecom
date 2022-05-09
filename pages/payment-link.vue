@@ -15,10 +15,33 @@
     <!-- invoice details  -->
     <div v-if="linkDetailsFetched">
       <div class="invoice-details">
-          <!-- payee details -->
-          <div class="payee-details">
-              {{ linkDetails.payeeName }}
+        <!-- items -->
+        <div class="items">
+          <h2 class="heading">Items</h2>
+            <table border="1">
+              <tr>
+                <th>S.no</th>
+                <th>Name</th>
+                <th>Color</th>
+                <th>Collection</th>
+                <th>Variant</th>
+                <th>Fabric</th>
+              </tr>
+
+              <tr v-for="(item, index) in linkDetails.items" :key="item._id">
+                  <td> {{ index + 1}} </td>
+                  <td>{{ item.name }}</td>
+                  <td>{{ item.colorName }}</td>
+                  <td>{{ item.collectionName }}</td>
+                  <td>{{ item.variantName }}</td>
+                  <td>{{ item.fabricName }}</td>
+              </tr>
+            </table>
           </div>
+        <!-- payee details -->
+        <div class="payee-details">
+          <!-- {{ linkDetails.payeeName }} -->
+        </div>
       </div>
       <!-- send otp & verify otp-->
       <div class="verify-number"></div>
@@ -71,8 +94,8 @@ export default {
   //   gap: 10px;
   .step {
     .circle {
-      height: 60px;
-      width: 60px;
+      height: 50px;
+      width: 50px;
       border-radius: 50%;
       background-color: rgb(180, 180, 180);
       color: white;
@@ -89,6 +112,41 @@ export default {
     &.active {
       .circle {
         background-color: rgb(73, 153, 73);
+      }
+    }
+  }
+}
+
+.items {
+  .heading {
+    font-family: $font_1_bold;
+    text-transform: uppercase;
+  }
+  .item {
+    border: 1px solid #efefef;
+    span {
+      color: $gray;
+      font-size: 11px;
+      display: inline-block;
+      &.name {
+        color: $dark_gray;
+        font-family: $font_1_bold;
+        text-transform: uppercase;
+        font-size: 13px;
+      }
+      &.collection {
+        font-family: $font_2;
+        font-size: 11px;
+        margin-bottom: 4px;
+      }
+      &.price {
+        color: $dark_gray;
+        font-family: $font_1;
+        font-size: 12px;
+      }
+      &.variant {
+        font-weight: 900;
+        color: $dark_gray;
       }
     }
   }
