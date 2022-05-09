@@ -56,6 +56,7 @@ export default {
   computed: {
     dontShowPopups() {
       const allowedRoutes = [
+        "/payment-link",
         "/login",
         "/registration",
         "/faq",

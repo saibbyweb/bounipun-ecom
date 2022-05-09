@@ -7,7 +7,7 @@
 
     <!-- preview link -->
     <div class="center" style="gap: 3px">
-      <a v-if="editMode" href="#">
+      <a v-if="editMode" :href="previewLink" target="_blank">
         <span
           style="
             background: #333;
@@ -244,6 +244,11 @@ export default {
     this.fetchActiveCurrencies();
     this.fetchAllProducts();
   },
+  computed: {
+    previewLink() {
+      return `/payment-link?id=${this.doc._id}`
+    }
+  },
   methods: {
     notifyVia(mode) {
       switch (mode) {
@@ -259,7 +264,7 @@ export default {
       setTimeout(() => (this.notify.done = false), 5000);
     },
     setNotifyClientText() {
-      return `Hi ${this.doc.payeeName}, view your Bounipun invoice at https://bounipun.in/paymentlinks/${this.doc._id}`;
+      return `Hi ${this.doc.payeeName}, view your Bounipun invoice at ${this.previewLink}`;
     },
     calculateAmount() {
       this.doc.amount = this.items.reduce((sum, curr) => sum + curr.total, 0);
