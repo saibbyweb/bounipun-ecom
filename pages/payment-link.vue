@@ -13,25 +13,40 @@
       </div>
     </div>
     <br />
+    <!-- header -->
     <div class="header flex center col">
       <h1 class="heading">Payment Request</h1>
       <p class="desc">
-        of
+        <!-- of
         <span class="amount">
           {{ linkDetails.amount }} {{ linkDetails.currency }}
-        </span>
+        </span> -->
         for
         <span class="link-name"> {{ linkDetails.name }} </span>
       </p>
     </div>
-    <!-- payee details -->
-    <div class="payee-details flex center"></div>
+  
+  <br/>
 
     <!-- invoice details  -->
     <div v-if="linkDetailsFetched">
-      <div class="invoice-details">
+      <div class="invoice-details flex">
+               <!-- payee details -->
+        <div class="payee-details flex col">
+           <h3 class="heading"> Payment Details </h3>
+           <div class="payee flex col shadow">
+               <label class="label"> Customer Name:</label>
+               <span>  {{ linkDetails.payeeName }} </span>
+                <label class="label"> Phone Number:</label>
+               <span> {{ linkDetails.countryCode }} {{ linkDetails.phoneNumber }} </span>
+                <label class="label"> Email:</label>
+               <span> {{ linkDetails.email }} </span>
+               <label class="label"> Amount Payable:</label>
+               <span> {{ linkDetails.amount }} {{ linkDetails.currency}} </span>
+           </div>
+        </div>
         <!-- items -->
-        <div class="items">
+        <div class="items flex col">
           <h3 class="heading">Items</h3>
           <div
             class="item shadow flex center"
@@ -65,9 +80,9 @@
             <!-- detail - 2 -->
             <div class="details-2 flex col">
               <!-- quantity -->
-              <span> Qty: {{ item.quantity }} </span>
+              <span>  {{ item.rate }} {{ linkDetails.currency }} x {{ item.quantity }} </span>
               <!-- rate -->
-              <span> Rate: {{ item.rate }} {{ linkDetails.currency }} </span>
+              <!-- <span> Rate:  </span> -->
             </div>
 
             <!-- detail - 2 -->
@@ -105,12 +120,12 @@
               <td>{{ item.total }} {{ linkDetails.currency }}</td>
             </tr>
           </table> -->
-        </div>
-        <!-- payee details -->
-        <div class="payee-details">
-          <!-- {{ linkDetails.payeeName }} -->
-        </div>
+        </div>   
       </div>
+<br />
+          <!-- confirm mobile number -->
+               <button class="action"> Confirm Phone Number & Continue</button>
+
       <!-- send otp & verify otp-->
       <div class="verify-number"></div>
       <!-- sub total + delivery address -->
@@ -159,8 +174,9 @@ export default {
   min-height: 40vh;
 }
 .heading {
-  font-family: $font_1_bold;
+  font-family: $font_2_bold;
   text-transform: uppercase;
+  text-align: center;
 }
 .steps {
   //   gap: 10px;
@@ -204,8 +220,14 @@ export default {
   }
 }
 
+.invoice-details {
+    width:100%;
+    column-gap:10px;
+}
+
 .items {
   width: 50%;
+  row-gap:10px;
   .item {
     border: 1px solid #efefef;
   }
@@ -239,10 +261,15 @@ export default {
       font-weight: 900;
       color: $dark_gray;
     }
+    &.total {
+        color: $dark_gray;
+      font-family: $font_1_bold;
+      font-size:15px;
+    }
   }
   .item {
     height: 90px;
-    margin: 10px 0;
+    
     column-gap: 30px;
 
     span {
@@ -251,7 +278,7 @@ export default {
 
     .serial-number {
       text-align: center;
-      width: 8%;
+      width: 7%;
       height: 100%;
       padding: 10px;
       font-size: 18px;
@@ -261,14 +288,36 @@ export default {
     }
 
     .details-1 {
-      width: 60%;
+      width: 57%;
     }
     .details-2 {
-      width: 20%;
+      width: 15%;
     }
     .details-3 {
-      width: 10%;
+      width: 15%;
     }
   }
 }
+
+.payee-details {
+    width:50%;
+    row-gap: 10px;
+
+    .payee {
+        padding:10px 20px;
+        row-gap: 5px;
+        label {
+            font-size:14px;
+            color: $gray;
+        }
+        span {
+            font-family: $font_1_bold;
+            font-size:15px;
+        }
+        .action {
+            width:50%;
+        }
+    }
+}
+
 </style>
