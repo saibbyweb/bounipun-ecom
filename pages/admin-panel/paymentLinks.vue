@@ -16,7 +16,7 @@
         :model="model"
         :headings="headings"
         :sortByFields="sortByFields"
-        custom_css="10% 35% 20% 35%"
+        custom_css="10% 25% 20% 25% 20%"
         @documentFetched="documentFetched"
         @sortToggled="sortToggled"
       />
@@ -30,22 +30,15 @@
     </div>
     <!-- update payment links -->
     <div :class="{ updating: showForm }" class="update">
-      <!-- <UpdatePaymentLink
-        v-show="showForm"
-        ref="updateComponent"
-        @updated="updateList"
-        :model="model"
-        @close="showForm = false"
-      /> -->
 
-      <UPL 
+      <UpdatePaymentLink 
        v-show="showForm"
         ref="updateComponent"
         @updated="updateList"
         :model="model"
         @close="showForm = false"/>
 
-        
+
       <AddNewItem
         v-if="!showForm"
         label="Payment Link"
@@ -76,8 +69,8 @@ export default {
         limit: 20,
       },
       list: [],
-      sortByFields: ["name", "description", "status"],
-      headings: ["_id", "name", "description", "status"],
+      sortByFields: ["name", "payeeName", "description", "status"],
+      headings: ["_id", "name", "payeeName", "description", "status"],
     };
   },
   async mounted() {
@@ -107,10 +100,11 @@ export default {
       }
 
       /* extract list */
-      this.list = result.docs.map(({ _id, name, description, status }) => {
+      this.list = result.docs.map(({ _id, name, payeeName, description, status }) => {
         return {
           _id,
           name,
+          payeeName,
           description,
           status,
         };

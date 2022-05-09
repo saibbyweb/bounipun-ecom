@@ -34,23 +34,54 @@
           :internal="true"
         />
 
-        <!-- link name -->
-        <InputBox label="Link Name" v-model="doc.name" :internal="true" />
+        <label class="label" style="text-align: left; width: 90%">
+          Phone Number (with country code)
+        </label>
+        <span class="desc">
+          Payment cannot be made without OTP verifying the number
+        </span>
+
+        <div class="section flex center col">
+          <!-- country selection -->
+          <label class="label" style="text-align: left; width: 90%">
+            Country:
+          </label>
+
+          <CountrySelect
+            v-model="doc.countryCode"
+            :initialValue="`${countryCode}`"
+            :css="{ width: '90%' }"
+            :lock="false"
+          />
+
+          <DeliveryInput
+            v-model="doc.phoneNumber"
+            label="Phone Number"
+            :isMobileNumber="true"
+            :countryCode="doc.countryCode"
+            :error="{ status: false }"
+          />
+        </div>
 
         <!-- payee name -->
         <InputBox label="Payee Name" v-model="doc.payeeName" />
+
+        <!-- client email -->
+        <InputBox type="text" label="Email" v-model="doc.email" />
 
         <!-- currency type -->
         <SelectBox
           :options="currencies"
           v-model="doc.currency"
           label="Select Currency"
-          @input="currencyChanged"
         />
       </div>
 
       <!-- validity range -->
       <div class="validity-range flex col">
+        <!-- link name -->
+        <InputBox label="Link Name" v-model="doc.name" :internal="true" />
+        <br />
         <label class="label"> Validity Range: </label>
         <client-only>
           <v-datepicker
@@ -66,151 +97,26 @@
     <!-- items -->
     <div class="flex col" style="gap: 10px">
       <label class="label"> Items: </label>
-      <Draggable
+      <!-- <Draggable
         v-model="doc.items"
         ghost-class="ghost"
         :sort="true"
         class="items"
       >
-        <transition-group type="transition" name="flip-list">
-          <div
-            class="flex col link-item"
+        <transition-group type="transition" name="flip-list"> -->
+          <PaymentLinkItem
             v-for="(item, index) in doc.items"
-            :key="item.key"
-            style="padding-bottom: 10px"
-          >
-            <!-- item header -->
-            <div
-              class="header flex"
-              style="height: 40px; background-color: #efefef"
-            >
-              <!-- index indicator -->
-              <span> Item #{{ index + 1 }} </span>
-              <!-- product selector -->
-              <!-- <div style="width:20vw; position: relative; overflow: scroll;"> -->
-              <Dropdown
-                :source="allProducts"
-                @selected="productSelected($event, index)"
-                @clearSelection="clearProductSelection(index)"
-                :css="{ width: '30%', zIndex: 13 }"
-              />
-              <!-- </div> -->
-              <!-- remove item -->
-              <img
-                @click="removeItem(index)"
-                src="/icons/light/trash.png"
-                style="height: 25px; width: 25px"
-              />
-            </div>
-
-            <div class="flex items">
-              <InputBox
-                v-model="item.styleId"
-                label="StyleID"
-                :disabled="item._productSelected"
-                :slim="true"
-                :css="{ width: '90px' }"
-              />
-              <InputBox
-                v-model="item.name"
-                label="Product Name"
-                :disabled="item._productSelected"
-                :slim="true"
-                :css="{ width: '250px' }"
-              />
-
-              <!-- color selection -->
-              <InputBox
-                v-if="!item._productSelected"
-                v-model="item.colorName"
-                label="Color"
-                :slim="true"
-                :css="{ width: '130px' }"
-              />
-              <SelectBox
-                v-else
-                label="Color:"
-                v-model="item.colorName"
-                :options="item._colors"
-                :slim="true"
-              />
-
-              <!-- variant name -->
-              <InputBox
-                v-if="!item._productSelected || item._readyToShip"
-                v-model="item.variantName"
-                label="Variant"
-                :slim="true"
-                :css="{ width: '100px' }"
-              />
-              <SelectBox
-                v-else
-                label="Variant:"
-                v-model="item.variantName"
-                :options="item._variants"
-                @input="variantSelected($event, index)"
-                :slim="true"
-              />
-
-              <!-- fabric name -->
-              <InputBox
-                v-if="!item._productSelected || item._readyToShip"
-                v-model="item.fabricName"
-                label="Fabric"
-                :slim="true"
-                :css="{ width: '180px' }"
-              />
-              <SelectBox
-                v-else
-                label="Fabric:"
-                v-model="item.fabricName"
-                :options="item._fabrics"
-                @input="fabricSelected($event, index)"
-                :slim="true"
-              />
-
-              <!-- </div> -->
-
-              <!-- <div class="flex items"> -->
-              <InputBox
-                v-model="item.collectionName"
-                :disabled="item._productSelected"
-                label="Collection"
-                :slim="true"
-                :css="{ width: '120px' }"
-              />
-              <InputBox
-                v-model="item.hsnCode"
-                label="HSN"
-                :slim="true"
-                :css="{ width: '100px' }"
-              />
-              <InputBox
-                v-model="item.quantity"
-                label="Quantity"
-                type="number"
-                :slim="true"
-                @input="$forceUpdate()"
-                :css="{ width: '80px' }"
-              />
-              <InputBox
-                v-model="item.rate"
-                :label="`Rate - (${doc.currency})`"
-                :slim="true"
-                @input="$forceUpdate()"
-                :css="{ width: '100px' }"
-              />
-              <InputBox
-                :value="item.quantity * item.rate"
-                :label="`Total - (${doc.currency})`"
-                :disabled="true"
-                :slim="true"
-                :css="{ width: '100px' }"
-              />
-            </div>
-          </div>
-        </transition-group>
-      </Draggable>
+            :initialValue="item"
+            :currency="doc.currency"
+            :key="item.key ? item.key : item._id"
+            :index="index"
+            :allProducts="allProducts"
+            @update="updateItems"
+            @remove="removeItem"
+            @totalChanged="calculateAmount"
+          />
+        <!-- </transition-group>
+      </Draggable> -->
       <!-- add new item -->
       <div class="flex center">
         <button @click="addNewItem()" class="action">Add New Item</button>
@@ -218,8 +124,33 @@
     </div>
 
     <!-- total amount -->
-    <h1> {{ totalAmount }} </h1>
+    <div class="total-amount">
+      <span> Total Payable Amount: </span>
+      <h1>{{ doc.amount }} {{ doc.currency }}</h1>
+    </div>
 
+    <!-- notify client (box and send option) -->
+    <div v-if="editMode" class="section notify-client flex col center">
+      <TextBox
+        v-model="notifyClientText"
+        label="Invite Text"
+        :internal="true"
+      />
+      <!-- send payment link -->
+      <div class="actions flex around">
+        <!-- sms invoice -->
+        <button class="action small" @click="notifyVia('sms')">
+          SMS Invoice to {{ doc.countryCode + doc.phoneNumber }}
+        </button>
+        <!-- email invoice  -->
+        <button class="action small" @click="notifyVia('email')">
+          Email Invoice to {{ doc.email }}
+        </button>
+      </div>
+      <!-- info -->
+      <br/>
+      <span v-if="notify.done" class="msg info" style="background-color: #efefef; padding: 2px 7px; font-size: 13px;"> {{ notify.msg }} </span>
+    </div>
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
 
@@ -258,36 +189,10 @@
 
 <script>
 import { v4 as uuidv4 } from "uuid";
-/* additional item props */
-const additionalItemProps = {
-  _productSelected: false,
-  _colors: [],
-  _variants: [],
-  _variantWithFabrics: [],
-  _fabrics: [],
-  _fabricWithDetails: [],
-  _selectedFabricIndex: 0,
-  _thirdPartyProduct: false,
-  _multiPrice: false,
-  _readyToShip: false,
-  _directPrice: 0,
-  _directPricing: {},
-};
 
 /* base item */
 const baseItem = () => ({
   key: uuidv4(),
-  styleId: "",
-  name: "",
-  variantName: "",
-  collectionName: "",
-  colorName: "",
-  hsnCode: "",
-  fabricName: "",
-  quantity: "",
-  rate: "",
-  total: "",
-  ...additionalItemProps,
 });
 
 /* base doc */
@@ -295,9 +200,12 @@ const baseDoc = () => ({
   _id: "",
   name: "",
   payeeName: "",
+  countryCode: "+91",
+  phoneNumber: "",
+  email: "",
   currency: "INR",
   items: [baseItem()],
-    validityRange: {
+  validityRange: {
     start: new Date(),
     end: new Date(),
   },
@@ -315,190 +223,50 @@ export default {
       editMode: false,
       currencies: [],
       doc: baseDoc(),
+      items: [],
       loading: false,
       updated: false,
       errorToast: {
         status: false,
         msg: "",
       },
+      countryDialCode: "+91",
       allProducts: [],
       currency: "INR",
+      notifyClientText: "",
+      notify: {
+        done: false,
+        msg: "",
+      },
     };
   },
   mounted() {
     this.fetchActiveCurrencies();
     this.fetchAllProducts();
   },
-  watch: {
-    doc: {
-      handler() {
-        this.calculateTotalAmount();
-      },
-      deep: true
-    }
-  },
   methods: {
-    calculateTotalAmount() {
-      let sum = 0;
-      this.doc.items.forEach(item => {
-        sum = sum + (item.quantity * item.rate)
-      });
-      this.totalAmount = sum;
-      this.$forceUpdate();
-    },
-    clearProductSelection(index) {
-      // this.doc.items[index]._productSelected = false;
-      Object.keys(additionalItemProps).forEach(key => {
-        this.doc.items[index][key] = additionalItemProps[key];
-      });
-
-      this.$forceUpdate();
-    },
-    productSelected(payload, index) {
-      const { product } = payload;
-      this.doc.items[index] = {
-        ...this.doc.items[index],
-        styleId: product.styleId,
-        name: product.name,
-        collectionName: product.bounipunCollection,
-        quantity: 1,
-        _productSelected: true,
-      };
-
-      /* fetch all details for the product */
-      this.fetchProductDetails(payload._id, index);
-    },
-    async fetchProductDetails(_id, itemIndex) {
-      const productFetch = this.$axios.post("/fetchProduct", {
-        _id,
-        lockCheck: true,
-      });
-      const { response, error } = await this.$task(productFetch);
-
-      if (error) {
-        alert("Couldnt fetch product.");
-        return;
+    notifyVia(mode) {
+      switch (mode) {
+        case "sms":
+          this.notify.msg = `✅ Invoice sent to ${this.doc.countryCode}${this.doc.phoneNumber}`;
+          this.notify.done = true;
+          break;
+        case "email":
+            this.notify.msg = `❌ Could not send email invoice to ${this.doc.email}`
+            this.notify.done = true;
+          break;
       }
-
-      const {
-        colors,
-        variants,
-        bounipun_collection,
-        type,
-        availabilityType,
-        directPrice,
-        directPricing,
-        rtsDirectVariant,
-        rtsDirectFabric,
-      } = response.data;
-
-      /* set flags and values */
-      const item = this.doc.items[itemIndex];
-      item._thirdPartyProduct = type === "third-party";
-      item._multiPriced =
-        type === "third-party" ? false : availabilityType === "made-to-order";
-      item._readyToShip = availabilityType === "ready-to-ship";
-      item._directPrice = directPrice;
-      item._directPricing = directPricing;
-
-      /* set bounipun collection */
-      item.collectionName = bounipun_collection
-        ? bounipun_collection.name
-        : "N/A";
-
-      /* set colors list */
-      item._colors = colors.map((color) => ({
-        name: color.name,
-        value: color.name,
-      }));
-
-      /* if item is ready to ship */
-      if (item._readyToShip) {
-        item.rate =
-          this.doc.currency === "INR"
-            ? item._directPrice
-            : item._directPricing[this.doc.currency];
-        item.variantName = rtsDirectVariant.name;
-        item.fabricName = rtsDirectFabric.name;
-        item.hsnCode = rtsDirectVariant.hsnCode;
-        this.$forceUpdate();
-        return;
-      }
-
-      /* set variants */
-      this.doc.items[itemIndex]._variantWithFabrics = variants;
-      this.doc.items[itemIndex]._variants = variants.map((variant) => ({
-        name: variant._id.name,
-        value: variant._id.name,
-      }));
-      
-      this.calculateTotalAmount();
-      this.$forceUpdate();
+      setTimeout(() => (this.notify.done = false), 5000);
     },
-    variantSelected(variantName, itemIndex) {
-      const item = this.doc.items[itemIndex];
-      const selectedVariantIndex = item._variants.findIndex(
-        (variant) => variant.name === variantName
-      );
-      const selectedVariant = item._variantWithFabrics[selectedVariantIndex];
-      item._fabrics = selectedVariant.fabrics.map((fab) => ({
-        name: `${fab._id.name} - ${fab._id.info1}`,
-        value: `${fab._id.name} - ${fab._id.info1}`,
-      }));
-
-      /* set hsn code */
-      item.hsnCode = selectedVariant._id.hsnCode;
-
-      /* all fabrics for the variant */
-      item._fabricWithDetails = selectedVariant.fabrics;
-      item.rate =
-        this.doc.currency === "INR"
-          ? selectedVariant.fabrics[0].price
-          : selectedVariant.fabrics[0].pricing[this.doc.currency];
-      this.calculateTotalAmount();
-
-      this.$forceUpdate();
+    setNotifyClientText() {
+      return `Hi ${this.doc.payeeName}, view your Bounipun invoice at https://bounipun.in/paymentlinks/${this.doc._id}`;
     },
-    fabricSelected(fabricName, itemIndex) {
-      const item = this.doc.items[itemIndex];
-      const selectedFabricIndex = item._fabrics.findIndex(
-        (fabric) => fabric.name === fabricName
-      );
-      item._selectedFabricIndex = selectedFabricIndex;
-      const selectedFabric = item._fabricWithDetails[selectedFabricIndex];
-      item.rate =
-        this.doc.currency === "INR"
-          ? selectedFabric.price
-          : selectedFabric.pricing[this.doc.currency];
-      this.calculateTotalAmount();
-
-      this.$forceUpdate();
+    calculateAmount() {
+      this.doc.amount = this.items.reduce((sum, curr) => sum + curr.total, 0);
     },
-    currencyChanged(newCurrency) {
-      this.doc.items.forEach((item) => {
-        if (item._readyToShip) {
-          item.rate =
-            this.doc.currency === "INR"
-              ? item._directPrice
-              : item._directPricing?.[this.doc.currency];
-          return;
-        }
-
-        const selectedFabric =
-          item._fabricWithDetails[item._selectedFabricIndex];
-
-        if (selectedFabric === undefined) {
-          return;
-        }
-
-        item.rate =
-          this.doc.currency === "INR"
-            ? selectedFabric.price
-            : selectedFabric.pricing[this.doc.currency];
-      });
-      this.calculateTotalAmount();
-
-      this.$forceUpdate();
+    updateItems(payload) {
+      //   this.items[payload.index] = payload.value;
+      this.$set(this.items, payload.index, payload.value);
     },
     async fetchAllProducts() {
       const result = await this.$fetchCollection("products");
@@ -530,25 +298,21 @@ export default {
         name: c.name,
         value: c.code,
       }));
-      this.currencies.unshift(
-        // { name: "All Currencies", value: "all" },
-        { name: "Indian Rupee", value: "INR" }
-      );
-      this.calculateTotalAmount();
-
-      this.$forceUpdate();
+      this.currencies.unshift({ name: "Indian Rupee", value: "INR" });
     },
     addNewItem() {
       this.doc.items.push(baseItem());
     },
     removeItem(index) {
       this.doc.items.splice(index, 1);
+      this.items.splice(index, 1);
+      this.calculateAmount();
     },
     async updateDocument() {
       this.loading = true;
       const result = await this.$updateDocument(
         this.model,
-        this.doc,
+        { ...this.doc, items: this.items },
         this.editMode
       );
       this.loading = false;
@@ -581,6 +345,9 @@ export default {
         _id,
         name,
         payeeName,
+        countryCode,
+        phoneNumber,
+        email,
         currency,
         validityRange,
         amount,
@@ -592,6 +359,9 @@ export default {
         _id,
         name,
         payeeName,
+        countryCode,
+        phoneNumber,
+        email,
         currency,
         validityRange: validityRange ?? { start: new Date(), end: new Date() },
         amount,
@@ -599,6 +369,9 @@ export default {
         description,
         status,
       };
+      this.countryCode = this.doc.countryCode;
+      this.notifyClientText = this.setNotifyClientText();
+
       this.editMode = true;
     },
     closeForm() {
@@ -606,6 +379,7 @@ export default {
       this.$emit("close");
     },
     resetForm() {
+      this.items = []
       this.populateForm(baseDoc());
       this.editMode = false;
     },
@@ -625,7 +399,7 @@ export default {
   border: 1px dashed #efefef;
   padding: 5px 5px 30px 5px;
   border-radius: 5px;
-  overflow: hidden;
+  //   overflow: hidden;
 }
 
 .label {
@@ -638,38 +412,32 @@ export default {
   font-weight: 900;
 }
 
-.link-item {
-  border: 2px dotted #ababab;
-  margin: 10px 0;
-  .header {
-    overflow: hidden;
-    span {
-      font-size: 13px;
-      padding: 10px;
-      background-color: #333;
-      color: white;
-    }
-    img {
-      position: absolute;
-      right: 0;
-      background-color: rgb(192, 28, 28);
-      opacity: 0.8;
-      height: 40px;
-      width: 40px;
-      z-index: 4;
-      cursor: pointer;
+.desc {
+  font-size: 11px;
+  margin-left: 3%;
+  color: gray;
+}
+.total-amount {
+  position: fixed;
+  bottom: 30%;
+  left: 10%;
+  background: #333;
 
-      &:hover {
-        opacity: 1;
-      }
-    }
+  padding: 10px 20px;
+
+  span {
+    color: white;
   }
 
-  .items {
-    flex-wrap: wrap;
-    column-gap: 10px;
-    justify-content: flex-start;
-    align-items: center;
+  h1 {
+    color: white;
+  }
+}
+
+.actions {
+  .action {
+    text-transform: lowercase;
+    font-family: $font_1;
   }
 }
 </style>
