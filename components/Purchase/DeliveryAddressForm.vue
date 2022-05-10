@@ -12,11 +12,166 @@
       :isMobileNumber="key === 'mobileNumber'"
       :maxLength="key === 'addressLine1' || key === 'addressLine2' ? 60 : 100"
       :countryCode="countryDialCode"
-      :disabled="otpSent"
+      :disabled="disabled"
     />
-    <!-- verify phone number -->
-    <button class="action">
-          Continue
-    </button>
+    <!-- continue -->
+    <button class="action">Continue</button>
   </div>
 </template>
+
+<script>
+import "@/helpers/validate.js";
+
+export default {
+  props: {
+    countryDialCode: {
+      type: String,
+      default: "+91",
+    },
+    disabled: {
+        type: Boolean,
+        default: false
+    }
+  },
+  data() {
+    return {
+      formData: this.createFormData(),
+    };
+  },
+  methods: {
+    createFormData() {
+      /* form fields */
+      const fields = {
+        firstName: "First Name",
+        surName: "Sur Name",
+        mobileNumber: "Mobile Number",
+        email: "Email",
+        addressType: "Address Type",
+        state: "State",
+        addressLine1: "Address Line #1",
+        addressLine2: "Address Line #2",
+        city: "City",
+        postalCode: "Postal Code",
+      };
+
+      /* delivery address object */
+      let deliveryAddress = {};
+
+      /* create delivery form object */
+      for (let key in fields) {
+        deliveryAddress[key] = {
+          label: fields[key],
+          value: "",
+          type: "text",
+          error: {
+            status: false,
+            msg: "",
+          },
+        };
+
+        if (key === "addressType") {
+          deliveryAddress[key].value = "Home";
+          deliveryAddress[key].type = "select";
+        }
+
+        if (key === "state") {
+          deliveryAddress[key].value = "Andaman and Nicobar Islands";
+          deliveryAddress[key].type = "select";
+        }
+      }
+
+      return deliveryAddress;
+    },
+    setError(key, flag, msg) {
+      const field = this.formData[key];
+      if (flag) {
+        field.error = {
+          status: true,
+          msg,
+        };
+      }
+    },
+    validateForm() {
+      /* required fields */
+      const requiredFields = [
+        "firstName",
+        "surName",
+        "mobileNumber",
+        "email",
+        "addressLine1",
+        "city",
+        "postalCode",
+      ];
+
+      /* firstName and surName should only consist of alphabets */
+      ["firstName", "surName"].forEach((key) => {
+        const field = this.formData[key];
+        const hasOnlyAlphabets = field.value.hasOnlyAlphabets();
+        this.setError(key, !hasOnlyAlphabets, "Only Alphabets are allowed!");
+      });
+
+      /*  mobile number field */
+      const mobileNumberField = this.formData["mobileNumber"];
+
+      /* mobile number should only consist of numbers  */
+      const mobileNumberHasOnlyNumbers =
+        mobileNumberField.value.hasOnlyNumbers();
+      this.setError(
+        "mobileNumber",
+        !mobileNumberHasOnlyNumbers,
+        "Mobile number can only consist of digits"
+      );
+
+      /* mobile number length should be between 4 - 14 */
+      const mobileNumberLengthInRange =
+        mobileNumberField.value.length > 3 &&
+        mobileNumberField.value.length < 15;
+      this.setError(
+        "mobileNumber",
+        !mobileNumberLengthInRange,
+        "Please enter a valid mobile number"
+      );
+
+      /* email should be in a valid format */
+      const emailField = this.formData["email"];
+      const emailValid = emailField.value.isValidEmail();
+      this.setError("email", !emailValid, "Please enter a valid email address");
+
+      /* city should only consist of alphabets */
+      const cityField = this.formData["city"];
+      const cityOnlyHasAlphabets = cityField.value.hasOnlyAlphabets();
+      this.setError(
+        "city",
+        !cityOnlyHasAlphabets,
+        "Only Alphabets are allowed"
+      );
+
+      /* postal code should only consist of numbers */
+      const postalCodeField = this.formData["postalCode"];
+      const postalCodeOnlyHasNumbers = postalCodeField.value.hasOnlyNumbers();
+      this.setError(
+        "postalCode",
+        !postalCodeOnlyHasNumbers,
+        "Only Number are allowed"
+      );
+
+      /* except for addressLine#2, no field can be blank */
+      requiredFields.forEach((key) => {
+        const field = this.formData[key];
+        const fieldEmpty = field.value.isEmpty();
+        this.setError(key, fieldEmpty, "This field cannot be left blank!");
+      });
+
+      /* check for any error flags */
+      const validated = requiredFields.every((key) => {
+        console.log(this.formData[key].error.status, key);
+        return !this.formData[key].error.status;
+      });
+
+      console.log(validated, "--validated");
+
+      return validated;
+    },
+  },
+};
+</script>

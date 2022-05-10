@@ -188,6 +188,7 @@ export default {
       this.selectedCountryIndex = index;
       this.showCountrySelect = false;
     },
+    /* TODO: copied */
     createFormData() {
       /* form fields */
       const fields = {
@@ -231,6 +232,7 @@ export default {
 
       return deliveryAddress;
     },
+    /* TODO: copied */
     setError(key, flag, msg) {
       const field = this.formData[key];
       if (flag) {
@@ -240,6 +242,7 @@ export default {
         };
       }
     },
+    /* TODO: copied */
     validateForm() {
       /* required fields */
       const requiredFields = [

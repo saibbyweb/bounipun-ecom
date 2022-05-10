@@ -29,7 +29,7 @@
     <br />
 
     <!-- invoice details  -->
-    <div v-if="linkDetailsFetched">
+    <div v-if="linkDetailsFetched && !otpVerified">
       <div class="invoice-details flex">
         <!-- payee details -->
         <div class="payee-details flex col">
@@ -145,6 +145,11 @@
       <!-- overview + payment completion -->
       <!-- payment success  -->
       <!-- payment failure (with retry) -->
+    </div>
+
+    <!-- delivery address form -->
+    <div class="delivery-address">
+        <Delivery-Address-Form  />
     </div>
   </div>
 </template>
