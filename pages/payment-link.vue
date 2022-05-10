@@ -6,10 +6,10 @@
         v-for="(step, index) in steps"
         :key="index"
         class="step flex center"
-        :class="{ active: activeStepIndex === index }"
+        :class="{ active: activeStepIndex >= index }"
       >
         <div class="circle flex center">{{ index + 1 }}</div>
-        <div v-if="index !== steps.length - 1" class="connector"></div>
+        <div v-if="index !== steps.length - 1" class="connector" :class="{ active: activeStepIndex === index + 1 }"></div>
       </div>
     </div>
     <br />
@@ -44,7 +44,9 @@
             <label class="label"> Email:</label>
             <span> {{ linkDetails.email }} </span>
             <label class="label"> Amount Payable:</label>
-            <span> {{ formatCurrency(linkDetails.amount,linkDetails.currency) }} </span>
+            <span>
+              {{ formatCurrency(linkDetails.amount, linkDetails.currency) }}
+            </span>
             <label class="label"> Due Date:</label>
             <span>
               {{
@@ -53,7 +55,17 @@
                   : ""
               }}
             </span>
+            <br />
           </div>
+          <!-- send otp -->
+          <button v-if="!otpSent" class="action" @click="sendOtp">Confirm Phone Number</button>
+                   <!-- otp input box -->
+          <InputCredential label="One Time Password" v-model="otp" v-if="otpSent" />
+          <!-- verify otp -->
+          <button v-if="otpSent" class="action" @click="verifyOtp">Verify Number</button>
+           <!-- otp sent msg -->
+          <p v-if="otpSent" class="message"> A one time password has been sent to your mobile number. </p>
+
         </div>
 
         <!-- items -->
@@ -65,7 +77,7 @@
             :key="item._id"
           >
             <!-- serial no -->
-            <p class="serial-number flex center">{{ index + 1 }}</p>
+            <p class="serial-number flex center">{{ index + 1 }}.</p>
             <!-- details -1  -->
             <div class="details-1 flex col">
               <div class="flex col">
@@ -73,30 +85,26 @@
                 <span class="name"> {{ item.name }} &nbsp; </span>
                 <!-- color name -->
                 <span class="color-name"> {{ item.colorName }}</span>
-                  <!-- collection -->
+                <!-- collection -->
                 <span class="collection"> {{ item.collectionName }} </span>
                 <!-- variant -->
-
                 <span class="variant"> {{ item.variantName }} &nbsp; </span>
-  <!-- fabric -->
+                <!-- fabric -->
                 <span class="fabric"> {{ item.fabricName }} </span>
               </div>
-
-
             </div>
             <!-- detail - 2 -->
             <div class="details-2 flex around">
               <!-- quantity -->
               <span>
-                {{ formatCurrency(item.rate,linkDetails.currency) }}  x {{ item.quantity }}
+                {{ formatCurrency(item.rate, linkDetails.currency) }} x
+                {{ item.quantity }}
               </span>
-                  <!-- total -->
+              <!-- total -->
               <span class="total">
-               {{ formatCurrency(item.total,linkDetails.currency) }}
+                {{ formatCurrency(item.total, linkDetails.currency) }}
               </span>
             </div>
-
-    
           </div>
           <!-- <table>
             <tr>
@@ -130,8 +138,6 @@
         </div>
       </div>
       <br />
-      <!-- confirm mobile number -->
-      <button class="action">Confirm Phone Number</button>
 
       <!-- send otp & verify otp-->
       <div class="verify-number"></div>
@@ -146,11 +152,14 @@
 <script>
 import CurrencyHelper from "../helpers/currencyHelper.js";
 export default {
-     mixins: [CurrencyHelper],
+  mixins: [CurrencyHelper],
   data() {
     return {
       steps: ["Verify OTP", "Delivery Address", "Finalize Payment"],
       activeStepIndex: 0,
+      otpSent: false,
+      otpVerified: false,
+      otp: "",
       invalidLink: false,
       linkDetailsFetched: true,
       linkDetails: {},
@@ -173,6 +182,17 @@ export default {
       /* set new link details */
       this.linkDetails = doc;
       this.linkDetailsFetched = true;
+    },
+    sendOtp(value = true) {
+      setTimeout(() => {
+        this.otpSent = value;
+      }, 1000);
+    },
+    verifyOtp(value = true) {
+      setTimeout(() => {
+        this.otpVerified = value;
+        this.activeStepIndex = this.activeStepIndex+1;
+      }, 1000);
     },
   },
 };
@@ -203,6 +223,10 @@ export default {
       width: 20vw;
       height: 5px;
       background-color: rgb(180, 180, 180);
+      &.active {
+        background-color: rgb(73, 153, 73);
+          
+      }
     }
 
     &.active {
@@ -304,8 +328,8 @@ export default {
       padding: 10px;
       font-size: 18px;
       font-family: $font_1_bold;
-      background-color: #333;
-      color: white;
+      //   background-color: #333;
+      color: #333;
     }
 
     .details-1 {
@@ -314,7 +338,6 @@ export default {
     .details-2 {
       width: 37%;
     }
-  
 
     @media (max-width: 768px) {
       flex-direction: column;
@@ -330,9 +353,9 @@ export default {
       }
 
       .details-2 {
-              margin-top: 20px;
-    justify-content: space-between;
-    gap: 30px;
+        margin-top: 20px;
+        justify-content: space-between;
+        gap: 30px;
       }
     }
   }
@@ -354,9 +377,13 @@ export default {
       font-weight: 100;
       font-size: 15px;
     }
-    .action {
-      width: 50%;
-    }
+  }
+  .action {
+    background: #5a9a5a;
+  }
+  .message {
+      text-align: center;
+      font-size:12px;
   }
 }
 </style>
