@@ -75,12 +75,12 @@ export default {
   flex-direction: column;
   box-sizing: border-box;
   width: 100%;
-  padding: 2% 5%;
+  padding: 2% 0;
 
 
 
   @media (max-width: 768px) {
-    padding: 5%;
+    padding: 5% 0;
   }
 
     &.fullWidth {

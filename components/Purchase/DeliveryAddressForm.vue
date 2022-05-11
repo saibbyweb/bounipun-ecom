@@ -15,7 +15,7 @@
       :disabled="disabled"
     />
     <!-- continue -->
-    <button class="action">Continue</button>
+    <button class="action" @click="validateForm">Continue</button>
   </div>
 </template>
 

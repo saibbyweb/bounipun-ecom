@@ -74,7 +74,7 @@ export default {
 .delivery-input {
     display: flex;
     flex-direction: column-reverse;
-    width: 90%;
+    width: 100%;
     margin: 10px 0;
 
     @media (max-width: 768px) {

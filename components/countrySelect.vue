@@ -159,7 +159,7 @@ export default {
 .country-select {
   border: none;
   border-radius: 0;
-  width: 90%;
+  width: 100%;
   // padding: 2%;
   background-color: white;
   border-bottom: 2px solid #e7e7e7;

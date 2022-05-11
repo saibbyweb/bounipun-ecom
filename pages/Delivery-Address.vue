@@ -477,7 +477,9 @@ export default {
 
       .delivery-address {
         width: 100%;
-        padding: 10% 0 2% 0;
+        // padding: 10% 0 2% 0;
+        padding: 10% 5% 2% 5%;
+
         margin-top: 0;
 
         .title {

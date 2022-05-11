@@ -41,7 +41,7 @@
           Payment cannot be made without OTP verifying the number
         </span>
 
-        <div class="section flex center col">
+        <div class="section flex center col" style="padding: 0 5%;">
           <!-- country selection -->
           <label class="label" style="text-align: left; width: 90%">
             Country:
@@ -50,7 +50,7 @@
           <CountrySelect
             v-model="doc.countryCode"
             :initialValue="`${countryCode}`"
-            :css="{ width: '90%' }"
+      
             :lock="false"
           />
 
