@@ -20,9 +20,9 @@
 
     <!-- header -->
     <div class="header flex center col">
-      <h1 class="heading">Payment Request</h1>
+      <h1 class="heading">{{ title }}</h1>
       <p class="desc">
-        for <span class="link-name"> {{ linkDetails.name }} </span>
+        <span class="link-name"> {{ desc }} </span>
       </p>
     </div>
 
@@ -31,8 +31,6 @@
     <!-- invoice details  -->
     <div v-if="linkDetailsFetched">
       <div v-if="!otpVerified" class="invoice-details flex">
-   
-
         <!-- items -->
         <div class="items flex col">
           <h3 class="heading">Items</h3>
@@ -46,7 +44,7 @@
           />
         </div>
 
-             <!-- payee details -->
+        <!-- payee details -->
         <div class="payee-details flex col">
           <h3 class="heading">Payment Details</h3>
           <PayeeDetails
@@ -77,9 +75,16 @@
     <br />
 
     <!-- delivery address form -->
-    <div v-if="otpVerified" class="delivery-address">
-      <h3 class="heading">Delivery Address</h3>
-      <Delivery-Address-Form />
+    <div v-if="otpVerified" class="delivery-address flex center">
+      <div class="form">
+        <!-- country selection -->
+        <CountrySelect
+          :initialValue="linkDetails.countryCode"
+          @setCountryIsoCode="countryIsoCode = $event"
+          :lock="true"
+        />
+        <Delivery-Address-Form :countryDialCode="linkDetails.countryCode" :countryIsoCode="countryIsoCode" />
+      </div>
     </div>
     <!-- sub total + delivery address -->
     <!-- overview + payment completion -->
@@ -102,6 +107,10 @@ export default {
       invalidLink: false,
       linkDetailsFetched: true,
       linkDetails: {},
+      deliveryAddress: {},
+      title: "Payment Request",
+      desc: "",
+      countryIsoCode: ""
     };
   },
   mounted() {
@@ -121,6 +130,7 @@ export default {
       /* set new link details */
       this.linkDetails = doc;
       this.linkDetailsFetched = true;
+      this.desc = `for ${doc.name}`;
     },
     sendOtp(value = true) {
       setTimeout(() => {
@@ -132,6 +142,8 @@ export default {
         this.otpVerified = value;
         this.activeStepIndex = this.activeStepIndex + 1;
         window.scroll({ top: 0, behavior: "smooth" });
+        this.title = "Delivery Address";
+        this.desc = `Enter a shipping address`;
       }, 1000);
     },
   },
@@ -218,7 +230,6 @@ export default {
   row-gap: 10px;
   align-items: center;
 
-
   .action {
     background: #5a9a5a;
     width: 80%;
@@ -226,6 +237,18 @@ export default {
   .message {
     text-align: center;
     font-size: 12px;
+  }
+}
+
+.delivery-address {
+  .form {
+    width: 60%;
+  }
+
+  @media (max-width: 768px) {
+    .form {
+      width: 100%;
+    }
   }
 }
 </style>

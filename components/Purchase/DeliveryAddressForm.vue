@@ -24,14 +24,11 @@ import "@/helpers/validate.js";
 
 export default {
   props: {
-    countryDialCode: {
-      type: String,
-      default: "+91",
-    },
+    countryDialCode: String,
     disabled: {
-        type: Boolean,
-        default: false
-    }
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -39,6 +36,16 @@ export default {
     };
   },
   methods: {
+    prefillForm() {
+      this.formData.firstName.value = "Suhaib";
+      this.formData.surName.value = "Khan";
+      this.formData.mobileNumber.value = "8082007711";
+      this.formData.email.value = "hello@saibbyweb.com";
+      this.formData.addressLine1.value =
+        "H.no 54, Chinar Enclave, Rawalpora, Srinagar, Jammu & Kashmir";
+      this.formData.city.value = "Srinagar";
+      this.formData.postalCode.value = "190005";
+    },
     createFormData() {
       /* form fields */
       const fields = {
@@ -168,8 +175,16 @@ export default {
         return !this.formData[key].error.status;
       });
 
-      console.log(validated, "--validated");
+      /* collect delivery address */
+      let deliveryAddress = {};
+      Object.keys(this.formData).forEach((key) => {
+        deliveryAddress[key] = this.formData[key].value;
+      });
+      
+      deliveryAddress.countryDialCode = this.countryDialCode;
+      deliveryAddress.countryIsoCode = this.countryIsoCode;
 
+      this.$emit("continue", deliveryAddress);
       return validated;
     },
   },
