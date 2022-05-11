@@ -85,30 +85,8 @@
 
 <script>
 import currencyHelper from "../helpers/currencyHelper.js";
-import sumBy from "lodash/sumBy";
 import { loadStripe } from "@stripe/stripe-js";
-const style = {
-  style: {
-    base: {
-      iconColor: "#000",
-      color: "#000",
-      fontWeight: "800",
-      fontFamily: "Press Start 2P",
-      fontSize: "22px",
-      fontSmoothing: "antialiased",
-      ":-webkit-autofill": {
-        color: "#fce883",
-      },
-      "::placeholder": {
-        color: "green",
-      },
-    },
-    invalid: {
-      iconColor: "#FFC7EE",
-      color: "red",
-    },
-  },
-};
+
 
 /* demo delivery address */
 const demoDeliveryAddress = {
@@ -186,9 +164,11 @@ export default {
     coupon() {
       return this.$store.state.customer.coupon;
     },
+    /* TODO: copied */
     gatewayName() {
       return this.currency === "INR" ? "razorpay" : "stripe";
     },
+    /* TODO: copied */
     stripeBillingAddress() {
       return {
         name:
@@ -205,6 +185,7 @@ export default {
         },
       };
     },
+    /* TODO: copied */
     stripeShippingObject() {
       return {
         address: {
@@ -227,6 +208,7 @@ export default {
     },
   },
   methods: {
+    /* TODO: copied */
     setKeys() {
       /* if environment is dev, use test keys */
       if (
@@ -252,6 +234,7 @@ export default {
         }
       }
     },
+    /* TODO: copied */
     async initializeStripe() {
       this.stripe = await loadStripe(this.stripePK);
       this.elements = this.stripe.elements();
@@ -264,6 +247,7 @@ export default {
 
       element.mount("#stripe-mount");
     },
+    /* TODO: copied */
     onPaymentIntentCreated(details) {
       /* save payment intent id */
       this.paymentIntentId = details.intentId;
@@ -273,6 +257,7 @@ export default {
       if (this.gatewayName === "razorpay")
         this.setupRazorpayOrder(details.gatewayToken, details.amount);
     },
+    /* TODO: copied */
     setupRazorpayOrder(orderId, amount) {
       let options = {
         key: this.razorpayKeyId, // Enter the Key ID generated from the Dashboard
@@ -324,6 +309,7 @@ export default {
       else this.stripeCheckout();
       return;
     },
+    /* TODO: copied */
     async stripeCheckout() {
       if (this.processingStripe) return;
 
