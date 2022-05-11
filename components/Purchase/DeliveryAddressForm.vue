@@ -15,7 +15,10 @@
       :disabled="disabled"
     />
     <!-- continue -->
+    <div class="flex center" style="gap:10px;">
     <button class="action" @click="validateForm">Continue</button>
+    <button class="action" @click="prefillForm"> Prefill </button>
+    </div>
   </div>
 </template>
 
@@ -186,7 +189,7 @@ export default {
 
       this.$emit("continue", deliveryAddress);
       return validated;
-    },
-  },
+    }
+  }
 };
 </script>

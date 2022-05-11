@@ -12,7 +12,7 @@
         <div
           v-if="index !== steps.length - 1"
           class="connector"
-          :class="{ active: activeStepIndex === index + 1 }"
+          :class="{ active: activeStepIndex >= index + 1 }"
         ></div>
       </div>
     </div>
@@ -30,7 +30,7 @@
 
     <!-- invoice details  -->
     <div v-if="linkDetailsFetched">
-      <div v-if="!otpVerified" class="invoice-details flex">
+      <div v-if="!otpVerified || paymentOverview" class="invoice-details flex">
         <!-- items -->
         <div class="items flex col">
           <h3 class="heading">Items</h3>
@@ -43,39 +43,56 @@
             :key="item._id"
           />
         </div>
+        
+        <!-- payee details and payment information -->
+        <div class="flex col payee-and-payment">
+          <!-- payee details -->
+          <div class="payee-details flex col">
+            <h3 class="heading">Payment Details</h3>
+            <PayeeDetails
+              :linkDetails="linkDetails"
+              :formatCurrency="formatCurrency"
+            />
 
-        <!-- payee details -->
-        <div class="payee-details flex col">
-          <h3 class="heading">Payment Details</h3>
-          <PayeeDetails
-            :linkDetails="linkDetails"
-            :formatCurrency="formatCurrency"
-          />
-          <!-- send otp -->
-          <button v-if="!otpSent" class="action" @click="sendOtp">
-            Confirm Phone Number
-          </button>
-          <!-- otp input box -->
-          <InputCredential
-            label="One Time Password"
-            v-model="otp"
-            v-if="otpSent"
-          />
-          <!-- verify otp -->
-          <button v-if="otpSent" class="action" @click="verifyOtp">
-            Verify Number
-          </button>
-          <!-- otp sent msg -->
-          <p v-if="otpSent" class="message">
-            A one time password has been sent to your mobile number.
-          </p>
+            <div
+              class="actions flex col center"
+              v-if="!paymentOverview"
+              style="width: 100%"
+            >
+              <!-- send otp -->
+              <button v-if="!otpSent" class="action" @click="sendOtp">
+                Confirm Phone Number
+              </button>
+              <!-- otp input box -->
+              <InputCredential
+                label="One Time Password"
+                v-model="otp"
+                v-if="otpSent"
+              />
+              <!-- verify otp -->
+              <button v-if="otpSent" class="action" @click="verifyOtp">
+                Verify Number
+              </button>
+              <!-- otp sent msg -->
+              <p v-if="otpSent" class="message">
+                A one time password has been sent to your mobile number.
+              </p>
+            </div>
+          </div>
+          <!-- overview + payment completion -->
+          <div v-if="paymentOverview" class="payment-overview flex center">
+            <p>Complete Payment</p>
+          </div>
         </div>
       </div>
     </div>
     <br />
 
     <!-- delivery address form -->
-    <div v-if="otpVerified" class="delivery-address flex center">
+    <div
+      v-if="otpVerified && !paymentOverview"
+      class="delivery-address flex center"
+    >
       <div class="form">
         <!-- country selection -->
         <CountrySelect
@@ -83,11 +100,15 @@
           @setCountryIsoCode="countryIsoCode = $event"
           :lock="true"
         />
-        <Delivery-Address-Form :countryDialCode="linkDetails.countryCode" :countryIsoCode="countryIsoCode" />
+        <!-- delivery form -->
+        <Delivery-Address-Form
+          :countryDialCode="linkDetails.countryCode"
+          :countryIsoCode="countryIsoCode"
+          @continue="moveToCheckout"
+        />
       </div>
     </div>
-    <!-- sub total + delivery address -->
-    <!-- overview + payment completion -->
+
     <!-- payment success  -->
     <!-- payment failure (with retry) -->
   </div>
@@ -110,7 +131,8 @@ export default {
       deliveryAddress: {},
       title: "Payment Request",
       desc: "",
-      countryIsoCode: ""
+      countryIsoCode: "",
+      paymentOverview: false,
     };
   },
   mounted() {
@@ -133,18 +155,21 @@ export default {
       this.desc = `for ${doc.name}`;
     },
     sendOtp(value = true) {
-      setTimeout(() => {
-        this.otpSent = value;
-      }, 1000);
+      this.otpSent = value;
     },
     verifyOtp(value = true) {
-      setTimeout(() => {
-        this.otpVerified = value;
-        this.activeStepIndex = this.activeStepIndex + 1;
-        window.scroll({ top: 0, behavior: "smooth" });
-        this.title = "Delivery Address";
-        this.desc = `Enter a shipping address`;
-      }, 1000);
+      this.otpVerified = value;
+      this.activeStepIndex = this.activeStepIndex + 1;
+      window.scroll({ top: 0, behavior: "smooth" });
+      this.title = "Delivery Address";
+      this.desc = `Enter a shipping address`;
+    },
+    moveToCheckout() {
+      this.activeStepIndex = this.activeStepIndex + 1;
+      this.title = "Payment Overview";
+      this.desc = `Review items, delivery address and payment information`;
+      window.scroll({ top: 0, behavior: "smooth" });
+      this.paymentOverview = true;
     },
   },
 };
@@ -195,7 +220,7 @@ export default {
   .desc {
     font-size: 19px;
     .link-name {
-      font-family: $font_2_bold;
+      font-family: $font_2;
     }
     .amount {
       font-family: $font_2_bold;
@@ -225,8 +250,20 @@ export default {
   row-gap: 10px;
 }
 
+.payee-and-payment {
+    width: 50%;
+    align-content: center;
+    @media(max-width: 768px) {
+        width:100%;
+    }
+
+    .payment-overview {
+        margin-top:20px;
+    }
+}
+
 .payee-details {
-  width: 50%;
+  width: 100%;
   row-gap: 10px;
   align-items: center;
 
