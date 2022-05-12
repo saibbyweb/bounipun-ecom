@@ -1,7 +1,6 @@
 <script>
 import { loadStripe } from "@stripe/stripe-js";
 import {
-  environment,
   RAZORPAY_KEY_ID,
   STRIPE_PUBLISHABLE_KEY,
 } from "../helpers/MiscHelper";
