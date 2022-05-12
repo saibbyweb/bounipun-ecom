@@ -175,7 +175,7 @@ export default {
           this.deliveryAddress.firstName + " " + this.deliveryAddress.surName,
         email: this.deliveryAddress.email,
         address: {
-          city: this.deliveryAddress.city,
+          city: this.deliveryAddress.city, 
           line1:
             this.deliveryAddress.addressLine1 +
             " | " +

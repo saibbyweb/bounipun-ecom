@@ -20,8 +20,12 @@ export default {
         gatewayToken: "",
         dbId: "",
       },
-      /* stripe sdk */
-      stripeSdk: null,
+      processing: false,
+      /* stripe */
+      stripe: {
+        elements: null,
+        sdk: null,
+      },
       /* razorpay checkout */
       razorpayCheckout: null,
       /* flag indicating UI is ready to process payment */
@@ -43,11 +47,12 @@ export default {
     },
     /* initialize stripe elements */
     async renderStipeCardElement(options = { hidePostalCode: true }) {
-      const { stripeSdk } = this;
+      const { stripe } = this;
       /* load client side stripe sdk */
-      stripeSdk = await loadStripe(STRIPE_PUBLISHABLE_KEY);
+      stripe.sdk = await loadStripe(STRIPE_PUBLISHABLE_KEY);
+      stripe.elements = stripe.sdk.elements();
       /* create stripe card element */
-      const element = stripeSdk.elements().create("card", options);
+      const element = stripe.elements.create("card", options);
       /* mount card element to DOM  */
       element.mount("#stripe-card");
       /* enable processing when mount is complete */
@@ -114,14 +119,84 @@ export default {
             gatewayToken: razorpay_order_id,
             transactionId: razorpay_payment_id,
             signature: razorpay_signature,
-            type: "",
+            type: this.type,
           });
+
+          /* act according to payment type */
+          switch (this.type) {
+            case "order":
+              /* move to order placed page */
+              this.$store.dispatch("customer/fetchCart");
+              this.$router.push("/order-placed-successfully");
+              break;
+            case "paymentLink":
+              break;
+          }
         },
       };
       /* create razorpay checkout object */
       this.razorpayCheckout = new Razorpay(options);
       /* enable payment processing */
       this.enablePaymentProcessing = true;
+    },
+    /* create stripe billing address */
+    createStripeBillingAddress() {
+      const {
+        firstName,
+        surName,
+        email,
+        city,
+        addressLine1,
+        addressLine2,
+        postalCode,
+        countryIsoCode,
+      } = this.billingAddress;
+
+      return {
+        name: `${firstName} ${surName}`,
+        email: email,
+        address: {
+          city,
+          line1: `${addressLine1} | ${addressLine2}`,
+          postal_code: `${postalCode}`,
+          country: countryIsoCode,
+        },
+      };
+    },
+    /* create stripe payment method */
+    createStripePaymentMethod() {
+      this.$store.commit("customer/setLoading", true);
+      this.processing = true;
+
+      /* get card element from the dom */
+      const cardElement = this.stripe.elements.getElement("card");
+      /* create payment method from card details */
+      const { paymentMethod, error } =
+        await this.stripe.sdk.createPaymentMethod({
+          type: "card",
+          card: cardElement,
+          billing_details: this.createStripeBillingAddress(),
+        });
+
+      this.$store.commit("customer/setLoading", false);
+      this.processing = false;
+
+      /* if error occured while generating payment method */
+      if (error) {
+        this.error.msg = "Could not process payment. Kindly try after sometime.";
+        this.error.status = true;
+        return null;
+      }
+
+      return paymentMethod;
+    },
+    /* TODO: stripe confirm card payment */
+    async stripeCheckout() {
+      if (this.processing) return;
+      const paymentMethod = await this.createStripePaymentMethod();
+      if(!paymentMethod)
+        return;
+        
     },
   },
 };

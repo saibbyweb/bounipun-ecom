@@ -37,7 +37,5 @@ function setKeys() {
 /* set keys according to environment and domain */
 setKeys();
 
-export default {
-  RAZORPAY_KEY_ID: gateways.razorpay.keyId,
-  STRIPE_PUBLISHABLE_KEY: gateways.stripe.publishableKey,
-};
+export const RAZORPAY_KEY_ID = gateways.razorpay.keyId;
+export const STRIPE_PUBLISHABLE_KEY = gateways.stripe.publishableKey;
