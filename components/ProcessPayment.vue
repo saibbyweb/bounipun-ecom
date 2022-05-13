@@ -1,3 +1,8 @@
+<template>
+    <div class="process-payment">
+        <button class="action"> Make Payment </button>
+    </div>
+</template>
 <script>
 import { loadStripe } from "@stripe/stripe-js";
 import { RAZORPAY_KEY_ID, STRIPE_PUBLISHABLE_KEY } from "../helpers/MiscHelper";
@@ -35,7 +40,7 @@ export default {
         status: false,
         msg: "",
       },
-    };
+    }
   },
   mounted() {
     this.deciceGateway();
@@ -164,7 +169,7 @@ export default {
       };
     },
     /* create stripe payment method */
-    createStripePaymentMethod() {
+    async createStripePaymentMethod() {
       this.$store.commit("customer/setLoading", true);
       this.processing = true;
 

@@ -390,13 +390,6 @@ export default {
   .d-o-p {
     width: 30%;
 
-    // @media (min-width: 769px) {
-    //   position: fixed;
-    //   right: 5%;
-    //   top: 10vh;
-    //   height: 90vh;
-    // }
-
     .delivery-address {
       width: 100%;
     }

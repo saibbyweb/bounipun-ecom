@@ -81,7 +81,7 @@
           </div>
           <!-- overview + payment completion -->
           <div v-if="paymentOverview" class="payment-overview flex center">
-            <p>Complete Payment</p>
+            <ProcessPayment />
           </div>
         </div>
       </div>
