@@ -7,6 +7,7 @@ import { methods as notificationMethods } from "@models/notification";
 import { methods as unlockMethods } from "@models/unlock";
 import { methods as globalConfigMethods } from "@models/globalConfig";
 import { methods as currencyMethods } from "@models/currency"
+import { methods as paymentLinkMethods } from "@models/paymentLinks"
 
 let { sendContactFormEmailToAdmin } = notificationMethods;
 sendContactFormEmailToAdmin =
@@ -50,13 +51,13 @@ router.post("/fetchGlobalConfig", async (req, res) => {
 
   /* fetch global config */
   const config = await globalConfigMethods.getGlobalConfig(currency);
-    
+
   /* if config couldn't be fetched */
-  if(config === false) {
-      res.send(response);
-      return;
+  if (config === false) {
+    res.send(response);
+    return;
   }
-  
+
   response.globalConfig = config;
   response.resolved = true;
 
@@ -161,9 +162,9 @@ router.post("/createPaymentIntent", userAuth("customer"), async (req, res) => {
 
   let zeroDecimal = false;
 
-  if(currency !== "INR") {
-      const currencyDetails = await currencyMethods.getCurrency(currency);
-      zeroDecimal = currencyDetails.zeroDecimal;
+  if (currency !== "INR") {
+    const currencyDetails = await currencyMethods.getCurrency(currency);
+    zeroDecimal = currencyDetails.zeroDecimal;
   }
 
   /* payload (can be for order or anything) */
@@ -216,11 +217,73 @@ router.post("/createPaymentIntent", userAuth("customer"), async (req, res) => {
   res.send(response);
 });
 
+/* TODO: create universal payment intent */
+router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, res) => {
+  /* response object to be send back */
+  const response = {
+    resolved: false,
+    intentId: "",
+    gatewayToken: "",
+    amount: 0,
+    currency: ""
+  };
+
+  /* TODO: verify gateway */
+  const {
+    user,
+    type,
+    amount,
+    currency,
+    gateway,
+    billingAddress,
+    shippingAddress,
+    /* can have coupon code, delivery address, combined delivery consent, gift message, payment link details etc. */
+    payload
+  } = req.body;
+
+  /* check if currency is zero decimal or not */
+  const currencyDetails = await currencyMethods.getCurrency(currency);
+  const zeroDecimal = currencyDetails.zeroDecimal;
+
+  /* create intent payload & verify amount */
+  let intentPayload = null;
+
+  switch (type) {
+    case 'order':
+      break;
+    case 'paymentLink':
+      /* validate details */
+      const detailsValid = await paymentLinkMethods.validateLinkDetails(payload.linkId, {
+        amount,
+        currency,
+        countryCode: payload.countryCode,
+        phoneNumber: payload.phoneNumber
+      });
+      
+      /* if details invalid */
+      if(!detailsValid)
+        return res.send(response);
+
+      break;
+  }
+
+  /* create gateway token (payment intent)  */
+  switch (gateway) {
+    case 'razorpay':
+      break;
+    case 'stripe':
+      break;
+  }
+
+
+
+});
+
 /* process stripe payment */
 router.post(
   "/processStripePayment",
   userAuth("customer"),
-  async (req, res) => {}
+  async (req, res) => { }
 );
 
 /*  stripe webhooks */

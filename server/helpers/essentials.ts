@@ -69,6 +69,7 @@ export const port = process.env.PORT || 4000;
 
 /* mongodb object id */
 export const ObjectId = mongoose.Schema.Types.ObjectId;
+export type MongoId = mongoose.Types.ObjectId | string;
 
 /* mongo db connector */
 export const dbConnect = async (): Promise<any> => {

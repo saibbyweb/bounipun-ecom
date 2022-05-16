@@ -61,7 +61,7 @@ export default {
     };
   },
   mounted() {
-    /* finalize gateway  */
+    /* finalize gateway, render UI & prepare required data */
     this.initializePayment();
   },
   methods: {
@@ -153,31 +153,25 @@ export default {
           color: "#3399cc",
         },
         amount,
-        handler: async (response) => {
-          const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
-            response;
-
-          await this.$post("/razorpayPaymentSuccess/v2", {
-            gatewayToken: razorpay_order_id,
-            transactionId: razorpay_payment_id,
-            signature: razorpay_signature,
-            type: this.type,
-          });
-
-          /* act according to payment type */
-          switch (this.type) {
-            case "order":
-              /* move to order placed page */
-              this.$store.dispatch("customer/fetchCart");
-              this.$router.push("/order-placed-successfully");
-              break;
-            case "paymentLink":
-              break;
-          }
-        },
+        handler: this.onRazorpayPaymentSuccess
       };
       /* create razorpay checkout object */
       this.razorpayCheckout = new Razorpay(options);
+    },
+    /* on razorpay payment success */
+    async onRazorpayPaymentSuccess(response) {
+      const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+        response;
+      /* call server api on payment success */
+      await this.$post("/razorpayPaymentSuccess/v2", {
+        /* razorpay_order_id is same as this.paymentIntent.gatewayTokeb */
+        gatewayToken: razorpay_order_id,
+        transactionId: razorpay_payment_id,
+        signature: razorpay_signature,
+        type: this.type,
+      });
+      /* emit payment processed event  */
+      this.$emit("paymentProcessed");
     },
     /* set stripe shipping and billing address */
     createStripeShippingAndBillingAddresses() {

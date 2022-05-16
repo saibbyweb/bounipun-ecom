@@ -1,4 +1,4 @@
-import { mongoose } from "@helpers/essentials";
+import { mongoose, MongoId } from "@helpers/essentials";
 
 /* schema */
 const schema = new mongoose.Schema(
@@ -44,10 +44,20 @@ const schema = new mongoose.Schema(
 /* model */
 const model = mongoose.model("paymentlink", schema);
 
+/* link details */
+type LinkDetailsToBeMatched = { amount: number, currency: string, countryCode: string, phoneNumber: string }
+
 /* helper methods */
 export const methods = {
     register() {
         console.log('registered paymentlinks')
+    },
+    async validateLinkDetails(linkId: MongoId, details: LinkDetailsToBeMatched) {
+        const doc = await model.findById(linkId);
+        if (!doc)
+            return false;
+
+        return doc.amount == details.amount && doc.currency == details.currency && doc.countryCode == details.countryCode && doc.phoneNumber == details.phoneNumber;
     }
 }
 
