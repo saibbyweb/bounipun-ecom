@@ -10,6 +10,7 @@
 import { loadStripe } from "@stripe/stripe-js";
 import { RAZORPAY_KEY_ID, STRIPE_PUBLISHABLE_KEY } from "../helpers/MiscHelper";
 
+/* error messages */
 const errorMsgs = {
   technicalDifficulty:
     "We are facing some technical difficulties at the moment. Kindly, try again after sometime.",
@@ -20,11 +21,15 @@ export default {
   props: {
     /* order, payment link, gift etc. */
     type: String,
+    /* three letter currency code */
     currency: String,
-    gateway: String,
+    /* preffered gateway (optional) */
+    prefferedGateway: String,
     /* amount (not in sub units) */
     amount: Number,
+    /* in delivery address shape */
     address: Object,
+    /* additional payload to be sent to server while creating payment intent */
     payload: Object,
   },
   data() {
@@ -56,41 +61,28 @@ export default {
     };
   },
   mounted() {
-    /* create a payment intent */
-    this.createPaymentIntent();
-    this.deciceGateway();
-  },
-  computed: {
-    stripeBillingAddress() {},
-    stripeShippingAddress() {},
+    /* finalize gateway  */
+    this.initializePayment();
   },
   methods: {
-    /* decide gateway */
-    deciceGateway() {
-      if (this.currency !== "INR") {
-        this.renderStipeCardElement();
-        this.createStripeShippingAndBillingAddresses();
+    /* initialize payment */
+    initializePayment() {
+      /* finalize gateway */
+      this.gateway =
+        this.prefferedGateway ?? this.currency === "INR"
+          ? "razorpay"
+          : "stripe";
+
+      /* do gateway related stuff */
+      switch (this.gateway) {
+        case "stripe":
+          this.createStipeCardElement();
+          this.createStripeShippingAndBillingAddresses();
+          break;
       }
-    },
-    /* initialize stripe elements */
-    async renderStipeCardElement(
-      options = {
-        hidePostalCode: true,
-      }
-    ) {
-      const { stripe } = this;
-      /* load client side stripe sdk */
-      stripe.sdk = await loadStripe(STRIPE_PUBLISHABLE_KEY);
-      stripe.elements = stripe.sdk.elements();
-      /* create stripe card element */
-      const element = stripe.elements.create("card", options);
-      /* mount card element to DOM  */
-      element.mount("#stripe-card");
-      /* enable processing when mount is complete */
-      element.on("change", (event) => {
-        this.error.status = false;
-        this.paymentUIReady = event.complete ? true : false;
-      });
+
+      /* create a payment intent */
+      this.createPaymentIntent();
     },
     /* create payment intent */
     async createPaymentIntent() {
@@ -121,6 +113,26 @@ export default {
       }
       /* enable payment processing from client side */
       this.paymentUIReady = true;
+    },
+    /* initialize stripe elements */
+    async createStipeCardElement(
+      options = {
+        hidePostalCode: true,
+      }
+    ) {
+      const { stripe } = this;
+      /* load client side stripe sdk */
+      stripe.sdk = await loadStripe(STRIPE_PUBLISHABLE_KEY);
+      stripe.elements = stripe.sdk.elements();
+      /* create stripe card element */
+      const element = stripe.elements.create("card", options);
+      /* mount card element to DOM  */
+      element.mount("#stripe-card");
+      /* enable processing when mount is complete */
+      element.on("change", (event) => {
+        this.error.status = false;
+        this.paymentUIReady = event.complete ? true : false;
+      });
     },
     /* setup razorpay order (set handler methods) */
     setupRazorpayOrder(amount) {
@@ -227,7 +239,7 @@ export default {
 
       /* confirm card payment */
       const { error } = await this.stripe.sdk.confirmCardPayment(
-        this.gatewayToken,
+        this.paymentIntent.gatewayToken,
         {
           payment_method: paymentMethodId,
           shipping: this.stripe.shippingAddress,
@@ -256,10 +268,12 @@ export default {
       /* emit payment processed event  */
       this.$emit("paymentProcessed");
     },
+    /* set loading state */
     setLoading(value) {
       this.$store.commit("customer/setLoading", value);
       this.processing = value;
     },
+    /* set error state and msg */
     setError(value, msg) {
       this.error.status = value;
       this.error.msg = msg;
