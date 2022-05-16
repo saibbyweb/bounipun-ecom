@@ -8,6 +8,7 @@ import { methods as unlockMethods } from "@models/unlock";
 import { methods as globalConfigMethods } from "@models/globalConfig";
 import { methods as currencyMethods } from "@models/currency"
 import { methods as paymentLinkMethods } from "@models/paymentLinks"
+import { methods as paymentMethods } from "@models/payment"
 
 let { sendContactFormEmailToAdmin } = notificationMethods;
 sendContactFormEmailToAdmin =
@@ -225,10 +226,11 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
     intentId: "",
     gatewayToken: "",
     amount: 0,
-    currency: ""
+    currency: "",
+    msg: ""
   };
 
-  /* TODO: verify gateway */
+  /* request body */
   const {
     user,
     type,
@@ -241,9 +243,8 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
     payload
   } = req.body;
 
-  /* check if currency is zero decimal or not */
-  const currencyDetails = await currencyMethods.getCurrency(currency);
-  const zeroDecimal = currencyDetails.zeroDecimal;
+
+  /* TODO: validate request */
 
   /* create intent payload & verify amount */
   let intentPayload = null;
@@ -258,25 +259,62 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
         currency,
         countryCode: payload.countryCode,
         phoneNumber: payload.phoneNumber
-      });
-      
+      })
       /* if details invalid */
-      if(!detailsValid)
-        return res.send(response);
+      if (!detailsValid)
+        return res.send({ ...response, msg: 'Invalid details provided' });
 
       break;
   }
+
+  /* check if currency is zero decimal or not */
+  const currencyDetails = await currencyMethods.getCurrency(currency);
+  const zeroDecimal = currencyDetails.zeroDecimal;
+  /* amount in sub-units */
+  const amountInSubUnits = parseInt((amount * 100).toFixed(2))
 
   /* create gateway token (payment intent)  */
+  let gatewayResponse = null;
   switch (gateway) {
     case 'razorpay':
+      gatewayResponse = await paymentMethods.createRazorpayOrder({
+        amount: amountInSubUnits,
+        currency: "INR",
+        receipt: "Bounipun Transaction",
+      });
       break;
     case 'stripe':
+      gatewayResponse = await paymentMethods.createStripePaymentIntent({
+        amount: zeroDecimal ? amount : amountInSubUnits,
+        currency,
+        description: "Bounipun Payment",
+      });
       break;
   }
 
+  /* if payment intent creation failed */
+  if (!gatewayResponse) {
+    return res.send({ ...response, msg: 'Gateway intent creation failed' });
+  }
 
+  /* save payment intent in database */
+  const paymentIntent = await paymentIntentMethods.createNew({
+    intentType: type,
+    createdBy: user._id,
+    amount: amountInSubUnits,
+    currency,
+    gateway,
+    payload,
+    valid: true,
+  });
+  /* attaching required details to response body */
+  response.gatewayToken = gateway === 'stripe' ? gatewayResponse.client_secret : gatewayResponse.id;
+  response.intentId = paymentIntent._id;
+  response.amount = amountInSubUnits;
+  response.currency = currency;
+  response.resolved = true;
 
+  res.send(response);
 });
 
 /* process stripe payment */

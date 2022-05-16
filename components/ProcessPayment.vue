@@ -82,7 +82,7 @@ export default {
       }
 
       /* create a payment intent */
-      this.createPaymentIntent();
+    //   this.createPaymentIntent();
     },
     /* create payment intent */
     async createPaymentIntent() {
