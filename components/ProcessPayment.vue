@@ -1,11 +1,15 @@
 <template>
-  <div class="process-payment">
-    <p>{{ JSON.stringify(address, null, 2) }}</p>
-    <p>{{ JSON.stringify(payload) }}</p>
+  <div class="process-payment flex center col">
     <!-- stripe card element -->
     <div v-if="gateway === 'stripe'" id="stripe-card" />
     <!-- checkout -->
-    <button class="action" @click="proceedPayment">Make Payment</button>
+    <button
+      :class="{ disabled: !enableCheckout }"
+      class="checkout-btn action"
+      @click="proceedPayment"
+    >
+      Make Payment
+    </button>
   </div>
 </template>
 
@@ -42,6 +46,9 @@ export default {
         gatewayToken: "",
         dbId: "",
       },
+      /* enable checkout flag (when card details have been entered) */
+      enableCheckout: false,
+      /* processing */
       processing: false,
       /* stripe */
       stripe: {
@@ -54,8 +61,6 @@ export default {
       gateway: "",
       /* razorpay checkout */
       razorpayCheckout: null,
-      /* flag indicating UI load is complete */
-      paymentUIReady: false,
       /* flag indicatring payment intent has been created */
       paymentIntentCreated: false,
       /* error */
@@ -67,7 +72,7 @@ export default {
   },
   mounted() {
     /* finalize gateway, render UI & prepare required data */
-    // this.initializePayment();
+    this.initializePayment();
   },
   methods: {
     /* proceed payment */
@@ -129,8 +134,6 @@ export default {
           this.setupRazorpayOrder(details.amount);
           break;
       }
-      /* enable payment processing from client side */
-      this.paymentUIReady = true;
     },
     /* initialize stripe elements */
     async createStipeCardElement(
@@ -149,7 +152,7 @@ export default {
       /* enable processing when mount is complete */
       element.on("change", (event) => {
         this.error.status = false;
-        this.paymentUIReady = event.complete ? true : false;
+        this.enableCheckout = event.complete ? true : false;
       });
     },
     /* setup razorpay order (set handler methods) */
@@ -175,6 +178,8 @@ export default {
       };
       /* create razorpay checkout object */
       this.razorpayCheckout = new Razorpay(options);
+      /* enable payment processing from client side */
+      this.enableCheckout = true;
     },
     /* on razorpay payment success */
     async onRazorpayPaymentSuccess(response) {
@@ -294,3 +299,22 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.process-payment {
+  width: 100%;
+}
+#stripe-card {
+  margin: 20px 0;
+  width: 100%;
+  max-width: 500px;
+  background-color: white;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
+  padding: 3%;
+}
+.checkout-btn {
+  &.disabled {
+    background-color: gray;
+  }
+}
+</style>
