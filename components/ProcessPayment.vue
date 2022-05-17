@@ -124,14 +124,17 @@ export default {
         return;
       }
 
+      /* extract gateway token and intent id */
+      const { gatewayToken, intentId, amount } = paymentIntentFetch.response;
+
       /* save payment intent token and id */
-      this.paymentIntent.gatewayToken = details.gatewayToken;
-      this.paymentIntent.dbId = details.intentId;
+      this.paymentIntent.gatewayToken = gatewayToken;
+      this.paymentIntent.dbId = intentId;
 
       /* act according to gateway */
       switch (this.gateway) {
         case "razorpay":
-          this.setupRazorpayOrder(details.amount);
+          this.setupRazorpayOrder(amount);
           break;
       }
     },
@@ -157,7 +160,7 @@ export default {
     },
     /* setup razorpay order (set handler methods) */
     setupRazorpayOrder(amount) {
-      const { firstName, surName, email, mobileNumber } = this.billingAddress;
+      const { firstName, surName, email, mobileNumber } = this.address;
       let options = {
         key: RAZORPAY_KEY_ID,
         order_id: this.paymentIntent.gatewayToken,
@@ -180,6 +183,7 @@ export default {
       this.razorpayCheckout = new Razorpay(options);
       /* enable payment processing from client side */
       this.enableCheckout = true;
+      alert('Razorpay checkout enabled')
     },
     /* on razorpay payment success */
     async onRazorpayPaymentSuccess(response) {
