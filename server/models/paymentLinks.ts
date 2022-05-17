@@ -1,5 +1,5 @@
 import { mongoose, MongoId } from "@helpers/essentials";
-
+type Gateway = 'stripe' | 'razorpay';
 /* schema */
 const schema = new mongoose.Schema(
     {
@@ -33,6 +33,13 @@ const schema = new mongoose.Schema(
         },
         /* amount */
         amount: Number,
+        /* paid */
+        paid: { type: Boolean, default: false },
+        /* payment details */
+        paymentDetails: {
+            gateway: String,
+            timestamp: Date
+        },
         description: { type: String, default: '' },
         status: { type: Boolean, default: false }
     },
@@ -52,12 +59,24 @@ export const methods = {
     register() {
         console.log('registered paymentlinks')
     },
+    /* validate link details */
     async validateLinkDetails(linkId: MongoId, details: LinkDetailsToBeMatched) {
         const doc = await model.findById(linkId);
         if (!doc)
             return false;
 
         return doc.amount == details.amount && doc.currency == details.currency && doc.countryCode == details.countryCode && doc.phoneNumber == details.phoneNumber;
+    },
+    /* mark as paid */
+    async markAsPaid(linkId: MongoId, gateway: Gateway) {
+        const updated = await model.findByIdAndUpdate(linkId, {
+            paid: true, paymentDetails: {
+                gateway,
+                timestamp: new Date()
+            }
+        })
+
+        return updated ? true : false;
     }
 }
 

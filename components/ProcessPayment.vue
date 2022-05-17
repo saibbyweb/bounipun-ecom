@@ -164,7 +164,7 @@ export default {
         response;
       /* call server api on payment success */
       await this.$post("/razorpayPaymentSuccess/v2", {
-        /* razorpay_order_id is same as this.paymentIntent.gatewayTokeb */
+        /* razorpay_order_id is same as this.paymentIntent.gatewayToken */
         gatewayToken: razorpay_order_id,
         transactionId: razorpay_payment_id,
         signature: razorpay_signature,

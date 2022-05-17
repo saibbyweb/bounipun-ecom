@@ -1,7 +1,7 @@
 import { server, db, mongoose, task, formatDate } from "@helpers/essentials";
 import { methods as userMethods } from "@models/user";
 import { methods as couponMethods } from "@models/coupon";
-import { methods as paymentIntentMethods } from "@models/paymentIntent";
+import { IntentOptions, methods as paymentIntentMethods, PaymentLinkIntent } from "@models/paymentIntent";
 import { methods as messageMethods } from "@models/message";
 import { methods as notificationMethods } from "@models/notification";
 import { methods as unlockMethods } from "@models/unlock";
@@ -247,7 +247,7 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
   /* TODO: validate request */
 
   /* create intent payload & verify amount */
-  let intentPayload = null;
+  let intentTypeAndPayload = null;
 
   switch (type) {
     case 'order':
@@ -264,6 +264,12 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
       if (!detailsValid)
         return res.send({ ...response, msg: 'Invalid details provided' });
 
+      /* create intent payload */
+      intentTypeAndPayload = {
+        intentType: 'paymentLink', payload: {
+          linkId: payload.linkId
+        }
+      } as PaymentLinkIntent
       break;
   }
 
@@ -299,13 +305,12 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
 
   /* save payment intent in database */
   const paymentIntent = await paymentIntentMethods.createNew({
-    intentType: type,
+    ...intentTypeAndPayload,
     createdBy: user._id,
     amount: amountInSubUnits,
     currency,
     gateway,
-    payload,
-    valid: true,
+    valid: true
   });
   /* attaching required details to response body */
   response.gatewayToken = gateway === 'stripe' ? gatewayResponse.client_secret : gatewayResponse.id;
@@ -329,7 +334,6 @@ router.post("/stripeWebhook", async (req, res) => {
   const event = req.body;
 
   /* TODO: dude, verify the signature first */
-  // console.log(event);
   const amount = event.data.object.amount;
   const currency = event.data.object.currency;
 
@@ -347,11 +351,76 @@ router.post("/stripeWebhook", async (req, res) => {
   res.send({ resolved: true });
 });
 
+/*  stripe webhooks */
+router.post("/stripeWebhook/v2", async (req, res) => {
+  /* TODO: dude, verify the signature first */
+  const event = req.body;
+  const stripePaymentIntent = event.data.object;
+  const { amount, currency, id: transactionId, client_secret: gatewayToken } = stripePaymentIntent;
+
+  /* verify token is valid */
+  const paymentIntent: any = await paymentIntentMethods.fetchAndVerifyPaymentIntent(
+    gatewayToken
+  );
+
+  /* if payment intent is invalid */
+  if (!paymentIntent)
+    return console.log("Payment Intent Invalid")
+
+  if (event.type === "payment_intent.succeeded") {
+    // switch () {
+    //   case '':
+    //     break;
+    //   case '':
+    //     break;
+    // }
+  }
+
+  switch (event.type) {
+    case "payment_intent.succeeded":
+      console.log("WEBHOOK CALLED, PAYMENT SUCCEEDED");
+
+
+      await userMethods.placeOrder(client_secret, transactionId, "stripe");
+      break;
+  }
+
+  res.send({ resolved: true });
+});
+
 /* razorpay payment success */
 router.post("/razorpayPaymentSuccess", async (req, res) => {
   const { razorpay_order_id, transactionId } = req.body;
   console.log(req.body);
   await userMethods.placeOrder(razorpay_order_id, transactionId, "razorpay");
+  res.send({ resolved: true });
+});
+
+/* razorpay payment success - v2 */
+router.post("/razorpayPaymentSuccess/v2", async (req, res) => {
+  console.log(req.body);
+  const { gatewayToken, transactionId, signature, type } = req.body;
+
+  /* verify token is valid */
+  const paymentIntent: any = await paymentIntentMethods.fetchAndVerifyPaymentIntent(
+    gatewayToken
+  );
+
+  /* if payment intent is invalid */
+  if (!paymentIntent)
+    return console.log("Payment Intent Invalid")
+
+  switch (type) {
+    case 'order':
+      /* place order */
+      await userMethods.placeOrder(gatewayToken, transactionId, "razorpay");
+      break;
+    case 'paymentLink':
+      /* mark payment link as paid */
+      await paymentLinkMethods.markAsPaid((paymentIntent as PaymentLinkIntent).payload.linkId, "razorpay")
+      break;
+  }
+
   res.send({ resolved: true });
 });
 
