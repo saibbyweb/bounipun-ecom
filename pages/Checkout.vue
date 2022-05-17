@@ -87,7 +87,6 @@
 import currencyHelper from "../helpers/currencyHelper.js";
 import { loadStripe } from "@stripe/stripe-js";
 
-
 /* demo delivery address */
 const demoDeliveryAddress = {
   firstName: "Suhaib",
@@ -175,7 +174,7 @@ export default {
           this.deliveryAddress.firstName + " " + this.deliveryAddress.surName,
         email: this.deliveryAddress.email,
         address: {
-          city: this.deliveryAddress.city, 
+          city: this.deliveryAddress.city,
           line1:
             this.deliveryAddress.addressLine1 +
             " | " +
@@ -475,6 +474,9 @@ export default {
   margin-top: 20px;
   &.disabled {
     background-color: gray;
+    &:hover {
+      background-color: gray;
+    }
   }
 }
 </style>
