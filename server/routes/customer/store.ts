@@ -218,8 +218,16 @@ router.post("/createPaymentIntent", userAuth("customer"), async (req, res) => {
   res.send(response);
 });
 
+/* payment link request payload */
+type paymentLinkReqPayload = {
+  linkId: string;
+  countryCode: string;
+  phoneNumber: string;
+}
+
 /* TODO: create universal payment intent */
 router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, res) => {
+
   /* response object to be send back */
   const response = {
     resolved: false,
@@ -243,7 +251,10 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
     payload
   } = req.body;
 
+  /* msg */
+  let msg = '';
 
+  console.log(`✴️ Payment Intent creation requested for: ${type} | Amount: ${amount} | Currency: ${currency}`);
   /* TODO: validate request */
 
   /* create intent payload & verify amount */
@@ -253,16 +264,22 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
     case 'order':
       break;
     case 'paymentLink':
+      const reqPayload = payload as paymentLinkReqPayload
       /* validate details */
-      const detailsValid = await paymentLinkMethods.validateLinkDetails(payload.linkId, {
+      const detailsValid = await paymentLinkMethods.validateLinkDetails(reqPayload.linkId, {
         amount,
         currency,
-        countryCode: payload.countryCode,
-        phoneNumber: payload.phoneNumber
+        countryCode: reqPayload.countryCode,
+        phoneNumber: reqPayload.phoneNumber
       })
       /* if details invalid */
-      if (!detailsValid)
-        return res.send({ ...response, msg: 'Invalid details provided' });
+      if (!detailsValid) {
+        msg = '❌ Invalid link details provided'
+        console.log(msg);
+        return res.send({ ...response, msg });
+      }
+
+      console.log('🔰 Payment link details validated')
 
       /* create intent payload */
       intentTypeAndPayload = {
@@ -273,11 +290,15 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
       break;
   }
 
+  console.log('🔰 Payment Intent payload created')
+
   /* check if currency is zero decimal or not */
   const currencyDetails = await currencyMethods.getCurrency(currency);
   const zeroDecimal = currencyDetails.zeroDecimal;
   /* amount in sub-units */
   const amountInSubUnits = parseInt((amount * 100).toFixed(2))
+
+  console.log(`🔸 Amount in sub-units: ${amountInSubUnits} ${currency} | Zero Decimal: ${zeroDecimal}`)
 
   /* create gateway token (payment intent)  */
   let gatewayResponse = null;
@@ -293,14 +314,16 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
       gatewayResponse = await paymentMethods.createStripePaymentIntent({
         amount: zeroDecimal ? amount : amountInSubUnits,
         currency,
-        description: "Bounipun Payment",
+        description: "Bounipun Transaction",
       });
       break;
   }
 
   /* if payment intent creation failed */
   if (!gatewayResponse) {
-    return res.send({ ...response, msg: 'Gateway intent creation failed' });
+    msg = '❌ Gateway intent creation failed'
+    console.log(msg);
+    return res.send({ ...response, msg });
   }
 
   /* save payment intent in database */
@@ -312,6 +335,9 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
     gateway,
     valid: true
   });
+
+  console.log(`✅ Payment intent created: ${paymentIntent._id}`)
+
   /* attaching required details to response body */
   response.gatewayToken = gateway === 'stripe' ? gatewayResponse.client_secret : gatewayResponse.id;
   response.intentId = paymentIntent._id;
@@ -355,34 +381,27 @@ router.post("/stripeWebhook", async (req, res) => {
 router.post("/stripeWebhook/v2", async (req, res) => {
   /* TODO: dude, verify the signature first */
   const event = req.body;
-  const stripePaymentIntent = event.data.object;
-  const { amount, currency, id: transactionId, client_secret: gatewayToken } = stripePaymentIntent;
-
+  const { id: transactionId, client_secret: gatewayToken }  = event.data.object;
   /* verify token is valid */
-  const paymentIntent: any = await paymentIntentMethods.fetchAndVerifyPaymentIntent(
+  const paymentIntent: IntentOptions = await paymentIntentMethods.fetchAndVerifyPaymentIntent(
     gatewayToken
   );
 
   /* if payment intent is invalid */
   if (!paymentIntent)
-    return console.log("Payment Intent Invalid")
-
+    return res.send({ resolved: false, msg: 'Gateway token invalid' })
+  
+  /* if payment successed  */
   if (event.type === "payment_intent.succeeded") {
-    // switch () {
-    //   case '':
-    //     break;
-    //   case '':
-    //     break;
-    // }
-  }
-
-  switch (event.type) {
-    case "payment_intent.succeeded":
-      console.log("WEBHOOK CALLED, PAYMENT SUCCEEDED");
-
-
-      await userMethods.placeOrder(client_secret, transactionId, "stripe");
-      break;
+    console.log('💳 Payment Succeeded');
+    switch (paymentIntent.intentType) {
+      case 'order':
+        await userMethods.placeOrder(gatewayToken, transactionId, "stripe");
+        break;
+      case 'paymentLink':
+        await paymentLinkMethods.markAsPaid((paymentIntent as PaymentLinkIntent).payload.linkId, "stripe")
+        break;
+    }
   }
 
   res.send({ resolved: true });

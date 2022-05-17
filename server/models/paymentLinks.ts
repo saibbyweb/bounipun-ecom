@@ -76,6 +76,8 @@ export const methods = {
             }
         })
 
+        /* TODO: send email notification to admin */
+
         return updated ? true : false;
     }
 }

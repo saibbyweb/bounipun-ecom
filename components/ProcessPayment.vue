@@ -1,8 +1,11 @@
 <template>
   <div class="process-payment">
+    <p>{{ JSON.stringify(address, null, 2) }}</p>
+    <p>{{ JSON.stringify(payload) }}</p>
     <!-- stripe card element -->
     <div v-if="gateway === 'stripe'" id="stripe-card" />
-    <button class="action">Make Payment</button>
+    <!-- checkout -->
+    <button class="action" @click="proceedPayment">Make Payment</button>
   </div>
 </template>
 
@@ -47,6 +50,8 @@ export default {
         shippingAddress: null,
         billingAddress: null,
       },
+      /* gateway */
+      gateway: "",
       /* razorpay checkout */
       razorpayCheckout: null,
       /* flag indicating UI load is complete */
@@ -62,9 +67,22 @@ export default {
   },
   mounted() {
     /* finalize gateway, render UI & prepare required data */
-    this.initializePayment();
+    // this.initializePayment();
   },
   methods: {
+    /* proceed payment */
+    proceedPayment() {
+      if (this.processing) return;
+      /* gateway */
+      switch (this.gateway) {
+        case "razorpay":
+          this.razorpayCheckout.open();
+          break;
+        case "stripe":
+          this.stripeCheckout();
+          break;
+      }
+    },
     /* initialize payment */
     initializePayment() {
       /* finalize gateway */
@@ -82,7 +100,7 @@ export default {
       }
 
       /* create a payment intent */
-    //   this.createPaymentIntent();
+      this.createPaymentIntent();
     },
     /* create payment intent */
     async createPaymentIntent() {
@@ -153,7 +171,7 @@ export default {
           color: "#3399cc",
         },
         amount,
-        handler: this.onRazorpayPaymentSuccess
+        handler: this.onRazorpayPaymentSuccess,
       };
       /* create razorpay checkout object */
       this.razorpayCheckout = new Razorpay(options);

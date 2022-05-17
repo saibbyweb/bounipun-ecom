@@ -43,7 +43,7 @@
             :key="item._id"
           />
         </div>
-        
+
         <!-- payee details and payment information -->
         <div class="flex col payee-and-payment">
           <!-- payee details -->
@@ -81,7 +81,17 @@
           </div>
           <!-- overview + payment completion -->
           <div v-if="paymentOverview" class="payment-overview flex center">
-            <ProcessPayment />
+            <ProcessPayment
+              type="paymentLink"
+              :currency="linkDetails.currency"
+              :amount="linkDetails.amount"
+              :address="deliveryAddress"
+              :payload="{
+                linkId: linkDetails._id,
+                countryCode: linkDetails.countryCode,
+                phoneNumber: linkDetails.phoneNumber,
+              }"
+            />
           </div>
         </div>
       </div>
@@ -164,11 +174,12 @@ export default {
       this.title = "Delivery Address";
       this.desc = `Enter a shipping address`;
     },
-    moveToCheckout() {
+    moveToCheckout(deliveryAddress) {
       this.activeStepIndex = this.activeStepIndex + 1;
       this.title = "Payment Overview";
       this.desc = `Review items, delivery address and payment information`;
       window.scroll({ top: 0, behavior: "smooth" });
+      this.deliveryAddress = deliveryAddress;
       this.paymentOverview = true;
     },
   },
@@ -251,15 +262,15 @@ export default {
 }
 
 .payee-and-payment {
-    width: 50%;
-    align-content: center;
-    @media(max-width: 768px) {
-        width:100%;
-    }
+  width: 50%;
+  align-content: center;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 
-    .payment-overview {
-        margin-top:20px;
-    }
+  .payment-overview {
+    margin-top: 20px;
+  }
 }
 
 .payee-details {
