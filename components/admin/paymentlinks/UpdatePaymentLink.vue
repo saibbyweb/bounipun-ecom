@@ -24,6 +24,7 @@
     </div>
 
     <div class="flex center" style="gap: 5%; margin-top: 20px">
+      <!-- payee details -->
       <div class="flex col" style="width: 40%">
         <!-- payment link ID -->
         <InputBox
@@ -41,7 +42,7 @@
           Payment cannot be made without OTP verifying the number
         </span>
 
-        <div class="section flex center col" style="padding: 0 5%;">
+        <div class="section flex center col" style="padding: 0 5%">
           <!-- country selection -->
           <label class="label" style="text-align: left; width: 90%">
             Country:
@@ -50,7 +51,6 @@
           <CountrySelect
             v-model="doc.countryCode"
             :initialValue="`${countryCode}`"
-      
             :lock="false"
           />
 
@@ -104,18 +104,18 @@
         class="items"
       >
         <transition-group type="transition" name="flip-list"> -->
-          <PaymentLinkItem
-            v-for="(item, index) in doc.items"
-            :initialValue="item"
-            :currency="doc.currency"
-            :key="item.key ? item.key : item._id"
-            :index="index"
-            :allProducts="allProducts"
-            @update="updateItems"
-            @remove="removeItem"
-            @totalChanged="calculateAmount"
-          />
-        <!-- </transition-group>
+      <PaymentLinkItem
+        v-for="(item, index) in doc.items"
+        :initialValue="item"
+        :currency="doc.currency"
+        :key="item.key ? item.key : item._id"
+        :index="index"
+        :allProducts="allProducts"
+        @update="updateItems"
+        @remove="removeItem"
+        @totalChanged="calculateAmount"
+      />
+      <!-- </transition-group>
       </Draggable> -->
       <!-- add new item -->
       <div class="flex center">
@@ -148,11 +148,21 @@
         </button>
       </div>
       <!-- info -->
-      <br/>
-      <span v-if="notify.done" class="msg info" style="background-color: #efefef; padding: 2px 7px; font-size: 13px;"> {{ notify.msg }} </span>
+      <br />
+      <span
+        v-if="notify.done"
+        class="msg info"
+        style="background-color: #efefef; padding: 2px 7px; font-size: 13px"
+      >
+        {{ notify.msg }}
+      </span>
     </div>
+
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
+
+    <!-- paid flag -->
+    <div class="paid-flag">{{ doc.paid ? "Paid" : "Unpaid" }}</div>
 
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
@@ -209,6 +219,7 @@ const baseDoc = () => ({
     start: new Date(),
     end: new Date(),
   },
+  paid: false,
   amount: 0,
   description: "",
   status: false,
@@ -246,8 +257,8 @@ export default {
   },
   computed: {
     previewLink() {
-      return `/payment-link?id=${this.doc._id}`
-    }
+      return `/payment-link?id=${this.doc._id}`;
+    },
   },
   methods: {
     notifyVia(mode) {
@@ -257,8 +268,8 @@ export default {
           this.notify.done = true;
           break;
         case "email":
-            this.notify.msg = `❌ Could not send email invoice to ${this.doc.email}`
-            this.notify.done = true;
+          this.notify.msg = `❌ Could not send email invoice to ${this.doc.email}`;
+          this.notify.done = true;
           break;
       }
       setTimeout(() => (this.notify.done = false), 5000);
@@ -358,6 +369,7 @@ export default {
         amount,
         description,
         items,
+        paid,
         status,
       } = details;
       this.doc = {
@@ -372,6 +384,7 @@ export default {
         amount,
         items,
         description,
+        paid,
         status,
       };
       this.countryCode = this.doc.countryCode;
@@ -384,7 +397,7 @@ export default {
       this.$emit("close");
     },
     resetForm() {
-      this.items = []
+      this.items = [];
       this.populateForm(baseDoc());
       this.editMode = false;
     },
