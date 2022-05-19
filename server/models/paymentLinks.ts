@@ -70,7 +70,8 @@ export const methods = {
     /* mark as paid */
     async markAsPaid(linkId: MongoId, gateway: Gateway) {
         const updated = await model.findByIdAndUpdate(linkId, {
-            paid: true, paymentDetails: {
+            paid: true,
+            paymentDetails: {
                 gateway,
                 timestamp: new Date()
             }

@@ -32,6 +32,7 @@ export type OrderIntent = {
 export type PaymentLinkIntent = {
     intentType: 'paymentLink',
     payload: {
+        gatewayToken: string,
         linkId: MongoId
     }
 }
@@ -60,7 +61,7 @@ export const methods = {
         console.log(paymentIntent, '--from fetch intent')
         return paymentIntent !== null ? paymentIntent : false;
     },
-     /* check for payment intent validity */
+    /* check for payment intent validity */
     async fetchAndVerifyPaymentIntent(gatewayToken) {
         const paymentIntent = await model.findOne({ 'payload.gatewayToken': gatewayToken, valid: true });
         return paymentIntent;

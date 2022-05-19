@@ -258,7 +258,7 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
   /* TODO: validate request */
 
   /* create intent payload & verify amount */
-  let intentTypeAndPayload = null;
+  let intentPayload = null;
 
   switch (type) {
     case 'order':
@@ -282,11 +282,10 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
       console.log('🔰 Payment link details validated')
 
       /* create intent payload */
-      intentTypeAndPayload = {
-        intentType: 'paymentLink', payload: {
-          linkId: payload.linkId
-        }
-      } as PaymentLinkIntent
+      intentPayload = {
+        linkId: payload.linkId,
+      } as PaymentLinkIntent['payload']
+
       break;
   }
 
@@ -326,9 +325,13 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
     return res.send({ ...response, msg });
   }
 
+  /* set gateway token */
+  const gatewayToken = gateway === 'stripe' ? gatewayResponse.client_secret : gatewayResponse.id;
+
   /* save payment intent in database */
   const paymentIntent = await paymentIntentMethods.createNew({
-    ...intentTypeAndPayload,
+    payload: { ...intentPayload, gatewayToken },
+    intentType: type,
     createdBy: user._id,
     amount: amountInSubUnits,
     currency,
@@ -339,7 +342,7 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
   console.log(`✅ Payment intent created: ${paymentIntent._id}`)
 
   /* attaching required details to response body */
-  response.gatewayToken = gateway === 'stripe' ? gatewayResponse.client_secret : gatewayResponse.id;
+  response.gatewayToken = gatewayToken;
   response.intentId = paymentIntent._id;
   response.amount = amountInSubUnits;
   response.currency = currency;
@@ -381,7 +384,7 @@ router.post("/stripeWebhook", async (req, res) => {
 router.post("/stripeWebhook/v2", async (req, res) => {
   /* TODO: dude, verify the signature first */
   const event = req.body;
-  const { id: transactionId, client_secret: gatewayToken }  = event.data.object;
+  const { id: transactionId, client_secret: gatewayToken } = event.data.object;
   /* verify token is valid */
   const paymentIntent: IntentOptions = await paymentIntentMethods.fetchAndVerifyPaymentIntent(
     gatewayToken
@@ -390,7 +393,7 @@ router.post("/stripeWebhook/v2", async (req, res) => {
   /* if payment intent is invalid */
   if (!paymentIntent)
     return res.send({ resolved: false, msg: 'Gateway token invalid' })
-  
+
   /* if payment successed  */
   if (event.type === "payment_intent.succeeded") {
     console.log('💳 Payment Succeeded');
@@ -417,7 +420,7 @@ router.post("/razorpayPaymentSuccess", async (req, res) => {
 
 /* razorpay payment success - v2 */
 router.post("/razorpayPaymentSuccess/v2", async (req, res) => {
-  console.log(req.body);
+  console.log('Request body: ', req.body);
   const { gatewayToken, transactionId, signature, type } = req.body;
 
   /* verify token is valid */
@@ -429,6 +432,8 @@ router.post("/razorpayPaymentSuccess/v2", async (req, res) => {
   if (!paymentIntent)
     return console.log("Payment Intent Invalid")
 
+  console.log(`✅  Payment Intent is valid, type: ${type}`)
+
   switch (type) {
     case 'order':
       /* place order */
@@ -439,6 +444,8 @@ router.post("/razorpayPaymentSuccess/v2", async (req, res) => {
       await paymentLinkMethods.markAsPaid((paymentIntent as PaymentLinkIntent).payload.linkId, "razorpay")
       break;
   }
+
+  console.log('✅  Post payment routine complete.')
 
   res.send({ resolved: true });
 });
