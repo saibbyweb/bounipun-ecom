@@ -10,6 +10,8 @@ const newOrderAdminTemplateId = 'd-4d596c48997442849bc5e4358851973b';
 const orderCancelledAdminTemplateId = 'd-fe286d508f9545d0b96569179293ef75';
 const orderUpdateCustomerTemplateId = 'd-4831632c7d7b4da98f41b97fa548b013';
 const orderPlacedCustomerTemplateId = 'd-85ed720ba2ea445fba54555ec1da9baf';
+const paymentReceivedAdminTemplateId = 'd-0b533bae3eaa458d95e08c0ab95d9875'
+const paymentLinkCustomerTemplateId = 'd-5291767f141f4a79aab77efaac2c5336';
 
 const typeString = {
     type: String,
@@ -86,6 +88,23 @@ type AdminOrderCancelledEmailTemplate = {
     reason: string
 }
 
+type paymentLinkCustomerEmailTemplate = {
+    name: string,
+    for: string,
+    amount: string | number,
+    currency: string,
+    dueDate: string,
+    linkId: string
+}
+
+type paymentSucessAdminEmailTemplate = {
+    name: string,
+    for: string,
+    amount: string,
+    currency: string,
+    gateway: string
+}
+
 // {
 //     "name": "Suhaib Khan",
 //     "timestamp":"2021-08-28T11:49:50.524+00:00",
@@ -130,10 +149,10 @@ export const methods = {
         const { to, subject, templateId, templateData, emailProvider, type, customer } = details;
         let { receipt } = details;
 
-        console.log('📤 Email notification request type:' ,type)
-        
-          //remove @bounipun emails from list (for dev)
-        if(environment === 'development') {
+        console.log('📤 Email notification request type:', type)
+
+        //remove @bounipun emails from list (for dev)
+        if (environment === 'development') {
             receipt = receipt.filter(email => email.includes('@bounipun') === false)
             console.log('🔸 Removed @bounipun.in email for dev. environement')
         }
@@ -164,7 +183,7 @@ export const methods = {
 
     },
     async sendContactFormEmailToAdmin(details: ContactEmailTemplate) {
-        
+
         await this.sendEmailNotification({
             to: 'admin',
             receipt: ['contact@bounipun.in'],
@@ -190,7 +209,7 @@ export const methods = {
 
         await this.sendEmailNotification({
             to: 'admin',
-            receipt: ['orders@bounipun.in','hello@saibbyweb.com'],
+            receipt: ['orders@bounipun.in', 'hello@saibbyweb.com'],
             subject: 'New Order Received',
             templateId: newOrderAdminTemplateId,
             templateData: details,
