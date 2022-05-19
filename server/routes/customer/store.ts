@@ -420,7 +420,7 @@ router.post("/razorpayPaymentSuccess", async (req, res) => {
 
 /* razorpay payment success - v2 */
 router.post("/razorpayPaymentSuccess/v2", async (req, res) => {
-  console.log('Request body: ', req.body);
+  // console.log('Request body: ', req.body);
   const { gatewayToken, transactionId, signature, type } = req.body;
 
   /* verify token is valid */

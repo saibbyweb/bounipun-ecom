@@ -26,6 +26,7 @@ const errorMsgs = {
 };
 export default {
   props: {
+    demoMode: Boolean,
     /* order, payment link, gift etc. */
     type: String,
     /* three letter currency code */
@@ -77,7 +78,14 @@ export default {
   methods: {
     /* proceed payment */
     proceedPayment() {
+      /* if demo mode */
+      if(this.demoMode) {
+        this.$emit('paymentProcessed')
+        return;
+      }
+
       if (this.processing) return;
+
       /* gateway */
       switch (this.gateway) {
         case "razorpay":

@@ -13,13 +13,13 @@
 export default {
   head() {
     return {
-      title: "Order Placed Successfully | Bounipun Kashmir"
+      title: "Order Placed Successfully | Bounipun Kashmir",
     };
   },
   mounted() {
     this.$store.dispatch("customer/fetchProfile");
-    this.$store.dispatch('customer/fetchCart')
-  }
+    this.$store.dispatch("customer/fetchCart");
+  },
 };
 </script>
 

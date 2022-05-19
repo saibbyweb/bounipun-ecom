@@ -25,9 +25,23 @@
 <script>
 import "@/helpers/validate.js";
 
+const demoDeliveryAddress = {
+  firstName: "Suhaib",
+  surName: "Khan",
+  mobileNumber: "9906697711",
+  email: "hello@saibbyweb.com",
+  addressLine1: "H.no 54, Chinar Enclave",
+  addressLine2: "Rawalpora, Near Masjid",
+  city: "Srinagar",
+  postalCode: "190005",
+  countryIsoCode: "US",
+}
+
 export default {
   props: {
+    useUSAddress: { type: Boolean, default: false },
     countryDialCode: String,
+    countryIsoCode: String,
     disabled: {
       type: Boolean,
       default: false,
@@ -187,7 +201,7 @@ export default {
       deliveryAddress.countryDialCode = this.countryDialCode;
       deliveryAddress.countryIsoCode = this.countryIsoCode;
 
-      this.$emit("continue", deliveryAddress);
+      this.$emit("continue", this.useUSAddress ? demoDeliveryAddress : deliveryAddress);
       return validated;
     }
   }

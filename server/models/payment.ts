@@ -1,7 +1,13 @@
-import { mongoose, ObjectId, task } from "@helpers/essentials"
+import { mongoose, ObjectId, task, environment } from "@helpers/essentials"
 import Razorpay from "razorpay";
 import Stripe from "stripe";
-const stripe = new Stripe(process.env.STRIPE_SK, {
+
+/* stripe secret key */
+const STRIPE_SECRET_KEY = environment === "development"
+    ? process.env.STRIPE_SK_TEST_SAIBBYWEB
+    : process.env.STRIPE_SK;
+
+const stripe = new Stripe(STRIPE_SECRET_KEY, {
     apiVersion: '2020-08-27'
 });
 
@@ -60,8 +66,8 @@ export const methods = {
     async createStripePaymentIntent(intentDetails: StripeDetails) {
         /* stripe intent */
         const { response, error } = await task(stripe.paymentIntents.create(intentDetails));
-        
-        if(error) {
+
+        if (error) {
             return false;
         }
 

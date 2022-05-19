@@ -1,7 +1,7 @@
 <template>
   <div class="page payment-link">
     <!-- progress bar -->
-    <div class="steps flex center">
+    <div v-if="!paymentProcessedSuccessfully" class="steps flex center">
       <div
         v-for="(step, index) in steps"
         :key="index"
@@ -19,7 +19,7 @@
     <br />
 
     <!-- header -->
-    <div class="header flex center col">
+    <div v-if="!paymentProcessedSuccessfully" class="header flex center col">
       <h1 class="heading">{{ title }}</h1>
       <p class="desc">
         <span class="link-name"> {{ desc }} </span>
@@ -29,7 +29,7 @@
     <br />
 
     <!-- invoice details  -->
-    <div v-if="linkDetailsFetched">
+    <div v-if="linkDetailsFetched && !paymentProcessedSuccessfully">
       <div v-if="!otpVerified || paymentOverview" class="invoice-details flex">
         <!-- items -->
         <div class="items flex col">
@@ -91,6 +91,8 @@
                 countryCode: linkDetails.countryCode,
                 phoneNumber: linkDetails.phoneNumber,
               }"
+              :demoMode="true"
+              @paymentProcessed="paymentProcessed"
             />
           </div>
         </div>
@@ -120,6 +122,14 @@
     </div>
 
     <!-- payment success  -->
+    <div v-if="paymentProcessedSuccessfully" class="payment-success">
+      <ActionResponse
+        icon="/icons/order_success.png"
+        title="Payment Successful."
+        :message="`We have received a payment of ${linkDetails.amount} ${linkDetails.currency}. Thank you.`"
+        action="Continue Shopping!"
+      />
+    </div>
     <!-- payment failure (with retry) -->
   </div>
 </template>
@@ -150,6 +160,14 @@ export default {
     this.fetchPaymentLinkDetails(paymentLinkId);
   },
   methods: {
+    /* payment proccessed */
+    paymentProcessed() {
+      this.activeStepIndex = this.activeStepIndex + 1;
+      window.scroll({ top: 0, behavior: "smooth" });
+      this.paymentProcessedSuccessfully = true;
+      this.title = "Payment Successful";
+      this.desc = "";
+    },
     async fetchPaymentLinkDetails(paymentLinkId) {
       const { fetched, doc } = await this.$fetchDocument(
         "paymentlink",
