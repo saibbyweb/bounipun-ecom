@@ -564,6 +564,21 @@ router.post("/updateWholeStore", adminAuth("1", true), async (req, res) => {
   res.send({ resolved: true });
 });
 
+/* notify client about payment */
+router.post('/paymentLinkNotification', adminAuth('1', true), async (req, res) => {
+  const { mode, email, text } = req.body;
+  console.log(req.body)
+  switch(mode) {
+    case 'email':
+      break;
+    case 'sms':
+      break;
+  }
+  
+  res.send({resolved: true})
+
+})
+
 /* update order (of lists in admin panel) */
 router.post("/updateOrder", async (req, res) => {
   const { model, newList } = req.body;

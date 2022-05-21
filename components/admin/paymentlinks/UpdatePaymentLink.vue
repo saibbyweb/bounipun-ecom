@@ -261,7 +261,7 @@ export default {
     },
   },
   methods: {
-    notifyVia(mode) {
+    async notifyVia(mode) {
       switch (mode) {
         case "sms":
           this.notify.msg = `✅ Invoice sent to ${this.doc.countryCode}${this.doc.phoneNumber}`;
@@ -272,6 +272,16 @@ export default {
           this.notify.done = true;
           break;
       }
+      
+      /* send invoice via */
+      await this.$post('/paymentLinkNotification', {
+        mode,
+        email: this.doc.email,
+        countryDialCode: this.doc.countryCode,
+        phoneNumber: this.doc.phoneNumber,
+        text: this.notifyClientText
+      });
+
       setTimeout(() => (this.notify.done = false), 5000);
     },
     setNotifyClientText() {

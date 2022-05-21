@@ -79,13 +79,13 @@ export const methods = {
             }
         })
 
-        /* TODO: send email notification to admin */
+        /* send email notification to admin */
         await notificationMethods.paymentLinkUpdate('paymentReceivedAdmin',{
-            name : 'Bounipun Admin',
+            name : updated.payeeName,
             for: updated.name,
             amount: updated.amount,
             currency: updated.currency,
-            gateway
+            gateway: gateway.toUpperCase()
         });
 
         return updated ? true : false;
