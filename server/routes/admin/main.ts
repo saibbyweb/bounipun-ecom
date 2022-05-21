@@ -9,6 +9,7 @@ import { methods as notificationMethods, paymentLinkCustomerEmailTemplate } from
 import { methods as currencyMethods } from "@models/currency";
 import { methods as saleMethods } from "@models/sale";
 import { methods as productListMethods } from "@models/productLists"
+import { methods as paymentLinkMethods } from "@models/paymentLinks"
 import axios from "axios";
 
 let { orderUpdateEmailToCustomer } = notificationMethods;
@@ -571,22 +572,14 @@ router.post('/paymentLinkNotification', adminAuth('1', true), async (req, res) =
 
   switch (mode) {
     case 'email':
-      /* send email notification to admin */
-      await notificationMethods.paymentLinkUpdate('paymentLinkCustomer', {
-        name: details.payeeName,
-        for: details.for,
-        amount: details.amount,
-        currency: details.currency,
-        dueDate: details.dueDate,
-        linkId: details.linkId
-      } as paymentLinkCustomerEmailTemplate, email);
+      /* notify client */
+      await paymentLinkMethods.notifyClient('email', details, email);
       break;
     case 'sms':
       break;
   }
 
-  res.send({ resolved: true })
-
+  res.send({ resolved: true });
 })
 
 /* update order (of lists in admin panel) */

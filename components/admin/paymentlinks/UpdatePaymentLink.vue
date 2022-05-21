@@ -156,6 +156,25 @@
       >
         {{ notify.msg }}
       </span>
+
+      <!-- notify-log -->
+      <label class="label"> Notify Log: </label>
+
+      <table v-if="doc.notifyLog.length > 0" class="notify-log" style="width: 100%; font-size: 12px">
+        <!-- heading -->
+        <tr class="heading">
+          <td>Mode</td>
+          <td>To</td>
+          <td>Timestamp</td>
+        </tr>
+
+        <!-- details -->
+        <tr v-for="item in doc.notifyLog" :key="item._id">
+          <td>{{ item.mode.toString() }}</td>
+          <td>{{ item.to }}</td>
+          <td>{{ $formatDate(item.timestamp) }}</td>
+        </tr>
+      </table>
     </div>
 
     <!-- description -->
@@ -221,6 +240,7 @@ const baseDoc = () => ({
   },
   paid: false,
   amount: 0,
+  notifyLog: [],
   description: "",
   status: false,
 });
@@ -262,19 +282,8 @@ export default {
   },
   methods: {
     async notifyVia(mode) {
-      switch (mode) {
-        case "sms":
-          this.notify.msg = `✅ Invoice sent to ${this.doc.countryCode}${this.doc.phoneNumber}`;
-          this.notify.done = true;
-          break;
-        case "email":
-          this.notify.msg = `❌ Could not send email invoice to ${this.doc.email}`;
-          this.notify.done = true;
-          break;
-      }
-      
       /* send invoice via */
-      await this.$post('/paymentLinkNotification', {
+      const notifyRequest = await this.$post("/paymentLinkNotification", {
         mode,
         email: this.doc.email,
         countryDialCode: this.doc.countryCode,
@@ -286,11 +295,30 @@ export default {
           amount: this.doc.amount,
           currency: this.doc.currency,
           dueDate: this.$formatDate(this.doc.validityRange.end),
-          linkId: this.doc._id
-        }
+          linkId: this.doc._id,
+        },
       });
 
+      /* if notify request failed */
+      if (!notifyRequest.resolved) {
+        this.setNotifyResponse(true, `❌ Couldn't process notify request.`);
+        return;
+      }
+
+      if (mode === "email")
+        this.setNotifyResponse(`✅ Invoice sent to ${this.doc.email}`);
+      else if (mode === "sms")
+        this.setNotifyResponse(
+          `✅ Invoice sent to ${this.doc.countryCode}${this.doc.phoneNumber}`
+        );
+
+      this.updateDocument();
+
       setTimeout(() => (this.notify.done = false), 5000);
+    },
+    setNotifyResponse(msg) {
+      this.notify.done = true;
+      this.notify.msg = msg;
     },
     setNotifyClientText() {
       return `Hi ${this.doc.payeeName}, view your Bounipun invoice at ${this.previewLink}`;
@@ -344,9 +372,11 @@ export default {
     },
     async updateDocument() {
       this.loading = true;
+      const doc = {...this.doc}
+      delete doc.notifyLog;
       const result = await this.$updateDocument(
         this.model,
-        { ...this.doc, items: this.items },
+        { ...doc, items: this.items },
         this.editMode
       );
       this.loading = false;
@@ -388,8 +418,10 @@ export default {
         description,
         items,
         paid,
+        notifyLog,
         status,
       } = details;
+
       this.doc = {
         _id,
         name,
@@ -403,6 +435,7 @@ export default {
         items,
         description,
         paid,
+        notifyLog: notifyLog ?? [],
         status,
       };
       this.countryCode = this.doc.countryCode;
@@ -474,6 +507,18 @@ export default {
   .action {
     text-transform: lowercase;
     font-family: $font_1;
+  }
+}
+.notify-log {
+  .heading {
+    td {
+      font-family: $font_1_bold;
+    }
+  }
+  td {
+    border: 1px solid #efefef;
+    font-family: $font_1;
+    text-align: center;
   }
 }
 </style>

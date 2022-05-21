@@ -1,5 +1,5 @@
 import { mongoose, MongoId } from "@helpers/essentials";
-import { methods as notificationMethods } from "@models/notification";
+import { methods as notificationMethods, paymentLinkCustomerEmailTemplate } from "@models/notification";
 
 type Gateway = 'stripe' | 'razorpay';
 /* schema */
@@ -42,6 +42,11 @@ const schema = new mongoose.Schema(
             gateway: String,
             timestamp: Date
         },
+        notifyLog: [{
+            mode: String,
+            to: String,
+            timestamp: { type: Date }
+        }],
         description: { type: String, default: '' },
         status: { type: Boolean, default: false }
     },
@@ -80,8 +85,8 @@ export const methods = {
         })
 
         /* send email notification to admin */
-        await notificationMethods.paymentLinkUpdate('paymentReceivedAdmin',{
-            name : updated.payeeName,
+        await notificationMethods.paymentLinkUpdate('paymentReceivedAdmin', {
+            name: updated.payeeName,
             for: updated.name,
             amount: updated.amount,
             currency: updated.currency,
@@ -89,6 +94,26 @@ export const methods = {
         });
 
         return updated ? true : false;
+    },
+    /* notify client */
+    async notifyClient(mode: 'email' | 'sms', details: any, email: string) {
+        // await notificationMethods.paymentLinkUpdate('paymentLinkCustomer', {
+        //     name: details.payeeName,
+        //     for: details.for,
+        //     amount: details.amount,
+        //     currency: details.currency,
+        //     dueDate: details.dueDate,
+        //     linkId: details.linkId
+        // }, email);
+
+        /* update notify log for payment link */
+        await model.findByIdAndUpdate(details.linkId, {
+            $push: { notifyLog: { mode, to: email, timestamp: new Date() } }
+        });
+
+        console.log('updated payment link')
+
+        return true;
     }
 }
 
