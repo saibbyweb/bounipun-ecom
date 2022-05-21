@@ -5,7 +5,7 @@ import { register } from "@models";
 import { methods as userMethods } from "@models/user";
 import { methods as adminMethods } from "@models/admin";
 import { methods as sessionMethods } from "@models/session";
-import { methods as notificationMethods } from "@models/notification";
+import { methods as notificationMethods, paymentLinkCustomerEmailTemplate } from "@models/notification";
 import { methods as currencyMethods } from "@models/currency";
 import { methods as saleMethods } from "@models/sale";
 import { methods as productListMethods } from "@models/productLists"
@@ -482,28 +482,28 @@ router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
         const product: any = await db.model('products').findById(productId).lean();
 
         /* check if its under bounipun */
-        if(product.availabilityType === "ready-to-ship" && product.type === "under-bounipun" && product.colors.length > 1) {
+        if (product.availabilityType === "ready-to-ship" && product.type === "under-bounipun" && product.colors.length > 1) {
           console.log('********* RTS split can be processed');
         }
         else {
           return res.send(response);
         }
-        
+
         let splittedProducts = [];
-    
-            /* split colors into individual */
-        for(const color of product.colors) {
-          const splittedProduct = {...product, _id: '', alias: '', name: product.name + " - " + color.name, colors: [color], }
+
+        /* split colors into individual */
+        for (const color of product.colors) {
+          const splittedProduct = { ...product, _id: '', alias: '', name: product.name + " - " + color.name, colors: [color], }
           splittedProducts.push(splittedProduct);
         }
-        
+
         /* mark common product to be removed */
         await db.model(model).findByIdAndUpdate(productId, { name: product.name + " -  TO BE REMOVED ❌", status: false });
-    
+
         res.send({ splittedProducts });
         return;
       }
-      else if(type === "set-higher-order") {
+      else if (type === "set-higher-order") {
         console.log('do something here with orders');
         res.send('I am on my way!');
         return;
@@ -566,16 +566,26 @@ router.post("/updateWholeStore", adminAuth("1", true), async (req, res) => {
 
 /* notify client about payment */
 router.post('/paymentLinkNotification', adminAuth('1', true), async (req, res) => {
-  const { mode, email, text } = req.body;
-  console.log(req.body)
-  switch(mode) {
+  const { mode, email, countryDialCode, phoneNumber, text, details } = req.body;
+  console.log(details);
+
+  switch (mode) {
     case 'email':
+      /* send email notification to admin */
+      await notificationMethods.paymentLinkUpdate('paymentLinkCustomer', {
+        name: details.payeeName,
+        for: details.for,
+        amount: details.amount,
+        currency: details.currency,
+        dueDate: details.dueDate,
+        linkId: details.linkId
+      } as paymentLinkCustomerEmailTemplate, email);
       break;
     case 'sms':
       break;
   }
-  
-  res.send({resolved: true})
+
+  res.send({ resolved: true })
 
 })
 
@@ -722,11 +732,11 @@ router.post("/loginAdmin", async (req, res) => {
   // if (countryDialCode === "+91")
   //   otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp);
   // else
-    otpVerified = await userMethods.verifyInternationalOtp(
-      countryDialCode,
-      phoneNumber,
-      otp
-    );
+  otpVerified = await userMethods.verifyInternationalOtp(
+    countryDialCode,
+    phoneNumber,
+    otp
+  );
 
   /* if otp verification failed */
   if (otpVerified === false) {

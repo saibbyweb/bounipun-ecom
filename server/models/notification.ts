@@ -89,7 +89,7 @@ type AdminOrderCancelledEmailTemplate = {
     reason: string
 }
 
-type paymentLinkCustomerEmailTemplate = {
+export type paymentLinkCustomerEmailTemplate = {
     name: string,
     for: string,
     amount: string | number,
@@ -98,7 +98,7 @@ type paymentLinkCustomerEmailTemplate = {
     linkId: string
 }
 /* payment received email template */
-type paymentReceivedAdminEmailTemplate = {
+export type paymentReceivedAdminEmailTemplate = {
     name: string,
     for: string,
     amount: string,

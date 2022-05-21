@@ -279,7 +279,15 @@ export default {
         email: this.doc.email,
         countryDialCode: this.doc.countryCode,
         phoneNumber: this.doc.phoneNumber,
-        text: this.notifyClientText
+        text: this.notifyClientText,
+        details: {
+          payeeName: this.doc.payeeName,
+          for: this.doc.name,
+          amount: this.doc.amount,
+          currency: this.doc.currency,
+          dueDate: this.$formatDate(this.doc.validityRange.end),
+          linkId: this.doc._id
+        }
       });
 
       setTimeout(() => (this.notify.done = false), 5000);
