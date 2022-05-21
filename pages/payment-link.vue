@@ -91,7 +91,7 @@
                 countryCode: linkDetails.countryCode,
                 phoneNumber: linkDetails.phoneNumber,
               }"
-              :demoMode="true"
+              :demoMode="false"
               @paymentProcessed="paymentProcessed"
             />
           </div>

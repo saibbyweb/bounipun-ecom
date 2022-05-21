@@ -1,4 +1,6 @@
 import { mongoose, MongoId } from "@helpers/essentials";
+import { methods as notificationMethods } from "@models/notification";
+
 type Gateway = 'stripe' | 'razorpay';
 /* schema */
 const schema = new mongoose.Schema(
@@ -78,6 +80,13 @@ export const methods = {
         })
 
         /* TODO: send email notification to admin */
+        await notificationMethods.paymentLinkUpdate('paymentReceivedAdmin',{
+            name : 'Bounipun Admin',
+            for: updated.name,
+            amount: updated.amount,
+            currency: updated.currency,
+            gateway
+        });
 
         return updated ? true : false;
     }

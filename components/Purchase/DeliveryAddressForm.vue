@@ -50,7 +50,7 @@ export default {
   data() {
     return {
       formData: this.createFormData(),
-    };
+    }
   },
   methods: {
     prefillForm() {

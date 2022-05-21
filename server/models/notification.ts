@@ -1,5 +1,6 @@
 import { mongoose, ObjectId, environment } from "@helpers/essentials";
 import sgMail, { MailDataRequired } from '@sendgrid/mail'
+import { ConferenceInstance } from "twilio/lib/rest/api/v2010/account/conference";
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 /* template id send grid */
@@ -96,8 +97,8 @@ type paymentLinkCustomerEmailTemplate = {
     dueDate: string,
     linkId: string
 }
-
-type paymentSucessAdminEmailTemplate = {
+/* payment received email template */
+type paymentReceivedAdminEmailTemplate = {
     name: string,
     for: string,
     amount: string,
@@ -117,7 +118,6 @@ type paymentSucessAdminEmailTemplate = {
 export const methods = {
     register() {
         console.log('notification registered');
-        // this.sendTestDynamicMail();
     },
     async sendDynamicEmailViaSendGrid(to: string | Array<string>, subject: string, templateId: string, dynamicTemplateData: any, from: string = 'noreply@bounipun.in') {
         /* construct email data */
@@ -266,9 +266,37 @@ export const methods = {
             emailProvider: 'sendgrid',
             type
         });
+    },
+    async paymentLinkUpdate(type: PaymentLinkUpdateType, templateData: PaymentLinkUpdateTemplate, email?: string, ) {
+        let emailList = [];
+        let subject = '';
+        let to = '';
 
+        switch(type) {
+            case 'paymentReceivedAdmin':
+                subject = 'Payment Received'
+                emailList = ['hello@saibbyweb.com']
+                to = 'admin'
+                break;
+            case 'paymentLinkCustomer':
+                subject = 'Payment Requested | Bounipun'
+                emailList = [email]
+                to = 'customer'
+                break;
+        }
 
+        await this.sendEmailNotification({
+            to,
+            receipt: emailList,
+            subject,
+            templateId: to === 'admin' ? paymentReceivedAdminTemplateId : paymentLinkCustomerTemplateId,
+            templateData,
+            emailProvider: 'sendgrid',
+            type: 'payment-link-update'
+        });
     }
 }
 
+type PaymentLinkUpdateType = 'paymentReceivedAdmin' | 'paymentLinkCustomer'
+type PaymentLinkUpdateTemplate = paymentReceivedAdminEmailTemplate | paymentLinkCustomerEmailTemplate
 export default { model, methods };

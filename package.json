@@ -14,7 +14,7 @@
     "start": "NODE_ENV=production node dist/server.js",
     "start:dev": "yarn run frontend:dev && yarn run server:dev",
     "up": "yarn run build && yarn run start",
-    "stripe:listen": "stripe listen --forward-to localhost:3000/stripeWebhook",
+    "stripe:listen": "stripe listen --forward-to localhost:3000/stripeWebhook/v2",
     "backup-prod": "./db-transport backup bounipun-ecom-prod",
     "staging-db-restore": "./db-transport restore bounipun-ecom-stage",
     "ssh-prod": "ssh -i ssh_keys/bounipun_ecom saibbyweb@143.110.182.246"
