@@ -139,11 +139,11 @@
       <!-- send payment link -->
       <div class="actions flex around">
         <!-- sms invoice -->
-        <button class="action small" @click="notifyVia('sms')">
+        <!-- <button class="action small" @click="notifyVia('sms')">
           SMS Invoice to {{ doc.countryCode + doc.phoneNumber }}
-        </button>
+        </button> -->
         <!-- email invoice  -->
-        <button class="action small" @click="notifyVia('email')">
+        <button :disabled="doc.paid" class="action small" @click="notifyVia('email')">
           Email Invoice to {{ doc.email }}
         </button>
       </div>
