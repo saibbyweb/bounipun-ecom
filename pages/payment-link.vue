@@ -1,6 +1,6 @@
 <template>
   <div class="page payment-link">
-    <div v-if="linkDetailsFetched && !invalidLink && !aleadyPaid">
+    <div v-if="linkDetailsFetched && !invalidLink && !alreadyPaid">
       <!-- progress bar -->
       <div v-if="!paymentProcessedSuccessfully" class="steps flex center">
         <div
@@ -83,6 +83,22 @@
                 </p>
               </div>
             </div>
+
+             <!-- delivery address -->
+          <div v-if="steps[activeStepIndex] === 'Finalize Payment'" class="delivery-address-overview shadow flex col">
+              <h3 class="heading">Delivery Address</h3>
+            <span class="name">
+              {{ deliveryAddress.firstName }} {{ deliveryAddress.surName }}
+            </span>
+            <span> {{ deliveryAddress.addressLine1 }}</span>
+            <span> {{ deliveryAddress.addressLine2 }} </span>
+            <span> {{ deliveryAddress.state || "" }} </span>
+            <span> {{ deliveryAddress.city }} </span>
+            <span> {{ deliveryAddress.postalCode }} </span>
+            <span> {{ deliveryAddress.mobileNumber }} </span>
+            <!-- <span> {{ deliveryAddress.email }} </span> -->
+          </div>
+
             <!-- overview + payment completion -->
             <div v-if="paymentOverview" class="payment-overview flex center">
               <ProcessPayment
@@ -99,7 +115,12 @@
                 @paymentProcessed="paymentProcessed"
               />
             </div>
+
           </div>
+
+
+
+
         </div>
       </div>
       <br />
@@ -146,12 +167,12 @@
     </div>
     <!-- invalid link -->
     <div v-if="invalidLink">
-        <ActionResponse
+      <ActionResponse
         icon="/icons/payment_failed.png"
         title="Broken Payment Link"
         message="Kindly recheck the URL and try again"
         action="Continue Shopping"
-         />
+      />
     </div>
   </div>
 </template>
@@ -214,7 +235,7 @@ export default {
       this.linkDetailsFetched = true;
       this.desc = `for ${doc.name}`;
       if (doc.paid) {
-       this.alreadyPaid = true
+        this.alreadyPaid = true;
       }
     },
     sendOtp(value = true) {
@@ -283,11 +304,18 @@ export default {
   }
   .desc {
     font-size: 19px;
+    text-align: center;
     .link-name {
       font-family: $font_2;
     }
     .amount {
       font-family: $font_2_bold;
+    }
+  }
+
+  @media(max-width: 768px) {
+    .desc {
+      font-size: 13px;
     }
   }
 }
@@ -352,4 +380,34 @@ export default {
     }
   }
 }
+
+  .delivery-address-overview {
+    margin-top: 20px;
+    width: 100%;
+    position: relative;
+    background: rgb(255, 255, 255);
+    padding: 3%;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
+
+    .heading {
+      background-color: rgb(126, 190, 126);
+      color:white;
+      border-radius: 2px;
+      padding:10px;
+      margin-bottom:10px;
+    }
+
+    span {
+      font-family: $font_2;
+      font-size: 14px;
+      margin: 2px 0;
+
+      &.name {
+        font-family: $font_1_bold;
+        font-weight: 900;
+      }
+    }
+  }
 </style>

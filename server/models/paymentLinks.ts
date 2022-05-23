@@ -97,14 +97,14 @@ export const methods = {
     },
     /* notify client */
     async notifyClient(mode: 'email' | 'sms', details: any, email: string) {
-        // await notificationMethods.paymentLinkUpdate('paymentLinkCustomer', {
-        //     name: details.payeeName,
-        //     for: details.for,
-        //     amount: details.amount,
-        //     currency: details.currency,
-        //     dueDate: details.dueDate,
-        //     linkId: details.linkId
-        // }, email);
+        await notificationMethods.paymentLinkUpdate('paymentLinkCustomer', {
+            name: details.payeeName,
+            for: details.for,
+            amount: details.amount,
+            currency: details.currency,
+            dueDate: details.dueDate,
+            linkId: details.linkId
+        }, email);
 
         /* update notify log for payment link */
         await model.findByIdAndUpdate(details.linkId, {
