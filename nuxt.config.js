@@ -83,7 +83,7 @@ export default {
     BASE_URL: process.env.BASE_URL,
     RAZORPAY_KEY_ID_TEST: process.env.RAZORPAY_KEY_ID_TEST,
     RAZORPAY_KEY_ID_PROD: process.env.RAZORPAY_KEY_ID_PROD,
-    STRIPE_PK_TEST: process.env.STRIPE_PK_TEST,
+    STRIPE_PK_TEST: process.env.STRIPE_PK_TEST_SAIBBYWEB,
     STRIPE_PK_PROD: process.env.STRIPE_PK_PROD
   },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
