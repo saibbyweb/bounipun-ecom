@@ -65,7 +65,7 @@
               >
                 <!-- send otp -->
                 <button v-if="!otpSent" class="action" @click="sendOtp">
-                  Confirm Phone Number
+                  Generate OTP
                 </button>
                 <!-- otp input box -->
                 <InputCredential

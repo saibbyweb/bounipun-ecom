@@ -25,7 +25,7 @@
 
     <div :class="{paid: doc.paid}"  class="flex center" style="gap: 5%; margin-top: 20px">
       <!-- payee details -->
-      <div class="flex col" style="width: 40%">
+      <div class="section flex col" style="width: 40%">
         <!-- payment link ID -->
         <InputBox
           v-if="editMode"
@@ -35,14 +35,16 @@
           :internal="true"
         />
 
-        <label class="label" style="text-align: left; width: 90%">
-          Phone Number (with country code)
+        <label class="label" style="text-align: center; width: 90%; font-size: 16px;">
+         Payee Details:
         </label>
-        <span class="desc">
+        <!-- <span class="desc">
           Payment cannot be made without OTP verifying the number
-        </span>
+        </span> -->
 
-        <div class="section flex center col" style="padding: 0 5%">
+        <br/>
+
+        <div class="flex center col" style="padding: 0 5%">
           <!-- country selection -->
           <label class="label" style="text-align: left; width: 90%">
             Country:
@@ -56,7 +58,7 @@
 
           <DeliveryInput
             v-model="doc.phoneNumber"
-            label="Phone Number"
+            label="Payee Phone Number"
             :isMobileNumber="true"
             :countryCode="doc.countryCode"
             :error="{ status: false }"
@@ -67,7 +69,7 @@
         <InputBox label="Payee Name" v-model="doc.payeeName" />
 
         <!-- client email -->
-        <InputBox type="text" label="Email" v-model="doc.email" />
+        <InputBox type="text" label="Payee Email" v-model="doc.email" />
 
         <!-- currency type -->
         <SelectBox
@@ -77,10 +79,11 @@
         />
       </div>
 
+
       <!-- validity range -->
       <div class="validity-range flex col">
         <!-- link name -->
-        <InputBox label="Payment For" v-model="doc.name" :internal="true" />
+        <InputBox label="Payment For (Challan No, Invoice No)" v-model="doc.name" :internal="true" />
         <br />
         <label class="label"> Validity Range: </label>
         <client-only>
