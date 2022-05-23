@@ -390,7 +390,8 @@ export default {
         switch (this.headings[propIndex]) {
           case "read":
             return value ? "Read" : "Unread";
-            break;
+          case 'paid':
+            return value ? "Paid" : "Unpaid"
         }
 
         return value ? "Active" : "Inactive";
@@ -422,6 +423,9 @@ export default {
       /* slugify column heading and set as class name */
       let classes = [];
       const heading = this.headings[propIndex];
+
+
+
       const slugifiedHeading = slugify(heading, {
         lower: true,
       });
@@ -433,6 +437,8 @@ export default {
         // });
         // classes.push(slugifiedValue);
       }
+
+  
       return classes;
     },
     adjustItem() {

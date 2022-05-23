@@ -16,7 +16,7 @@
         :model="model"
         :headings="headings"
         :sortByFields="sortByFields"
-        custom_css="10% 25% 20% 25% 20%"
+        custom_css="10% 20% 25% 15% 10% 10% 10%"
         @documentFetched="documentFetched"
         @sortToggled="sortToggled"
       />
@@ -69,8 +69,8 @@ export default {
         limit: 20,
       },
       list: [],
-      sortByFields: ["name", "payeeName", "description", "status"],
-      headings: ["_id", "name", "payeeName", "description", "status"],
+      sortByFields: ["name", "payeeName", "amount", "currency", "paid", "status"],
+      headings: ["_id", "name", "payeeName", "amount", "currency", "paid", "status"],
     };
   },
   async mounted() {
@@ -100,12 +100,14 @@ export default {
       }
 
       /* extract list */
-      this.list = result.docs.map(({ _id, name, payeeName, description, status }) => {
+      this.list = result.docs.map(({ _id, name, payeeName, amount, currency, paid, description, status }) => {
         return {
           _id,
           name,
           payeeName,
-          description,
+          amount,
+          currency,
+          paid,
           status,
         };
       });

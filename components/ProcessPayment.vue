@@ -191,7 +191,6 @@ export default {
       this.razorpayCheckout = new Razorpay(options);
       /* enable payment processing from client side */
       this.enableCheckout = true;
-      alert('Razorpay checkout enabled')
     },
     /* on razorpay payment success */
     async onRazorpayPaymentSuccess(response) {

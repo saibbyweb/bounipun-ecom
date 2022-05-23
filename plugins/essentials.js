@@ -154,7 +154,7 @@ export default (context, inject) => {
     const { response, error } = await task(documentFetch);
     // $store.commit("admin/setLoading", false);
 
-    if (error) {
+    if (error || response.notFound == true) {
       return result;
     }
 

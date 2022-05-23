@@ -23,7 +23,7 @@
       </a>
     </div>
 
-    <div :class="{paid: doc.paid}"  class="flex center" style="gap: 5%; margin-top: 20px">
+    <div class="flex center" style="gap: 5%; margin-top: 20px">
       <!-- payee details -->
       <div class="flex col" style="width: 40%">
         <!-- payment link ID -->
@@ -80,7 +80,7 @@
       <!-- validity range -->
       <div class="validity-range flex col">
         <!-- link name -->
-        <InputBox label="Payment For" v-model="doc.name" :internal="true" />
+        <InputBox label="Link Name" v-model="doc.name" :internal="true" />
         <br />
         <label class="label"> Validity Range: </label>
         <client-only>
@@ -95,7 +95,7 @@
     </div>
 
     <!-- items -->
-    <div :class="{paid: doc.paid}"  class="flex col" style="gap: 10px">
+    <div class="flex col" style="gap: 10px">
       <label class="label"> Items: </label>
       <!-- <Draggable
         v-model="doc.items"
@@ -180,8 +180,8 @@
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
 
-    <!-- paid flag
-    <div class="paid-flag">{{ doc.paid ? "Paid" : "Unpaid" }}</div> -->
+    <!-- paid flag -->
+    <div class="paid-flag">{{ doc.paid ? "Paid" : "Unpaid" }}</div>
 
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
@@ -520,11 +520,5 @@ export default {
     font-family: $font_1;
     text-align: center;
   }
-}
-
-.paid {
-  pointer-events:none;
-  background-color: rgb(168, 214, 168);
-  border-radius: 10px;
 }
 </style>

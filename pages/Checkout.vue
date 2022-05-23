@@ -86,6 +86,7 @@
 <script>
 import currencyHelper from "../helpers/currencyHelper.js";
 import { loadStripe } from "@stripe/stripe-js";
+import { RAZORPAY_KEY_ID, STRIPE_PUBLISHABLE_KEY } from "../helpers/MiscHelper";
 
 /* demo delivery address */
 const demoDeliveryAddress = {
@@ -113,7 +114,7 @@ export default {
       if (!this.$store.state.customer.authorized) return;
 
       /* set keys according to environment */
-      this.setKeys();
+      // this.setKeys();
 
       /* fetch updated cart from user account */
       await this.$store.dispatch("customer/fetchCart");
@@ -138,6 +139,7 @@ export default {
   data() {
     return {
       deliveryAddress: this.$route.params.deliveryAddress,
+      // deliveryAddress: demoDeliveryAddress,
       remoteCartItems: this.$store.state.customer.globalRemoteCart,
       razorpayCheckout: null,
       stripe: null,
@@ -151,8 +153,8 @@ export default {
       elements: null,
       orderDetails: {},
       combinedDeliveryConsent: true,
-      razorpayKeyId: "",
-      stripePK: "",
+      razorpayKeyId: RAZORPAY_KEY_ID,
+      stripePK: STRIPE_PUBLISHABLE_KEY,
       processingStripe: false,
     };
   },

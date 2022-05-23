@@ -1,136 +1,158 @@
 <template>
   <div class="page payment-link">
-    <!-- progress bar -->
-    <div v-if="!paymentProcessedSuccessfully" class="steps flex center">
-      <div
-        v-for="(step, index) in steps"
-        :key="index"
-        class="step flex center"
-        :class="{ active: activeStepIndex >= index }"
-      >
-        <div class="circle flex center">{{ index + 1 }}</div>
+    <div v-if="linkDetailsFetched && !invalidLink && !aleadyPaid">
+      <!-- progress bar -->
+      <div v-if="!paymentProcessedSuccessfully" class="steps flex center">
         <div
-          v-if="index !== steps.length - 1"
-          class="connector"
-          :class="{ active: activeStepIndex >= index + 1 }"
-        ></div>
-      </div>
-    </div>
-    <br />
-
-    <!-- header -->
-    <div v-if="!paymentProcessedSuccessfully" class="header flex center col">
-      <h1 class="heading">{{ title }}</h1>
-      <p class="desc">
-        <span class="link-name"> {{ desc }} </span>
-      </p>
-    </div>
-
-    <br />
-
-    <!-- invoice details  -->
-    <div v-if="linkDetailsFetched && !paymentProcessedSuccessfully">
-      <div v-if="!otpVerified || paymentOverview" class="invoice-details flex">
-        <!-- items -->
-        <div class="items flex col">
-          <h3 class="heading">Items</h3>
-          <InvoiceItem
-            v-for="(item, index) in linkDetails.items"
-            :index="index"
-            :item="item"
-            :currency="linkDetails.currency"
-            :formatCurrency="formatCurrency"
-            :key="item._id"
-          />
+          v-for="(step, index) in steps"
+          :key="index"
+          class="step flex center"
+          :class="{ active: activeStepIndex >= index }"
+        >
+          <div class="circle flex center">{{ index + 1 }}</div>
+          <div
+            v-if="index !== steps.length - 1"
+            class="connector"
+            :class="{ active: activeStepIndex >= index + 1 }"
+          ></div>
         </div>
+      </div>
+      <br />
 
-        <!-- payee details and payment information -->
-        <div class="flex col payee-and-payment">
-          <!-- payee details -->
-          <div class="payee-details flex col">
-            <h3 class="heading">Payment Details</h3>
-            <PayeeDetails
-              :linkDetails="linkDetails"
+      <!-- header -->
+      <div v-if="!paymentProcessedSuccessfully" class="header flex center col">
+        <h1 class="heading">{{ title }}</h1>
+        <p class="desc">
+          <span class="link-name"> {{ desc }} </span>
+        </p>
+      </div>
+
+      <br />
+
+      <!-- invoice details  -->
+      <div v-if="linkDetailsFetched && !paymentProcessedSuccessfully">
+        <div
+          v-if="!otpVerified || paymentOverview"
+          class="invoice-details flex"
+        >
+          <!-- items -->
+          <div class="items flex col">
+            <h3 class="heading">Items</h3>
+            <InvoiceItem
+              v-for="(item, index) in linkDetails.items"
+              :index="index"
+              :item="item"
+              :currency="linkDetails.currency"
               :formatCurrency="formatCurrency"
+              :key="item._id"
             />
+          </div>
 
-            <div
-              class="actions flex col center"
-              v-if="!paymentOverview"
-              style="width: 100%"
-            >
-              <!-- send otp -->
-              <button v-if="!otpSent" class="action" @click="sendOtp">
-                Confirm Phone Number
-              </button>
-              <!-- otp input box -->
-              <InputCredential
-                label="One Time Password"
-                v-model="otp"
-                v-if="otpSent"
+          <!-- payee details and payment information -->
+          <div class="flex col payee-and-payment">
+            <!-- payee details -->
+            <div class="payee-details flex col">
+              <h3 class="heading">Payment Details</h3>
+              <PayeeDetails
+                :linkDetails="linkDetails"
+                :formatCurrency="formatCurrency"
               />
-              <!-- verify otp -->
-              <button v-if="otpSent" class="action" @click="verifyOtp">
-                Verify Number
-              </button>
-              <!-- otp sent msg -->
-              <p v-if="otpSent" class="message">
-                A one time password has been sent to your mobile number.
-              </p>
+
+              <div
+                class="actions flex col center"
+                v-if="!paymentOverview"
+                style="width: 100%"
+              >
+                <!-- send otp -->
+                <button v-if="!otpSent" class="action" @click="sendOtp">
+                  Confirm Phone Number
+                </button>
+                <!-- otp input box -->
+                <InputCredential
+                  label="One Time Password"
+                  v-model="otp"
+                  v-if="otpSent"
+                />
+                <!-- verify otp -->
+                <button v-if="otpSent" class="action" @click="verifyOtp">
+                  Verify Number
+                </button>
+                <!-- otp sent msg -->
+                <p v-if="otpSent" class="message">
+                  A one time password has been sent to your mobile number.
+                </p>
+              </div>
+            </div>
+            <!-- overview + payment completion -->
+            <div v-if="paymentOverview" class="payment-overview flex center">
+              <ProcessPayment
+                type="paymentLink"
+                :currency="linkDetails.currency"
+                :amount="linkDetails.amount"
+                :address="deliveryAddress"
+                :payload="{
+                  linkId: linkDetails._id,
+                  countryCode: linkDetails.countryCode,
+                  phoneNumber: linkDetails.phoneNumber,
+                }"
+                :demoMode="false"
+                @paymentProcessed="paymentProcessed"
+              />
             </div>
           </div>
-          <!-- overview + payment completion -->
-          <div v-if="paymentOverview" class="payment-overview flex center">
-            <ProcessPayment
-              type="paymentLink"
-              :currency="linkDetails.currency"
-              :amount="linkDetails.amount"
-              :address="deliveryAddress"
-              :payload="{
-                linkId: linkDetails._id,
-                countryCode: linkDetails.countryCode,
-                phoneNumber: linkDetails.phoneNumber,
-              }"
-              :demoMode="false"
-              @paymentProcessed="paymentProcessed"
-            />
-          </div>
         </div>
       </div>
-    </div>
-    <br />
+      <br />
 
-    <!-- delivery address form -->
-    <div
-      v-if="otpVerified && !paymentOverview"
-      class="delivery-address flex center"
-    >
-      <div class="form">
-        <!-- country selection -->
-        <CountrySelect
-          :initialValue="linkDetails.countryCode"
-          @setCountryIsoCode="countryIsoCode = $event"
-          :lock="true"
-        />
-        <!-- delivery form -->
-        <Delivery-Address-Form
-          :countryDialCode="linkDetails.countryCode"
-          :countryIsoCode="countryIsoCode"
-          @continue="moveToCheckout"
+      <!-- delivery address form -->
+      <div
+        v-if="otpVerified && !paymentOverview"
+        class="delivery-address flex center"
+      >
+        <div class="form">
+          <!-- country selection -->
+          <CountrySelect
+            :initialValue="linkDetails.countryCode"
+            @setCountryIsoCode="countryIsoCode = $event"
+            :lock="true"
+          />
+          <!-- delivery form -->
+          <Delivery-Address-Form
+            :countryDialCode="linkDetails.countryCode"
+            :countryIsoCode="countryIsoCode"
+            @continue="moveToCheckout"
+          />
+        </div>
+      </div>
+
+      <!-- payment success  -->
+      <div v-if="paymentProcessedSuccessfully" class="payment-success">
+        <ActionResponse
+          icon="/icons/order_success.png"
+          title="Payment Successful."
+          :message="`We have received a payment of ${linkDetails.amount} ${linkDetails.currency}. Thank you.`"
+          action="Continue Shopping!"
         />
       </div>
     </div>
-
-    <!-- payment success  -->
-    <div v-if="paymentProcessedSuccessfully" class="payment-success">
+    <!-- if already paid -->
+    <div v-if="alreadyPaid">
       <ActionResponse
         icon="/icons/order_success.png"
-        title="Payment Successful."
-        :message="`We have received a payment of ${linkDetails.amount} ${linkDetails.currency}. Thank you.`"
+        title="Already Paid"
+        :message="`We have already received a payment of ${linkDetails.amount} ${linkDetails.currency} on this payment link. Thank you.`"
         action="Continue Shopping!"
       />
     </div>
-    <!-- payment failure (with retry) -->
+    <!-- invalid link -->
+    <div v-if="invalidLink">
+        <ActionResponse
+        icon="/icons/payment_failed.png"
+        title="Broken Payment Link"
+        message="Kindly recheck the URL and try again"
+        action="Continue Shopping"
+         />
+    </div>
   </div>
 </template>
 
@@ -153,6 +175,7 @@ export default {
       desc: "",
       countryIsoCode: "",
       paymentOverview: false,
+      alreadyPaid: false,
     };
   },
   mounted() {
@@ -169,18 +192,30 @@ export default {
       this.desc = "";
     },
     async fetchPaymentLinkDetails(paymentLinkId) {
-      const { fetched, doc } = await this.$fetchDocument(
-        "paymentlink",
-        paymentLinkId
-      );
+      // const { fetched, doc } = await this.$fetchDocument(
+      //   "paymentlink",
+      //   paymentLinkId
+      // );
+
+      const { fetched, doc } = await this.$fetchData("paymentlink", {
+        _id: paymentLinkId,
+        status: true,
+      });
+
       if (!fetched) {
         this.invalidLink = true;
         return;
       }
+
+      /* if already paid */
+
       /* set new link details */
       this.linkDetails = doc;
       this.linkDetailsFetched = true;
       this.desc = `for ${doc.name}`;
+      if (doc.paid) {
+       this.alreadyPaid = true
+      }
     },
     sendOtp(value = true) {
       this.otpSent = value;

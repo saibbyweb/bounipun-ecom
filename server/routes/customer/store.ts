@@ -359,7 +359,7 @@ router.post(
 );
 
 /*  stripe webhooks */
-router.post("/stripeWebhook", async (req, res) => {
+router.post("/stripeWebhook/old", async (req, res) => {
   const event = req.body;
 
   /* TODO: dude, verify the signature first */
@@ -381,7 +381,7 @@ router.post("/stripeWebhook", async (req, res) => {
 });
 
 /*  stripe webhooks */
-router.post("/stripeWebhook/v2", async (req, res) => {
+router.post("/stripeWebhook", async (req, res) => {
   /* TODO: dude, verify the signature first */
   const event = req.body;
   const { id: transactionId, client_secret: gatewayToken } = event.data.object;
