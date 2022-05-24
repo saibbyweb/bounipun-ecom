@@ -150,8 +150,18 @@
         :internal="true"
       />
       <!-- copy text -->
-      <button class="small copy-text action" @click="copyLinkWithText"> 📋 Copy Text </button>
-      <span class="text-copied"> Text copied </span>
+      <button class="small copy-text action" @click="copyLinkWithText">
+        📋 Copy Text
+      </button>
+
+      <button
+        class="small send-to-whatsapp action"
+        @click="openInNewTab(whatsAppShareLink)"
+      >
+        🔗  Share to Whatsapp
+      </button>
+
+      <span v-if="textCopied" class="text-copied"> Text copied </span>
       <!-- send payment link -->
       <div class="actions flex around">
         <!-- sms invoice -->
@@ -304,8 +314,17 @@ export default {
     previewLink() {
       return `/payment-link?id=${this.doc._id}`;
     },
+    whatsAppShareLink() {
+      const BASE_SHARE_URL = "https://wa.me/919103077655?text=";
+      let msg = this.notifyClientText;
+      msg = encodeURI(msg);
+      return BASE_SHARE_URL + msg;
+    },
   },
   methods: {
+    openInNewTab(link) {
+      window.open(link, "_newtab");
+    },
     async notifyVia(mode) {
       /* send invoice via */
       const notifyRequest = await this.$post("/paymentLinkNotification", {
@@ -348,8 +367,12 @@ export default {
     setNotifyClientText() {
       return `Hi ${this.doc.payeeName}, view your Bounipun invoice at https://bounipun.in${this.previewLink}`;
     },
+    copyLinkWithText() {
+      this.textCopied = true;
+      this.copyToClipBoard(this.notifyClientText);
+      setTimeout(() => (this.textCopied = false), 2500);
+    },
     copyToClipBoard(textToCopy) {
-      
       const tmpTextField = document.createElement("textarea");
       tmpTextField.textContent = textToCopy;
       tmpTextField.setAttribute("style", "position:absolute; right:200%;");
@@ -358,8 +381,6 @@ export default {
       tmpTextField.setSelectionRange(0, 99999); /*For mobile devices*/
       document.execCommand("copy");
       tmpTextField.remove();
-      this.textCopied = true;
-      setTimeout(() => this.textCopied = false, 2500)
     },
     calculateAmount() {
       this.doc.amount = this.items.reduce((sum, curr) => sum + curr.total, 0);
@@ -511,20 +532,33 @@ export default {
 
 .notify-client {
   position: relative;
-  .copy-text {
+  .copy-text,
+  .send-to-whatsapp {
     position: absolute;
-    right:0;
-    top:0%;
-    font-size:12px;
-    background-color: rgb(96, 188, 96);
+    font-size: 11px;
+    background-color: rgb(103, 162, 180);
     &:hover {
-    background-color: rgb(103, 176, 102);
-      
+      background-color: rgb(92, 181, 178);
     }
+  }
+
+  .copy-text {
+        right: 0;
+    top: 0%;
+  }
+
+  .send-to-whatsapp {
+    left: 0;
+    top: 0%;
   }
 
   .text-copied {
     background-color: rgb(116, 181, 116);
+    color: white;
+    padding: 5px 20px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    font-size: 14px;
   }
 }
 
