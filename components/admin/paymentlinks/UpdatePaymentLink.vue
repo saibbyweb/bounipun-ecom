@@ -23,7 +23,11 @@
       </a>
     </div>
 
-    <div :class="{paid: doc.paid}"  class="flex center" style="gap: 5%; margin-top: 20px">
+    <div
+      :class="{ paid: doc.paid }"
+      class="flex center"
+      style="gap: 5%; margin-top: 20px"
+    >
       <!-- payee details -->
       <div class="section flex col" style="width: 40%">
         <!-- payment link ID -->
@@ -35,14 +39,17 @@
           :internal="true"
         />
 
-        <label class="label" style="text-align: center; width: 90%; font-size: 16px;">
-         Payee Details:
+        <label
+          class="label"
+          style="text-align: center; width: 90%; font-size: 16px"
+        >
+          Payee Details:
         </label>
         <!-- <span class="desc">
           Payment cannot be made without OTP verifying the number
         </span> -->
 
-        <br/>
+        <br />
 
         <div class="flex center col" style="padding: 0 5%">
           <!-- country selection -->
@@ -79,11 +86,14 @@
         />
       </div>
 
-
       <!-- validity range -->
       <div class="validity-range flex col">
         <!-- link name -->
-        <InputBox label="Payment For (Challan No, Invoice No)" v-model="doc.name" :internal="true" />
+        <InputBox
+          label="Payment For (Challan No, Invoice No)"
+          v-model="doc.name"
+          :internal="true"
+        />
         <br />
         <label class="label"> Validity Range: </label>
         <client-only>
@@ -98,7 +108,7 @@
     </div>
 
     <!-- items -->
-    <div :class="{paid: doc.paid}"  class="flex col" style="gap: 10px">
+    <div :class="{ paid: doc.paid }" class="flex col" style="gap: 10px">
       <label class="label"> Items: </label>
       <!-- <Draggable
         v-model="doc.items"
@@ -136,9 +146,12 @@
     <div v-if="editMode" class="section notify-client flex col center">
       <TextBox
         v-model="notifyClientText"
-        label="Invite Text"
+        label="Payment Details + Link"
         :internal="true"
       />
+      <!-- copy text -->
+      <button class="small copy-text action" @click="copyLinkWithText"> 📋 Copy Text </button>
+      <span class="text-copied"> Text copied </span>
       <!-- send payment link -->
       <div class="actions flex around">
         <!-- sms invoice -->
@@ -146,7 +159,11 @@
           SMS Invoice to {{ doc.countryCode + doc.phoneNumber }}
         </button> -->
         <!-- email invoice  -->
-        <button :disabled="doc.paid" class="action small" @click="notifyVia('email')">
+        <button
+          :disabled="doc.paid"
+          class="action small"
+          @click="notifyVia('email')"
+        >
           Email Invoice to {{ doc.email }}
         </button>
       </div>
@@ -163,7 +180,11 @@
       <!-- notify-log -->
       <label class="label"> Notify Log: </label>
 
-      <table v-if="doc.notifyLog.length > 0" class="notify-log" style="width: 100%; font-size: 12px">
+      <table
+        v-if="doc.notifyLog.length > 0"
+        class="notify-log"
+        style="width: 100%; font-size: 12px"
+      >
         <!-- heading -->
         <tr class="heading">
           <td>Mode</td>
@@ -264,6 +285,7 @@ export default {
         status: false,
         msg: "",
       },
+      textCopied: false,
       countryDialCode: "+91",
       allProducts: [],
       currency: "INR",
@@ -324,7 +346,20 @@ export default {
       this.notify.msg = msg;
     },
     setNotifyClientText() {
-      return `Hi ${this.doc.payeeName}, view your Bounipun invoice at ${this.previewLink}`;
+      return `Hi ${this.doc.payeeName}, view your Bounipun invoice at https://bounipun.in${this.previewLink}`;
+    },
+    copyToClipBoard(textToCopy) {
+      
+      const tmpTextField = document.createElement("textarea");
+      tmpTextField.textContent = textToCopy;
+      tmpTextField.setAttribute("style", "position:absolute; right:200%;");
+      document.body.appendChild(tmpTextField);
+      tmpTextField.select();
+      tmpTextField.setSelectionRange(0, 99999); /*For mobile devices*/
+      document.execCommand("copy");
+      tmpTextField.remove();
+      this.textCopied = true;
+      setTimeout(() => this.textCopied = false, 2500)
     },
     calculateAmount() {
       this.doc.amount = this.items.reduce((sum, curr) => sum + curr.total, 0);
@@ -375,7 +410,7 @@ export default {
     },
     async updateDocument() {
       this.loading = true;
-      const doc = {...this.doc}
+      const doc = { ...this.doc };
       delete doc.notifyLog;
       const result = await this.$updateDocument(
         this.model,
@@ -474,6 +509,25 @@ export default {
   //   overflow: hidden;
 }
 
+.notify-client {
+  position: relative;
+  .copy-text {
+    position: absolute;
+    right:0;
+    top:0%;
+    font-size:12px;
+    background-color: rgb(96, 188, 96);
+    &:hover {
+    background-color: rgb(103, 176, 102);
+      
+    }
+  }
+
+  .text-copied {
+    background-color: rgb(116, 181, 116);
+  }
+}
+
 .label {
   font-family: $font_2_bold;
   color: $gray;
@@ -526,7 +580,7 @@ export default {
 }
 
 .paid {
-  pointer-events:none;
+  pointer-events: none;
   background-color: rgb(168, 214, 168);
   border-radius: 10px;
 }
