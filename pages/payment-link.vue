@@ -3,6 +3,8 @@
     <div v-if="linkDetailsFetched && !invalidLink && !alreadyPaid">
       <!-- progress bar -->
       <div v-if="!paymentProcessedSuccessfully" class="steps flex center">
+        <img v-if="paymentOverview" @click="goBackToDeliveryForm" class="back-button" src="/icons/dark/arrow-left.png" />
+
         <div
           v-for="(step, index) in steps"
           :key="index"
@@ -17,6 +19,7 @@
           ></div>
         </div>
       </div>
+
       <br />
 
       <!-- header -->
@@ -84,20 +87,23 @@
               </div>
             </div>
 
-             <!-- delivery address -->
-          <div v-if="steps[activeStepIndex] === 'Finalize Payment'" class="delivery-address-overview shadow flex col">
+            <!-- delivery address -->
+            <div
+              v-if="steps[activeStepIndex] === 'Finalize Payment'"
+              class="delivery-address-overview shadow flex col"
+            >
               <h3 class="heading">Delivery Address</h3>
-            <span class="name">
-              {{ deliveryAddress.firstName }} {{ deliveryAddress.surName }}
-            </span>
-            <span> {{ deliveryAddress.addressLine1 }}</span>
-            <span> {{ deliveryAddress.addressLine2 }} </span>
-            <span> {{ deliveryAddress.state || "" }} </span>
-            <span> {{ deliveryAddress.city }} </span>
-            <span> {{ deliveryAddress.postalCode }} </span>
-            <span> {{ deliveryAddress.mobileNumber }} </span>
-            <!-- <span> {{ deliveryAddress.email }} </span> -->
-          </div>
+              <span class="name">
+                {{ deliveryAddress.firstName }} {{ deliveryAddress.surName }}
+              </span>
+              <span> {{ deliveryAddress.addressLine1 }}</span>
+              <span> {{ deliveryAddress.addressLine2 }} </span>
+              <span> {{ deliveryAddress.state || "" }} </span>
+              <span> {{ deliveryAddress.city }} </span>
+              <span> {{ deliveryAddress.postalCode }} </span>
+              <span> {{ deliveryAddress.mobileNumber }} </span>
+              <!-- <span> {{ deliveryAddress.email }} </span> -->
+            </div>
 
             <!-- overview + payment completion -->
             <div v-if="paymentOverview" class="payment-overview flex center">
@@ -115,12 +121,7 @@
                 @paymentProcessed="paymentProcessed"
               />
             </div>
-
           </div>
-
-
-
-
         </div>
       </div>
       <br />
@@ -204,6 +205,11 @@ export default {
     this.fetchPaymentLinkDetails(paymentLinkId);
   },
   methods: {
+    goBackToDeliveryForm() {
+      this.paymentOverview = false;
+      this.verifyOtp();
+      this.activeStepIndex-=2;
+    },
     /* payment proccessed */
     paymentProcessed() {
       this.activeStepIndex = this.activeStepIndex + 1;
@@ -270,6 +276,25 @@ export default {
   text-align: center;
 }
 .steps {
+  .back-button {
+    margin-right: 8%;
+    width: 50px;
+    height: 50px;
+    background-color: rgb(227, 223, 223);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      background-color: rgb(244, 244, 244);
+    }
+
+    @media (max-width: 768px) {
+      width: 35px;
+      height: 35px;
+    }
+  }
+
   .step {
     .circle {
       height: 35px;
@@ -299,6 +324,8 @@ export default {
 }
 
 .header {
+  position: relative;
+
   .heading {
     font-family: $font_1_bold;
   }
@@ -313,7 +340,7 @@ export default {
     }
   }
 
-  @media(max-width: 768px) {
+  @media (max-width: 768px) {
     .desc {
       font-size: 13px;
     }
@@ -381,33 +408,33 @@ export default {
   }
 }
 
-  .delivery-address-overview {
-    margin-top: 20px;
-    width: 100%;
-    position: relative;
-    background: rgb(255, 255, 255);
-    padding: 3%;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
+.delivery-address-overview {
+  margin-top: 20px;
+  width: 100%;
+  position: relative;
+  background: rgb(255, 255, 255);
+  padding: 3%;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
 
-    .heading {
-      background-color: rgb(126, 190, 126);
-      color:white;
-      border-radius: 2px;
-      padding:10px;
-      margin-bottom:10px;
-    }
+  .heading {
+    background-color: rgb(126, 190, 126);
+    color: white;
+    border-radius: 2px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
 
-    span {
-      font-family: $font_2;
-      font-size: 14px;
-      margin: 2px 0;
+  span {
+    font-family: $font_2;
+    font-size: 14px;
+    margin: 2px 0;
 
-      &.name {
-        font-family: $font_1_bold;
-        font-weight: 900;
-      }
+    &.name {
+      font-family: $font_1_bold;
+      font-weight: 900;
     }
   }
+}
 </style>
