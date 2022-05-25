@@ -36,10 +36,13 @@ const schema = new mongoose.Schema(
         /* discount */
         discount: {
             type: { type: String, enum: ['percentage', 'direct'] },
-            value: Number
+            value: Number,
+            amount: Number
         },
         /* courier charges */
         courierCharges: Number,
+        /* item total */
+        itemTotal: Number,
         /* amount */
         amount: Number,
         /* paid */

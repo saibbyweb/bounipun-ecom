@@ -137,40 +137,41 @@
     </div>
 
     <div class="flex center discount-and-courier">
+      <!-- discount  -->
+      <div class="flex center discount col section">
+        <label class="label"> Discount: </label>
+        <SelectBox
+          :options="discountTypes"
+          v-model="doc.discount.type"
+          label="Select Discount Type"
+          @input="calculateAmount"
+        />
 
-    <!-- discount  -->
-    <div class="flex center discount col section">
-      <label class="label"> Discount: </label>
-      <SelectBox
-        :options="discountTypes"
-        v-model="doc.discount.type"
-        label="Select Discount Type"
-        @input="calculateAmount"
-      />
+        <InputBox
+          label="Percentage (or Value)"
+          v-model="doc.discount.value"
+          type="number"
+          @input="calculateAmount"
+        />
+      </div>
 
-      <InputBox
-        label="Percentage (or Value)"
-        v-model="doc.discount.value"
-        type="number"
-        @input="calculateAmount"
-      />
-    </div>
-
-    <!-- courier charges -->
-    <div class="flex center section courier">
-      <InputBox
-        :label="`Courier Charges (in ${doc.currency})`"
-        v-model="doc.courierCharges"
-        type="number"
-        @input="calculateAmount"
-      />
-    </div>
-
+      <!-- courier charges -->
+      <div class="flex center section courier">
+        <InputBox
+          :label="`Courier Charges (in ${doc.currency})`"
+          v-model="doc.courierCharges"
+          type="number"
+          @input="calculateAmount"
+        />
+      </div>
     </div>
 
     <!-- total amount -->
     <div class="total-amount">
-      <span> Total Payable Amount: </span>
+      <span> Total Payable Amount </span>
+      <p>Total Amount: {{ doc.itemTotal }} {{ doc.currency }}</p>
+      <p>- Discount: {{ doc.discount.amount }} {{ doc.currency }}</p>
+      <p>+ Courier Charges: {{ doc.courierCharges }} {{ doc.currency }}</p>
       <h1>{{ doc.amount }} {{ doc.currency }}</h1>
     </div>
 
@@ -322,7 +323,9 @@ const baseDoc = () => ({
   discount: {
     type: null,
     value: 0,
+    amount: 0,
   },
+  itemTotal: 0,
   courierCharges: 0,
   paid: false,
   amount: 0,
@@ -438,16 +441,20 @@ export default {
     calculateAmount() {
       /* sum total of all items */
       let amount = this.items.reduce((sum, curr) => sum + curr.total, 0);
-      // this.doc.amount = amount;
+      this.doc.itemTotal = amount;
 
       /* calculate discount amount */
       const { type: discountType, value: discountValue } = this.doc.discount;
-      const discountAmount = discountType === 'percentage' 
-      ? (amount/100) * discountValue
-      : discountValue;
+      const discountAmount =
+        discountType === "percentage"
+          ? (amount / 100) * discountValue
+          : discountValue;
+
+      this.doc.discount.amount = discountAmount;
 
       /* calculate final amount */
-      this.doc.amount = (amount - discountAmount) + parseInt(this.doc.courierCharges);
+      this.doc.amount =
+        amount - discountAmount + parseInt(this.doc.courierCharges);
     },
     updateItems(payload) {
       //   this.items[payload.index] = payload.value;
@@ -561,7 +568,7 @@ export default {
         description,
         paid,
         courierCharges: courierCharges ?? 0,
-        discount: discount ?? { type: null, value: 0 },
+        discount: discount ?? { type: null, value: 0, amount: 0 },
         notifyLog: notifyLog ?? [],
         status,
       };
@@ -662,17 +669,35 @@ export default {
 .total-amount {
   position: fixed;
   bottom: 30%;
-  left: 10%;
+  left: 6%;
   background: #333;
-
   padding: 10px 20px;
+  text-align: right;
+
+  p {
+    color: white;
+    font-size: 17px;
+    font-family: $font_2;
+
+    &:nth-child(2) {
+      padding-top: 20px !important;
+    }
+  }
 
   span {
-    color: white;
+    color: #333;
+    font-size: 15px;
+    padding:5px 10px;
+    text-align:center;
+    // height:30px;
+    font-family: $font_2_bold;
+    text-transform: uppercase;
+    background-color:white;
   }
 
   h1 {
     color: white;
+    font-size: 40px;
   }
 }
 
