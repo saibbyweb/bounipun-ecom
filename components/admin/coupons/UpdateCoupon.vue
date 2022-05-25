@@ -32,7 +32,7 @@
       v-model="doc.currency"
       label="Select Currency"
     />
-    <!-- coupon type -->
+    <!-- coupon value -->
     <InputBox label="Percentage (or Value)" v-model="doc.value" type="number" />
     <!-- coupon validity -->
     <InputBox

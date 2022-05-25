@@ -33,10 +33,19 @@ const schema = new mongoose.Schema(
             start: Date,
             end: Date
         },
+        /* discount */
+        discount: {
+            type: { type: String, enum: ['percentage', 'direct'] },
+            value: Number
+        },
+        /* courier charges */
+        courierCharges: Number,
         /* amount */
         amount: Number,
         /* paid */
         paid: { type: Boolean, default: false },
+        /* customer note */
+        customerNote: { type: String, default: '' },
         /* payment details */
         paymentDetails: {
             gateway: String,

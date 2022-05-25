@@ -136,6 +136,22 @@
       </div>
     </div>
 
+    <!-- discount  -->
+    <div class="flex center discount col section">
+      <label class="label"> Discount: </label>
+      <SelectBox
+        :options="discountTypes"
+        v-model="doc.discount.type"
+        label="Select Discount Type"
+      />
+
+      <InputBox
+        label="Percentage (or Value)"
+        v-model="doc.discount.value"
+        type="number"
+      />
+    </div>
+
     <!-- total amount -->
     <div class="total-amount">
       <span> Total Payable Amount: </span>
@@ -158,7 +174,7 @@
         class="small send-to-whatsapp action"
         @click="openInNewTab(whatsAppShareLink)"
       >
-        🔗  Share to Whatsapp
+        🔗 Share to Whatsapp
       </button>
 
       <span v-if="textCopied" class="text-copied"> Text copied </span>
@@ -253,6 +269,21 @@
 <script>
 import { v4 as uuidv4 } from "uuid";
 
+const discountTypes = [
+  {
+    name: "Select Type",
+    value: null,
+  },
+  {
+    name: "Percentage",
+    value: "percentage",
+  },
+  {
+    name: "Cash Discount",
+    value: "direct",
+  },
+];
+
 /* base item */
 const baseItem = () => ({
   key: uuidv4(),
@@ -271,6 +302,10 @@ const baseDoc = () => ({
   validityRange: {
     start: new Date(),
     end: new Date(),
+  },
+  discount: {
+    type: null,
+    value: 0,
   },
   paid: false,
   amount: 0,
@@ -304,6 +339,7 @@ export default {
         done: false,
         msg: "",
       },
+      discountTypes
     };
   },
   mounted() {
@@ -477,6 +513,7 @@ export default {
         description,
         items,
         paid,
+        discount,
         notifyLog,
         status,
       } = details;
@@ -494,6 +531,7 @@ export default {
         items,
         description,
         paid,
+        discount: discount ?? { type: null, value: 0 },
         notifyLog: notifyLog ?? [],
         status,
       };
@@ -521,6 +559,13 @@ export default {
   overflow: scroll;
 }
 
+.discount {
+  width: 40%;
+  >* {
+    width: 100%;
+  }
+}
+
 .section {
   position: relative;
   margin: 10px;
@@ -543,7 +588,7 @@ export default {
   }
 
   .copy-text {
-        right: 0;
+    right: 0;
     top: 0%;
   }
 
