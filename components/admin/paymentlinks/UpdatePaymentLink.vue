@@ -136,6 +136,8 @@
       </div>
     </div>
 
+    <div class="flex center discount-and-courier">
+
     <!-- discount  -->
     <div class="flex center discount col section">
       <label class="label"> Discount: </label>
@@ -150,6 +152,17 @@
         v-model="doc.discount.value"
         type="number"
       />
+    </div>
+
+    <!-- courier charges -->
+    <div class="flex center section courier">
+      <InputBox
+        :label="`Courier Charges (in ${doc.currency})`"
+        v-model="doc.courierCharges"
+        type="number"
+      />
+    </div>
+
     </div>
 
     <!-- total amount -->
@@ -307,6 +320,7 @@ const baseDoc = () => ({
     type: null,
     value: 0,
   },
+  courierCharges: 0,
   paid: false,
   amount: 0,
   notifyLog: [],
@@ -339,7 +353,7 @@ export default {
         done: false,
         msg: "",
       },
-      discountTypes
+      discountTypes,
     };
   },
   mounted() {
@@ -514,6 +528,7 @@ export default {
         items,
         paid,
         discount,
+        courierCharges,
         notifyLog,
         status,
       } = details;
@@ -531,6 +546,7 @@ export default {
         items,
         description,
         paid,
+        courierCharges: courierCharges ?? 0,
         discount: discount ?? { type: null, value: 0 },
         notifyLog: notifyLog ?? [],
         status,
@@ -559,9 +575,16 @@ export default {
   overflow: scroll;
 }
 
+.discount-and-courier {
+  width: 100%;
+  .courier {
+    width: 40%;
+  }
+}
+
 .discount {
   width: 40%;
-  >* {
+  > * {
     width: 100%;
   }
 }
