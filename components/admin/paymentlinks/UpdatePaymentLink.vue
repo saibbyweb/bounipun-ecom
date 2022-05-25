@@ -244,11 +244,14 @@
       </table>
     </div>
 
+    <!-- customer note -->
+    <TextBox v-model="doc.customerNote" label="Customer Note" />
+
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" :internal="true" />
 
-    <!-- paid flag
-    <div class="paid-flag">{{ doc.paid ? "Paid" : "Unpaid" }}</div> -->
+    <!-- paid flag -->
+    <!-- <div class="paid-flag">{{ doc.paid ? "Paid" : "Unpaid" }}</div> -->
 
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
@@ -325,6 +328,7 @@ const baseDoc = () => ({
     value: 0,
     amount: 0,
   },
+  customerNote: "",
   itemTotal: 0,
   courierCharges: 0,
   paid: false,
@@ -547,6 +551,8 @@ export default {
         amount,
         description,
         items,
+        itemTotal,
+        customerNote,
         paid,
         discount,
         courierCharges,
@@ -565,13 +571,16 @@ export default {
         validityRange: validityRange ?? { start: new Date(), end: new Date() },
         amount,
         items,
+        itemTotal: itemTotal ?? 0,
+        customerNote,
         description,
         paid,
         courierCharges: courierCharges ?? 0,
         discount: discount ?? { type: null, value: 0, amount: 0 },
         notifyLog: notifyLog ?? [],
         status,
-      };
+      }
+
       this.countryCode = this.doc.countryCode;
       this.notifyClientText = this.setNotifyClientText();
 
