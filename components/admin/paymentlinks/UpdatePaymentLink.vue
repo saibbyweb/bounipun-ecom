@@ -59,7 +59,7 @@
 
           <CountrySelect
             v-model="doc.countryCode"
-            :initialValue="`${countryCode}`"
+            :initialValue="`${countryDialCode}`"
             :lock="false"
           />
 
@@ -145,12 +145,14 @@
         :options="discountTypes"
         v-model="doc.discount.type"
         label="Select Discount Type"
+        @input="calculateAmount"
       />
 
       <InputBox
         label="Percentage (or Value)"
         v-model="doc.discount.value"
         type="number"
+        @input="calculateAmount"
       />
     </div>
 
@@ -160,6 +162,7 @@
         :label="`Courier Charges (in ${doc.currency})`"
         v-model="doc.courierCharges"
         type="number"
+        @input="calculateAmount"
       />
     </div>
 
@@ -433,7 +436,18 @@ export default {
       tmpTextField.remove();
     },
     calculateAmount() {
-      this.doc.amount = this.items.reduce((sum, curr) => sum + curr.total, 0);
+      /* sum total of all items */
+      let amount = this.items.reduce((sum, curr) => sum + curr.total, 0);
+      // this.doc.amount = amount;
+
+      /* calculate discount amount */
+      const { type: discountType, value: discountValue } = this.doc.discount;
+      const discountAmount = discountType === 'percentage' 
+      ? (amount/100) * discountValue
+      : discountValue;
+
+      /* calculate final amount */
+      this.doc.amount = (amount - discountAmount) + parseInt(this.doc.courierCharges);
     },
     updateItems(payload) {
       //   this.items[payload.index] = payload.value;
