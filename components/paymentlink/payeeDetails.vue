@@ -25,22 +25,21 @@
         </span>
       </p>
       <!-- discount -->
-      <p>
+      <p v-if="!noDiscount">
         <span class="label"> Discount </span>
         <span class="value">
           -
           {{
-            linkDetails.discount
-              ? formatCurrency(
+             formatCurrency(
                   linkDetails.discount.amount,
                   linkDetails.currency
                 )
-              : ""
-          }}</span
-        >
+            
+          }} 
+        </span>
       </p>
       <!-- courier charges -->
-      <p>
+      <p v-if="!noShippingCharges">
         <span class="label"> Shipping Charges: </span>
         <span class="value">
           +
@@ -67,7 +66,17 @@ export default {
     linkDetails: Object,
     formatCurrency: Function,
   },
-};
+  computed: {
+    noDiscount() {
+      if(!this.linkDetails.discount)
+        return true;
+      return this.linkDetails.discount.amount === 0;
+    },
+    noShippingCharges() {
+      return this.linkDetails.courierCharges === 0;
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
