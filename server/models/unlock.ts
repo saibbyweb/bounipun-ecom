@@ -96,46 +96,54 @@ export const methods = {
 
     },
     async updateUnlockCodeLog(code, user, action = 'push') {
-        /* fetch unlock code doc */
-        const unlockDoc: any = await model.findOne({
-            code: code.toUpperCase()
-        });
-        
-        /* if unlock code */
-        if(unlockDoc === null) {
-            console.log('❌ Unlock code not found.');
-            return;
+        try {
+
+
+            /* fetch unlock code doc */
+            const unlockDoc: any = await model.findOne({
+                code: code.toUpperCase()
+            });
+
+            /* if unlock code */
+            if (unlockDoc === null) {
+                console.log('❌ Unlock code not found.');
+                return;
+            }
+
+            const currentTimestamp = new Date();
+
+            switch (action) {
+                /* add user to log */
+                case 'push':
+                    unlockDoc.log.push({
+                        user,
+                        usedOn: currentTimestamp
+                    });
+                    unlockDoc.validity = unlockDoc.validity - 1;
+                    break;
+                case 'remove':
+                    const foundIndex = unlockDoc.log.findIndex(entry => entry.user.toString() === user.toString())
+                    if (foundIndex !== -1)
+                        unlockDoc.log.splice(foundIndex, 1);
+                    break;
+            }
+
+            /* add action to timeline */
+            if (unlockDoc.timeline === undefined)
+                unlockDoc.timeline = [];
+
+            unlockDoc.timeline.push({ user, action: action === 'push' ? 'Applied' : 'Removed', taken: currentTimestamp })
+
+            /*  re-save doc */
+            await unlockDoc.save();
+
+            /* unlock code log updated */
+            console.log('✅ User unlock code log updated, action: ', action);
+
         }
-
-        const currentTimestamp = new Date();
-
-        switch (action) {
-            /* add user to log */
-            case 'push':
-                unlockDoc.log.push({
-                    user,
-                    usedOn: currentTimestamp
-                });
-                unlockDoc.validity = unlockDoc.validity - 1;
-                break;
-            case 'remove':
-                const foundIndex = unlockDoc.log.findIndex(entry => entry.user.toString() === user.toString())
-                if (foundIndex !== -1)
-                    unlockDoc.log.splice(foundIndex, 1);
-                break;
+        catch (e) {
+            console.log('❌ Something happened.')
         }
-
-        /* add action to timeline */
-        if(unlockDoc.timeline === undefined)
-            unlockDoc.timeline = [];
-        
-        unlockDoc.timeline.push({ user, action : action === 'push' ? 'Applied' : 'Removed', taken: currentTimestamp })
-
-        /*  re-save doc */
-        await unlockDoc.save();
-
-        /* unlock code log updated */
-        console.log('✅ User unlock code log updated, action: ', action);
     }
 }
 
