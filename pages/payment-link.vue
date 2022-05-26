@@ -66,6 +66,15 @@
                 v-if="!paymentOverview"
                 style="width: 100%"
               >
+
+              <!-- customer note -->
+              <div class="flex center">
+              <p class="note"> 
+                <span class="label"> Note: </span>
+                <span class="value">
+                 {{ linkDetails.customerNote }} </span> 
+              </p>
+              </div>
                 <!-- send otp -->
                 <button v-if="!otpSent" class="action" @click="sendOtp">
                   Generate OTP
@@ -239,7 +248,7 @@ export default {
       /* set new link details */
       this.linkDetails = doc;
       this.linkDetailsFetched = true;
-      this.desc = `for ${doc.name}`;
+      this.desc = `Complete your payment in 3 easy steps`;
       if (doc.paid) {
         this.alreadyPaid = true;
       }
@@ -435,6 +444,31 @@ export default {
       font-family: $font_1_bold;
       font-weight: 900;
     }
+  }
+}
+$noteColor: #333;
+.note {
+  width:100%;
+  text-align: center;
+  color: white;
+  font-size: 14px;
+  margin-bottom: 10px;
+  display: flex;
+
+  .label {
+    background-color: white;
+    color: $noteColor;
+    border: 1px solid $noteColor;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+  }
+  .value {
+    border: 1px solid $noteColor;
+    background-color: $noteColor;
+    color: white;
+    padding: 3px 10px;
+    text-align: left;
   }
 }
 </style>
