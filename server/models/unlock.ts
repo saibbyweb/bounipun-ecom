@@ -100,6 +100,12 @@ export const methods = {
         const unlockDoc: any = await model.findOne({
             code: code.toUpperCase()
         });
+        
+        /* if unlock code */
+        if(unlockDoc === null) {
+            console.log('❌ Unlock code not found.');
+            return;
+        }
 
         const currentTimestamp = new Date();
 
