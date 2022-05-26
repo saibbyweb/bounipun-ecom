@@ -3,7 +3,12 @@
     <div v-if="linkDetailsFetched && !invalidLink && !alreadyPaid">
       <!-- progress bar -->
       <div v-if="!paymentProcessedSuccessfully" class="steps flex center">
-        <img v-if="paymentOverview" @click="goBackToDeliveryForm" class="back-button" src="/icons/dark/arrow-left.png" />
+        <img
+          v-if="paymentOverview"
+          @click="goBackToDeliveryForm"
+          class="back-button"
+          src="/icons/dark/arrow-left.png"
+        />
 
         <div
           v-for="(step, index) in steps"
@@ -57,6 +62,7 @@
             <div class="payee-details flex col">
               <h3 class="heading">Payment Details</h3>
               <PayeeDetails
+                v-if="linkDetailsFetched"
                 :linkDetails="linkDetails"
                 :formatCurrency="formatCurrency"
               />
@@ -66,15 +72,13 @@
                 v-if="!paymentOverview"
                 style="width: 100%"
               >
-
-              <!-- customer note -->
-              <div class="flex center">
-              <p class="note"> 
-                <span class="label"> Note: </span>
-                <span class="value">
-                 {{ linkDetails.customerNote }} </span> 
-              </p>
-              </div>
+                <!-- customer note -->
+                <div class="customer-note flex center">
+                  <p class="note">
+                    <span class="label"> Note: </span>
+                    <span class="value"> {{ linkDetails.customerNote }} </span>
+                  </p>
+                </div>
                 <!-- send otp -->
                 <button v-if="!otpSent" class="action" @click="sendOtp">
                   Generate OTP
@@ -217,7 +221,7 @@ export default {
     goBackToDeliveryForm() {
       this.paymentOverview = false;
       this.verifyOtp();
-      this.activeStepIndex-=2;
+      this.activeStepIndex -= 2;
     },
     /* payment proccessed */
     paymentProcessed() {
@@ -448,7 +452,7 @@ export default {
 }
 $noteColor: #333;
 .note {
-  width:100%;
+  width: 100%;
   text-align: center;
   color: white;
   font-size: 14px;
