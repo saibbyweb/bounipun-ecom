@@ -196,18 +196,24 @@
 
       <span v-if="textCopied" class="text-copied"> Text copied </span>
       <!-- send payment link -->
-      <div class="actions flex around">
+      <div class="actions flex around wrap">
+        <label class="label"> Send Payment Link via Email: </label>
         <!-- sms invoice -->
         <!-- <button class="action small" @click="notifyVia('sms')">
           SMS Invoice to {{ doc.countryCode + doc.phoneNumber }}
         </button> -->
+        <Checkbox v-for="email in Object.keys(adminEmails)" v-model="adminEmails[email]" :key="email" :label="email" />
+        <Checkbox v-model="customerEmailSelected" :label="doc.email" />
+        <br />
+
         <!-- email invoice  -->
         <button
+        style="margin-top:5px"
           :disabled="doc.paid"
           class="action small"
           @click="notifyVia('email')"
         >
-          Email Invoice to {{ doc.email }}
+          Send Payment Link Via Email
         </button>
       </div>
       <!-- info -->
@@ -364,6 +370,11 @@ export default {
         msg: "",
       },
       discountTypes,
+      customerEmailSelected: false,
+      adminEmails: {
+        "zubairkirmani@gmail.com": false,
+        "orders@bounipun.in": false
+      }
     };
   },
   mounted() {
@@ -386,10 +397,20 @@ export default {
       window.open(link, "_newtab");
     },
     async notifyVia(mode) {
+      /* get list of selected emails  */
+      let emails = Object.keys(this.adminEmails).filter(email => this.adminEmails[email])
+      if(this.customerEmailSelected)
+        emails.push(this.doc.email);
+
+      /* if no email selected */
+      if(emails.length === 0)
+        return;
+   
+
       /* send invoice via */
       const notifyRequest = await this.$post("/paymentLinkNotification", {
         mode,
-        email: this.doc.email,
+        emails: emails,
         countryDialCode: this.doc.countryCode,
         phoneNumber: this.doc.phoneNumber,
         text: this.notifyClientText,
@@ -579,7 +600,7 @@ export default {
         discount: discount ?? { type: null, value: 0, amount: 0 },
         notifyLog: notifyLog ?? [],
         status,
-      }
+      };
 
       this.countryCode = this.doc.countryCode;
       this.notifyClientText = this.setNotifyClientText();
@@ -696,12 +717,12 @@ export default {
   span {
     color: #333;
     font-size: 15px;
-    padding:5px 10px;
-    text-align:center;
+    padding: 5px 10px;
+    text-align: center;
     // height:30px;
     font-family: $font_2_bold;
     text-transform: uppercase;
-    background-color:white;
+    background-color: white;
   }
 
   h1 {

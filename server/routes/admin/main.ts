@@ -567,13 +567,14 @@ router.post("/updateWholeStore", adminAuth("1", true), async (req, res) => {
 
 /* notify client about payment */
 router.post('/paymentLinkNotification', adminAuth('1', true), async (req, res) => {
-  const { mode, email, countryDialCode, phoneNumber, text, details } = req.body;
+  const { mode, emails, countryDialCode, phoneNumber, text, details } = req.body;
   console.log(details);
 
   switch (mode) {
     case 'email':
       /* notify client */
-      await paymentLinkMethods.notifyClient('email', details, email);
+      for(const email of emails)
+        await paymentLinkMethods.notifyClient('email', details, email);
       break;
     case 'sms':
       break;
