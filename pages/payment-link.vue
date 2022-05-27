@@ -73,7 +73,10 @@
                 style="width: 100%"
               >
                 <!-- customer note -->
-                <div class="customer-note flex center">
+                <div
+                  class="customer-note flex center"
+                  v-if="linkDetails.customerNote"
+                >
                   <p class="note">
                     <span class="label"> Note: </span>
                     <span class="value"> {{ linkDetails.customerNote }} </span>
@@ -115,7 +118,6 @@
               <span> {{ deliveryAddress.city }} </span>
               <span> {{ deliveryAddress.postalCode }} </span>
               <span> {{ deliveryAddress.mobileNumber }} </span>
-              <!-- <span> {{ deliveryAddress.email }} </span> -->
             </div>
 
             <!-- overview + payment completion -->
@@ -211,6 +213,7 @@ export default {
       countryIsoCode: "",
       paymentOverview: false,
       alreadyPaid: false,
+      byPassMode: true,
     };
   },
   mounted() {
@@ -257,11 +260,52 @@ export default {
         this.alreadyPaid = true;
       }
     },
-    sendOtp(value = true) {
-      this.otpSent = value;
+    sendOtp() {
+      /* if byPass mode is on */
+      if (this.byPassMode) {
+        this.otpSent = true;
+        return;
+      }
+      
+      /* send otp */
+      const { response, resolved } = await this.$post("/sendOtp", {
+        countryDialCode: this.doc.countryCode,
+        phoneNumber: this.doc.phoneNumber,
+        purpose: 'verify-payment-link',
+      });
+
+      /* if req not resolved */
+      if (resolved === false) {
+        console.log("send otp not resolved");
+        return;
+      }
+
+      /* map otp sent response */
+      this.otpSent = response.otpSent === true;
     },
-    verifyOtp(value = true) {
-      this.otpVerified = value;
+    verifyOtp() {
+      /* if bypass mode is on */
+      if(this.byPassMode) {
+        this.otpVerified = true;
+        return;
+      }
+
+      /* verify otp */
+      const { response, resolved } = await this.$post("/verifyOTP", {
+        countryDialCode: this.doc.countryCode,
+        phoneNumber: this.doc.phoneNumber,
+        otp: this.otp
+      });
+
+      /* if req not resolved */
+      if (resolved === false) {
+        console.log("verify otp not resolved");
+        /* show error msg */
+        return;
+      }
+
+      this.otpVerified = true;
+
       this.activeStepIndex = this.activeStepIndex + 1;
       window.scroll({ top: 0, behavior: "smooth" });
       this.title = "Delivery Address";

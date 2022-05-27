@@ -45,6 +45,32 @@ router.post("/sendOtp", async (req, res) => {
   res.send(response);
 });
 
+/* verify otp */
+router.post("/verifyOtp", async(req, res) => {
+  let response = { resolved: false, otpVerified: false, msg: "" };
+    /* extract phone number, dial code, and purpose */
+    const { countryDialCode, phoneNumber, otp } = req.body;
+    /* verify otp request status */
+    let otpVerified = false;
+    /* otp verified */
+    otpVerified = await userMethods.verifyInternationalOtp(
+      countryDialCode,
+      phoneNumber,
+      otp
+    );
+
+    /* suhaib */
+    if (otpVerified === false) {
+      response.msg = "Incorrect OTP entered.";
+      console.log("incorrect otp");
+      res.send(response);
+      return;
+    }
+    /* mark otp as verified */
+    response.otpVerified = true;
+    res.send(response);
+})
+
 /* (verify phone-number) and register customer */
 router.post("/registerCustomer", async (req, res) => {
   let response = {

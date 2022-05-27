@@ -202,13 +202,18 @@
         <!-- <button class="action small" @click="notifyVia('sms')">
           SMS Invoice to {{ doc.countryCode + doc.phoneNumber }}
         </button> -->
-        <Checkbox v-for="email in Object.keys(adminEmails)" v-model="adminEmails[email]" :key="email" :label="email" />
+        <Checkbox
+          v-for="email in Object.keys(adminEmails)"
+          v-model="adminEmails[email]"
+          :key="email"
+          :label="email"
+        />
         <Checkbox v-model="customerEmailSelected" :label="doc.email" />
         <br />
 
         <!-- email invoice  -->
         <button
-        style="margin-top:5px"
+          style="margin-top: 5px"
           :disabled="doc.paid"
           class="action small"
           @click="notifyVia('email')"
@@ -373,8 +378,8 @@ export default {
       customerEmailSelected: false,
       adminEmails: {
         "zubairkirmani@gmail.com": false,
-        "orders@bounipun.in": false
-      }
+        "orders@bounipun.in": false,
+      },
     };
   },
   mounted() {
@@ -398,14 +403,13 @@ export default {
     },
     async notifyVia(mode) {
       /* get list of selected emails  */
-      let emails = Object.keys(this.adminEmails).filter(email => this.adminEmails[email])
-      if(this.customerEmailSelected)
-        emails.push(this.doc.email);
+      let emails = Object.keys(this.adminEmails).filter(
+        (email) => this.adminEmails[email]
+      );
+      if (this.customerEmailSelected) emails.push(this.doc.email);
 
       /* if no email selected */
-      if(emails.length === 0)
-        return;
-   
+      if (emails.length === 0) return;
 
       /* send invoice via */
       const notifyRequest = await this.$post("/paymentLinkNotification", {
