@@ -216,7 +216,7 @@ export default {
       countryIsoCode: "",
       paymentOverview: false,
       alreadyPaid: false,
-      byPassMode: false,
+      byPassMode: true,
       paymentProcessedSuccessfully: false,
       error: {
         status: false,
@@ -269,8 +269,7 @@ export default {
       }
     },
     async sendOtp() {
-        // this.otpSent = true;
-        // return;
+
 
       /* if byPass mode is on */
       if (this.byPassMode) {

@@ -17,7 +17,7 @@
     <!-- continue -->
     <div class="flex center" style="gap:10px;">
     <button class="action" @click="validateForm">Continue</button>
-    <button class="action" @click="prefillForm"> Prefill </button>
+    <!-- <button class="action" @click="prefillForm"> Prefill </button> -->
     </div>
   </div>
 </template>
@@ -201,8 +201,8 @@ export default {
       deliveryAddress.countryDialCode = this.countryDialCode;
       deliveryAddress.countryIsoCode = this.countryIsoCode;
 
-      this.$emit("continue", this.useUSAddress ? demoDeliveryAddress : deliveryAddress);
-      return validated;
+      if(validated)
+        this.$emit("continue", deliveryAddress);
     }
   }
 };
