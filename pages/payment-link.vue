@@ -93,13 +93,16 @@
                   v-if="otpSent"
                 />
                 <!-- verify otp -->
-                <button v-if="otpSent" class="action" @click="verifyOtp">
+                <button v-if="otpSent" class="action" @click="verifyOtp(false)">
                   Verify Number
                 </button>
                 <!-- otp sent msg -->
                 <p v-if="otpSent" class="message">
                   A one time password has been sent to your mobile number.
                 </p>
+ <!-- form error -->
+      <p v-if="error.status" class="msg error">{{ error.message }}</p>
+
               </div>
             </div>
 
@@ -213,7 +216,12 @@ export default {
       countryIsoCode: "",
       paymentOverview: false,
       alreadyPaid: false,
-      byPassMode: true,
+      byPassMode: false,
+      paymentProcessedSuccessfully: false,
+      error: {
+        status: false,
+        message: "Something went wrong"
+      }
     };
   },
   mounted() {
@@ -223,7 +231,7 @@ export default {
   methods: {
     goBackToDeliveryForm() {
       this.paymentOverview = false;
-      this.verifyOtp();
+      this.verifyOtp(true);
       this.activeStepIndex -= 2;
     },
     /* payment proccessed */
@@ -260,18 +268,21 @@ export default {
         this.alreadyPaid = true;
       }
     },
-    sendOtp() {
+    async sendOtp() {
+        // this.otpSent = true;
+        // return;
+
       /* if byPass mode is on */
       if (this.byPassMode) {
         this.otpSent = true;
         return;
       }
-      
+
       /* send otp */
       const { response, resolved } = await this.$post("/sendOtp", {
-        countryDialCode: this.doc.countryCode,
-        phoneNumber: this.doc.phoneNumber,
-        purpose: 'verify-payment-link',
+        countryDialCode: this.linkDetails.countryCode,
+        phoneNumber: this.linkDetails.phoneNumber,
+        purpose: "verify-payment-link",
       });
 
       /* if req not resolved */
@@ -283,27 +294,33 @@ export default {
       /* map otp sent response */
       this.otpSent = response.otpSent === true;
     },
-    verifyOtp() {
+    async verifyOtp(localBypass = false) {
       /* if bypass mode is on */
-      if(this.byPassMode) {
+      if (this.byPassMode || localBypass) {
         this.otpVerified = true;
+        this.title = "Delivery Address";
+        this.desc = `Enter a shipping address`;
+        window.scroll({ top: 0, behavior: "smooth" });
         return;
       }
 
       /* verify otp */
       const { response, resolved } = await this.$post("/verifyOTP", {
-        countryDialCode: this.doc.countryCode,
-        phoneNumber: this.doc.phoneNumber,
-        otp: this.otp
+        countryDialCode: this.linkDetails.countryCode,
+        phoneNumber: this.linkDetails.phoneNumber,
+        otp: this.otp,
       });
 
       /* if req not resolved */
       if (resolved === false) {
         console.log("verify otp not resolved");
-        /* show error msg */
+        /* TODO: show error msg */
+        this.error.message = "Incorrect OTP";
+        this.error.status = true;
         return;
       }
 
+      /* otp verified */
       this.otpVerified = true;
 
       this.activeStepIndex = this.activeStepIndex + 1;

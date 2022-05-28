@@ -53,20 +53,26 @@ router.post("/verifyOtp", async(req, res) => {
     /* verify otp request status */
     let otpVerified = false;
     /* otp verified */
-    otpVerified = await userMethods.verifyInternationalOtp(
-      countryDialCode,
-      phoneNumber,
-      otp
-    );
+    try {
+      otpVerified = await userMethods.verifyInternationalOtp(
+        countryDialCode,
+        phoneNumber,
+        otp
+      );
+    }
+    catch(e) {
+      otpVerified = false;
+    }
 
-    /* suhaib */
+
+    /* if otp not verified */
     if (otpVerified === false) {
       response.msg = "Incorrect OTP entered.";
       console.log("incorrect otp");
-      res.send(response);
-      return;
+      return res.send(response);
     }
     /* mark otp as verified */
+    response.resolved = true;
     response.otpVerified = true;
     res.send(response);
 })
