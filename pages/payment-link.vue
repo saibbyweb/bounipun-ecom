@@ -4,8 +4,8 @@
       <!-- progress bar -->
       <div v-if="!paymentProcessedSuccessfully" class="steps flex center">
         <img
-          v-if="paymentOverview"
-          @click="goBackToDeliveryForm"
+          v-if="activeStepIndex > 0"
+          @click="goBack"
           class="back-button"
           src="/icons/dark/arrow-left.png"
         />
@@ -216,7 +216,7 @@ export default {
       countryIsoCode: "",
       paymentOverview: false,
       alreadyPaid: false,
-      byPassMode: true,
+      byPassMode: false,
       paymentProcessedSuccessfully: false,
       error: {
         status: false,
@@ -229,10 +229,24 @@ export default {
     this.fetchPaymentLinkDetails(paymentLinkId);
   },
   methods: {
+    goBack() {
+      if(this.paymentOverview)
+        this.goBackToDeliveryForm();
+      else
+        this.goBackToFirstScreen();
+    },
+    goBackToFirstScreen() {
+      this.otpSent = false;
+      this.otpVerified = false;
+      this.activeStepIndex = 0;
+      this.otp = "";
+      this.title = "Payment Request"
+      this.desc = `Complete your payment in 3 easy steps`;
+    },
     goBackToDeliveryForm() {
       this.paymentOverview = false;
       this.verifyOtp(true);
-      this.activeStepIndex -= 2;
+      this.activeStepIndex = 1;
     },
     /* payment proccessed */
     paymentProcessed() {
@@ -269,8 +283,6 @@ export default {
       }
     },
     async sendOtp() {
-
-
       /* if byPass mode is on */
       if (this.byPassMode) {
         this.otpSent = true;
@@ -328,7 +340,7 @@ export default {
       this.desc = `Enter a shipping address`;
     },
     moveToCheckout(deliveryAddress) {
-      this.activeStepIndex = this.activeStepIndex + 1;
+      this.activeStepIndex = 2;
       this.title = "Payment Overview";
       this.desc = `Review items, delivery address and payment information`;
       window.scroll({ top: 0, behavior: "smooth" });
