@@ -135,7 +135,7 @@
         <button @click="addNewItem()" class="action">Add New Item</button>
       </div>
     </div>
-
+<!-- discount and courier -->
     <div class="flex center discount-and-courier">
       <!-- discount  -->
       <div class="flex center discount col section">
@@ -148,7 +148,7 @@
         />
 
         <InputBox
-          label="Percentage (or Value)"
+          :label="`${doc.discount.type === 'percentage' ? 'Percentage %' : 'Cash Discount Value'}`"
           v-model="doc.discount.value"
           type="number"
           @input="calculateAmount"
@@ -165,6 +165,19 @@
         />
       </div>
     </div>
+
+  <!-- options -->
+  <div class="section options flex center">
+    <label class="label"> Payemnt Link Options: </label>
+    <Checkbox v-model="doc.options.otpOptional" label="OTP Verification Optional" />
+
+    <div class="section address-type flex center">
+       <label class="label"> Address Type: </label>
+        <label class="type">  <input type="radio" value="billing" v-model="doc.options.addressType" name="address-type" />Billing</label>
+        <label class="type">  <input type="radio" value="shipping" v-model="doc.options.addressType" name="address-type" />Shipping</label>
+        <label class="type">  <input type="radio" value="delivery"  v-model="doc.options.addressType" name="address-type" />Delivery</label>
+    </div>
+  </div>
 
     <!-- total amount -->
     <div class="total-amount">
@@ -339,6 +352,10 @@ const baseDoc = () => ({
     value: 0,
     amount: 0,
   },
+  options: {
+    otpOptional: false,
+    addressType: 'billing'
+  },
   customerNote: "",
   itemTotal: 0,
   courierCharges: 0,
@@ -375,10 +392,10 @@ export default {
         msg: "",
       },
       discountTypes,
-      customerEmailSelected: false,
+      customerEmailSelected: true,
       adminEmails: {
-        "zubairkirmani@gmail.com": false,
-        "orders@bounipun.in": false,
+        "zubairkirmani@gmail.com": true,
+        "orders@bounipun.in": true,
       },
     };
   },
@@ -580,6 +597,7 @@ export default {
         customerNote,
         paid,
         discount,
+        options,
         courierCharges,
         notifyLog,
         status,
@@ -600,6 +618,7 @@ export default {
         customerNote,
         description,
         paid,
+        options: options ? options : { otpOptional: false, addressType: 'billing'},
         courierCharges: courierCharges ?? 0,
         discount: discount ?? { type: null, value: 0, amount: 0 },
         notifyLog: notifyLog ?? [],
@@ -758,5 +777,16 @@ export default {
   pointer-events: none;
   background-color: rgb(168, 214, 168);
   border-radius: 10px;
+}
+
+.section.address-type {
+  width: 70%;
+  gap:10px;
+}
+
+label.type {
+  font-size:12px;
+  font-family: $font_2;
+  cursor: pointer;
 }
 </style>

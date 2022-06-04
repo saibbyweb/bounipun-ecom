@@ -43,6 +43,15 @@ const schema = new mongoose.Schema(
         courierCharges: Number,
         /* item total */
         itemTotal: Number,
+        /* options */
+        options: {
+            otpOptional: Boolean,
+            addressType: { type: String, enum: ['billing','shipping','delivery'] }
+        },
+        /* address provided by the client */
+        address: {
+            type: Object
+        },
         /* amount */
         amount: Number,
         /* paid */

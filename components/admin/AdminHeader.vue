@@ -69,13 +69,13 @@ export default {
           path: "/admin-panel/colors",
           desc: "Manage bounipun colors",
         },
+        // {
+        //   name: "Homepage Layouts",
+        //   path: "/admin-panel/homepageLayouts",
+        //   desc: "Manage Homepage Layouts",
+        // },
         {
-          name: "Homepage Layouts",
-          path: "/admin-panel/homepageLayouts",
-          desc: "Manage Homepage Layouts",
-        },
-        {
-          name: "[NEW] Homepage",
+          name: "Homepage",
           path: "/admin-panel/homepage",
           desc: "Manage Homepage Layouts",
         },
