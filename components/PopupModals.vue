@@ -28,6 +28,7 @@ export default {
     return {
       time: 0,
       timer: null,
+      localPopped:[]
     };
   },
   async mounted() {
@@ -40,6 +41,9 @@ export default {
       allotted: this.allottedPopups,
       eligible: this.eligiblePopups,
     });
+    const { localPopped } = this.$store.state.customer;
+    this.localPopped = localPopped && localPopped.length > 0 ? JSON.parse(JSON.stringify(localPopped)) : [];
+    console.log('local poppedx set', this.localPopped)
   },
   computed: {
     availablePopups() {
@@ -65,11 +69,16 @@ export default {
     eligiblePopups() {
       const { popupsPopped } = this.$store.state.customer;
       // if there's a persistable popup which has been popped, set its delay timer to 6 seconds (0.1 min);
-      const eligiblePopups = this.allottedPopups.map((popup) => {
-        const alreadyPopped =
-          popupsPopped.findIndex((popId) => popId == popup._id) !== -1;
+
+      /* filter local popped */
+      console.log(this.localPopped, 'calculated local poppedx')
+      const allottedPopups = this.allottedPopups.filter(popup => this.localPopped ? this.localPopped.includes(popup._id) === false : true)
+        
+      const eligiblePopups = allottedPopups.map((popup) => {
+        const alreadyPopped = popupsPopped.findIndex((popId) => popId == popup._id) !== -1;
+        
+
         if (popup.persist && alreadyPopped) {
-          //  console.log(popup.name, "updated timer to 0.1 minutes");
           return { ...popup, delay: 0.17 };
         } else return { ...popup };
       });

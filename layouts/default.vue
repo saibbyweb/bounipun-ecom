@@ -53,6 +53,7 @@
 
 <script>
 export default {
+
   computed: {
     dontShowPopups() {
       const allowedRoutes = [
@@ -86,7 +87,7 @@ export default {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (
         mutation.type === "customer/setLoading" ||
-        mutation.type === "customer/setGiftMessage"
+        mutation.type === "customer/setGiftMessage" || mutation.type === "customer/setLocalPopped"
       )
         return;
 
@@ -120,7 +121,7 @@ export default {
       menuOpen: false,
       unsubscribe: null,
       fakeLoaded: false,
-      startedFromPopup: false,
+      startedFromPopup: false
     };
   },
   methods: {

@@ -27,6 +27,7 @@ export const state = () => ({
   currencyMultiplier: 1.3,
   popups: [],
   popupsPopped: [],
+  localPopped: []
 });
 
 /* find cartItem helper  */
@@ -57,6 +58,9 @@ const findCartItem = (cart, cartItem) => {
 };
 
 export const mutations = {
+  setLocalPopped(state, popId) {
+    state.localPopped.push(popId);
+  },
   setPopups(state, popups) {
     state.popups = popups;
   },
@@ -105,7 +109,7 @@ export const mutations = {
       persistedState.currencyMultiplier = 1.3;
       persistedState.currency = "INR";
       persistedState.countryIndex = 0;
-     // persistedState.popups = [];
+      persistedState.localPopped = [];
       Object.assign(state, persistedState);
     }
 

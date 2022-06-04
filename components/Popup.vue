@@ -63,6 +63,8 @@ export default {
       if (this.persist) {
         this.$store.commit("customer/setPopupAsPopped", this._id);
       }
+      else
+        this.$store.commit("customer/setLocalPopped", this._id);
     },
     closePopup() {
       this.showPopup = false;
