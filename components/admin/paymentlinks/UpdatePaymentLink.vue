@@ -169,7 +169,8 @@
   <!-- options -->
   <div class="section options flex center">
     <label class="label"> Payemnt Link Options: </label>
-    <Checkbox v-model="doc.options.otpOptional" label="OTP Verification Optional" />
+    <Checkbox v-model="doc.options.otpOptional" label="Make OTP Verification optional" />
+    <Checkbox v-model="doc.options.addressOptional" label="Make Address Collection optional" />
 
     <div class="section address-type flex center">
        <label class="label"> Address Type: </label>
@@ -354,6 +355,7 @@ const baseDoc = () => ({
   },
   options: {
     otpOptional: false,
+    addressOptional: false,
     addressType: 'billing'
   },
   customerNote: "",
@@ -618,7 +620,7 @@ export default {
         customerNote,
         description,
         paid,
-        options: options ? options : { otpOptional: false, addressType: 'billing'},
+        options: options ? options : { otpOptional: false, addressOptional: false, addressType: 'billing'},
         courierCharges: courierCharges ?? 0,
         discount: discount ?? { type: null, value: 0, amount: 0 },
         notifyLog: notifyLog ?? [],

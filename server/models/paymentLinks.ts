@@ -46,6 +46,8 @@ const schema = new mongoose.Schema(
         /* options */
         options: {
             otpOptional: Boolean,
+            /* TODO: add admin panel UI */
+            addressOptional: Boolean,
             addressType: { type: String, enum: ['billing','shipping','delivery'] }
         },
         /* address provided by the client */
