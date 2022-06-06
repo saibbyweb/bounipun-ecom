@@ -2,7 +2,10 @@
   <div class="page payment-link">
     <div v-if="linkDetailsFetched && !invalidLink && !alreadyPaid">
       <!-- progress bar -->
-      <div v-if="!paymentProcessedSuccessfully" class="steps flex center">
+      <div
+        v-if="!paymentProcessedSuccessfully && showSteps"
+        class="steps flex center"
+      >
         <img
           v-if="activeStepIndex > 0"
           @click="goBack"
@@ -84,7 +87,7 @@
                 </div>
                 <!-- send otp -->
                 <button v-if="!otpSent" class="action" @click="sendOtp">
-                  Generate OTP
+                  {{ sendOtpButtonText }}
                 </button>
                 <!-- otp input box -->
                 <InputCredential
@@ -100,9 +103,8 @@
                 <p v-if="otpSent" class="message">
                   A one time password has been sent to your mobile number.
                 </p>
- <!-- form error -->
-      <p v-if="error.status" class="msg error">{{ error.message }}</p>
-
+                <!-- form error -->
+                <p v-if="error.status" class="msg error">{{ error.message }}</p>
               </div>
             </div>
 
@@ -203,10 +205,14 @@ export default {
   data() {
     return {
       steps: ["Verify OTP", "Delivery Address", "Finalize Payment"],
+      showSteps: true,
       activeStepIndex: 0,
       otpSent: false,
       otpVerified: false,
+      sendOtpButtonText: "Generate OTP",
       otp: "",
+      otpOptional: false,
+      addressOptional: false,
       invalidLink: false,
       linkDetailsFetched: true,
       linkDetails: {},
@@ -220,8 +226,8 @@ export default {
       paymentProcessedSuccessfully: false,
       error: {
         status: false,
-        message: "Something went wrong"
-      }
+        message: "Something went wrong",
+      },
     };
   },
   mounted() {
@@ -230,17 +236,15 @@ export default {
   },
   methods: {
     goBack() {
-      if(this.paymentOverview)
-        this.goBackToDeliveryForm();
-      else
-        this.goBackToFirstScreen();
+      if (this.paymentOverview) this.goBackToDeliveryForm();
+      else this.goBackToFirstScreen();
     },
     goBackToFirstScreen() {
       this.otpSent = false;
       this.otpVerified = false;
       this.activeStepIndex = 0;
       this.otp = "";
-      this.title = "Payment Request"
+      this.title = "Payment Request";
       this.desc = `Complete your payment in 3 easy steps`;
     },
     goBackToDeliveryForm() {
@@ -257,11 +261,6 @@ export default {
       this.desc = "";
     },
     async fetchPaymentLinkDetails(paymentLinkId) {
-      // const { fetched, doc } = await this.$fetchDocument(
-      //   "paymentlink",
-      //   paymentLinkId
-      // );
-
       const { fetched, doc } = await this.$fetchData("paymentlink", {
         _id: paymentLinkId,
         status: true,
@@ -272,17 +271,58 @@ export default {
         return;
       }
 
-      /* if already paid */
-
       /* set new link details */
       this.linkDetails = doc;
-      this.linkDetailsFetched = true;
-      this.desc = `Complete your payment in 3 easy steps`;
+
+      /* if already paid */
       if (doc.paid) {
         this.alreadyPaid = true;
       }
+      /* set description */
+      this.desc = `Complete your payment in 3 easy steps`;
+
+      /* decide landing step */
+      if (doc.options) {
+        /* both otp and address is optional */
+        if (doc.options.otpOptional && doc.options.addressOptional) {
+          this.showSteps = false;
+          this.title = "Payment Overview";
+          this.desc = `Review items and payment information`;
+          this.otpOptional = true;
+          this.addressOptional = true;
+            /* set address */
+          this.setBasicAddress();
+          this.paymentOverview = true;
+        
+        } else if (doc.options.otpOptional && !doc.options.addressOptional) {
+          /* only otp is optional */
+          this.showSteps = false;
+          this.sendOtpButtonText = "Continue";
+          this.otpOptional = true;
+        } else if (!doc.options.otpOptional && doc.options.addressOptional) {
+          /* only address is optional */
+          this.showSteps = false;
+          this.addressOptional = true;
+        }
+      }
+
+      this.linkDetailsFetched = true;
+    },
+    setBasicAddress() {
+        this.deliveryAddress.firstName = this.linkDetails.payeeName;
+        this.deliveryAddress.surName = '';
+        this.deliveryAddress.email = this.linkDetails.email;
+        this.deliveryAddress.mobileNumber = this.linkDetails.phoneNumber;
     },
     async sendOtp() {
+      /* if otp is optional */
+      if (this.otpOptional) {
+        window.scroll({ top: 0, behavior: "smooth" });
+        this.title = "Delivery Address";
+        this.desc = `Enter a shipping address`;
+        this.otpVerified = true;
+        return;
+      }
       /* if byPass mode is on */
       if (this.byPassMode) {
         this.otpSent = true;
@@ -333,9 +373,17 @@ export default {
 
       /* otp verified */
       this.otpVerified = true;
+      window.scroll({ top: 0, behavior: "smooth" });
+
+      /* if address is optional, move to checkout */
+      if (this.addressOptional) {
+        this.title = "Payment Overview";
+        this.desc = `Review items and payment information`;
+        this.paymentOverview = true;
+        return;
+      }
 
       this.activeStepIndex = this.activeStepIndex + 1;
-      window.scroll({ top: 0, behavior: "smooth" });
       this.title = "Delivery Address";
       this.desc = `Enter a shipping address`;
     },
@@ -344,7 +392,7 @@ export default {
       this.title = "Payment Overview";
       this.desc = `Review items, delivery address and payment information`;
       window.scroll({ top: 0, behavior: "smooth" });
-      this.deliveryAddress = deliveryAddress;
+      this.deliveryAddress = deliveryAddress ?? {};
       this.paymentOverview = true;
     },
   },

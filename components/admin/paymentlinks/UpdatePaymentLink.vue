@@ -170,7 +170,7 @@
   <div class="section options flex center">
     <label class="label"> Payemnt Link Options: </label>
     <Checkbox v-model="doc.options.otpOptional" label="Make OTP Verification optional" />
-    <Checkbox v-model="doc.options.addressOptional" label="Make Address Collection optional" />
+    <Checkbox v-if="doc.currency === 'INR'" v-model="doc.options.addressOptional" label="Make Address Collection optional" />
 
     <div class="section address-type flex center">
        <label class="label"> Address Type: </label>
