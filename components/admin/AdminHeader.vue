@@ -1,13 +1,13 @@
 <template>
   <div class="header center-col">
-    <div class="flex between" style="width: 100%">
+    <div class="flex center" style="width: 100%">
       <!-- bounipun logo -->
       <div @click="$router.push('/admin-panel')" class="logo center">
         <img src="/icons/light/logo.png" />
       </div>
 
       <!-- logout button -->
-      <button class="logout-btn" @click="logoutAdmin">Logout</button>
+      <button class="logout-btn" style="position: absolute; right:0;" @click="logoutAdmin">Logout</button>
     </div>
 
     <div class="menu-links flex wrap center">
@@ -208,7 +208,7 @@ export default {
 .header {
   // padding: 10px;
   background-color: $dark_gray;
-  height: 15vh;
+  height: 17vh;
   overflow: hidden;
   padding: 0;
   margin: 0;
