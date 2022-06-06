@@ -83,6 +83,7 @@
           :options="currencies"
           v-model="doc.currency"
           label="Select Currency"
+          @input="currencyChanged"
         />
       </div>
 
@@ -417,6 +418,10 @@ export default {
     },
   },
   methods: {
+    currencyChanged() {
+      if(this.doc.currency !== 'INR')
+        this.doc.options.addressOptional = false;
+    },
     openInNewTab(link) {
       window.open(link, "_newtab");
     },
