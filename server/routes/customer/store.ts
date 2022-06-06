@@ -264,7 +264,7 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
     case 'order':
       break;
     case 'paymentLink':
-      const reqPayload = payload as paymentLinkReqPayload
+      const reqPayload = payload as paymentLinkReqPayload;
       /* validate details */
       const detailsValid = await paymentLinkMethods.validateLinkDetails(reqPayload.linkId, {
         amount,
@@ -284,6 +284,7 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
       /* create intent payload */
       intentPayload = {
         linkId: payload.linkId,
+        address: payload.address,
       } as PaymentLinkIntent['payload']
 
       break;
@@ -402,7 +403,8 @@ router.post("/stripeWebhook", async (req, res) => {
         await userMethods.placeOrder(gatewayToken, transactionId, "stripe");
         break;
       case 'paymentLink':
-        await paymentLinkMethods.markAsPaid((paymentIntent as PaymentLinkIntent).payload.linkId, "stripe")
+        const { payload: { linkId, address } } = paymentIntent as PaymentLinkIntent
+        await paymentLinkMethods.markAsPaid(linkId, address, "stripe")
         break;
     }
   }
@@ -441,7 +443,9 @@ router.post("/razorpayPaymentSuccess/v2", async (req, res) => {
       break;
     case 'paymentLink':
       /* mark payment link as paid */
-      await paymentLinkMethods.markAsPaid((paymentIntent as PaymentLinkIntent).payload.linkId, "razorpay")
+      const { payload: { linkId, address } } = paymentIntent as PaymentLinkIntent
+      console.log(address)
+      await paymentLinkMethods.markAsPaid(linkId, address, "razorpay")
       break;
   }
 

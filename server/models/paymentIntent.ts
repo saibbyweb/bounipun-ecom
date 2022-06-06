@@ -33,6 +33,7 @@ export type PaymentLinkIntent = {
     intentType: 'paymentLink',
     payload: {
         gatewayToken: string,
+        address: Record<string, any>,
         linkId: MongoId
     }
 }

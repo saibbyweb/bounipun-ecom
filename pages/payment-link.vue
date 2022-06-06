@@ -136,6 +136,7 @@
                   linkId: linkDetails._id,
                   countryCode: linkDetails.countryCode,
                   phoneNumber: linkDetails.phoneNumber,
+                  address: deliveryAddress
                 }"
                 :demoMode="false"
                 @paymentProcessed="paymentProcessed"

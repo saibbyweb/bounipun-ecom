@@ -108,6 +108,12 @@
       </div>
     </div>
 
+    <!-- address provided -->
+    <div v-if="doc.address" class="address">
+       <label class="label"> Address: </label>
+       <p class="address-type" style="margin-left:10%; width:25%; font-size:14px;"> {{ JSON.stringify(doc.address, null, 4) }} </p>
+    </div>
+
     <!-- items -->
     <div :class="{ paid: doc.paid }" class="flex col" style="gap: 10px">
       <label class="label"> Items: </label>
@@ -394,6 +400,7 @@ export default {
         done: false,
         msg: "",
       },
+      address: {},
       discountTypes,
       customerEmailSelected: true,
       adminEmails: {
@@ -606,6 +613,7 @@ export default {
         discount,
         options,
         courierCharges,
+        address,
         notifyLog,
         status,
       } = details;
@@ -629,6 +637,7 @@ export default {
         courierCharges: courierCharges ?? 0,
         discount: discount ?? { type: null, value: 0, amount: 0 },
         notifyLog: notifyLog ?? [],
+        address: address ?? false,
         status,
       };
 

@@ -50,6 +50,7 @@ router.post("/findDocument", async (req, res) => {
     const msg = error ? "Couldnt fetch" : "Couldnt find";
     console.log(msg);
     res.send({notFound: true})
+    return;
   }
 
   res.send(document);

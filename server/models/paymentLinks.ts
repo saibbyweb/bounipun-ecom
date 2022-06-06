@@ -46,7 +46,6 @@ const schema = new mongoose.Schema(
         /* options */
         options: {
             otpOptional: Boolean,
-            /* TODO: add admin panel UI */
             addressOptional: Boolean,
             addressType: { type: String, enum: ['billing','shipping','delivery'] }
         },
@@ -98,9 +97,10 @@ export const methods = {
         return doc.amount == details.amount && doc.currency == details.currency && doc.countryCode == details.countryCode && doc.phoneNumber == details.phoneNumber;
     },
     /* mark as paid */
-    async markAsPaid(linkId: MongoId, gateway: Gateway) {
+    async markAsPaid(linkId: MongoId, address: Record<string, any>, gateway: Gateway) {
         const updated = await model.findByIdAndUpdate(linkId, {
             paid: true,
+            address,
             paymentDetails: {
                 gateway,
                 timestamp: new Date()
