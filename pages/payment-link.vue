@@ -314,12 +314,20 @@ export default {
         this.deliveryAddress.email = this.linkDetails.email;
         this.deliveryAddress.mobileNumber = this.linkDetails.phoneNumber;
     },
+    setAddressTitle() {
+      const { options } = this.linkDetails;
+      let addressType = 'Billing'
+      if(options) {
+        addressType = options.addressType ?? 'Billing'
+      }
+      this.title = `${addressType} Address`;
+      this.desc = `Enter a ${addressType} address`
+    },
     async sendOtp() {
       /* if otp is optional */
       if (this.otpOptional) {
         window.scroll({ top: 0, behavior: "smooth" });
-        this.title = "Delivery Address";
-        this.desc = `Enter a shipping address`;
+        this.setAddressTitle();
         this.otpVerified = true;
         return;
       }
@@ -349,8 +357,7 @@ export default {
       /* if bypass mode is on */
       if (this.byPassMode || localBypass) {
         this.otpVerified = true;
-        this.title = "Delivery Address";
-        this.desc = `Enter a shipping address`;
+        this.setAddressTitle()
         window.scroll({ top: 0, behavior: "smooth" });
         return;
       }
@@ -379,13 +386,13 @@ export default {
       if (this.addressOptional) {
         this.title = "Payment Overview";
         this.desc = `Review items and payment information`;
+        this.setBasicAddress();
         this.paymentOverview = true;
         return;
       }
 
       this.activeStepIndex = this.activeStepIndex + 1;
-      this.title = "Delivery Address";
-      this.desc = `Enter a shipping address`;
+      this.setAddressTitle()
     },
     moveToCheckout(deliveryAddress) {
       this.activeStepIndex = 2;
