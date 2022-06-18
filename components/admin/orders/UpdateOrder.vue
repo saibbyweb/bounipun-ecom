@@ -55,7 +55,10 @@
     </div>
 
     <!-- order is a gift -->
-    <div v-if="doc.giftMessage !== undefined && doc.giftMessage.status === true" class="order-is-a-gift">
+    <div
+      v-if="doc.giftMessage !== undefined && doc.giftMessage.status === true"
+      class="order-is-a-gift"
+    >
       <label class="label"> Gifting: </label>
       <GiftMessage :value="doc.giftMessage" :disabled="true" />
     </div>
@@ -108,7 +111,7 @@
       </button>
 
       <!-- download invoice -->
-      <button @click="downloadInvoice"> Download Invoice </button>
+      <button @click="downloadInvoice">Download Invoice</button>
     </div>
   </div>
 </template>
@@ -128,7 +131,7 @@ const baseDoc = () => ({
   discountValue: "",
   shippingCharge: "",
   combinedDeliveryConsent: false,
-  giftMessage: { status: false},
+  giftMessage: { status: false },
   deliveryAddress: {
     firstName: "",
     surName: "",
@@ -249,7 +252,39 @@ export default {
       this.editMode = false;
     },
     downloadInvoice() {
-      let invoiceItems = [];
+      let invoiceItems = [
+        {
+          styleId: "BCK-434",
+          product: "Pottery Blossom",
+          collection: "Autograph",
+          color: "Gray Red Multi",
+          hsnCode: "6214",
+          rate: "14296", // find rate before gst
+          discount: "-100",
+          qty: "1",
+          sgst: "6%",
+          cgst: "6%",
+          amountBeforeGst: "14196",
+          gstAmount: "1703",
+          total: "15900",
+        },
+        {
+          styleId: "BCK 005 SH/SH/SH-TW-WE200",
+          product: "Persian Khatam",
+          collection: "Karakul",
+          color: "Blk/red blk/fuschia",
+          hsnCode: "6214",
+          rate: "125000", // find rate before gst
+          discount: "0",
+          qty: "1",
+          sgst: "6%",
+          cgst: "6%",
+          amountBeforeGst: "125000",
+          gstAmount: "15000",
+          total: "140000",
+        },
+      ];
+
       const props = {
         outputType: "save",
         returnJsPDFDocObject: true,
@@ -289,23 +324,87 @@ export default {
           headerBorder: false,
           tableBodyBorder: false,
           header: [
-           {title: "#" },
-            {title: "StyleId"},
-            {title: "Product Description"},
-            {title: "Color"},
-            {title: "HSN Code"},
-            {title: "Qty"},
-            {title: "Total"},
+            {
+              title: "S.no",
+              style: {
+                width: 10,
+              },
+            },
+            {
+              title: "StyleId",
+              style: {
+                width: 30,
+                fontSize: 7
+              },
+            },
+            {
+              title: "Product",
+              style: {
+                width: 30,
+              },
+            },
+            { title: "Collection" },
+            {
+              title: "Color",
+              style: {
+                width: 30,
+              },
+            },
+            { title: "HSN Code" },
+            { title: "Rate" },
+            { title: "Discount" },
+            {
+              title: "Qty",
+              style: {
+                width: 10,
+              },
+            },
+            {
+              title: "SGST",
+              style: {
+                width: 10,
+              },
+            },
+            {
+              title: "CGST",
+              style: {
+                width: 10,
+              },
+            },
+            { title: "W/O GST" },
+            { title: "GST" },
+            { title: "Total" },
           ],
-          table: Array.from(Array(5), (item, index) => [
+          table: invoiceItems.map((item, index) => [
             index + 1,
-            "Fading Tradition ",
-            "Lorem Ipsum is simply dummy text ",
-            200.5,
-            4.5,
-            "m2",
-            400.5,
+            item.styleId,
+            item.product,
+            item.collection,
+            item.color,
+            item.hsnCode,
+            item.rate,
+            item.discount,
+            item.qty,
+            item.sgst,
+            item.cgst,
+            item.amountBeforeGst,
+            item.gstAmount,
+            item.total,
           ]),
+
+          // table: Array.from(Array(5), (item, index) => [
+          //   index + 1,
+          //   "BCK-400/ST/WQ001",
+          //   "PERSIAN KHATAM",
+          //   "Karakul",
+          //   "BLK/RED BLK/FUSCHIA",
+          //   "6214",
+          //   "15000",
+          //   "2",
+          //   "6%",
+          //   "6%",
+          //   "18650",
+          // ]),
           invTotalLabel: "Total:",
           invTotal: "145,250.50",
           invCurrency: "ALL",
@@ -325,6 +424,32 @@ export default {
               fontSize: 10, //optional, default 12
             },
           },
+          additionalRows: [
+            {
+              col1: "Total:",
+              col2: "145,250.50",
+              col3: "ALL",
+              style: {
+                fontSize: 14, //optional, default 12
+              },
+            },
+            {
+              col1: "VAT:",
+              col2: "20",
+              col3: "%",
+              style: {
+                fontSize: 10, //optional, default 12
+              },
+            },
+            {
+              col1: "SubTotal:",
+              col2: "116,199.90",
+              col3: "ALL",
+              style: {
+                fontSize: 10, //optional, default 12
+              },
+            },
+          ],
           invDescLabel: "Invoice Note",
           invDesc:
             "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary.",
@@ -335,10 +460,9 @@ export default {
         pageEnable: true,
         pageLabel: "Page ",
       };
-      console.log(jsPDFInvoiceTemplate)
+      console.log(jsPDFInvoiceTemplate);
       var pdfCreated = jsPDFInvoiceTemplate(props);
       pdfCreated.jsPDFDocObject.save();
-
     },
   },
 };
