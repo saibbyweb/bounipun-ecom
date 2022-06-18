@@ -757,7 +757,7 @@ router.post("/loginAdmin", async (req, res) => {
   if (platform === "web") {
     console.log("setting cookie...", loginAttempt.token);
     res.cookie("swecom_bounipun_admin", loginAttempt.token, {
-      maxAge: 1209600000,
+      maxAge: 2419200000,
       httpOnly: false,
       sameSite: "none",
       secure: true,

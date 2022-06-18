@@ -302,8 +302,12 @@ export default {
       const collectionSlugs = allCollections.map(col => '/collections?slug=' + col.slug);
       const productListSlugs = allProductLists.map(list => '/lists/' + list.slug + '?c=1');
       
-      const allSlugs = [...collectionSlugs, ...productListSlugs].map(slug => ({name: location.host + slug, value:location.host + slug }));
+      // const allSlugs = [...collectionSlugs, ...productListSlugs].map(slug => ({name: location.host + slug, value:location.host + slug }));
+      const BASE_URL = 'https://bounipun.in';
+      const allSlugs = [...collectionSlugs, ...productListSlugs].map(slug => ({name: BASE_URL + slug, value: BASE_URL + slug }));
       this.allSlugs = allSlugs;
+      /* set first slug as the default link  */
+      this.link = this.allSlugs[0].value;
     },
     copyToClipBoard(textToCopy) {
       const tmpTextField = document.createElement("textarea");
@@ -408,6 +412,8 @@ export default {
         fields: "firstName surName countryIsoCode",
         _ids: allIds,
       });
+      
+ 
 
       if (result.length > 0) {
         this.customersUnlocked = result;

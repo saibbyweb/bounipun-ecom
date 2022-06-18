@@ -40,6 +40,7 @@ export default {
 
 <style lang="scss" scoped>
 .currency-selector {
+    margin-left:14px;
     .select {
         padding:1px 3px;
         // padding: 0;

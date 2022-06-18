@@ -57,6 +57,10 @@ export default {
   computed: {
     dontShowPopups() {
       const allowedRoutes = [
+        "/my-account/orders",
+        "/my-account",
+        "/my-account/address-book",
+        "/my-account/profile-details",
         "/payment-link",
         "/login",
         "/registration",
