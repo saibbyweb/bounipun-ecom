@@ -117,7 +117,7 @@
 </template>
 
 <script>
-import jsPDFInvoiceTemplate from "jspdf-invoice-template";
+import jsPDFInvoiceTemplate from "../../../helpers/pdfHelper";
 
 const baseDoc = () => ({
   _id: "",
@@ -333,47 +333,81 @@ export default {
             {
               title: "StyleId",
               style: {
-                width: 30,
-                fontSize: 7
+                width: 40,
               },
             },
             {
               title: "Product",
               style: {
-                width: 30,
+                width: 40,
               },
             },
-            { title: "Collection" },
+            {
+              title: "Collection",
+              style: {
+                width: 20,
+              },
+            },
             {
               title: "Color",
               style: {
-                width: 30,
+                width: 25,
               },
             },
-            { title: "HSN Code" },
-            { title: "Rate" },
-            { title: "Discount" },
+            {
+              title: "HSN",
+              style: {
+                width: 15,
+              },
+            },
+            {
+              title: "Rate",
+              style: {
+                width: 20,
+              },
+            },
+            {
+              title: "Discount",
+              style: {
+                width: 20,
+              },
+            },
             {
               title: "Qty",
               style: {
-                width: 10,
+                width: 12,
               },
             },
             {
               title: "SGST",
               style: {
-                width: 10,
+                width: 12,
               },
             },
             {
               title: "CGST",
               style: {
-                width: 10,
+                width: 12,
               },
             },
-            { title: "W/O GST" },
-            { title: "GST" },
-            { title: "Total" },
+            {
+              title: "W/O GST",
+              style: {
+                width: 22,
+              },
+            },
+            {
+              title: "GST",
+              style: {
+                width: 15,
+              },
+            },
+            {
+              title: "Total",
+              style: {
+                width: 15,
+              },
+            },
           ],
           table: invoiceItems.map((item, index) => [
             index + 1,
