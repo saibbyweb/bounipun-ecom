@@ -106,11 +106,16 @@
       >
         Delete
       </button>
+
+      <!-- download invoice -->
+      <button @click="downloadInvoice"> Download Invoice </button>
     </div>
   </div>
 </template>
 
 <script>
+import jsPDFInvoiceTemplate from "jspdf-invoice-template";
+
 const baseDoc = () => ({
   _id: "",
   items: [],
@@ -278,19 +283,19 @@ export default {
         },
         invoice: {
           label: "Invoice #: BP-ORDER-009",
-          num: " ",
+          num: "--19",
           invDate: "Payment Date: 30 June, 2021 - 15:36:31 IST  ",
           invGenDate: "",
           headerBorder: false,
           tableBodyBorder: false,
           header: [
-            "#",
-            "StyleId",
-            "Product Description",
-            "Color",
-            "HSN Code",
-            "Qty",
-            "Total",
+           {title: "#" },
+            {title: "StyleId"},
+            {title: "Product Description"},
+            {title: "Color"},
+            {title: "HSN Code"},
+            {title: "Qty"},
+            {title: "Total"},
           ],
           table: Array.from(Array(5), (item, index) => [
             index + 1,
@@ -330,6 +335,10 @@ export default {
         pageEnable: true,
         pageLabel: "Page ",
       };
+      console.log(jsPDFInvoiceTemplate)
+      var pdfCreated = jsPDFInvoiceTemplate(props);
+      pdfCreated.jsPDFDocObject.save();
+
     },
   },
 };
