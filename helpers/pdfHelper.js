@@ -189,7 +189,7 @@ function jsPDFInvoiceTemplate(props) {
   var pdfConfig = {
     headerTextSize: 20,
     labelTextSize: 11,
-    fieldTextSize: 9,
+    fieldTextSize: 8.5,
     lineHeight: 6,
     subLineHeight: 4,
   };
@@ -391,6 +391,7 @@ function jsPDFInvoiceTemplate(props) {
         const widthToUse = param.invoice.header[index]?.style?.width || tdWidth;
 
         let item = splitTextAndGetHeight(rr.toString(), widthToUse - 1); //minus 1, to fix the padding issue between borders
+        /* added row height */
         rowsHeight.push(item.height + 2);
       });
 

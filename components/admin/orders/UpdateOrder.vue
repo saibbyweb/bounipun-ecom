@@ -259,29 +259,44 @@ export default {
           collection: "Autograph",
           color: "Gray Red Multi",
           hsnCode: "6214",
-          rate: "14296", // find rate before gst
-          discount: "-100",
+          rate: "14296.00", // find rate before gst
+          discount: "-100.00",
           qty: "1",
           sgst: "6%",
           cgst: "6%",
-          amountBeforeGst: "14196",
-          gstAmount: "1703",
-          total: "15900",
+          amountBeforeGst: "14196.00",
+          gstAmount: "1703.00",
+          total: "15900.00",
         },
         {
-          styleId: "BCK 005 SH/SH/SH-TW-WE200",
-          product: "Persian Khatam",
+          styleId: "BCK 005/SH/SH-TW-WE200",
+          product: "Signature Khatamband",
           collection: "Karakul",
-          color: "Blk/red blk/fuschia",
+          color: "Blk/RedBlk/Fuschia",
           hsnCode: "6214",
-          rate: "125000", // find rate before gst
+          rate: "125000.00", // find rate before gst
           discount: "0",
           qty: "1",
           sgst: "6%",
           cgst: "6%",
-          amountBeforeGst: "125000",
-          gstAmount: "15000",
-          total: "140000",
+          amountBeforeGst: "125000.00",
+          gstAmount: "15000.00",
+          total: "140000.00",
+        },
+              {
+          styleId: "BCK 407/ST/ST-LW-WO/MD60",
+          product: "Fading Tradition",
+          collection: "Autograph",
+          color: "Red Sky Blue",
+          hsnCode: "6214",
+          rate: "14296.00", // find rate before gst
+          discount: "0",
+          qty: "1",
+          sgst: "6%",
+          cgst: "6%",
+          amountBeforeGst: "14296.00",
+          gstAmount: "14296.00",
+          total: "14296.00",
         },
       ];
 
@@ -303,13 +318,14 @@ export default {
           name: "Bounipun Kashmir",
           address:
             "H-30 Integrated Textile and Handicraft Park Zakura, Srinagar, Jammu and Kashmir, India, 190006",
-          phone: "(+91) 91030-77655, (+91) 78897-77377",
+          phone:
+            "GST No: GSTINXXXXXXXX  |  (+91) 91030-77655, (+91) 78897-77377",
           email: "care@bounipun.in",
           email_1: "contact@bounipun.in",
           website: "www.bounipun.in",
         },
         contact: {
-          label: "Invoice issued for:",
+          label: "Tax Invoice issued for:",
           name: "Suhaib Khan",
           address: "H.no.54, Chinar Enclave, Rawalpora",
           phone: "(+91) 99066-97711",
@@ -318,28 +334,29 @@ export default {
         },
         invoice: {
           label: "Invoice #: BP-ORDER-009",
-          num: "--19",
+          num: "",
           invDate: "Payment Date: 30 June, 2021 - 15:36:31 IST  ",
-          invGenDate: "",
-          headerBorder: false,
-          tableBodyBorder: false,
+          // gateway
+          invGenDate: "Razorpay | Transaction Id: pi_1L2VzbLdxwZUT01QC7t1G40F",
+          headerBorder: true,
+          tableBodyBorder: true,
           header: [
             {
               title: "S.no",
               style: {
-                width: 10,
+                width: 8,
               },
             },
             {
               title: "StyleId",
               style: {
-                width: 40,
+                width: 44,
               },
             },
             {
               title: "Product",
               style: {
-                width: 40,
+                width: 33,
               },
             },
             {
@@ -351,13 +368,13 @@ export default {
             {
               title: "Color",
               style: {
-                width: 25,
+                width: 29,
               },
             },
             {
               title: "HSN",
               style: {
-                width: 15,
+                width: 13,
               },
             },
             {
@@ -369,7 +386,7 @@ export default {
             {
               title: "Discount",
               style: {
-                width: 20,
+                width: 18,
               },
             },
             {
@@ -393,19 +410,19 @@ export default {
             {
               title: "W/O GST",
               style: {
-                width: 22,
+                width: 24,
               },
             },
             {
               title: "GST",
               style: {
-                width: 15,
+                width: 18,
               },
             },
             {
               title: "Total",
               style: {
-                width: 15,
+                width: 18,
               },
             },
           ],
@@ -439,54 +456,54 @@ export default {
           //   "6%",
           //   "18650",
           // ]),
-          invTotalLabel: "Total:",
-          invTotal: "145,250.50",
-          invCurrency: "ALL",
-          row1: {
-            col1: "VAT:",
-            col2: "20",
-            col3: "%",
-            style: {
-              fontSize: 10, //optional, default 12
-            },
-          },
-          row2: {
-            col1: "SubTotal:",
-            col2: "116,199.90",
-            col3: "ALL",
-            style: {
-              fontSize: 10, //optional, default 12
-            },
-          },
+          // invTotalLabel: "Total:",
+          // invTotal: "3,11,800.00",
+          // invCurrency: "INR",
+          // row1: {
+          //   col1: "GST:",
+          //   col2: "31876.00",
+          //   col3: "INR",
+          //   style: {
+          //     fontSize: 10, //optional, default 12
+          //   },
+          // },
+          // row2: {
+          //   col1: "SubTotal:",
+          //   col2: "116,199.90",
+          //   col3: "ALL",
+          //   style: {
+          //     fontSize: 10, //optional, default 12
+          //   },
+          // },
           additionalRows: [
             {
+              col1: "SubTotal:",
+              col2: "278392.00",
+              col3: "INR",
+              style: {
+                fontSize: 10, //optional, default 12
+              },
+            },
+            {
+              col1: "GST:",
+              col2: "31876.00",
+              col3: "INR",
+              style: {
+                fontSize: 10, //optional, default 12
+              },
+            },
+            {
               col1: "Total:",
-              col2: "145,250.50",
-              col3: "ALL",
+              col2: "311800.00",
+              col3: "INR",
               style: {
                 fontSize: 14, //optional, default 12
-              },
-            },
-            {
-              col1: "VAT:",
-              col2: "20",
-              col3: "%",
-              style: {
-                fontSize: 10, //optional, default 12
-              },
-            },
-            {
-              col1: "SubTotal:",
-              col2: "116,199.90",
-              col3: "ALL",
-              style: {
-                fontSize: 10, //optional, default 12
               },
             },
           ],
           invDescLabel: "Invoice Note",
           invDesc:
-            "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary.",
+            "Incase of any complaint kindly mail on customer care ID printed on tag of garment. All disputes subject to srinagar jurisdiction only.",
         },
         footer: {
           text: "The invoice is created on a computer and is valid without the signature and stamp.",
@@ -496,7 +513,7 @@ export default {
       };
       console.log(jsPDFInvoiceTemplate);
       var pdfCreated = jsPDFInvoiceTemplate(props);
-      pdfCreated.jsPDFDocObject.save();
+      // pdfCreated.jsPDFDocObject
     },
   },
 };
