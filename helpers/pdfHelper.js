@@ -277,7 +277,8 @@ function jsPDFInvoiceTemplate(props) {
     currentHeight += pdfConfig.subLineHeight;
 
   doc.setTextColor(colorGray);
-  doc.setFontSize(pdfConfig.fieldTextSize - 2);
+  // doc.setFontSize(pdfConfig.fieldTextSize - 2);
+  doc.setFontSize(pdfConfig.fieldTextSize - 1.5);
 
   if (param.contact.address || param.invoice.invDate) {
     doc.text(10, currentHeight, param.contact.address);

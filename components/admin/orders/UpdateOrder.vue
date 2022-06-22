@@ -118,7 +118,7 @@
 
 <script>
 import jsPDFInvoiceTemplate from "../../../helpers/pdfHelper";
-
+import { invoiceItemsINR, invoiceItemsUSD } from "../../../helpers/invoiceItems";
 const baseDoc = () => ({
   _id: "",
   items: [],
@@ -252,53 +252,6 @@ export default {
       this.editMode = false;
     },
     downloadInvoice() {
-      let invoiceItems = [
-        {
-          styleId: "BCK-434",
-          product: "Pottery Blossom",
-          collection: "Autograph",
-          color: "Gray Red Multi",
-          hsnCode: "6214",
-          rate: "14296.00", // find rate before gst
-          discount: "-100.00",
-          qty: "1",
-          sgst: "6%",
-          cgst: "6%",
-          amountBeforeGst: "14196.00",
-          gstAmount: "1703.00",
-          total: "15900.00",
-        },
-        {
-          styleId: "BCK 005/SH/SH-TW-WE200",
-          product: "Signature Khatamband",
-          collection: "Karakul",
-          color: "Blk/RedBlk/Fuschia",
-          hsnCode: "6214",
-          rate: "125000.00", // find rate before gst
-          discount: "0",
-          qty: "1",
-          sgst: "6%",
-          cgst: "6%",
-          amountBeforeGst: "125000.00",
-          gstAmount: "15000.00",
-          total: "140000.00",
-        },
-              {
-          styleId: "BCK 407/ST/ST-LW-WO/MD60",
-          product: "Fading Tradition",
-          collection: "Autograph",
-          color: "Red Sky Blue",
-          hsnCode: "6214",
-          rate: "14296.00", // find rate before gst
-          discount: "0",
-          qty: "1",
-          sgst: "6%",
-          cgst: "6%",
-          amountBeforeGst: "14296.00",
-          gstAmount: "14296.00",
-          total: "14296.00",
-        },
-      ];
 
       const props = {
         outputType: "save",
@@ -333,11 +286,11 @@ export default {
           otherInfo: "Srinagar, Jammu and Kashmir",
         },
         invoice: {
-          label: "Invoice #: BP-ORDER-009",
+          label: "Invoice #: BP-ORDER-010",
           num: "",
-          invDate: "Payment Date: 30 June, 2021 - 15:36:31 IST  ",
+          invDate: "Payment Date: 22 June, 2022 - 15:36:31 IST  ",
           // gateway
-          invGenDate: "Razorpay | Transaction Id: pi_1L2VzbLdxwZUT01QC7t1G40F",
+          invGenDate: "Stripe | Transaction Id: pi_1L2VzbLdxwZUT01QC7t1G40F",
           headerBorder: true,
           tableBodyBorder: true,
           header: [
@@ -396,6 +349,12 @@ export default {
               },
             },
             {
+              title: "Before Tax",
+              style: {
+                width: 20,
+              },
+            },
+            {
               title: "SGST",
               style: {
                 width: 12,
@@ -408,13 +367,7 @@ export default {
               },
             },
             {
-              title: "W/O GST",
-              style: {
-                width: 24,
-              },
-            },
-            {
-              title: "GST",
+              title: "+GST",
               style: {
                 width: 18,
               },
@@ -422,11 +375,11 @@ export default {
             {
               title: "Total",
               style: {
-                width: 18,
+                width: 20,
               },
             },
           ],
-          table: invoiceItems.map((item, index) => [
+          table: invoiceItemsUSD.map((item, index) => [
             index + 1,
             item.styleId,
             item.product,
@@ -436,66 +389,39 @@ export default {
             item.rate,
             item.discount,
             item.qty,
+            item.amountBeforeGst,
             item.sgst,
             item.cgst,
-            item.amountBeforeGst,
             item.gstAmount,
             item.total,
           ]),
-
-          // table: Array.from(Array(5), (item, index) => [
-          //   index + 1,
-          //   "BCK-400/ST/WQ001",
-          //   "PERSIAN KHATAM",
-          //   "Karakul",
-          //   "BLK/RED BLK/FUSCHIA",
-          //   "6214",
-          //   "15000",
-          //   "2",
-          //   "6%",
-          //   "6%",
-          //   "18650",
-          // ]),
-          // invTotalLabel: "Total:",
-          // invTotal: "3,11,800.00",
-          // invCurrency: "INR",
-          // row1: {
-          //   col1: "GST:",
-          //   col2: "31876.00",
-          //   col3: "INR",
-          //   style: {
-          //     fontSize: 10, //optional, default 12
-          //   },
-          // },
-          // row2: {
-          //   col1: "SubTotal:",
-          //   col2: "116,199.90",
-          //   col3: "ALL",
-          //   style: {
-          //     fontSize: 10, //optional, default 12
-          //   },
-          // },
           additionalRows: [
             {
-              col1: "SubTotal:",
-              col2: "278392.00",
-              col3: "INR",
+              col1: "Sub Total (Tax Exclusive):",
+              // col2: "278392.00",
+              col2: "2202.53",
+              // col3: "INR",
+              col3: "USD",
               style: {
                 fontSize: 10, //optional, default 12
               },
             },
             {
               col1: "GST:",
-              col2: "31876.00",
-              col3: "INR",
+              // col2: "31876.00",
+              col2: "0",
+              // col3: "INR",
+              col3: "USD",
               style: {
                 fontSize: 10, //optional, default 12
               },
             },
             {
               col1: "Total:",
-              col2: "311800.00",
-              col3: "INR",
+              // col2: "311800.00",
+              col2: "2202.53",
+              // col3: "INR",
+              col3: "USD",
               style: {
                 fontSize: 14, //optional, default 12
               },
