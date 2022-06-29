@@ -118,7 +118,10 @@
 
 <script>
 import jsPDFInvoiceTemplate from "../../../helpers/pdfHelper";
-import { invoiceItemsINR, invoiceItemsUSD } from "../../../helpers/invoiceItems";
+import {
+  invoiceItemsINR,
+  invoiceItemsUSD,
+} from "../../../helpers/invoiceItems";
 const baseDoc = () => ({
   _id: "",
   items: [],
@@ -252,14 +255,13 @@ export default {
       this.editMode = false;
     },
     downloadInvoice() {
-
       const props = {
         outputType: "save",
         returnJsPDFDocObject: true,
         fileName: "Invoice 2021",
         orientationLandscape: true,
         logo: {
-          src: "https://bounipun.in/icons/light/logo.png",
+          src: "https://bounipun.in/icons/light/logo-wok.png",
           width: 56.4, //aspect ratio = width/height
           height: 14.5,
           margin: {
@@ -268,9 +270,9 @@ export default {
           },
         },
         business: {
-          name: "Bounipun Kashmir",
+          name: "Bounipun",
           address:
-            "H-30 Integrated Textile and Handicraft Park Zakura, Srinagar, Jammu and Kashmir, India, 190006",
+            "H-30 Integrated Textile and Handicraft Park Zakura, Srinagar, Jammu and Kashmir, India, 190024",
           phone:
             "GST No: GSTINXXXXXXXX  |  (+91) 91030-77655, (+91) 78897-77377",
           email: "care@bounipun.in",
@@ -310,6 +312,12 @@ export default {
               title: "Product",
               style: {
                 width: 33,
+              },
+            },
+            {
+              title: "Variant",
+              style: {
+                width: 18,
               },
             },
             {
@@ -383,6 +391,7 @@ export default {
             index + 1,
             item.styleId,
             item.product,
+            'Shawl',
             item.collection,
             item.color,
             item.hsnCode,
@@ -427,7 +436,7 @@ export default {
               },
             },
           ],
-          invDescLabel: "Invoice Note",
+          invDescLabel: "E & O.E",
           invDesc:
             "Incase of any complaint kindly mail on customer care ID printed on tag of garment. All disputes subject to srinagar jurisdiction only.",
         },

@@ -248,7 +248,7 @@ p {
     }
 
     .full-width {
-        background-attachment: initial;
+        /* background-attachment: initial; */
     }
 }
 

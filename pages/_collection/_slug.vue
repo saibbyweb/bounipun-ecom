@@ -643,7 +643,7 @@ export default {
       let baseLink = `${location.host}/${this.product.slug}?activeColor=${
         this.colorExplicitlyChoosen
           ? this.activeColorIndex
-          : this.$route.query.activeColor
+          : (this.$route.query.activeColor ?? 0)
       }`;
 
       if (window.location.hostname === "bounipun.in")
