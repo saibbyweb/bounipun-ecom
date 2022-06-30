@@ -299,91 +299,103 @@ export default {
             {
               title: "S.no",
               style: {
-                width: 8,
+                width: 7,
               },
             },
             {
               title: "StyleId",
               style: {
-                width: 44,
+                width: 38,
               },
             },
             {
               title: "Product",
               style: {
-                width: 33,
+                width: 30,
               },
             },
             {
               title: "Variant",
               style: {
-                width: 18,
+                width: 13,
               },
             },
             {
               title: "Collection",
               style: {
-                width: 20,
+                width: 16,
               },
             },
             {
               title: "Color",
               style: {
-                width: 29,
+                width: 24,
               },
             },
             {
               title: "HSN",
               style: {
-                width: 13,
+                width: 9,
               },
             },
             {
               title: "Rate",
               style: {
-                width: 20,
+                width: 16,
               },
             },
             {
               title: "Discount",
               style: {
-                width: 18,
+                width: 14,
               },
             },
             {
               title: "Qty",
               style: {
-                width: 12,
+                width: 8,
               },
             },
             {
-              title: "Before Tax",
-              style: {
-                width: 20,
-              },
-            },
-            {
-              title: "SGST",
-              style: {
-                width: 12,
-              },
-            },
-            {
-              title: "CGST",
-              style: {
-                width: 12,
-              },
-            },
-            {
-              title: "+GST",
+              title: "Taxable Value",
               style: {
                 width: 18,
               },
             },
             {
+              title: "SGST %",
+              style: {
+                width: 12,
+              },
+            },
+            {
+              title: "SGST Amt",
+              style: {
+                width: 14,
+              },
+            },
+            {
+              title: "CGST %",
+              style: {
+                width: 12,
+              },
+            },
+            {
+              title: "CGST Amt",
+              style: {
+                width: 14,
+              },
+            },
+            {
+              title: "GST",
+              style: {
+                width: 15,
+              },
+            },
+            {
               title: "Total",
               style: {
-                width: 20,
+                width: 17,
               },
             },
           ],
@@ -391,7 +403,7 @@ export default {
             index + 1,
             item.styleId,
             item.product,
-            'Shawl',
+            "Shawl",
             item.collection,
             item.color,
             item.hsnCode,
@@ -400,7 +412,9 @@ export default {
             item.qty,
             item.amountBeforeGst,
             item.sgst,
+            '226',
             item.cgst,
+            '226',
             item.gstAmount,
             item.total,
           ]),

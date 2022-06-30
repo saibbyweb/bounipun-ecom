@@ -189,7 +189,7 @@ function jsPDFInvoiceTemplate(props) {
   var pdfConfig = {
     headerTextSize: 20,
     labelTextSize: 11,
-    fieldTextSize: 8.5,
+    fieldTextSize: 7,
     lineHeight: 6,
     subLineHeight: 4,
   };

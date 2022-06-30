@@ -239,7 +239,11 @@ p {
 .full-width {
   width: 100%;
   height: 90vh;
-  background-attachment: fixed;
+  /* background-attachment: fixed; */
+
+  @supports(background-attachment: fixed) {
+    background-attachment: fixed
+  }
 }
 
 @media(max-width: 768px) {
