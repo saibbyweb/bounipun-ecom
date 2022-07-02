@@ -45,7 +45,7 @@
       <div class="two" :style="setBg('2.png')"></div>
     </div>
     <!-- full width image -->
-    <div class="full-width" :style="setBg('3.png')"></div>
+    <div class="full-width" :style="setBg('3.png', true)"></div>
     <!-- centralized text block -->
     <div class="c-text">
       <p>
@@ -81,7 +81,7 @@
       <div class="two" :style="setBg('5.png')"></div>
     </div>
     <!-- full width image -->
-    <div class="full-width" :style="setBg('6.png')"></div>
+    <div class="full-width" :style="setBg('6.png', true)"></div>
     <!-- centralized text block -->
     <div class="c-text">
       <p>
@@ -129,17 +129,31 @@ export default {
       title: "Our Story | Bounipun Kashmir",
     };
   },
+  computed: {
+    isMobileSafari() {
+      let is_ios = /iP(ad|od|hone)/i.test(window.navigator.userAgent);
+      let is_safari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+      return is_ios && is_safari;
+    },
+  },
   methods: {
-    setBg(image) {
-    //   const bg = this.windowWidth > 768 ? image : `mobile/${image}`
+    setBg(image, fixedAttachment) {
+      //   const bg = this.windowWidth > 768 ? image : `mobile/${image}`
       const bg = image;
 
-      return {
+      let styles = {
         backgroundImage: `url(/story-images/${bg})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundOrigin: "content-box",
       };
+      
+      /* if device is NOT mobile safari and fixed attachement is required */
+      if (!this.isMobileSafari && fixedAttachment) {
+        styles = { ...styles, backgroundAttachment: "fixed" };
+      }
+
+      return styles;
     },
     moveDown() {
       const offsetTop = this.$refs.start.offsetTop;
@@ -172,9 +186,7 @@ export default {
       transform: scale(1.3);
     }
   }
-
 }
-
 
 p {
   font-size: 15px;
@@ -240,22 +252,17 @@ p {
   width: 100%;
   height: 90vh;
   /* background-attachment: fixed; */
+}
 
-  @supports(background-attachment: fixed) {
-    background-attachment: fixed
+@media (max-width: 768px) {
+  .header-image {
+    background-attachment: initial;
+  }
+
+  .full-width {
+    /* background-attachment: initial; */
   }
 }
-
-@media(max-width: 768px) {
-    .header-image {
-        background-attachment: initial;
-    }
-
-    .full-width {
-        /* background-attachment: initial; */
-    }
-}
-
 
 /* bordered block */
 .bordered-block {

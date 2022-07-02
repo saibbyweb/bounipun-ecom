@@ -280,12 +280,12 @@ export default {
           website: "www.bounipun.in",
         },
         contact: {
-          label: "Tax Invoice issued for:",
+          label: "CONSIGNEE:",
           name: "Suhaib Khan",
-          address: "H.no.54, Chinar Enclave, Rawalpora",
+          address: "H.no.54, Chinar Enclave, Rawalpora, Srinagar, Jammu and Kashmir",
           phone: "(+91) 99066-97711",
           email: "hello@saibbyweb.com",
-          otherInfo: "Srinagar, Jammu and Kashmir",
+          otherInfo: "GST:",
         },
         invoice: {
           label: "Invoice #: BP-ORDER-010",
@@ -412,9 +412,9 @@ export default {
             item.qty,
             item.amountBeforeGst,
             item.sgst,
-            '226',
+            "226",
             item.cgst,
-            '226',
+            "226",
             item.gstAmount,
             item.total,
           ]),
@@ -431,6 +431,16 @@ export default {
             },
             {
               col1: "GST:",
+              // col2: "31876.00",
+              col2: "0",
+              // col3: "INR",
+              col3: "USD",
+              style: {
+                fontSize: 10, //optional, default 12
+              },
+            },
+            {
+              col1: "Shipping:",
               // col2: "31876.00",
               col2: "0",
               // col3: "INR",
