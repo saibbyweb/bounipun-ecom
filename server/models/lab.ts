@@ -1,28 +1,22 @@
 import { mongoose, db, ObjectId, task } from "@helpers/essentials";
-/* variant block */
-type VariantBlock = {
-  heroBlockKey: string;
-  image: string;
-  title: string;
-  paragraph: string;
-};
 
-/* color block */
-type colorBlock = {
+type CommonBlock = {
   heroBlockKey: string;
   mainImage: string;
-  colorImage: string;
-  category: string;
   title: string;
   paragraph: string;
+}
+/* variant block */
+type VariantBlock = CommonBlock;
+
+/* color block */
+type colorBlock = CommonBlock & {
+  colorImage: string;
+  category: string;
 };
 
 /* fabric block */
-type fabricBlock = {
-  heroBlockKey: string;
-  mainImage: string;
-  title: string;
-  paragraph: string;
+type fabricBlock = CommonBlock & {
   subImage1: string;
   subImage2: string;
   subHeading1: string;

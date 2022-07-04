@@ -119,7 +119,7 @@
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
     <!-- update button -->
-    <div class="center-space">
+    <div class="center-space" style="width: 70%">
       <!-- loading bar -->
       <img v-if="loading" class="loading" src="/loading.gif" />
       <!-- action complete gif -->
@@ -228,13 +228,14 @@ export default {
       }
     },
     removeBlock(property, index) {
+
       let deletedItems = [];
       if (this.doc[property].length <= 1) return;
       deletedItems = this.doc[property].splice(index, 1);
       
       const removedBlock = deletedItems[0];
       delete this.doc.heroBlockDetails[removedBlock.key];
-      // remove corresponding heroBlockDetail
+      // TODO: remove corresponding heroBlockDetail
 
     },
     async updateDocument() {
@@ -334,6 +335,7 @@ export default {
       right: 5px;
       top: 5px;
       width: 6%;
+      z-index: 1;
     }
   }
 

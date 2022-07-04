@@ -184,3 +184,18 @@ export default {
   },
 };
 </script>
+
+
+<style lang="scss">
+.update.updating {
+  position: absolute;
+  right:0;
+  top:15vh;
+  overflow-y: scroll;
+  // min-height: 60vh;
+  height:79vh;
+  // transform: translate(-33%,0);
+  width:70%;
+  background-color:white;
+}
+</style>
