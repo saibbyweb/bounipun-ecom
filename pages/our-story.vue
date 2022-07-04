@@ -130,9 +130,9 @@ export default {
     };
   },
   computed: {
-    isMobileSafari() {
+    isIos() {
       let is_ios = /iP(ad|od|hone)/i.test(window.navigator.userAgent);
-      let is_safari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+      // let is_safari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
       return is_ios && is_safari;
     },
   },
@@ -148,8 +148,8 @@ export default {
         backgroundOrigin: "content-box",
       };
       
-      /* if device is NOT mobile safari and fixed attachement is required */
-      if (!this.isMobileSafari && fixedAttachment) {
+      /* if device is NOT ios and fixed attachement is required */
+      if (!this.isIos && fixedAttachment) {
         styles = { ...styles, backgroundAttachment: "fixed" };
       }
 

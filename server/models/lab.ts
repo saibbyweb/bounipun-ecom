@@ -1,4 +1,37 @@
 import { mongoose, db, ObjectId, task } from "@helpers/essentials";
+/* variant block */
+type VariantBlock = {
+  heroBlockKey: string;
+  image: string;
+  title: string;
+  paragraph: string;
+};
+
+/* color block */
+type colorBlock = {
+  heroBlockKey: string;
+  mainImage: string;
+  colorImage: string;
+  category: string;
+  title: string;
+  paragraph: string;
+};
+
+/* fabric block */
+type fabricBlock = {
+  heroBlockKey: string;
+  mainImage: string;
+  title: string;
+  paragraph: string;
+  subImage1: string;
+  subImage2: string;
+  subHeading1: string;
+  subParagraph1: string;
+  subHeading2: string;
+  subParagraph2: string;
+  subHeading3: string;
+  subParagraph3: string;
+};
 
 const schema = new mongoose.Schema(
   {
@@ -38,25 +71,26 @@ export const methods = {
   },
   async updateLab(details, editMode) {
     if (details.status === false) return;
-    console.log('Other lab documents need status update')
+    console.log("Other lab documents need status update");
 
     let filter: any = {};
     /* if edit mode, skip the existing layout */
-    if (editMode)
-        filter._id = { $ne: details._id };
+    if (editMode) filter._id = { $ne: details._id };
 
-    const matchedDocs : any = await model.find(filter);
+    const matchedDocs: any = await model.find(filter);
 
     /* if no matched layouts found */
-    if (matchedDocs === null)
-        return;
+    if (matchedDocs === null) return;
 
     /* update status for all matched layouts */
     for (const doc of matchedDocs) {
-        const updated: any = await model.findOneAndUpdate({ _id: doc._id }, { status: false }, { returnOriginal: false });
-        console.log(updated.status);
+      const updated: any = await model.findOneAndUpdate(
+        { _id: doc._id },
+        { status: false },
+        { returnOriginal: false }
+      );
+      console.log(updated.status);
     }
-    
   },
 };
 
