@@ -73,43 +73,54 @@
     </div>
 
     <!-- loop through all heroBlocks -->
-    <div class="hero-block-details" v-if="Object.keys(doc.heroBlockDetails).length > 0">
+    <div
+      class="hero-block-details"
+      v-if="Object.keys(doc.heroBlockDetails).length > 0"
+    >
       <Accordion
-           v-for="heroBlock in doc.heroBlocks"
+        v-for="heroBlock in doc.heroBlocks"
         :key="heroBlock.key"
-        :heading="`Details for: ${heroBlock.name}`">
+        :heading="`Details for: ${heroBlock.name}`"
+      >
 
-      <div class="hero-block-detail">
+      
+        <div class="hero-block-detail">
+          <div class="flex center">
+            <!-- image 1 -->
+            <UploadImage
+              :multipleUpload="false"
+              :ref="`imageUploader_heroBlockDetails_${heroBlock.key}`"
+              :label="`Block Detail Image [1] for [${heroBlock.name}]`"
+              @updated="
+                imageListUpdated($event, 'heroBlockDetails', heroBlock.key)
+              "
+            />
 
-        <div class="flex center">
-        <!-- image 1 -->
-        <UploadImage
-          :multipleUpload="false"
-          :ref="`imageUploader_heroBlockDetails_${heroBlock.key}`"
-          :label="`Block Detail Image [1] for [${heroBlock.name}]`"
-          @updated="imageListUpdated($event, 'heroBlockDetails', heroBlock.key)"
-        />
+            <!-- image 2 -->
+            <UploadImage
+              :multipleUpload="false"
+              :ref="`imageUploader_heroBlockDetails2_${heroBlock.key}`"
+              :label="`Block Detail Image [2] for [${heroBlock.name}]`"
+              @updated="
+                imageListUpdated($event, 'heroBlockDetails2', heroBlock.key)
+              "
+            />
+          </div>
 
-        <!-- image 2 -->
-        <UploadImage
-          :multipleUpload="false"
-          :ref="`imageUploader_heroBlockDetails2_${heroBlock.key}`"
-          :label="`Block Detail Image [2] for [${heroBlock.name}]`"
-          @updated="imageListUpdated($event, 'heroBlockDetails2', heroBlock.key)"
-        />
-</div>
+          <!-- title -->
+          <InputBox
+            :label="`Title for [${heroBlock.name}]`"
+            v-model="doc.heroBlockDetails[heroBlock.key].title"
+          />
+          <!-- paragraph -->
+          <TextBox
+            :label="`Paragraph for [${heroBlock.name}]`"
+            v-model="doc.heroBlockDetails[heroBlock.key].paragraph"
+          />
+        </div>
 
-        <!-- title -->
-        <InputBox
-          :label="`Title for [${heroBlock.name}]`"
-          v-model="doc.heroBlockDetails[heroBlock.key].title"
-        />
-        <!-- paragraph -->
-        <TextBox
-          :label="`Paragraph for [${heroBlock.name}]`"
-          v-model="doc.heroBlockDetails[heroBlock.key].paragraph"
-        />
-      </div>
+
+
       </Accordion>
     </div>
 
@@ -199,10 +210,12 @@ export default {
           this.doc[property] = list.length > 0 ? list[0].path : "";
           break;
         case "heroBlockDetails":
-          this.doc.heroBlockDetails[key].image = list.length > 0 ? list[0].path : "";
+          this.doc.heroBlockDetails[key].image =
+            list.length > 0 ? list[0].path : "";
           break;
         case "heroBlockDetails2":
-          this.doc.heroBlockDetails[key].image2 = list.length > 0 ? list[0].path : ""
+          this.doc.heroBlockDetails[key].image2 =
+            list.length > 0 ? list[0].path : "";
       }
     },
     addNewBlock(type) {
@@ -228,15 +241,13 @@ export default {
       }
     },
     removeBlock(property, index) {
-
       let deletedItems = [];
       if (this.doc[property].length <= 1) return;
       deletedItems = this.doc[property].splice(index, 1);
-      
+
       const removedBlock = deletedItems[0];
       delete this.doc.heroBlockDetails[removedBlock.key];
       // TODO: remove corresponding heroBlockDetail
-
     },
     async updateDocument() {
       this.loading = true;
@@ -273,7 +284,7 @@ export default {
     },
     populateForm(details) {
       console.log(details);
-      console.log('details to be populated');
+      console.log("details to be populated");
 
       const keys = Object.keys(details);
       for (const key of keys) {
