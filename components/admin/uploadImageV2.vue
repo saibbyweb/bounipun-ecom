@@ -94,7 +94,7 @@ export default {
       type: String,
       default: "non-product",
     },
-    uploaded: Array,
+    value: [Array, String],
   },
   data() {
     return {
@@ -103,47 +103,69 @@ export default {
       uploadImageAPI: "/uploadImage",
     };
   },
-  // watch: {
-  //     uploaded(newVal) {
-  //         console.log("IS THIS THE CULPRIT");
-  //         if(newVal.length > 0)
-  //             this.assignImages();
-  //     }
-  // },
+  watch: {
+    value: {
+      handler(newValue, oldValue) {
+        if (oldValue != false) {
+          return;
+        }
+
+        this.commonAssign();
+      },
+    },
+    /* clear file selection on visibility toggle */
+    "$parent.$parent.showForm": {
+      handler(newValue) {
+        if (!newValue) this.clearFileSelection();
+      },
+    },
+  },
   methods: {
     clearFileSelection() {
       this.images = [];
     },
-    assignImages(list) {
+    commonAssign() {
       console.log("ASSIGN IMAGES WAS CALLED");
-      if (!list.length > 0) return;
-
-      this.images = [];
+      const commonProps = {
+        file: null,
+        cancelToken: null,
+        uploadPercentage: 100,
+        uploaded: true,
+      };
+      /* base aws s3 url */
       const baseAWSURL =
         "https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/";
-      list.forEach((image) => {
-        // console.log(image);
-        const imageObject = {
-          /* actual file */
-          file: null,
-          /* local preview url */
-          previewURL: baseAWSURL + image.path,
-          /* cancel token */
-          cancelToken: null,
-          /* upload percentage  */
-          uploadPercentage: 100,
-          /* uploaded flag */
-          uploaded: true,
-          /* main image flag */
-          mainImage: image.mainImage,
-          /* upload ID */
-          _id: image._id,
-          /* path to uploaded image */
-          path: image.path,
-        };
 
-        this.images.push(imageObject);
-      });
+      switch (this.multipleUpload) {
+        case true:
+          /* if image list is empty */
+          if (this.value.length === 0) return;
+          /* construct component image list array */
+          const constructedImageList = this.value.map((image) => {
+            return {
+              ...commonProps,
+              ...image,
+              previewURL: baseAWSURL + image.path,
+            };
+          });
+          this.images = constructedImageList;
+          break;
+        case false:
+          /* if no image provided */
+          if (this.value === "") return;
+          /* set provided image as the first element of the component image list */
+          this.images[0] = {
+            ...commonProps,
+            _id: "",
+            mainImage: false,
+            order: 1,
+            path: this.value,
+            previewURL: baseAWSURL + this.value,
+          };
+          break;
+      }
+
+      this.$forceUpdate();
     },
     addFiles() {
       this.$refs.selector.click();
@@ -171,6 +193,8 @@ export default {
     },
     createImageObject(file) {
       return {
+        /* order */
+        order: this.images.length,
         /* actual file */
         file,
         /* local preview url */
@@ -234,7 +258,7 @@ export default {
       imageObject.uploaded = imageObject.uploadPercentage === 100;
       imageObject.path = response.name;
       imageObject._id = response._id;
-      this.$emit("updated", this.images);
+      this.emitUpdateImageValue();
     },
     setMainImage(key, value) {
       /* if value set to true, turn all other main image flags off */
@@ -249,7 +273,8 @@ export default {
       /* if value set to true */
       setTimeout(() => {
         this.images[key].mainImage = true;
-        this.$emit("updated", this.images);
+        this.emitUpdateImageValue();
+        // this.$emit("updated", this.images);
       }, 100);
     },
     removeFile(key) {
@@ -258,11 +283,28 @@ export default {
 
       /* remove from the images list */
       this.images.splice(key, 1);
-      this.$emit("updated", this.images);
+
+      this.emitUpdateImageValue();
     },
     resetFileSelection() {
       this.$refs.selector.type = "text";
       this.$refs.selector.type = "file";
+    },
+    emitUpdateImageValue() {
+      /* if multi upload is enabled */
+      if (this.multipleUpload) {
+        const constructedImageList = this.images.map(
+          ({ _id, order, mainImage, path }) => ({
+            _id,
+            order,
+            mainImage,
+            path,
+          })
+        );
+        this.$emit("input", constructedImageList);
+      } else
+      /* if single file upload is enabled */
+        this.$emit("input", this.images.length > 0 ? this.images[0].path : "");
     },
   },
 };
@@ -364,9 +406,9 @@ export default {
       padding: 2px 5px;
       background-color: rgba(51, 51, 51, 0.621);
       border-top-left-radius: 5px;
-      width:30%;
-      text-align:center;
-      font-size:13px;
+      width: 30%;
+      text-align: center;
+      font-size: 13px;
       color: white;
     }
   }

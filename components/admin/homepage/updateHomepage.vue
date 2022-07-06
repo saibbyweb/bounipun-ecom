@@ -19,15 +19,31 @@
     <div class="main-slideshow section">
       <label class="head"> Main Slideshow (Desktop) </label>
       <!-- desktop slideshow images -->
-      <UploadImage
+      <!-- <UploadImage
         ref="desktopMainSlideshow"
         :multipleUpload="true"
         label="Set Desktop Slideshow Images:"
         @updated="imageListUpdated($event, 'desktopMainSlideshow')"
+      /> -->
+
+      <UploadImageV2
+        :multipleUpload="true"
+        label="Set Desktop Slideshow Images:"
+        v-model="doc.desktopMainSlideshow.slides"
       />
 
       <!--  desktop slide link -->
-      <InputBox v-for="(slide,index) in doc.desktopMainSlideshow.slides" :key="slide._id" :label="`Link for Slide #${index+1}`" v-model="slide.link" :options="{indicator: true, title:'You can copy and paste direct website links from the browser address bar.'}"  />
+      <InputBox
+        v-for="(slide, index) in doc.desktopMainSlideshow.slides"
+        :key="slide._id"
+        :label="`Link for Slide #${index + 1}`"
+        v-model="slide.link"
+        :options="{
+          indicator: true,
+          title:
+            'You can copy and paste direct website links from the browser address bar.',
+        }"
+      />
 
       <!-- visiblity toggle -->
       <Toggle
@@ -50,9 +66,18 @@
         @updated="imageListUpdated($event, 'mainSlideshow')"
       />
 
-          <!--  mobile slide link -->
-      <InputBox v-for="(slide,index) in doc.mainSlideshow.slides" :key="slide._id" :label="`Link for Slide #${index+1}`" v-model="slide.link" :options="{indicator: true, title:'You can copy and paste direct website links from the browser address bar.'}" />
-
+      <!--  mobile slide link -->
+      <InputBox
+        v-for="(slide, index) in doc.mainSlideshow.slides"
+        :key="slide._id"
+        :label="`Link for Slide #${index + 1}`"
+        v-model="slide.link"
+        :options="{
+          indicator: true,
+          title:
+            'You can copy and paste direct website links from the browser address bar.',
+        }"
+      />
 
       <!-- visiblity toggle -->
       <Toggle
@@ -490,18 +515,23 @@ export default {
   methods: {
     /* set image list */
     imageListUpdated(list, property, index) {
-
       switch (property) {
         /* multiple */
         case "desktopMainSlideshow": {
           let { slides } = this.doc.desktopMainSlideshow;
-          this.doc.desktopMainSlideshow.slides = list.map(item => ({...item, link: slides.find(s => s._id === item._id)?.link || ""  }));
+          this.doc.desktopMainSlideshow.slides = list.map((item) => ({
+            ...item,
+            link: slides.find((s) => s._id === item._id)?.link || "",
+          }));
           break;
         }
         /* multiple */
         case "mainSlideshow":
           let { slides } = this.doc.mainSlideshow;
-          this.doc.mainSlideshow.slides = list.map(item => ({...item, link: slides.find(s => s._id === item._id)?.link || ""  }));
+          this.doc.mainSlideshow.slides = list.map((item) => ({
+            ...item,
+            link: slides.find((s) => s._id === item._id)?.link || "",
+          }));
           break;
         /* multiple [indexed] */
         case "collectionBlock":
@@ -622,10 +652,10 @@ export default {
       this.$emit("close");
     },
     resetForm() {
-      this.$refs.desktopMainSlideshow.clearFileSelection();
+      // this.$refs.desktopMainSlideshow.clearFileSelection();
       this.$refs.mainSlideshow.clearFileSelection();
       this.doc = baseDocument();
-      console.log('doc was cleared');
+      console.log("doc was cleared");
     },
     async updateDocument() {
       // return;

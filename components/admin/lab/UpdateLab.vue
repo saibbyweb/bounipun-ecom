@@ -18,13 +18,20 @@
     <InputBox label="Page Title" v-model="doc.title" />
     <!-- Page tagline -->
     <InputBox label="Page Tagline" v-model="doc.tagline" />
+    
+    <UploadImageV2
+      :multipleUpload="false"
+      label="Set Hero Image (Desktop) - V2"
+      v-model="doc.heroImage"
+     />
+
     <!-- set hero image (desktop) -->
-    <UploadImage
+    <!-- <UploadImage
       :multipleUpload="false"
       ref="imageUploader_heroImage"
       label="Set Hero Image (Desktop)"
       @updated="imageListUpdated($event, 'heroImage')"
-    />
+    /> -->
 
     <!-- set hero image (mobile) -->
     <UploadImage
@@ -298,7 +305,7 @@ export default {
     },
     resetForm() {
       this.populateForm(baseDoc());
-      this.$refs.imageUploader_heroImage.clearFileSelection();
+      // this.$refs.imageUploader_heroImage.clearFileSelection();
       this.$refs.imageUploader_heroImageMobile.clearFileSelection();
       this.editMode = false;
     },

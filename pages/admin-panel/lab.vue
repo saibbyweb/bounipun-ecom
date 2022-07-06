@@ -111,6 +111,8 @@ export default {
 
       updateComponent.populateForm(doc);
 
+      // return;
+
       const { heroImage } = doc;
 
       this.setSingleImage("heroImage", doc);
@@ -132,6 +134,8 @@ export default {
           );
         }
       }, 500);
+
+
     },
     setSingleImage(property, doc, ref = false, key = false, lastProp='image') {
       const updateComponent = this.$refs.updateComponent;

@@ -112,11 +112,11 @@ export default {
       } = doc;
 
       /* assign mainslide (desktop) show images */
-      if (desktopMainSlideshow.slides.length > 0) {
-        updateComponent.$refs.desktopMainSlideshow.assignImages(
-          doc.desktopMainSlideshow.slides
-        );
-      }
+      // if (desktopMainSlideshow.slides.length > 0) {
+      //   updateComponent.$refs.desktopMainSlideshow.assignImages(
+      //     doc.desktopMainSlideshow.slides
+      //   );
+      // }
 
       /* assign mainslide (mobile) show images */
       if (mainSlideshow.slides.length > 0) {
