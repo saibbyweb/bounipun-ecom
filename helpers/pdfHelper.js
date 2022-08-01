@@ -579,19 +579,34 @@ function jsPDFInvoiceTemplate(props) {
 
   //#region INVOICE DESCRIPTION
   var addInvoiceDesc = () => {
+    currentHeight += pdfConfig.subLineHeight + 2;
+    
     doc.setFontSize(pdfConfig.labelTextSize);
 
     doc.setTextColor(colorBlack);
 
     doc.text(param.invoice.invDescLabel, 10, currentHeight);
-    currentHeight += pdfConfig.subLineHeight;
+    /* TODO: added new line */
+    doc.text("Declaration: We hereby certify that", 100, currentHeight)
+
+    currentHeight += pdfConfig.subLineHeight + 2;
+
+
     doc.setTextColor(colorGray);
-    doc.setFontSize(10)
+    /* TODO: changed font size */
+    doc.setFontSize(9)
     // doc.setFontSize(pdfConfig.fieldTextSize - 1);
 
     var lines = doc.splitTextToSize(param.invoice.invDesc, docWidth / 2);
+    
     //text in left half
     doc.text(lines, 10, currentHeight);
+    /* TODO: add declaration points */
+    const declarationPoints =  " 1) This invoice is authentic. \n 2) It is the only invoice issues by us for the goods described herein. \n 3) It shows their exact value without deduction of any discount. \n 4) Their origin is India. ";
+
+    var declarationsLines = doc.splitTextToSize(declarationPoints, docWidth / 2) 
+    doc.text(declarationsLines, 100, currentHeight)
+
     currentHeight +=
       doc.getTextDimensions(lines).h > 5
         ? doc.getTextDimensions(lines).h + 6

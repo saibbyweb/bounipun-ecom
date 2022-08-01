@@ -255,9 +255,6 @@ export default {
       this.editMode = false;
     },
     downloadInvoice() {
-      
-      
-
       const props = {
         outputType: "save",
         returnJsPDFDocObject: true,
@@ -283,9 +280,10 @@ export default {
           website: "www.bounipun.in",
         },
         contact: {
-          label: "CONSIGNEE:",
+          label: "Buyer:",
           name: "Suhaib Khan",
-          address: "H.no.54, Chinar Enclave, Rawalpora, Srinagar, Jammu and Kashmir",
+          address:
+            "H.no.54, Chinar Enclave, Rawalpora, Srinagar, Jammu and Kashmir",
           phone: "(+91) 99066-97711",
           email: "hello@saibbyweb.com",
           otherInfo: "GST:",
@@ -466,6 +464,7 @@ export default {
           invDescLabel: "Terms & Condition",
           invDesc:
             " 1) Goods once sold can not be taken back. \n 2) Please check goods before delivery. \n 3) Minor imperfection of the product are part of human error \n 4) Size differences might occur between different products. \n 5) 100% Payment before deliver of goods \n 6) All disputes subject to Srinagar Jurisdiction.",
+          
         },
         footer: {
           text: "The invoice is created on a computer and is valid without the signature and stamp.",
