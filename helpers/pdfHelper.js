@@ -580,12 +580,14 @@ function jsPDFInvoiceTemplate(props) {
   //#region INVOICE DESCRIPTION
   var addInvoiceDesc = () => {
     doc.setFontSize(pdfConfig.labelTextSize);
+
     doc.setTextColor(colorBlack);
 
     doc.text(param.invoice.invDescLabel, 10, currentHeight);
     currentHeight += pdfConfig.subLineHeight;
     doc.setTextColor(colorGray);
-    doc.setFontSize(pdfConfig.fieldTextSize - 1);
+    doc.setFontSize(10)
+    // doc.setFontSize(pdfConfig.fieldTextSize - 1);
 
     var lines = doc.splitTextToSize(param.invoice.invDesc, docWidth / 2);
     //text in left half

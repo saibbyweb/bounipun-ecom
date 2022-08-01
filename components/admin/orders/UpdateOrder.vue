@@ -255,6 +255,9 @@ export default {
       this.editMode = false;
     },
     downloadInvoice() {
+      
+      
+
       const props = {
         outputType: "save",
         returnJsPDFDocObject: true,
@@ -293,8 +296,8 @@ export default {
           invDate: "Payment Date: 22 June, 2022 - 15:36:31 IST  ",
           // gateway
           invGenDate: "Stripe | Transaction Id: pi_1L2VzbLdxwZUT01QC7t1G40F",
-          headerBorder: true,
-          tableBodyBorder: true,
+          headerBorder: 2,
+          tableBodyBorder: 2,
           header: [
             {
               title: "S.no",
@@ -460,9 +463,9 @@ export default {
               },
             },
           ],
-          invDescLabel: "E & O.E",
+          invDescLabel: "Terms & Condition",
           invDesc:
-            "Incase of any complaint kindly mail on customer care ID printed on tag of garment. All disputes subject to srinagar jurisdiction only.",
+            " 1) Goods once sold can not be taken back. \n 2) Please check goods before delivery. \n 3) Minor imperfection of the product are part of human error \n 4) Size differences might occur between different products. \n 5) 100% Payment before deliver of goods \n 6) All disputes subject to Srinagar Jurisdiction.",
         },
         footer: {
           text: "The invoice is created on a computer and is valid without the signature and stamp.",
