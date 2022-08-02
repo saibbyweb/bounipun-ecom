@@ -474,6 +474,8 @@ function jsPDFInvoiceTemplate(props) {
     param.invoice.invDesc,
     docWidth / 2
   ).height;
+/* TODO: made some changes */
+  invDescSize-= 5;
 
   //#region PAGE BREAKER
   var checkAndAddPageLandscape = function () {
@@ -483,7 +485,7 @@ function jsPDFInvoiceTemplate(props) {
     }
   };
 
-  var checkAndAddPageNotLandscape = function (heightLimit = 173) {
+  var checkAndAddPageNotLandscape = function (heightLimit = 192) {
     if (
       param.orientationLandscape &&
       currentHeight + invDescSize > heightLimit
@@ -582,11 +584,11 @@ function jsPDFInvoiceTemplate(props) {
   if (param.invoice.additionalRows?.length > 0) {
     //#region Line breaker before invoce total
     doc.line(docWidth / 2, currentHeight, docWidth - 10, currentHeight);
-    currentHeight += pdfConfig.lineHeight;
+    currentHeight += pdfConfig.subLineHeight;
     //#endregion
 
     for (let i = 0; i < param.invoice.additionalRows.length; i++) {
-      currentHeight += pdfConfig.lineHeight;
+      currentHeight += pdfConfig.subLineHeight + 2;
       doc.setFontSize(param.invoice.additionalRows[i].style.fontSize);
 
       doc.text(
@@ -618,7 +620,7 @@ function jsPDFInvoiceTemplate(props) {
   doc.setTextColor(colorBlack);
   currentHeight += pdfConfig.subLineHeight;
   currentHeight += pdfConfig.subLineHeight;
-  //   currentHeight += pdfConfig.subLineHeight;
+    currentHeight += pdfConfig.subLineHeight;
   doc.setFontSize(pdfConfig.labelTextSize);
 
   //#region Add num of pages at the bottom

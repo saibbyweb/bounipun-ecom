@@ -400,7 +400,7 @@ export default {
               },
             },
           ],
-          table: [...invoiceItemsUSD, ...invoiceItemsUSD,...invoiceItemsUSD].map((item, index) => [
+          table: [...invoiceItemsUSD, ...invoiceItemsUSD,...invoiceItemsUSD,...invoiceItemsUSD].map((item, index) => [
             index + 1,
             item.styleId,
             item.product,
