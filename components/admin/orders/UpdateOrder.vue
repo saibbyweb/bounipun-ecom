@@ -400,7 +400,12 @@ export default {
               },
             },
           ],
-          table: [...invoiceItemsUSD, ...invoiceItemsUSD,...invoiceItemsUSD,...invoiceItemsUSD].map((item, index) => [
+          table: [
+            ...invoiceItemsUSD,
+            ...invoiceItemsUSD,
+            ...invoiceItemsUSD,
+            ...invoiceItemsUSD,
+          ].map((item, index) => [
             index + 1,
             item.styleId,
             item.product,
@@ -421,50 +426,59 @@ export default {
           ]),
           additionalRows: [
             {
-              col1: "Sub Total (Tax Exclusive):",
+              col1: "Total Amount before Tax:",
               // col2: "278392.00",
               col2: "2202.53",
               // col3: "INR",
               col3: "USD",
               style: {
-                fontSize: 10, //optional, default 12
+                fontSize: 8, //optional, default 12
               },
             },
             {
-              col1: "GST:",
+              col1: "Total Amount After Tax:",
               // col2: "31876.00",
               col2: "0",
               // col3: "INR",
               col3: "USD",
               style: {
-                fontSize: 10, //optional, default 12
+                fontSize: 8, //optional, default 12
               },
             },
             {
-              col1: "Shipping:",
+              col1: "Roundoff:",
               // col2: "31876.00",
               col2: "0",
               // col3: "INR",
               col3: "USD",
               style: {
-                fontSize: 10, //optional, default 12
+                fontSize: 8, //optional, default 12
               },
             },
             {
-              col1: "Total:",
+              col1: "INR. Total Amount after Tax:",
               // col2: "311800.00",
               col2: "2202.53",
               // col3: "INR",
               col3: "USD",
               style: {
-                fontSize: 14, //optional, default 12
+                fontSize: 8
+              },
+            },
+            {
+              col1: "GST on Reverse Charge:",
+              // col2: "311800.00",
+              col2: "2202.53",
+              // col3: "INR",
+              col3: "USD",
+              style: {
+                fontSize: 8, //optional, default 12
               },
             },
           ],
           invDescLabel: "Terms & Condition",
           invDesc:
             " 1) Goods once sold can not be taken back. \n 2) Please check goods before delivery. \n 3) Minor imperfection of the product are part of human error \n 4) Size differences might occur between different products. \n 5) 100% Payment before deliver of goods \n 6) All disputes subject to Srinagar Jurisdiction.",
-          
         },
         footer: {
           text: "The invoice is created on a computer and is valid without the signature and stamp.",

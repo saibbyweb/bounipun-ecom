@@ -485,7 +485,7 @@ function jsPDFInvoiceTemplate(props) {
     }
   };
 
-  var checkAndAddPageNotLandscape = function (heightLimit = 192) {
+  var checkAndAddPageNotLandscape = function (heightLimit = 200) {
     if (
       param.orientationLandscape &&
       currentHeight + invDescSize > heightLimit
@@ -552,11 +552,12 @@ function jsPDFInvoiceTemplate(props) {
     // doc.text(10, currentHeight, "Terms and Conditions", "left");
     /* TODO: added new line */
     let height = currentHeight;
-    height += pdfConfig.subLineHeight * 3;
+    height += pdfConfig.subLineHeight * 2;
 
     doc.setTextColor(colorBlack);
-    doc.text(param.invoice.invDescLabel, 10, height);
-    doc.text("Declaration: We hereby certify that", 100, height);
+    doc.setFontSize(8.5);
+    doc.text(param.invoice.invDescLabel, 12, height);
+    doc.text("Declaration: We hereby certify that", 91, height);
 
     height += pdfConfig.subLineHeight;
 
@@ -572,10 +573,10 @@ function jsPDFInvoiceTemplate(props) {
 
     var termsAndConditionPoints = doc.splitTextToSize(param.invoice.invDesc, docWidth / 2);
 
-    doc.setFontSize(9);
+    doc.setFontSize(7.5);
     doc.setTextColor(colorGray);
-    doc.text(termsAndConditionPoints, 10, height);
-    doc.text(declarationsLines, 100, height);
+    doc.text(termsAndConditionPoints, 12, height);
+    doc.text(declarationsLines, 91, height);
   }
 
   addTermsAndConditions();
@@ -583,35 +584,45 @@ function jsPDFInvoiceTemplate(props) {
   //#region additionalRows
   if (param.invoice.additionalRows?.length > 0) {
     //#region Line breaker before invoce total
-    doc.line(docWidth / 2, currentHeight, docWidth - 10, currentHeight);
+    // doc.line(docWidth / 2, currentHeight, docWidth - 10, currentHeight);
     currentHeight += pdfConfig.subLineHeight;
+
+  
     //#endregion
+    const initialHeight = currentHeight;
 
     for (let i = 0; i < param.invoice.additionalRows.length; i++) {
-      currentHeight += pdfConfig.subLineHeight + 2;
+      currentHeight += pdfConfig.subLineHeight;
       doc.setFontSize(param.invoice.additionalRows[i].style.fontSize);
-
+      
       doc.text(
-        docWidth - 50,
+        docWidth - 30,
         currentHeight,
         param.invoice.additionalRows[i].col1,
         "right"
       );
       doc.text(
-        docWidth - 25,
+        docWidth - 12,
         currentHeight,
         param.invoice.additionalRows[i].col2,
         "right"
       );
-      doc.text(
-        docWidth - 10,
-        currentHeight,
-        param.invoice.additionalRows[i].col3,
-        "right"
-      );
+      // doc.text(
+      //   docWidth - 10,
+      //   currentHeight,
+      //   param.invoice.additionalRows[i].col3,
+      //   "right"
+      // );
 
       checkAndAddPage();
     }
+
+    // doc.rect(docWidth-70, initialHeight, 60, 23);
+
+    doc.rect(9, initialHeight-2, 78, 30);
+    doc.rect(87, initialHeight-2, 87, 30);
+    doc.rect(87+87, initialHeight-2, 55, 30);
+    doc.rect(229, initialHeight-2, 58, 30);
   }
   //#endregion
 
