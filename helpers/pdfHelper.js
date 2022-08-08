@@ -592,15 +592,16 @@ function jsPDFInvoiceTemplate(props) {
     const initialHeight = currentHeight;
 
     for (let i = 0; i < param.invoice.additionalRows.length; i++) {
-      currentHeight += pdfConfig.subLineHeight;
+      currentHeight += pdfConfig.subLineHeight + 0.5;
       doc.setFontSize(param.invoice.additionalRows[i].style.fontSize);
-      
+      doc.setTextColor(colorBlack);
       doc.text(
-        docWidth - 30,
+        docWidth - 29,
         currentHeight,
         param.invoice.additionalRows[i].col1,
         "right"
       );
+      doc.setTextColor(colorGray);
       doc.text(
         docWidth - 12,
         currentHeight,
@@ -618,10 +619,18 @@ function jsPDFInvoiceTemplate(props) {
     }
 
     // doc.rect(docWidth-70, initialHeight, 60, 23);
-
+    /* terms and conditions box */
     doc.rect(9, initialHeight-2, 78, 30);
+    /* we here by box */
     doc.rect(87, initialHeight-2, 87, 30);
-    doc.rect(87+87, initialHeight-2, 55, 30);
+    /* authorise signatory box */
+    doc.rect(174, initialHeight-2, 55, 30);
+    doc.setFontSize(8);
+    doc.setTextColor(colorBlack)
+    doc.text("For BOUNIPUN", 176+15.5, initialHeight + 2)
+    doc.text("Authorized Signatory", 176+12.5, initialHeight + 26)
+    doc.setFontSize(7.5);
+    /* total box */
     doc.rect(229, initialHeight-2, 58, 30);
   }
   //#endregion
