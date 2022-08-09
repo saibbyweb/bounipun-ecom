@@ -327,22 +327,23 @@ function jsPDFInvoiceTemplate(props) {
     let startWidth = 0;
     for (let i = 0; i < param.invoice.header.length; i++) {
       const currentTdWidth = param.invoice.header[i]?.style?.width || tdWidth;
-      if (i === 0) doc.rect(10, currentHeight, currentTdWidth, lineHeight);
+      if (i === 0) doc.rect(10, currentHeight, currentTdWidth, lineHeight+2);
       else {
         const previousTdWidth =
           param.invoice.header[i - 1]?.style?.width || tdWidth;
         const widthToUse =
           currentTdWidth == previousTdWidth ? currentTdWidth : previousTdWidth;
         startWidth += widthToUse;
-        doc.rect(startWidth + 10, currentHeight, currentTdWidth, lineHeight);
+        doc.rect(startWidth + 10, currentHeight, currentTdWidth, lineHeight + 2);
       }
     }
-    currentHeight -= 2;
+    // currentHeight += 4;
   };
   //#endregion
 
   //#region TABLE BODY BORDER
   var addTableBodyBorder = (lineHeight) => {
+    currentHeight;
     let startWidth = 0;
     for (let i = 0; i < param.invoice.header.length; i++) {
       const currentTdWidth = param.invoice.header[i]?.style?.width || tdWidth;
@@ -372,7 +373,7 @@ function jsPDFInvoiceTemplate(props) {
 
     let startWidth = 0;
     param.invoice.header.forEach(function (row, index) {
-      if (index == 0) doc.text(row.title, 11, currentHeight);
+      if (index == 0) doc.text(row.title, 11, currentHeight-2);
       else {
         const currentTdWidth = row?.style?.width || tdWidth;
         const previousTdWidth =
@@ -380,7 +381,9 @@ function jsPDFInvoiceTemplate(props) {
         const widthToUse =
           currentTdWidth == previousTdWidth ? currentTdWidth : previousTdWidth;
         startWidth += widthToUse;
-        doc.text(row.title, startWidth + 11, currentHeight);
+        /* TODO: added auto line break here */
+        const strArr = doc.splitTextToSize(row.title, currentTdWidth - 2)
+        doc.text(strArr, startWidth + 11, currentHeight-2);
       }
     });
 
@@ -403,6 +406,7 @@ function jsPDFInvoiceTemplate(props) {
         const widthToUse = param.invoice.header[index]?.style?.width || tdWidth;
 
         let item = splitTextAndGetHeight(rr.toString(), widthToUse - 1); //minus 1, to fix the padding issue between borders
+
         /* added row height */
         rowsHeight.push(item.height + 2);
       });

@@ -295,7 +295,7 @@ export default {
           // gateway
           invGenDate: "Stripe | Transaction Id: pi_1L2VzbLdxwZUT01QC7t1G40F",
           headerBorder: 2,
-          tableBodyBorder: 2,
+          tableBodyBorder: 3,
           header: [
             {
               title: "S.no",
@@ -306,19 +306,37 @@ export default {
             {
               title: "StyleId",
               style: {
-                width: 38,
+                width: 20,
               },
             },
             {
-              title: "Product",
+              title: "Product Description",
               style: {
                 width: 30,
               },
             },
+                       {
+              title: "Color",
+              style: {
+                width: 24,
+              },
+            },
             {
-              title: "Variant",
+              title: "Item",
               style: {
                 width: 13,
+              },
+            },
+                     {
+              title: "HSN Code",
+              style: {
+                width: 9,
+              },
+            },
+                     {
+              title: "Qty",
+              style: {
+                width: 8,
               },
             },
             {
@@ -327,20 +345,16 @@ export default {
                 width: 16,
               },
             },
+ 
+   
             {
-              title: "Color",
+              title: "Unit Price (INR)",
               style: {
-                width: 24,
+                width: 16,
               },
             },
-            {
-              title: "HSN",
-              style: {
-                width: 9,
-              },
-            },
-            {
-              title: "Rate",
+                      {
+              title: "Amount",
               style: {
                 width: 16,
               },
@@ -351,30 +365,26 @@ export default {
                 width: 14,
               },
             },
+   
             {
-              title: "Qty",
-              style: {
-                width: 8,
-              },
-            },
-            {
-              title: "Taxable Value",
+              title: "Taxable Amount",
               style: {
                 width: 18,
               },
             },
-            {
-              title: "SGST %",
+                        {
+              title: "IGST %",
               style: {
                 width: 12,
               },
             },
             {
-              title: "SGST Amt",
+              title: "IGST Amt",
               style: {
                 width: 14,
               },
             },
+
             {
               title: "CGST %",
               style: {
@@ -387,10 +397,16 @@ export default {
                 width: 14,
               },
             },
-            {
-              title: "GST",
+                        {
+              title: "SGST %",
               style: {
-                width: 15,
+                width: 12,
+              },
+            },
+            {
+              title: "SGST Amt",
+              style: {
+                width: 14,
               },
             },
             {
@@ -404,23 +420,31 @@ export default {
             ...invoiceItemsUSD,
             ...invoiceItemsUSD,
             ...invoiceItemsUSD,
-            ...invoiceItemsUSD,
+            // ...invoiceItemsUSD,
           ].map((item, index) => [
             index + 1,
             item.styleId,
             item.product,
+             item.color,
             "Shawl",
-            item.collection,
-            item.color,
-            item.hsnCode,
-            item.rate,
-            item.discount,
+                item.hsnCode,
             item.qty,
+            item.rate,
+            "20000",
+            item.discount,
             item.amountBeforeGst,
-            item.sgst,
+  "NA",
+            "--",
+               item.cgst,
             "226",
-            item.cgst,
+               item.sgst,
             "226",
+            // item.collection,
+           
+        
+          
+         
+         
             item.gstAmount,
             item.total,
           ]),
