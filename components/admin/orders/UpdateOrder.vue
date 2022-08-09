@@ -306,7 +306,7 @@ export default {
             {
               title: "StyleId",
               style: {
-                width: 20,
+                width: 27,
               },
             },
             {
@@ -339,12 +339,12 @@ export default {
                 width: 8,
               },
             },
-            {
-              title: "Collection",
-              style: {
-                width: 16,
-              },
-            },
+            // {
+            //   title: "Collection",
+            //   style: {
+            //     width: 16,
+            //   },
+            // },
  
    
             {
@@ -379,7 +379,7 @@ export default {
               },
             },
             {
-              title: "IGST Amt",
+              title: "IGST Amount",
               style: {
                 width: 14,
               },
@@ -392,7 +392,7 @@ export default {
               },
             },
             {
-              title: "CGST Amt",
+              title: "CGST Amount",
               style: {
                 width: 14,
               },
@@ -404,7 +404,7 @@ export default {
               },
             },
             {
-              title: "SGST Amt",
+              title: "SGST Amount",
               style: {
                 width: 14,
               },
@@ -420,7 +420,7 @@ export default {
             ...invoiceItemsUSD,
             ...invoiceItemsUSD,
             ...invoiceItemsUSD,
-            // ...invoiceItemsUSD,
+            ...invoiceItemsUSD,
           ].map((item, index) => [
             index + 1,
             item.styleId,
@@ -429,7 +429,7 @@ export default {
             "Shawl",
                 item.hsnCode,
             item.qty,
-            item.rate,
+            // item.rate,
             "20000",
             item.discount,
             item.amountBeforeGst,

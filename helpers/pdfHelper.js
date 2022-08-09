@@ -247,14 +247,14 @@ function jsPDFInvoiceTemplate(props) {
 
   //line breaker after logo & business info
   if (param.invoice.header.length) {
-    currentHeight += pdfConfig.subLineHeight;
-    doc.line(10, currentHeight, docWidth - 10, currentHeight);
+    // currentHeight += pdfConfig.subLineHeight;
+    // doc.line(10, currentHeight, docWidth - 10, currentHeight);
   }
 
   //Contact part
   doc.setTextColor(colorGray);
   doc.setFontSize(pdfConfig.fieldTextSize);
-  currentHeight += pdfConfig.lineHeight;
+  // currentHeight += pdfConfig.lineHeight;
   if (param.contact.label) {
     doc.text(10, currentHeight, param.contact.label);
     currentHeight += pdfConfig.lineHeight;
@@ -325,8 +325,10 @@ function jsPDFInvoiceTemplate(props) {
     currentHeight += 2;
     const lineHeight = 7;
     let startWidth = 0;
+    doc.setLineWidth(0.3)
     for (let i = 0; i < param.invoice.header.length; i++) {
       const currentTdWidth = param.invoice.header[i]?.style?.width || tdWidth;
+     
       if (i === 0) doc.rect(10, currentHeight, currentTdWidth, lineHeight+2);
       else {
         const previousTdWidth =
@@ -337,6 +339,7 @@ function jsPDFInvoiceTemplate(props) {
         doc.rect(startWidth + 10, currentHeight, currentTdWidth, lineHeight + 2);
       }
     }
+    doc.setLineWidth(0.1);
     // currentHeight += 4;
   };
   //#endregion
@@ -370,8 +373,10 @@ function jsPDFInvoiceTemplate(props) {
     //border color
     doc.setDrawColor(colorGray);
     currentHeight += 2;
-
+    // console.log(doc.getFontList());
     let startWidth = 0;
+    // doc.setFontSize(pdfConfig.fieldTextSize + 1);
+    doc.setFont(doc.getFontList()[0],'bold');
     param.invoice.header.forEach(function (row, index) {
       if (index == 0) doc.text(row.title, 11, currentHeight-2);
       else {
@@ -383,9 +388,13 @@ function jsPDFInvoiceTemplate(props) {
         startWidth += widthToUse;
         /* TODO: added auto line break here */
         const strArr = doc.splitTextToSize(row.title, currentTdWidth - 2)
+     
         doc.text(strArr, startWidth + 11, currentHeight-2);
       }
     });
+
+    doc.setFontSize(pdfConfig.fieldTextSize);
+    doc.setFont(doc.getFontList()[0],'normal');
 
     currentHeight += pdfConfig.subLineHeight - 1;
     doc.setTextColor(colorGray);
@@ -422,7 +431,7 @@ function jsPDFInvoiceTemplate(props) {
     let startWidth = 0;
     row.forEach(function (rr, index) {
       const widthToUse = param.invoice.header[index]?.style?.width || tdWidth;
-      let item = splitTextAndGetHeight(rr.toString(), widthToUse - 1); //minus 1, to fix the padding issue between borders
+      let item = splitTextAndGetHeight(rr.toString(), widthToUse - 2.5); //minus 1, to fix the padding issue between borders
 
       if (index == 0) doc.text(item.text, 11, currentHeight + 4);
       else {
@@ -549,10 +558,11 @@ function jsPDFInvoiceTemplate(props) {
 
   doc.setTextColor(colorBlack);
   doc.setFontSize(pdfConfig.labelTextSize);
-  currentHeight += pdfConfig.lineHeight;
+  // currentHeight += pdfConfig.lineHeight;
 
   /* TODO: added terms and conditions on left side of sub total */
   function addTermsAndConditions() {
+
     // doc.text(10, currentHeight, "Terms and Conditions", "left");
     /* TODO: added new line */
     let height = currentHeight;
