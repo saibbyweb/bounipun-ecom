@@ -364,20 +364,28 @@ function jsPDFInvoiceTemplate(props) {
     doc.line(10, currentHeight+5, buyerTableWidth, currentHeight+4.5);
 
     currentHeight += pdfConfig.subLineHeight * 2;
-  
+    
+    /* vertical line */
     doc.line(buyerTableWidth * 0.5, currentHeight-3.2, buyerTableWidth*0.5, currentHeight+9.2);
+    doc.line(buyerTableWidth * 0.65, currentHeight-3.2, buyerTableWidth*0.65, currentHeight+9.2);
+    
+    /* horizontal line */
+    doc.line(buyerTableWidth * 0.65, currentHeight+3, buyerTableWidth, currentHeight+3);
 
     /* add email */
     doc.text(12, currentHeight+1, "Email: " + param.contact.email);
-    /* add gst */
+    /* add gst and state */
     doc.text(82, currentHeight+1, "GSTIN: ");
+    doc.text(107, currentHeight+1, "State: Jammu and Kashmir");
+
     doc.text(82, currentHeight+7.5, "XXXXXXXXX");
     doc.line(10, currentHeight+3, buyerTableWidth*0.5, currentHeight+2);
-    doc.line(10, currentHeight+3, buyerTableWidth*0.5, currentHeight+2);    currentHeight += pdfConfig.subLineHeight + 1.4;
+    // doc.line(10, currentHeight+3, buyerTableWidth*0.5, currentHeight+2);    
+    currentHeight += pdfConfig.subLineHeight + 1.4;
    
-    /* add contact number */
+    /* add contact number and state code */
     doc.text(12, currentHeight+1.5, "Contact:" + param.contact.phone);
-    // doc.text(10, currentHeight, param.contact.otherInfo);
+    doc.text(107, currentHeight+1.5, "State Code: 01");
   }
 
   //TABLE PART
