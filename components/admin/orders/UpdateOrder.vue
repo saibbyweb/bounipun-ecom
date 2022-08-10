@@ -291,7 +291,7 @@ export default {
         invoice: {
           label: "Invoice #: BP-ORDER-010",
           num: "",
-          invDate: "Payment Date: 22 June, 2022 - 15:36:31 IST  ",
+          invDate: "Payment Date: 22 June, 2022 - 15:36:31 IST",
           // gateway
           invGenDate: "Stripe | Transaction Id: pi_1L2VzbLdxwZUT01QC7t1G40F",
           headerBorder: 2,
