@@ -320,14 +320,16 @@ function jsPDFInvoiceTemplate(props) {
   //end contact part
 
   function addTableAboveItems() {
-    doc.line(125, currentHeight, 125, currentHeight+26.2);
+    const buyerTableWidth = 160;
+    doc.line(buyerTableWidth, currentHeight, buyerTableWidth, currentHeight+26.2);
+    
     doc.rect(10, currentHeight, docWidth-20, 26.2);
     currentHeight+=4;
     doc.setFontSize(pdfConfig.fieldTextSize+1.5);
     /* add label */
     setBoldText();
     doc.text(12, currentHeight, "BUYER:");
-    doc.line(10, currentHeight+1.5, 125, currentHeight + 1);
+    // doc.line(10, currentHeight+1.5, 125, currentHeight + 1);
 
     setNormalText();
 
@@ -353,17 +355,25 @@ function jsPDFInvoiceTemplate(props) {
     doc.text(24, currentHeight, param.contact.name.toUpperCase());
 
     currentHeight += pdfConfig.subLineHeight + 1;
+
+
+
     /* add address */
     const splitAddressText = doc.splitTextToSize(param.contact.address.toUpperCase(), 110)
-    doc.text(splitAddressText, 12, currentHeight);
-    doc.line(10, currentHeight+5, 125, currentHeight+4.5);
+    doc.text(splitAddressText, 12, currentHeight - 1);
+    doc.line(10, currentHeight+5, buyerTableWidth, currentHeight+4.5);
+
     currentHeight += pdfConfig.subLineHeight * 2;
-   
+  
+    doc.line(buyerTableWidth * 0.5, currentHeight-3.2, buyerTableWidth*0.5, currentHeight+9.2);
 
     /* add email */
     doc.text(12, currentHeight+1, "Email: " + param.contact.email);
-    doc.line(10, currentHeight+3, 125, currentHeight+2);
-    currentHeight += pdfConfig.subLineHeight + 1.4;
+    /* add gst */
+    doc.text(82, currentHeight+1, "GSTIN: ");
+    doc.text(82, currentHeight+7.5, "XXXXXXXXX");
+    doc.line(10, currentHeight+3, buyerTableWidth*0.5, currentHeight+2);
+    doc.line(10, currentHeight+3, buyerTableWidth*0.5, currentHeight+2);    currentHeight += pdfConfig.subLineHeight + 1.4;
    
     /* add contact number */
     doc.text(12, currentHeight+1.5, "Contact:" + param.contact.phone);
