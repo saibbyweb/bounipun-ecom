@@ -252,17 +252,22 @@ function jsPDFInvoiceTemplate(props) {
   }
 
   //Contact part
+
+
+  /* add table above items */
+  addTableAboveItems();
+
   doc.setTextColor(colorGray);
   doc.setFontSize(pdfConfig.fieldTextSize);
   // currentHeight += pdfConfig.lineHeight;
-  if (param.contact.label) {
-    doc.text(10, currentHeight, param.contact.label);
-    currentHeight += pdfConfig.lineHeight;
-  }
+  // if (param.contact.label) {
+  //   doc.text(10, currentHeight, param.contact.label);
+  //   currentHeight += pdfConfig.lineHeight;
+  // }
 
-  doc.setTextColor(colorBlack);
-  doc.setFontSize(pdfConfig.headerTextSize - 5);
-  if (param.contact.name) doc.text(10, currentHeight, param.contact.name);
+  // doc.setTextColor(colorBlack);
+  // doc.setFontSize(pdfConfig.headerTextSize - 5);
+  // if (param.contact.name) doc.text(10, currentHeight, param.contact.name);
 
   if (param.invoice.label && param.invoice.num) {
     doc.text(
@@ -281,26 +286,48 @@ function jsPDFInvoiceTemplate(props) {
   doc.setFontSize(pdfConfig.fieldTextSize - 0.8);
 
   if (param.contact.address || param.invoice.invDate) {
-    doc.text(10, currentHeight, param.contact.address);
+    // doc.text(10, currentHeight, param.contact.address);
     doc.text(docWidth - 10, currentHeight, param.invoice.invDate, "right");
     currentHeight += pdfConfig.subLineHeight;
   }
 
   if (param.contact.phone || param.invoice.invGenDate) {
-    doc.text(10, currentHeight, param.contact.phone);
+    // doc.text(10, currentHeight, param.contact.phone);
     doc.text(docWidth - 10, currentHeight, param.invoice.invGenDate, "right");
     currentHeight += pdfConfig.subLineHeight;
   }
 
-  if (param.contact.email) {
+  // if (param.contact.email) {
+  //   doc.text(10, currentHeight, param.contact.email);
+  //   currentHeight += pdfConfig.subLineHeight;
+  // }
+
+  // if (param.contact.otherInfo)
+  //   doc.text(10, currentHeight, param.contact.otherInfo);
+  // else currentHeight -= pdfConfig.subLineHeight;
+  //end contact part
+
+  function addTableAboveItems() {
+    doc.rect(10, currentHeight, docWidth-20, 15);
+    /* add label */
+    doc.text(10, currentHeight, "Buyer:");
+    // currentHeight += pdfConfig.lineHeight;
+    /* add name */
+    doc.setTextColor(colorBlack);
+    // doc.setFontSize(pdfConfig.headerTextSize - 7);
+    doc.text(20, currentHeight, param.contact.name);
+
+    currentHeight += pdfConfig.subLineHeight;
+    /* add address */
+    doc.text(10, currentHeight, param.contact.address);
+    currentHeight += pdfConfig.subLineHeight;
+    /* add email */
     doc.text(10, currentHeight, param.contact.email);
     currentHeight += pdfConfig.subLineHeight;
+    /* add contact number */
+    doc.text(10, currentHeight, param.contact.phone);
+    // doc.text(10, currentHeight, param.contact.otherInfo);
   }
-
-  if (param.contact.otherInfo)
-    doc.text(10, currentHeight, param.contact.otherInfo);
-  else currentHeight -= pdfConfig.subLineHeight;
-  //end contact part
 
   //TABLE PART
   //var tdWidth = 31.66;
@@ -344,9 +371,14 @@ function jsPDFInvoiceTemplate(props) {
   };
   //#endregion
 
+
+
+
+
   //#region TABLE BODY BORDER
   var addTableBodyBorder = (lineHeight) => {
-    currentHeight;
+
+    // currentHeight;
     let startWidth = 0;
     for (let i = 0; i < param.invoice.header.length; i++) {
       const currentTdWidth = param.invoice.header[i]?.style?.width || tdWidth;
@@ -389,7 +421,7 @@ function jsPDFInvoiceTemplate(props) {
         /* TODO: added auto line break here */
         const strArr = doc.splitTextToSize(row.title, currentTdWidth - 2)
      
-        doc.text(strArr, startWidth + 11, currentHeight-2);
+        doc.text(strArr, startWidth + 11.5, currentHeight-2);
       }
     });
 
