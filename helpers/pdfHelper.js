@@ -183,7 +183,7 @@ function jsPDFInvoiceTemplate(props) {
   var colorBlack = "#000000";
   var colorGray = "#4d4e53";
   //starting at 15mm
-  var currentHeight = 15;
+  var currentHeight = 6;
   //var startPointRectPanel1 = currentHeight + 6;
 
   var pdfConfig = {
@@ -194,56 +194,56 @@ function jsPDFInvoiceTemplate(props) {
     subLineHeight: 4,
   };
 
-  doc.setFontSize(pdfConfig.headerTextSize);
+  // doc.setFontSize(pdfConfig.headerTextSize);
   doc.setTextColor(colorBlack);
-  doc.text(docWidth - 10, currentHeight, param.business.name, "right");
+  // doc.text(docWidth - 10, currentHeight, param.business.name, "right");
   doc.setFontSize(pdfConfig.fieldTextSize);
 
-  if (param.logo.src) {
-    var imageHeader = "";
-    if (typeof window === "undefined") {
-      imageHeader = param.logo.src;
-    } else {
-      imageHeader = new Image();
-      imageHeader.src = param.logo.src;
-    }
-    //doc.text(htmlDoc.sessionDateText, docWidth - (doc.getTextWidth(htmlDoc.sessionDateText) + 10), currentHeight);
-    if (param.logo.type)
-      doc.addImage(
-        imageHeader,
-        param.logo.type,
-        10 + param.logo.margin.left,
-        currentHeight - 5 + param.logo.margin.top,
-        param.logo.width,
-        param.logo.height
-      );
-    else
-      doc.addImage(
-        imageHeader,
-        10 + param.logo.margin.left,
-        currentHeight - 5 + param.logo.margin.top,
-        param.logo.width,
-        param.logo.height
-      );
-  }
+  // if (param.logo.src) {
+  //   var imageHeader = "";
+  //   if (typeof window === "undefined") {
+  //     imageHeader = param.logo.src;
+  //   } else {
+  //     imageHeader = new Image();
+  //     imageHeader.src = param.logo.src;
+  //   }
+  //   //doc.text(htmlDoc.sessionDateText, docWidth - (doc.getTextWidth(htmlDoc.sessionDateText) + 10), currentHeight);
+  //   if (param.logo.type)
+  //     doc.addImage(
+  //       imageHeader,
+  //       param.logo.type,
+  //       10 + param.logo.margin.left,
+  //       currentHeight - 5 + param.logo.margin.top,
+  //       param.logo.width,
+  //       param.logo.height
+  //     );
+  //   else
+  //     doc.addImage(
+  //       imageHeader,
+  //       10 + param.logo.margin.left,
+  //       currentHeight - 5 + param.logo.margin.top,
+  //       param.logo.width,
+  //       param.logo.height
+  //     );
+  // }
 
-  doc.setTextColor(colorGray);
+  
 
-  currentHeight += pdfConfig.subLineHeight;
-  currentHeight += pdfConfig.subLineHeight;
-  doc.text(docWidth - 10, currentHeight, param.business.address, "right");
-  currentHeight += pdfConfig.subLineHeight;
-  doc.text(docWidth - 10, currentHeight, param.business.phone, "right");
-  doc.setFontSize(pdfConfig.fieldTextSize);
+  // currentHeight += pdfConfig.subLineHeight;
+  // currentHeight += pdfConfig.subLineHeight;
+  // doc.text(docWidth - 10, currentHeight, param.business.address, "right");
+  // currentHeight += pdfConfig.subLineHeight;
+  // doc.text(docWidth - 10, currentHeight, param.business.phone, "right");
+  // doc.setFontSize(pdfConfig.fieldTextSize);
   // doc.setTextColor(colorGray);
-  currentHeight += pdfConfig.subLineHeight;
-  doc.text(docWidth - 10, currentHeight, param.business.email, "right");
+  // currentHeight += pdfConfig.subLineHeight;
+  // doc.text(docWidth - 10, currentHeight, param.business.email, "right");
 
-  currentHeight += pdfConfig.subLineHeight;
-  doc.text(docWidth - 10, currentHeight, param.business.email_1, "right");
+  // currentHeight += pdfConfig.subLineHeight;
+  // doc.text(docWidth - 10, currentHeight, param.business.email_1, "right");
 
-  currentHeight += pdfConfig.subLineHeight;
-  doc.text(docWidth - 10, currentHeight, param.business.website, "right");
+  // currentHeight += pdfConfig.subLineHeight;
+  // doc.text(docWidth - 10, currentHeight, param.business.website, "right");
 
   //line breaker after logo & business info
   if (param.invoice.header.length) {
@@ -253,6 +253,37 @@ function jsPDFInvoiceTemplate(props) {
 
   //Contact part
 
+  /* main header */
+  doc.setTextColor(colorBlack);
+  doc.setFontSize(pdfConfig.fieldTextSize+2);
+  doc.text("TAX INVOICE", docWidth/2, currentHeight, "center")
+  currentHeight += pdfConfig.subLineHeight;
+
+  doc.setFontSize(pdfConfig.fieldTextSize);
+  doc.text("ORIGINAL", docWidth/2, currentHeight, "center")
+  currentHeight += pdfConfig.subLineHeight;
+
+  doc.setFontSize(pdfConfig.fieldTextSize+3);
+  doc.setFont(doc.getFontList()[0],'bold');
+  doc.text("BOUNIPUN", docWidth/2, currentHeight, "center")
+  currentHeight += pdfConfig.subLineHeight;
+
+  doc.setFont(doc.getFontList()[0],'normal');
+  doc.setFontSize(pdfConfig.fieldTextSize+1);
+  doc.text("H-30, Integrated Textile and Handicraft Park, Zakura, Srinagar, Jammu and Kashmir,India-190024", docWidth/2, currentHeight, "center")
+  currentHeight += pdfConfig.subLineHeight;
+
+  doc.text("Contact: +91 78897-77377, +91 91030-77655, e-mail:care@bounipun.in", docWidth/2, currentHeight, "center")
+  currentHeight += pdfConfig.subLineHeight;
+
+  doc.setFont(doc.getFontList()[0],'bold');
+  doc.text("GSTIN: 01AMJPK9732G1Z4", docWidth/2, currentHeight, "center")
+  currentHeight += pdfConfig.subLineHeight;
+
+
+  doc.text("www.bounipun.in", docWidth/2, currentHeight, "center")
+  currentHeight += pdfConfig.subLineHeight;
+  doc.setFont(doc.getFontList()[0],'normal');
 
   /* add table above items */
   addTableAboveItems();
