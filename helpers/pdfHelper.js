@@ -316,34 +316,21 @@ function jsPDFInvoiceTemplate(props) {
   // doc.setFontSize(pdfConfig.fieldTextSize - 2);
   doc.setFontSize(pdfConfig.fieldTextSize - 0.8);
 
-  if (param.contact.address || param.invoice.invDate) {
-    // doc.text(10, currentHeight, param.contact.address);
-    // doc.text(docWidth - 10, currentHeight, param.invoice.invDate, "right");
-    // currentHeight += pdfConfig.subLineHeight;
-  }
 
-  if (param.contact.phone || param.invoice.invGenDate) {
-    // doc.text(10, currentHeight, param.contact.phone);
-    // doc.text(docWidth - 10, currentHeight, param.invoice.invGenDate, "right");
-    // currentHeight += pdfConfig.subLineHeight;
-  }
-
-  // if (param.contact.email) {
-  //   doc.text(10, currentHeight, param.contact.email);
-  //   currentHeight += pdfConfig.subLineHeight;
-  // }
-
-  // if (param.contact.otherInfo)
-  //   doc.text(10, currentHeight, param.contact.otherInfo);
-  // else currentHeight -= pdfConfig.subLineHeight;
   //end contact part
 
   function addTableAboveItems() {
-    doc.rect(10, currentHeight, docWidth-20, 20);
+    doc.line(125, currentHeight, 125, currentHeight+26.2);
+    doc.rect(10, currentHeight, docWidth-20, 26.2);
     currentHeight+=4;
+    doc.setFontSize(pdfConfig.fieldTextSize+1.5);
     /* add label */
-    doc.text(12, currentHeight, "Buyer:");
-    
+    setBoldText();
+    doc.text(12, currentHeight, "BUYER:");
+    doc.line(10, currentHeight+1.5, 125, currentHeight + 1);
+
+    setNormalText();
+
     /* label + invoice number */
     doc.text(
       docWidth - 12,
@@ -358,21 +345,28 @@ function jsPDFInvoiceTemplate(props) {
     /* invoice generate date */
     doc.text(docWidth - 12, currentHeight + (pdfConfig.subLineHeight * 2), param.invoice.invGenDate, "right");
 
-    // currentHeight += pdfConfig.lineHeight;
+
     /* add name */
     doc.setTextColor(colorBlack);
     // doc.setFontSize(pdfConfig.headerTextSize - 7);
-    doc.text(20, currentHeight, param.contact.name);
+  
+    doc.text(24, currentHeight, param.contact.name.toUpperCase());
 
-    currentHeight += pdfConfig.subLineHeight;
+    currentHeight += pdfConfig.subLineHeight + 1;
     /* add address */
-    doc.text(12, currentHeight, param.contact.address);
-    currentHeight += pdfConfig.subLineHeight;
+    const splitAddressText = doc.splitTextToSize(param.contact.address.toUpperCase(), 110)
+    doc.text(splitAddressText, 12, currentHeight);
+    doc.line(10, currentHeight+5, 125, currentHeight+4.5);
+    currentHeight += pdfConfig.subLineHeight * 2;
+   
+
     /* add email */
-    doc.text(12, currentHeight, param.contact.email);
-    currentHeight += pdfConfig.subLineHeight;
+    doc.text(12, currentHeight+1, "Email: " + param.contact.email);
+    doc.line(10, currentHeight+3, 125, currentHeight+2);
+    currentHeight += pdfConfig.subLineHeight + 1.4;
+   
     /* add contact number */
-    doc.text(12, currentHeight, param.contact.phone);
+    doc.text(12, currentHeight+1.5, "Contact:" + param.contact.phone);
     // doc.text(10, currentHeight, param.contact.otherInfo);
   }
 
@@ -441,6 +435,16 @@ function jsPDFInvoiceTemplate(props) {
     }
   };
   //#endregion
+
+  /* set bold text */
+function setBoldText() {
+  doc.setFont(doc.getFontList()[0],'bold');
+}
+
+/* set normal text */
+function setNormalText() {
+  doc.setFont(doc.getFontList()[0],'normal');
+}
 
   //#region TABLE HEADER
   var addTableHeader = () => {

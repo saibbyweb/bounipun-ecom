@@ -282,8 +282,8 @@ export default {
         contact: {
           label: "Buyer:",
           name: "Suhaib Khan",
-          address:
-            "H.no.54, Chinar Enclave, Rawalpora, Srinagar, Jammu and Kashmir",
+         address: "H.no.54, Chinar Enclave, Rawalpora, Srinagar, Jammu and Kashmir, India, 190005",
+// address: "H-30 Integrated Textile and Handicraft Park Zakura, Srinagar, Jammu and Kashmir, India, 190024",
           phone: "(+91) 99066-97711",
           email: "hello@saibbyweb.com",
           otherInfo: "GST:",
