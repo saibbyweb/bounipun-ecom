@@ -356,7 +356,7 @@ export default {
                       {
               title: "Amount",
               style: {
-                width: 16,
+                width: 18,
               },
             },
             {
@@ -381,7 +381,7 @@ export default {
             {
               title: "IGST Amount",
               style: {
-                width: 14,
+                width: 12,
               },
             },
 
@@ -394,7 +394,7 @@ export default {
             {
               title: "CGST Amount",
               style: {
-                width: 14,
+                width: 12,
               },
             },
                         {
@@ -406,21 +406,21 @@ export default {
             {
               title: "SGST Amount",
               style: {
-                width: 14,
+                width: 12,
               },
             },
             {
               title: "Total",
               style: {
-                width: 17,
+                width: 21,
               },
             },
           ],
           table: [
-            ...invoiceItemsUSD,
-            ...invoiceItemsUSD,
-            ...invoiceItemsUSD,
-            ...invoiceItemsUSD,
+            ...invoiceItemsINR,
+            ...invoiceItemsINR,
+            ...invoiceItemsINR,
+            // ...invoiceItemsUSD,
           ].map((item, index) => [
             index + 1,
             item.styleId,
@@ -431,9 +431,10 @@ export default {
             item.qty,
             // item.rate,
             "20000",
+             item.amountBeforeGst,
             item.discount,
-            item.amountBeforeGst,
-  "NA",
+ item.amountBeforeGst,
+            "--",
             "--",
                item.cgst,
             "226",
@@ -445,7 +446,7 @@ export default {
           
          
          
-            item.gstAmount,
+            // item.gstAmount,
             item.total,
           ]),
           additionalRows: [

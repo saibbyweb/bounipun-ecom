@@ -227,8 +227,6 @@ function jsPDFInvoiceTemplate(props) {
   //     );
   // }
 
-  
-
   // currentHeight += pdfConfig.subLineHeight;
   // currentHeight += pdfConfig.subLineHeight;
   // doc.text(docWidth - 10, currentHeight, param.business.address, "right");
@@ -255,35 +253,44 @@ function jsPDFInvoiceTemplate(props) {
 
   /* main header */
   doc.setTextColor(colorBlack);
-  doc.setFontSize(pdfConfig.fieldTextSize+2);
-  doc.text("TAX INVOICE", docWidth/2, currentHeight, "center")
+  doc.setFontSize(pdfConfig.fieldTextSize + 2);
+  doc.text("TAX INVOICE", docWidth / 2, currentHeight, "center");
   currentHeight += pdfConfig.subLineHeight;
 
   doc.setFontSize(pdfConfig.fieldTextSize);
-  doc.text("ORIGINAL", docWidth/2, currentHeight, "center")
+  doc.text("ORIGINAL", docWidth / 2, currentHeight, "center");
   currentHeight += pdfConfig.subLineHeight;
 
-  doc.setFontSize(pdfConfig.fieldTextSize+3);
-  doc.setFont(doc.getFontList()[0],'bold');
-  doc.text("BOUNIPUN", docWidth/2, currentHeight, "center")
+  doc.setFontSize(pdfConfig.fieldTextSize + 3);
+  doc.setFont(doc.getFontList()[0], "bold");
+  doc.text("BOUNIPUN", docWidth / 2, currentHeight, "center");
   currentHeight += pdfConfig.subLineHeight;
 
-  doc.setFont(doc.getFontList()[0],'normal');
-  doc.setFontSize(pdfConfig.fieldTextSize+1);
-  doc.text("H-30, Integrated Textile and Handicraft Park, Zakura, Srinagar, Jammu and Kashmir,India-190024", docWidth/2, currentHeight, "center")
+  doc.setFont(doc.getFontList()[0], "normal");
+  doc.setFontSize(pdfConfig.fieldTextSize + 1);
+  doc.text(
+    "H-30, Integrated Textile and Handicraft Park, Zakura, Srinagar, Jammu and Kashmir,India-190024",
+    docWidth / 2,
+    currentHeight,
+    "center"
+  );
   currentHeight += pdfConfig.subLineHeight;
 
-  doc.text("Contact: +91 78897-77377, +91 91030-77655, e-mail:care@bounipun.in", docWidth/2, currentHeight, "center")
+  doc.text(
+    "Contact: +91 78897-77377, +91 91030-77655, e-mail:care@bounipun.in",
+    docWidth / 2,
+    currentHeight,
+    "center"
+  );
   currentHeight += pdfConfig.subLineHeight;
 
-  doc.setFont(doc.getFontList()[0],'bold');
-  doc.text("GSTIN: 01AMJPK9732G1Z4", docWidth/2, currentHeight, "center")
+  doc.setFont(doc.getFontList()[0], "bold");
+  doc.text("GSTIN: 01AMJPK9732G1Z4", docWidth / 2, currentHeight, "center");
   currentHeight += pdfConfig.subLineHeight;
 
-
-  doc.text("www.bounipun.in", docWidth/2, currentHeight, "center")
+  doc.text("www.bounipun.in", docWidth / 2, currentHeight, "center");
   currentHeight += pdfConfig.subLineHeight;
-  doc.setFont(doc.getFontList()[0],'normal');
+  doc.setFont(doc.getFontList()[0], "normal");
 
   /* add table above items */
   addTableAboveItems();
@@ -315,7 +322,6 @@ function jsPDFInvoiceTemplate(props) {
   doc.setTextColor(colorGray);
   // doc.setFontSize(pdfConfig.fieldTextSize - 2);
   doc.setFontSize(pdfConfig.fieldTextSize - 0.8);
-
 
   //end contact part
 
@@ -463,18 +469,23 @@ function jsPDFInvoiceTemplate(props) {
     // currentHeight += 1;
     const lineHeight = 7;
     let startWidth = 0;
-    doc.setLineWidth(0.3)
+    doc.setLineWidth(0.3);
     for (let i = 0; i < param.invoice.header.length; i++) {
       const currentTdWidth = param.invoice.header[i]?.style?.width || tdWidth;
-     
-      if (i === 0) doc.rect(10, currentHeight, currentTdWidth, lineHeight+2);
+
+      if (i === 0) doc.rect(10, currentHeight, currentTdWidth, lineHeight + 2);
       else {
         const previousTdWidth =
           param.invoice.header[i - 1]?.style?.width || tdWidth;
         const widthToUse =
           currentTdWidth == previousTdWidth ? currentTdWidth : previousTdWidth;
         startWidth += widthToUse;
-        doc.rect(startWidth + 10, currentHeight, currentTdWidth, lineHeight + 2);
+        doc.rect(
+          startWidth + 10,
+          currentHeight,
+          currentTdWidth,
+          lineHeight + 2
+        );
       }
     }
     doc.setLineWidth(0.1);
@@ -482,13 +493,8 @@ function jsPDFInvoiceTemplate(props) {
   };
   //#endregion
 
-
-
-
-
   //#region TABLE BODY BORDER
   var addTableBodyBorder = (lineHeight) => {
-
     // currentHeight;
     let startWidth = 0;
     for (let i = 0; i < param.invoice.header.length; i++) {
@@ -507,14 +513,14 @@ function jsPDFInvoiceTemplate(props) {
   //#endregion
 
   /* set bold text */
-function setBoldText() {
-  doc.setFont(doc.getFontList()[0],'bold');
-}
+  function setBoldText() {
+    doc.setFont(doc.getFontList()[0], "bold");
+  }
 
-/* set normal text */
-function setNormalText() {
-  doc.setFont(doc.getFontList()[0],'normal');
-}
+  /* set normal text */
+  function setNormalText() {
+    doc.setFont(doc.getFontList()[0], "normal");
+  }
 
   //#region TABLE HEADER
   var addTableHeader = () => {
@@ -529,9 +535,9 @@ function setNormalText() {
     // console.log(doc.getFontList());
     let startWidth = 0;
     // doc.setFontSize(pdfConfig.fieldTextSize + 1);
-    doc.setFont(doc.getFontList()[0],'bold');
+    doc.setFont(doc.getFontList()[0], "bold");
     param.invoice.header.forEach(function (row, index) {
-      if (index == 0) doc.text(row.title, 11, currentHeight-2);
+      if (index == 0) doc.text(row.title, 11, currentHeight - 2);
       else {
         const currentTdWidth = row?.style?.width || tdWidth;
         const previousTdWidth =
@@ -540,14 +546,14 @@ function setNormalText() {
           currentTdWidth == previousTdWidth ? currentTdWidth : previousTdWidth;
         startWidth += widthToUse;
         /* TODO: added auto line break here */
-        const strArr = doc.splitTextToSize(row.title, currentTdWidth - 2)
-     
-        doc.text(strArr, startWidth + 11.5, currentHeight-2);
+        const strArr = doc.splitTextToSize(row.title, currentTdWidth - 2);
+
+        doc.text(strArr, startWidth + 11.5, currentHeight - 2);
       }
     });
 
     doc.setFontSize(pdfConfig.fieldTextSize);
-    doc.setFont(doc.getFontList()[0],'normal');
+    doc.setFont(doc.getFontList()[0], "normal");
 
     currentHeight += pdfConfig.subLineHeight - 1;
     doc.setTextColor(colorGray);
@@ -633,15 +639,52 @@ function setNormalText() {
       // check if new page
       currentHeight -= maxHeight;
   });
-  //doc.line(10, currentHeight, docWidth - 10, currentHeight); //if we want to show the last table line
+
+  // doc.line(10, currentHeight+1, docWidth - 10, currentHeight+1); //if we want to show the last table line
+  doc.setLineWidth(0.4);
+  doc.rect(10, currentHeight, docWidth - 20, 6);
+  
+
+  /* total row */
+
+  setBoldText();
+  doc.setFontSize(pdfConfig.fieldTextSize + 1.1);
+  doc.text("Total", 55, currentHeight + 3.8);
+  /* quantity total */
+  doc.text("6", 121, currentHeight + 3.8);
+  doc.line(120, currentHeight, 120, currentHeight + 6);
+  doc.line(126, currentHeight, 126, currentHeight + 6);
+
+  /* amount */
+  doc.text("626875.00", 145, currentHeight + 3.8);
+  /* taxable amount */
+  doc.text("626875.00", 177, currentHeight + 3.8);
+  /* igst total */
+  doc.text("0", 209, currentHeight + 3.8);
+  /* cgst total */
+  doc.text("3432.00", 231, currentHeight + 3.8);
+  /* sgst total */
+  doc.text("3423.00", 255, currentHeight + 3.8);
+  /* final total */
+  doc.text("725775.00", 268, currentHeight + 3.8);
+
+  /* vertical line */
+  doc.line(120, currentHeight, 120, currentHeight + 6);
+
+  doc.setLineWidth(0.1);
+
+  setNormalText();
+
+  currentHeight += 6;
+  doc.setFontSize(pdfConfig.fieldTextSize);
   //#endregion
 
   var invDescSize = splitTextAndGetHeight(
     param.invoice.invDesc,
     docWidth / 2
   ).height;
-/* TODO: made some changes */
-  invDescSize-= 5;
+  /* TODO: made some changes */
+  invDescSize -= 5;
 
   //#region PAGE BREAKER
   var checkAndAddPageLandscape = function () {
@@ -715,7 +758,6 @@ function setNormalText() {
 
   /* TODO: added terms and conditions on left side of sub total */
   function addTermsAndConditions() {
-
     // doc.text(10, currentHeight, "Terms and Conditions", "left");
     /* TODO: added new line */
     let height = currentHeight;
@@ -737,8 +779,10 @@ function setNormalText() {
       docWidth / 2
     );
 
-
-    var termsAndConditionPoints = doc.splitTextToSize(param.invoice.invDesc, docWidth / 2);
+    var termsAndConditionPoints = doc.splitTextToSize(
+      param.invoice.invDesc,
+      docWidth / 2
+    );
 
     doc.setFontSize(7.5);
     doc.setTextColor(colorGray);
@@ -754,7 +798,6 @@ function setNormalText() {
     // doc.line(docWidth / 2, currentHeight, docWidth - 10, currentHeight);
     currentHeight += pdfConfig.subLineHeight;
 
-  
     //#endregion
     const initialHeight = currentHeight;
 
@@ -787,18 +830,18 @@ function setNormalText() {
 
     // doc.rect(docWidth-70, initialHeight, 60, 23);
     /* terms and conditions box */
-    doc.rect(9, initialHeight-2, 78, 30);
+    doc.rect(9, initialHeight - 2, 78, 30);
     /* we here by box */
-    doc.rect(87, initialHeight-2, 87, 30);
+    doc.rect(87, initialHeight - 2, 87, 30);
     /* authorise signatory box */
-    doc.rect(174, initialHeight-2, 55, 30);
+    doc.rect(174, initialHeight - 2, 55, 30);
     doc.setFontSize(8);
-    doc.setTextColor(colorBlack)
-    doc.text("For BOUNIPUN", 176+15.5, initialHeight + 2)
-    doc.text("Authorized Signatory", 176+12.5, initialHeight + 26)
+    doc.setTextColor(colorBlack);
+    doc.text("For BOUNIPUN", 176 + 15.5, initialHeight + 2);
+    doc.text("Authorized Signatory", 176 + 12.5, initialHeight + 26);
     doc.setFontSize(7.5);
     /* total box */
-    doc.rect(229, initialHeight-2, 58, 30);
+    doc.rect(229, initialHeight - 2, 58, 30);
   }
   //#endregion
 
@@ -807,7 +850,7 @@ function setNormalText() {
   doc.setTextColor(colorBlack);
   currentHeight += pdfConfig.subLineHeight;
   currentHeight += pdfConfig.subLineHeight;
-    currentHeight += pdfConfig.subLineHeight;
+  currentHeight += pdfConfig.subLineHeight;
   doc.setFontSize(pdfConfig.labelTextSize);
 
   //#region Add num of pages at the bottom

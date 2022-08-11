@@ -1,20 +1,20 @@
 /* inr */
 export const invoiceItemsINR = [
-    {
-      styleId: "BCK-434",
-      product: "Pottery Blossom",
-      collection: "Autograph",
-      color: "Gray Red Multi",
-      hsnCode: "6214",
-      rate: "14296.00", // find rate before gst
-      discount: "-100.00",
-      qty: "1",
-      sgst: "6%",
-      cgst: "6%",
-      amountBeforeGst: "14196.00",
-      gstAmount: "1703.00",
-      total: "15900.00",
-    },
+    // {
+    //   styleId: "BCK-434",
+    //   product: "Pottery Blossom",
+    //   collection: "Autograph",
+    //   color: "Gray Red Multi",
+    //   hsnCode: "6214",
+    //   rate: "14296.00", // find rate before gst
+    //   discount: "-100.00",
+    //   qty: "1",
+    //   sgst: "6%",
+    //   cgst: "6%",
+    //   amountBeforeGst: "14196.00",
+    //   gstAmount: "1703.00",
+    //   total: "15900.00",
+    // },
     {
       styleId: "BCK 005/SH/SH-TW-WE200",
       product: "Signature Khatamband",
@@ -49,21 +49,21 @@ export const invoiceItemsINR = [
 
   /* usd */
   export const invoiceItemsUSD = [
-    {
-      styleId: "BCK-434",
-      product: "Pottery Blossom",
-      collection: "Autograph",
-      color: "Gray Red Multi",
-      hsnCode: "6214",
-      rate: "215.00", // find rate before gst
-      discount: "-10.47",
-      qty: "1",
-      sgst: "N/A",
-      cgst: "N/A",
-      amountBeforeGst: "204.53",
-      gstAmount: "N/A",
-      total: "204.53",
-    },
+    // {
+    //   styleId: "BCK-434",
+    //   product: "Pottery Blossom",
+    //   collection: "Autograph",
+    //   color: "Gray Red Multi",
+    //   hsnCode: "6214",
+    //   rate: "215.00", // find rate before gst
+    //   discount: "-10.47",
+    //   qty: "1",
+    //   sgst: "N/A",
+    //   cgst: "N/A",
+    //   amountBeforeGst: "204.53",
+    //   gstAmount: "N/A",
+    //   total: "204.53",
+    // },
     {
       styleId: "BCK 005/SH/SH-TW-WE200",
       product: "Signature Khatamband",
