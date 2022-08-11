@@ -653,18 +653,33 @@ function jsPDFInvoiceTemplate(props) {
   /* quantity total */
   doc.text("6", 121, currentHeight + 3.8);
   doc.line(120, currentHeight, 120, currentHeight + 6);
-  doc.line(126, currentHeight, 126, currentHeight + 6);
+  doc.line(128, currentHeight, 128, currentHeight + 6);
 
   /* amount */
   doc.text("626875.00", 145, currentHeight + 3.8);
+  doc.line(144, currentHeight, 144, currentHeight + 6);
+  doc.line(162, currentHeight, 162, currentHeight + 6);
+
   /* taxable amount */
   doc.text("626875.00", 177, currentHeight + 3.8);
+  doc.line(176, currentHeight, 176, currentHeight + 6);
+  doc.line(194, currentHeight, 194, currentHeight + 6);
+
   /* igst total */
   doc.text("0", 209, currentHeight + 3.8);
+  doc.line(206, currentHeight, 206, currentHeight + 6);
+  doc.line(218, currentHeight, 218, currentHeight + 6);
+
   /* cgst total */
   doc.text("3432.00", 231, currentHeight + 3.8);
+  doc.line(230, currentHeight, 230, currentHeight + 6);
+  doc.line(242, currentHeight, 242, currentHeight + 6);
+
   /* sgst total */
   doc.text("3423.00", 255, currentHeight + 3.8);
+  doc.line(254, currentHeight, 254, currentHeight + 6);
+  doc.line(266, currentHeight, 266, currentHeight + 6);
+
   /* final total */
   doc.text("725775.00", 268, currentHeight + 3.8);
 
