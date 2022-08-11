@@ -321,11 +321,17 @@ function jsPDFInvoiceTemplate(props) {
 
   function addTableAboveItems() {
     const buyerTableWidth = 160;
-    doc.line(buyerTableWidth, currentHeight, buyerTableWidth, currentHeight+26.2);
-    
-    doc.rect(10, currentHeight, docWidth-20, 26.2);
-    currentHeight+=4;
-    doc.setFontSize(pdfConfig.fieldTextSize+1.5);
+    /* vertical line */
+    doc.line(
+      buyerTableWidth,
+      currentHeight,
+      buyerTableWidth,
+      currentHeight + 26.2
+    );
+
+    doc.rect(10, currentHeight, docWidth - 20, 26.2);
+    currentHeight += 4;
+    doc.setFontSize(pdfConfig.fieldTextSize + 1.5);
     /* add label */
     setBoldText();
     doc.text(12, currentHeight, "BUYER:");
@@ -334,58 +340,104 @@ function jsPDFInvoiceTemplate(props) {
     setNormalText();
 
     /* label + invoice number */
+    doc.text(buyerTableWidth + 2, currentHeight, param.invoice.label);
+    setBoldText();
+    doc.text(buyerTableWidth + 16, currentHeight, param.invoice.num);
+    setNormalText();
+
+    /* payment date */
     doc.text(
-      docWidth - 12,
-      currentHeight,
-      param.invoice.label + param.invoice.num,
-      "right"
+      buyerTableWidth + 2,
+      currentHeight + pdfConfig.subLineHeight * 1.85,
+      param.invoice.invDate
     );
-    
-    /* invoice date */
-    doc.text(docWidth - 12, currentHeight + pdfConfig.subLineHeight, param.invoice.invDate, "right");
-
     /* invoice generate date */
-    doc.text(docWidth - 12, currentHeight + (pdfConfig.subLineHeight * 2), param.invoice.invGenDate, "right");
-
+    doc.text(
+      buyerTableWidth + 2,
+      currentHeight + pdfConfig.subLineHeight * 3.55,
+      param.invoice.invGenDate
+    );
+    /* reverse charge */
+    doc.text(
+      buyerTableWidth + 2,
+      currentHeight + pdfConfig.subLineHeight * 5,
+      "Reverse Charge (Y/N):"
+    );
+    /* transport mode */
+    doc.text(
+      buyerTableWidth + 55,
+      currentHeight + pdfConfig.subLineHeight * 5,
+      "Transport Mode: SELF"
+    );
 
     /* add name */
     doc.setTextColor(colorBlack);
     // doc.setFontSize(pdfConfig.headerTextSize - 7);
-  
+
     doc.text(24, currentHeight, param.contact.name.toUpperCase());
 
     currentHeight += pdfConfig.subLineHeight + 1;
 
-
-
     /* add address */
-    const splitAddressText = doc.splitTextToSize(param.contact.address.toUpperCase(), 110)
+    const splitAddressText = doc.splitTextToSize(
+      param.contact.address.toUpperCase(),
+      110
+    );
     doc.text(splitAddressText, 12, currentHeight - 1);
-    doc.line(10, currentHeight+5, buyerTableWidth, currentHeight+4.5);
+    /* horizontal line */
+    doc.line(10, currentHeight + 5, docWidth - 10, currentHeight + 5);
+    doc.line(
+      buyerTableWidth,
+      currentHeight - 2,
+      docWidth - 10,
+      currentHeight - 2
+    );
 
     currentHeight += pdfConfig.subLineHeight * 2;
-    
+
     /* vertical line */
-    doc.line(buyerTableWidth * 0.5, currentHeight-3.2, buyerTableWidth*0.5, currentHeight+9.2);
-    doc.line(buyerTableWidth * 0.65, currentHeight-3.2, buyerTableWidth*0.65, currentHeight+9.2);
-    
-    /* horizontal line */
-    doc.line(buyerTableWidth * 0.65, currentHeight+3, buyerTableWidth, currentHeight+3);
+    doc.line(
+      buyerTableWidth * 0.5,
+      currentHeight - 3.2,
+      buyerTableWidth * 0.5,
+      currentHeight + 9.2
+    );
+    doc.line(
+      buyerTableWidth * 0.65,
+      currentHeight - 3.2,
+      buyerTableWidth * 0.65,
+      currentHeight + 9.2
+    );
+
+    /* horizontal lines */
+    doc.line(
+      buyerTableWidth * 0.65,
+      currentHeight + 3,
+      docWidth - 10,
+      currentHeight + 3
+    );
+    // doc.line(buyerTableWidth, currentHeight+3, docWidth-10, currentHeight+3);
 
     /* add email */
-    doc.text(12, currentHeight+1, "Email: " + param.contact.email);
+    doc.text(12, currentHeight + 1, "Email: " + param.contact.email);
     /* add gst and state */
-    doc.text(82, currentHeight+1, "GSTIN: ");
-    doc.text(107, currentHeight+1, "State: Jammu and Kashmir");
+    doc.text(82, currentHeight + 1, "GSTIN: ");
+    doc.text(107, currentHeight + 1, "State: Jammu and Kashmir");
 
-    doc.text(82, currentHeight+7.5, "XXXXXXXXX");
-    doc.line(10, currentHeight+3, buyerTableWidth*0.5, currentHeight+2);
-    // doc.line(10, currentHeight+3, buyerTableWidth*0.5, currentHeight+2);    
+    doc.text(82, currentHeight + 7.5, "XXXXXXXXX");
+    doc.line(10, currentHeight + 3, buyerTableWidth * 0.5, currentHeight + 3);
+    /* vertical line */
+    doc.line(
+      docWidth - 85,
+      currentHeight + 3,
+      docWidth - 85,
+      currentHeight + 9.2
+    );
     currentHeight += pdfConfig.subLineHeight + 1.4;
-   
+
     /* add contact number and state code */
-    doc.text(12, currentHeight+1.5, "Contact:" + param.contact.phone);
-    doc.text(107, currentHeight+1.5, "State Code: 01");
+    doc.text(12, currentHeight + 1.5, "Contact:" + param.contact.phone);
+    doc.text(107, currentHeight + 1.5, "State Code: 01");
   }
 
   //TABLE PART
