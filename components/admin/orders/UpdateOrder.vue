@@ -451,9 +451,19 @@ export default {
           ]),
           additionalRows: [
             {
+              col1: "Total Tax:",
+              // col2: "278392.00",
+              col2: "6922.53",
+              // col3: "INR",
+              col3: "USD",
+              style: {
+                fontSize: 8, //optional, default 12
+              },
+            },
+            {
               col1: "Total Amount before Tax:",
               // col2: "278392.00",
-              col2: "2202.53",
+              col2: "626875.00",
               // col3: "INR",
               col3: "USD",
               style: {
@@ -463,7 +473,7 @@ export default {
             {
               col1: "Total Amount After Tax:",
               // col2: "31876.00",
-              col2: "0",
+              col2: "725775.00",
               // col3: "INR",
               col3: "USD",
               style: {
@@ -473,7 +483,7 @@ export default {
             {
               col1: "Roundoff:",
               // col2: "31876.00",
-              col2: "0",
+              col2: "-",
               // col3: "INR",
               col3: "USD",
               style: {
@@ -483,7 +493,7 @@ export default {
             {
               col1: "INR. Total Amount after Tax:",
               // col2: "311800.00",
-              col2: "2202.53",
+              col2: "725775.00",
               // col3: "INR",
               col3: "USD",
               style: {
@@ -493,7 +503,7 @@ export default {
             {
               col1: "GST on Reverse Charge:",
               // col2: "311800.00",
-              col2: "2202.53",
+              col2: "-",
               // col3: "INR",
               col3: "USD",
               style: {
