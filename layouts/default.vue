@@ -68,6 +68,7 @@ export default {
         "/contact-us",
         "/terms",
         "/about-us",
+        "/our-story",
         "/press",
         "/privacy-policy",
         "/cart",

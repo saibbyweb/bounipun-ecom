@@ -18,9 +18,7 @@
     <!-- centralized text block -->
     <div ref="start" class="c-text">
       <p>
-        BOUNIPUN Kashmir is a specialist luxury division lead by the known
-        internationally acclaimed fashion designer <b>ZUBAIR KIRMANI</b> who’s
-        born and brought up in the divine valley of Kashmir.
+       Zubair Kirmani , an internationally acclaimed fashion designer hailing from the implausible Vale of Kashmir. He has grown under shades of mighty Chinars and scented cypresses in mountainous paradise. To cap it all, he called his ever-growing Brand as – “BOUNIPUN” (Chinar leaf).
       </p>
     </div>
     <!-- section 1 (45/55) - (first one with image + text, second one with just a long image) -->
@@ -28,35 +26,26 @@
       <!-- first part -->
       <div class="one">
         <!-- one image -->
-        <div class="one-image" :style="setBg('1.png')"></div>
+        <div class="one-image" :style="setBg('1.jpg')"></div>
         <!-- text -->
         <div class="text">
           <p>
-            In fashion, he’s celebrated as a reformer of fabric, texture and
-            simplicity of silhouette. He was awarded as the “best debut” and
-            “neo-minimal designer” by ELLE magazine just after the launch of his
-            men’s and women’s label. His profile has been published by an
-            Italian Publication (Damiani) based on CONTEMPORARY INDIAN FASHION.
-            Winner.
+          Zubair Kirmani could not unhitch the strings that linked him to his motherland despite working away from home for at least 15 years. Zubair Kirmani came back after exploring and proving himself worldwide. The brand is about breaking all the stereotypes, the mainstream rules which cause hindrance in expression. The brand BOUNIPUN is all about Luxury that is authentic, modern, and allows everyone to express their unique personality. A luxury rooted in creativity and sincerity that inspires dreams and emotions. In our signature designs, we encapsulate these beliefs.
           </p>
         </div>
       </div>
       <!-- second part -->
-      <div class="two" :style="setBg('2.png')"></div>
+      <div class="two" :style="setBg('2.jpg')"></div>
     </div>
+
+    <br>
+    <br>
     <!-- full width image -->
-    <div class="full-width" :style="setBg('3.png', true)"></div>
+    <div class="full-width" :style="setBg('3.jpg', true)"></div>
     <!-- centralized text block -->
     <div class="c-text">
       <p>
-        In fashion, he’s celebrated as a reformer of fabric, texture and
-        simplicity of silhouette. He was awarded as the “best debut” and
-        “neo-minimal designer” by ELLE magazine just after the launch of his
-        men’s and women’s label. His profile has been published by an Italian
-        Publication (Damiani) based on CONTEMPORARY INDIAN FASHION. Winner of
-        the prestigious International Woolmark Prize 2016/17 India, Pakistan and
-        Middle East regional final for his innovative development in wool held
-        in Paris.
+        Zubair is one of the few designers who flourished as the winner of the prestigious International Woolmark Prize, 2016-2017 that was held in Paris. He has been honoured “best debut” and “neo-minimal designer” by ELLE magazine. His rigorous research into the textile and in-depth exploration with style for Woolmark inspired him to explore more, and subsume these innovations in his brand BOUNIPUN KASHMIR.
       </p>
     </div>
     <!-- reverse of section 1 -->
@@ -64,24 +53,21 @@
       <!-- first part -->
       <div class="one">
         <!-- one image -->
-        <div class="one-image" :style="setBg('4.png')"></div>
+        <div class="one-image" :style="setBg('4.jpg')"></div>
         <!-- text -->
         <div class="text">
           <p>
-            In fashion, he’s celebrated as a reformer of fabric, texture and
-            simplicity of silhouette. He was awarded as the “best debut” and
-            “neo-minimal designer” by ELLE magazine just after the launch of his
-            men’s and women’s label. His profile has been published by an
-            Italian Publication (Damiani) based on CONTEMPORARY INDIAN FASHION.
-            Winner.
+            We've explored cashmere in the ways no one has ever done before. Our signature designs are unique and are not limited to one season, just like Bounipun(Chinar leaf) , we are versatile and blend with every season.
+
+Our hand crafted cashmere is weaved on 500year old looms and are treated from the waters of glacier. The running down the mountains through gushing streams, the water is utilised in the manufacturing process.
           </p>
         </div>
       </div>
       <!-- second part -->
-      <div class="two" :style="setBg('5.png')"></div>
+      <div class="two" :style="setBg('5.jpg')"></div>
     </div>
     <!-- full width image -->
-    <div class="full-width" :style="setBg('6.png', true)"></div>
+    <div class="full-width" :style="setBg('6.jpg', true)"></div>
     <!-- centralized text block -->
     <div class="c-text">
       <p>
@@ -105,11 +91,11 @@
           men’s and women’s label. His profile has been published by an Italian
           Publication.
         </p>
-        <div class="image first" :style="setBg('7.png')"></div>
+        <div class="image first" :style="setBg('7.jpg')"></div>
       </div>
       <!-- reverse of bordered block with image and text -->
       <div class="bordered-block reverse">
-        <div class="image second" :style="setBg('8.png')"></div>
+        <div class="image second" :style="setBg('8.jpg')"></div>
         <p class="text">
           In fashion, he’s celebrated as a reformer of fabric, texture and
           simplicity of silhouette. He was awarded as the “best debut” and
@@ -132,7 +118,7 @@ export default {
   computed: {
     isIos() {
       let is_ios = /iP(ad|od|hone)/i.test(window.navigator.userAgent);
-      // let is_safari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+      let is_safari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
       return is_ios && is_safari;
     },
   },
@@ -142,10 +128,11 @@ export default {
       const bg = image;
 
       let styles = {
-        backgroundImage: `url(/story-images/${bg})`,
+        backgroundImage: `url(/new-story-images/${bg})`,
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         backgroundOrigin: "content-box",
+        // backgroundPosition: "center"
       };
       
       /* if device is NOT ios and fixed attachement is required */
@@ -189,7 +176,7 @@ export default {
 }
 
 p {
-  font-size: 15px;
+  font-size: 13.5px;
 }
 
 .c-text {
