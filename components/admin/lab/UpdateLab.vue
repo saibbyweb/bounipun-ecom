@@ -41,7 +41,7 @@
       @updated="imageListUpdated($event, 'heroImageMobile')"
     />
 
-    <!-- loop through all collection blocks -->
+    <!-- loop through all blocks -->
     <div class="blocks">
       <label class="label"> Hero Blocks: </label>
       <br />
@@ -79,7 +79,10 @@
       </div>
     </div>
 
-    <!-- loop through all heroBlocks -->
+    <!-- loop through all heroBlocks (details) -->
+    <!-- TODO: variants will have a variant detail block (one image, one text title and one paragraph) -->
+    <!-- TODO: colors will have a section with available colour categories, a colour selector, for each colour i need to attach an image and paragraph -->
+    <!-- TODO: fabrics: for each  -->
     <div
       class="hero-block-details"
       v-if="Object.keys(doc.heroBlockDetails).length > 0"

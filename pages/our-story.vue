@@ -113,7 +113,7 @@ export default {
   head() {
     return {
       title: "Our Story | Bounipun Kashmir",
-    };
+    }
   },
   computed: {
     isIos() {
