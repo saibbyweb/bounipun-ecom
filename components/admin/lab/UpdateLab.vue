@@ -4,7 +4,10 @@
     <h2 class="heading">
       {{ editMode ? "Update" : "Add New" }} Bounipun Lab Layout
     </h2>
-    <!-- FAQ ID -->
+
+
+    <div class="flex">
+          <!-- FAQ ID -->
     <InputBox
       v-if="editMode"
       label="Lab Layout ID"
@@ -13,37 +16,34 @@
       :internal="true"
     />
     <!-- Layout name -->
-    <InputBox label="Layout Name" v-model="doc.name" />
+    <InputBox :internal="true" label="Layout Name" v-model="doc.name" />
     <!-- Page title -->
     <InputBox label="Page Title" v-model="doc.title" />
+
+    </div>
     <!-- Page tagline -->
     <InputBox label="Page Tagline" v-model="doc.tagline" />
-    
-    <UploadImageV2
-      :multipleUpload="false"
-      label="Set Hero Image (Desktop) - V2"
-      v-model="doc.heroImage"
-     />
 
-    <!-- set hero image (desktop) -->
-    <!-- <UploadImage
-      :multipleUpload="false"
-      ref="imageUploader_heroImage"
-      label="Set Hero Image (Desktop)"
-      @updated="imageListUpdated($event, 'heroImage')"
-    /> -->
 
-    <!-- set hero image (mobile) -->
-    <UploadImage
-      :multipleUpload="false"
-      ref="imageUploader_heroImageMobile"
-      label="Set Hero Image (Mobile)"
-      @updated="imageListUpdated($event, 'heroImageMobile')"
-    />
+    <div class="flex section">
+      <!-- set hero image (desktop) -->
+      <UploadImageV2
+        :multipleUpload="false"
+        label="Set Hero Image (Desktop) - V2"
+        v-model="doc.heroImage"
+      />
+
+      <!-- set hero image (mobile) -->
+      <UploadImageV2
+        :multipleUpload="false"
+        label="Set Hero Image (Mobile) - V2"
+        v-model="doc.heroImageMobile"
+      />
+    </div>
 
     <!-- loop through all blocks -->
-    <div class="blocks">
-      <label class="label"> Hero Blocks: </label>
+    <div class="blocks section">
+      <p class="title"> Hero Blocks: </p>
       <br />
       <br />
       <Accordion
@@ -51,24 +51,34 @@
         :key="heroBlock.key"
         :heading="`#${index + 1} - ${heroBlock.name}`"
       >
-        <div class="block">
+        <div class="block section">
           <img
             class="delete"
             src="/icons/dark/remove-cart-item.png"
             @click="removeBlock('heroBlocks', index)"
           />
-          <!-- hero block name -->
-          <InputBox
-            label="Hero Block Name"
-            v-model="heroBlock.name"
-            @input="setAlias($event, heroBlock)"
-          />
-          <!-- hero name alias -->
-          <InputBox label="Alias" v-model="heroBlock.alias" :disabled="true" />
+
+          <div class="flex">
+            <!-- hero block name -->
+            <InputBox
+              label="Hero Block Name"
+              v-model="heroBlock.name"
+              @input="setAlias($event, heroBlock)"
+            />
+            <!-- hero name alias -->
+            <InputBox
+              label="Alias"
+              v-model="heroBlock.alias"
+              :disabled="true"
+            />
+
+              <!-- visibility toggle -->
+          <Toggle v-model="heroBlock.visible" label="Visibility" />
+          </div>
+
           <!-- hero block paragraph -->
           <TextBox label="Hero Block Paragraph" v-model="heroBlock.paragraph" />
-          <!-- visibility toggle -->
-          <Toggle v-model="heroBlock.visible" label="Visibility" />
+        
         </div>
       </Accordion>
       <!-- add new hero block wrapper -->
@@ -83,19 +93,25 @@
     <!-- TODO: variants will have a variant detail block (one image, one text title and one paragraph) -->
     <!-- TODO: colors will have a section with available colour categories, a colour selector, for each colour i need to attach an image and paragraph -->
     <!-- TODO: fabrics: for each  -->
-    
+
     <div
       class="hero-block-details"
       v-if="Object.keys(doc.heroBlockDetails).length > 0"
     >
+      <p class="title"> Hero Blocks Details: </p>
+      <br />
+      <br />
+
       <Accordion
         v-for="heroBlock in doc.heroBlocks"
         :key="heroBlock.key"
         :heading="`Details for: ${heroBlock.name}`"
       >
         <!-- decide which component to render depending on alias -->
-        <DecideLabBlockDetail :alias="heroBlock.alias" :heroBlockDetails="doc.heroBlockDetails" />
-
+        <DecideLabBlockDetail
+          :alias="heroBlock.alias"
+          :heroBlockDetails="doc.heroBlockDetails"
+        />
       </Accordion>
     </div>
 
@@ -274,7 +290,7 @@ export default {
     resetForm() {
       this.populateForm(baseDoc());
       // this.$refs.imageUploader_heroImage.clearFileSelection();
-      this.$refs.imageUploader_heroImageMobile.clearFileSelection();
+      // this.$refs.imageUploader_heroImageMobile.clearFileSelection();
       this.editMode = false;
     },
   },
@@ -282,6 +298,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.title {
+   font-size: 22px;
+   font-family: $font_1_bold;
+   color: rgb(76, 75, 78);
+}
+
 .item-drag {
   opacity: 0;
 }
@@ -320,7 +342,7 @@ export default {
       position: absolute;
       right: 5px;
       top: 5px;
-      width: 6%;
+      width: 3%;
       z-index: 1;
     }
   }
@@ -330,6 +352,8 @@ export default {
     font-size: 14px;
   }
 }
+
+
 
 .hero-block-details {
   padding: 2%;

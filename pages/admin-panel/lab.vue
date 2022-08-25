@@ -115,8 +115,8 @@ export default {
 
       const { heroImage } = doc;
 
-      this.setSingleImage("heroImage", doc);
-      this.setSingleImage("heroImageMobile", doc);
+      // this.setSingleImage("heroImage", doc);
+      // this.setSingleImage("heroImageMobile", doc);
 
       const heroBlockKeys = Object.keys(doc.heroBlockDetails);
 
