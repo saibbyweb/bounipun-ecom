@@ -1,6 +1,5 @@
 <template>
     <div class="decide-block">
-        <p> well {{ alias }} </p>
        <component :is="blocks[alias]" v-for="(blockDetail, index) in blockDetails" :key="index" />
     </div>
 </template>
@@ -26,3 +25,9 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+.section {
+    border: 1px solid red;
+}
+</style>
