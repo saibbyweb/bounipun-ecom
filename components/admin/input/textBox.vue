@@ -1,5 +1,5 @@
 <template>
-  <div class="text-box" :class="{ nonAdmin }">
+  <div class="text-box" :class="{ nonAdmin, slim, long }">
     <div style="display: flex; align-items: center">
       <div v-if="internal" class="internal"></div>
       <label class="label"> {{ label }} </label>
@@ -27,6 +27,14 @@ export default {
       type: Boolean,
       default: false,
     },
+    slim: {
+      type: Boolean,
+      default: false,
+    },
+    long: {
+      type: Boolean,
+      default: false,
+    },
     disabled: {
       type: Boolean,
       default: false,
@@ -37,12 +45,15 @@ export default {
 
 <style lang="scss" scoped>
 .text-box {
-  
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
   padding: 2%;
   width: 100%;
+
+  &.slim {
+    padding: 0 2%;
+  }
 
   .internal {
     height: 10px;
@@ -79,5 +90,11 @@ export default {
     }
   }
 
+  &.long {
+    /* background: blue; */
+    .textarea-box {
+      height: 95px;
+    }
+  }
 }
 </style>

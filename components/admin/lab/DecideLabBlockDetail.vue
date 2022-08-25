@@ -1,6 +1,7 @@
 <template>
     <div class="decide-block">
-       <component :is="blocks[alias]" />
+        <p> well {{ alias }} </p>
+       <component :is="blocks[alias]" v-for="(blockDetail, index) in blockDetails" :key="index" />
     </div>
 </template>
 
@@ -12,7 +13,7 @@ import FabricBlock from "./FabricBlock.vue";
 export default {
     props: {
         alias: String,
-        heroBlockDetails: Object
+        blockDetails: Array
     },
     data() {
         return {

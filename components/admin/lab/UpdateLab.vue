@@ -5,25 +5,22 @@
       {{ editMode ? "Update" : "Add New" }} Bounipun Lab Layout
     </h2>
 
-
     <div class="flex">
-          <!-- FAQ ID -->
-    <InputBox
-      v-if="editMode"
-      label="Lab Layout ID"
-      v-model="doc._id"
-      disabled
-      :internal="true"
-    />
-    <!-- Layout name -->
-    <InputBox :internal="true" label="Layout Name" v-model="doc.name" />
-    <!-- Page title -->
-    <InputBox label="Page Title" v-model="doc.title" />
-
+      <!-- FAQ ID -->
+      <InputBox
+        v-if="editMode"
+        label="Lab Layout ID"
+        v-model="doc._id"
+        disabled
+        :internal="true"
+      />
+      <!-- Layout name -->
+      <InputBox :internal="true" label="Layout Name" v-model="doc.name" />
+      <!-- Page title -->
+      <InputBox label="Page Title" v-model="doc.title" />
     </div>
     <!-- Page tagline -->
     <InputBox label="Page Tagline" v-model="doc.tagline" />
-
 
     <div class="flex section">
       <!-- set hero image (desktop) -->
@@ -43,7 +40,7 @@
 
     <!-- loop through all blocks -->
     <div class="blocks section">
-      <p class="title"> Hero Blocks: </p>
+      <p class="title">Hero Blocks:</p>
       <br />
       <br />
       <Accordion
@@ -72,19 +69,22 @@
               :disabled="true"
             />
 
-              <!-- visibility toggle -->
-          <Toggle v-model="heroBlock.visible" label="Visibility" />
+            <!-- visibility toggle -->
+            <Toggle v-model="heroBlock.visible" label="Visibility" />
           </div>
 
           <!-- hero block paragraph -->
-          <TextBox label="Hero Block Paragraph" v-model="heroBlock.paragraph" />
-        
+          <TextBox
+            slim
+            label="Hero Block Paragraph"
+            v-model="heroBlock.paragraph"
+          />
         </div>
       </Accordion>
       <!-- add new hero block wrapper -->
       <div class="flex center">
         <button class="action" @click="addNewBlock('heroBlocks')">
-          Add New Hero Block
+         + Add New Hero Block
         </button>
       </div>
     </div>
@@ -98,7 +98,7 @@
       class="hero-block-details"
       v-if="Object.keys(doc.heroBlockDetails).length > 0"
     >
-      <p class="title"> Hero Blocks Details: </p>
+      <p class="title">Hero Blocks Details:</p>
       <br />
       <br />
 
@@ -110,8 +110,16 @@
         <!-- decide which component to render depending on alias -->
         <DecideLabBlockDetail
           :alias="heroBlock.alias"
-          :heroBlockDetails="doc.heroBlockDetails"
+          :blockDetails="doc.heroBlockDetails[heroBlock.key]"
         />
+           <br>
+        <!-- add new hero block wrapper -->
+        <div class="flex center">
+       
+          <button class="action" @click="addNewDetailBlock(heroBlock.key,heroBlock.alias)">
+            + Add New {{ heroBlock.name }} Block
+          </button>
+        </div>
       </Accordion>
     </div>
 
@@ -160,19 +168,24 @@ const baseDoc = () => {
     heroImage: "",
     heroImageMobile: "",
     heroBlocks: [
-      {
-        name: "",
-        paragraph: "",
-        visible: false,
-        key: key,
-        // newKey: () => uuidv4(),
-      },
+     
     ],
-    heroBlockDetails: { [key]: { title: "", paragraph: "", image: "" } },
+    heroBlockDetails: {},
     description: "",
     status: false,
   };
 };
+
+/* base variant block detail */
+const baseVariantBlock = () => {
+  const key = uuidv4();
+  return {
+    image: "",
+    title: "",
+    paragraph: "",
+    key
+  }
+}
 
 export default {
   props: {
@@ -222,14 +235,34 @@ export default {
           });
 
           /* create an object for block detail */
-          this.doc.heroBlockDetails[key] = {
-            image: "",
-            image2: "",
-            title: "",
-            paragraph: "",
-          };
+          // this.doc.heroBlockDetails[key] = [];
+          this.$set(this.doc.heroBlockDetails, key, [])
           break;
       }
+      this.$forceUpdate();
+    },
+    addNewDetailBlock(blockKey, alias) {
+      let blockDetails = this.doc.heroBlockDetails[blockKey];
+      /* if detail block not present */
+      if(!blockDetails)
+        blockDetails = this.doc.heroBlockDetails[blockKey]
+      
+      // this.$set(this.items, payload.index, payload.value);
+      
+      switch(alias) {
+        case "variant":
+          blockDetails.push(baseVariantBlock())
+          
+          // this.$set(this.doc, blockDetails.length, baseVariantBlock());
+          break;
+        case "color":
+          break;
+        case "farbic":
+          break;
+      }
+      
+      this.$forceUpdate();
+
     },
     removeBlock(property, index) {
       let deletedItems = [];
@@ -299,9 +332,9 @@ export default {
 
 <style lang="scss" scoped>
 .title {
-   font-size: 22px;
-   font-family: $font_1_bold;
-   color: rgb(76, 75, 78);
+  font-size: 22px;
+  font-family: $font_1_bold;
+  color: rgb(76, 75, 78);
 }
 
 .item-drag {
@@ -317,6 +350,8 @@ export default {
 }
 
 .section {
+  border-color: rgba(135, 131, 131, 0.381) !important;
+  /* border-style: dotted; */
   position: relative;
   margin: 10px;
   padding: 5px 5px 30px 5px;
@@ -352,8 +387,6 @@ export default {
     font-size: 14px;
   }
 }
-
-
 
 .hero-block-details {
   padding: 2%;
