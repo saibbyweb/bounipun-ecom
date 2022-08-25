@@ -83,6 +83,7 @@
     <!-- TODO: variants will have a variant detail block (one image, one text title and one paragraph) -->
     <!-- TODO: colors will have a section with available colour categories, a colour selector, for each colour i need to attach an image and paragraph -->
     <!-- TODO: fabrics: for each  -->
+    
     <div
       class="hero-block-details"
       v-if="Object.keys(doc.heroBlockDetails).length > 0"
@@ -92,44 +93,8 @@
         :key="heroBlock.key"
         :heading="`Details for: ${heroBlock.name}`"
       >
-
-      
-        <div class="hero-block-detail">
-          <div class="flex center">
-            <!-- image 1 -->
-            <UploadImage
-              :multipleUpload="false"
-              :ref="`imageUploader_heroBlockDetails_${heroBlock.key}`"
-              :label="`Block Detail Image [1] for [${heroBlock.name}]`"
-              @updated="
-                imageListUpdated($event, 'heroBlockDetails', heroBlock.key)
-              "
-            />
-
-            <!-- image 2 -->
-            <UploadImage
-              :multipleUpload="false"
-              :ref="`imageUploader_heroBlockDetails2_${heroBlock.key}`"
-              :label="`Block Detail Image [2] for [${heroBlock.name}]`"
-              @updated="
-                imageListUpdated($event, 'heroBlockDetails2', heroBlock.key)
-              "
-            />
-          </div>
-
-          <!-- title -->
-          <InputBox
-            :label="`Title for [${heroBlock.name}]`"
-            v-model="doc.heroBlockDetails[heroBlock.key].title"
-          />
-          <!-- paragraph -->
-          <TextBox
-            :label="`Paragraph for [${heroBlock.name}]`"
-            v-model="doc.heroBlockDetails[heroBlock.key].paragraph"
-          />
-        </div>
-
-
+        <!-- decide which component to render depending on alias -->
+        <DecideLabBlockDetail :alias="heroBlock.alias" :heroBlockDetails="doc.heroBlockDetails" />
 
       </Accordion>
     </div>
