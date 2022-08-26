@@ -2,7 +2,8 @@
   <div class="decide-block">
 
       <component v-for="(blockDetail, index) in blockDetails"
-      :key="blockDetail.key" :is="blocks[alias]" :blockKey="blockKey" :remover="remover" :index="index" />
+      @input="$emit('input', $event)"
+      :key="blockDetail.key" :is="blocks[alias]" :blockDetails="blockDetails" :blockKey="blockKey" :remover="remover" :index="index" />
 
   </div>
 </template>
@@ -26,9 +27,9 @@ export default {
         color: ColorBlock,
         fabric: FabricBlock,
       },
-    };
+    }
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

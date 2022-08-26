@@ -108,8 +108,11 @@
         :key="heroBlock.key"
         :heading="`Details for: ${heroBlock.name}`"
       >
+           
+
         <!-- decide which component to render depending on alias -->
         <DecideLabBlockDetail
+          @input="setValues"
           :alias="heroBlock.alias"
           :remover="removeDetailBlock"
           :blockKey="heroBlock.key"
@@ -119,11 +122,12 @@
         <!-- add new hero block wrapper -->
         <div class="flex center">
        
-          <button class="action" @click="addNewDetailBlock(heroBlock.key,heroBlock.alias)">
+         <button class="action" @click="addNewDetailBlock(heroBlock.key,heroBlock.alias)">
             + Add New {{ heroBlock.name }} Block
           </button>
         </div>
       </Accordion>
+  
     </div>
 
     <!-- Description -->
@@ -225,6 +229,9 @@ export default {
             list.length > 0 ? list[0].path : "";
       }
     },
+    setValues(payload) {
+     alert(JSON.stringify(payload))
+    },
     addNewBlock(type) {
       switch (type) {
         case "heroBlocks":
@@ -259,7 +266,7 @@ export default {
           blockDetails.push(baseVariantBlock())
           if(parentAccordion[0]) {
             parentAccordion[0].toggle();
-            setTimeout(() => parentAccordion[0].toggle(), 500)
+            setTimeout(() => parentAccordion[0].toggle(), 70)
           }
           // this.$set(this.doc, blockDetails.length, baseVariantBlock());
           break;

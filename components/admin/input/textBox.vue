@@ -93,7 +93,7 @@ export default {
   &.long {
     /* background: blue; */
     .textarea-box {
-      height: 95px;
+      height: 145px;
     }
   }
 }
