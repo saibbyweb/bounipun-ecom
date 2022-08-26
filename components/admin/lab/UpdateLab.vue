@@ -103,6 +103,7 @@
       <br />
 
       <Accordion
+        :ref="heroBlock.key"
         v-for="heroBlock in doc.heroBlocks"
         :key="heroBlock.key"
         :heading="`Details for: ${heroBlock.name}`"
@@ -227,8 +228,8 @@ export default {
         case "heroBlocks":
           const key = uuidv4();
           this.doc.heroBlocks.push({
-            name: "",
-            alias: "",
+            name: "variant",
+            alias: "variant",
             paragraph: "",
             status: false,
             key,
@@ -248,11 +249,16 @@ export default {
         blockDetails = this.doc.heroBlockDetails[blockKey]
       
       // this.$set(this.items, payload.index, payload.value);
+      const parentAccordion = this.$refs[blockKey];
+
       
       switch(alias) {
         case "variant":
           blockDetails.push(baseVariantBlock())
-          
+          if(parentAccordion[0]) {
+            parentAccordion[0].toggle();
+            setTimeout(() => parentAccordion[0].toggle(), 500)
+          }
           // this.$set(this.doc, blockDetails.length, baseVariantBlock());
           break;
         case "color":

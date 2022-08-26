@@ -7,7 +7,7 @@
         <span class="switch"> {{ active ? "-" : "+" }} </span>
     </div>
 
-    <div ref="content" class="content" :class="{noMargin}" :style="{maxHeight}">
+    <div ref="content" class="content" :class="{noMargin}" :style="{minHeight: maxHeight}">
         <slot>
             <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span>
         </slot>
@@ -69,7 +69,7 @@ export default {
             this.updateHeight();
         },
         updateHeight() {
-            // this.maxHeight = this.$refs.content.scrollHeight + 'px';
+           // this.maxHeight = this.$refs.content.scrollHeight + 'px';
         }
     }
 }
@@ -108,8 +108,10 @@ export default {
         border-radius: 10px;
         max-height: 0px;
         overflow: hidden;
-        transition: max-height 0.3s ease-out;
+        /* transition: max-height 0.3s ease-out; */
         box-sizing: border-box;
+        transition: all 0.4s ease-in-out;
+
 
         &.noMargin {
             margin: 18px 0;
