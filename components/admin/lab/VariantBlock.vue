@@ -10,16 +10,16 @@
 
     <div class="flex">
       <div class="flex col" style="width: 100%">
-        <!-- title -->
+        <!-- name -->
         <InputBox
-          :label="`Title for [${localBlock.variantName}]`"
-          v-model="localBlock.title"
+          label="Variant Name"
+          v-model="localVariant.name"
         />
         <!-- image 1 -->
         <UploadImageV2
-          :multipleUpload="true"
+          :multipleUpload="false"
           label="Variant Image"
-          v-model="localBlock.image"
+          v-model="localVariant.image"
         />
       </div>
 
@@ -27,8 +27,8 @@
       <TextBox
         long
         slim
-        :label="`Paragraph for [${localBlock.variantName}]`"
-        v-model="localBlock.paragraph"
+        :label="`Paragraph for [${localVariant.name}]`"
+        v-model="localVariant.paragraph"
       />
     </div>
   </div>
@@ -39,12 +39,12 @@
 export default {
   props: {
     blockKey: String,
-    blockDetails: Object,
+    blockDetail: Object,
     index: Number,
     remover: Function,
   },
   watch: {
-    blockDetails: {
+    localVariant: {
       handler(newValue) {
         // Object.keys(newValue).forEach((key) => {
         //   this.localBlock[key] = newValue[key];
@@ -52,21 +52,25 @@ export default {
       },
       deep: true,
     },
-    localBlock: {
+    localVariant: {
       handler(newValue) {
-    //    alert('well')
-        this.$emit('input',newValue);
+        //    alert('well')
+        this.$emit("input", newValue);
       },
       deep: true,
     },
   },
-  mounted() {},
+  mounted() {
+    Object.keys(this.blockDetail).forEach((key) => {
+      this.localVariant[key] = this.blockDetail[key];
+    });
+  },
   data() {
     return {
-      localBlock: {
-        variantName: "",
+      localVariant: {
+        key: "",
+        name: "",
         image: "",
-        title: "",
         paragraph: "",
       },
     };

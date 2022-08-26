@@ -40,7 +40,7 @@
       <!-- copyright -->
       <div id="copyright" class="section">
         <span class="last-footer-item">
-          Copyright © 2021 Bounipun. All Rights Reserved.</span
+          Copyright © 2022 Bounipun. All Rights Reserved.</span
         >
       </div>
 

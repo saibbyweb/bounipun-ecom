@@ -1,9 +1,15 @@
 <template>
   <div class="decide-block">
 
-      <component v-for="(blockDetail, index) in blockDetails"
-      @input="$emit('input', $event)"
-      :key="blockDetail.key" :is="blocks[alias]" :blockDetails="blockDetails" :blockKey="blockKey" :remover="remover" :index="index" />
+      <component 
+      v-for="(blockDetail, index) in blockDetails"
+      @input="$emit('input', {payload: $event, index })"
+      :key="blockDetail.key"
+      :is="blocks[alias]" 
+      :blockDetail="blockDetail" 
+      :blockKey="blockKey" 
+      :remover="remover" 
+      :index="index" />
 
   </div>
 </template>

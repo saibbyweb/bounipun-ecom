@@ -90,51 +90,7 @@ export default {
       this.showForm = true;
       this.editMode = true;
 
-      /* TODO: save key in database, use same key while retrieving2 */
-      // doc.heroBlocks = doc.heroBlocks.map((block) => ({
-      //   ...block,
-      //   key: uuidv4(),
-      //   // newKey: () => uuidv4(),
-      // }));
-
-      /* hero block details */
-      if (!doc.heroBlockDetails) {
-        doc.heroBlockDetails = {};
-        doc.heroBlocks.forEach((block) => {
-          doc.heroBlockDetails[block.key] = {
-            image: "",
-            title: "",
-            paragraph: "",
-          };
-        });
-      }
-
       updateComponent.populateForm(doc);
-
-      // return;
-
-      const { heroImage } = doc;
-
-      // this.setSingleImage("heroImage", doc);
-      // this.setSingleImage("heroImageMobile", doc);
-
-      const heroBlockKeys = Object.keys(doc.heroBlockDetails);
-
-      setTimeout(() => {
-        for (const key of heroBlockKeys) {
-          this.setSingleImage(
-            `heroBlockDetails`,
-            doc,
-            `heroBlockDetails_${key}`, key
-          );
-             this.setSingleImage(
-            `heroBlockDetails`,
-            doc,
-            `heroBlockDetails2_${key}`, key, 'image2'
-          );
-        }
-      }, 500);
-
 
     },
     setSingleImage(property, doc, ref = false, key = false, lastProp='image') {

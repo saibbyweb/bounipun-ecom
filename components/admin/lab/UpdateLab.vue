@@ -104,15 +104,14 @@
 
       <Accordion
         :ref="heroBlock.key"
-        v-for="heroBlock in doc.heroBlocks"
+        v-for="(heroBlock) in doc.heroBlocks"
         :key="heroBlock.key"
         :heading="`Details for: ${heroBlock.name}`"
       >
            
-
         <!-- decide which component to render depending on alias -->
         <DecideLabBlockDetail
-          @input="setValues"
+          @input="setValues($event, doc.heroBlockDetails[heroBlock.key])"
           :alias="heroBlock.alias"
           :remover="removeDetailBlock"
           :blockKey="heroBlock.key"
@@ -184,11 +183,11 @@ const baseDoc = () => {
 };
 
 /* base variant block detail */
-const baseVariantBlock = () => {
+const baseVariantBlock = (length) => {
   const key = uuidv4();
   return {
+    name: "Variant -" + length, 
     image: "",
-    title: "",
     paragraph: "",
     key
   }
@@ -229,8 +228,8 @@ export default {
             list.length > 0 ? list[0].path : "";
       }
     },
-    setValues(payload) {
-     alert(JSON.stringify(payload))
+    setValues({payload, index},blockDetails) {
+      blockDetails[index] = payload;
     },
     addNewBlock(type) {
       switch (type) {
@@ -263,7 +262,7 @@ export default {
       
       switch(alias) {
         case "variant":
-          blockDetails.push(baseVariantBlock())
+          blockDetails.push(baseVariantBlock(blockDetails.length))
           if(parentAccordion[0]) {
             parentAccordion[0].toggle();
             setTimeout(() => parentAccordion[0].toggle(), 70)
@@ -304,12 +303,6 @@ export default {
       if (!result.updated) return;
 
       this.$emit("updated");
-
-      // result.doc.heroBlocks = result.doc.heroBlocks.map((block) => ({
-      //   ...block,
-      //   key: uuidv4(),
-      //   newKey: () => uuidv4(),
-      // }));
 
       this.populateForm(result.doc);
       this.$flash(this);
