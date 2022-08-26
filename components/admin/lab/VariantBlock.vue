@@ -1,11 +1,11 @@
 <template>
 <!-- <Accordion :heading="`Variant - ${index+1} `"> -->
   <div class="variant-block flex col">
-      <p> Varaint {{ index }} </p>
+      <p> Varaint {{ index + 1 }} </p>
           <img
+           @click="remover(blockKey, index)"
             class="delete"
             src="/icons/dark/remove-cart-item.png"
-            @click="removeBlock('heroBlocks', index)"
           />
 
     <div class="flex">
@@ -35,8 +35,9 @@
 <script>
 export default {
   props: {
-    blockDetail: Object,
-    index: Number
+    blockKey: String,
+    index: Number,
+    remover: Function
   },
   data() {
     return {
@@ -52,10 +53,10 @@ export default {
 <style lang="scss" scoped>
 .variant-block {
     padding: 7px 4px;
-    margin-top: 5px;
+    margin-top: 15px;
     border: 2px dotted #efefef;
         position: relative;
-        
+
         .delete {
       position: absolute;
       right: 5px;

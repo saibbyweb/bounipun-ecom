@@ -2,7 +2,7 @@
   <div class="decide-block">
 
       <component v-for="(blockDetail, index) in blockDetails"
-      :key="index" :is="blocks[alias]" :index="index" />
+      :key="blockDetail.key" :is="blocks[alias]" :blockKey="blockKey" :remover="remover" :index="index" />
 
   </div>
 </template>
@@ -16,6 +16,8 @@ export default {
   props: {
     alias: String,
     blockDetails: Array,
+    blockKey: String,
+    remover: Function
   },
   data() {
     return {

@@ -95,7 +95,7 @@
     <!-- TODO: fabrics: for each  -->
 
     <div
-      class="hero-block-details"
+      class="hero-block-details section"
       v-if="Object.keys(doc.heroBlockDetails).length > 0"
     >
       <p class="title">Hero Blocks Details:</p>
@@ -111,6 +111,8 @@
         <!-- decide which component to render depending on alias -->
         <DecideLabBlockDetail
           :alias="heroBlock.alias"
+          :remover="removeDetailBlock"
+          :blockKey="heroBlock.key"
           :blockDetails="doc.heroBlockDetails[heroBlock.key]"
         />
            <br>
@@ -269,6 +271,10 @@ export default {
       
       this.$forceUpdate();
 
+    },
+    removeDetailBlock(blockKey, index) {
+    // alert(blockKey)
+        this.doc.heroBlockDetails[blockKey].splice(index, 1);
     },
     removeBlock(property, index) {
       let deletedItems = [];
