@@ -43,44 +43,56 @@
       <p class="title">Hero Blocks:</p>
       <br />
       <br />
-      <Accordion
-        v-for="(heroBlock, index) in doc.heroBlocks"
-        :key="heroBlock.key"
-        :heading="`#${index + 1} - ${heroBlock.name}`"
+
+      <!-- draggable list -->
+      <Draggable
+        v-model="doc.heroBlocks"
+        ghost-class="ghost"
+        :sort="true"
+        class="items"
       >
-        <div class="block section">
-          <img
-            class="delete"
-            src="/icons/dark/remove-cart-item.png"
-            @click="removeBlock('heroBlocks', index)"
-          />
+        <transition-group type="transition" name="flip-list">
+          <Accordion
+            v-for="(heroBlock, index) in doc.heroBlocks"
+            :key="heroBlock.key"
+            :heading="`#${index + 1} - ${heroBlock.name}`"
+          >
+            <div class="block section">
+              <img
+                class="delete"
+                src="/icons/dark/remove-cart-item.png"
+                @click="removeBlock('heroBlocks', index)"
+              />
 
-          <div class="flex">
-            <!-- hero block name -->
-            <InputBox
-              label="Hero Block Name"
-              v-model="heroBlock.name"
-              @input="setAlias($event, heroBlock)"
-            />
-            <!-- hero name alias -->
-            <InputBox
-              label="Alias"
-              v-model="heroBlock.alias"
-              :disabled="true"
-            />
+              <div class="flex">
+                <!-- hero block name -->
+                <InputBox
+                  label="Hero Block Name"
+                  v-model="heroBlock.name"
+                  @input="setAlias($event, heroBlock)"
+                />
+                <!-- hero name alias -->
+                <InputBox
+                  label="Alias"
+                  v-model="heroBlock.alias"
+                  :disabled="true"
+                />
 
-            <!-- visibility toggle -->
-            <Toggle v-model="heroBlock.visible" label="Visibility" />
-          </div>
+                <!-- visibility toggle -->
+                <Toggle v-model="heroBlock.visible" label="Visibility" />
+              </div>
 
-          <!-- hero block paragraph -->
-          <TextBox
-            slim
-            label="Hero Block Paragraph"
-            v-model="heroBlock.paragraph"
-          />
-        </div>
-      </Accordion>
+              <!-- hero block paragraph -->
+              <TextBox
+                slim
+                label="Hero Block Paragraph"
+                v-model="heroBlock.paragraph"
+              />
+            </div>
+          </Accordion>
+        </transition-group>
+      </Draggable>
+
       <!-- add new hero block wrapper -->
       <div class="flex center">
         <button class="action" @click="addNewBlock('heroBlocks')">
@@ -250,7 +262,7 @@ export default {
     },
     async fetchColorCategories() {
       const result = await this.$fetchCollection("color_categories");
-      this.colorCategories = result.docs.map(({ _id, name }) => {
+      this.colorCategories = result.docs.map(({ name }) => {
         return {
           name,
           value: name,
