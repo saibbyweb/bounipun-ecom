@@ -191,6 +191,19 @@ const baseVariantBlock = (length) => {
   };
 };
 
+/* base color block detail */
+const baseColorBlock = (length) => {
+  const key = uuidv4();
+  return {
+    name: "Color -" + length,
+    mainImage: "",
+    paragraph: "",
+    key,
+    colorImage: "",
+    category: ""
+  };
+};
+
 /* base fabric block detail */
 const baseFabricBlock = (length) => {
   const key = uuidv4();
@@ -207,7 +220,7 @@ const baseFabricBlock = (length) => {
     subParagraph2: "",
     subHeading3: "",
     subParagraph3: "",
-  }
+  };
 };
 
 export default {
@@ -253,8 +266,8 @@ export default {
         case "heroBlocks":
           const key = uuidv4();
           this.doc.heroBlocks.push({
-            name: "fabric",
-            alias: "fabric",
+            name: "color",
+            alias: "color",
             paragraph: "",
             status: false,
             key,
@@ -281,24 +294,21 @@ export default {
           parentAccordion[0].toggle();
           setTimeout(() => parentAccordion[0].toggle(), 70);
         }
-      }
+      };
 
       switch (alias) {
         case "variant":
           blockDetails.push(baseVariantBlock(blockDetails.length));
-          refreshParentAccordion();
-          // this.$set(this.doc, blockDetails.length, baseVariantBlock());
           break;
         case "color":
+          blockDetails.push(baseColorBlock(blockDetails.length));
           break;
         case "fabric":
           blockDetails.push(baseFabricBlock(blockDetails.length));
-
-          refreshParentAccordion();
           break;
       }
 
-
+       refreshParentAccordion();
 
       this.$forceUpdate();
     },
