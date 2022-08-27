@@ -19,7 +19,7 @@
         <UploadImageV2
           :multipleUpload="false"
           label="Variant Image"
-          v-model="localVariant.image"
+          v-model="localVariant.mainImage"
         />
       </div>
 
@@ -70,7 +70,7 @@ export default {
       localVariant: {
         key: "",
         name: "",
-        image: "",
+        mainImage: "",
         paragraph: "",
       },
     };

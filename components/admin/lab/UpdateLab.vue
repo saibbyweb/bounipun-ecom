@@ -84,7 +84,7 @@
       <!-- add new hero block wrapper -->
       <div class="flex center">
         <button class="action" @click="addNewBlock('heroBlocks')">
-         + Add New Hero Block
+          + Add New Hero Block
         </button>
       </div>
     </div>
@@ -95,7 +95,7 @@
     <!-- TODO: fabrics: for each  -->
 
     <div
-      class="hero-block-details section"
+      class="hero-block-details block section"
       v-if="Object.keys(doc.heroBlockDetails).length > 0"
     >
       <p class="title">Hero Blocks Details:</p>
@@ -104,11 +104,10 @@
 
       <Accordion
         :ref="heroBlock.key"
-        v-for="(heroBlock) in doc.heroBlocks"
+        v-for="heroBlock in doc.heroBlocks"
         :key="heroBlock.key"
         :heading="`Details for: ${heroBlock.name}`"
       >
-           
         <!-- decide which component to render depending on alias -->
         <DecideLabBlockDetail
           @input="setValues($event, doc.heroBlockDetails[heroBlock.key])"
@@ -117,16 +116,17 @@
           :blockKey="heroBlock.key"
           :blockDetails="doc.heroBlockDetails[heroBlock.key]"
         />
-           <br>
+        <br />
         <!-- add new hero block wrapper -->
         <div class="flex center">
-       
-         <button class="action" @click="addNewDetailBlock(heroBlock.key,heroBlock.alias)">
+          <button
+            class="action"
+            @click="addNewDetailBlock(heroBlock.key, heroBlock.alias)"
+          >
             + Add New {{ heroBlock.name }} Block
           </button>
         </div>
       </Accordion>
-  
     </div>
 
     <!-- Description -->
@@ -173,9 +173,7 @@ const baseDoc = () => {
     tagline: "",
     heroImage: "",
     heroImageMobile: "",
-    heroBlocks: [
-     
-    ],
+    heroBlocks: [],
     heroBlockDetails: {},
     description: "",
     status: false,
@@ -186,12 +184,31 @@ const baseDoc = () => {
 const baseVariantBlock = (length) => {
   const key = uuidv4();
   return {
-    name: "Variant -" + length, 
-    image: "",
+    name: "Variant -" + length,
+    mainImage: "",
     paragraph: "",
-    key
+    key,
+  };
+};
+
+/* base fabric block detail */
+const baseFabricBlock = (length) => {
+  const key = uuidv4();
+  return {
+    name: "Fabric -" + length,
+    mainImage: "",
+    paragraph: "",
+    key,
+    subImage1: "",
+    subImage2: "",
+    subHeading1: "",
+    subParagraph1: "",
+    subHeading2: "",
+    subParagraph2: "",
+    subHeading3: "",
+    subParagraph3: "",
   }
-}
+};
 
 export default {
   props: {
@@ -228,7 +245,7 @@ export default {
             list.length > 0 ? list[0].path : "";
       }
     },
-    setValues({payload, index},blockDetails) {
+    setValues({ payload, index }, blockDetails) {
       blockDetails[index] = payload;
     },
     addNewBlock(type) {
@@ -236,8 +253,8 @@ export default {
         case "heroBlocks":
           const key = uuidv4();
           this.doc.heroBlocks.push({
-            name: "variant",
-            alias: "variant",
+            name: "fabric",
+            alias: "fabric",
             paragraph: "",
             status: false,
             key,
@@ -245,42 +262,49 @@ export default {
 
           /* create an object for block detail */
           // this.doc.heroBlockDetails[key] = [];
-          this.$set(this.doc.heroBlockDetails, key, [])
+          this.$set(this.doc.heroBlockDetails, key, []);
           break;
       }
       this.$forceUpdate();
     },
     addNewDetailBlock(blockKey, alias) {
+      // alert(alias)
       let blockDetails = this.doc.heroBlockDetails[blockKey];
       /* if detail block not present */
-      if(!blockDetails)
-        blockDetails = this.doc.heroBlockDetails[blockKey]
-      
-      // this.$set(this.items, payload.index, payload.value);
-      const parentAccordion = this.$refs[blockKey];
+      if (!blockDetails) blockDetails = this.doc.heroBlockDetails[blockKey];
 
-      
-      switch(alias) {
+      // this.$set(this.items, payload.index, payload.value);
+      const refreshParentAccordion = () => {
+        const parentAccordion = this.$refs[blockKey];
+
+        if (parentAccordion[0]) {
+          parentAccordion[0].toggle();
+          setTimeout(() => parentAccordion[0].toggle(), 70);
+        }
+      }
+
+      switch (alias) {
         case "variant":
-          blockDetails.push(baseVariantBlock(blockDetails.length))
-          if(parentAccordion[0]) {
-            parentAccordion[0].toggle();
-            setTimeout(() => parentAccordion[0].toggle(), 70)
-          }
+          blockDetails.push(baseVariantBlock(blockDetails.length));
+          refreshParentAccordion();
           // this.$set(this.doc, blockDetails.length, baseVariantBlock());
           break;
         case "color":
           break;
-        case "farbic":
+        case "fabric":
+          blockDetails.push(baseFabricBlock(blockDetails.length));
+
+          refreshParentAccordion();
           break;
       }
-      
-      this.$forceUpdate();
 
+
+
+      this.$forceUpdate();
     },
     removeDetailBlock(blockKey, index) {
-    // alert(blockKey)
-        this.doc.heroBlockDetails[blockKey].splice(index, 1);
+      // alert(blockKey)
+      this.doc.heroBlockDetails[blockKey].splice(index, 1);
     },
     removeBlock(property, index) {
       let deletedItems = [];
@@ -402,6 +426,7 @@ export default {
 
 .hero-block-details {
   padding: 2%;
+  border: 1px solid black;
   .hero-block-detail {
     border: 1px dotted #efefef;
     box-sizing: border-box;

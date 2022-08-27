@@ -2,9 +2,9 @@ import { mongoose, db, ObjectId, task } from "@helpers/essentials";
 
 /* variant block */
 type VariantBlock = {
-  heroBlockKey: string;
+  key: string;
   mainImage: string;
-  title: string;
+  name: string;
   paragraph: string;
 }
 
