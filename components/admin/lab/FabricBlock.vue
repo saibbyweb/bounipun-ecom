@@ -7,12 +7,12 @@
       class="delete"
       src="/icons/dark/remove-cart-item.png"
     />
-
+    <!-- common details -->
     <div class="flex">
       <div class="flex col" style="width: 100%">
         <!-- name -->
         <InputBox label="Fabric Name" v-model="localFabric.name" />
-        <!-- image 1 -->
+        <!-- main image -->
         <UploadImageV2
           :multipleUpload="false"
           label="Fabric Main Image"
@@ -27,6 +27,67 @@
         :label="`Paragraph for [${localFabric.name}]`"
         v-model="localFabric.paragraph"
       />
+    </div>
+
+    <!-- subImage 1 and 2 -->
+    <div
+      class="flex"
+      style="margin: 20px 0; 
+      border-top: 2px dotted #efefef;
+      border-bottom: 2px dotted #efefef; 
+      padding: 20px 5px; 
+      border-radius: 0px;"
+    >
+      <UploadImageV2
+        :multipleUpload="false"
+        label="Sub Image - 1"
+        v-model="localFabric.subImage1"
+      />
+
+      <UploadImageV2
+        :multipleUpload="false"
+        label="Sub Image - 2"
+        v-model="localFabric.subImage2"
+      />
+    </div>
+
+    <!-- sub headings and sub paragraphs -->
+    <div class="flex">
+      <div class="flex col" style="flex-grow: 1">
+        <!-- sub heading 1 -->
+        <InputBox label="Sub Heading - 1" v-model="localFabric.subHeading1" />
+        <!-- sub paragraph 1 -->
+        <TextBox
+          long
+          slim
+          label="Sub Paragraph - 1"
+          v-model="localFabric.subParagraph1"
+        />
+      </div>
+
+      <div class="flex col" style="flex-grow: 1">
+        <!-- sub heading 2 -->
+        <InputBox label="Sub Heading - 2" v-model="localFabric.subHeading2" />
+        <!-- sub paragraph 2 -->
+        <TextBox
+          long
+          slim
+          label="Sub Paragraph - 2"
+          v-model="localFabric.subParagraph2"
+        />
+      </div>
+
+      <div class="flex col" style="flex-grow: 1">
+        <!-- sub heading 3 -->
+        <InputBox label="Sub Heading - 3" v-model="localFabric.subHeading3" />
+        <!-- sub paragraph 3 -->
+        <TextBox
+          long
+          slim
+          label="Sub Paragraph - 3"
+          v-model="localFabric.subParagraph3"
+        />
+      </div>
     </div>
   </div>
   <!-- </Accordion> -->
@@ -87,6 +148,7 @@ export default {
 .fabric-block {
   padding: 7px 4px;
   margin-top: 20px;
+  border-radius: 4px;
   border: 2px dotted #efefef;
   position: relative;
 

@@ -72,8 +72,8 @@
         class="not-uploaded"
         style="margin-left: 10px"
       >
-        <img src="/icons/light/upload-cloud.svg" />
-        <span> No Image(s) uploaded yet </span>
+        <img style="width: 2vw;" src="/icons/light/upload-cloud.svg" />
+        <span style="font-size: 10px;"> No Image(s) uploaded yet </span>
       </div>
     </div>
   </div>
