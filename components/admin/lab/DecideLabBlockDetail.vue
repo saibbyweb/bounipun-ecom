@@ -9,6 +9,7 @@
       :blockDetail="blockDetail" 
       :blockKey="blockKey" 
       :remover="remover" 
+      :colorCategories="colorCategories"
       :index="index" />
 
   </div>
@@ -24,7 +25,8 @@ export default {
     alias: String,
     blockDetails: Array,
     blockKey: String,
-    remover: Function
+    remover: Function,
+    colorCategories: Array
   },
   data() {
     return {

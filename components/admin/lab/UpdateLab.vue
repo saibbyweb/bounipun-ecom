@@ -115,6 +115,7 @@
           :remover="removeDetailBlock"
           :blockKey="heroBlock.key"
           :blockDetails="doc.heroBlockDetails[heroBlock.key]"
+          :colorCategories="colorCategories"
         />
         <br />
         <!-- add new hero block wrapper -->
@@ -200,7 +201,7 @@ const baseColorBlock = (length) => {
     paragraph: "",
     key,
     colorImage: "",
-    category: ""
+    category: "",
   };
 };
 
@@ -231,10 +232,14 @@ export default {
     return {
       editMode: false,
       doc: baseDoc(),
+      colorCategories: [],
       dragEnabled: false,
       loading: false,
       updated: false,
     };
+  },
+  mounted() {
+    this.fetchColorCategories();
   },
   methods: {
     setAlias(value, heroBlock) {
@@ -243,20 +248,14 @@ export default {
     newKey() {
       return uuidv4();
     },
-    imageListUpdated(list, property, key) {
-      switch (property) {
-        case "heroImage":
-        case "heroImageMobile":
-          this.doc[property] = list.length > 0 ? list[0].path : "";
-          break;
-        case "heroBlockDetails":
-          this.doc.heroBlockDetails[key].image =
-            list.length > 0 ? list[0].path : "";
-          break;
-        case "heroBlockDetails2":
-          this.doc.heroBlockDetails[key].image2 =
-            list.length > 0 ? list[0].path : "";
-      }
+    async fetchColorCategories() {
+      const result = await this.$fetchCollection("color_categories");
+      this.colorCategories = result.docs.map(({ _id, name }) => {
+        return {
+          name,
+          value: name,
+        };
+      });
     },
     setValues({ payload, index }, blockDetails) {
       blockDetails[index] = payload;
@@ -308,7 +307,7 @@ export default {
           break;
       }
 
-       refreshParentAccordion();
+      refreshParentAccordion();
 
       this.$forceUpdate();
     },

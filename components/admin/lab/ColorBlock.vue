@@ -1,7 +1,7 @@
 <template>
   <!-- <Accordion :heading="`Color - ${index+1} `"> -->
   <div class="color-block flex col">
-    <p class="title">Varaint {{ index + 1 }}</p>
+    <p class="title">Color {{ index + 1 }}</p>
     <img
       @click="remover(blockKey, index)"
       class="delete"
@@ -14,7 +14,9 @@
           <!-- name -->
           <InputBox label="Color Name" v-model="localColor.name" />
           <!-- category -->
-          <InputBox label="Color Category" v-model="localColor.category" />
+          <!-- <InputBox label="Color Category" v-model="localColor.category" /> -->
+          <!-- category -->
+          <SelectBox :options="colorCategories" v-model="localColor.category" label="Category" />
         </div>
 
         <div class="flex">
@@ -53,6 +55,7 @@ export default {
     blockDetail: Object,
     index: Number,
     remover: Function,
+    colorCategories: Array
   },
   watch: {
     localColor: {
