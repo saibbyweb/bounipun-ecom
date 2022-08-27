@@ -16,7 +16,7 @@
         <UploadImageV2
           :multipleUpload="false"
           label="Fabric Main Image"
-          v-model="localFabric.main"
+          v-model="localFabric.mainImage"
         />
       </div>
 
