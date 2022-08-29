@@ -120,8 +120,6 @@ router.post("/getDocument", async (req, res) => {
           "name code baseColor image"
         );
 
-        /* */
-
         /* update color name for color list */
         document.colors.forEach((color) => {
           const bounipunColor = color._id !== null;

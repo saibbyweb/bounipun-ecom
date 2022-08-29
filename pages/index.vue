@@ -230,7 +230,7 @@ export default {
         return;
       }
       this.layout = layout.doc;
-      console.log(this.layout);
+      // console.log(this.layout);
       this.setSlideshow(this.layout.mainSlideshow.slides);
       const totalCollectionBlocks = this.layout.collectionBlocks.length;
       const totalProductListBlocks = this.layout.productListBlocks.length;

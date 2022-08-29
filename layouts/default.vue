@@ -65,6 +65,7 @@ export default {
         "/login",
         "/registration",
         "/faq",
+        "/lab",
         "/contact-us",
         "/terms",
         "/about-us",
