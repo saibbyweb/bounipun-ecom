@@ -10,14 +10,15 @@
         <p class="tagline">{{ layout.tagline }}</p>
 
         <!-- hero blocks -->
-        <div class="hero-blocks">
+        <div class="hero-blocks flex">
           <div
-            class="hero-block"
+            class="hero-block flex col center"
             v-for="(heroBlock, index) in layout.heroBlocks"
             :key="index"
           >
-            <h3>{{ heroBlock.name }}</h3>
-            <p>{{ heroBlock.paragraph }}</p>
+            <h3 class="name">{{ heroBlock.name }}</h3>
+            <p class="para">{{ heroBlock.paragraph }}</p>
+            <button class="action outline"> Explore </button>
           </div>
         </div>
       </div>
@@ -68,16 +69,60 @@ export default {
 
   .content {
     background-color: rgba(255, 255, 255, 0.881);
-    height: 65vh;
+    height: 70vh;
     width: 88%;
+    gap: 5px;
 
     .title {
       font-family: $font_1_bold;
-      font-size: 42px;
+      font-size: 3.8vw;
       letter-spacing: 1px;
+      line-height: 4.9vw;
+     
     }
     .tagline {
-      font-family: $font_2;
+      font-family: $font_3;
+       font-size: 1.45vw;
+       color: rgb(42, 42, 42);
+    }
+    .hero-blocks {
+      width: 90%;
+      /* background-color: brown; */
+      .hero-block {
+          gap: 15px;
+        margin-top: 4%;
+        padding: 0% 4%;
+        &:nth-child(1) {
+          border-right: 1px solid rgb(189, 189, 192);
+        }
+        &:nth-child(3) {
+          border-left: 1px solid rgb(208, 208, 210);
+        }
+
+        .name {
+          text-align: center;
+          text-transform: uppercase;
+          font-family: $font_1;
+          letter-spacing: 1px;
+          font-size: 1.8vw;
+        }
+        .para {
+          font-size:1.25vw;
+          color: rgb(42, 42, 42);
+          font-family: $font_3;
+          line-height: 1.7vw;
+          text-align: center;
+        }
+        .outline {
+            margin-top: 15px;
+            font-size: 11px;
+            padding: 1% 7%;
+            background-color: white;
+            border: 1.5px solid gray;
+            color: black;
+            font-family: $font_1;
+        }
+      }
     }
   }
 }
