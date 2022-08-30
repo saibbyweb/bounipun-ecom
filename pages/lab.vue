@@ -2,7 +2,7 @@
   <div class="page -wh">
     <!-- hero -->
     <div v-if="layoutFetched" class="hero flex center" :style="setHeroImage()">
-      <!-- content -->
+      <!-- hero content -->
       <div class="content flex center col">
         <!-- title -->
         <h1 class="title">{{ layout.title }}</h1>
@@ -18,12 +18,23 @@
           >
             <h3 class="name">{{ heroBlock.name }}</h3>
             <p class="para">{{ heroBlock.paragraph }}</p>
-            <button class="action outline"> Explore </button>
+            <button class="action outline">Explore</button>
           </div>
         </div>
       </div>
-      <!-- content ** ends here -->
+      <!-- hero content ** ends here -->
     </div>
+
+    <!-- hero block details -->
+    <div
+      class="hero-block-details"
+      v-for="(heroBlock, index) in layout.heroBlocks"
+      :key="index"
+    >
+        <DecideLabBlockLayout :alias="heroBlock.alias" :blockDetails="layout.heroBlockDetails[heroBlock.key]" />
+    </div>
+    <!-- colors -->
+    <!-- fabrics -->
   </div>
 </template>
 
@@ -78,18 +89,17 @@ export default {
       font-size: 3.8vw;
       letter-spacing: 1px;
       line-height: 4.9vw;
-     
     }
     .tagline {
       font-family: $font_3;
-       font-size: 1.45vw;
-       color: rgb(42, 42, 42);
+      font-size: 1.45vw;
+      color: rgb(42, 42, 42);
     }
     .hero-blocks {
       width: 90%;
       /* background-color: brown; */
       .hero-block {
-          gap: 15px;
+        gap: 15px;
         margin-top: 4%;
         padding: 0% 4%;
         &:nth-child(1) {
@@ -107,20 +117,20 @@ export default {
           font-size: 1.8vw;
         }
         .para {
-          font-size:1.25vw;
+          font-size: 1.25vw;
           color: rgb(42, 42, 42);
           font-family: $font_3;
           line-height: 1.7vw;
           text-align: center;
         }
         .outline {
-            margin-top: 15px;
-            font-size: 11px;
-            padding: 1% 7%;
-            background-color: white;
-            border: 1.5px solid gray;
-            color: black;
-            font-family: $font_1;
+          margin-top: 15px;
+          font-size: 11px;
+          padding: 1% 7%;
+          background-color: white;
+          border: 1.5px solid gray;
+          color: black;
+          font-family: $font_1;
         }
       }
     }
