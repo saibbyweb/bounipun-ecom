@@ -1,14 +1,12 @@
 <template>
   <div class="decide-lab-block-layout">
-    <LabBlockHeading
-      :name="name"
-      :paragraph="paragraph"
-    />
+    <LabBlockHeading :name="name" :paragraph="paragraph" />
     <component
       v-for="(blockDetail, index) in blockDetails"
       :key="blockDetail.key"
       :is="blocks[alias]"
       :blockDetail="blockDetail"
+      :setBg="setBg"
       :index="index"
     />
   </div>
@@ -34,6 +32,13 @@ export default {
         fabric: FabricBlockLayout,
       },
     };
+  },
+  methods: {
+    setBg(image) {
+      return {
+        backgroundImage: `url(${this.$getOriginalPath(image)})`,
+      };
+    },
   },
 };
 </script>

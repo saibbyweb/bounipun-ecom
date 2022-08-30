@@ -1,7 +1,7 @@
 <template>
-  <div class="variant-block flex center" :class="{reverse: index%2!==0}">
+  <div class="variant-block flex center" :class="{ reverse: index % 2 !== 0 }">
     <!-- main image -->
-    <div class="main-image" :style="setMainImage()"></div>
+    <div class="main-image" :style="setBg(blockDetail.mainImage)"></div>
     <!-- name & paragraph -->
     <div class="name-and-para flex center col">
       <h2 class="name">{{ blockDetail.name }}</h2>
@@ -14,22 +14,15 @@
 <script>
 export default {
   props: {
-      index: Number,
+    index: Number,
     blockDetail: {
       name: String,
       mainImage: String,
       paragraph: String,
     },
+    setBg: Function,
   },
-  methods: {
-    setMainImage() {
-      return {
-        backgroundImage: `url(${this.$getOriginalPath(
-          this.blockDetail.mainImage
-        )})`,
-      };
-    },
-  },
+  methods: {},
 };
 </script>
 
@@ -40,7 +33,7 @@ export default {
   gap: 5%;
 
   &.reverse {
-      flex-direction: row-reverse;
+    flex-direction: row-reverse;
   }
   .main-image {
     width: 35%;
@@ -56,22 +49,23 @@ export default {
     width: 40%;
     gap: 15px;
     .name {
-        text-align: center;
-        text-transform: uppercase;
-        font-family: $font_1;
-        font-size: 3vw;
+      text-align: center;
+      text-transform: uppercase;
+      font-family: $font_1;
+      font-size: 3vw;
+      line-height: 2.4vw;
     }
 
     .hr {
-        height:2px;
-        width: 8%;
-        background-color: rgb(35, 35, 35);
+      height: 2px;
+      width: 8%;
+      background-color: rgb(35, 35, 35);
     }
 
     .para {
-        font-family: $font_3;
-        text-align: center;
-         font-size: 1.4vw;
+      font-family: $font_3;
+      text-align: center;
+      font-size: 1.4vw;
     }
   }
 }
