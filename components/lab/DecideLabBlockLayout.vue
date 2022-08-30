@@ -42,3 +42,47 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.lab-block {
+  width: 100%;
+  margin: 50px 0;
+  gap: 5%;
+
+  &.reverse {
+    flex-direction: row-reverse;
+  }
+  .main-image {
+    width: 35%;
+    aspect-ratio: 1;
+    padding: 2%;
+    /* height: 70vh; */
+    background-size: cover;
+    background-repeat: no-repeat;
+  
+  }
+  .name-and-para {
+    width: 40%;
+    gap: 15px;
+    .name {
+      text-align: center;
+      text-transform: uppercase;
+      font-family: $font_1;
+      font-size: 3vw;
+      line-height: 2.4vw;
+    }
+
+    .hr {
+      height: 2px;
+      width: 8%;
+      background-color: rgb(35, 35, 35);
+    }
+
+    .para {
+      font-family: $font_3;
+      text-align: center;
+      font-size: 1.4vw;
+    }
+  }
+}
+</style>

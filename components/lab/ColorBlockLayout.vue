@@ -1,11 +1,9 @@
 <template>
-  <div class="color-block flex center" :class="{reverse: index%2!==0}">
+  <div class="lab-block flex center" :class="{ reverse: index % 2 !== 0 }">
     <!-- main image -->
     <div class="main-image" :style="setBg(blockDetail.mainImage)">
-
-        <div class="color-image"></div>
+      <div class="color-image" :style="setBg(blockDetail.colorImage)"></div>
     </div>
-
 
     <!-- name & paragraph -->
     <div class="name-and-para flex center col">
@@ -24,6 +22,8 @@ export default {
       name: String,
       mainImage: String,
       paragraph: String,
+      colorImage: String,
+      category: String,
     },
     setBg: Function,
   },
@@ -32,46 +32,26 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.color-block {
-  width: 100%;
-  margin: 50px 0;
-  gap: 5%;
-
-  &.reverse {
-    flex-direction: row-reverse;
-  }
+.lab-block {
+      gap: 15%;
   .main-image {
     width: 30%;
     aspect-ratio: 1/1.2;
-    padding: 2%;
-    /* height: 70vh; */
-    background-size: cover;
-    background-repeat: no-repeat;
-    border: 12px solid rgb(255, 255, 255);
-    box-shadow: 0 0 0 1.5px rgb(71, 71, 71);
+    position: relative;
+
+    .color-image {
+        position: absolute;
+        bottom: -15%;
+        right: -7%;
+        width: 13vw;
+        height: 15vw;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
   }
+
   .name-and-para {
-    width: 30%;
-    gap: 15px;
-    .name {
-      text-align: center;
-      text-transform: uppercase;
-      font-family: $font_1;
-      font-size: 3vw;
-      line-height: 2.4vw;
-    }
-
-    .hr {
-      height: 2px;
-      width: 8%;
-      background-color: rgb(35, 35, 35);
-    }
-
-    .para {
-      font-family: $font_3;
-      text-align: center;
-      font-size: 1.4vw;
-    }
+    width: 25%;
   }
 }
 </style>
