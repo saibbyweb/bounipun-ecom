@@ -1,5 +1,9 @@
 <template>
   <div class="decide-lab-block-layout">
+    <LabBlockHeading
+      :name="name"
+      :paragraph="paragraph"
+    />
     <component
       v-for="(blockDetail, index) in blockDetails"
       :key="blockDetail.key"
@@ -7,7 +11,6 @@
       :blockDetail="blockDetail"
       :index="index"
     />
-
   </div>
 </template>
 
@@ -18,6 +21,8 @@ import FabricBlockLayout from "./FabricBlockLayout.vue";
 
 export default {
   props: {
+    name: String,
+    paragraph: String,
     alias: String,
     blockDetails: Array,
   },

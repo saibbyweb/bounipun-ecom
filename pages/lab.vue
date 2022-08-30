@@ -31,7 +31,7 @@
       v-for="(heroBlock, index) in layout.heroBlocks"
       :key="index"
     >
-        <DecideLabBlockLayout :alias="heroBlock.alias" :blockDetails="layout.heroBlockDetails[heroBlock.key]" />
+        <DecideLabBlockLayout :name="heroBlock.name" :paragraph="heroBlock.paragraph" :alias="heroBlock.alias" :blockDetails="layout.heroBlockDetails[heroBlock.key]" />
     </div>
     <!-- colors -->
     <!-- fabrics -->
