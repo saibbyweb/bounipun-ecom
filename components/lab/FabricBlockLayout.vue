@@ -11,7 +11,10 @@
     </div>
 
     <!-- sub text and images -->
-    <div class="flex sub-texts-and-images">
+    <div
+      class="flex sub-texts-and-images"
+      :class="{ reverse: index % 2 !== 0 }"
+    >
       <!-- sub texts -->
       <div class="sub-texts flex col">
         <div class="sub-text">
@@ -63,7 +66,7 @@ export default {
 <style lang="scss" scoped>
 .lab-block {
   gap: 10%;
-  padding-bottom: 120px;
+  padding-bottom: 40px;
   .main-image {
     width: 34%;
     aspect-ratio: 1;
@@ -75,6 +78,7 @@ export default {
 
     .name {
       line-height: 2.9vw;
+      font-size: 2.7vw;
     }
 
     .hr {
@@ -87,6 +91,7 @@ export default {
   .sub-texts-and-images {
     width: 100%;
     position: relative;
+
     .sub-texts {
       width: 40%;
       margin-top: 40px;
@@ -121,6 +126,22 @@ export default {
         aspect-ratio: 1;
         background-size: cover;
         background-repeat: no-repeat;
+      }
+    }
+
+    &.reverse {
+      flex-direction: row-reverse;
+
+      .sub-texts {
+        margin-left: 0;
+        /* margin-top: 11%; */
+        margin-right: 5.5%;
+      }
+
+      .sub-images {
+        left: 0;
+        /* top: 0%; */
+        right: auto;
       }
     }
   }
