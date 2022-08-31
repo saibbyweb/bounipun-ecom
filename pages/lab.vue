@@ -180,12 +180,11 @@ export default {
           }
           &:nth-child(2) {
             border-left: none;
-               border-bottom: 1px solid rgb(189, 189, 192);
+            border-bottom: 1px solid rgb(189, 189, 192);
           }
 
-             &:nth-child(3) {
+          &:nth-child(3) {
             border-left: none;
-           
           }
           .name {
             letter-spacing: 1px;
@@ -199,8 +198,8 @@ export default {
             margin-top: 15px;
             font-size: 2.5vw;
             width: fit-content;
-          border: 1px solid gray;
-          color: gray;
+            border: 1px solid gray;
+            color: gray;
           }
         }
       }
