@@ -16,7 +16,7 @@ export default {
 
 <style lang="scss" scoped>
 .lab-block-heading {
-  margin-top: 10%;
+  /* margin-top: 10%; */
   background-color: #615555;
   color: white;
   padding: 4%;
@@ -36,8 +36,8 @@ export default {
   }
 
   @media (max-width: 768px) {
-      margin-top: 0%;
-      padding: 6%;
+    margin-top: 0%;
+    padding: 6%;
     .name {
       font-size: 5.5vw;
     }
@@ -45,7 +45,7 @@ export default {
     .para {
       font-size: 3vw;
       line-height: 3.8vw;
-          width: 90%;
+      width: 90%;
     }
   }
 }
