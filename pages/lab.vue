@@ -31,7 +31,12 @@
       v-for="(heroBlock, index) in layout.heroBlocks"
       :key="index"
     >
-        <DecideLabBlockLayout :name="heroBlock.name" :paragraph="heroBlock.paragraph" :alias="heroBlock.alias" :blockDetails="layout.heroBlockDetails[heroBlock.key]" />
+      <DecideLabBlockLayout
+        :name="heroBlock.name"
+        :paragraph="heroBlock.paragraph"
+        :alias="heroBlock.alias"
+        :blockDetails="layout.heroBlockDetails[heroBlock.key]"
+      />
     </div>
     <!-- colors -->
     <!-- fabrics -->
@@ -49,6 +54,11 @@ export default {
   mounted() {
     this.fetchLabLayout();
   },
+  computed: {
+    isMobile() {
+      return this.windowWidth < 768;
+    },
+  },
   methods: {
     async fetchLabLayout() {
       const layout = await this.$fetchData("lab", {
@@ -62,8 +72,12 @@ export default {
       this.layoutFetched = true;
     },
     setHeroImage() {
+      const heroImage = this.isMobile
+        ? this.layout.heroImageMobile
+        : this.layout.heroImage;
+
       return {
-        backgroundImage: `url(${this.$getOriginalPath(this.layout.heroImage)})`,
+        backgroundImage: `url(${this.$getOriginalPath(heroImage)})`,
       };
     },
   },
@@ -97,6 +111,7 @@ export default {
     }
     .hero-blocks {
       width: 90%;
+
       /* background-color: brown; */
       .hero-block {
         gap: 15px;
@@ -131,6 +146,62 @@ export default {
           border: 1.5px solid gray;
           color: black;
           font-family: $font_1;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    min-height: fit-content;
+    .content {
+      height: fit-content;
+      margin: 15vw 8vw;
+      padding: 6% 10%;
+
+      .title {
+        font-size: 7.8vw;
+        line-height: 7.9vw;
+      }
+      .tagline {
+        font-size: 3.45vw;
+      }
+
+      .hero-blocks {
+        flex-wrap: wrap;
+        width: 90%;
+        margin-top: 10px;
+
+        .hero-block {
+          padding: 14% 0%;
+          &:nth-child(1) {
+            border-right: none;
+            border-bottom: 1px solid rgb(189, 189, 192);
+            /* border-bottom: 1px solid rgb(189, 189, 192); */
+          }
+          &:nth-child(2) {
+            border-left: none;
+               border-bottom: 1px solid rgb(189, 189, 192);
+          }
+
+             &:nth-child(3) {
+            border-left: none;
+           
+          }
+          .name {
+            letter-spacing: 1px;
+            font-size: 4.8vw;
+          }
+          .para {
+            font-size: 3.65vw;
+            line-height: 3.8vw;
+          }
+          .outline {
+            margin-top: 15px;
+            font-size: 2.5vw;
+            width: fit-content;
+          border: 1px solid gray;
+          color: gray;
+          }
         }
       }
     }
