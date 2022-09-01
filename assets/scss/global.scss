@@ -125,6 +125,10 @@ $pageMarginTop: 20vh;
   }
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0 !important;
   padding: 0;

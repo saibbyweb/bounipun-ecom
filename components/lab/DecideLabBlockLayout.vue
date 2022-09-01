@@ -1,5 +1,5 @@
 <template>
-  <div class="decide-lab-block-layout">
+  <div :id="alias" class="decide-lab-block-layout">
     <LabBlockHeading :name="name" :paragraph="paragraph" />
     <!-- color categories -->
     <LabColorBoxes v-if="alias === 'color'" :categories="colorCategories" />
@@ -50,8 +50,10 @@ export default {
 <style lang="scss">
 .decide-lab-block-layout {
   padding-bottom: 0px;
+   scroll-margin-top: 83px;
 }
 .lab-block {
+   
   width: 100%;
   margin: 50px 0;
   gap: 5%;

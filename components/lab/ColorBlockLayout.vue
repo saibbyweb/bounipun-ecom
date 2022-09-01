@@ -1,7 +1,5 @@
 <template>
   <div class="lab-block flex center" :class="{ reverse: index % 2 !== 0 }">
-
-
     <!-- main image -->
     <div class="main-image" :style="setBg(blockDetail.mainImage)">
       <div class="color-image" :style="setBg(blockDetail.colorImage)"></div>
@@ -36,6 +34,9 @@ export default {
 
 <style lang="scss" scoped>
 .lab-block {
+  &:last-child {
+    padding-bottom: 80px;
+  }
   gap: 15%;
   .main-image {
     width: 30%;
@@ -88,7 +89,7 @@ export default {
       width: 70%;
 
       .category {
-        font-size: 2vw;
+        font-size: 3vw;
       }
     }
   }

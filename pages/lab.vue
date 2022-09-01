@@ -18,7 +18,9 @@
           >
             <h3 class="name">{{ heroBlock.name }}</h3>
             <p class="para">{{ heroBlock.paragraph }}</p>
-            <button class="action outline">Explore</button>
+            <a :href="`#${heroBlock.alias}`">
+              <button class="action outline">Explore</button>
+            </a>
           </div>
         </div>
       </div>
@@ -31,7 +33,6 @@
       v-for="(heroBlock, index) in layout.heroBlocks"
       :key="index"
     >
- 
       <DecideLabBlockLayout
         :name="heroBlock.name"
         :paragraph="heroBlock.paragraph"
@@ -98,6 +99,7 @@ export default {
 
 <style lang="scss" scoped>
 .page {
+ 
 }
 .hero {
   min-height: 80vh;
