@@ -43,11 +43,18 @@ export default {
     flex-direction: column;
 
     .main-image {
+      margin-left: 10%;
       width: 62%;
     }
 
     .name-and-para {
       width: 70%;
+    }
+
+    &.reverse {
+        .main-image {
+            margin-right: 10%;
+        }
     }
   }
 }

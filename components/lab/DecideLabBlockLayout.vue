@@ -44,6 +44,9 @@ export default {
 </script>
 
 <style lang="scss">
+.decide-lab-block-layout {
+    padding-bottom: 60px;
+}
 .lab-block {
   width: 100%;
   margin: 50px 0;
@@ -95,9 +98,6 @@ export default {
     align-items: flex-start;
     justify-content: flex-start;
 
-    .main-image {
-      margin-left: 10%;
-    }
     .name-and-para {
       margin-top: 30px;
       align-items: flex-start;
@@ -124,10 +124,7 @@ export default {
     &.reverse {
       flex-direction: column;
       align-items: flex-end;
-      .main-image {
-        margin-right: 10%;
-      }
-
+   
       .name-and-para {
         margin-right: 15%;
          align-items: flex-end;
