@@ -46,7 +46,7 @@ export default {
 
 <style lang="scss">
 .decide-lab-block-layout {
-  padding-bottom: 60px;
+  padding-bottom: 0px;
 }
 .lab-block {
   width: 100%;

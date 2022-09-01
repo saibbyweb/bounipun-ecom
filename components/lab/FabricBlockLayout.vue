@@ -32,7 +32,7 @@
       </div>
 
       <!-- sub images -->
-      <div class="sub-images flex center col">
+      <div class="sub-images flex center">
         <div class="sub-image" :style="setBg(blockDetail.subImage1)"></div>
         <div class="sub-image" :style="setBg(blockDetail.subImage2)"></div>
       </div>
@@ -116,6 +116,7 @@ export default {
     }
 
     .sub-images {
+      flex-direction: column;
       width: 50%;
       gap: 30px;
       position: absolute;
@@ -169,7 +170,34 @@ export default {
     }
 
     .sub-texts-and-images {
-      display: none;
+      flex-direction: column-reverse;
+
+      .sub-texts {
+        width: 80%;
+        padding-left: 4%;
+        margin-left: 10%;
+
+        .sub-text {
+          h5 {
+            font-size: 3vw;
+          }
+
+          p {
+            font-size: 2.9vw;
+          }
+        }
+      }
+
+      .sub-images {
+        margin-top: 7%;
+        width: 90%;
+        position: relative;
+        flex-direction: row;
+
+        .sub-image {
+          width: 30vw;
+        }
+      }
     }
 
     &.reverse {
@@ -184,7 +212,21 @@ export default {
         align-items: flex-end;
 
         .hr {
-            align-self: flex-end;
+          align-self: flex-end;
+        }
+      }
+
+      .sub-texts-and-images {
+        flex-direction: column-reverse;
+        align-items: flex-end;
+        .sub-texts {
+          margin-left: 0;
+          margin-right: 10%;
+          padding-left: 2%;
+          padding-right: 4%;
+          border-left: none;
+          border-right: 1px solid rgba(128, 128, 128, 0.322);
+          text-align: right;
         }
       }
     }
