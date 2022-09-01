@@ -5,8 +5,8 @@
       {{ editMode ? "Update" : "Add New" }} Bounipun Lab Layout
     </h2>
 
-        <!-- preview link -->
-    <div class="flex col center" style="align-items:baseline; width:100%;" v-if="editMode">
+      <!-- preview link -->
+    <div class="flex col center" style="align-items:baseline; width:100%;">
       <div class="center" style="width:100%;">
       <a href="/lab" target="_blank">
         <span
@@ -24,7 +24,6 @@
       </a>
       </div>
     </div>
-
     <div class="flex">
       <!-- FAQ ID -->
       <InputBox

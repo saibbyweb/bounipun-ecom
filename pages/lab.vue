@@ -99,8 +99,8 @@ export default {
 
 <style lang="scss" scoped>
 .page {
- 
 }
+
 .hero {
   min-height: 80vh;
   background-size: cover;
@@ -119,7 +119,7 @@ export default {
       line-height: 4.9vw;
     }
     .tagline {
-        text-align: center;
+      text-align: center;
       font-family: $font_3;
       font-size: 1.45vw;
       color: rgb(42, 42, 42);
@@ -171,7 +171,7 @@ export default {
     .content {
       height: fit-content;
       margin: 15vw 8vw;
-      padding: 6% 10%;
+      padding: 6% 8%;
 
       .title {
         font-size: 7.8vw;
@@ -191,7 +191,6 @@ export default {
           &:nth-child(1) {
             border-right: none;
             border-bottom: 1px solid rgb(189, 189, 192);
-            /* border-bottom: 1px solid rgb(189, 189, 192); */
           }
           &:nth-child(2) {
             border-left: none;
@@ -206,12 +205,12 @@ export default {
             font-size: 4.8vw;
           }
           .para {
-            font-size: 3.65vw;
-            line-height: 3.8vw;
+            font-size: 3.8vw;
+            line-height: 3.9vw;
           }
           .outline {
             margin-top: 15px;
-            font-size: 2.5vw;
+            font-size: 3vw;
             width: fit-content;
             border: 1px solid gray;
             color: gray;
