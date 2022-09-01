@@ -116,7 +116,7 @@ export default {
     /* clear file selection on visibility toggle */
     "$parent.$parent.showForm": {
       handler(newValue) {
-        if (!newValue) this.clearFileSelection();
+        // if (!newValue) this.clearFileSelection();
       },
     },
   },

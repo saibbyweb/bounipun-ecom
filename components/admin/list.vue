@@ -69,7 +69,7 @@
               :class="{ selected: isSelected(index), dragEnabled }"
               class="item shadow"
               v-for="(item, index) in localList"
-              :key="item._id + index"
+              :key="item._id + Math.random(index)"
               :style="adjustItem()"
             >
               <!-- selector -->

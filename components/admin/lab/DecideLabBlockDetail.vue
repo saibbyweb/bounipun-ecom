@@ -1,13 +1,13 @@
 <template>
   <div class="decide-block">
-    <Draggable
+    <!-- <Draggable
       v-model="localBlockDetails"
       ghost-class="ghost"
       :sort="true"
       @end="onDragEnd"
       class="items"
     >
-      <transition-group type="transition" name="flip-list">
+      <transition-group type="transition" name="flip-list"> -->
         <component
           v-for="(blockDetail, index) in blockDetails"
           @input="$emit('input', { payload: $event, index })"
@@ -19,8 +19,8 @@
           :colorCategories="colorCategories"
           :index="index"
         />
-      </transition-group>
-    </Draggable>
+      <!-- </transition-group>
+    </Draggable> -->
   </div>
 </template>
 

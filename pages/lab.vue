@@ -119,6 +119,7 @@ export default {
       line-height: 4.9vw;
     }
     .tagline {
+        text-align: center;
       font-family: $font_3;
       font-size: 1.45vw;
       color: rgb(42, 42, 42);

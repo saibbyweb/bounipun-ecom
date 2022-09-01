@@ -5,6 +5,26 @@
       {{ editMode ? "Update" : "Add New" }} Bounipun Lab Layout
     </h2>
 
+        <!-- preview link -->
+    <div class="flex col center" style="align-items:baseline; width:100%;" v-if="editMode">
+      <div class="center" style="width:100%;">
+      <a href="/lab" target="_blank">
+        <span
+          style="
+            background: #333;
+            text-align: center;
+            color: white;
+            font-size: 12px;
+            padding: 2px 4px;
+            border-radius: 2px;
+          "
+        >
+          Preview Product ➚
+        </span>
+      </a>
+      </div>
+    </div>
+
     <div class="flex">
       <!-- FAQ ID -->
       <InputBox
@@ -21,7 +41,8 @@
     </div>
     <!-- Page tagline -->
     <InputBox label="Page Tagline" v-model="doc.tagline" />
-
+    
+    <!-- hero images -->
     <div class="flex section">
       <!-- set hero image (desktop) -->
       <UploadImageV2
@@ -45,13 +66,13 @@
       <br />
 
       <!-- draggable list -->
-      <Draggable
+      <!-- <Draggable
         v-model="doc.heroBlocks"
         ghost-class="ghost"
         :sort="true"
         class="items"
       >
-        <transition-group type="transition" name="flip-list">
+        <transition-group type="transition" name="flip-list"> -->
           <Accordion
             v-for="(heroBlock, index) in doc.heroBlocks"
             :key="heroBlock.key"
@@ -79,7 +100,7 @@
                 />
 
                 <!-- visibility toggle -->
-                <Toggle v-model="heroBlock.visible" label="Visibility" />
+                <!-- <Toggle v-model="heroBlock.visible" label="Visibility" /> -->
               </div>
 
               <!-- hero block paragraph -->
@@ -90,8 +111,8 @@
               />
             </div>
           </Accordion>
-        </transition-group>
-      </Draggable>
+        <!-- </transition-group>
+      </Draggable> -->
 
       <!-- add new hero block wrapper -->
       <div class="flex center">
@@ -379,8 +400,6 @@ export default {
     },
     resetForm() {
       this.populateForm(baseDoc());
-      // this.$refs.imageUploader_heroImage.clearFileSelection();
-      // this.$refs.imageUploader_heroImageMobile.clearFileSelection();
       this.editMode = false;
     },
   },
