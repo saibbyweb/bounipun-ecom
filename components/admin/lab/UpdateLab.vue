@@ -277,8 +277,8 @@ export default {
         case "heroBlocks":
           const key = uuidv4();
           this.doc.heroBlocks.push({
-            name: "color",
-            alias: "color",
+            name: "",
+            alias: "",
             paragraph: "",
             status: false,
             key,

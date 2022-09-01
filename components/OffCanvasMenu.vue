@@ -85,7 +85,8 @@
           Gift Cards
         </button> -->
       </div>
-
+  <button class="clear link" @click="navigate('/lab')">Bounipun Lab</button>
+    <button class="clear link" @click="navigate('/our-story')">Our Story</button>
       <!-- links -->
       <button class="clear link" @click="navigate('/faq')">FAQs</button>
       <!-- <button class="clear link">Help</button> -->

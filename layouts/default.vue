@@ -53,7 +53,6 @@
 
 <script>
 export default {
-
   computed: {
     dontShowPopups() {
       const allowedRoutes = [
