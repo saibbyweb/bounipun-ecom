@@ -1,6 +1,9 @@
 <template>
   <div class="decide-lab-block-layout">
     <LabBlockHeading :name="name" :paragraph="paragraph" />
+    <!-- color categories -->
+    <LabColorBoxes v-if="alias === 'color'" :categories="colorCategories" />
+
     <component
       v-for="(blockDetail, index) in blockDetails"
       :key="blockDetail.key"
@@ -17,13 +20,13 @@ import FabricBlockLayout from "./FabricBlockLayout.vue";
 import ColorBlockLayout from "./ColorBlockLayout.vue";
 import VariantBlockLayout from "./VariantBlockLayout.vue";
 
-
 export default {
   props: {
     name: String,
     paragraph: String,
     alias: String,
     blockDetails: Array,
+    colorCategories: Array,
   },
   data() {
     return {

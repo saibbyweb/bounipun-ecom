@@ -1,5 +1,7 @@
 <template>
   <div class="lab-block flex center" :class="{ reverse: index % 2 !== 0 }">
+
+
     <!-- main image -->
     <div class="main-image" :style="setBg(blockDetail.mainImage)">
       <div class="color-image" :style="setBg(blockDetail.colorImage)"></div>
@@ -89,7 +91,6 @@ export default {
         font-size: 2vw;
       }
     }
-
   }
 }
 </style>

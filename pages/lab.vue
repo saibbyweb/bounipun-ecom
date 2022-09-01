@@ -31,11 +31,13 @@
       v-for="(heroBlock, index) in layout.heroBlocks"
       :key="index"
     >
+ 
       <DecideLabBlockLayout
         :name="heroBlock.name"
         :paragraph="heroBlock.paragraph"
         :alias="heroBlock.alias"
         :blockDetails="layout.heroBlockDetails[heroBlock.key]"
+        :colorCategories="colorCategories"
       />
     </div>
     <!-- colors -->
@@ -48,11 +50,14 @@ export default {
   data() {
     return {
       layout: {},
+      colorCategories: [],
+      colorCategoriesFetched: false,
       layoutFetched: false,
     };
   },
   mounted() {
     this.fetchLabLayout();
+    this.fetchColorCategories();
   },
   computed: {
     isMobile() {
@@ -70,6 +75,13 @@ export default {
       }
       this.layout = layout.doc;
       this.layoutFetched = true;
+    },
+    async fetchColorCategories() {
+      const result = await this.$fetchCollection("color_categories");
+      this.colorCategories = result.docs.map(({ name }) => {
+        return name;
+      });
+      this.colorCategoriesFetched = true;
     },
     setHeroImage() {
       const heroImage = this.isMobile
