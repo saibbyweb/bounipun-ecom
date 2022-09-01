@@ -13,9 +13,10 @@
 </template>
 
 <script>
+import FabricBlockLayout from "./FabricBlockLayout.vue";
 import ColorBlockLayout from "./ColorBlockLayout.vue";
 import VariantBlockLayout from "./VariantBlockLayout.vue";
-import FabricBlockLayout from "./FabricBlockLayout.vue";
+
 
 export default {
   props: {
@@ -45,7 +46,7 @@ export default {
 
 <style lang="scss">
 .decide-lab-block-layout {
-    padding-bottom: 60px;
+  padding-bottom: 60px;
 }
 .lab-block {
   width: 100%;
@@ -124,10 +125,10 @@ export default {
     &.reverse {
       flex-direction: column;
       align-items: flex-end;
-   
+
       .name-and-para {
         margin-right: 15%;
-         align-items: flex-end;
+        align-items: flex-end;
         .name {
           text-align: right;
         }

@@ -1,10 +1,10 @@
 <template>
-  <div class="lab-block flex center wrap" :class="{ reverse: index % 2 !== 0 }">
+  <div class="lab-block flex wrap" :class="{ reverse: index % 2 !== 0 }">
     <!-- main image -->
     <div class="main-image" :style="setBg(blockDetail.mainImage)"></div>
 
     <!-- name & paragraph -->
-    <div class="name-and-para flex center col">
+    <div class="name-and-para flex col">
       <h2 class="name">{{ blockDetail.name }}</h2>
       <div class="hr" />
       <p class="para">{{ blockDetail.paragraph }}</p>
@@ -83,8 +83,8 @@ export default {
 
     .hr {
       width: 14%;
-      margin-left: 1%;
-      align-self: flex-start;
+      /* margin-left: 1%; */
+      /* align-self: flex-start; */
     }
   }
 
@@ -142,6 +142,50 @@ export default {
         left: 0;
         /* top: 0%; */
         right: auto;
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+
+    .main-image {
+      width: 70%;
+      margin-left: 10%;
+    }
+
+    .name-and-para {
+      align-items: flex-start;
+      justify-content: flex-start;
+      width: 65%;
+      margin-left: 10%;
+
+      .name {
+        line-height: 4.2vw;
+        font-size: 4.3vw;
+      }
+    }
+
+    .sub-texts-and-images {
+      display: none;
+    }
+
+    &.reverse {
+      flex-direction: column;
+      align-items: flex-end;
+      .main-image {
+        margin-right: 10%;
+      }
+
+      .name-and-para {
+        margin-right: 10%;
+        align-items: flex-end;
+
+        .hr {
+            align-self: flex-end;
+        }
       }
     }
   }
