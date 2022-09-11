@@ -8,7 +8,7 @@
             <!-- name -->
             <div class="flex fields">
                 <InputCredential label="First Name" v-model="firstName" :clearError="true" />
-                <InputCredential label="Sur Name" v-model="surName" :clearError="true" />
+                <InputCredential label="Surname" v-model="surName" :clearError="true" />
             </div>
             <!-- subject -->
             <InputCredential label="Subject" v-model="subject" :clearError="true" />
