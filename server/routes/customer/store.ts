@@ -225,6 +225,14 @@ type paymentLinkReqPayload = {
   phoneNumber: string;
 }
 
+/* order details request payload */
+type OrderDetailsReqPayload = {
+  couponCode: string,
+  deliveryAddress: object,
+  combinedDeliveryConsent: boolean
+  giftMessage: object
+}
+
 /* TODO: create universal payment intent */
 router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, res) => {
 
@@ -251,6 +259,14 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
     payload
   } = req.body;
 
+  /* currency zero decimal flag */
+  let zeroDecimal = false;
+
+  if (currency !== "INR") {
+    const currencyDetails = await currencyMethods.getCurrency(currency);
+    zeroDecimal = currencyDetails.zeroDecimal;
+  }
+
   /* msg */
   let msg = '';
 
@@ -262,6 +278,31 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
 
   switch (type) {
     case 'order':
+      const orderReqPayload = payload as OrderDetailsReqPayload;
+      const { couponCode, deliveryAddress, combinedDeliveryConsent, giftMessage } = orderReqPayload;
+
+      /* create order payload */
+      intentPayload = await userMethods.createOrderPayload(
+        user.cart,
+        amount,
+        currency,
+        couponCode,
+        deliveryAddress,
+        combinedDeliveryConsent,
+        zeroDecimal,
+        giftMessage
+      );
+
+      /* if verification failed, stop execution */
+      if (intentPayload === false) {
+        msg = '❌ Order details verification failed'
+        console.log(msg);
+        res.send({...response,msg});
+        return;
+      }
+
+      console.log('🔰 Order details validated')
+
       break;
     case 'paymentLink':
       const reqPayload = payload as paymentLinkReqPayload;
@@ -293,8 +334,9 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
   console.log('🔰 Payment Intent payload created')
 
   /* check if currency is zero decimal or not */
-  const currencyDetails = await currencyMethods.getCurrency(currency);
-  const zeroDecimal = currencyDetails.zeroDecimal;
+  // const currencyDetails = await currencyMethods.getCurrency(currency);
+  // const zeroDecimal = currencyDetails.zeroDecimal;
+  
   /* amount in sub-units */
   const amountInSubUnits = parseInt((amount * 100).toFixed(2))
 

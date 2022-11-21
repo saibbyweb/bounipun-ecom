@@ -17,7 +17,7 @@
     <!-- continue -->
     <div class="flex center" style="gap:10px;">
     <button class="action" @click="validateForm">Continue</button>
-    <!-- <button class="action" @click="prefillForm"> Prefill </button> -->
+    <!-- <button class="action" @click="prefillForm"> Prefill FORM </button> -->
     </div>
   </div>
 </template>
@@ -34,7 +34,7 @@ const demoDeliveryAddress = {
   addressLine2: "Rawalpora, Near Masjid",
   city: "Srinagar",
   postalCode: "190005",
-  countryIsoCode: "US",
+  // countryIsoCode: "US",
 }
 
 export default {
@@ -62,6 +62,7 @@ export default {
         "H.no 54, Chinar Enclave, Rawalpora, Srinagar, Jammu & Kashmir";
       this.formData.city.value = "Srinagar";
       this.formData.postalCode.value = "190005";
+      this.formData.countryIsoCode = "US"
     },
     createFormData() {
       /* form fields */

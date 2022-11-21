@@ -99,7 +99,7 @@ export default {
         }
       }
     },
-    initializeStripe() {
+    async initializeStripe() {
       this.stripe = await loadStripe(this.stripePK);
       this.elements = this.stripe.elements();
       const element = this.elements.create("card", { hidePostalCode: true });

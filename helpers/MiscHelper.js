@@ -1,6 +1,6 @@
 const STRIPE_PK_TEST_SAIBBYWEB = "pk_test_Ct9bX6YRz5YItn8gCGGO4ypy00KzN2R4mG"
-const NODE_ENV = "production";
-const MODE = "production";
+let NODE_ENV = "production";
+let MODE = "production";
 const VITE_RAZORPAY_KEY_ID_TEST = "rzp_test_LnJPEC0MOtvlSn"
 const RAZORPAY_KEY_ID_PROD = "rzp_live_bzpnf6YPxKKfTh"
 const  STRIPE_PK_PROD = "pk_live_51J0qm7SAJnKcquR3JZ1T9qVG8lGA4bIflVcp5TZFWYP06n6XPLWojyNYUc5PMUFEwWCoe62IHW9HsnebRlpl5Scw00LC38Ktxu"
@@ -16,6 +16,7 @@ const VITE_STRIPE_PK_TEST_SAIBBYWEB = "pk_test_Ct9bX6YRz5YItn8gCGGO4ypy00KzN2R4m
 //   VITE_STRIPE_PK_TEST,
 //   VITE_STRIPE_PK_TEST_SAIBBYWEB
 // } = import.meta.env;
+
 
 /* environment is dev flag */
 const envIsDev = NODE_ENV === "development" || MODE === "development";
@@ -39,6 +40,7 @@ function setKeys() {
   const { razorpay, stripe } = gateways;
   /* set test keys (by default) */
   razorpay.keyId = VITE_RAZORPAY_KEY_ID_TEST;
+  console.log('❇️❇️❇️❇️❇️❇️❇️❇️❇️', useSWTestKeys)
   stripe.publishableKey = useSWTestKeys ? VITE_STRIPE_PK_TEST_SAIBBYWEB : VITE_STRIPE_PK_TEST;
 
   /* if environment is production, set live key only on main domain */

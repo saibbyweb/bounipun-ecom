@@ -840,6 +840,72 @@ export const methods = {
 
     return orderPayload;
   },
+  async createOrderPayloadV2(
+    cart,
+    amountToBeCharged,
+    currency,
+    couponCode,
+    deliveryAddress,
+    combinedDeliveryConsent,
+    zeroDecimal,
+    giftMessage
+  ) {
+    const cartItems = await this.getCartItems(cart);
+    /* total order quantity */
+    const totalOrderQuantity = sumBy(cartItems, (item) => item.quantity);
+
+    /* grand total should be equal to amount to be charged (PROVIDE COUPON) */
+    const orderTotal = await this.calculateOrderTotal(
+      cartItems,
+      totalOrderQuantity,
+      currency,
+      couponCode
+    );
+
+    /* if calculation failed */
+    if (orderTotal == false) return;
+
+    /* extracting details */
+    const { subTotal, coupon, discountValue, shippingCharge, tax, grandTotal } =
+      orderTotal;
+
+    console.log("GRAND TOTAL-->", grandTotal, amountToBeCharged, zeroDecimal);
+
+    /* if amount doesn't match */
+    if (grandTotal !== amountToBeCharged) {
+      console.log("Amount doesnt match, yo");
+      return false;
+    }
+
+    /* set amount for gateway (as a whole number) */
+    let amount: any;
+    if (zeroDecimal) amount = grandTotal;
+    else amount = (grandTotal * 100).toFixed(2);
+
+    /* parse int */
+    amount = parseInt(amount);
+
+    /* construct order details */
+    const orderPayload = {
+      deliveryAddress,
+      cartItems: cartItems,
+      coupon,
+      discountValue: discountValue * 100,
+      subTotal: parseInt((subTotal * 100).toFixed(2)),
+      shippingCharge: shippingCharge * 100,
+      combinedDeliveryConsent,
+      giftMessage,
+      /* TODO: need to check tax.value [may toFixed(2) will fix it] */
+      /* TODO: get frontend and backend value EQUAL */
+      tax: {
+        percentage: tax.percentage,
+        value: tax.value * 100,
+      },
+      grandTotal: amount
+    };
+
+    return orderPayload;
+  },
   async verifyGatewayToken() {},
   /* get next sequence */
   async getNextSequence() {
