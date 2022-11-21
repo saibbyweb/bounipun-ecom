@@ -34,7 +34,7 @@ export default {
     /* preffered gateway (optional) */
     prefferedGateway: String,
     /* amount (not in sub units) */
-    amount: Number,
+    amount: Number | String,
     /* in delivery address shape */
     address: Object,
     /* additional payload to be sent to server while creating payment intent */
@@ -73,6 +73,7 @@ export default {
   },
   mounted() {
     /* finalize gateway, render UI & prepare required data */
+    console.log('👋 Hello from Process Payment component')
     this.initializePayment();
   },
   methods: {

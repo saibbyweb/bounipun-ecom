@@ -154,6 +154,7 @@ export default {
   },
   async mounted() {
     this.prefillForm();
+    console.clear();
     // this.fetchAddressBook();
   },
   methods: {

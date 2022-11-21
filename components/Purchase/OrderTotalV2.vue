@@ -142,6 +142,21 @@
     },
     methods: {
       async createPaymentIntent() {
+
+        this.$emit('getOrderRequestDetails', {
+            amount: this.grandTotal,
+            currency: this.currency.trim(),
+            deliveryAddress: this.deliveryAddress,
+            couponCode: this.coupon.code,
+            combinedDeliveryConsent: this.$store.state.customer.combinedDeliveryConsent,
+            giftMessage: this.$store.state.customer.giftMessage
+        });
+
+        return;
+
+
+
+
         const paymentIntentFetch = await this.$post("/createPaymentIntent", {
           intentType: "order",
           amountToBeCharged: this.grandTotal,
@@ -162,6 +177,7 @@
         }
   
         this.$emit('paymentIntentCreated', paymentIntentFetch.response);
+
       }
     }
   };
