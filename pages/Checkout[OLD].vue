@@ -466,8 +466,8 @@ export default {
   #stripe-mount {
     margin-top: 20px;
     width: 100%;
-    background-color: white;
-    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
+    /* background-color: white; */
+    /* box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16); */
     padding: 3%;
   }
 }

@@ -223,7 +223,7 @@ export default {
       countryIsoCode: "",
       paymentOverview: false,
       alreadyPaid: false,
-      byPassMode: false,
+      byPassMode: true,
       paymentProcessedSuccessfully: false,
       error: {
         status: false,

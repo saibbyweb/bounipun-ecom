@@ -71,6 +71,7 @@
           <!-- overview + payment completion -->
           <div v-if="ORDER_REQUEST_DETAILS_FETCHED" class="payment-overview flex center">
             <ProcessPayment
+              actionBtnText="Place Order"
               type="order"
               :currency="ORDER_REQUEST_DETAILS.currency"
               :amount="ORDER_REQUEST_DETAILS.amount"
@@ -83,6 +84,7 @@
               }"
               :demoMode="false"
               @paymentProcessed="paymentProcessed"
+              @paymentFailed="paymentFailed"
             />
           </div>
         </div>
@@ -181,8 +183,19 @@ export default {
         this.ORDER_REQUEST_DETAILS_FETCHED = true;
         // Vue.set(this.ORDER_REQUEST_DETAILS, details)
     },
-    paymentProcessed() {
-      console.log('✅ Payment has been processed, now do something')
+    async paymentProcessed() {
+      console.log('✅ Payment has been processed, now do something');
+      /* move to order placed page */
+      this.$store.dispatch("customer/fetchCart");
+      this.$router.push("/order-placed-successfully");
+    },
+    paymentFailed() {
+      this.paymentError.msg =
+          "We are facing some technical difficulties at the moment. Kindly, try again after sometime.";
+        this.paymentError.status = true;
+      setTimeout(() => {
+        this.paymentError.status = false;
+      }, 3000);
     }
   },
 };
@@ -281,7 +294,7 @@ export default {
     margin-top: 20px;
     width: 100%;
     background-color: white;
-    box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
+    /* box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16); */
     padding: 3%;
   }
 }

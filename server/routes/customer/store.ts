@@ -427,6 +427,7 @@ router.post("/stripeWebhook/old", async (req, res) => {
 router.post("/stripeWebhook", async (req, res) => {
   /* TODO: dude, verify the signature first */
   const event = req.body;
+
   const { id: transactionId, client_secret: gatewayToken } = event.data.object;
   /* verify token is valid */
   const paymentIntent: IntentOptions = await paymentIntentMethods.fetchAndVerifyPaymentIntent(

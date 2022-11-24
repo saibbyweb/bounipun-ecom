@@ -8,7 +8,7 @@
       class="checkout-btn action"
       @click="proceedPayment"
     >
-      Make Payment
+      {{ actionBtnText }}
     </button>
   </div>
 </template>
@@ -39,6 +39,10 @@ export default {
     address: Object,
     /* additional payload to be sent to server while creating payment intent */
     payload: Object,
+    actionBtnText: {
+      type: String,
+      default: "Make Payment"
+    }
   },
   data() {
     return {
@@ -292,6 +296,7 @@ export default {
       );
       /* if payment processing failed */
       if (!paymentProcessed) {
+        this.$emit('paymentFailed');
         return;
       }
       /* emit payment processed event  */
@@ -319,14 +324,45 @@ export default {
 #stripe-card {
   margin: 20px 0;
   width: 100%;
+  min-width: 30vw;
   max-width: 500px;
   background-color: white;
   box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16);
   padding: 3%;
+
+  @media(max-width: 768px) {
+    width: 90vw;
+  }
 }
-.checkout-btn {
+
+#stripe-mount {
+    margin-top: 20px;
+    width: 100%;
+    background-color: white;
+    /* box-shadow: 1px 1px 15px rgba(0, 0, 0, 0.16); */
+    padding: 3%;
+  }
+/* .checkout-btn {
   &.disabled {
     background-color: gray;
+  }
+} */
+
+.checkout-btn {
+  width: 100%;
+  min-width: 10vw;
+  padding: 10px 15px;
+  margin-top: 20px;
+
+  @media(max-width: 768px) {
+    min-width: 33vw;
+    padding: 10px 15px !important;
+  }
+  &.disabled {
+    background-color: gray;
+    &:hover {
+      background-color: gray;
+    }
   }
 }
 </style>
