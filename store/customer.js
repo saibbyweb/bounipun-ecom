@@ -32,7 +32,7 @@ export const state = () => ({
 
 /* find cartItem helper  */
 const findCartItem = (cart, cartItem) => {
-  console.log("find cart item was called", cartItem, cart);
+  // console.log("find cart item was called", cartItem, cart);
   /* if cart empty */
   if (cart.length === 0) return false;
 
@@ -181,7 +181,7 @@ export const mutations = {
   clearCart(state) {
     /* clear cart array directly */
     state.cart = [];
-    console.log("cart emptied");
+    // console.log("cart emptied");
   },
   setGlobalRemoteCart(state, cart) {
     state.globalRemoteCart = cart;
@@ -365,7 +365,7 @@ export const actions = {
     /* if request failed */
     if (fetchConfigRequest.resolved === false) return;
     /* extract global config */
-    console.log(fetchConfigRequest.response, "--genius");
+    // console.log(fetchConfigRequest.response, "--genius");
     const { globalConfig } = fetchConfigRequest.response;
     // console.log(globalConfig, "--again genius");
     /* set config in vuex */

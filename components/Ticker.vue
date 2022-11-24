@@ -50,7 +50,7 @@ export default {
 
       const isMobile = this.windowWidth < 768;
       const intervalDuration = isMobile ? 8500 : 6000;
-      console.log(intervalDuration, '--interval duration')
+      // console.log(intervalDuration, '--interval duration')
 
       setInterval(() => {
         if (this.activeIndex === this.tickerItems.length - 1) {

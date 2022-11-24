@@ -7,7 +7,7 @@ export default function ({ $axios, store, router, redirect }) {
 
     $axios.onResponse(response => {
 
-        console.log(response.data,'--ON RESPONSE')
+        // console.log(response.data,'--ON RESPONSE')
         if(response.data.notAuthorized === true) {
             store.commit("customer/unauthorize");
             router.push('/');

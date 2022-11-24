@@ -258,7 +258,7 @@ export default {
       switch (data.direction) {
         /* swiped left */
         case 2:
-          console.log("swiped left");
+          // console.log("swiped left");
 
           /* stop at the last slide */
           if (this.slideMargin === threshold * (-1 * this.slideWidth)) {
@@ -272,7 +272,7 @@ export default {
           break;
         /* swiped right */
         case 4:
-          console.log("swiped right");
+          // console.log("swiped right");
           /* stop at the first slide */
           if (this.slideMargin === 0) return;
 

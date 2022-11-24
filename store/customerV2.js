@@ -60,7 +60,7 @@ export const actions = {
     /* set country index */
     const countryIndex = getCountryIndex(countryCode);
     if (countryIndex !== -1) {
-      console.log("country index updated: ", countryIndex, countryCode);
+      // console.log("country index updated: ", countryIndex, countryCode);
       commit("customer/setCountryIndex", countryIndex, { root: true });
     }
 

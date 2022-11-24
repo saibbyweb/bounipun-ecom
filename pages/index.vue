@@ -175,7 +175,7 @@
             <div class="image-list">
               <div
                 class="image-box"
-                v-for="(image, index) in layout.press.imageList.reverse()"
+                v-for="(image, index) in pressImages"
                 :key="index"
                 :style="`background-image: url(${$getOriginalPath(image.path)})`"
               ></div>
@@ -214,6 +214,11 @@ export default {
     },
     inProduction() {
       return process.env.NODE_ENV === 'production'
+    },
+    pressImages() {
+      if(this.layout && this.layout.press && this.layout.press.imageList)
+        return this.layout.press.imageList.reverse();
+      return []
     }
   },
   methods: {
@@ -255,7 +260,7 @@ export default {
         sections.push(section);
       }
       this.sections = sections;
-      console.log(sections);
+      // console.log(sections);
     },
     navigateToCollection(bounipun_collection) {
       this.$router.push("/collections?slug=" + bounipun_collection.slug);

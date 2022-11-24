@@ -37,7 +37,7 @@
         @click="navigate(collection, 'collection')"
         class="clear item sub-item acc"
         v-for="(collection, index) in scarves"
-        :key="index"
+        :key="index+collection.name"
       >
         {{ collection.name }}
       </button>
@@ -48,7 +48,7 @@
         @click="navigate(collection, 'collection')"
         class="clear item sub-item acc"
         v-for="(collection, index) in decor"
-        :key="index"
+        :key="index+2+collection.name"
       >
         <!-- {{ collection.lock ? "" : "" }} -->
         {{ collection.name }}

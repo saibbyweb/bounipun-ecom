@@ -1,19 +1,22 @@
-let envIsDev = true;
 let envIsProd = false;
 
 try {
-  if(import.meta.env) {
-    envIsDev = true;
+  if(process && process.dev === true) {
+    console.log('Dev env set ✅')
+  }
+  else {
+    envIsProd = true;
   }
 }
 catch(e) {
-  console.log('I WAS HERE ❌')
   envIsProd = true;
 }
 
+/* check if env is prod */
+if(envIsProd) {
+  console.log('Prod env set ✅')
+}
 
-// let NODE_ENV = "production";
-// let MODE = "production";
 const VITE_RAZORPAY_KEY_ID_TEST = "rzp_test_LnJPEC0MOtvlSn"
 const RAZORPAY_KEY_ID_PROD = "rzp_live_bzpnf6YPxKKfTh"
 const STRIPE_PK_PROD = "pk_live_51J0qm7SAJnKcquR3JZ1T9qVG8lGA4bIflVcp5TZFWYP06n6XPLWojyNYUc5PMUFEwWCoe62IHW9HsnebRlpl5Scw00LC38Ktxu"

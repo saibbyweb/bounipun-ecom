@@ -96,7 +96,7 @@ export default {
       )
         return;
 
-      console.log(mutation);
+      // console.log(mutation);
       /* save state in local storage */
       window.localStorage.setItem(
         "persistedState",

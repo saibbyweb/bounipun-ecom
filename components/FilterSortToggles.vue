@@ -77,7 +77,8 @@ export default {
 
 <style lang="scss" scoped>
 .fs-wrapper {
-  padding: 5px;
+  /* padding: 5px; */
+  padding-top: 5px;
   position: fixed;
   top: 0;
   @include marginTop;
@@ -87,12 +88,17 @@ export default {
   background-color: white;
   box-shadow: 20px 0px 15px rgba(0, 0, 0, 0.16);
 
+  @media(max-width: 768px) {
+     padding-top:0;
+    padding: 5px;
+  }
+
   .relative-wrapper {
     width: 100%;
   }
 
   .filters-and-sort {
-    // margin-top: 10px;
+    /* margin-top: 10px; */
     position: relative;
     display: flex;
     justify-content: space-around;
@@ -101,6 +107,7 @@ export default {
     background-color: white;
 
     .action {
+      padding: 4.5px 0;
       width: 50%;
       font-size: 13px;
       color: $dark_gray;
