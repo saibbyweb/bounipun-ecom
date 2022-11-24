@@ -56,6 +56,8 @@
         class="block flex col"
         v-for="(block, index) in layout.collectionBlocks"
         :key="index"
+        style="cursor: pointer;"
+        @click="navigateToCollection(block.bounipun_collection)"
       >
         <!-- cover image and CTA  -->
         <div v-if="block.visible" class="cover">
@@ -268,6 +270,9 @@ export default {
     },
     fetchLinks(slides) {
       return slides.map(slide => slide.link)
+    },
+    collectionLinks() {
+      return 
     }
   }
 };
