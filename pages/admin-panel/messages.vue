@@ -15,7 +15,7 @@
         :list="list"
         :model="model"
         :headings="headings"
-        custom_css="10% 30% 30% 20% 10%"
+        custom_css="10% 15% 30% 20% 15% 10%"
         :sortByFields="sortByFields"
         @documentFetched="documentFetched"
         @sortToggled="sortToggled"
@@ -67,7 +67,7 @@ export default {
       },
       list: [],
       sortByFields: ["name", "email", "read"],
-      headings: ["_id", "name", "email", "subject", "read"],
+      headings: ["_id", "name", "email", "subject", "createdAt", "read"],
       dragEnabled: false
     };
   },
@@ -107,12 +107,13 @@ export default {
       }
 
       /* extract list */
-      this.list = result.docs.map(({ _id, name, email, subject, read }) => {
+      this.list = result.docs.map(({ _id, name, email, subject, createdAt, read }) => {
         return {
           _id,
           name,
           email,
           subject,
+          createdAt: this.$formatDate(createdAt),
           read
         };
       });

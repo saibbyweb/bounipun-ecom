@@ -328,6 +328,7 @@
     <c-boxes
       v-if="!thirdPartyProduct && !readyToShip"
       :options="variants"
+      :selectedCollection="selectedCollection"
       label="Variants"
     />
 
@@ -528,6 +529,15 @@ export default {
     },
   },
   computed: {
+    selectedCollection() {
+      if(this.collections && this.doc.bounipun_collection != null) {
+        const foundCollection = this.collections.find(c => c.value === this.doc.bounipun_collection)
+        if(foundCollection)
+          return foundCollection.slug;
+      }
+
+      return ""; 
+    },
     colorSources() {
       /* show color sources according to collection selection */
       if (!this.underEscape)

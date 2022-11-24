@@ -389,9 +389,9 @@ export default {
       if (typeof value === "boolean") {
         switch (this.headings[propIndex]) {
           case "read":
-            return value ? "Read" : "Unread";
+            return value ? "✅ Read" : "💬 Unread";
           case 'paid':
-            return value ? "Paid" : "Unpaid"
+            return value ? "✅ Paid" : "💳 Unpaid"
         }
 
         return value ? "Active" : "Inactive";

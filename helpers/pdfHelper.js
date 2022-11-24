@@ -803,6 +803,7 @@ function jsPDFInvoiceTemplate(props) {
     doc.setTextColor(colorGray);
     doc.text(termsAndConditionPoints, 12, height);
     doc.text(declarationsLines, 91, height);
+    doc.text("E & O.E.", 45, height + 21)
   }
 
   addTermsAndConditions();

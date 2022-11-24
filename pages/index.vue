@@ -175,7 +175,7 @@
             <div class="image-list">
               <div
                 class="image-box"
-                v-for="(image, index) in layout.press.imageList"
+                v-for="(image, index) in layout.press.imageList.reverse()"
                 :key="index"
                 :style="`background-image: url(${$getOriginalPath(image.path)})`"
               ></div>

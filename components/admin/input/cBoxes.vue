@@ -46,6 +46,7 @@
 export default {
   props: {
     label: String,
+    selectedCollection: String,
     options: {
       type: Array,
       default: () => [],
@@ -53,7 +54,11 @@ export default {
   },
   computed: {
     categories() {
-      return new Set(this.options.map((op) => op.category));
+      const uniqueCategories = new Set(this.options.map((op) => op.category));
+      if(this.selectedCollection !== "wall-art") {
+        return [...uniqueCategories].filter(cat => cat.startsWith("Decor") === false)
+      }
+      return [...uniqueCategories].filter(cat => cat.toUpperCase() !== "SCARFS")
     },
     categoriesCheckedMap() {
       let map = {};

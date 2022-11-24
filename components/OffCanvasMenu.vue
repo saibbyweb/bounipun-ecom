@@ -318,8 +318,12 @@ export default {
   }
 
   .place-holder {
-    width: 30%;
+   
+  width: 70%;
     background: transparent;
+    @media(max-width: 768px) {
+      width: 30%;
+    }
   }
 }
 </style>
