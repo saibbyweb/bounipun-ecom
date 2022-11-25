@@ -216,9 +216,22 @@ export default {
       return process.env.NODE_ENV === 'production'
     },
     pressImages() {
+      let finalImages = []
+
       if(this.layout && this.layout.press && this.layout.press.imageList)
-        return this.layout.press.imageList.reverse();
-      return []
+        finalImages = this.layout.press.imageList.reverse();
+      
+      /* check for main image */
+      const mainImageIndex = finalImages.findIndex(i => i.mainImage === true)
+      
+      /* shift main image to the beginning */
+      if(mainImageIndex !== -1) {
+        const mainImage = {...finalImages[mainImageIndex]}
+        finalImages.splice(mainImageIndex, 1);
+        finalImages.unshift(mainImage);
+      }
+
+      return finalImages
     }
   },
   methods: {
