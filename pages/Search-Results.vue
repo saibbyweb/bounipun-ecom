@@ -43,7 +43,7 @@
     </div>
 
     <!-- pagination bar -->
-    <div v-if="totalMatches > 0" class="pagination-bar">
+    <!-- <div v-if="totalMatches > 0" class="pagination-bar">
       <button
         @click="getPage(n)"
         :class="n == rawCriterion.cursor ? 'current-page page-no' : 'page-no'"
@@ -52,7 +52,7 @@
       >
         {{ n }}
       </button>
-    </div>
+    </div> -->
   </div>
 </template>
 

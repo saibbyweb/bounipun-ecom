@@ -290,7 +290,7 @@ router.post(
     /* text match + filters */
     criterion.match = {
       status: true,
-      "colors.status": true,
+     "colors.status": true,
       $or: [
         { name: { $regex: rawCriterion.search.term, $options: "i" } },
         { "colors.name": { $regex: rawCriterion.search.term, $options: "i" } },
@@ -321,6 +321,9 @@ router.post(
     if (unlocked === false) {
       criterion.match = { ...criterion.match, lock: false };
     }
+
+    console.log(criterion.match['$or'])
+
     /* sort by fields */
     criterion.sort = rawCriterion.sortBy;
     console.log(criterion.sort)
@@ -333,7 +336,7 @@ router.post(
 
     /* identify the color which matched */
 
-    let paginatedResults: any = await customer.getPaginationResults(
+    let paginatedResults: any = await customer.getPaginationResultsV2(
       "products",
       criterion
     );
