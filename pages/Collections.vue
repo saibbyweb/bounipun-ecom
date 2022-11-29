@@ -660,7 +660,7 @@ export default {
   }
 
   &.isEscape {
-    margin-top: 0vh;
+    /* margin-top: 0vh; */
   }
 
   .heading {
