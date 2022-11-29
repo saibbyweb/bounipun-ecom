@@ -144,10 +144,10 @@ export const methods = {
         /* create chips */
         await resizeS3Image(fileName, 350, 'thumb');
         // download existing press images
+        // delete existing dist folder and rebuild
         // push the update
         // reupload them in-order
     }
-
 }
 
 export default { model, methods }
