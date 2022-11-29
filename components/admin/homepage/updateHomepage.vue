@@ -297,6 +297,7 @@
       <label class="head"> Press: </label>
       <!-- press logo -->
       <UploadImage
+        uploadType="press-logo"
         ref="imageUploader_pressLogo"
         :multipleUpload="false"
         label="Set Logo"
@@ -304,6 +305,7 @@
       />
       <!-- image list -->
       <UploadImage
+        uploadType="press-images"
         ref="imageUploader_pressImageList"
         :multipleUpload="true"
         label="Set Press Image List"

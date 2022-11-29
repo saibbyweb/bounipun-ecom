@@ -139,7 +139,15 @@ export const methods = {
         await resizeS3Image(fileName, 500, 'productCards');
         /* product page */
         await resizeS3Image(fileName, 1024, 'productPages');
+    },
+    createPressVariants: async (fileName: String) => {
+        /* create chips */
+        await resizeS3Image(fileName, 350, 'thumb');
+        // download existing press images
+        // push the update
+        // reupload them in-order
     }
+
 }
 
 export default { model, methods }

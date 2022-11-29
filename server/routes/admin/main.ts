@@ -30,10 +30,14 @@ router.post(
     console.log(req.file);
     const fileName = req.file.key.replace("original/", "");
     const { uploadType } = req.body;
+    console.log(uploadType);
 
     switch (uploadType) {
       case "product":
         await imageHelper.createProductImageVariants(fileName);
+        break;
+      case "press-images":
+        await imageHelper.createPressVariants(fileName);
         break;
     }
 

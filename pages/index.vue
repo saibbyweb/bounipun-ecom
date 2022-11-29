@@ -173,11 +173,19 @@
           <div class="list">
             <!-- image list -->
             <div class="image-list">
-              <div
+   <!--            <div
                 class="image-box"
                 v-for="(image, index) in pressImages"
                 :key="index"
                 :style="`background-image: url(${$getOriginalPath(image.path)})`"
+              ></div> -->
+
+
+              <div
+                class="image-box"
+                v-for="(image, index) in pressImages"
+                :key="index"
+                :style="`background-image: url(${$getImage(image.path, 'thumb')})`"
               ></div>
             </div>
           </div>
