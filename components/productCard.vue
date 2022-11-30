@@ -357,6 +357,26 @@ export default {
     slideshowImages() {
       if (this.product.notProvided || this.product.colors.length === 0)
         return ["/default-image.png"];
+      
+        /* could be a breaking change */
+      this.product.colors.forEach((c) => {
+        console.log(c.images, "***");
+
+        const mainImages = c.images || [];
+
+        /* check for main image */
+        const mainImageIndex = mainImages.findIndex(
+          (i) => i.mainImage === true
+        );
+
+        /* shift main image to the beginning */
+        if (mainImageIndex !== -1) {
+          const mainImage = { ...mainImages[mainImageIndex] };
+          mainImages.splice(mainImageIndex, 1);
+          mainImages.unshift(mainImage);
+        }
+
+      });
 
       let mainImages = [];
 
@@ -443,7 +463,7 @@ export default {
       const BASE_SHARE_URL = "https://wa.me/?text=";
       let msg = `Hi there, I would like to get a price quote for: ${location.host}/${this.product.slug}?activeColor=${this.activeColorIndex}`;
       msg = encodeURI(msg);
-      window.open(BASE_SHARE_URL + msg,'_blank');
+      window.open(BASE_SHARE_URL + msg, "_blank");
     },
     async toggleWishlist() {
       /* if user is not logged in, move to login page */

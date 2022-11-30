@@ -475,8 +475,8 @@ export default {
     firstProductImage() {
       /* TODO: DO SOME MAGIC HERE */
       const index = this.colorExplicitlyChoosen
-          ? this.activeColorIndex
-          : this.$route.query.activeColor
+        ? this.activeColorIndex
+        : this.$route.query.activeColor;
 
       // const index = this.activeColorIndex;
 
@@ -643,7 +643,7 @@ export default {
       let baseLink = `${location.host}/${this.product.slug}?activeColor=${
         this.colorExplicitlyChoosen
           ? this.activeColorIndex
-          : (this.$route.query.activeColor ?? 0)
+          : this.$route.query.activeColor ?? 0
       }`;
 
       if (window.location.hostname === "bounipun.in")
@@ -862,8 +862,8 @@ export default {
         return;
       }
 
-      let result = {}
-      result.doc = { ...response.data }
+      let result = {};
+      result.doc = { ...response.data };
 
       /* filter out inactive colors */
       result.doc.colors = result.doc.colors.filter(
@@ -1005,6 +1005,21 @@ export default {
     },
     setImages() {
       this.product.colors.forEach((color) => {
+        /* can be a breaking change */
+        console.log(color.images, "🎉🎉🎉");
+
+        const imagesSet = color.images || [];
+
+        /* check for main image */
+        const mainImageIndex = imagesSet.findIndex((i) => i.mainImage === true);
+
+        /* shift main image to the beginning */
+        if (mainImageIndex !== -1) {
+          const mainImage = { ...imagesSet[mainImageIndex] };
+          imagesSet.splice(mainImageIndex, 1);
+          imagesSet.unshift(mainImage);
+        }
+
         let images = color.images.map((image) =>
           this.$getImage(image.path, "productPages")
         );

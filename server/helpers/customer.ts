@@ -63,12 +63,14 @@ export default {
         let paginatedResults = { docs: [], totalMatches: 0, fetched: false }
         /* collection */
         const collection = db.model(model);
+        // console.log(criterion.sort);
+        // criterion.sort = { 'name': -1 }
         /* fetch documents */
         const results = await collection.aggregate([{
             $facet: {
                 documents: [
                     { $match: criterion.match },
-                    { $sort: Object.keys(criterion.sort).length === 0 ? { createdAt: -1 } : criterion.sort },
+                    { $sort: Object.keys(criterion.sort).length === 0 ? { name: 1 , createdAt: -1, } : criterion.sort },
                     // { $skip: criterion.skip },
                     // { $limit: criterion.limit },
                     {
