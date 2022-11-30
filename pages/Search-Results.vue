@@ -136,7 +136,7 @@ export default {
       this.fetchResults();
     },
     sortToggled(sortBy) {
-      console.log(sortBy);
+      // console.log(sortBy);
       this.rawCriterion = {
         ...this.rawCriterion,
         sortBy
@@ -184,7 +184,7 @@ export default {
       this.rawCriterion.selectedPriceRange = this.filterData.selectedPriceRange;
 
       /* append sort by data */
-      console.log(this.sortData.priceRange, "--before hitting");
+      // console.log(this.sortData.priceRange, "--before hitting");
       if (
         this.sortData.priceRange !== undefined &&
         this.sortData.priceRange !== ""
@@ -194,7 +194,7 @@ export default {
         };
       } else this.rawCriterion.sortBy = {};
 
-      console.log(this.rawCriterion.sortBy, this.sortData.priceRange);
+      // console.log(this.rawCriterion.sortBy, this.sortData.priceRange);
 
       /* post raw criterion to the server */
       this.$store.commit("customer/setLoading", true);
@@ -257,7 +257,7 @@ export default {
 
       // this.totalMatches = response.totalMatches;
       //     console.log(response.docs);
-      console.log(response.totalMatches, "--matches found");
+      // console.log(response.totalMatches, "--matches found");
     },
     processColorSegregation(matchedProducts) {
       /* figure out (guess) the number of color matches in the product */
@@ -268,7 +268,7 @@ export default {
         segregated = [...segregated, ...matchedColors];
       });
 
-      console.log(segregated, segregated.length, "-- WATCH");
+      // console.log(segregated, segregated.length, "-- WATCH");
 
       this.products = segregated;
       this.totalMatches = segregated.length;
@@ -278,7 +278,7 @@ export default {
       /* update total matches */
     },
     findMatchedColors(product) {
-      console.log(product, "matched");
+      // console.log(product, "matched");
 
       // return [{ color: product, actualIndex: -1 }];
       /* product name or base colors matches the color filter (if provided) */
@@ -335,10 +335,10 @@ export default {
         /* make sure the color is active */
         if ((textMatch || filterMatch) && color.status === true) {
           const colorProduct = { ...product };
-          console.log("COLOR MATCHED", color.name, product.bounipun_collection);
+          // console.log("COLOR MATCHED", color.name, product.bounipun_collection);
           /* TODO: escape collection id should be global */
           if (product.bounipun_collection.toUpperCase() === "ESCAPE") {
-            console.log("ESCAPE COLOR FOUND");
+            // console.log("ESCAPE COLOR FOUND");
             colorProduct.name = color.name;
           }
 
@@ -350,7 +350,7 @@ export default {
       });
 
       /* if no color matched, return as it is */
-      console.log(product.name, matchedColors.length, "--WATCH");
+      // console.log(product.name, matchedColors.length, "--WATCH");
       if (matchedColors.length === 0) {
         matchedColors = [{ color: product, actualIndex: -1 }];
       }

@@ -1,17 +1,12 @@
 <template>
   <div class="homepage" v-if="layout !== null">
-  
     <!-- coming soon -->
     <!-- <div v-if="inProduction && locked" class="coming-soon flex center"> -->
     <div v-if="false" class="coming-soon flex center">
-
-
-      <div class="banner">
-      </div>
+      <div class="banner"></div>
 
       <!-- close button -->
-      <div class="close" @click="locked =false">
-      </div>
+      <div class="close" @click="locked = false"></div>
     </div>
 
     <!-- slidehshow (MOBILE)-->
@@ -31,7 +26,7 @@
       v-if="layout.desktopMainSlideshow.visible && !isMobile"
       size="cover"
       :images="fetchSlideshow(layout.desktopMainSlideshow.slides)"
-       :links="fetchLinks(layout.desktopMainSlideshow.slides)"
+      :links="fetchLinks(layout.desktopMainSlideshow.slides)"
       mSlideHeight="120vw"
       dSlideHeight="90vh"
       :dSlideWidth="100"
@@ -56,7 +51,7 @@
         class="block flex col"
         v-for="(block, index) in layout.collectionBlocks"
         :key="index"
-        style="cursor: pointer;"
+        style="cursor: pointer"
         @click="navigateToCollection(block.bounipun_collection)"
       >
         <!-- cover image and CTA  -->
@@ -106,7 +101,12 @@
           />
 
           <div class="cta center">
-            <button class="action" @click="$router.push(`/lists/${block.productList.slug}`)">{{ block.buttonText }}</button>
+            <button
+              class="action"
+              @click="$router.push(`/lists/${block.productList.slug}`)"
+            >
+              {{ block.buttonText }}
+            </button>
           </div>
         </div>
 
@@ -127,9 +127,9 @@
     <div class="bounipun-lab col" v-if="layout.bounipunLab.visible">
       <div
         class="cover"
-        :style="
-          `background-image: url(${$getOriginalPath(layout.bounipunLab.image)})`
-        "
+        :style="`background-image: url(${$getOriginalPath(
+          layout.bounipunLab.image
+        )})`"
       >
         <div class="cta center">
           <button class="action">{{ layout.bounipunLab.buttonText }}</button>
@@ -141,7 +141,7 @@
       </div>
     </div>
 
-          <InstagramFeed />
+    <InstagramFeed />
 
     <div class="press-and-quote flex col">
       <!-- quote -->
@@ -149,7 +149,9 @@
         <!-- logo -->
         <div
           class="logo"
-          :style="`background-image: url(${$getOriginalPath(layout.quote.logo)})`"
+          :style="`background-image: url(${$getOriginalPath(
+            layout.quote.logo
+          )})`"
         ></div>
         <div class="text pad">
           <h2 class="head text-1">{{ layout.quote.heading }}</h2>
@@ -166,34 +168,35 @@
         <!-- logo -->
         <div
           class="logo"
-          :style="`background-image: url(${$getOriginalPath(layout.press.logo)})`"
+          :style="`background-image: url(${$getOriginalPath(
+            layout.press.logo
+          )})`"
         ></div>
 
         <div class="scrollable-list">
           <div class="list">
             <!-- image list -->
             <div class="image-list">
-   <!--            <div
+              <!--            <div
                 class="image-box"
                 v-for="(image, index) in pressImages"
                 :key="index"
                 :style="`background-image: url(${$getOriginalPath(image.path)})`"
               ></div> -->
 
-
               <div
                 class="image-box"
                 v-for="(image, index) in pressImages"
                 :key="index"
-                :style="`background-image: url(${$getImage(image.path, 'thumb')})`"
+                :style="`background-image: url(${$getImage(
+                  image.path,
+                  'thumb'
+                )})`"
               ></div>
             </div>
           </div>
         </div>
       </div>
-
-
-      
     </div>
   </div>
 </template>
@@ -202,15 +205,15 @@
 export default {
   head() {
     return {
-      title: "Bounipun Kashmir | Luxury Store | Shawls, Stoles and Squares"
-    }
+      title: "Bounipun Kashmir | Luxury Store | Shawls, Stoles and Squares",
+    };
   },
   data() {
     return {
       layout: null,
       mainSlideshowImages: [],
       sections: [],
-      locked: true
+      locked: true,
     };
   },
   mounted() {
@@ -221,26 +224,26 @@ export default {
       return this.windowWidth < 768;
     },
     inProduction() {
-      return process.env.NODE_ENV === 'production'
+      return process.env.NODE_ENV === "production";
     },
     pressImages() {
-      let finalImages = []
+      let finalImages = [];
 
-      if(this.layout && this.layout.press && this.layout.press.imageList)
+      if (this.layout && this.layout.press && this.layout.press.imageList)
         finalImages = this.layout.press.imageList.reverse();
-      
+
       /* check for main image */
-      const mainImageIndex = finalImages.findIndex(i => i.mainImage === true)
-      
+      const mainImageIndex = finalImages.findIndex((i) => i.mainImage === true);
+
       /* shift main image to the beginning */
-      if(mainImageIndex !== -1) {
-        const mainImage = {...finalImages[mainImageIndex]}
+      if (mainImageIndex !== -1) {
+        const mainImage = { ...finalImages[mainImageIndex] };
         finalImages.splice(mainImageIndex, 1);
         finalImages.unshift(mainImage);
       }
 
-      return finalImages
-    }
+      return finalImages;
+    },
   },
   methods: {
     getImagePath(image) {
@@ -251,7 +254,7 @@ export default {
     },
     async fetchHomepageLayout() {
       const layout = await this.$fetchData("homepages", {
-        status: true
+        status: true,
       });
       if (!layout.fetched) {
         console.log("Layout not fetched");
@@ -287,20 +290,35 @@ export default {
       this.$router.push("/collections?slug=" + bounipun_collection.slug);
     },
     setSlideshow(images) {
-      this.mainSlideshowImages = images.map(
-        image => this.$getOriginalPath(image.path)
+      this.mainSlideshowImages = images.map((image) =>
+        this.$getOriginalPath(image.path)
       );
     },
     fetchSlideshow(slides) {
-      return slides.map(slide => this.$getOriginalPath(slide.path));
+
+      const finalImages = [...slides];
+
+      /* could be a breaking change  */
+
+      /* check for main image */
+      const mainImageIndex = finalImages.findIndex((i) => i.mainImage === true);
+
+      /* shift main image to the beginning */
+      if (mainImageIndex !== -1) {
+        const mainImage = { ...finalImages[mainImageIndex] };
+        finalImages.splice(mainImageIndex, 1);
+        finalImages.unshift(mainImage);
+      }
+
+      return finalImages.map((slide) => this.$getOriginalPath(slide.path));
     },
     fetchLinks(slides) {
-      return slides.map(slide => slide.link)
+      return slides.map((slide) => slide.link);
     },
     collectionLinks() {
-      return 
-    }
-  }
+      return;
+    },
+  },
 };
 </script>
 
@@ -308,31 +326,31 @@ export default {
 .homepage {
   // margin-top: $pageMarginTop;
   @include marginTop;
-  position:relative;
+  position: relative;
 
   .coming-soon {
     position: fixed;
-    top:0;
-    left:0;
-    height:100%;
-    width:100%;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
     background-color: white;
     z-index: 4;
 
     .banner {
       width: 300px;
       height: 533px;
-      background-image: url('/launch-image.jpeg');
+      background-image: url("/launch-image.jpeg");
       background-repeat: no-repeat;
       background-size: cover;
     }
 
     .close {
       position: absolute;
-      top:0;
-      right:0;
-      width:100px;
-      height:100px;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100px;
     }
   }
 
@@ -418,18 +436,16 @@ export default {
         width: 27%;
         margin: 5px;
       }
-
     }
 
     @media (max-width: 768px) {
-      
       .p-block {
         flex-direction: column;
         justify-content: center;
-        padding:0%;
+        padding: 0%;
         .cover {
           width: 100%;
-          margin:0px;
+          margin: 0px;
         }
         .mood {
           display: none;
@@ -544,7 +560,6 @@ export default {
       .scrollable-list {
         width: 60vw;
       }
-
     }
   }
   .text-1 {
@@ -571,7 +586,7 @@ export default {
       font-size: 13px;
     }
   }
-/* bounipun lab */
+  /* bounipun lab */
   .bounipun-lab {
     width: 100%;
 
@@ -581,7 +596,7 @@ export default {
         padding: 1% 2.5%;
       }
     }
-  
+
     .cover {
       width: 100%;
       height: 70vh;
@@ -603,7 +618,6 @@ export default {
       .text {
         width: 100%;
         padding: 5%;
-
       }
     }
   }

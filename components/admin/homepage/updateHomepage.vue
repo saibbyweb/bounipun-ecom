@@ -28,7 +28,7 @@
 
       <UploadImageV2
         :multipleUpload="true"
-        label="Set Desktop Slideshow Images:"
+        label="Set Desktop Slideshow Images: (7h: 15w) "
         v-model="doc.desktopMainSlideshow.slides"
       />
 
@@ -62,7 +62,7 @@
       <UploadImage
         ref="mainSlideshow"
         :multipleUpload="true"
-        label="Set Slideshow Images:"
+        label="Set Slideshow Images: (1h: 0.83w)"
         @updated="imageListUpdated($event, 'mainSlideshow')"
       />
 
@@ -141,7 +141,8 @@
         <UploadImage
           ref="imageUploader_collection"
           :multipleUpload="true"
-          label="Set Collection Images"
+          :mainImageAllowed="false"
+          label="Set Collection Images (1h: 0.83w):"
           @updated="imageListUpdated($event, 'collectionBlock', index)"
         />
         <!-- text 1 -->
@@ -204,6 +205,7 @@
         />
         <!-- set product list image -->
         <UploadImage
+          :mainImageAllowed="false"
           ref="imageUploader_productList"
           label="Set Product List Images"
           @updated="imageListUpdated($event, 'productListBlock', index)"
@@ -212,6 +214,7 @@
         <!-- set product list mood image -->
         <UploadImage
           :multiple="false"
+          :mainImageAllowed="false"
           ref="imageUploader_productListMood"
           label="Set Product List Mood Image"
           @updated="imageListUpdated($event, 'productListBlockMood', index)"

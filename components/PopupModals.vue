@@ -43,7 +43,7 @@ export default {
     });
     const { localPopped } = this.$store.state.customer;
     this.localPopped = localPopped && localPopped.length > 0 ? JSON.parse(JSON.stringify(localPopped)) : [];
-    console.log('local poppedx set', this.localPopped)
+    // console.log('local poppedx set', this.localPopped)
   },
   computed: {
     availablePopups() {
@@ -71,7 +71,7 @@ export default {
       // if there's a persistable popup which has been popped, set its delay timer to 6 seconds (0.1 min);
 
       /* filter local popped */
-      console.log(this.localPopped, 'calculated local poppedx')
+      // console.log(this.localPopped, 'calculated local poppedx')
       const allottedPopups = this.allottedPopups.filter(popup => this.localPopped ? this.localPopped.includes(popup._id) === false : true)
         
       const eligiblePopups = allottedPopups.map((popup) => {

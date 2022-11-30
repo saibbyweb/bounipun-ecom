@@ -32,7 +32,7 @@
             @click="removeFile(key)"
           />
           <input
-            v-if="multipleUpload"
+            v-if="multipleUpload && mainImageAllowed"
             class="set-main-image"
             type="checkbox"
             v-model="image.mainImage"
@@ -89,6 +89,10 @@ export default {
     multipleUpload: {
       type: Boolean,
       default: true,
+    },
+    mainImageAllowed: {
+      type: Boolean,
+      default: true
     },
     uploadType: {
       type: String,

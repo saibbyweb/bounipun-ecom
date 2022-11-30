@@ -360,7 +360,7 @@ export default {
       
         /* could be a breaking change */
       this.product.colors.forEach((c) => {
-        console.log(c.images, "***");
+    
 
         const mainImages = c.images || [];
 
