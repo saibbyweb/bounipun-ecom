@@ -3,7 +3,7 @@
     <!-- header image with arrow in bottom-middle part -->
     <div
       class="header-image flex center col"
-      :style="setBg('header-image.png')"
+      :style="setBg('1.jpg')"
     >
       <h1>Our Story</h1>
       <br />
@@ -26,7 +26,7 @@
       <!-- first part -->
       <div class="one">
         <!-- one image -->
-        <div class="one-image" :style="setBg('1.jpg')"></div>
+        <div class="one-image" :style="setBg('2.jpg')"></div>
         <!-- text -->
         <div class="text">
           <p>
@@ -35,13 +35,13 @@
         </div>
       </div>
       <!-- second part -->
-      <div class="two" :style="setBg('2.jpg')"></div>
+      <div class="two" :style="setBg('3.jpg')"></div>
     </div>
 
     <br>
     <br>
     <!-- full width image -->
-    <div class="full-width" :style="setBg('3.jpg', true)"></div>
+    <div class="full-width" :style="setBg('4.jpg', true)"></div>
     <!-- centralized text block -->
     <div class="c-text">
       <p>
@@ -53,7 +53,7 @@
       <!-- first part -->
       <div class="one">
         <!-- one image -->
-        <div class="one-image" :style="setBg('4.jpg')"></div>
+        <div class="one-image" :style="setBg('5.jpg')"></div>
         <!-- text -->
         <div class="text">
           <p>
@@ -64,10 +64,10 @@ Our hand crafted cashmere is weaved on 500year old looms and are treated from th
         </div>
       </div>
       <!-- second part -->
-      <div class="two" :style="setBg('5.jpg')"></div>
+      <div class="two" :style="setBg('6.jpg')"></div>
     </div>
     <!-- full width image -->
-    <div class="full-width" :style="setBg('6.jpg', true)"></div>
+    <div class="full-width" :style="setBg('7.jpg', true)"></div>
     <!-- centralized text block -->
     <div class="c-text">
       <p>
@@ -91,11 +91,11 @@ Our hand crafted cashmere is weaved on 500year old looms and are treated from th
           men’s and women’s label. His profile has been published by an Italian
           Publication.
         </p>
-        <div class="image first" :style="setBg('7.jpg')"></div>
+        <div class="image first" :style="setBg('8.jpg')"></div>
       </div>
       <!-- reverse of bordered block with image and text -->
       <div class="bordered-block reverse">
-        <div class="image second" :style="setBg('8.jpg')"></div>
+        <div class="image second" :style="setBg('9.jpg')"></div>
         <p class="text">
           In fashion, he’s celebrated as a reformer of fabric, texture and
           simplicity of silhouette. He was awarded as the “best debut” and

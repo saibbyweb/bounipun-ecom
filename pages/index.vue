@@ -87,6 +87,8 @@
       <div
         class="p-block flex"
         v-for="(block, index) in layout.productListBlocks"
+        style="cursor: pointer"
+        @click="$router.push(`/lists/${block.productList.slug}`)"
         :key="index"
       >
         <!-- product list block cover image -->
@@ -98,6 +100,7 @@
             dSlideHeight="70vh"
             :dSlideWidth="27"
             :dots="true"
+            :autoplay="true"
           />
 
           <div class="cta center">
@@ -118,7 +121,7 @@
         ></div>
 
         <div class="pad center-col text" v-if="block.visible">
-          <h2 class="text-1">{{ block.text1 }}</h2>
+          <h2 class="text-1" style="text-align:center;">{{ block.text1 }}</h2>
           <p class="text-2">{{ block.text2 }}</p>
         </div>
       </div>
