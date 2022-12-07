@@ -236,7 +236,7 @@ router.post(
     /* destructure data from request body */
     const { rawCriterion, unlocked } = req.body;
 
-    console.log(rawCriterion);
+    // console.log(rawCriterion);
 
     /* construct criterion from raw criterion */
     let criterion: any = {};
@@ -254,6 +254,12 @@ router.post(
           ? admin.getObjectId_ied(value)
           : value;
         filters[key] = { $in: value };
+      }
+      
+      /* if rts and variant selected */
+      if(filters['availabilityType'] && key==="variants._id" && value.length !== 0) {
+        delete filters['variants._id'];
+        filters['rtsDirectVariant'] = { $in: value }
       }
     });
 
@@ -322,11 +328,11 @@ router.post(
       criterion.match = { ...criterion.match, lock: false };
     }
 
-    console.log(criterion.match['$or'])
+    console.log(criterion.match)
 
     /* sort by fields */
     criterion.sort = rawCriterion.sortBy;
-    console.log(criterion.sort)
+    // console.log(criterion.sort)
 
     /* calculate number of docs to be skipped */
     criterion.skip = (rawCriterion.cursor - 1) * rawCriterion.limit;
