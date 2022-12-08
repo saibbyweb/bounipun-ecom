@@ -111,7 +111,7 @@
         <div class="image first" :style="setBg('8.jpg')"></div>
       </div>
       <!-- reverse of bordered block with image and text -->
-      <div class="bordered-block reverse">
+      <!-- <div class="bordered-block reverse">
         <div class="image second" :style="setBg('9.jpg')"></div>
         <p class="text">
           In fashion, he’s celebrated as a reformer of fabric, texture and
@@ -120,7 +120,7 @@
           men’s and women’s label. His profile has been published by an Italian
           Publication.
         </p>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
@@ -253,10 +253,12 @@ p {
     padding: 5%;
     .one {
       width: 100%;
+      padding: 0;
       /* height: 60vh; */
 
       .one-image {
         height: 60vh;
+        padding: 1% 3%;
       }
 
       .text {

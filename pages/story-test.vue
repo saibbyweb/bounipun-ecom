@@ -99,7 +99,7 @@
       </p>
     </div>
     <!-- bordered block with image and text -->
-    <div class="flex center col bordered-blocks">
+    <!-- <div class="flex center col bordered-blocks">
       <div class="bordered-block">
         <p class="text">
           In fashion, he’s celebrated as a reformer of fabric, texture and
@@ -109,9 +109,9 @@
           Publication.
         </p>
         <div class="image first" :style="setBg('8.jpg')"></div>
-      </div>
-      <!-- reverse of bordered block with image and text -->
-      <div class="bordered-block reverse">
+      </div> -->
+    <!-- reverse of bordered block with image and text -->
+    <!-- <div class="bordered-block reverse">
         <div class="image second" :style="setBg('9.jpg')"></div>
         <p class="text">
           In fashion, he’s celebrated as a reformer of fabric, texture and
@@ -120,8 +120,8 @@
           men’s and women’s label. His profile has been published by an Italian
           Publication.
         </p>
-      </div>
-    </div>
+      </div> -->
+    <!-- </div> -->
   </div>
 </template>
 
@@ -156,8 +156,8 @@ export default {
   methods: {
     setBg(image, fixedAttachment) {
       let bg = image;
-      if(fixedAttachment)
-        bg = this.windowWidth > 768 ? image : `mobile/${image}`
+      if (fixedAttachment)
+        bg = this.windowWidth > 768 ? image : `mobile/${image}`;
 
       let styles = {
         backgroundImage: `url(/new-story-images/${bg})`,
@@ -190,7 +190,7 @@ export default {
       });
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -213,6 +213,7 @@ export default {
 
 p {
   font-size: 13.5px;
+  /* text-align: justify; */
 }
 
 .c-text {
@@ -238,7 +239,8 @@ p {
       height: 80%;
     }
     .text {
-      padding: 2%;
+      /* padding: 0% 2% 2% 2%; */
+   
       margin: 0% 0 4.5% 0;
     }
   }
@@ -254,14 +256,17 @@ p {
     padding: 5%;
     .one {
       width: 100%;
+      padding: 0;
       /* height: 60vh; */
 
       .one-image {
         height: 60vh;
+        /* padding: 1% 3%; */
       }
 
       .text {
         padding-top: 10%;
+        padding-bottom: 5%;
         /* height: 35%; */
         text-align: center;
       }
@@ -298,7 +303,6 @@ p {
 
   .full-width {
     /* background-attachment: initial; */
-    
   }
 }
 
