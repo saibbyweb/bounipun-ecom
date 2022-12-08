@@ -1,11 +1,8 @@
 <template>
   <div class="page -wh">
     <!-- header image with arrow in bottom-middle part -->
-    <div
-      class="header-image flex center col"
-      :style="setBg('1.jpg')"
-    >
-      <h1>Our Story</h1>
+    <div class="header-image flex center col" :style="setBg('1.jpg')">
+      <!-- <h1>Our Story</h1> -->
       <br />
       <br />
       <img
@@ -18,7 +15,10 @@
     <!-- centralized text block -->
     <div ref="start" class="c-text">
       <p>
-       Zubair Kirmani , an internationally acclaimed fashion designer hailing from the implausible Vale of Kashmir. He has grown under shades of mighty Chinars and scented cypresses in mountainous paradise. To cap it all, he called his ever-growing Brand as – “BOUNIPUN” (Chinar leaf).
+        Zubair Kirmani , an internationally acclaimed fashion designer hailing
+        from the implausible Vale of Kashmir. He has grown under shades of
+        mighty Chinars and scented cypresses in mountainous paradise. To cap it
+        all, he called his ever-growing Brand as – “BOUNIPUN” (Chinar leaf).
       </p>
     </div>
     <!-- section 1 (45/55) - (first one with image + text, second one with just a long image) -->
@@ -30,7 +30,15 @@
         <!-- text -->
         <div class="text">
           <p>
-          Zubair Kirmani could not unhitch the strings that linked him to his motherland despite working away from home for at least 15 years. Zubair Kirmani came back after exploring and proving himself worldwide. The brand is about breaking all the stereotypes, the mainstream rules which cause hindrance in expression. The brand BOUNIPUN is all about Luxury that is authentic, modern, and allows everyone to express their unique personality. A luxury rooted in creativity and sincerity that inspires dreams and emotions. In our signature designs, we encapsulate these beliefs.
+            Zubair Kirmani could not unhitch the strings that linked him to his
+            motherland despite working away from home for at least 15 years.
+            Zubair Kirmani came back after exploring and proving himself
+            worldwide. The brand is about breaking all the stereotypes, the
+            mainstream rules which cause hindrance in expression. The brand
+            BOUNIPUN is all about Luxury that is authentic, modern, and allows
+            everyone to express their unique personality. A luxury rooted in
+            creativity and sincerity that inspires dreams and emotions. In our
+            signature designs, we encapsulate these beliefs.
           </p>
         </div>
       </div>
@@ -38,14 +46,19 @@
       <div class="two" :style="setBg('3.jpg')"></div>
     </div>
 
-    <br>
-    <br>
+    <!-- <br> -->
+    <!-- <br> -->
     <!-- full width image -->
     <div class="full-width" :style="setBg('4.jpg', true)"></div>
     <!-- centralized text block -->
     <div class="c-text">
-      <p>
-        Zubair is one of the few designers who flourished as the winner of the prestigious International Woolmark Prize, 2016-2017 that was held in Paris. He has been honoured “best debut” and “neo-minimal designer” by ELLE magazine. His rigorous research into the textile and in-depth exploration with style for Woolmark inspired him to explore more, and subsume these innovations in his brand BOUNIPUN KASHMIR.
+      <p class="just-text">
+        Zubair is one of the few designers who flourished as the winner of the
+        prestigious International Woolmark Prize, 2016-2017 that was held in
+        Paris. He has been honoured “best debut” and “neo-minimal designer” by
+        ELLE magazine. His rigorous research into the textile and in-depth
+        exploration with style for Woolmark inspired him to explore more, and
+        subsume these innovations in his brand BOUNIPUN KASHMIR.
       </p>
     </div>
     <!-- reverse of section 1 -->
@@ -57,9 +70,13 @@
         <!-- text -->
         <div class="text">
           <p>
-            We've explored cashmere in the ways no one has ever done before. Our signature designs are unique and are not limited to one season, just like Bounipun(Chinar leaf) , we are versatile and blend with every season.
-
-Our hand crafted cashmere is weaved on 500year old looms and are treated from the waters of glacier. The running down the mountains through gushing streams, the water is utilised in the manufacturing process.
+            We've explored cashmere in the ways no one has ever done before. Our
+            signature designs are unique and are not limited to one season, just
+            like Bounipun(Chinar leaf) , we are versatile and blend with every
+            season. Our hand crafted cashmere is weaved on 500year old looms and
+            are treated from the waters of glacier. The running down the
+            mountains through gushing streams, the water is utilised in the
+            manufacturing process.
           </p>
         </div>
       </div>
@@ -70,7 +87,7 @@ Our hand crafted cashmere is weaved on 500year old looms and are treated from th
     <div class="full-width" :style="setBg('7.jpg', true)"></div>
     <!-- centralized text block -->
     <div class="c-text">
-      <p>
+      <p class="just-text">
         In fashion, he’s celebrated as a reformer of fabric, texture and
         simplicity of silhouette. He was awarded as the “best debut” and
         “neo-minimal designer” by ELLE magazine just after the launch of his
@@ -113,13 +130,27 @@ export default {
   head() {
     return {
       title: "Our Story | Bounipun Kashmir",
-    }
+    };
   },
   computed: {
     isIos() {
       let is_ios = /iP(ad|od|hone)/i.test(window.navigator.userAgent);
       let is_safari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
       return is_ios && is_safari;
+    },
+    iosDetected() {
+      return (
+        [
+          "iPad Simulator",
+          "iPhone Simulator",
+          "iPod Simulator",
+          "iPad",
+          "iPhone",
+          "iPod",
+        ].includes(navigator.platform) ||
+        // iPad on iOS 13 detection
+        (navigator.userAgent.includes("Mac") && "ontouchend" in document)
+      );
     },
   },
   methods: {
@@ -134,9 +165,13 @@ export default {
         backgroundOrigin: "content-box",
         // backgroundPosition: "center"
       };
-      
+
       /* if device is NOT ios and fixed attachement is required */
-      if (!this.isIos && fixedAttachment) {
+      // if (!this.isIos && fixedAttachment) {
+      //   styles = { ...styles, backgroundAttachment: "fixed" };
+      // }
+
+      if (!this.iosDetected && fixedAttachment) {
         styles = { ...styles, backgroundAttachment: "fixed" };
       }
 
@@ -203,33 +238,36 @@ p {
     }
     .text {
       padding: 2%;
+      margin: 0% 0 4.5% 0;
     }
   }
   .two {
-    padding: 1% 3%;
+    /* padding: 1% 3%; */
+
     width: 55%;
   }
 
   @media (max-width: 768px) {
     flex-direction: column;
-    height: 200vh;
+    height: fit-content;
+    padding: 5%;
     .one {
       width: 100%;
-      height: 50%;
+      /* height: 60vh; */
 
       .one-image {
-        height: 65%;
+        height: 60vh;
       }
 
       .text {
         padding-top: 10%;
-        height: 35%;
+        /* height: 35%; */
         text-align: center;
       }
     }
     .two {
       width: 100%;
-      height: 50%;
+      height: 90vh;
     }
   }
 }
@@ -242,6 +280,13 @@ p {
 }
 
 @media (max-width: 768px) {
+  .c-text {
+    padding: 4% 10% 0 10%;
+    text-align: center;
+    .just-text {
+      padding-top: 5%;
+    }
+  }
   .header-image {
     background-attachment: initial;
   }
@@ -281,7 +326,8 @@ p {
 
   @media (max-width: 768px) {
     width: 85%;
-    height: 83vh;
+    height: 80vh;
+    /* height:fit-content; */
     flex-direction: column;
     justify-content: flex-end;
 
@@ -295,6 +341,7 @@ p {
       top: 0;
       width: 100%;
       height: 57%;
+      /* position: relative; */
 
       &.first {
         left: 0;
