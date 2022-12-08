@@ -99,7 +99,7 @@
       </p>
     </div>
     <!-- bordered block with image and text -->
-    <div class="flex center col">
+    <div class="flex center col bordered-blocks">
       <div class="bordered-block">
         <p class="text">
           In fashion, he’s celebrated as a reformer of fabric, texture and
@@ -280,6 +280,11 @@ p {
 }
 
 @media (max-width: 768px) {
+
+
+  .bordered-blocks {
+    margin-top: 4%;
+  }
   .c-text {
     padding: 4% 10% 0 10%;
     text-align: center;
