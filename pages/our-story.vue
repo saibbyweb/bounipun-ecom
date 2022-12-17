@@ -2,7 +2,7 @@
   <div class="page -wh">
     <!-- header image with arrow in bottom-middle part -->
     <div class="header-image flex center col" :style="setBg('1.jpg')">
-      <!-- <h1>Our Story</h1> -->
+      <!-- <h1></h1> -->
       <br />
       <br />
       <img
@@ -99,8 +99,8 @@
       </p>
     </div>
     <!-- bordered block with image and text -->
-    <div class="flex center col bordered-blocks">
-      <!-- <div class="bordered-block">
+    <!-- <div class="flex center col bordered-blocks">
+      <div class="bordered-block">
         <p class="text">
           In fashion, he’s celebrated as a reformer of fabric, texture and
           simplicity of silhouette. He was awarded as the “best debut” and
@@ -110,8 +110,8 @@
         </p>
         <div class="image first" :style="setBg('8.jpg')"></div>
       </div> -->
-      <!-- reverse of bordered block with image and text -->
-      <!-- <div class="bordered-block reverse">
+    <!-- reverse of bordered block with image and text -->
+    <!-- <div class="bordered-block reverse">
         <div class="image second" :style="setBg('9.jpg')"></div>
         <p class="text">
           In fashion, he’s celebrated as a reformer of fabric, texture and
@@ -121,7 +121,7 @@
           Publication.
         </p>
       </div> -->
-    </div>
+    <!-- </div> -->
   </div>
 </template>
 
@@ -155,8 +155,9 @@ export default {
   },
   methods: {
     setBg(image, fixedAttachment) {
-      //   const bg = this.windowWidth > 768 ? image : `mobile/${image}`
-      const bg = image;
+      let bg = image;
+      // if (fixedAttachment)
+        // bg = this.windowWidth > 768 ? image : `mobile/${image}`;
 
       let styles = {
         backgroundImage: `url(/new-story-images/${bg})`,
@@ -189,7 +190,7 @@ export default {
       });
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -212,6 +213,7 @@ export default {
 
 p {
   font-size: 13.5px;
+  /* text-align: justify; */
 }
 
 .c-text {
@@ -237,7 +239,8 @@ p {
       height: 80%;
     }
     .text {
-      padding: 2%;
+      /* padding: 0% 2% 2% 2%; */
+   
       margin: 0% 0 4.5% 0;
     }
   }
@@ -258,11 +261,12 @@ p {
 
       .one-image {
         height: 60vh;
-        padding: 1% 3%;
+        /* padding: 1% 3%; */
       }
 
       .text {
         padding-top: 10%;
+        padding-bottom: 5%;
         /* height: 35%; */
         text-align: center;
       }
@@ -278,30 +282,31 @@ p {
 .full-width {
   width: 100%;
   height: 90vh;
+  background-position: center;
   /* background-attachment: fixed; */
 }
 
 @media (max-width: 768px) {
-
-
   .bordered-blocks {
     margin-top: 4%;
   }
-
   .text {
     p {
       font-size: 3.5vw;
     }
   }
+
   .c-text {
     padding: 4% 10% 0 10%;
     text-align: center;
 
-     p {
-      font-size: 3.5vw;
+    p {
+      font-size: 3.5vw !important;
      }
+
     .just-text {
       padding-top: 5%;
+      font-size: 3.5vw;
     }
   }
   .header-image {

@@ -290,11 +290,23 @@ p {
   .bordered-blocks {
     margin-top: 4%;
   }
+  .text {
+    p {
+      font-size: 3.5vw;
+    }
+  }
+
   .c-text {
     padding: 4% 10% 0 10%;
     text-align: center;
+
+    p {
+      font-size: 3.5vw !important;
+     }
+
     .just-text {
       padding-top: 5%;
+      font-size: 3.5vw;
     }
   }
   .header-image {
