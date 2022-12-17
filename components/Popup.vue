@@ -11,7 +11,7 @@
       <div class="image" :style="backgroundImageStyles"></div>
       <div class="text flex center col w-bold">
         <p v-html="text1" class="text1"></p>
-        <p v-html="text2" class="text2">{{ text2 }}</p>
+        <p v-html="text2" class="text2"></p>
         <button class="action">{{ text3 }}</button>
       </div>
     </div>
@@ -148,8 +148,13 @@ export default {
     }
     .text {
       height: 180px;
-      gap: 14px;
+      gap: 14px; 
+      font-size: 3.3vw;
     }
+
+    .action {
+      font-size: 3.5vw;
+  }
   }
 }
 </style>

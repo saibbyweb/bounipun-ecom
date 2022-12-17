@@ -100,7 +100,7 @@
     </div>
     <!-- bordered block with image and text -->
     <div class="flex center col bordered-blocks">
-      <div class="bordered-block">
+      <!-- <div class="bordered-block">
         <p class="text">
           In fashion, he’s celebrated as a reformer of fabric, texture and
           simplicity of silhouette. He was awarded as the “best debut” and
@@ -109,7 +109,7 @@
           Publication.
         </p>
         <div class="image first" :style="setBg('8.jpg')"></div>
-      </div>
+      </div> -->
       <!-- reverse of bordered block with image and text -->
       <!-- <div class="bordered-block reverse">
         <div class="image second" :style="setBg('9.jpg')"></div>
@@ -287,9 +287,19 @@ p {
   .bordered-blocks {
     margin-top: 4%;
   }
+
+  .text {
+    p {
+      font-size: 3.5vw;
+    }
+  }
   .c-text {
     padding: 4% 10% 0 10%;
     text-align: center;
+
+     p {
+      font-size: 3.5vw;
+     }
     .just-text {
       padding-top: 5%;
     }
