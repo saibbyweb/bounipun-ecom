@@ -287,198 +287,216 @@ export const methods = {
   },
   userAuth:
     (userGroup, strictMode = true) =>
-    (...args: [req: any, res: any, next: any]) => {
-      return expressAuth(...args, userGroup, strictMode);
-    },
+      (...args: [req: any, res: any, next: any]) => {
+        return expressAuth(...args, userGroup, strictMode);
+      },
   /* pricing retrieved */
   async getCartItems(cart, unlocked = false) {
-    /*  if cart is empty */
-    if (cart.length === 0) return [];
 
-    /* get all unique product ids */
-    const allUniqueProducts = [...new Set(cart.map((item) => item.product))];
-    /* fetch all relevant details for each unique product */
-    let allProductPromises = [];
-    for (const productId of allUniqueProducts) {
-      /* filter */
-      const filter: any = { _id: productId, status: true };
-      // TODO: may be it should be lock not equal to true
-      if (unlocked === false) filter.lock = false;
+    try {
 
-      const fetchProduct = db
-        .model("products")
-        .findOne(filter)
-        .populate("bounipun_collection", { _id: 0, name: 1, edt: 1 })
-        .populate("variants._id", { name: 1, hsnCode: 1, gstPercentage: 1 })
-        .populate("variants.fabrics._id", { name: 1, info1: 1 })
-        .populate("colors._id", { name: 1 })
-        .populate("rtsDirectVariant", { name: 1 })
-        .populate("rtsDirectFabric", { name: 1 })
-        .lean();
-      allProductPromises.push(fetchProduct);
-    }
+      /*  if cart is empty */
+      if (cart.length === 0) return [];
 
-    /* wait for all promises to resolve */
-    let allProducts: any = await Promise.all(allProductPromises);
+      /* get all unique product ids */
+      const allUniqueProducts = [...new Set(cart.map((item) => item.product))];
+      /* fetch all relevant details for each unique product */
+      let allProductPromises = [];
+      for (const productId of allUniqueProducts) {
+        /* filter */
+        const filter: any = { _id: productId, status: true };
+        // TODO: may be it should be lock not equal to true
+        if (unlocked === false) filter.lock = false;
 
-    allProducts = allProducts.filter((prod) => prod !== null);
+        const fetchProduct = db
+          .model("products")
+          .findOne(filter)
+          .populate("bounipun_collection", { _id: 0, name: 1, edt: 1 })
+          .populate("variants._id", { name: 1, hsnCode: 1, gstPercentage: 1 })
+          .populate("variants.fabrics._id", { name: 1, info1: 1 })
+          .populate("colors._id", { name: 1 })
+          .populate("rtsDirectVariant", { name: 1 })
+          .populate("rtsDirectFabric", { name: 1 })
+          .lean();
+        allProductPromises.push(fetchProduct);
+      }
 
-    if (allProducts.length === 0) {
-      return false;
-    }
+      /* wait for all promises to resolve */
+      let allProducts: any = await Promise.all(allProductPromises);
 
-    /* remove all inactive colors */
-    allProducts.forEach((product) => {
-      /* filter out inactive colors */
-      // console.log(product.name, product.colors)
-      product.colors = product.colors.filter((color) => color.status === true);
-    });
+      allProducts = allProducts.filter((prod) => prod !== null);
 
-    /* TODO: check for sale and update pricing */
+      if (allProducts.length === 0) {
+        return false;
+      }
 
-    /* TODO: you should clear cart from user database and return */
-
-    /* remove all the nulls from cart as well as all products */
-
-    /* TODO: put this to use */
-    let itemsToBeRemoved = [];
-
-    /* create cart items array */
-    let cartItems = cart.map((item) => {
-      let cartItem = {
-        productId: item.product,
-        styleId: "",
-        productName: "",
-        slug: "",
-        colorName: "",
-        mainImage: "",
-        collectionName: "",
-        shippingTime: "4",
-        variantName: "",
-        hsnCode: "",
-        gstPercentage: "",
-        fabricName: "",
-        fabricInfo1: "",
-        price: 0,
-        pricing: {},
-        sale: null,
-        askForPrice: false,
-        quantity: item.quantity,
-        cartEntry: item,
-      };
-
-      /* find product */
-      const product = allProducts.find((prod) => {
-        return prod._id.toString() == item.product.toString();
+      /* remove all inactive colors */
+      allProducts.forEach((product) => {
+        /* filter out inactive colors */
+        // console.log(product.name, product.colors)
+        product.colors = product.colors.filter((color) => color.status === true);
       });
 
-      /* if productId didn't match, product is either unpublished or removed from the db,
-            mark this as item to be removed */
-      if (product === undefined) {
-        itemsToBeRemoved.push(item);
-        return false;
-      }
+      /* TODO: check for sale and update pricing */
 
-      /* find selected color */
-      const selectedColor = product.colors.find(
-        (color) => color.code === item.colorCode
-      );
+      /* TODO: you should clear cart from user database and return */
 
-      /* if color is not found, color is either unpublished or removed from the db,
-            mark this as item to be removed */
-      if (selectedColor === undefined) {
-        itemsToBeRemoved.push(item);
-        return false;
-      }
+      /* remove all the nulls from cart as well as all products */
 
-      /* product name */
-      cartItem.styleId = product.styleId;
-      cartItem.productName = product.name;
-      cartItem.sale = product.sale;
-      cartItem.askForPrice = product.askForPrice !== undefined ? product.askForPrice : false;
+      /* TODO: put this to use */
+      let itemsToBeRemoved = [];
 
-      /* slug */
-      cartItem.slug = product.slug;
-      /* color name */
-      cartItem.colorName = selectedColor.name;
+      /* create cart items array */
+      let cartItems = cart.map((item) => {
+        let cartItem = {
+          productId: item.product,
+          styleId: "",
+          productName: "",
+          slug: "",
+          colorName: "",
+          mainImage: "",
+          collectionName: "",
+          shippingTime: "4",
+          variantName: "",
+          hsnCode: "",
+          gstPercentage: "",
+          fabricName: "",
+          fabricInfo1: "",
+          price: 0,
+          pricing: {},
+          sale: null,
+          askForPrice: false,
+          quantity: item.quantity,
+          cartEntry: item,
+        };
 
-      /*  main image */
-      if (selectedColor.images.length !== 0) {
-        /* find main image */
-        const mainImage = selectedColor.images.find(
-          (img) => img.mainImage === true
-        );
-        /* set main image */
-        cartItem.mainImage =
-          mainImage !== undefined
-            ? mainImage.path
-            : selectedColor.images[0].path;
-      }
+        /* find product */
+        const product = allProducts.find((prod) => {
+          return prod._id.toString() == item.product.toString();
+        });
 
-      /* price: defaults to direct price */
-      // cartItem.price = parseInt(product.directPrice);
-      cartItem.price = product.directPrice;
-      cartItem.pricing = product.directPricing;
-
-      /* if under bounipun, set collection name */
-      if (product.type === "under-bounipun") {
-        /* collection name */
-        cartItem.collectionName = product.bounipun_collection.name;
-        /* shipping time */
-        cartItem.shippingTime = product.bounipun_collection.edt;
-        // console.log(cartItem);
-      }
-
-      /* if under bounipun and made to order */
-      if (
-        product.type === "under-bounipun" &&
-        product.availabilityType === "made-to-order"
-      ) {
-        /* variant name (if made to order) */
-        const selectedVariant = product.variants.find(
-          (variant) => variant._id._id.toString() === item.variant.toString()
-        );
-        cartItem.variantName = selectedVariant._id.name;
-        cartItem.hsnCode = selectedVariant._id.hsnCode;
-        cartItem.gstPercentage = selectedVariant._id.gstPercentage;
-
-        /* fabric name (if made to order) */
-        const selectedFabric = selectedVariant.fabrics.find(
-          (fabric) => fabric._id._id.toString() === item.fabric.toString()
-        );
-
-        if(selectedFabric === undefined) {
+        /* if productId didn't match, product is either unpublished or removed from the db,
+              mark this as item to be removed */
+        if (product === undefined) {
+          itemsToBeRemoved.push(item);
           return false;
         }
+
+        /* find selected color */
+        const selectedColor = product.colors.find(
+          (color) => color.code === item.colorCode
+        );
+
+        /* if color is not found, color is either unpublished or removed from the db,
+              mark this as item to be removed */
+        if (selectedColor === undefined) {
+          itemsToBeRemoved.push(item);
+          return false;
+        }
+
+        /* product name */
+        cartItem.styleId = product.styleId;
+        cartItem.productName = product.name;
+        cartItem.sale = product.sale;
+        cartItem.askForPrice = product.askForPrice !== undefined ? product.askForPrice : false;
+
+        /* slug */
+        cartItem.slug = product.slug;
+        /* color name */
+        cartItem.colorName = selectedColor.name;
+
+        /*  main image */
+        if (selectedColor.images.length !== 0) {
+          /* find main image */
+          const mainImage = selectedColor.images.find(
+            (img) => img.mainImage === true
+          );
+          /* set main image */
+          cartItem.mainImage =
+            mainImage !== undefined
+              ? mainImage.path
+              : selectedColor.images[0].path;
+        }
+
+        /* price: defaults to direct price */
+        // cartItem.price = parseInt(product.directPrice);
+        cartItem.price = product.directPrice;
+        cartItem.pricing = product.directPricing;
+
+        /* if under bounipun, set collection name */
+        if (product.type === "under-bounipun") {
+          /* collection name */
+          cartItem.collectionName = product.bounipun_collection.name;
+          /* shipping time */
+          cartItem.shippingTime = product.bounipun_collection.edt;
+          // console.log(cartItem);
+        }
+
+        /* if under bounipun and made to order */
+        if (
+          product.type === "under-bounipun" &&
+          product.availabilityType === "made-to-order"
+        ) {
+          /* variant name (if made to order) */
+          const selectedVariant = product.variants.find(
         
-        cartItem.fabricName = selectedFabric._id.name;
+            (variant) => { 
+              variant._id._id.toString() === item.variant.toString()
+            }
+          );
+          
+          /* if selected variant is not available, skip */
+          if(!selectedVariant) {
+            itemsToBeRemoved.push(item);
+            return false;
+          }
 
-        /* fabric info 1 (if made to order) */
-        cartItem.fabricInfo1 = selectedFabric._id.info1;
-        /* price (depends on ready to ship or made to order */
-        cartItem.price = selectedFabric.price;
-        cartItem.pricing = selectedFabric.pricing;
-      }
+          cartItem.variantName = selectedVariant._id.name;
+          cartItem.hsnCode = selectedVariant._id.hsnCode;
+          cartItem.gstPercentage = selectedVariant._id.gstPercentage;
 
-      /* if under bounipun and ready to ship */
-      if (
-        product.type === "under-bounipun" &&
-        product.availabilityType === "ready-to-ship"
-      ) {
-        /* set variant and fabric name */
-        cartItem.variantName = product.rtsDirectVariant.name;
-        cartItem.fabricName = product.rtsDirectFabric.name;
-        cartItem.shippingTime = "1";
-      }
+          /* fabric name (if made to order) */
+          const selectedFabric = selectedVariant.fabrics.find(
+            (fabric) => fabric._id._id.toString() === item.fabric.toString()
+          );
 
-      return cartItem;
-    });
+          if (selectedFabric === undefined) {
+            return false;
+          }
 
-    cartItems = cartItems.filter((item) => item !== false);
+          cartItem.fabricName = selectedFabric._id.name;
 
-    cartItems = await this.normalizePricing(cartItems);
+          /* fabric info 1 (if made to order) */
+          cartItem.fabricInfo1 = selectedFabric._id.info1;
+          /* price (depends on ready to ship or made to order */
+          cartItem.price = selectedFabric.price;
+          cartItem.pricing = selectedFabric.pricing;
+        }
 
-    return cartItems;
+        /* if under bounipun and ready to ship */
+        if (
+          product.type === "under-bounipun" &&
+          product.availabilityType === "ready-to-ship"
+        ) {
+          /* set variant and fabric name */
+          cartItem.variantName = product.rtsDirectVariant.name;
+          cartItem.fabricName = product.rtsDirectFabric.name;
+          cartItem.shippingTime = "1";
+        }
+
+        return cartItem;
+      });
+
+      cartItems = cartItems.filter((item) => item !== false);
+
+      cartItems = await this.normalizePricing(cartItems);
+
+      return cartItems;
+    }
+    catch (e) {
+      console.log(e)
+      return [];
+    }
   },
   async normalizePricing(cartItems) {
     /* hashmap of all valid sale details fetched during this routine */
@@ -488,7 +506,7 @@ export const methods = {
 
     let normalizedProducts = [];
 
-    for(const product of cartItems) {
+    for (const product of cartItems) {
 
       console.log(`${product.productName}`);
       /* if product is not under sale, return product as is */
@@ -522,15 +540,15 @@ export const methods = {
       }
 
       /* extract discount percentage */
-      const { discountPercentage, name: saleName  } = validSales[product.sale];
-      
+      const { discountPercentage, name: saleName } = validSales[product.sale];
+
       /* sale details */
       product.saleDetails = { name: saleName, discountPercentage };
 
       console.log(
         `🔹 Discount percentage to be applied to ${product.productName} :  ${discountPercentage} %`
       );
-      
+
       console.log(`🟡 Original: ${product.price}`);
 
       product.price =
@@ -906,7 +924,7 @@ export const methods = {
 
     return orderPayload;
   },
-  async verifyGatewayToken() {},
+  async verifyGatewayToken() { },
   /* get next sequence */
   async getNextSequence() {
     /* generate new id  */
