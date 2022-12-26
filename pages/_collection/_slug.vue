@@ -28,9 +28,9 @@
         <span class="collection-vertical"> Bounipun Escape </span>
 
         <!-- back button -->
-        <div class="back-button">
+        <!-- <div class="back-button">
           <img @click="$router.go(-1)" src="/icons/dark/arrow-left.png" />
-        </div>
+        </div> -->
 
         <!-- wishlist icon -->
         <img
@@ -1156,7 +1156,9 @@ export default {
       // cursor: pointer;
 
       .toggle {
-        width: 100%;
+        /* width: 100%; */
+        border-radius: 50%;
+        width: 40px;
         height: 40px;
         box-sizing: content-box;
         transform: rotate(0deg) scale(1);
@@ -1169,7 +1171,8 @@ export default {
         opacity: 0.7;
 
         img {
-          width: 24px;
+          width: 19px;
+          margin-left: -2px;
           transition: transform 0.4s ease-in-out;
         }
 
@@ -1187,9 +1190,10 @@ export default {
         // display: flex;
         display: none;
         flex-direction: column-reverse;
-        justify-content: center;
-        align-items: center;
+        justify-content: flex-start;
+        align-items: flex-start;
         transition: opacity 0.4s ease-in-out;
+        padding-left: 7px;
 
         img {
           cursor: pointer;
@@ -1200,6 +1204,8 @@ export default {
           box-sizing: content-box;
           padding: 4px;
           transition: all 0.3s ease-in-out;
+          border-radius: 50%;
+          padding: 4px;
           &:hover {
             transform: scale(1.1);
           }

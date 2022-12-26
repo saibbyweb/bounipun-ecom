@@ -106,7 +106,7 @@
       <label class="label"> Soft Lock </label>
       <Toggle
         v-model="doc.softLock"
-        label="🔒 Soft Lock"
+        label="🔒 Soft Lock (Only logged can view)"
         width="90px"
         activeText="Enabled"
         inactiveText="Unlocked"
@@ -138,7 +138,7 @@
       <!-- lock toggle -->
       <Toggle
         v-model="doc.lock"
-        label="🔒 Lock"
+        label="🔒 Hard Lock (Only users with Premium Access Code can view)"
         width="90px"
         activeText="Enabled"
         inactiveText="Unlocked"

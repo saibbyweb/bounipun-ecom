@@ -89,6 +89,7 @@ export const methods = {
 
         if (logIndex !== -1) {
             console.log('❌  User already in unlock usage log');
+            // this.updateUnlockCodeLog(code.toUpperCase(), user, 'remove')
             return false;
         }
 

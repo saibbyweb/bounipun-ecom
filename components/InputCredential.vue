@@ -167,7 +167,7 @@ export default {
         }
 
         @media (max-width: 768px) {
-          font-size: 30px;
+          font-size: 27px;
 
           &::placeholder {
             font-size: 3.4vw;

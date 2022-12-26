@@ -14,13 +14,15 @@
       />
 
       <!-- apply button -->
-      <button
+      <AnimatedButton :onClick="applyUnlockCode" :text="unlockCodeApplied ? 'Unlocking...' : 'Click to Activate'" />
+
+      <!-- <button
         @click="applyUnlockCode"
         class="action apply"
         :class="{ applied: unlockCodeApplied }"
       >
-        {{ unlockCodeApplied ? "Unlocking..." : "Activate Bounipun Premium" }}
-      </button>
+        {{ unlockCodeApplied ? "Unlocking..." : "Click to Activate" }}
+      </button> -->
 
       <!-- code error -->
       <p v-if="unlockCodeError.status" class="error msg">
@@ -76,6 +78,7 @@ export default {
 
       /* refresh window */
       console.log(applyUnlockCodeRequest);
+      this.$vibrateDevice(300);
       location.reload();
     },
   },

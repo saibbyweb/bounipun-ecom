@@ -403,7 +403,7 @@
     <!-- lock status -->
     <Toggle
       v-model="doc.lock"
-      label="Lock Status"
+      label="🔒 Hard Lock (Only users with Premium Access code can view)"
       activeText="🔒 Locked"
       inactiveText="Unlocked"
     />
