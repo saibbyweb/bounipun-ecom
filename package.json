@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "frontend:generate": "nuxt generate",
-    "dev:nuxt": "NUXT_HOST=0.0.0.0 NUXT_PORT=8080 nuxt --spa",
+    "client:dev": "NUXT_HOST=0.0.0.0 NUXT_PORT=8080 nuxt --spa",
     "frontend:build": "nuxt build --spa",
     "dev:server-old": "NODE_ENV=development nodemon --watch server --exec ts-eager server/index.ts",
-    "dev:server": "NODE_ENV=development nodemon --watch server --exec esr server/index.ts",
+    "server:dev": "NODE_ENV=development nodemon --watch server --exec esr server/index.ts",
     "server:build": "NODE_ENV=production node serverBundle.js",
     "buildx": "yarn run frontend:build && yarn run server:build",
     "build": "yarn run server:build",

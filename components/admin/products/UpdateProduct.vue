@@ -389,6 +389,9 @@
         />
       </div>
     </div>
+    
+    <!-- override variant data -->
+    <OverrideVariantData :selectedVariants="selectedVariants" />
 
     <!-- stock -->
     <InputBox

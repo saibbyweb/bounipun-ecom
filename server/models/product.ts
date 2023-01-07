@@ -2,7 +2,6 @@ import { mongoose, ObjectId, db } from "@helpers/essentials";
 import slugify from "slugify";
 import * as fs from "fs"  
 const request = require("request")
-// const db = mongoose.connection;
 
 /* schema */
 const schema = new mongoose.Schema(
@@ -81,6 +80,13 @@ const schema = new mongoose.Schema(
       type: Boolean, 
       default: false
     },
+    variantsInfo: [{
+      variantCode: String,
+      variantImage: String,
+      info1: String,
+      info2: String,
+      hexColor: String
+    }],
     order: Number,
     status: Boolean,
   },
