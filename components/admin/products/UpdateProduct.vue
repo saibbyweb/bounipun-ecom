@@ -669,17 +669,25 @@ export default {
       this.doc["variantsInfo"] = variantsInfo;
     },
     updateVariantsInfo(options) {
-      if(!this.doc.variantsInfo)
+      if (!this.doc.variantsInfo) {
         this.doc.variantsInfo = [];
+      }
 
       switch (options.type) {
         case "push":
-          this.doc.variantsInfo.push(options.payload);
+          // this.doc.variantsInfo.push(options.payload);
+          this.$set(
+            this.doc.variantsInfo,
+            this.doc.variantsInfo.length,
+            options.payload
+          );
+          // this.$forceUpdate();
           break;
         case "remove":
+          this.doc.variantsInfo.splice(options.key, 1);
           break;
       }
-      this.$forceUpdate()
+      this.$forceUpdate();
     },
     async requestPrerender() {
       if (!this.selectedCollection) return;
