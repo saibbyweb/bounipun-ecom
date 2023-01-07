@@ -94,6 +94,10 @@ export default {
       type: String,
       default: "non-product",
     },
+    location: {
+      type: String,
+      default: ""
+    },
     value: [Array, String],
   },
   data() {
@@ -106,6 +110,7 @@ export default {
   watch: {
     value: {
       handler(newValue, oldValue) {
+  
         if (oldValue != false) {
           return;
         }
@@ -120,12 +125,16 @@ export default {
       },
     },
   },
+  mounted() {
+    if(this.location === "variants-meta")
+      this.commonAssign();
+  },
   methods: {
     clearFileSelection() {
       this.images = [];
     },
     commonAssign() {
-      console.log("ASSIGN IMAGES WAS CALLED");
+      console.log("ASSIGN IMAGES WAS CALLED !!");
       const commonProps = {
         file: null,
         cancelToken: null,
@@ -138,6 +147,7 @@ export default {
 
       switch (this.multipleUpload) {
         case true:
+        console.log('multiple file upload')
           /* if image list is empty */
           if (this.value.length === 0) return;
           /* construct component image list array */
@@ -151,6 +161,7 @@ export default {
           this.images = constructedImageList;
           break;
         case false:
+          console.log('single file upload')
           /* if no image provided */
           if (this.value === "") return;
           /* set provided image as the first element of the component image list */

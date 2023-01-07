@@ -961,6 +961,7 @@ export default {
         lock,
         sale,
         askForPrice,
+        variantsInfo,
         status,
       } = details;
       this.doc = {
@@ -987,6 +988,7 @@ export default {
         lock,
         sale,
         askForPrice,
+        variantsInfo,
         status,
       };
 

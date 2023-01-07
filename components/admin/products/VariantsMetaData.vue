@@ -31,11 +31,12 @@
 
         <!-- variant info #1  -->
         <InputBox label="Info 1" v-model="variant.info1" />
-
         <!-- variant info #2  -->
         <InputBox label="Info 2" v-model="variant.info2" />
         <!-- variant image  -->
-        <InputBox label="Variant Image" v-model="variant.variantImage" />
+        <!-- <InputBox label="Variant Image" v-model="variant.variantImage" /> -->
+
+        <UploadImageV2 label="Variant Image" :multipleUpload="false" v-model="variant.variantImage" location="variants-meta" />
         <!-- variant hex color  -->
         <InputBox label="Hex Color" v-model="variant.hexColor" />
       </div>
