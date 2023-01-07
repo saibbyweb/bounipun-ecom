@@ -14,6 +14,10 @@
 
         <!-- variant info #2  -->
         <InputBox label="Info 2" v-model="variant.info2" />
+        <!-- variant image  -->
+        <InputBox label="Variant Image" v-model="variant.variantImage" />
+        <!-- variant hex color  -->
+        <InputBox label="Hex Color" v-model="variant.hexColor" />
       </div>
     </Accordion>
   </div>
@@ -45,6 +49,7 @@ export default {
       type: Array,
       default: () => [],
     },
+    setVariantsInfo: Function,
   },
   mounted() {
     //    this.populateForm();
@@ -55,33 +60,29 @@ export default {
   methods: {
     populateForm() {
       /* find matched  */
+      const matchedProducts = this.variantsInfo.filter(
+        (v) =>
+          this.selectedVariants.findIndex((sv) => sv.code == v.variantCode) !==
+          -1
+      );
 
-      const matchedProducts = this.variantsInfo.filter(v => this.selectedVariants.findIndex(sv => sv.code == v.variantCode) !== -1);
-
-        
-
-    //   console.log(this.selectedVariants.length, matchedProducts.length);
-
-      if(this.selectedVariants.length > matchedProducts.length) {
-
-        const newVariants = this.selectedVariants.filter(sv => this.variantsInfo.findIndex(v => v.variantCode === sv.code) === -1);
+      if (this.selectedVariants.length > matchedProducts.length) {
+        const newVariants = this.selectedVariants.filter(
+          (sv) =>
+            this.variantsInfo.findIndex((v) => v.variantCode === sv.code) === -1
+        );
         console.log(newVariants);
 
-        this.variantsInfo.push(addVariantInfo(newVariants[0].code))
-      }
-      else {
-        console.log('do something')
+        this.variantsInfo.push(addVariantInfo(newVariants[0].code));
+      } else {
         this.variantsInfo = [];
-        matchedProducts.forEach(v => {
-            this.variantsInfo.push(v);
-        })
+        matchedProducts.forEach((v) => {
+          this.variantsInfo.push(v);
+        });
       }
-    //   console.log(this.selectedVariants.length, matchedProducts.length);
 
-      // this.$set(this.variantsInfo, [])
-      // this.selectedVariants.forEach(v => {
-      //     this.variantsInfo.push(addVariantInfo(v.code))
-      // })
+      /* update doc */
+      this.setVariantsInfo(this.variantsInfo);
     },
   },
   data() {
@@ -92,4 +93,9 @@ export default {
 };
 </script>
 
-<style scss="scoped"></style>
+<style scss="scoped">
+.section {
+    border: 3px dotted #efefef;
+    margin: 15px 0;
+}
+</style>

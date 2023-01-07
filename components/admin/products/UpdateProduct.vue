@@ -4,25 +4,46 @@
     <h2 class="heading">{{ editMode ? "Update" : "Add New" }} Product</h2>
 
     <!-- preview link -->
-    <div class="flex col center" style="align-items:baseline; width:100%;" v-if="editMode">
-      <div class="center" style="width:100%;">
-      <a :href="`/products?_id=${doc._id}`" target="_blank">
-        <span
+    <div
+      class="flex col center"
+      style="align-items: baseline; width: 100%"
+      v-if="editMode"
+    >
+      <div class="center" style="width: 100%">
+        <a :href="`/products?_id=${doc._id}`" target="_blank">
+          <span
+            style="
+              background: #333;
+              text-align: center;
+              color: white;
+              font-size: 12px;
+              padding: 2px 4px;
+              border-radius: 2px;
+            "
+          >
+            Preview Product ➚
+          </span>
+        </a>
+        <button
           style="
-            background: #333;
-            text-align: center;
+            background-color: #333;
             color: white;
             font-size: 12px;
-            padding: 2px 4px;
             border-radius: 2px;
+            margin: 2px;
+            padding: 2px 6px;
           "
+          @click="requestPrerender"
         >
-          Preview Product ➚
-        </span>
-      </a>
-      <button style="background-color:#333; color:white;font-size:12px;border-radius:2px; margin:2px;padding:2px 6px;" @click="requestPrerender">Request Pre-render</button>
-     </div>
-      <span v-if="prerenderingSuccessful" style="text-align:center; width:100%; font-size:12px;"> ✅ Product pre-rendered for previews </span>
+          Request Pre-render
+        </button>
+      </div>
+      <span
+        v-if="prerenderingSuccessful"
+        style="text-align: center; width: 100%; font-size: 12px"
+      >
+        ✅ Product pre-rendered for previews
+      </span>
     </div>
 
     <!-- product id -->
@@ -332,6 +353,12 @@
       label="Variants"
     />
 
+    <VariantsMetaData
+      :variants="variants"
+      :variantsInfo="doc.variantsInfo"
+      :updateVariantsInfo="updateVariantsInfo"
+    />
+
     <!-- fabric selector -->
     <div v-if="!thirdPartyProduct && !readyToShip">
       <fabric-selector
@@ -389,9 +416,9 @@
         />
       </div>
     </div>
-    
+
     <!-- override variant data -->
-    <OverrideVariantData v-if="selectedVariants.length > 0" :variantsInfo="doc.variantsInfo" :selectedVariants="selectedVariants" />
+    <!-- <OverrideVariantData v-if="selectedVariants.length > 0" :variantsInfo="doc.variantsInfo" :selectedVariants="selectedVariants" :setVariantsInfo="setVariantsInfo" /> -->
 
     <!-- stock -->
     <InputBox
@@ -534,13 +561,14 @@ export default {
   },
   computed: {
     selectedCollection() {
-      if(this.collections && this.doc.bounipun_collection != null) {
-        const foundCollection = this.collections.find(c => c.value === this.doc.bounipun_collection)
-        if(foundCollection)
-          return foundCollection.slug;
+      if (this.collections && this.doc.bounipun_collection != null) {
+        const foundCollection = this.collections.find(
+          (c) => c.value === this.doc.bounipun_collection
+        );
+        if (foundCollection) return foundCollection.slug;
       }
 
-      return ""; 
+      return "";
     },
     colorSources() {
       /* show color sources according to collection selection */
@@ -637,6 +665,22 @@ export default {
     this.fetchActiveCurrencies();
   },
   methods: {
+    setVariantsInfo(variantsInfo) {
+      this.doc["variantsInfo"] = variantsInfo;
+    },
+    updateVariantsInfo(options) {
+      if(!this.doc.variantsInfo)
+        this.doc.variantsInfo = [];
+
+      switch (options.type) {
+        case "push":
+          this.doc.variantsInfo.push(options.payload);
+          break;
+        case "remove":
+          break;
+      }
+      this.$forceUpdate()
+    },
     async requestPrerender() {
       if (!this.selectedCollection) return;
 
@@ -645,12 +689,12 @@ export default {
       const response = await this.$axios.get("/crawl", {
         params: {
           url,
-          totalColors:this.doc.colors.length
+          totalColors: this.doc.colors.length,
         },
       });
       this.$store.commit("admin/setLoading", false);
       this.prerenderingSuccessful = true;
-      setTimeout(() => this.prerenderingSuccessful = false,3000);
+      setTimeout(() => (this.prerenderingSuccessful = false), 3000);
     },
     async addNewRTSEntry(color) {
       console.log(color);

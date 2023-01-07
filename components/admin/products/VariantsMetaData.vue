@@ -1,0 +1,103 @@
+<template>
+  <div class="variants-meta-data">
+    <label class="label"> Variant Meta Data : </label>
+    <br />
+    <!-- add new button -->
+    <div class="add-new flex center" style="gap: 10px">
+      <SelectBox v-model="selectedVariant" :options="variantOptions">
+      </SelectBox>
+      <button class="action small" @click="addNewVariantMeta">+ Add New</button>
+    </div>
+
+    <!-- list -->
+    <div class="section" v-for="variant in variantsInfo" :key="variant.code">
+      <!-- variant code  -->
+      <InputBox
+        :disabled="true"
+        label="Variant Code"
+        v-model="variant.variantCode"
+      />
+
+      <!-- variant info #1  -->
+      <InputBox label="Info 1" v-model="variant.info1" />
+
+      <!-- variant info #2  -->
+      <InputBox label="Info 2" v-model="variant.info2" />
+      <!-- variant image  -->
+      <InputBox label="Variant Image" v-model="variant.variantImage" />
+      <!-- variant hex color  -->
+      <InputBox label="Hex Color" v-model="variant.hexColor" />
+    </div>
+  </div>
+</template>
+
+<script>
+const addVariantInfo = (variantCode = "") => {
+  return {
+    variantCode,
+    variantImage: "",
+    info1: "",
+    info2: "",
+    hexColor: "",
+  };
+};
+
+export default {
+  props: {
+    variants: {
+      type: Array,
+      default: () => [],
+    },
+    variantsInfo: {
+      type: Array,
+      default: () => [],
+    },
+    updateVariantsInfo: Function,
+  },
+  data() {
+    return {
+      selectedVariant: "default",
+    };
+  },
+  computed: {
+    variantOptions() {
+      return [
+        ...this.variants.map((variant) => ({
+          name: `${variant.name} | ${variant.code}`,
+          value: variant.code,
+        })),
+        { name: "Select Variant", value: "default" },
+      ];
+    },
+  },
+  methods: {
+    /* add caption box */
+    addNewVariantMeta() {
+      const alreadyThere = this.variantsInfo.findIndex(v => v.variantCode === this.selectedVariant) !== -1;
+
+      if(alreadyThere) {
+        alert('Already added');
+        return;
+      }
+
+      this.updateVariantsInfo({
+        type: "push",
+        payload: addVariantInfo(this.selectedVariant),
+      });
+    },
+    removeVariantMeta(key) {
+      this.updateVariantsInfo({
+        type: "remove",
+        key,
+      });
+    },
+  },
+};
+</script>
+
+<style lang="scss" scoped>
+.variants-meta-data {
+  padding: 10px 0;
+  border: 1px solid #efefef;
+}
+</style>
