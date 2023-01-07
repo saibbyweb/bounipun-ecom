@@ -391,7 +391,7 @@
     </div>
     
     <!-- override variant data -->
-    <OverrideVariantData :selectedVariants="selectedVariants" />
+    <OverrideVariantData v-if="selectedVariants.length > 0" :variantsInfo="doc.variantsInfo" :selectedVariants="selectedVariants" />
 
     <!-- stock -->
     <InputBox
@@ -491,6 +491,7 @@ const baseDoc = () => ({
   // etd: "",
   lock: false,
   sale: null,
+  variantsInfo: [],
   askForPrice: false,
   status: false,
 });
@@ -558,7 +559,7 @@ export default {
       );
 
       /* update doc.variants accordingly */
-      console.log(this.doc.variants.length, selectedVariants.length);
+      // console.log(this.doc.variants.length, selectedVariants.length);
 
       /* if there's any variant which is not in the selected variants,, remove it */
       let deselectedVariantId = null;
