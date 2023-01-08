@@ -12,11 +12,12 @@
     <br />
     <!-- list -->
     <Accordion
+    :contentOverflow="true"
       v-for="(variant, index) in variantsInfo"
       :key="variant.variantCode"
       :heading="variant.variantCode"
     >
-      <div class="section">
+      <div class="section" style="position: relative;">
         <img
           class="close"
           src="/icons/dark/close.png"
@@ -38,7 +39,11 @@
 
         <UploadImageV2 label="Variant Image" :multipleUpload="false" v-model="variant.variantImage" location="variants-meta" />
         <!-- variant hex color  -->
-        <InputBox label="Hex Color" v-model="variant.hexColor" />
+        <div class="center" style="position:relative;">
+            <verte model="hex" @input="(val) => variant.hexColor = val" style="position:absolute; right: 5%; top:50%; z-index:5" menuPosition="right" :value="variant.hexColor" />
+            <!-- fabric name -->
+            <InputBox label="HEX Color" v-model="variant.hexColor" />
+        </div>
       </div>
     </Accordion>
   </div>
@@ -117,5 +122,13 @@ export default {
 .variants-meta-data {
   padding: 10px 5px;
   border: 1px solid #efefef;
+}
+.close {
+    position: absolute;
+    right: -2%;
+    top: -2%;
+    width: 30px;
+    height:30px;
+    cursor: pointer;
 }
 </style>

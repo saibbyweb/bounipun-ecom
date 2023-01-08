@@ -7,7 +7,7 @@
         <span class="switch"> {{ active ? "-" : "+" }} </span>
     </div>
 
-    <div ref="content" class="content" :class="{noMargin}" :style="{minHeight: maxHeight}">
+    <div ref="content" class="content" :class="{noMargin}" :style="{minHeight: maxHeight, overflow: contentOverflow && active ? 'visible': 'hidden'}">
         <slot>
             <span>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span>
         </slot>
@@ -31,6 +31,10 @@ export default {
             default: false
         },
         noMargin: {
+            type: Boolean,
+            default: false
+        },
+        contentOverflow: {
             type: Boolean,
             default: false
         }
