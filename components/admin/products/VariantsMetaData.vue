@@ -14,8 +14,8 @@
     <Accordion
     :contentOverflow="true"
       v-for="(variant, index) in variantsInfo"
-      :key="variant.variantCode"
-      :heading="variant.variantCode"
+      :key="variant.code"
+      :heading="variant.code"
     >
       <div class="section" style="position: relative;">
         <img
@@ -27,7 +27,7 @@
         <InputBox
           :disabled="true"
           label="Variant Code"
-          v-model="variant.variantCode"
+          v-model="variant.code"
         />
 
         <!-- variant info #1  -->
@@ -35,14 +35,14 @@
         <!-- variant info #2  -->
         <InputBox label="Info 2" v-model="variant.info2" />
         <!-- variant image  -->
-        <!-- <InputBox label="Variant Image" v-model="variant.variantImage" /> -->
+        <!-- <InputBox label="Variant Image" v-model="variant.image" /> -->
 
-        <UploadImageV2 label="Variant Image" :multipleUpload="false" v-model="variant.variantImage" location="variants-meta" />
+        <UploadImageV2 label="Variant Image" :multipleUpload="false" v-model="variant.image" location="variants-meta" />
         <!-- variant hex color  -->
         <div class="center" style="position:relative;">
-            <verte model="hex" @input="(val) => variant.hexColor = val" style="position:absolute; right: 5%; top:50%; z-index:5" menuPosition="right" :value="variant.hexColor" />
+            <verte model="hex" @input="(val) => variant.hex = val" style="position:absolute; right: 5%; top:50%; z-index:5" menuPosition="right" :value="variant.hex" />
             <!-- fabric name -->
-            <InputBox label="HEX Color" v-model="variant.hexColor" />
+            <InputBox label="HEX Color" v-model="variant.hex" />
         </div>
       </div>
     </Accordion>
@@ -50,13 +50,13 @@
 </template>
 
 <script>
-const addVariantInfo = (variantCode = "") => {
+const addVariantInfo = (code = "") => {
   return {
-    variantCode,
-    variantImage: "",
+    code,
+    image: "",
     info1: "",
     info2: "",
-    hexColor: "",
+    hex: "",
   };
 };
 
@@ -93,7 +93,7 @@ export default {
     addNewVariantMeta() {
       const alreadyThere =
         this.variantsInfo.findIndex(
-          (v) => v.variantCode === this.selectedVariant
+          (v) => v.code === this.selectedVariant
         ) !== -1;
 
       if (alreadyThere) {

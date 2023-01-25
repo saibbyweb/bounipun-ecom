@@ -959,7 +959,8 @@ export default {
           description: variant._id.description,
           image: variant._id.image,
           fabrics,
-        };
+        }
+        
       });
 
       /* filter out variants which have no active fabrics */

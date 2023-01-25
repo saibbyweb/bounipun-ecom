@@ -81,11 +81,11 @@ const schema = new mongoose.Schema(
       default: false
     },
     variantsInfo: [{
-      variantCode: String,
-      variantImage: String,
+      code: String,
+      image: String,
       info1: String,
       info2: String,
-      hexColor: String
+      hex: String
     }],
     order: Number,
     status: Boolean,
