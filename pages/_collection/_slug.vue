@@ -948,16 +948,29 @@ export default {
         /* sort fabrics according to order */
         fabrics.sort((a, b) => a.order - b.order);
 
+        /* look for variant meta */
+        let variantMeta = null;
+        if(this.product.variantsInfo) {
+          variantMeta = this.product.variantsInfo.find(varInfo => varInfo.code === variant._id.code)
+          if(variantMeta) {
+            setTimeout(() => {
+              console.log('🔥 found variant meta override', variantMeta)
+            }, 1200);
+          }
+            
+        }
+        
+
         return {
           _id: variant._id._id,
           name: variant._id.name,
-          info1: variant._id.info1,
-          info2: variant._id.info2,
+          info1: variantMeta?.info1 || variant._id.info1,
+          info2: variantMeta?.info2 || variant._id.info2,
           code: variant._id.code,
           order: variant._id.order,
-          hex: variant._id.hex,
+          hex: variantMeta?.hex || variant._id.hex,
           description: variant._id.description,
-          image: variant._id.image,
+          image: variantMeta?.image || variant._id.image,
           fabrics,
         }
         
