@@ -80,6 +80,15 @@ export default {
       return allowedRoutes.includes(this.$route.path);
     },
   },
+  watch: {
+    $route: {
+      handler(to, from) {
+        console.log(to, "► route changed");
+        this.$axios.$post("/lastSeen");
+      },
+      immediate: true,
+    },
+  },
   mounted() {
     this.$ga.page(this.$router);
     if (this.$route.query.referrer) this.startedFromPopup = true;
@@ -92,7 +101,8 @@ export default {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (
         mutation.type === "customer/setLoading" ||
-        mutation.type === "customer/setGiftMessage" || mutation.type === "customer/setLocalPopped"
+        mutation.type === "customer/setGiftMessage" ||
+        mutation.type === "customer/setLocalPopped"
       )
         return;
 
@@ -126,7 +136,7 @@ export default {
       menuOpen: false,
       unsubscribe: null,
       fakeLoaded: false,
-      startedFromPopup: false
+      startedFromPopup: false,
     };
   },
   methods: {

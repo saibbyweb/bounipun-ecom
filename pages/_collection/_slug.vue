@@ -957,10 +957,8 @@ export default {
               console.log('🔥 found variant meta override', variantMeta)
             }, 1200);
           }
-            
         }
         
-
         return {
           _id: variant._id._id,
           name: variant._id.name,

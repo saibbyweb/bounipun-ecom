@@ -606,6 +606,19 @@ router.post("/updateProfile", userAuth("customer"), async (req, res) => {
   res.send("done");
 });
 
+/* update last seen and view count */
+router.post("/lastSeen", userAuth("customer"), async(req, res) => {
+  const { user, profile } = req.body;
+
+    /* update last seen and view count */
+    await db.model('users').findByIdAndUpdate(user._id, {
+      lastSeen: new Date(),
+      $inc: { viewCount: 1 }
+    })
+
+    res.send("done");
+})
+
 /* set cookie demo */
 router.post("/setCookie", (req, res) => {
   console.log(req.headers);

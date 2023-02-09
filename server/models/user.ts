@@ -97,6 +97,12 @@ const schema = new mongoose.Schema(
         status: false,
       },
     },
+    lastSeen: {
+      type: Date
+    },
+    viewCount: {
+      type: Number
+    },
     /* status */
     status: {
       type: Boolean,

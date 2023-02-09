@@ -15,7 +15,7 @@
         :list="list"
         :model="model"
         :headings="headings"
-        custom_css="10% 20% 20% 20% 20% 10%"
+        custom_css="10% 20% 10% 10% 10% 10% 20% 10%"
         :sortByFields="sortByFields"
         @documentFetched="documentFetched"
         @sortToggled="sortToggled"
@@ -72,6 +72,8 @@ export default {
         "surName",
         "usergroup",
         "countryIsoCode",
+        "viewCount",
+        "lastSeen",
         "status"
       ],
       dragEnabled: false
@@ -113,8 +115,8 @@ export default {
 
       /* extract list */
       this.list = result.docs.map(
-        ({ _id, firstName, surName, usergroup, countryIsoCode, status }) => {
-          return { _id, firstName, surName, usergroup, countryIsoCode, status }
+        ({ _id, firstName, surName, usergroup, countryIsoCode, viewCount, lastSeen, status }) => {
+          return { _id, firstName, surName, usergroup, countryIsoCode, viewCount: viewCount || 0, lastSeen: lastSeen ? this.$formatDate(lastSeen) : "N/A", status }
         }
       );
     }
