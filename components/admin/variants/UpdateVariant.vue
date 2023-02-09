@@ -12,7 +12,6 @@
     <InputBox v-model="doc.code" label="Bounipun Code" :internal="true" />
     <!-- description -->
     <TextBox v-model="doc.description" label="Description" />
-    
     <!-- hsnCode -->
     <InputBox v-model="doc.hsnCode" label="HSN Code" />
     <!-- gstPercentage -->

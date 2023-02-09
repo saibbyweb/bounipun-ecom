@@ -14,7 +14,9 @@
       />
 
       <!-- apply button -->
-      <AnimatedButton :onClick="applyUnlockCode" :text="unlockCodeApplied ? 'Unlocking...' : 'Click to Activate'" />
+      <!-- <AnimatedButton :onClick="applyUnlockCode" :text="unlockCodeApplied ? 'Unlocking...' : 'Click to Activate'" /> -->
+      <br>
+      <AnimatedUnlockButton :onClick="applyUnlockCode" :text="unlockCodeApplied ? 'Unlocking...' : 'Click to Activate'" />
 
       <!-- <button
         @click="applyUnlockCode"
@@ -86,6 +88,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.unlock-content {
+ 
+}
 .action {
   &.apply {
     // background: radial-gradient(

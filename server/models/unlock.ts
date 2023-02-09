@@ -86,10 +86,12 @@ export const methods = {
 
         /* check if user already in log (prevent duplicate usage) */
         const logIndex = codeDoc.log.findIndex(log => log.user.toString() === user.toString())
-
+        
+        /* edge case: remove user from the log */
         if (logIndex !== -1) {
             console.log('❌  User already in unlock usage log');
-            // this.updateUnlockCodeLog(code.toUpperCase(), user, 'remove')
+            /* remove user from current log (just in-case this error occurs) */
+            this.updateUnlockCodeLog(code.toUpperCase(), user, 'remove')
             return false;
         }
 

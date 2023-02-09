@@ -120,15 +120,19 @@ export default {
 
 <style lang="scss" scoped>
 .variants-meta-data {
-  padding: 10px 5px;
+  padding: 10px 15px;
   border: 1px solid #efefef;
 }
 .close {
     position: absolute;
     right: -2%;
     top: -2%;
-    width: 30px;
-    height:30px;
+    width: 25px;
+    height:25px;
+    background-color: rgb(212, 204, 204);
+    padding: 5px;
+    overflow: hidden;
+    z-index: 2;
     cursor: pointer;
 }
 </style>

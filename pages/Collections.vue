@@ -1,5 +1,10 @@
 <template>
-  <div class="flex col page -wh">
+  <div
+    class="flex col page -wh"
+    :style="
+      collectionLockedAndUserAuthorized ? { backgroundColor: '#111' } : {}
+    "
+  >
     <!-- collection header -->
     <div
       v-if="collectionImageProvided && !collectionLocked"
@@ -36,12 +41,17 @@
       "
       class="main-text-block center-col pad"
     >
-      <h2 class="text-1">{{ collection.mainTextBlock.text1 }}</h2>
-      <p class="text-2">{{ collection.mainTextBlock.text2 }}</p>
-      <p v-if="!collectionLocked" class="text-3">
+      <h2
+        class="text-1"
+        :style="collectionLockedAndUserAuthorized ? { color: 'white' } : {}"
+      >
+        {{ collection.mainTextBlock.text1 }}
+      </h2>
+      <p class="text-2" :style="collectionLockedAndUserAuthorized ? { color: 'white' } : {}">{{ collection.mainTextBlock.text2 }}</p>
+      <p v-if="!collectionLocked" class="text-3" :style="collectionLockedAndUserAuthorized ? { color: 'white' } : {}">
         {{ collection.mainTextBlock.text3 }}
       </p>
-      <p v-else class="text-2">{{ collection.lockedText }}</p>
+      <p v-else class="text-2" :style="collectionLockedAndUserAuthorized ? { color: 'white' } : {}">{{ collection.lockedText }}</p>
     </div>
 
     <!-- filter sort toggles -->
@@ -98,7 +108,13 @@
       />
 
       <!-- if no products found -->
-      <h3 v-if="products.length === 0 && !$store.state.customer.loading && initialLoadComplete">
+      <h3
+        v-if="
+          products.length === 0 &&
+          !$store.state.customer.loading &&
+          initialLoadComplete
+        "
+      >
         No products matched for {{ collection.name }}
       </h3>
     </div>
@@ -197,7 +213,7 @@ export default {
       colorCategories: [],
       escapeProduct: [],
       loading: false,
-      initialLoadComplete: false
+      initialLoadComplete: false,
     };
   },
   watch: {
@@ -205,7 +221,7 @@ export default {
       this.products = [];
       this.escapeProduct = [];
       this.colorCategories = [];
-      this.collection = { name: 'fetching... '};
+      this.collection = { name: "fetching... " };
       // if (this.isEscape) {
       //   this.fetchCollectionProducts(this.$route.query.slug);
       //   return;
@@ -277,7 +293,7 @@ export default {
   },
   methods: {
     fetchSlideshow(slides) {
-      return slides.map(slide => this.$getOriginalPath(slide.path));
+      return slides.map((slide) => this.$getOriginalPath(slide.path));
     },
     filtersUpdated(filterData) {
       this.filterData = filterData;
@@ -352,7 +368,7 @@ export default {
         this.rawCriterion.sortBy = {
           "priceRange.startsAt": parseInt(this.sortData.priceRange),
         };
-      } else this.rawCriterion.sortBy = { order: 1};
+      } else this.rawCriterion.sortBy = { order: 1 };
 
       /* if escape, no filter applied but sort applied, reset sort */
       if (
@@ -389,7 +405,7 @@ export default {
       } catch (err) {
         // console.log("Oops, `window` is not defined");
       }
-      
+
       /* initial load complete */
       this.initialLoadComplete = true;
 

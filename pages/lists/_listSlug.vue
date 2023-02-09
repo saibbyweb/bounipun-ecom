@@ -1,8 +1,10 @@
 <template>
-  <div class="page -wh">
+  <div class="page -wh" :style="
+      listLockedAndUserAuthorized ? { backgroundColor: '#111' } : {}
+    ">
     <!-- list header -->
     <div
-      v-if="listImageProvided"
+      v-if="listImageProvided && !listLockedAndUserAuthorized"
       class="c-header center"
       :style="{
         backgroundImage: `url(${getListImage(listImage)})`,
@@ -11,8 +13,8 @@
 
     <!-- main text block -->
     <div class="main-text-block flex center col">
-      <h2 class="text-1">{{ list.name }}</h2>
-      <p class="text-2">{{ listText }}</p>
+      <h2 class="text-1" :style="listLockedAndUserAuthorized ? { color: 'white', textAlign: 'center' } : {}">{{ list.name }}</h2>
+      <p class="text-2" :style="listLockedAndUserAuthorized ? { color: 'white' } : {}">{{ listText }}</p>
     </div>
 
     <!-- product list -->
@@ -28,7 +30,7 @@
 
     <!-- list is locked -->
     <div v-if="listLockedAndUserAuthorized" class="locked">
-      <h2 class="heading" v-if="listLocked">
+      <h2 class="heading" v-if="listLocked" style="color: white;">
         🔒 This product List is locked
       </h2>
       <br />
@@ -71,7 +73,7 @@ export default {
   },
   computed: {
     listImageProvided() {
-      return this.listImage !== "";
+      return this.list.image !== "";
     },
     listImage() {
       return this.listLocked ? this.list.lockedImage : this.list.image;
