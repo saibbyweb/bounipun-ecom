@@ -85,7 +85,8 @@ const schema = new mongoose.Schema(
       image: String,
       info1: String,
       info2: String,
-      hex: String
+      hex: String,
+      description: { type: String, default: '' }
     }],
     order: Number,
     status: Boolean,

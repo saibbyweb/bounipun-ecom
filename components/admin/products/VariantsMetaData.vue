@@ -34,9 +34,9 @@
         <InputBox label="Info 1" v-model="variant.info1" />
         <!-- variant info #2  -->
         <InputBox label="Info 2" v-model="variant.info2" />
-        <!-- variant image  -->
-        <!-- <InputBox label="Variant Image" v-model="variant.image" /> -->
-
+        <!-- description -->
+        <!-- <InputBox label="Description" v-model="variant.description" /> -->
+        <TextBox v-model="variant.description" label="Description" />
         <UploadImageV2 label="Variant Image" :multipleUpload="false" v-model="variant.image" location="variants-meta" />
         <!-- variant hex color  -->
         <div class="center" style="position:relative;">
@@ -57,6 +57,7 @@ const addVariantInfo = (code = "") => {
     info1: "",
     info2: "",
     hex: "",
+    description: ""
   };
 };
 

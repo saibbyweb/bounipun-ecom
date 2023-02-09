@@ -969,7 +969,7 @@ export default {
           code: variant._id.code,
           order: variant._id.order,
           hex: variantMeta?.hex || variant._id.hex,
-          description: variant._id.description,
+          description: variantMeta?.description || variant._id.description,
           image: variantMeta?.image || variant._id.image,
           fabrics,
         }
