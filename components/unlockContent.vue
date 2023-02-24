@@ -10,7 +10,7 @@
         :disabled="unlockCodeApplied"
         @input="unlockCodeError.status = false"
         :isUnlocker="true"
-        placeholder="Enter Premium Access Code"
+        placeholder="Enter Code"
       />
 
       <!-- apply button -->

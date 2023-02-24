@@ -161,18 +161,28 @@ export default {
         box-shadow: none;
         border-bottom: 1px solid #efefef;
         text-align: center;
+        box-sizing: content-box;
+
         &::placeholder {
           font-size: 1.7vw;
           color: #9d9d9d;
         }
-
+    
+        padding: 10px 0px;
+        height: 50px;
+        line-height: 50px;
         @media (max-width: 768px) {
           font-size: 27px;
+          height:27px;
+          line-height: 27px;
+       
 
           &::placeholder {
-            font-size: 3.4vw;
+            font-size: 27px;
+            line-height: 3.4vw;
           }
         }
+
       }
 
       &.textarea {
