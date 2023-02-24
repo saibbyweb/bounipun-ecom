@@ -458,7 +458,7 @@ export default {
         overflow: hidden;
         background-position: center;
         background-repeat: no-repeat;
-
+ 
         &.clickable {
           cursor: pointer;
         }

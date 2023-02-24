@@ -35,6 +35,10 @@ const schema: Schema = new mongoose.Schema({
             ref: 'users'
         }
     }],
+    invitation: {
+        clientName: String,
+        link: String,
+    },
     description: String,
     status: Boolean
 },
@@ -86,7 +90,7 @@ export const methods = {
 
         /* check if user already in log (prevent duplicate usage) */
         const logIndex = codeDoc.log.findIndex(log => log.user.toString() === user.toString())
-        
+
         /* edge case: remove user from the log */
         if (logIndex !== -1) {
             console.log('❌  User already in unlock usage log');

@@ -41,11 +41,11 @@
     <!-- invitation template -->
     <div class="section">
       <label class="label"> Invitation: </label>
-      <InputBox v-model="clientName" label="Client Name" :internal="true" />
+      <InputBox v-model="doc.invitation.clientName" label="Client Name" :internal="true" />
 
-      <SelectBox :internal="true" label="Select Link" :options="allSlugs" v-model="link" />
+      <SelectBox :internal="true" label="Select Link" :options="allSlugs" v-model="doc.invitation.link" />
       
-      <!-- description -->
+      <!-- invitation template -->
       <TextBox
         v-model="doc.description"
         label="Invitation Template:"
@@ -205,6 +205,10 @@ const baseDoc = () => ({
     start: new Date(),
     end: new Date(),
   },
+  invitation :{
+    clientName: "",
+    link: ""
+  },
   log: [],
   timeline: [],
   blackList: [],
@@ -248,7 +252,7 @@ export default {
   },
   computed: {
     clientTemplate() {
-      let temp = this.doc.description.replace("##client##", this.clientName);
+      let temp = this.doc.description.replace("##client##", this.doc.invitation.clientName);
       temp = temp.replace("##code##", this.doc.code);
       temp = temp.replace("##link##", `${this.link}&code=${this.doc.code}`);
       temp = temp.replace('##start##', this.$formatDate(this.doc.validityRange.start, true))
@@ -366,6 +370,7 @@ export default {
         type,
         validity,
         validityRange,
+        invitation,
         log,
         timeline,
         blackList,
@@ -378,6 +383,7 @@ export default {
         type,
         validity: validity.toString(),
         validityRange,
+        invitation: invitation === undefined ? { clientName: "", link: "" } : invitation,
         log,
         timeline: timeline === undefined ? [] : timeline,
         blackList,
