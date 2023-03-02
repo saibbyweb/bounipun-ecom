@@ -323,10 +323,6 @@ import { v4 as uuidv4 } from "uuid";
 
 const discountTypes = [
   {
-    name: "Select Type",
-    value: null,
-  },
-  {
     name: "Percentage",
     value: "percentage",
   },
@@ -356,7 +352,7 @@ const baseDoc = () => ({
     end: new Date(),
   },
   discount: {
-    type: null,
+    type: "percentage",
     value: 0,
     amount: 0,
   },
