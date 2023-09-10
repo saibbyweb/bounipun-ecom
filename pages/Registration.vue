@@ -41,11 +41,12 @@
 
       <!-- disclaimer -->
       <p class="disclaimer">
-        By clicking Continue, you agree to our <a target="_blank" href="/terms">Terms </a> and
-        <a target="_blank" href="/privacy-policy"> Privacy Policy </a>. You may receive SMS
-        notifications from us and can opt out at any time.
+        By clicking Continue, you agree to our
+        <a target="_blank" href="/terms">Terms </a> and
+        <a target="_blank" href="/privacy-policy"> Privacy Policy </a>. You may
+        receive SMS notifications from us and can opt out at any time.
       </p>
-      <br>
+      <br />
 
       <!-- send otp -->
       <button
@@ -86,7 +87,7 @@ import CountrySelect from "../components/countrySelect.vue";
 export default {
   head() {
     return {
-      title: "Registration | Bounipun Kashmir"
+      title: "Registration | Bounipun Kashmir",
     };
   },
   data() {
@@ -102,29 +103,42 @@ export default {
       consent: true,
       error: {
         status: false,
-        message: "Could not sent otp"
-      }
+        message: "Could not sent otp",
+      },
     };
   },
   methods: {
-    validatePhoneNumber() {
-      console.log("validate called");
-      // if (this.phoneNumber.length !== 10) {
-      //   this.error.message = "Kindly enter a valid 10 digit mobile number";
-      //   this.error.status = true;
-      //   console.log("hey there");
-      //   return false;
-      // }
+    validateForm() {
+      /* check first name  */
+      if (this.firstName.length < 3) {
+        this.error.message = "Kindly enter a valid First Name.";
+        this.error.status = true;
+        return false;
+      }
+      /* check sur name */
+      if (this.surName.length < 3) {
+        this.error.message = "Kindly enter a valid Sur Name.";
+        this.error.status = true;
+        return false;
+      }
+
+      /* validate phone number */
+      if (this.phoneNumber.length < 5) {
+        this.error.message = "Kindly enter a valid mobile number";
+        this.error.status = true;
+        return false;
+      }
+
       return true;
     },
     async sendOtp() {
       /* validate form or atleast phone number */
-      if (!this.validatePhoneNumber()) return;
+      if (!this.validateForm()) return;
 
       const { response, resolved } = await this.$post("/sendOtp", {
         countryDialCode: this.countryDialCode,
         phoneNumber: this.phoneNumber,
-        purpose: this.purpose
+        purpose: this.purpose,
       });
 
       /* if req not resolved */
@@ -148,7 +162,7 @@ export default {
         otp: this.otp,
         firstName: this.firstName,
         surName: this.surName,
-        platform: "web"
+        platform: "web",
       });
 
       /* if req not resolved, map error message */
@@ -168,7 +182,7 @@ export default {
     },
     async shiftCart() {
       const { resolved, response } = await this.$post("/shiftCart", {
-        cart: this.$store.state.customer.cart
+        cart: this.$store.state.customer.cart,
       });
 
       /* clear local cart if cart shifted */
@@ -178,8 +192,8 @@ export default {
 
       /* refetch cart */
       await this.$store.dispatch("customer/fetchCart");
-    }
-  }
+    },
+  },
 };
 </script>
 
