@@ -10,13 +10,6 @@ export default {
     },
     script: [
       { src: "https://checkout.razorpay.com/v1/checkout.js" },
-      {
-        src: "https://www.googletagmanager.com/gtag/js?id=G-FTSB78PVM5",
-        async: true,
-      },
-      {
-        src: "js/ga.js",
-      },
     ],
     meta: [
       { charset: "utf-8" },
