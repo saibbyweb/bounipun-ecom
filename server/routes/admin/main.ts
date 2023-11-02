@@ -315,9 +315,14 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
   /* get collection  */
   const collection = db.model(model);
   let result: any;
-
+  let productSnaphot: any;
   try {
     if (editMode) {
+
+      if(model === "products") {
+        productSnaphot = await collection.findById(details._id);
+      }
+
       result = await collection.findOneAndUpdate(
         { _id: details._id },
         details,
@@ -350,7 +355,9 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
       await productListMethods.updateProductLockFlags(details.list, details.lock)
     case "products":
       /* update base price */
-      await productMethods.syncMainPricesAndBasePrices(result);
+      /* should only update if price has changed */
+      if(!editMode)
+        await productMethods.syncMainPricesAndBasePrices(result);
       break;
   }
 

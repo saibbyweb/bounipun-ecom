@@ -322,7 +322,6 @@ export const methods = {
       .on("close", () => console.log("Download Complete"));
   },
   async syncMainPricesAndBasePrices(product) {
-
     if (product.availabilityType === "made-to-order") {
       /* all base prices */
       if (!product.allBasePrices) {

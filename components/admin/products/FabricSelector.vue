@@ -1,7 +1,7 @@
 <template>
   <div class="checkboxes-container fabric-selctor">
     <div class="flex around">
-      <label class="label"> {{ label }} </label>
+      <label class="label"> {{ label }}</label>
       <!-- <button @click="setSuggestedPricing">Set Suggested</button> -->
       <Toggle
         v-model="enableSuggestedPricing"
@@ -23,7 +23,7 @@
           v-model="option.checked"
           @input="fabricChecked"
         />
-        <label class="label"> {{ option.name }} </label>
+        <label class="label"> {{ option.name }}</label>
         <!-- <span style="margin: 0;font-size: 8px; font-style: italic; text-align:center; color: #333;"> {{ option.info1 }} </span> -->
         <span
           style="
@@ -46,6 +46,7 @@
             v-model="option.price"
             placeholder="Price (INR)"
             @input="basePriceUpdated"
+            :title="allBasePrices[option._id] ? 'Base Price: ' + allBasePrices[option._id]['price'] : ''"
           />
         </div>
 
@@ -64,6 +65,7 @@
             type="text"
             v-model="option.pricing[currency.code]"
             :placeholder="`Price (${currency.code})`"
+            :title="allBasePrices[option._id] ? 'Base Price: ' + allBasePrices[option._id]['pricing'][currency.code] : ''"
           />
         </div>
       </div>
@@ -88,6 +90,7 @@ export default {
       type: Number,
       default: 0,
     },
+    allBasePrices: Object,
     setNonINRPrices: Function
   },
   watch: {

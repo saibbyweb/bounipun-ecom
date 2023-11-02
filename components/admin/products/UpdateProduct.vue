@@ -370,6 +370,7 @@
         :currencies="currencies"
         :inflationPercentage="collectionInflationPercentage"
         :setNonINRPrices="setNonINRPrices"
+        :allBasePrices="doc.allBasePrices"
         @fabricSelectionUpdated="fabricSelectionUpdated"
       />
     </div>
