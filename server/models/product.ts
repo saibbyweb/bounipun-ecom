@@ -1,7 +1,8 @@
 import { mongoose, ObjectId, db } from "@helpers/essentials";
 import slugify from "slugify";
-import * as fs from "fs"  
-const request = require("request")
+import * as fs from "fs";
+import cloneDeep from "lodash/cloneDeep";
+const request = require("request");
 
 /* schema */
 const schema = new mongoose.Schema(
@@ -73,23 +74,29 @@ const schema = new mongoose.Schema(
       default: false,
     },
     sale: {
-      type: ObjectId, ref: 'sales',
-      default: null
+      type: ObjectId,
+      ref: "sales",
+      default: null,
     },
     askForPrice: {
-      type: Boolean, 
-      default: false
+      type: Boolean,
+      default: false,
     },
-    variantsInfo: [{
-      code: String,
-      image: String,
-      info1: String,
-      info2: String,
-      hex: String,
-      description: { type: String, default: '' }
-    }],
+    variantsInfo: [
+      {
+        code: String,
+        image: String,
+        info1: String,
+        info2: String,
+        hex: String,
+        description: { type: String, default: "" },
+      },
+    ],
     order: Number,
     status: Boolean,
+    allBasePrices: {
+      type: Object,
+    },
   },
   {
     timestamps: true,
@@ -123,7 +130,7 @@ export const methods = {
     details.slug = parent.slug + "/" + details.alias;
 
     /* set product lock as collection lock  */
-    if(parent.lock === true) {
+    if (parent.lock === true) {
       details.lock = true;
     }
 
@@ -163,7 +170,7 @@ export const methods = {
       /* add lowest and highest variant price */
       let allPrices = [];
       let nonINRPrices = {};
-      
+
       /* saving all price and non - inr pricing for calculating pricing ranges */
       details.variants.forEach((variant) => {
         variant.fabrics.forEach((fabric) => {
@@ -273,43 +280,96 @@ export const methods = {
   },
   /* update one product */
   async updateOne(filter, fields) {
-    const updated: any = await model.findOneAndUpdate(
-      filter,
-      fields,
-      { returnOriginal: false }
-    );
-    console.log('Updated: ', updated.slug, ' ✅');
+    const updated: any = await model.findOneAndUpdate(filter, fields, {
+      returnOriginal: false,
+    });
+    console.log("Updated: ", updated.slug, " ✅");
   },
   async downloadImages() {
-    const AWSBASE = 'https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/';
-    const parentDir = './productImages/';
+    const AWSBASE =
+      "https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/";
+    const parentDir = "./productImages/";
     this.createDir(parentDir);
 
     const allProducts = await model.find();
-    for(const product of allProducts) {
-      const productDir = parentDir + slugify(product.styleId) + '-' + slugify(product.name) + '/'
-      this.createDir(productDir) 
+    for (const product of allProducts) {
+      const productDir =
+        parentDir +
+        slugify(product.styleId) +
+        "-" +
+        slugify(product.name) +
+        "/";
+      this.createDir(productDir);
       const colors = product.colors;
-      for(const color of colors) {
-        const colorDir = productDir + slugify(color.name) + '/';
+      for (const color of colors) {
+        const colorDir = productDir + slugify(color.name) + "/";
         this.createDir(colorDir);
         /* start download images */
         const images = color.images;
-        for(const image of images) {
+        for (const image of images) {
           const uri = AWSBASE + image.path;
-          this.downloadFile(uri, colorDir+image.path)
+          this.downloadFile(uri, colorDir + image.path);
         }
       }
     }
   },
   async createDir(path) {
-    !fs.existsSync(path) && fs.mkdirSync(path, { recursive: true })
+    !fs.existsSync(path) && fs.mkdirSync(path, { recursive: true });
   },
   async downloadFile(uri, filename) {
-    request(uri).pipe(fs.createWriteStream(filename)).on('close', () => console.log('Download Complete'))
-  }
+    request(uri)
+      .pipe(fs.createWriteStream(filename))
+      .on("close", () => console.log("Download Complete"));
+  },
+  async syncMainPricesAndBasePrices(product) {
+
+    if (product.availabilityType === "made-to-order") {
+      /* all base prices */
+      if (!product.allBasePrices) {
+        product.allBasePrices = {};
+      }
+
+      product.variants.forEach(({ fabrics }) => {
+        fabrics.forEach((fabric) => {
+          /* mimic all base prices */
+          product.allBasePrices[fabric.id] = {
+            price: fabric.price,
+            pricing: cloneDeep(fabric.pricing),
+          };
+        });
+      });
+    } else {
+      /* all base prices */
+      if (!product.allBasePrices) {
+        product.allBasePrices = {};
+      }
+
+      /* mimic all base prices */
+      product.allBasePrices = {
+        directPrice: product.directPrice,
+        directPricing: cloneDeep(product.directPricing),
+      };
+    }
+    const updatedProduct = await model.findByIdAndUpdate(product.id, {
+      allBasePrices: product.allBasePrices
+    })
+    // const updatedProduct = await product.save();
+    console.log(
+      "Updated base price for: ",
+      product.name,
+      product.allBasePrices,
+      updatedProduct.allBasePrices
+    );
+    return updatedProduct;
+  },
+  async setBasePricesForAllProducts() {
+    const allProducts = await model.find();
+    for (const product of allProducts) {
+      await this.syncMainPricesAndBasePrices(product);
+    }
+  },
 };
-//
-// methods.downloadImages();
+
+// methods.setBasePricesForAllProducts();
 
 export default { model, methods };

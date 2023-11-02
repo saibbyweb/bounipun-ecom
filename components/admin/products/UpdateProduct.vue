@@ -515,6 +515,7 @@ const baseDoc = () => ({
   rtsDirectVariant: "",
   rtsDirectFabric: "",
   stock: "",
+  allBasePrices: {},
   // etd: "",
   lock: false,
   sale: null,
@@ -957,6 +958,7 @@ export default {
         stock,
         rtsDirectVariant,
         rtsDirectFabric,
+        allBasePrices,
         // etd,
         lock,
         sale,
@@ -964,6 +966,7 @@ export default {
         variantsInfo,
         status,
       } = details;
+   
       this.doc = {
         _id,
         styleId,
@@ -984,6 +987,7 @@ export default {
         rtsDirectVariant,
         rtsDirectFabric,
         stock: stock === undefined ? "" : stock,
+        allBasePrices: allBasePrices === undefined ? {} : allBasePrices,
         // etd: etd === null ? "" : etd.toString(),
         lock,
         sale,

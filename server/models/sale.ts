@@ -1,4 +1,6 @@
 import { mongoose, ObjectId, db, task } from "@helpers/essentials";
+import { product } from "@models";
+import cloneDeep from "lodash/cloneDeep"
 
 /* schema */
 const schema = new mongoose.Schema(
@@ -64,7 +66,7 @@ export const methods = {
     console.log(`🟡 Original INR Price: ${INRPrice}`);
 
     INRPrice = INRPrice - (INRPrice / 100) * discountPercentage;
-    console.log(`🔵 Discounted INR Price: ${INRPrice}`);
+    console.log(`🔵 Updated INR Price: ${INRPrice}`);
 
     /* loop through every currency code */
     const currencyCodes = Object.keys(NonINRPricing);
@@ -74,7 +76,7 @@ export const methods = {
       const price: any = NonINRPricing[code];
       console.log(`🟡 Original ${code} Price: ${price}`);
       NonINRPricing[code] = parseInt(
-        price - (price / 100) * discountPercentage
+       String( price - (price / 100) * discountPercentage)
       );
       console.log(`🔵  Discounted ${code} Price: ${NonINRPricing[code]}`);
     }
@@ -112,7 +114,9 @@ export const methods = {
         const saleDetails = await this.validateSale(product.sale);
         /* (if sale is invalid, store invalid sale details, and save product as is) */
         if (saleDetails === false) {
-          console.log(`🚫 Product ${product.name} found under invalid sale, returned as is.`);
+          console.log(
+            `🚫 Product ${product.name} found under invalid sale, returned as is.`
+          );
           invalidSales[product.sale] = true;
           normalizedProducts.push(product);
           continue;
@@ -125,9 +129,11 @@ export const methods = {
 
       /* attach sale details to the product */
       product.saleDetails = { name: saleName, discountPercentage };
-      console.log('SALE DETAILS ATTACHED')
+      console.log("SALE DETAILS ATTACHED");
 
-      console.log( `🔹 Discount percentage to be applied to ${product.name} :  ${discountPercentage} %`);
+      console.log(
+        `🔹 Discount percentage to be applied to ${product.name} :  ${discountPercentage} %`
+      );
 
       /* extract variants, availability type, directPrice, directPricing */
       let { variants, availabilityType, directPrice, directPricing } = product;
@@ -213,6 +219,147 @@ export const methods = {
 
     return normalizedProducts;
   },
+  async updatePricingForAllProductsUnderCollection(
+    collectionId: string,
+    basePriceMultiplier: number
+  ) {
+    let matchedProducts: any = await product.methods.getProducts({
+      bounipun_collection: collectionId,
+    });
+
+    /* if no matched products found */
+    if (matchedProducts === null) return;
+
+    /* update slugs for all matched products */
+    for (const product of matchedProducts) {
+      /* prop to update */
+      /* fabric.price, fabric.pricing, directPrice, directPricing, priceRange, pricingRange */
+      /* all prices and non-inr prices array [for calculating range] */
+      let allINRPrices = [];
+      let allNonINRPrices = {};
+
+      if (product.availabilityType === "made-to-order") {
+        product.variants.forEach(({ fabrics }) => {
+          fabrics.forEach((fabric) => {
+            /* all base prices */
+            if (!product.allBasePrices) {
+              product.allBasePrices = {};
+            }
+            /* mimic all base prices */
+            product.allBasePrices[fabric.id] = {
+              price: fabric.price,
+              // pricing: JSON.stringify(fabric.pricing),
+              pricing: cloneDeep(fabric.pricing)
+            };
+            /* calculate discount prices */
+            const { INRPrice, NonINRPricing } = this.getDiscountedPrices(
+              product.allBasePrices[fabric.id].price,
+              // product.allBasePrices[fabric.id].pricing,
+              // fabric.price,
+              fabric.pricing,
+              basePriceMultiplier * -1
+            );
+            /* set discounted prices */
+            fabric.price = INRPrice;
+            fabric.pricing = NonINRPricing;
+
+            /* save all prices in a one-dimensional arrays */
+            const updatedValues = this.savePrices(
+              INRPrice,
+              NonINRPricing,
+              allINRPrices,
+              allNonINRPrices
+            );
+            allINRPrices = updatedValues.allINRPrices;
+            allNonINRPrices = updatedValues.allNonINRPrices;
+          });
+        });
+
+        /* calculate inr price range and non-inr pricing range */
+      } else {
+        /* all base prices */
+        if (!product.allBasePrices) {
+          product.allBasePrices = {};
+        }
+        /* mimic all base prices */
+        product.allBasePrices = {
+          directPrice: product.directPrice,
+          directPricing: cloneDeep(product.directPricing),
+        };
+
+        const { INRPrice, NonINRPricing } = this.getDiscountedPrices(
+          product.allBasePrices.directPrice,
+          product.directPricing,
+          // product.directPrice,
+          // product.directPricing,
+          basePriceMultiplier * -1
+        );
+        /* update direct price and direct pricing */
+        product.directPrice = INRPrice;
+        product.directPricing = NonINRPricing;
+
+        /* save all prices in a one-dimensional arrays */
+        const updatedValues = this.savePrices(
+          INRPrice,
+          NonINRPricing,
+          allINRPrices,
+          allNonINRPrices
+        );
+        allINRPrices = updatedValues.allINRPrices;
+        allNonINRPrices = updatedValues.allNonINRPrices;
+      }
+
+      /* recalculate inr price range */
+      product.priceRange = {
+        startsAt: Math.min(...allINRPrices),
+        endsAt: Math.max(...allINRPrices),
+      };
+
+      /* recalculate non-inr pricing range */
+      const currencyCodes = Object.keys(allNonINRPrices);
+      if (currencyCodes.length !== 0) {
+        let pricingRange = {};
+
+        for (const code of currencyCodes) {
+          pricingRange[code] = {
+            startsAt: Math.min(...allNonINRPrices[code]),
+            endsAt: Math.max(...allNonINRPrices[code]),
+          };
+        }
+        product.pricingRange = pricingRange;
+      }
+
+      console.log(this.logProductPricing(product));
+    }
+  },
+  async logProductPricing(product) {
+    console.log(product.allBasePrices);
+    return;
+    /*  product with new pricing values */
+    console.log("Product to be updated: ", product.name);
+
+    if (product.availabilityType === "made-to-order") {
+      product.variants.forEach(({ fabrics }) => {
+        fabrics.forEach((fabric) => {
+          console.log('Fabric Price');
+          /* price */
+          console.table([product.allBasePrices[fabric.id].price, fabric.price]);
+          /* pricing */
+          console.log(
+            product.allBasePrices[fabric.id].pricing,
+            fabric.pricing,
+          );
+        });
+      });
+    } else {
+      console.log('RTS Price');
+      console.table([product.allBasePrices.directPrice, product.directPrice]);
+      console.log(
+        product.allBasePrices.directPricing,
+        product.directPricing,
+      );
+    }
+  },
   /* update product sale flags */
   async updateProductSaleFlags(saleId, oldSale, newSale) {
     console.log(newSale.status, "- sale status");
@@ -263,7 +410,7 @@ export const methods = {
       return {
         updated: false,
         msg: `Product list is already under a different sale: ${underSale.name}`,
-      }
+      };
     }
 
     /* product list */

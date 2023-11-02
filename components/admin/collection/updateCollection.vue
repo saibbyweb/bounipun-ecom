@@ -87,7 +87,8 @@
     <!-- inflation slider -->
     <div class="section">
     <InputSlider v-model="doc.inflationPercentage" label="Inflation Percentage (for outside India)" />
-
+    <!-- base price multiplier -->
+    <InputSlider min="-100" max="100" v-model="doc.basePriceMultiplier" label="Base Price Multiplier" />
     
     <div v-if="inflationChanged" class="flex center">
       <span style="font-size:12px; width:60%; text-align:center; padding-left:1%;"> To update all international prices for products under {{ doc.name}}, click here:  👉</span>
@@ -190,6 +191,7 @@ const baseDoc = () => ({
   edt: "",
   image: "",
   inflationPercentage:0,
+  basePriceMultiplier: 0,
   lockedImage: "",
   lockedImages: [],
   lockedText: "",
@@ -287,6 +289,7 @@ export default {
         activeOrderLimit,
         image,
         inflationPercentage,
+        basePriceMultiplier,
         lockedImage,
         lockedImages,
         lockedText,
@@ -306,6 +309,7 @@ export default {
         edt: edt !== null ? edt.toString() : "",
         image,
         inflationPercentage: inflationPercentage == undefined ? 0 : inflationPercentage,
+        basePriceMultiplier: basePriceMultiplier === undefined ? 0 : basePriceMultiplier,
         lockedImage,
         lockedImages: lockedImages || [],
         lockedText,

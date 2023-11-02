@@ -10,6 +10,8 @@ import { methods as currencyMethods } from "@models/currency";
 import { methods as saleMethods } from "@models/sale";
 import { methods as productListMethods } from "@models/productLists"
 import { methods as paymentLinkMethods } from "@models/paymentLinks"
+import { methods as productMethods }  from "@models/product";
+
 import axios from "axios";
 
 let { orderUpdateEmailToCustomer } = notificationMethods;
@@ -345,7 +347,12 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
       break;
     case "product_lists":
       await productListMethods.updateProductSaleFlags(result._id, originalDoc.list, details.list);
-      await productListMethods.updateProductLockFlags(details.list, details.lock);
+      await productListMethods.updateProductLockFlags(details.list, details.lock)
+    case "products":
+      /* update base price */
+      console.log(result);
+      await productMethods.syncMainPricesAndBasePrices(result);
+      break;
   }
 
   res.send(result);

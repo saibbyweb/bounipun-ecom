@@ -1,8 +1,8 @@
 import { server, port, environment, dbConnect, mongoose } from "@helpers/essentials";
-mongoose.set("debug", (collectionName, method, query, doc) => {
-  if(collectionName === 'collections' && method !== 'aggregate' && method !== 'findOne' && method !== 'find')
-    console.log(`${collectionName}.${method}`, JSON.stringify(query), doc);
-});
+// mongoose.set("debug", (collectionName, method, query, doc) => {
+//   if(collectionName === 'collections' && method !== 'aggregate' && method !== 'findOne' && method !== 'find')
+//     console.log(`${collectionName}.${method}`, JSON.stringify(query), doc);
+// });
 import mainRoutes from "@routes/admin/main";
 require("../helpers/validate.js");
 import customerRoutes from "@routes/customer";
