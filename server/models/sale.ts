@@ -232,6 +232,7 @@ export const methods = {
 
     /* update slugs for all matched products */
     for (const product of matchedProducts) {
+   
       /* prop to update */
       /* fabric.price, fabric.pricing, directPrice, directPricing, priceRange, pricingRange */
       /* all prices and non-inr prices array [for calculating range] */
@@ -245,20 +246,14 @@ export const methods = {
             if (!product.allBasePrices) {
               product.allBasePrices = {};
             }
-            /* mimic all base prices */
-            product.allBasePrices[fabric.id] = {
-              price: fabric.price,
-              // pricing: JSON.stringify(fabric.pricing),
-              pricing: cloneDeep(fabric.pricing)
-            };
-            /* calculate discount prices */
+            const fabricBasePrices = product.allBasePrices[fabric.id];
+            /* calculate adjusted prices */
             const { INRPrice, NonINRPricing } = this.getDiscountedPrices(
-              product.allBasePrices[fabric.id].price,
-              // product.allBasePrices[fabric.id].pricing,
-              // fabric.price,
-              fabric.pricing,
+              fabricBasePrices.price,
+              cloneDeep(fabricBasePrices.pricing),
               basePriceMultiplier * -1
             );
+
             /* set discounted prices */
             fabric.price = INRPrice;
             fabric.pricing = NonINRPricing;
@@ -281,17 +276,10 @@ export const methods = {
         if (!product.allBasePrices) {
           product.allBasePrices = {};
         }
-        /* mimic all base prices */
-        product.allBasePrices = {
-          directPrice: product.directPrice,
-          directPricing: cloneDeep(product.directPricing),
-        };
 
         const { INRPrice, NonINRPricing } = this.getDiscountedPrices(
           product.allBasePrices.directPrice,
-          product.directPricing,
-          // product.directPrice,
-          // product.directPricing,
+          cloneDeep(product.allBasePrices.directPricing),
           basePriceMultiplier * -1
         );
         /* update direct price and direct pricing */
@@ -329,19 +317,19 @@ export const methods = {
         product.pricingRange = pricingRange;
       }
 
-      console.log(this.logProductPricing(product));
+      await product.save();
+
+      // console.log(this.logProductPricing(product));
     }
   },
   async logProductPricing(product) {
-    console.log(product.allBasePrices);
-    return;
     /*  product with new pricing values */
     console.log("Product to be updated: ", product.name);
 
     if (product.availabilityType === "made-to-order") {
       product.variants.forEach(({ fabrics }) => {
         fabrics.forEach((fabric) => {
-          console.log('Fabric Price');
+          console.log('Fabric Price:');
           /* price */
           console.table([product.allBasePrices[fabric.id].price, fabric.price]);
           /* pricing */
@@ -352,7 +340,7 @@ export const methods = {
         });
       });
     } else {
-      console.log('RTS Price');
+      console.log('RTS Price:');
       console.table([product.allBasePrices.directPrice, product.directPrice]);
       console.log(
         product.allBasePrices.directPricing,
