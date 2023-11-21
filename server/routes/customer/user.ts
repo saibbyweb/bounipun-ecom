@@ -437,7 +437,7 @@ router.post("/cartActions", userAuth("customer"), async (req, res) => {
   }
 
   /* save cart back to database */
-  await db.model("users").findOneAndUpdate({ _id: user._id }, { cart });
+ await db.model("users").findOneAndUpdate({ _id: user._id }, { cart });
 
   res.send("cart_updated");
 });

@@ -300,7 +300,6 @@ export const methods = {
   async getCartItems(cart, unlocked = false) {
 
     try {
-
       /*  if cart is empty */
       if (cart.length === 0) return [];
 
@@ -313,6 +312,7 @@ export const methods = {
         const filter: any = { _id: productId, status: true };
         // TODO: may be it should be lock not equal to true
         if (unlocked === false) filter.lock = false;
+        // if(unlocked !== true) filter.lock = false;
 
         const fetchProduct = db
           .model("products")
@@ -443,16 +443,16 @@ export const methods = {
           product.type === "under-bounipun" &&
           product.availabilityType === "made-to-order"
         ) {
+
+
           /* variant name (if made to order) */
           const selectedVariant = product.variants.find(
-        
-            (variant) => { 
-              variant._id._id.toString() === item.variant.toString()
-            }
+            (variant) => variant._id._id.toString() === item.variant.toString()
           );
           
           /* if selected variant is not available, skip */
           if(!selectedVariant) {
+     
             itemsToBeRemoved.push(item);
             return false;
           }
