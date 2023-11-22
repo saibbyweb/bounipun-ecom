@@ -74,7 +74,7 @@ export default {
         variant: {},
         fabric: {}
       }
-    };
+    }
   },
   computed: {
     cartItemPrice() {
@@ -91,7 +91,6 @@ export default {
   methods: {
     navigateToProductPage() {
       // this.$router.push("/products?_id=" + this.item.productId);
-
       this.$router.push({
         path: `/${this.item.slug}`
         // query
@@ -123,8 +122,6 @@ export default {
   width: 80%;
   overflow: hidden;
   cursor: pointer;
-
-
 
   /* cart item thumbnail/image */
   .image-container {

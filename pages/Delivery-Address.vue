@@ -1,6 +1,5 @@
 <template>
   <div class="delivery-page page -wh">
-
     <div class="page-header center">
       <h2 class="title">Delivery Address</h2>
     </div>
@@ -15,7 +14,7 @@
       <h2 class="title">Saved Addresses ({{ addressList.length }})</h2>
       <p>Click to pre-fill address details</p>
       <!-- <Accordion :heading="`Saved Addresses (${addressList.length})`"> -->
-      <div class="flex wrap center" style="width:100%;">
+      <div class="flex wrap center" style="width: 100%">
         <AddressCard
           v-for="(address, index) in addressList"
           :key="index"
@@ -68,7 +67,7 @@
         <!-- divider -->
         <hr
           v-if="otpSent"
-          style="border-bottom: 1px solid #efefef; width: 85%;"
+          style="border-bottom: 1px solid #efefef; width: 85%"
         />
 
         <!-- otp -->
@@ -115,7 +114,7 @@ import "@/helpers/validate.js";
 export default {
   head() {
     return {
-      title: "Delivery Address | Bounipun Kashmir"
+      title: "Delivery Address | Bounipun Kashmir",
     };
   },
   data() {
@@ -131,8 +130,8 @@ export default {
       otpSent: false,
       otpError: {
         status: false,
-        msg: ""
-      }
+        msg: "",
+      },
     };
   },
   computed: {
@@ -150,11 +149,23 @@ export default {
     },
     loggedIn() {
       return this.$store.state.customer.authorized;
-    }
+    },
+  },
+  watch: {
+    addressList: function (oldList, newList) {
+      if (newList.length > 0) {
+        console.log('we are here', newList.length)
+        this.selectAddress(newList[0], 0);
+      }
+    },
   },
   async mounted() {
+    if(this.addressList.length > 0) {
+      setTimeout(() => this.selectAddress(this.addressList[0], 0),300)
+      
+    }
     // this.prefillForm();
-    console.clear();
+    // console.clear();
     // this.fetchAddressBook();
   },
   methods: {
@@ -162,7 +173,7 @@ export default {
       this.activeAddressIndex = index;
       this.$refs.newAddress.scrollIntoView({ behavior: "smooth" });
       // let deliveryAddress = {};
-      Object.keys(this.formData).forEach(key => {
+      Object.keys(this.formData).forEach((key) => {
         this.formData[key].value = address[key];
       });
     },
@@ -178,7 +189,7 @@ export default {
     },
     async fetchAddressBook() {
       const request = await this.$post("/fetchCustomerDataPoints", {
-        field: "addressBook"
+        field: "addressBook",
       });
 
       if (request.resolved === false) {
@@ -202,7 +213,7 @@ export default {
         addressLine1: "Address Line #1",
         addressLine2: "Address Line #2",
         city: "City",
-        postalCode: "Postal Code"
+        postalCode: "Postal Code",
       };
 
       /* delivery address object */
@@ -216,8 +227,8 @@ export default {
           type: "text",
           error: {
             status: false,
-            msg: ""
-          }
+            msg: "",
+          },
         };
 
         if (key === "addressType") {
@@ -239,7 +250,7 @@ export default {
       if (flag) {
         field.error = {
           status: true,
-          msg
+          msg,
         };
       }
     },
@@ -253,11 +264,11 @@ export default {
         "email",
         "addressLine1",
         "city",
-        "postalCode"
+        "postalCode",
       ];
 
       /* firstName and surName should only consist of alphabets */
-      ["firstName", "surName"].forEach(key => {
+      ["firstName", "surName"].forEach((key) => {
         const field = this.formData[key];
         const hasOnlyAlphabets = field.value.hasOnlyAlphabets();
         this.setError(key, !hasOnlyAlphabets, "Only Alphabets are allowed!");
@@ -267,7 +278,8 @@ export default {
       const mobileNumberField = this.formData["mobileNumber"];
 
       /* mobile number should only consist of numbers  */
-      const mobileNumberHasOnlyNumbers = mobileNumberField.value.hasOnlyNumbers();
+      const mobileNumberHasOnlyNumbers =
+        mobileNumberField.value.hasOnlyNumbers();
       this.setError(
         "mobileNumber",
         !mobileNumberHasOnlyNumbers,
@@ -308,14 +320,14 @@ export default {
       );
 
       /* except for addressLine#2, no field can be blank */
-      requiredFields.forEach(key => {
+      requiredFields.forEach((key) => {
         const field = this.formData[key];
         const fieldEmpty = field.value.isEmpty();
         this.setError(key, fieldEmpty, "This field cannot be left blank!");
       });
 
       /* check for any error flags */
-      const validated = requiredFields.every(key => {
+      const validated = requiredFields.every((key) => {
         console.log(this.formData[key].error.status, key);
         return !this.formData[key].error.status;
       });
@@ -328,7 +340,7 @@ export default {
       const { response, resolved } = await this.$post("/sendOtp", {
         countryDialCode: this.countryDialCode,
         phoneNumber: this.formData.mobileNumber.value,
-        purpose: "registration-on-checkout"
+        purpose: "registration-on-checkout",
       });
 
       /* if req not resolved */
@@ -352,7 +364,7 @@ export default {
         otp: this.otp,
         firstName: this.formData.firstName.value,
         surName: this.formData.surName.value,
-        platform: "web"
+        platform: "web",
       });
 
       /* if req not resolved, map error message */
@@ -363,7 +375,7 @@ export default {
       }
       /* TODO: should work but not tested */
       await this.shiftCart();
-        /* set user auth to true */
+      /* set user auth to true */
       this.$store.commit("customer/setAuthorization", true);
       /* fetch profile */
       await this.$store.dispatch("customer/fetchProfile");
@@ -372,7 +384,7 @@ export default {
 
       /* collect delivery address */
       let deliveryAddress = {};
-      Object.keys(this.formData).forEach(key => {
+      Object.keys(this.formData).forEach((key) => {
         deliveryAddress[key] = this.formData[key].value;
       });
 
@@ -385,7 +397,7 @@ export default {
     },
     async shiftCart() {
       const { resolved, response } = await this.$post("/shiftCart", {
-        cart: this.$store.state.customer.cart
+        cart: this.$store.state.customer.cart,
       });
 
       /* clear local cart if cart shifted */
@@ -414,7 +426,7 @@ export default {
 
       /* collect delivery address */
       let deliveryAddress = {};
-      Object.keys(this.formData).forEach(key => {
+      Object.keys(this.formData).forEach((key) => {
         deliveryAddress[key] = this.formData[key].value;
       });
 
@@ -428,12 +440,12 @@ export default {
     async saveAddressToProfile(address) {
       const saveAddress = await this.$post("/addressBookActions", {
         action: "save-address",
-        address
+        address,
       });
       /* fetch profile */
       this.$store.dispatch("customer/fetchProfile");
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -464,7 +476,7 @@ export default {
     .order-total-container {
       width: 30%;
       margin-top: 2%;
-      
+
       @media (min-width: 769px) {
         position: fixed;
         right: 5%;
