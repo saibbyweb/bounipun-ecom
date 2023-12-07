@@ -247,6 +247,10 @@ export const methods = {
               product.allBasePrices = {};
             }
             const fabricBasePrices = product.allBasePrices[fabric.id];
+
+            if(!fabricBasePrices) {
+              return;
+            }
             /* calculate adjusted prices */
             const { INRPrice, NonINRPricing } = this.getDiscountedPrices(
               fabricBasePrices.price,
