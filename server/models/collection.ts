@@ -28,6 +28,10 @@ const schema = new mongoose.Schema(
     activeOrderLimit: { type: Number, default: 50 },
     basePriceMultiplier: { type: Number, default: 1 },
     status: Boolean,
+    category: {
+      type: ObjectId,
+      ref: "collection_category",
+    },
   },
   {
     timestamps: true,

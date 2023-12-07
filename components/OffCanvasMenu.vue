@@ -36,7 +36,7 @@
       <button
         @click="navigate(collection, 'collection')"
         class="clear item sub-item acc"
-        v-for="(collection, index) in scarves"
+        v-for="(collection, index) in _scarves"
         :key="index+collection.name"
       >
         {{ collection.name }}
@@ -47,7 +47,7 @@
       <button
         @click="navigate(collection, 'collection')"
         class="clear item sub-item acc"
-        v-for="(collection, index) in decor"
+        v-for="(collection, index) in _decor"
         :key="index+2+collection.name"
       >
         <!-- {{ collection.lock ? "" : "" }} -->
@@ -144,6 +144,12 @@ export default {
       return this.collections.filter(
         (col) => col.name.toUpperCase() !== "WALL ART"
       );
+    },
+    _scarves() {
+      return this.collections.filter(c => c.category === "scarves")
+    },
+    _decor() {
+      return this.collections.filter(c => c.category === "decor")
     },
     decor() {
       return this.collections.filter(

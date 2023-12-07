@@ -73,6 +73,15 @@
       <TextBox v-model="doc.mainTextBlock.text2" label="Main Text 2" />
       <!-- text 3 -->
       <InputBox v-model="doc.mainTextBlock.text3" label="Main Text 3" />
+      <!-- category -->
+      <SelectBox
+        :options="[
+          { name: 'DÉCOR', value: 'decor' },
+          { name: 'SCARVES', value: 'scarves' }
+        ]"
+        v-model="doc.category"
+        label="Category"
+      />
 
       <!-- visiblity toggle -->
       <Toggle
@@ -86,20 +95,52 @@
 
     <!-- inflation slider -->
     <div class="section">
-    <InputSlider v-model="doc.inflationPercentage" label="Inflation Percentage (for outside India)" />
-    <!-- base price multiplier -->
-    <InputSlider min="-100" max="100" v-model="doc.basePriceMultiplier" label="Base Price Multiplier" />
-    
-    <div v-if="inflationChanged" class="flex center">
-      <span style="font-size:12px; width:60%; text-align:center; padding-left:1%;"> To update all international prices for products under {{ doc.name}}, click here:  👉</span>
-    <button @click="resetProductPrices" class="sub-action"> Update Prices </button> 
+      <InputSlider
+        v-model="doc.inflationPercentage"
+        label="Inflation Percentage (for outside India)"
+      />
+      <!-- base price multiplier -->
+      <InputSlider
+        min="-100"
+        max="100"
+        v-model="doc.basePriceMultiplier"
+        label="Base Price Multiplier"
+      />
+
+      <div v-if="inflationChanged" class="flex center">
+        <span
+          style="
+            font-size: 12px;
+            width: 60%;
+            text-align: center;
+            padding-left: 1%;
+          "
+        >
+          To update all international prices for products under {{ doc.name }},
+          click here: 👉</span
+        >
+        <button @click="resetProductPrices" class="sub-action">
+          Update Prices
+        </button>
+      </div>
     </div>
 
-        </div>
-    
     <!-- price reset confirmation -->
-    <div v-if="pricesReset" style="position:fixed; z-index:3; bottom:10px; left:0; width:100%;height:20%;">
-       <Toast :msg="`${totalProductsReset} Product(s) updated with new price(s).`" :show="pricesReset" />
+    <div
+      v-if="pricesReset"
+      style="
+        position: fixed;
+        z-index: 3;
+        bottom: 10px;
+        left: 0;
+        width: 100%;
+        height: 20%;
+      "
+    >
+      <Toast
+        :msg="`${totalProductsReset} Product(s) updated with new price(s).`"
+        :show="pricesReset"
+      />
     </div>
 
     <!-- soft lock -->
@@ -113,7 +154,6 @@
         inactiveText="Unlocked"
       />
     </div>
-
 
     <!-- lock -->
     <div class="section">
@@ -190,7 +230,7 @@ const baseDoc = () => ({
   activeOrderLimit: "",
   edt: "",
   image: "",
-  inflationPercentage:0,
+  inflationPercentage: 0,
   basePriceMultiplier: 0,
   lockedImage: "",
   lockedImages: [],
@@ -199,6 +239,7 @@ const baseDoc = () => ({
   lock: false,
   softLock: false,
   status: false,
+  category: ""
 });
 
 export default {
@@ -213,29 +254,29 @@ export default {
       updated: false,
       pricesReset: false,
       totalProductsReset: 0,
-      fetchedInflationPercentage: -1
+      fetchedInflationPercentage: -1,
     };
   },
   computed: {
     inflationChanged() {
       return this.fetchedInflationPercentage != this.doc.inflationPercentage;
-    }
+    },
   },
   methods: {
     async resetProductPrices() {
-      const request = await this.$post('/updateNonINRPricing', {
+      const request = await this.$post("/updateNonINRPricing", {
         collectionId: this.doc._id,
         inflationPercentage: this.doc.inflationPercentage,
-        type: 'collection'
+        type: "collection",
       });
-      
+
       /* show feed on update */
-      if(request.resolved ===  true) {
+      if (request.resolved === true) {
         /* save document */
         this.updateDocument();
         this.pricesReset = true;
         this.totalProductsReset = request.response.total;
-        setTimeout(() => this.pricesReset = false,4500)
+        setTimeout(() => (this.pricesReset = false), 4500);
       }
     },
     imageListUpdated(list, type) {
@@ -247,7 +288,7 @@ export default {
           this.doc.lockedImage = list.length > 0 ? list[0].path : "";
           break;
         case "lockedImages":
-          console.log('locked image set', list.length);
+          console.log("locked image set", list.length);
           this.doc.lockedImages = list;
           break;
       }
@@ -297,6 +338,7 @@ export default {
         lock,
         softLock,
         status,
+        category,
       } = details;
 
       this.doc = {
@@ -308,8 +350,10 @@ export default {
         activeOrderLimit,
         edt: edt !== null ? edt.toString() : "",
         image,
-        inflationPercentage: inflationPercentage == undefined ? 0 : inflationPercentage,
-        basePriceMultiplier: basePriceMultiplier === undefined ? 0 : basePriceMultiplier,
+        inflationPercentage:
+          inflationPercentage == undefined ? 0 : inflationPercentage,
+        basePriceMultiplier:
+          basePriceMultiplier === undefined ? 0 : basePriceMultiplier,
         lockedImage,
         lockedImages: lockedImages || [],
         lockedText,
@@ -318,6 +362,7 @@ export default {
         lock,
         softLock,
         status,
+        category: category === undefined ? "" : category,
       };
       /* set initailly fetched percentage */
       this.fetchedInflationPercentage = this.doc.inflationPercentage;

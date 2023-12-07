@@ -40,6 +40,11 @@ export default {
           desc: "Manage techniques",
         },
         {
+          name: "Collection Categories",
+          path: "/admin-panel/collectionCategories",
+          desc: "Collection Categories",
+        },
+        {
           name: "Variant Categories",
           path: "/admin-panel/variantCategories",
           desc: "Manage bounipun colors",

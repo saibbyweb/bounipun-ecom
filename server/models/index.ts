@@ -29,6 +29,7 @@ import pages from "./pages";
 import lab from "./lab";
 import popup from "./popup";
 import paymentLinks from "./paymentLinks";
+import collectionCategories from "./collectionCategory";
 
 const register = function () {
   imageUpload.methods.register();
@@ -62,6 +63,7 @@ const register = function () {
   lab.methods.register();
   popup.methods.register();
   paymentLinks.methods.register();
+  collectionCategories.methods.register();
 };
 
 export {
@@ -96,5 +98,6 @@ export {
   lab,
   popup,
   paymentLinks,
+  collectionCategories,
   register,
 };
