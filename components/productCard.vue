@@ -683,8 +683,8 @@ export default {
       border: 1px solid $primary_dark;
       margin: 0 2px;
       padding: 2px 5px;
-      font-size: 10px;
-      width: 25%;
+      font-size: 8.5px;
+      width: 29%;
       display: flex;
       justify-content: center;
       align-items: center;
