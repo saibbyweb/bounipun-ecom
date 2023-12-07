@@ -42,7 +42,6 @@
           >
             {{ collection.name }}
           </button>
-
       </div>
 
       <div v-if="$store.state.customer.authorized" style="margin-bottom: 10px">
