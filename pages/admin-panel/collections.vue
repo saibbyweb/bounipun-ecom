@@ -40,6 +40,7 @@
         @updated="updateList"
         :model="model"
         @close="showForm = false"
+        :collectionCategories="collectionCategories"
       />
       <AddNewItem
         v-if="!showForm && !dragEnabled"
@@ -82,11 +83,13 @@ export default {
       ],
       dragEnabled: false,
       productCount: null,
-    };
+      collectionCategories: [],
+    }
   },
   mounted() {
     // this.fetchList();
     this.fetchProductCount();
+    this.fetchCollectionCategories();
   },
   methods: {
     async fetchProductCount() {
@@ -174,6 +177,24 @@ export default {
         clearInterval(timer);
       },150);
 
+    },
+    async fetchCollectionCategories() {
+      const result = await this.$fetchCollection("collection_category");
+      this.collectionCategories = result.docs.map(({ _id, name }) => {
+        return {
+          name,
+          value: _id,
+        };
+      });
+      /* collection categories */
+      this.collectionCategories.unshift({
+        name: "Select Category",
+        value: "default",
+      });
+
+      if (this.list.length === 0) {
+        return;
+      }
     },
   },
 };

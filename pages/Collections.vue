@@ -47,11 +47,26 @@
       >
         {{ collection.mainTextBlock.text1 }}
       </h2>
-      <p class="text-2" :style="collectionLockedAndUserAuthorized ? { color: 'white' } : {}">{{ collection.mainTextBlock.text2 }}</p>
-      <p v-if="!collectionLocked" class="text-3" :style="collectionLockedAndUserAuthorized ? { color: 'white' } : {}">
+      <p
+        class="text-2"
+        :style="collectionLockedAndUserAuthorized ? { color: 'white' } : {}"
+      >
+        {{ collection.mainTextBlock.text2 }}
+      </p>
+      <p
+        v-if="!collectionLocked"
+        class="text-3"
+        :style="collectionLockedAndUserAuthorized ? { color: 'white' } : {}"
+      >
         {{ collection.mainTextBlock.text3 }}
       </p>
-      <p v-else class="text-2" :style="collectionLockedAndUserAuthorized ? { color: 'white' } : {}">{{ collection.lockedText }}</p>
+      <p
+        v-else
+        class="text-2"
+        :style="collectionLockedAndUserAuthorized ? { color: 'white' } : {}"
+      >
+        {{ collection.lockedText }}
+      </p>
     </div>
 
     <!-- filter sort toggles -->
@@ -213,7 +228,7 @@ export default {
       colorCategories: [],
       escapeProduct: [],
       loading: false,
-      initialLoadComplete: false,
+      initialLoadComplete: false
     };
   },
   watch: {
@@ -288,7 +303,7 @@ export default {
       );
     },
   },
-  mounted() {
+  async mounted() {
     // if (this.isEscape) this.fetchCollectionProducts(this.$route.query.slug);
   },
   methods: {
@@ -659,7 +674,7 @@ export default {
       if (image === undefined) return "";
 
       return this.$getOriginalPath(image);
-    },
+    }
   },
 };
 </script>

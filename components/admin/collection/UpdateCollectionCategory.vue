@@ -18,7 +18,7 @@
             <!-- action complete gif -->
             <img v-if="updated" class="action-complete" src="/complete.gif" />
             <!-- update document -->
-            <button @click="updateDocument" class="action" :disabled="loading"> {{ editMode ? "Edit" : "Add" }} Color Category </button>
+            <button @click="updateDocument" class="action" :disabled="loading"> {{ editMode ? "Edit" : "Add" }} Collection Category </button>
             <!-- delete document -->
             <button v-if="editMode" @click="deleteDocument" class="action delete" :disabled="loading"> Delete </button>
         </div>

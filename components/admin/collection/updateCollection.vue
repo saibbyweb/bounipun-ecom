@@ -74,14 +74,17 @@
       <!-- text 3 -->
       <InputBox v-model="doc.mainTextBlock.text3" label="Main Text 3" />
       <!-- category -->
-      <SelectBox
+      <!-- <SelectBox
         :options="[
           { name: 'DÉCOR', value: 'decor' },
           { name: 'SCARVES', value: 'scarves' }
         ]"
         v-model="doc.category"
         label="Category"
-      />
+      /> -->
+
+          <!-- category -->
+    <SelectBox :options="collectionCategories" v-model="doc.category" label="Category" />
 
       <!-- visiblity toggle -->
       <Toggle
@@ -245,6 +248,7 @@ const baseDoc = () => ({
 export default {
   props: {
     model: String,
+    collectionCategories: Array
   },
   data() {
     return {

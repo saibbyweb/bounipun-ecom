@@ -32,27 +32,18 @@
       <!-- menu items -->
       <!-- <button class="sub-heading clear item">Collections</button> -->
       <!-- active collection list (scarves) -->
-      <p class="item sub-heading"> Scarves </p>
-      <button
-        @click="navigate(collection, 'collection')"
-        class="clear item sub-item acc"
-        v-for="(collection, index) in _scarves"
-        :key="index+collection.name"
-      >
-        {{ collection.name }}
-      </button>
+      <div v-for="group in Object.keys(collectionGroups)" :key="group">
+          <p class="item sub-heading">{{ collectionCategories ? collectionCategories[group] : group}}</p>
+          <button
+            @click="navigate(collection, 'collection')"
+            class="clear item sub-item acc"
+            v-for="collection in collectionGroups[group]" 
+            :key="collection._id"
+          >
+            {{ collection.name }}
+          </button>
 
-      <!-- active collection list (decor) -->
-       <p class="item sub-heading"> Décor </p>
-      <button
-        @click="navigate(collection, 'collection')"
-        class="clear item sub-item acc"
-        v-for="(collection, index) in _decor"
-        :key="index+2+collection.name"
-      >
-        <!-- {{ collection.lock ? "" : "" }} -->
-        {{ collection.name }}
-      </button>
+      </div>
 
       <div v-if="$store.state.customer.authorized" style="margin-bottom: 10px">
         <!-- acc items -->
@@ -85,8 +76,8 @@
           Gift Cards
         </button> -->
       </div>
-  <!-- <button class="clear link" @click="navigate('/lab')">Bounipun Lab</button> -->
-    <!-- <button class="clear link" @click="navigate('/our-story')">Our Story</button> -->
+      <!-- <button class="clear link" @click="navigate('/lab')">Bounipun Lab</button> -->
+      <!-- <button class="clear link" @click="navigate('/our-story')">Our Story</button> -->
       <!-- links -->
       <button class="clear link" @click="navigate('/faq')">FAQs</button>
       <!-- <button class="clear link">Help</button> -->
@@ -123,6 +114,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      collectionCategories: {}
+    }
+  },
   computed: {
     greeting() {
       const time = new Date().getHours();
@@ -140,22 +136,45 @@ export default {
     collections() {
       return this.$store.state.customer.collections;
     },
+    collectionGroups() {
+      const groupedByCategory = this.collections.reduce((acc, col) => {
+        // If the category hasn't been added to the accumulator, add it
+        if (!acc[col.category]) {
+          acc[col.category] = [];
+        }
+
+        // Add the current product to the appropriate category array
+        acc[col.category].push(col);
+
+        return acc;
+      }, {});
+
+      return groupedByCategory;
+    },
     scarves() {
       return this.collections.filter(
         (col) => col.name.toUpperCase() !== "WALL ART"
       );
     },
     _scarves() {
-      return this.collections.filter(c => c.category === "scarves")
+      return this.collections.filter((c) => c.category === "scarves");
     },
     _decor() {
-      return this.collections.filter(c => c.category === "decor")
+      return this.collections.filter((c) => c.category === "decor");
     },
     decor() {
       return this.collections.filter(
         (col) => this.scarves.findIndex((sc) => sc.name === col.name) === -1
       );
     },
+  },
+  watch: {
+    collectionGroups(newVal) {
+      console.log(newVal);
+    },
+  },
+  mounted() {
+    this.getCategories();
   },
   methods: {
     navigate(route, type) {
@@ -188,6 +207,13 @@ export default {
       await this.$store.dispatch("customer/fetchGlobalConfig");
       this.$forceUpdate();
       this.$emit("closeMenu");
+    },
+    async getCategories() {
+      const result = await this.$fetchCollection("collection_category");
+      result.docs.forEach(({ _id, name }) => {
+        // this.collectionCategories[_id] = name;
+        this.$set(this.collectionCategories,_id,name)
+      });
     },
   },
 };
@@ -324,10 +350,9 @@ export default {
   }
 
   .place-holder {
-   
-  width: 70%;
+    width: 70%;
     background: transparent;
-    @media(max-width: 768px) {
+    @media (max-width: 768px) {
       width: 30%;
     }
   }

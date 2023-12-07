@@ -84,6 +84,7 @@ export default {
                     value: _id
                 }
             });
+            /* color categories */
             this.colorCategories.unshift({
                 name: 'Select Category',
                 value: "default"
