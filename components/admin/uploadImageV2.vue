@@ -72,8 +72,8 @@
         class="not-uploaded"
         style="margin-left: 10px"
       >
-        <img style="width: 2vw;" src="/icons/light/upload-cloud.svg" />
-        <span style="font-size: 10px;"> No Image(s) uploaded yet </span>
+        <img style="width: 2vw" src="/icons/light/upload-cloud.svg" />
+        <span style="font-size: 10px"> No Image(s) uploaded yet </span>
       </div>
     </div>
   </div>
@@ -96,7 +96,7 @@ export default {
     },
     location: {
       type: String,
-      default: ""
+      default: "",
     },
     value: [Array, String],
   },
@@ -110,7 +110,6 @@ export default {
   watch: {
     value: {
       handler(newValue, oldValue) {
-  
         if (oldValue != false) {
           return;
         }
@@ -126,8 +125,7 @@ export default {
     },
   },
   mounted() {
-    if(this.location === "variants-meta")
-      this.commonAssign();
+    if (this.location === "variants-meta") this.commonAssign();
   },
   methods: {
     clearFileSelection() {
@@ -147,7 +145,7 @@ export default {
 
       switch (this.multipleUpload) {
         case true:
-        console.log('multiple file upload')
+          console.log("multiple file upload");
           /* if image list is empty */
           if (this.value.length === 0) return;
           /* construct component image list array */
@@ -161,7 +159,7 @@ export default {
           this.images = constructedImageList;
           break;
         case false:
-          console.log('single file upload')
+          console.log("single file upload");
           /* if no image provided */
           if (this.value === "") return;
           /* set provided image as the first element of the component image list */
@@ -305,13 +303,23 @@ export default {
       /* if multi upload is enabled */
       if (this.multipleUpload) {
         const constructedImageList = this.images.map(
-          ({ _id, order, mainImage, path }) => ({
-            _id,
-            order,
-            mainImage,
-            path,
-          })
+          ({ _id, order, mainImage, path, link }) => {
+            const imageObj =  {
+              _id,
+              order,
+              mainImage,
+              path
+            };
+            
+            /* attach link if it exists */
+            if(link) {
+              imageObj.link = link;
+            }
+
+            return imageObj;
+          }
         );
+        // console.log(this.images);
         this.$emit("input", constructedImageList);
       } else
       /* if single file upload is enabled */

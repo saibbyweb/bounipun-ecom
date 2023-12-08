@@ -121,7 +121,7 @@
         ></div>
 
         <div class="pad center-col text" v-if="block.visible">
-          <h2 class="text-1" style="text-align:center;">{{ block.text1 }}</h2>
+          <h2 class="text-1" style="text-align: center">{{ block.text1 }}</h2>
           <p class="text-2">{{ block.text2 }}</p>
         </div>
       </div>
@@ -298,7 +298,6 @@ export default {
       );
     },
     fetchSlideshow(slides) {
-
       const finalImages = [...slides];
 
       /* could be a breaking change  */
@@ -316,7 +315,19 @@ export default {
       return finalImages.map((slide) => this.$getOriginalPath(slide.path));
     },
     fetchLinks(slides) {
-      return slides.map((slide) => slide.link);
+      const finalLinks = [...slides];
+
+      // Find index of main image
+      const mainImageIndex = finalLinks.findIndex((i) => i.mainImage === true);
+
+      // Shift link of main image to the beginning
+      if (mainImageIndex !== -1) {
+        const mainImage = { ...finalLinks[mainImageIndex] };
+        finalLinks.splice(mainImageIndex, 1);
+        finalLinks.unshift(mainImage);
+      }
+
+      return finalLinks.map((slide) => slide.link);
     },
     collectionLinks() {
       return;

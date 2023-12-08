@@ -710,6 +710,7 @@ export default {
     margin-bottom: 10px;
     font-size: 26px;
     text-transform: uppercase;
+    text-align: center;
   }
 
   .text-2 {
