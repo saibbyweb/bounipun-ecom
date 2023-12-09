@@ -228,7 +228,8 @@ export const methods = {
   async updateAllProductsUnderCollection(
     collectionId,
     collectionSlug,
-    collectionLock
+    collectionLock,
+    askForPrice
   ) {
     const products = model;
     let matchedProducts: any = await products.find({
@@ -242,7 +243,7 @@ export const methods = {
     for (const product of matchedProducts) {
       const updated: any = await products.findOneAndUpdate(
         { _id: product._id },
-        { slug: collectionSlug + "/" + product.alias, lock: collectionLock },
+        { slug: collectionSlug + "/" + product.alias, lock: collectionLock, askForPrice },
         { returnOriginal: false }
       );
       console.log(updated.slug, updated.lock);

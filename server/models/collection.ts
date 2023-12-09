@@ -28,6 +28,10 @@ const schema = new mongoose.Schema(
     activeOrderLimit: { type: Number, default: 50 },
     basePriceMultiplier: { type: Number, default: 1 },
     status: Boolean,
+    askForPrice: {
+      type: Boolean,
+      default: false,
+    },
     category: {
       type: ObjectId,
       ref: "collection_category",
@@ -70,13 +74,17 @@ export const methods = {
       await product.methods.updateAllProductsUnderCollection(
         details._id,
         details.slug,
-        details.lock
+        details.lock,
+        details.askForPrice
       );
 
       await sale.methods.updatePricingForAllProductsUnderCollection(
         details._id,
         details.basePriceMultiplier
       );
+
+      /* update ask for price for all products */
+
     }
 
     /* find the last highest order and assign it to the new collection */

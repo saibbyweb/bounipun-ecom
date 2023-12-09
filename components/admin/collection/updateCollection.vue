@@ -83,8 +83,12 @@
         label="Category"
       /> -->
 
-          <!-- category -->
-    <SelectBox :options="collectionCategories" v-model="doc.category" label="Category" />
+      <!-- category -->
+      <SelectBox
+        :options="collectionCategories"
+        v-model="doc.category"
+        label="Category"
+      />
 
       <!-- visiblity toggle -->
       <Toggle
@@ -191,6 +195,10 @@
 
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
+
+    <!-- ask for price toggle -->
+    <Toggle v-model="doc.askForPrice" label="Ask For Price" />
+
     <!-- update button -->
     <div class="center-space">
       <!-- loading bar -->
@@ -241,14 +249,15 @@ const baseDoc = () => ({
   mainTextBlock: baseTextBlock(),
   lock: false,
   softLock: false,
+  askForPrice: false,
   status: false,
-  category: ""
+  category: "",
 });
 
 export default {
   props: {
     model: String,
-    collectionCategories: Array
+    collectionCategories: Array,
   },
   data() {
     return {
@@ -343,6 +352,7 @@ export default {
         softLock,
         status,
         category,
+        askForPrice,
       } = details;
 
       this.doc = {
@@ -367,6 +377,7 @@ export default {
         softLock,
         status,
         category: category === undefined ? "" : category,
+        askForPrice: askForPrice === undefined ? false: askForPrice,
       };
       /* set initailly fetched percentage */
       this.fetchedInflationPercentage = this.doc.inflationPercentage;
