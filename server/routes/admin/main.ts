@@ -1,4 +1,4 @@
-import { server, db, mongoose, task } from "@helpers/essentials";
+import { server, db, mongoose, task, environment } from "@helpers/essentials";
 import admin from "@helpers/admin";
 import { uploader, methods as imageHelper } from "@models/imageUpload";
 import { register } from "@models";
@@ -741,7 +741,7 @@ router.post("/loginAdmin", async (req, res) => {
   // if (countryDialCode === "+91")
   //   otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp);
   // else
-  otpVerified = await userMethods.verifyInternationalOtp(
+  otpVerified =  environment === 'development' ? true : await userMethods.verifyInternationalOtp(
     countryDialCode,
     phoneNumber,
     otp

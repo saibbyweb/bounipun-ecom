@@ -354,6 +354,7 @@
     />
 
     <VariantsMetaData
+      :selectedCollection="selectedCollection"
       :variants="variants"
       :variantsInfo="doc.variantsInfo"
       :updateVariantsInfo="updateVariantsInfo"
@@ -937,7 +938,6 @@ export default {
       }
       this.$forceUpdate();
     },
-
     populateForm(details) {
       const {
         _id,
@@ -967,7 +967,7 @@ export default {
         variantsInfo,
         status,
       } = details;
-   
+
       this.doc = {
         _id,
         styleId,

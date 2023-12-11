@@ -290,7 +290,7 @@ export default {
     },
     async fetchVariants() {
       const result = await this.$fetchCollection("variants", "admin");
-      this.variants = result.docs.map(({ _id, name, code, category }) => {
+      this.variants = result.docs.map(({ _id, name, code, category, info1, info2, description, hex }) => {
         return {
           name,
           _id,
@@ -298,6 +298,10 @@ export default {
           category,
           value: _id,
           checked: false,
+          info1,
+          info2,
+          description, 
+          hex
         };
       });
     },

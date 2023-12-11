@@ -55,7 +55,6 @@ export default {
   computed: {
     categories() {
       const uniqueCategories = new Set(this.options.map((op) => op.category));
-      console.log(this.selectedCollection);
       if(this.selectedCollection !== "wall-art" && this.selectedCollection !== "connoisseur-wall-art") {
         return [...uniqueCategories].filter(cat => cat.startsWith("Decor") === false)
       }

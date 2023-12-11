@@ -1,4 +1,4 @@
-import { server, db, mongoose, task } from "@helpers/essentials";
+import { server, db, mongoose, task, environment } from "@helpers/essentials";
 import { methods as userMethods } from "@models/user";
 import { methods as sessionMethods } from "@models/session";
 import sumBy from "lodash/sumBy";
@@ -8,6 +8,7 @@ import { methods as saleMethods } from "@models/sale";
 import axios from "axios";
 import { methods as notificationMethods } from "@models/notification";
 import { methods as unlockMethods } from "@models/unlock";
+
 
 let { sendCustomerRegistrationEmailToAdmin } = notificationMethods;
 sendCustomerRegistrationEmailToAdmin =
@@ -35,10 +36,10 @@ router.post("/sendOtp", async (req, res) => {
   // if (countryDialCode === "+91")
   //   sendOtpRequestStatus = await userMethods.sendMsg91Otp(phoneNumber);
   // /* other wise use international sms gateway */ else
-    sendOtpRequestStatus = await userMethods.sendInternationalOtp(
-      countryDialCode,
-      phoneNumber
-    );
+  sendOtpRequestStatus = environment === 'development' ? true  : await userMethods.sendInternationalOtp(
+    countryDialCode,
+    phoneNumber
+  );
 
   response.resolved = true;
   response.otpSent = sendOtpRequestStatus;
@@ -46,36 +47,34 @@ router.post("/sendOtp", async (req, res) => {
 });
 
 /* verify otp */
-router.post("/verifyOtp", async(req, res) => {
+router.post("/verifyOtp", async (req, res) => {
   let response = { resolved: false, otpVerified: false, msg: "" };
-    /* extract phone number, dial code, and purpose */
-    const { countryDialCode, phoneNumber, otp } = req.body;
-    /* verify otp request status */
-    let otpVerified = false;
-    /* otp verified */
-    try {
-      otpVerified = await userMethods.verifyInternationalOtp(
-        countryDialCode,
-        phoneNumber,
-        otp
-      );
-    }
-    catch(e) {
-      otpVerified = false;
-    }
+  /* extract phone number, dial code, and purpose */
+  const { countryDialCode, phoneNumber, otp } = req.body;
+  /* verify otp request status */
+  let otpVerified = false;
+  /* otp verified */
+  try {
+    otpVerified = await userMethods.verifyInternationalOtp(
+      countryDialCode,
+      phoneNumber,
+      otp
+    );
+  } catch (e) {
+    otpVerified = false;
+  }
 
-
-    /* if otp not verified */
-    if (otpVerified === false) {
-      response.msg = "Incorrect OTP entered.";
-      console.log("incorrect otp");
-      return res.send(response);
-    }
-    /* mark otp as verified */
-    response.resolved = true;
-    response.otpVerified = true;
-    res.send(response);
-})
+  /* if otp not verified */
+  if (otpVerified === false) {
+    response.msg = "Incorrect OTP entered.";
+    console.log("incorrect otp");
+    return res.send(response);
+  }
+  /* mark otp as verified */
+  response.resolved = true;
+  response.otpVerified = true;
+  res.send(response);
+});
 
 /* (verify phone-number) and register customer */
 router.post("/registerCustomer", async (req, res) => {
@@ -109,11 +108,11 @@ router.post("/registerCustomer", async (req, res) => {
   // if (countryDialCode === "+91")
   //   otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp);
   // else
-    otpVerified = await userMethods.verifyInternationalOtp(
-      countryDialCode,
-      phoneNumber,
-      otp
-    );
+  otpVerified = await userMethods.verifyInternationalOtp(
+    countryDialCode,
+    phoneNumber,
+    otp
+  );
 
   if (otpVerified === false) {
     response.incorrectOtp = true;
@@ -219,11 +218,11 @@ router.post("/loginCustomer", async (req, res) => {
   // if (countryDialCode === "+91")
   //   otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp);
   // else
-    otpVerified = await userMethods.verifyInternationalOtp(
-      countryDialCode,
-      phoneNumber,
-      otp
-    );
+  otpVerified =  environment === 'development' ? true : await userMethods.verifyInternationalOtp(
+    countryDialCode,
+    phoneNumber,
+    otp
+  );
 
   /* if otp verification failed */
   if (otpVerified === false) {
@@ -325,46 +324,52 @@ router.post("/fetchLocalCart", async (req, res) => {
 });
 
 /* fetch product list */
-router.post("/fetchProductList", userAuth("customer", false), async (req, res) => {
-  /* unlocked */
-  const { unlocked, slug } = req.body;
-  console.log(slug);
-  /* response to be sent back */
-  let response = { resolved: false, listDetails: {} };
+router.post(
+  "/fetchProductList",
+  userAuth("customer", false),
+  async (req, res) => {
+    /* unlocked */
+    const { unlocked, slug } = req.body;
+    console.log(slug);
+    /* response to be sent back */
+    let response = { resolved: false, listDetails: {} };
 
-  const productList: any = await db
-    .model("product_lists")
-    .findOne({ slug, status: true })
-    .populate({
-      path: 'list',
-      populate: { path: "bounipun_collection colors._id rtsDirectVariant variants._id" }
-    })
-    .lean();
-  
+    const productList: any = await db
+      .model("product_lists")
+      .findOne({ slug, status: true })
+      .populate({
+        path: "list",
+        populate: {
+          path: "bounipun_collection colors._id rtsDirectVariant variants._id",
+        },
+      })
+      .lean();
+
     /* if product list not found */
-  if(productList === null) {
-    console.log('Product list not found')
+    if (productList === null) {
+      console.log("Product list not found");
+      res.send(response);
+      return;
+    }
+
+    console.log(`Product List ${productList.name} found for slug ${slug}`);
+
+    let products = productList.list;
+
+    /* filter products which are inactive and also check for locked products */
+    products = products.filter((product) => {
+      if (product.lock === true && unlocked === false) return false;
+      return product.status === true;
+    });
+
+    products = await saleMethods.normalizePricing(products);
+    productList.list = products;
+
+    response.listDetails = productList;
+    response.resolved = true;
     res.send(response);
-    return;
   }
-
-  console.log(`Product List ${productList.name} found for slug ${slug}`)
-
-  let products = productList.list;
-
-  /* filter products which are inactive and also check for locked products */
-  products = products.filter((product) => {
-    if (product.lock === true && unlocked === false) return false;
-    return product.status === true;
-  });
-
-  products = await saleMethods.normalizePricing(products);
-  productList.list = products;
-  
-  response.listDetails = productList;
-  response.resolved = true;
-  res.send(response);
-});
+);
 
 /* fetch wishlist */
 router.post("/fetchWishlist", userAuth("customer"), async (req, res) => {
@@ -437,7 +442,7 @@ router.post("/cartActions", userAuth("customer"), async (req, res) => {
   }
 
   /* save cart back to database */
- await db.model("users").findOneAndUpdate({ _id: user._id }, { cart });
+  await db.model("users").findOneAndUpdate({ _id: user._id }, { cart });
 
   res.send("cart_updated");
 });
@@ -607,17 +612,17 @@ router.post("/updateProfile", userAuth("customer"), async (req, res) => {
 });
 
 /* update last seen and view count */
-router.post("/lastSeen", userAuth("customer"), async(req, res) => {
+router.post("/lastSeen", userAuth("customer"), async (req, res) => {
   const { user, profile } = req.body;
 
-    /* update last seen and view count */
-    await db.model('users').findByIdAndUpdate(user._id, {
-      lastSeen: new Date(),
-      $inc: { viewCount: 1 }
-    })
+  /* update last seen and view count */
+  await db.model("users").findByIdAndUpdate(user._id, {
+    lastSeen: new Date(),
+    $inc: { viewCount: 1 },
+  });
 
-    res.send("done");
-})
+  res.send("done");
+});
 
 /* set cookie demo */
 router.post("/setCookie", (req, res) => {
