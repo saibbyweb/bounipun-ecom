@@ -241,6 +241,7 @@ export const methods = {
 
     /* update slugs for all matched products */
     for (const product of matchedProducts) {
+      console.log(askForPrice,'--ASK--')
       const updated: any = await products.findOneAndUpdate(
         { _id: product._id },
         { slug: collectionSlug + "/" + product.alias, lock: collectionLock, askForPrice },
@@ -365,6 +366,7 @@ export const methods = {
   async setBasePricesForAllProducts() {
     const allProducts = await model.find();
     for (const product of allProducts) {
+      // console.log(product._id)
       await this.syncMainPricesAndBasePrices(product);
     }
   },

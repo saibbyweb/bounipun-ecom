@@ -98,6 +98,9 @@
           }}
         </span>
         <span class="collection"> {{ collectionName }} </span>
+        <span v-if="belongsToDecor" class="price">
+           Size: {{ decorBasicInfo2 }}
+          </span>
 
         <!-- show price is askForPrice is false -->
         <div v-if="!product.askForPrice" class="price-box">
@@ -123,6 +126,7 @@
           <span v-if="readyToShip" class="price">
             {{ formatCurrency(directPrice) }}
           </span>
+
         </div>
 
         <!-- show ask for price -->
@@ -150,7 +154,7 @@
 
     <!-- variants available -->
     <div>
-      <div v-if="!thirdPartyProduct" class="variants-available center">
+      <div v-if="!thirdPartyProduct && !belongsToDecor" class="variants-available center">
         <div
           v-for="(variant, index) in variantsAvailable"
           :key="index"
@@ -253,6 +257,16 @@ export default {
       // if (this.product.variantNames) return this.product.variantNames;
       return this.product.variants.map((variant) => variant._id.name);
     },
+    decorBasicInfo2() {
+      try {
+        console.log(this.product.variantsInfo)
+        const basicVariant = this.product.variantsInfo.find((variant) => variant.code.toLowerCase().includes("basic"))
+        return basicVariant.info2;
+      }
+      catch(e) {
+        return ""
+      }
+    },
     baseColorsBoxes() {
       if (!this.product.colors) return;
       let baseColorList = this.product.colors.map(
@@ -335,9 +349,12 @@ export default {
     },
     collectionName() {
       if (typeof this.product.bounipun_collection === "string")
-        return this.product.bounipun_collection;
+        return this.product.bounipun_collection.trim();
       if (this.product.bounipun_collection === null) return "N/A";
-      return this.product.bounipun_collection.name;
+      return this.product.bounipun_collection.name.trim();
+    },
+    belongsToDecor() {
+      return this.collectionName == 'WALL ART - KHATT' || this.collectionName === 'WALL ART - CONNOISSEUR';
     },
     directPrice() {
       if (this.currencyIsINR) return this.product.directPrice;

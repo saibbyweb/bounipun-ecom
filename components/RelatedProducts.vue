@@ -1,5 +1,5 @@
 <template>
-  <div class="related-products">
+  <div v-if="relatedProducts.length && relatedProducts.length > 0" class="related-products">
     <h2 class="title">You may also like</h2>
     <div class="flex center">
       <div class="flex wrap">

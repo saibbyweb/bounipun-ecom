@@ -74,11 +74,11 @@ export const methods = {
 
     for (const code of currencyCodes) {
       const price: any = NonINRPricing[code];
-      console.log(`🟡 Original ${code} Price: ${price}`);
+      // console.log(`🟡 Original ${code} Price: ${price}`);
       NonINRPricing[code] = parseInt(
        String( price - (price / 100) * discountPercentage)
       );
-      console.log(`🔵  Discounted ${code} Price: ${NonINRPricing[code]}`);
+      // console.log(`🔵  Discounted ${code} Price: ${NonINRPricing[code]}`);
     }
 
     return { INRPrice, NonINRPricing };
