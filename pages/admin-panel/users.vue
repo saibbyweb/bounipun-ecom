@@ -15,7 +15,7 @@
         :list="list"
         :model="model"
         :headings="headings"
-        custom_css="10% 20% 10% 10% 10% 10% 20% 10%"
+        custom_css="5% 10% 10% 10% 15% 10% 20% 10% 10%"
         :sortByFields="sortByFields"
         @documentFetched="documentFetched"
         @sortToggled="sortToggled"
@@ -56,16 +56,24 @@ export default {
       rawCriterion: {
         search: {
           key: "firstName",
-          term: ""
+          term: "",
         },
         filters: {
-          type: "default"
+          type: "default",
         },
         sortBy: {},
-        limit: 20
+        limit: 20,
       },
       list: [],
-      sortByFields: ["firstName", "surName","usergroup", "countryIsoCode", "status"],
+      sortByFields: [
+        "firstName",
+        "surName",
+        "usergroup",
+        "countryIsoCode",
+        "viewCount",
+        "lastSeen",
+        "status",
+      ],
       headings: [
         "_id",
         "firstName",
@@ -74,9 +82,10 @@ export default {
         "countryIsoCode",
         "viewCount",
         "lastSeen",
-        "status"
+        "cartCount",
+        "status",
       ],
-      dragEnabled: false
+      dragEnabled: false,
     };
   },
   async mounted() {
@@ -87,7 +96,7 @@ export default {
       this.dragEnabled = dragEnabled;
 
       this.rawCriterion.filters = {
-        type: "default"
+        type: "default",
       };
 
       this.rawCriterion.search.term = "";
@@ -99,7 +108,7 @@ export default {
       console.log(sortBy);
       this.rawCriterion = {
         ...this.rawCriterion,
-        sortBy
+        sortBy,
       };
     },
     documentFetched(doc) {
@@ -115,11 +124,31 @@ export default {
 
       /* extract list */
       this.list = result.docs.map(
-        ({ _id, firstName, surName, usergroup, countryIsoCode, viewCount, lastSeen, status }) => {
-          return { _id, firstName, surName, usergroup, countryIsoCode, viewCount: viewCount || 0, lastSeen: lastSeen ? this.$formatDate(lastSeen) : "N/A", status }
+        ({
+          _id,
+          firstName,
+          surName,
+          usergroup,
+          countryIsoCode,
+          viewCount,
+          lastSeen,
+          status,
+          cart,
+        }) => {
+          return {
+            _id,
+            firstName,
+            surName,
+            usergroup,
+            countryIsoCode,
+            viewCount: viewCount || 0,
+            lastSeen: lastSeen ? this.$formatDate(lastSeen) : "N/A",
+            cartCount: cart ? cart.length : 0,
+            status,
+          };
         }
       );
-    }
-  }
-}
+    },
+  },
+};
 </script>

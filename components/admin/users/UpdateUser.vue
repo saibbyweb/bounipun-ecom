@@ -31,6 +31,9 @@
     <!-- usergroup -->
     <InputBox v-model="doc.usergroup" label="Usergroup" disabled />
 
+    <!-- user cart details -->
+    <UserCartDetails :cart="doc.cart" />
+
     <!-- content unlock code -->
     <InputBox
       v-model="doc.contentUnlock.code"
@@ -100,6 +103,7 @@ export default {
         },
         createdAt: "",
         status: false,
+        cart: []
       },
       loading: false,
       updated: false,
@@ -133,6 +137,7 @@ export default {
       this.$flash(this);
     },
     populateForm(details) {
+      console.log(details,'-Users-')
       const {
         _id,
         firstName,
@@ -143,6 +148,7 @@ export default {
         usergroup,
         contentUnlock,
         createdAt,
+        cart,
         status,
       } = details;
       this.doc = {
@@ -158,6 +164,7 @@ export default {
             ? { status: false, code: "" }
             : contentUnlock,
         createdAt,
+        cart: cart ? cart : [],
         status,
       };
       this.editMode = true;

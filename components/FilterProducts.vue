@@ -288,6 +288,15 @@ export default {
       /* TODO: temporary fix: filter out decor variants */
       this.filterData.variants = this.filterData.variants.filter(variant => ['SQUARE', 'SHAWL', 'STOLE'].includes(variant.name.toUpperCase()) );
 
+      // this.filterData.variants.forEach(f => {
+      //   const name = f.name.toUpperCase();
+      //   console.log(name,'-VARIANTS-')
+      //   if(name === "BASIC" || name==="CLASSIC" || name === "PREMIUM") {
+      //    f.name = `${f.name} - Décor`
+      //   }
+      //   return f
+      // })
+
       this.$emit('dataFetched');
     }
   }
