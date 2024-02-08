@@ -91,10 +91,12 @@ export default {
   methods: {
     navigateToProductPage() {
       // this.$router.push("/products?_id=" + this.item.productId);
-      this.$router.push({
-        path: `/${this.item.slug}`
-        // query
-      });
+      // this.$router.push({
+      //   path: `/${this.item.slug}`
+      //   // query
+      // });
+
+      window.open(`/${this.item.slug}`, "_blank");
 
       window.scroll({ top: 0, behavior: "smooth" });
     },

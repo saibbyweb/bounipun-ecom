@@ -15,7 +15,7 @@
         :list="list"
         :model="model"
         :headings="headings"
-        custom_css="5% 10% 10% 10% 15% 10% 20% 10% 10%"
+        custom_css="5% 15% 15% 10% 15% 10% 20% 10%"
         :sortByFields="sortByFields"
         @documentFetched="documentFetched"
         @sortToggled="sortToggled"
@@ -82,7 +82,7 @@ export default {
         "countryIsoCode",
         "viewCount",
         "lastSeen",
-        "cartCount",
+        // "cartCount",
         "status",
       ],
       dragEnabled: false,
@@ -143,7 +143,7 @@ export default {
             countryIsoCode,
             viewCount: viewCount || 0,
             lastSeen: lastSeen ? this.$formatDate(lastSeen) : "N/A",
-            cartCount: cart ? cart.length : 0,
+            // cartCount: cart ? cart.length : 0,
             status,
           };
         }

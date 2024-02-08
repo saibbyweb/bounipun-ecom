@@ -801,6 +801,17 @@ router.post("/fetchAdminProfile", adminAuth("0", false), async (req, res) => {
   res.send(admin);
 });
 
+/* fetch cart */
+router.post("/fetchUserCart", adminAuth("1", false), async(req, res) => {
+  const { userId } = req.body;
+  const user = await userMethods.getUser({
+    _id: userId
+  });
+  const cartItems = await userMethods.getCartItems(user.cart, true);
+  console.log(cartItems)
+  res.send(cartItems);
+});
+
 /* crawler */
 router.get("/crawl", async (req, res) => {
   console.log(req.query);

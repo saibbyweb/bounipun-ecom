@@ -32,7 +32,7 @@
     <InputBox v-model="doc.usergroup" label="Usergroup" disabled />
 
     <!-- user cart details -->
-    <UserCartDetails :cart="doc.cart" />
+    <UserCartDetails :cart="doc.cart" :userId="doc._id" />
 
     <!-- content unlock code -->
     <InputBox
