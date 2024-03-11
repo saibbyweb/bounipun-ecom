@@ -1,28 +1,33 @@
 <template>
   <div class="desktop-menu flex center">
     <div class="menu-items flex center">
-      <!-- <button
-        @click="navigate(collection, 'collection')"
-        class="menu-item"
-        v-for="(collection, index) in collections"
-        :key="index"
+      <div
+        v-for="group in Object.keys(collectionGroups)"
+        :key="group"
+        class="menu-item-wrapper"
       >
-        {{ collection.name }}
-      </button> -->
-      <div v-for="group in Object.keys(collectionGroups)" :key="group" class="menu-item-wrapper">
-        <button  class="menu-item">
+        <button class="menu-item">
           {{ collectionCategories ? collectionCategories[group] : group }}
         </button>
-        <!-- collections -->
-        <div class="collections-dropdown flex col">
-          <button
-            @click="navigate(collection, 'collection')"
-            class="menu-item collection-item"
-            v-for="collection in collectionGroups[group]" 
-            :key="collection._id"
-          >
-            {{ collection.name }}
-          </button>
+      </div>
+
+      <div class="collections-dropdown flex">
+        <div
+          v-for="group in Object.keys(collectionGroups)"
+          :key="group"
+          class="menu-item-wrapper flex"
+        >
+          <!-- collections -->
+          <div class="collections-list flex col">
+            <button
+              @click="navigate(collection, 'collection')"
+              class="menu-item collection-item"
+              v-for="collection in collectionGroups[group]"
+              :key="collection._id"
+            >
+              {{ collection.name }}
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -104,43 +109,57 @@ export default {
   .menu-items {
     width: 100%;
     .menu-item-wrapper {
-      width: 15%;
+      /* height: 100px; */
+      width: 300px;
       position: relative;
-      /* border:1px solid gray; */
+      /* border: 1px solid gray; */
       justify-content: center;
-      align-items: center;
+      align-items: start;
       display: flex;
+      overflow: visible;
+    }
 
-      &:hover {
-         .collections-dropdown {
-         display: flex;
-        }
+    &:hover {
+      .collections-dropdown {
+        padding-top:15px;
+        box-sizing: border-box;
+        height:30vh;
+        backdrop-filter: blur(10px);
       }
     }
 
     .collections-dropdown {
-      display: none;
+      /* display: none; */
+      /* width: 100vw; */
       width: 100%;
       position: absolute;
-      bottom:0%;
-      left:0;
-      top:110%;
+      bottom: 0%;
+      left: 0;
+      top: 100%;
+      /* height: 10vw; */
+      height: 0;
+      overflow: hidden;
+      transition: all 0.2s ease-in-out;
       z-index: 20;
-      /* height: 400px; */
-      background-color: "white"; // Define this color
-      // Additional styling for dropdown
+      /* background-color: white; */
+      justify-content: center;
+      box-shadow: 1px 1px 15px rgba(0,0,0,0.16);
+      /* height: 400px;
+      //   background-color: "white"; // Define this color
+      // Additional styling for dropdown */
 
       .collection-item {
         color: black;
+        width: 300px;
         padding: 10px 0 10px 0;
-        background: white;
-        border: 1px solid white;
+        /* background: white; */
+        /* border-left: 0.2px solid #efefef; */
         transition: all 0.3s ease-in-out;
 
         &:hover {
           border: 1px solid #efefef;
-          background: #333333;
-          color:white;
+          background: #33333377;
+          color: white;
         }
       }
     }
@@ -155,8 +174,6 @@ export default {
       font-size: 15px;
       font-family: $font_1;
       letter-spacing: 1px;
-
-
     }
   }
   @media (max-width: 768px) {

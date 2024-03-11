@@ -43,6 +43,7 @@ export default {
     height:100%;
     width:100%;
     background: white;
+    /* backdrop-filter: blur(10px); */
     box-sizing: border-box;
     transform: translateY(0);
     animation: showUp 0.3s ease-in-out;

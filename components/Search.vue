@@ -1,6 +1,7 @@
 <template>
 <div ref="searchPage" class="search">
-    <button class="clear cancel-search" @click="$emit('closeSearch')"> Cancel Search <img class="icon" src="/icons/dark/close.png"> </button>
+    <!-- <button class="clear cancel-search" @click="$emit('closeSearch')"> Cancel Search <img class="icon" src="/icons/dark/close.png"> </button> -->
+    <button class="clear cancel-search" @click="$emit('closeSearch')"> Cancel Search </button>
     <!-- search box -->
     <input ref="searchBox" class="search-box" type="text" placeholder="What are you looking for?" @keyup.enter="searchProducts" v-model="searchTerm" />
 
@@ -84,13 +85,18 @@ export default {
     }
 }
 
+.icon {
+    background-blend-mode:multiply;
+}
+
 .search {
     opacity: 0;
     position: fixed;
     padding: 10% 6% 6% 6%;
     top: 0;
     left: 0;
-    background: rgba(255, 255, 255, 0.97);
+    /* background: rgba(255, 255, 255, 0.97); */
+    backdrop-filter: blur(10px);
     width: 100vw;
     height: 100vh;
     transition: all 0.4s ease-in-out;
@@ -105,17 +111,19 @@ export default {
     }
 
     .cancel-search {
-        font-size: 10px;
+        font-size: 14px;
         padding: 3% 0;
-        color: $dark_gray;
+        color: white;
         position: absolute;
-        right: 0;
+        right: 4%;
         top: 1%;
     }
 
     .search-box {
         width: 100%;
-        background: #656565;
+        background: #656565c8;
+    backdrop-filter: blur(10px);
+        
         color: white;
         border: none;
         margin-top: 10px;
