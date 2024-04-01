@@ -51,12 +51,16 @@
     <!-- product autocomplete list -->
     <div class="section">
       <client-only>
-        <label class="label"> List of Products: ({{ doc.list.length }})</label>
-        <button class="action small" @click="toggleSelectAll">
-          Select All
-        </button>
-        <br />
-        <br />
+        <label class="label"> Total Products: ({{ filteredProducts.length }})</label>
+      
+        <product-list-collection-filter :collections="allCollections"  v-model="selectedCollectionFilters" />
+        <div class="flex end">
+        <button class="action small" @click="toggleSelectAll">            Select All </button>
+        </div>
+
+     
+  
+        <label class="label"> No. of Selected Products: ({{ doc.list.length }})</label>
         <autocomplete
           inputClass="small"
           ref="autocomplete"
@@ -163,6 +167,10 @@ export default {
       editMode: false,
       doc: baseDoc(),
       allProducts: [],
+      allCollections: [],
+      selectedCollectionFilters: {
+        
+      },
       loading: false,
       updated: false,
       errorToast: {
@@ -173,10 +181,27 @@ export default {
     };
   },
   computed: {
-    allProductsExceptSelected() {
+    filteredProducts() {
       if (this.allProducts.length === 0) return [];
+      // Get the selected collection IDs
+      const selectedCollectionIds = Object.keys(this.selectedCollectionFilters).filter(
+        (collectionId) => this.selectedCollectionFilters[collectionId]
+      );
 
-      return this.allProducts.filter((product) => {
+      // If no collection is selected, return all products
+      if (selectedCollectionIds.length === 0) {
+        return this.allProducts;
+      }
+
+      // Filter the products based on the selected collections
+      return this.allProducts.filter((product) =>
+        selectedCollectionIds.includes(product.collectionId)
+      );
+    },
+    allProductsExceptSelected() {
+      if (this.filteredProducts.length === 0) return [];
+
+      return this.filteredProducts.filter((product) => {
         /* product is not in the selected array */
         return (
           this.doc.list.findIndex((selected) => selected === product._id) === -1
@@ -185,6 +210,7 @@ export default {
     },
   },
   mounted() {
+    this.fetchAllCollections();
     this.fetchAllProducts();
   },
   methods: {
@@ -194,7 +220,7 @@ export default {
       if (!this.allSelected) {
         return;
       }
-      this.doc.list = this.allProducts.map((pro) => pro._id);
+      this.doc.list = this.filteredProducts.map((pro) => pro._id);
     },
     imageListUpdated(list, type) {
       switch (type) {
@@ -225,10 +251,20 @@ export default {
     },
     async fetchAllProducts() {
       const result = await this.$fetchCollection("products");
-      this.allProducts = result.docs.map(({ _id, styleId, name }) => {
+      this.allProducts = result.docs.map(({ _id, styleId, name, bounipun_collection }) => {
         return {
           _id,
           name: `${styleId} - (${name})`,
+          collectionId: bounipun_collection
+        };
+      });
+    },
+    async fetchAllCollections() {
+      const result = await this.$fetchCollection("collections");
+      this.allCollections = result.docs.map(({ _id, name }) => {
+        return {
+          _id,
+          name
         };
       });
     },

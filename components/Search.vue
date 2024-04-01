@@ -95,8 +95,8 @@ export default {
     padding: 10% 6% 6% 6%;
     top: 0;
     left: 0;
-    /* background: rgba(255, 255, 255, 0.97); */
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.97);
+    /* backdrop-filter: blur(10px); */
     width: 100vw;
     height: 100vh;
     transition: all 0.4s ease-in-out;
@@ -113,7 +113,7 @@ export default {
     .cancel-search {
         font-size: 14px;
         padding: 3% 0;
-        color: white;
+        color: $dark_gray;
         position: absolute;
         right: 4%;
         top: 1%;
@@ -122,7 +122,7 @@ export default {
     .search-box {
         width: 100%;
         background: #656565c8;
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); */
         
         color: white;
         border: none;

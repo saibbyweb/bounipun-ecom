@@ -254,7 +254,7 @@ export default {
     clientTemplate() {
       let temp = this.doc.description.replace("##client##", this.doc.invitation.clientName);
       temp = temp.replace("##code##", this.doc.code);
-      temp = temp.replace("##link##", `${this.link}&code=${this.doc.code}`);
+      temp = temp.replace("##link##", `${this.doc.invitation?.link || this.link}&code=${this.doc.code}`);
       temp = temp.replace('##start##', this.$formatDate(this.doc.validityRange.start, true))
       temp = temp.replace('##end##', this.$formatDate(this.doc.validityRange.end, true));
       return temp;

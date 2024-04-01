@@ -12,6 +12,10 @@
       </div>
 
       <div class="collections-dropdown flex">
+
+
+
+    
         <div
           v-for="group in Object.keys(collectionGroups)"
           :key="group"
@@ -30,6 +34,7 @@
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -109,7 +114,6 @@ export default {
   .menu-items {
     width: 100%;
     .menu-item-wrapper {
-      /* height: 100px; */
       width: 300px;
       position: relative;
       /* border: 1px solid gray; */
@@ -121,9 +125,10 @@ export default {
 
     &:hover {
       .collections-dropdown {
-        padding-top:15px;
-        box-sizing: border-box;
-        height:30vh;
+        padding-top:2vh;
+        padding-bottom:2vh;
+        box-sizing:content-box;
+        height:150px;
         backdrop-filter: blur(10px);
       }
     }
@@ -151,6 +156,7 @@ export default {
       .collection-item {
         color: black;
         width: 300px;
+        height: 50px;
         padding: 10px 0 10px 0;
         /* background: white; */
         /* border-left: 0.2px solid #efefef; */
