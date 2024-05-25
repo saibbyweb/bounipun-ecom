@@ -101,7 +101,7 @@ export default {
           key: "name",
           term: this.$route.query.searchTerm
             ? this.$route.query.searchTerm
-            : "rose"
+            : ""
         },
         filters: {},
         sortBy: {},

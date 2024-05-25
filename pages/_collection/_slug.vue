@@ -25,7 +25,7 @@
           size="cover"
         />
 
-        <span class="collection-vertical"> Bounipun Escape </span>
+        <!-- <span class="collection-vertical"> Bounipun Escape </span> -->
 
         <!-- back button -->
         <!-- <div class="back-button">
@@ -76,9 +76,11 @@
         <div class="details" :class="{ sticky: sticky, desktopSticky }">
           <!-- header -->
           <div class="header">
+            <a :href="collectionLink">
             <span class="collection" v-if="!thirdPartyProduct">
               Bounipun {{ collectionName }}
             </span>
+          </a>
             <span class="gender"> {{ preferredGender }} </span>
           </div>
 
@@ -511,6 +513,15 @@ export default {
         this.product.bounipun_collection.name
       )
         return this.product.bounipun_collection.name;
+      return "";
+    },
+    collectionLink() {
+      if (
+        !this.product.thirdParty &&
+        this.product.bounipun_collection &&
+        this.product.bounipun_collection.slug
+      )
+        return "/collections?slug=" + this.product.bounipun_collection.slug;
       return "";
     },
     preferredGender() {

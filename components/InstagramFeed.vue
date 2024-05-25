@@ -2,8 +2,8 @@
   <div class="instagram-feed">
     <!-- heading -->
     <div class="heading flex center">
-      <!-- <h3>{{ heading }}</h3> -->
-      <img class="instagram" src="/instagram-text.svg" />
+      <h3>{{ heading }}</h3>
+      <!-- <img class="instagram" src="/instagram-text.svg" /> -->
     </div>
     <!-- posts grid -->
     <div class="posts-grid flex wrap center">
@@ -28,7 +28,7 @@ export default {
   props: {
     heading: {
       type: String,
-      default: "Instagram"
+      default: "Green Book"
     }
   },
   data() {

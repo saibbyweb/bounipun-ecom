@@ -45,12 +45,34 @@ export default {
       activeCaptionIndex: 0
     };
   },
+  computed: {
+    pressImages() {
+      let finalImages = [];
+
+      if (this.layout && this.layout.press && this.layout.press.imageList)
+        finalImages = this.layout.press.imageList.reverse();
+
+      /* check for main image */
+      const mainImageIndex = finalImages.findIndex((i) => i.mainImage === true);
+
+      /* shift main image to the beginning */
+      if (mainImageIndex !== -1) {
+        const mainImage = { ...finalImages[mainImageIndex] };
+        finalImages.splice(mainImageIndex, 1);
+        finalImages.unshift(mainImage);
+      }
+
+      return finalImages;
+    },
+  },
   methods: {
     slideChanged(index) {
       if(index <= this.captionsList.length -1)
       this.activeCaptionIndex = index;
     },
     async fetchPressImages() {
+      let finalImages = [];
+      let finalCaptions = [];
       /* fetch active homepage layout */
       const layout = await this.$fetchData("homepages", {
         status: true
@@ -60,12 +82,30 @@ export default {
         console.log("Layout not fetched");
         return;
       }
-      console.log(layout.doc.press.imageList);
-      this.pressImageList = layout.doc.press.imageList.map(image =>
+
+      /* reverse the order */
+      finalImages = layout.doc.press.imageList.reverse();
+      finalCaptions = layout.doc.press.captions.reverse();
+
+      /* check for main image */
+      const mainImageIndex = finalImages.findIndex((i) => i.mainImage === true);
+
+      /* shift main image to the beginning */
+      if (mainImageIndex !== -1) {
+        const mainImage = { ...finalImages[mainImageIndex] };
+        const mainCaption = { ...finalCaptions[mainImageIndex] };
+        finalImages.splice(mainImageIndex, 1);
+        finalImages.unshift(mainImage);
+
+        finalCaptions.splice(mainImageIndex, 1);
+        finalCaptions.unshift(mainCaption);
+      }
+
+      this.pressImageList = finalImages.map(image =>
         this.$getOriginalPath(image.path)
       );
 
-      this.captionsList = layout.doc.press.captions;
+      this.captionsList = finalCaptions;
     }
   }
 };

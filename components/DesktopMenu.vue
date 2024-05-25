@@ -12,10 +12,6 @@
       </div>
 
       <div class="collections-dropdown flex">
-
-
-
-    
         <div
           v-for="group in Object.keys(collectionGroups)"
           :key="group"
@@ -31,7 +27,14 @@
             >
               {{ collection.name }}
             </button>
+            <!-- <button
+              @click="navigate(collection, 'collection')"
+              class="menu-item collection-item view-all"
+            >
+              View All
+            </button> -->
           </div>
+          
         </div>
       </div>
 
@@ -180,6 +183,11 @@ export default {
       font-size: 15px;
       font-family: $font_1;
       letter-spacing: 1px;
+
+      &.view-all {
+        color: #4a4949;
+        font-family: $font_2_semibold;
+      }
     }
   }
   @media (max-width: 768px) {

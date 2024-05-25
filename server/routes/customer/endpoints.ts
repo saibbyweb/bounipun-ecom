@@ -130,7 +130,7 @@ router.post("/fetchProduct", userAuth("customer", false), async (req, res) => {
   let document: any = collection.findOne(filters).lean();
 
   document = await document
-    .populate("bounipun_collection", "name description variantNote edt")
+    .populate("bounipun_collection", "name description variantNote edt slug")
     .populate("variants._id")
     .populate("variants.fabrics._id")
     .populate("colors._id", "name category image")
@@ -289,9 +289,12 @@ router.post(
     /* add generic filters (product and color should be active) */
     // filters = {...filters, status: true, 'colors.status': true }
     /* gold */
+    console.log(rawCriterion.search.term,'--SEARCH_TERM--')
     rawCriterion.search.term = admin.convertSearchTermToRegEx(
       rawCriterion.search.term
     );
+
+
 
     /* text match + filters */
     criterion.match = {
