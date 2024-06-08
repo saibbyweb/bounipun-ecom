@@ -2,7 +2,7 @@
   <div class="instagram-feed">
     <!-- heading -->
     <div class="heading flex center">
-      <h3>{{ heading }}</h3>
+      <h1 class="insta-heading">{{ heading }}</h1> 
       <!-- <img class="instagram" src="/instagram-text.svg" /> -->
     </div>
     <!-- posts grid -->
@@ -69,6 +69,13 @@ export default {
 <style lang="scss">
 .instagram-feed {
   padding: 2% 0;
+
+  .insta-heading {
+    font-family: $font_3_bold;
+    margin-bottom: 10px;
+    font-size: 36px;
+    text-transform: uppercase;
+  }
 
   @media (min-width: 769px) {
     // padding-top: 100px;

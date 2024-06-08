@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Variables
+DOMAIN="bounipun.in"
+WWW_DOMAIN="www.bounipun.in"
+
+# Install EPEL repository and Certbot
+sudo yum install -y epel-release
+sudo yum install -y certbot python2-certbot-nginx
+
+# Ensure Nginx is installed and running
+sudo yum install -y nginx
+sudo systemctl start nginx
+sudo systemctl enable nginx
+
+# Obtain SSL certificate from Let's Encrypt
+sudo certbot --nginx -d $DOMAIN -d $WWW_DOMAIN
+
+# Verify the SSL certificate and reload Nginx
+sudo nginx -t
+sudo systemctl reload nginx
+
+# Set up automatic renewal
+echo "0 0,12 * * * root /usr/bin/certbot renew --quiet" | sudo tee -a /etc/crontab > /dev/null
+
+echo "HTTPS setup complete for $DOMAIN and $WWW_DOMAIN."

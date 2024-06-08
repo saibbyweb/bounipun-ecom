@@ -354,7 +354,8 @@
             <Accordion v-if="!thirdPartyProduct" heading="Details And Care">
               <ul>
                 <li v-for="(point, index) in detailsAndCare" :key="index">
-                  <span class="desc"> {{ point }} </span>
+                  <!-- <span class="desc"> {{ point }}</span> -->
+                  <span class="desc" v-html="convertEmailsToLinks(point)"></span>
                 </li>
               </ul>
             </Accordion>
@@ -725,6 +726,10 @@ export default {
     },
   },
   methods: {
+    convertEmailsToLinks(text) {
+      const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/g;
+      return text.replace(emailRegex, '<a style="color:#562828;font-weight:900; font-family:Poppins SemiBold;" href="mailto:$1">$1</a>');
+    },
     addOGMetaTags() {
       this.addOGMetaTag("og:type", "website");
       this.addOGMetaTag(
@@ -859,6 +864,7 @@ export default {
       const productFetch = this.$axios.post("/fetchProduct", {
         slug,
         lockCheck: true,
+        forceUnlock: Boolean(this.$route.query.forceUnlock)
       });
       const { response, error } = await this.$task(productFetch);
 
@@ -1084,6 +1090,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .whole-page {
   min-height: 90vh;
   .placeholder {
@@ -1095,6 +1102,7 @@ export default {
   @include marginTop;
   position: relative;
   min-height: 90vh;
+
 
   .product-images {
     width: 30%;

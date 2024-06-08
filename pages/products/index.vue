@@ -20,7 +20,7 @@ export default {
       }
 
       this.$router.push({
-        path: `/${response.product.slug}`
+        path: `/${response.product.slug}?forceUnlock=true`
       });
 
       window.scroll({ top: 0, behavior: "smooth" });
