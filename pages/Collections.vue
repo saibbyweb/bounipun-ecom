@@ -413,10 +413,10 @@ export default {
 
       /* scroll to top */
       try {
-        // window.scroll({
-        //   top: 0,
-        //   behavior: "smooth",
-        // });
+        window.scroll({
+          top: 0,
+          behavior: "smooth",
+        });
       } catch (err) {
         // console.log("Oops, `window` is not defined");
       }

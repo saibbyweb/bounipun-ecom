@@ -52,6 +52,7 @@ export const server = {
             console.log('CORS APPLIED')
             app.use(cors({
                 origin: true,
+                // origin: 'http://172.20.10.3:8080',
                 credentials: true
             }))
         }

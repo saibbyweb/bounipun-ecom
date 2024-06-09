@@ -786,6 +786,8 @@ export default {
 
       /* refetch wishlist */
       this.$store.dispatch("customer/fetchProfile");
+       /* refetch wishlist */
+       this.$store.dispatch("customer/fetchWishlist");
     },
     addToRecentlyViewed() {
       this.$store.commit("customer/addToRecentlyViewed", {

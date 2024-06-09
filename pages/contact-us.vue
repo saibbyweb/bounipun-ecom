@@ -143,8 +143,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+@keyframes toggleScale {
+  0% {
+    transform: scale(1);
+  }
+
+  50%{
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
 .whatsapp-box {
   /* width: 250px; */
+  animation: toggleScale 3s ease-in-out infinite;
   margin-bottom:10px; 
   padding: 5px 10px;
   background-color: black;
