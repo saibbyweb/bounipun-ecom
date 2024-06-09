@@ -118,7 +118,7 @@ export default {
       await this.$store.dispatch("customerV2/fetchActiveCurrencies");
       await this.$store.dispatch("customerV2/fetchStoreLocation");
       this.$store.dispatch("customer/fetchPopups");
-
+      this.$store.dispatch("customer/fetchWishlist");
       this.$store.dispatch("customer/fetchCart");
       this.$store.dispatch("customer/fetchProfile");
       this.$store.dispatch("customer/fetchStoreLocation");

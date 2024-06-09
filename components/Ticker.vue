@@ -7,7 +7,7 @@
         class="text flex center"
         :key="activeTicker.text"
       >
-        <marquee class="onlyMobile" width="100%" scrollamount="5">
+        <marquee class="onlyMobile" width="100%" scrollamount="6">
           {{ activeTicker.text }}
         </marquee>
 <!-- {{ activeTicker.text }} -->
@@ -49,7 +49,7 @@ export default {
       
 
       const isMobile = this.windowWidth < 768;
-      const intervalDuration = isMobile ? 8500 : 6000;
+      const intervalDuration = isMobile ? 10500 : 6000;
       // console.log(intervalDuration, '--interval duration')
 
       setInterval(() => {

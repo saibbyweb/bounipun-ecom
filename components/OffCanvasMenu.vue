@@ -201,6 +201,7 @@ export default {
       this.$store.commit("customer/unauthorize");
       this.$router.push("/");
       await this.$store.dispatch("customer/fetchCart");
+      await this.$store.dispatch("customer/fetchWishlist");
       /* re-set store currency */
       await this.$store.dispatch("customerV2/fetchStoreLocation");
       await this.$store.dispatch("customer/fetchGlobalConfig");

@@ -29,10 +29,14 @@
 export default {
   data() {
     return {
-      wishlistItems: []
+      abc:[]
+      // wishlistItems: []
     };
   },
   computed: {
+    wishlistItems() {
+      return this.$store.state.customer.globalWishlist;
+    },
     wishlistEmpty() {
       return this.wishlistItems.length === 0;
     },

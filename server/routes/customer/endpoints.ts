@@ -126,7 +126,7 @@ router.post("/fetchProduct", userAuth("customer", false), async (req, res) => {
 
   /* if user is not unlocked, show only unlocked content */
   if (unlocked === false) filters.lock = false;
-  if(forceUnlock) filters.lock = true;
+  if(forceUnlock) delete filters.lock;
 
   let document: any = collection.findOne(filters).lean();
 

@@ -96,6 +96,15 @@ export default {
   publicRuntimeConfig: {
     apiSecret: process.env.API_SECRET_BOSS,
   },
+  router: {
+    scrollBehavior(to, from, savedPosition) {
+      if (savedPosition) {
+        return savedPosition;
+      } else {
+        return { x: 0, y: 0 };
+      }
+    }
+  },
   // Build Configuration: https://go.nuxtjs.dev/config-build
   // build: {
   //   extractCSS: {

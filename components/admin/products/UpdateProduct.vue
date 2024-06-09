@@ -763,6 +763,7 @@ export default {
       }
 
       this.loading = true;
+      console.log(JSON.stringify(rtsProduct));
       const result = await this.$updateDocument(this.model, rtsProduct, false);
       this.loading = false;
 
@@ -871,6 +872,7 @@ export default {
       }
 
       this.loading = true;
+      console.log(JSON.stringify(details));
       const result = await this.$updateDocument(
         this.model,
         details,

@@ -52,6 +52,13 @@
       </div>
 
       <div class="action-icon">
+        <!-- wishlist count -->
+        <span
+          v-if="wishlistCount !== 0 && wishlistCount !== undefined"
+          class="cart-count"
+        >
+          {{ wishlistCount }}
+        </span>
         <img
           class=""
           :src="getIconPath('heart.png')"
@@ -103,6 +110,9 @@ export default {
     cartCount() {
       return this.$store.getters["customer/getCartCount"];
     },
+    wishlistCount() {
+       return this.$store.state.customer?.globalWishlist?.length || 0;
+      },
     whatsAppShareLink() {
       const BASE_SHARE_URL = "https://wa.me/919103077655?text=";
       let msg = `Hi! Could you help me with a few queries!`;

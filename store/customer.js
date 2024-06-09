@@ -9,6 +9,7 @@ export const state = () => ({
   authorized: false,
   cart: [],
   globalRemoteCart: [],
+  globalWishlist: [],
   globalConfig: {},
   user: {},
   currency: "INR",
@@ -106,6 +107,7 @@ export const mutations = {
       /* clear global cart */
       persistedState = JSON.parse(persistedState);
       persistedState.globalRemoteCart = [];
+      persistedState.globalWishlist = [];
       persistedState.currencyMultiplier = 1.3;
       persistedState.currency = "INR";
       persistedState.countryIndex = 0;
@@ -186,6 +188,9 @@ export const mutations = {
   setGlobalRemoteCart(state, cart) {
     state.globalRemoteCart = cart;
   },
+  setGlobalWishlist(state, wishlist) {
+    state.globalWishlist = wishlist;
+  },
   switchCurrency(state) {
     state.currency = state.currency === "INR" ? "USD" : "INR";
   },
@@ -229,6 +234,10 @@ export const getters = {
         currency === "INR" ? item.price : item.pricing[currency];
       return cartItemPrice * item.quantity;
     });
+  },
+  /* wishlist count */
+  getWishlistCount(state) {
+    return state.user?.wishlist?.count || 0;
   },
   /* discount amount per item */
   getDiscountAmountPerItem() {
@@ -329,6 +338,40 @@ export const actions = {
     }
 
     commit("setGlobalRemoteCart", cartItems.response);
+  },
+  /* fetch wishlist */
+  async fetchWishlist({ state, commit }) {
+    if(!state.authorized)
+      return [];
+
+    const endPoint = "/fetchWishlist"
+
+    const wishlistItems = await this.$post(endPoint, {
+      lockCheck: true
+    });
+
+    if (wishlistItems.resolved === false) {
+      return;
+    }
+
+    let { products } = wishlistItems.response;
+
+    products.forEach(product => {
+      /* filter out inactive colors */
+      product.colors = product.colors.filter(color => color.status === true);
+      product.variants.sort((a, b) => a._id.order - b._id.order);
+
+      if (
+        product.rtsDirectVariant !== undefined ||
+        product.rtsDirectVariant === ""
+      )
+        product.rtsDirectVariant = product.rtsDirectVariant.name;
+    });
+
+    /* filter out products with no active colors */
+    products = products.filter(product => product.colors.length > 0);
+
+    commit("setGlobalWishlist", products);
   },
   /* fetch user profile */
   async fetchProfile({ state, commit }) {

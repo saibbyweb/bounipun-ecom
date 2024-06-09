@@ -507,6 +507,7 @@ export default {
       /* refetch wishlist */
       /* fetch profile */
       this.$store.dispatch("customer/fetchProfile");
+      this.$store.dispatch("customer/fetchWishlist");
     },
     navigateToProductPage() {
       let query = {
