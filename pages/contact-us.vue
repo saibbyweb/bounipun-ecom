@@ -3,13 +3,13 @@
     <div class="wrapper flex">
       <!-- contact form -->
       <div class="contact-form flex col center">
-        <a href="https://wa.me/919103077655?text=" target="_blank">
-          <div class="center" style="gap: 10px">
+        <a href="https://wa.me/919103077655?text=Hi! Could you help me with a few queries!" target="_blank">
+          <div class="center glow-on-hover whatsapp-box" style="gap: 10px;">
             <img
               class="action-icon whatsapp"
               :src="'/icons/light/whatsapp-aa.svg'"
             />
-            <h2>Whatsapp</h2>
+         <button>How may I help you?</button>
           </div>
         </a>
 
@@ -17,7 +17,7 @@
         <h2>Write to us</h2>
         <br />
         <!-- name -->
-        <div class="flex fields">
+        <div class="flex fields" style="gap: 10px;">
           <InputCredential
             label="First Name"
             v-model="firstName"
@@ -143,6 +143,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.whatsapp-box {
+  /* width: 250px; */
+  margin-bottom:10px; 
+  padding: 5px 10px;
+  background-color: black;
+  border-radius: 10px;
+
+  button {
+    font-size:13px;
+    background-color: black;
+    color: white;
+  }
+  img {
+    filter:brightness(200)
+  }
+}
 .wrapper {
   .contact-form {
     width: 50%;

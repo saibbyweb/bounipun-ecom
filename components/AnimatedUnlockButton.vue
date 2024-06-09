@@ -1,5 +1,5 @@
 <template>
-  <button @click="onClick" class="glow-on-hover" type="button">{{ text }}</button>
+  <button @click="onClick" class="glow-on-hover" type="button"> {{ text }}</button>
 </template>
 <script>
 export default {
@@ -10,7 +10,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 .glow-on-hover {
   width: 220px;
   height: 50px;
