@@ -102,9 +102,6 @@ Object.keys(swaggerSpec.paths).forEach((path) => {
   });
 });
 
-// Setup Swagger UI
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 server.applyStaticMiddleware("/frontend");
 app.use(
   history({
@@ -120,6 +117,10 @@ dbConnect();
 app.get("/api", (req, res) =>
   res.send("Hi from typescript and esrun. why is it so fast")
 );
+
+
+// Setup Swagger UI
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 const running = `ExpressJS running on http://localhost:${port} - Environment: ${environment}`;
 

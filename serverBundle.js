@@ -5,5 +5,5 @@ esbuild.build({
   bundle: true,
   platform: 'node',
   outfile: 'dist/server.js',
-  external: ['express','mongoose','bcrypt','sharp']
+  external: ['express','mongoose','bcrypt','sharp', 'swagger-jsdoc']
 });
