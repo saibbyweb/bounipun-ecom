@@ -98,10 +98,10 @@ const schema = new mongoose.Schema(
       },
     },
     lastSeen: {
-      type: Date
+      type: Date,
     },
     viewCount: {
-      type: Number
+      type: Number,
     },
     /* status */
     status: {
@@ -140,8 +140,17 @@ const expressAuth = async (req, res, next, usergroup, strictMode) => {
   req.body.user = { status: false };
   req.body.unlocked = false;
 
+  let bearerToken;
+  try {
+    bearerToken = req.headers.authorization.split(" ")[1];
+  } catch (e) {
+    bearerToken = null;
+  }
+
+  const token = req.cookies.swecom_bounipun || bearerToken;
+
   /* no cookie is found, mark user as guest */
-  if (req.cookies.swecom_bounipun === undefined) {
+  if (!token) {
     if (strictMode) {
       console.log(
         "❌ No cookie found, user not authorized to access: ",
@@ -153,7 +162,7 @@ const expressAuth = async (req, res, next, usergroup, strictMode) => {
   }
 
   /* if cookie found, validate and return appropriate response */
-  const token = req.cookies.swecom_bounipun;
+
   const session = await validateSession(token);
 
   /* if session is invalid */
@@ -293,12 +302,11 @@ export const methods = {
   },
   userAuth:
     (userGroup, strictMode = true) =>
-      (...args: [req: any, res: any, next: any]) => {
-        return expressAuth(...args, userGroup, strictMode);
-      },
+    (...args: [req: any, res: any, next: any]) => {
+      return expressAuth(...args, userGroup, strictMode);
+    },
   /* pricing retrieved */
   async getCartItems(cart, unlocked = false) {
-
     try {
       /*  if cart is empty */
       if (cart.length === 0) return [];
@@ -340,7 +348,9 @@ export const methods = {
       allProducts.forEach((product) => {
         /* filter out inactive colors */
         // console.log(product.name, product.colors)
-        product.colors = product.colors.filter((color) => color.status === true);
+        product.colors = product.colors.filter(
+          (color) => color.status === true
+        );
       });
 
       /* TODO: check for sale and update pricing */
@@ -404,7 +414,8 @@ export const methods = {
         cartItem.styleId = product.styleId;
         cartItem.productName = product.name;
         cartItem.sale = product.sale;
-        cartItem.askForPrice = product.askForPrice !== undefined ? product.askForPrice : false;
+        cartItem.askForPrice =
+          product.askForPrice !== undefined ? product.askForPrice : false;
 
         /* slug */
         cartItem.slug = product.slug;
@@ -443,16 +454,13 @@ export const methods = {
           product.type === "under-bounipun" &&
           product.availabilityType === "made-to-order"
         ) {
-
-
           /* variant name (if made to order) */
           const selectedVariant = product.variants.find(
             (variant) => variant._id._id.toString() === item.variant.toString()
           );
-          
+
           /* if selected variant is not available, skip */
-          if(!selectedVariant) {
-     
+          if (!selectedVariant) {
             itemsToBeRemoved.push(item);
             return false;
           }
@@ -498,9 +506,8 @@ export const methods = {
       cartItems = await this.normalizePricing(cartItems);
 
       return cartItems;
-    }
-    catch (e) {
-      console.log(e)
+    } catch (e) {
+      console.log(e);
       return [];
     }
   },
@@ -513,7 +520,6 @@ export const methods = {
     let normalizedProducts = [];
 
     for (const product of cartItems) {
-
       console.log(`${product.productName}`);
       /* if product is not under sale, return product as is */
       if (
@@ -560,7 +566,7 @@ export const methods = {
       product.price =
         product.price - (product.price / 100) * discountPercentage;
 
-      console.log(`🔵 Discounted: ${product.price}`)
+      console.log(`🔵 Discounted: ${product.price}`);
 
       /* loop through every currency code */
       const currencyCodes = Object.keys(product.pricing);
@@ -763,7 +769,7 @@ export const methods = {
         value: taxes,
       },
       grandTotal: grandTotal.toFixed(2),
-    }
+    };
   },
   async createOrderPayload(
     cart,
@@ -925,12 +931,12 @@ export const methods = {
         percentage: tax.percentage,
         value: tax.value * 100,
       },
-      grandTotal: amount
+      grandTotal: amount,
     };
 
     return orderPayload;
   },
-  async verifyGatewayToken() { },
+  async verifyGatewayToken() {},
   /* get next sequence */
   async getNextSequence() {
     /* generate new id  */
