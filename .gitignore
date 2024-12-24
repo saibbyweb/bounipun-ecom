@@ -59,6 +59,7 @@ typings/
 # dotenv environment variables file
 .env
 .env.prod
+.env.dev
 
 db-transport
 backup/

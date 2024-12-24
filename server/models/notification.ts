@@ -146,6 +146,8 @@ export const methods = {
         return true;
     },
     async sendEmailNotification(details: EmailNotification) {
+        console.log(environment,'--preventing emails--');
+        return;
         const { to, subject, templateId, templateData, emailProvider, type, customer } = details;
         let { receipt } = details;
 
