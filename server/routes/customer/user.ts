@@ -9,6 +9,13 @@ import axios from "axios";
 import { methods as notificationMethods } from "@models/notification";
 import { methods as unlockMethods } from "@models/unlock";
 
+export const devTeamPhoneNumbers = [
+  "9906697711",
+  "8082007711",
+  "7889777377",
+  "9891327892",
+];
+
 
 let { sendCustomerRegistrationEmailToAdmin } = notificationMethods;
 sendCustomerRegistrationEmailToAdmin =
@@ -36,7 +43,7 @@ router.post("/sendOtp", async (req, res) => {
   // if (countryDialCode === "+91")
   //   sendOtpRequestStatus = await userMethods.sendMsg91Otp(phoneNumber);
   // /* other wise use international sms gateway */ else
-  sendOtpRequestStatus = (environment === 'development' || phoneNumber === "9906697711") ? true  : await userMethods.sendInternationalOtp(
+  sendOtpRequestStatus = (environment === 'development' || devTeamPhoneNumbers.includes(phoneNumber)) ? true  : await userMethods.sendInternationalOtp(
     countryDialCode,
     phoneNumber
   );
@@ -218,7 +225,7 @@ router.post("/loginCustomer", async (req, res) => {
   // if (countryDialCode === "+91")
   //   otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp);
   // else
-  otpVerified =  (environment === 'development' || phoneNumber === "9906697711") ? true : await userMethods.verifyInternationalOtp(
+  otpVerified =  (environment === 'development' || devTeamPhoneNumbers.includes(phoneNumber)) ? true : await userMethods.verifyInternationalOtp(
     countryDialCode,
     phoneNumber,
     otp

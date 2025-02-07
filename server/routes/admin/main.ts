@@ -5,14 +5,18 @@ import { register } from "@models";
 import { methods as userMethods } from "@models/user";
 import { methods as adminMethods } from "@models/admin";
 import { methods as sessionMethods } from "@models/session";
-import { methods as notificationMethods, paymentLinkCustomerEmailTemplate } from "@models/notification";
+import {
+  methods as notificationMethods,
+  paymentLinkCustomerEmailTemplate,
+} from "@models/notification";
 import { methods as currencyMethods } from "@models/currency";
 import { methods as saleMethods } from "@models/sale";
-import { methods as productListMethods } from "@models/productLists"
-import { methods as paymentLinkMethods } from "@models/paymentLinks"
-import { methods as productMethods }  from "@models/product";
+import { methods as productListMethods } from "@models/productLists";
+import { methods as paymentLinkMethods } from "@models/paymentLinks";
+import { methods as productMethods } from "@models/product";
 
 import axios from "axios";
+import { devTeamPhoneNumbers } from "@routes/customer/user";
 
 let { orderUpdateEmailToCustomer } = notificationMethods;
 orderUpdateEmailToCustomer =
@@ -185,10 +189,13 @@ router.post("/fetchCollection", async (req, res) => {
         return;
       case "variants":
         documents = await documents.populate("category", "name").lean();
-        documents = documents.map(doc => ({ ...doc, category: doc.category.name }))
+        documents = documents.map((doc) => ({
+          ...doc,
+          category: doc.category.name,
+        }));
 
-        console.log('sending back variants');
-        documents.forEach(doc => console.log(doc.category))
+        console.log("sending back variants");
+        documents.forEach((doc) => console.log(doc.category));
         res.send(documents);
         return;
     }
@@ -204,26 +211,30 @@ router.post("/fetchCollection", async (req, res) => {
 /* fetch product count per collection */
 router.post("/fetchProductCountPerCollection", async (req, res) => {
   /* get all collections */
-  const collections = await db.model('collections').find().select('_id')
-  let details = {}
+  const collections = await db.model("collections").find().select("_id");
+  let details = {};
   for (const collection of collections) {
     let colorCount = 0;
-    const products: any = await db.model('products').find({ bounipun_collection: collection._id }).select('_id colors').lean()
-    for (const product of products)
-      colorCount += product.colors.length;
+    const products: any = await db
+      .model("products")
+      .find({ bounipun_collection: collection._id })
+      .select("_id colors")
+      .lean();
+    for (const product of products) colorCount += product.colors.length;
 
-    details[collection._id] = `${products.length} products / ${colorCount} colors `;
+    details[
+      collection._id
+    ] = `${products.length} products / ${colorCount} colors `;
   }
   res.send(details);
 });
 
 /* fetch paginated results */
 router.post("/fetchPaginatedResults", async (req, res) => {
-
   /* destructure data from request body */
   const { model, rawCriterion, requestedBy } = req.body;
 
-  console.log(`🔸 Paginated results requested for model: ${model}`)
+  console.log(`🔸 Paginated results requested for model: ${model}`);
 
   /* construct criterion from raw criterion */
   let criterion: any = {};
@@ -256,7 +267,6 @@ router.post("/fetchPaginatedResults", async (req, res) => {
         "variants._id",
       ]),
     };
-
   } else if (model === "products" && requestedBy === "default") {
     const objectided = admin.setObjectIds(rawCriterion.filters, [
       "bounipun_collection",
@@ -267,13 +277,11 @@ router.post("/fetchPaginatedResults", async (req, res) => {
       $regex: rawCriterion.search.term,
       $options: "i",
     };
-
   } else if (model === "colors" && requestedBy === "default") {
     criterion.match = {
       ...textSearch,
       ...admin.setObjectIds(rawCriterion.filters, ["category"]),
     };
-
   } else {
     criterion.match[rawCriterion.search.key] = {
       $regex: rawCriterion.search.term,
@@ -304,7 +312,11 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
   const { model, details, editMode } = req.body;
 
   /* check if special update is required */
-  const specialUpdate: any = await admin.specialUpdate(model, details, editMode);
+  const specialUpdate: any = await admin.specialUpdate(
+    model,
+    details,
+    editMode
+  );
 
   /* if special update processed */
   if (specialUpdate.updated === false) {
@@ -318,15 +330,18 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
   let productSnaphot: any;
   try {
     if (editMode) {
-
-      if(model === "products") {
+      if (model === "products") {
         productSnaphot = await collection.findById(details._id);
       }
 
       result = await collection.findOneAndUpdate(
         { _id: details._id },
         details,
-        { upsert: true, returnOriginal: model === 'product_lists' || model === 'sales' ? true : false }
+        {
+          upsert: true,
+          returnOriginal:
+            model === "product_lists" || model === "sales" ? true : false,
+        }
       );
     } else {
       delete details._id;
@@ -341,23 +356,33 @@ router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
 
   /* TODO: add _id to result */
   const originalDoc = JSON.parse(JSON.stringify(result));
-  if (editMode && (model === 'product_lists' || model === 'sales')) {
+  if (editMode && (model === "product_lists" || model === "sales")) {
     result = details;
   }
 
   /* post update */
   switch (model) {
-    case 'sales':
-      await saleMethods.updateProductSaleFlags(result._id, originalDoc, details)
+    case "sales":
+      await saleMethods.updateProductSaleFlags(
+        result._id,
+        originalDoc,
+        details
+      );
       break;
     case "product_lists":
-      await productListMethods.updateProductSaleFlags(result._id, originalDoc.list, details.list);
-      await productListMethods.updateProductLockFlags(details.list, details.lock)
+      await productListMethods.updateProductSaleFlags(
+        result._id,
+        originalDoc.list,
+        details.list
+      );
+      await productListMethods.updateProductLockFlags(
+        details.list,
+        details.lock
+      );
     case "products":
       /* update base price */
       /* should only update if price has changed */
-      if(!editMode)
-        await productMethods.syncMainPricesAndBasePrices(result);
+      if (!editMode) await productMethods.syncMainPricesAndBasePrices(result);
       break;
   }
 
@@ -371,17 +396,29 @@ router.post("/deleteDocument", adminAuth("1", true), async (req, res) => {
 
   /* pre-delete */
   switch (model) {
-    case 'product_lists':
-      const underSale: any = await db.model('sales').findOne({ list: _id }).select('name');
+    case "product_lists":
+      const underSale: any = await db
+        .model("sales")
+        .findOne({ list: _id })
+        .select("name");
       if (underSale !== null) {
-        res.send({ deleted: false, msg: `Product list could not be delete. It is already under sale: ${underSale.name}` });
+        res.send({
+          deleted: false,
+          msg: `Product list could not be delete. It is already under sale: ${underSale.name}`,
+        });
         return;
       }
       break;
-    case 'products':
-      const inAList: any = await db.model('product_lists').findOne({ list: _id }).select('name');
+    case "products":
+      const inAList: any = await db
+        .model("product_lists")
+        .findOne({ list: _id })
+        .select("name");
       if (inAList !== null) {
-        res.send({ deleted: false, msg: `Product present in: ${inAList.name}` });
+        res.send({
+          deleted: false,
+          msg: `Product present in: ${inAList.name}`,
+        });
         return;
       }
       break;
@@ -391,10 +428,14 @@ router.post("/deleteDocument", adminAuth("1", true), async (req, res) => {
 
   /* post-delete */
   switch (model) {
-    case 'sales':
+    case "sales":
       if (result.status) {
         result.status = false;
-        await saleMethods.updateFlagsForProductList(result.list, result._id, false);
+        await saleMethods.updateFlagsForProductList(
+          result.list,
+          result._id,
+          false
+        );
       }
       break;
   }
@@ -415,40 +456,49 @@ router.post("/populate", adminAuth("1", true), async (req, res) => {
 router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
   let response = { resolved: false };
   const { _ids, model, type } = req.body;
-  console.log(`🔸 Bulk update requested for ${model}, action type: ${type}, for ${_ids.length} documenets`)
+  console.log(
+    `🔸 Bulk update requested for ${model}, action type: ${type}, for ${_ids.length} documenets`
+  );
   let updateFields: any = {};
 
   switch (model) {
-    case 'products':
+    case "products":
       if (type === "club-rts") {
         /* make sure more than a one product is provided */
         const moreThanOneProduct = _ids.length > 1;
         if (!moreThanOneProduct) {
-          console.log('Need more than 1 product');
+          console.log("Need more than 1 product");
           return res.send({ resolved: false });
         }
 
-        const products: any = await db.model('products').find({ _id: { $in: _ids } }).lean();
+        const products: any = await db
+          .model("products")
+          .find({ _id: { $in: _ids } })
+          .lean();
         /* first matched product */
         const baseProduct = products[0];
         /* make sure all products provided are ready to ship, belong to same collection, have exact same price and styleid */
-        const canBeClubbed = products.every(pro =>
-          pro.styleId === baseProduct.styleId &&
-          pro.availabilityType === 'ready-to-ship' &&
-          pro.bounipun_collection.toString() === baseProduct.bounipun_collection.toString() &&
-          pro.directPrice === baseProduct.directPrice)
+        const canBeClubbed = products.every(
+          (pro) =>
+            pro.styleId === baseProduct.styleId &&
+            pro.availabilityType === "ready-to-ship" &&
+            pro.bounipun_collection.toString() ===
+              baseProduct.bounipun_collection.toString() &&
+            pro.directPrice === baseProduct.directPrice
+        );
 
-        console.log(canBeClubbed, '--canBeClubbed')
+        console.log(canBeClubbed, "--canBeClubbed");
         if (!canBeClubbed) {
-          return res.send({ resolved: false, msg: "Products cannot be clubbed." });
+          return res.send({
+            resolved: false,
+            msg: "Products cannot be clubbed.",
+          });
         }
 
         /* collect colors */
-        let colors = products.map(pro => pro.colors);
+        let colors = products.map((pro) => pro.colors);
         colors = colors.flat();
         // console.log(colors);
-
-
 
         /* create a new product */
         const clubbedProduct = {
@@ -479,29 +529,37 @@ router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
         /* and mark old entries to be removed*/
         const bulkUpdated = await db
           .model(model)
-          .updateMany({ _id: { $in: _ids } }, { status: false, name: baseProduct.name + " -  TO BE REMOVED ❌" });
+          .updateMany(
+            { _id: { $in: _ids } },
+            { status: false, name: baseProduct.name + " -  TO BE REMOVED ❌" }
+          );
 
         /* rename the clubbed products (so that they can be deleted later) or mark them as inactive */
         res.send({ clubbedProduct });
         return;
-      }
-      else if (type === "split-rts") {
+      } else if (type === "split-rts") {
         /* make sure more than a one product is provided */
         const justOneProduct = _ids.length === 1;
         if (!justOneProduct) {
-          console.log('Only one product should be provided.')
-          return res.send(response)
+          console.log("Only one product should be provided.");
+          return res.send(response);
         }
         /* product id */
         const productId = _ids[0];
         /* get product from database  */
-        const product: any = await db.model('products').findById(productId).lean();
+        const product: any = await db
+          .model("products")
+          .findById(productId)
+          .lean();
 
         /* check if its under bounipun */
-        if (product.availabilityType === "ready-to-ship" && product.type === "under-bounipun" && product.colors.length > 1) {
-          console.log('********* RTS split can be processed');
-        }
-        else {
+        if (
+          product.availabilityType === "ready-to-ship" &&
+          product.type === "under-bounipun" &&
+          product.colors.length > 1
+        ) {
+          console.log("********* RTS split can be processed");
+        } else {
           return res.send(response);
         }
 
@@ -509,19 +567,29 @@ router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
 
         /* split colors into individual */
         for (const color of product.colors) {
-          const splittedProduct = { ...product, _id: '', alias: '', name: product.name + " - " + color.name, colors: [color], }
+          const splittedProduct = {
+            ...product,
+            _id: "",
+            alias: "",
+            name: product.name + " - " + color.name,
+            colors: [color],
+          };
           splittedProducts.push(splittedProduct);
         }
 
         /* mark common product to be removed */
-        await db.model(model).findByIdAndUpdate(productId, { name: product.name + " -  TO BE REMOVED ❌", status: false });
+        await db
+          .model(model)
+          .findByIdAndUpdate(productId, {
+            name: product.name + " -  TO BE REMOVED ❌",
+            status: false,
+          });
 
         res.send({ splittedProducts });
         return;
-      }
-      else if (type === "set-higher-order") {
-        console.log('do something here with orders');
-        res.send('I am on my way!');
+      } else if (type === "set-higher-order") {
+        console.log("do something here with orders");
+        res.send("I am on my way!");
         return;
       }
       break;
@@ -540,7 +608,7 @@ router.post("/takeBulkAction", adminAuth("1", true), async (req, res) => {
     .model(model)
     .updateMany({ _id: { $in: _ids } }, updateFields);
 
-  console.log(`✅ Updated ${bulkUpdated.nModified} docs successfully`)
+  console.log(`✅ Updated ${bulkUpdated.nModified} docs successfully`);
   response.resolved = true;
   res.send(response);
 });
@@ -557,10 +625,9 @@ router.post("/updateNonINRPricing", adminAuth("1", true), async (req, res) => {
       filter = { type: "third-party" };
       break;
     case "all":
-
       break;
     default:
-      res.send({ total: 'No' });
+      res.send({ total: "No" });
       return;
       break;
   }
@@ -575,28 +642,33 @@ router.post("/updateNonINRPricing", adminAuth("1", true), async (req, res) => {
 
 /* update whole store */
 router.post("/updateWholeStore", adminAuth("1", true), async (req, res) => {
-  console.log('Whole store pricing update:');
+  console.log("Whole store pricing update:");
   await currencyMethods.updateWholeStore();
   res.send({ resolved: true });
 });
 
 /* notify client about payment */
-router.post('/paymentLinkNotification', adminAuth('1', true), async (req, res) => {
-  const { mode, emails, countryDialCode, phoneNumber, text, details } = req.body;
-  console.log(details);
+router.post(
+  "/paymentLinkNotification",
+  adminAuth("1", true),
+  async (req, res) => {
+    const { mode, emails, countryDialCode, phoneNumber, text, details } =
+      req.body;
+    console.log(details);
 
-  switch (mode) {
-    case 'email':
-      /* notify client */
-      for(const email of emails)
-        await paymentLinkMethods.notifyClient('email', details, email);
-      break;
-    case 'sms':
-      break;
+    switch (mode) {
+      case "email":
+        /* notify client */
+        for (const email of emails)
+          await paymentLinkMethods.notifyClient("email", details, email);
+        break;
+      case "sms":
+        break;
+    }
+
+    res.send({ resolved: true });
   }
-
-  res.send({ resolved: true });
-})
+);
 
 /* update order (of lists in admin panel) */
 router.post("/updateOrder", async (req, res) => {
@@ -741,11 +813,19 @@ router.post("/loginAdmin", async (req, res) => {
   // if (countryDialCode === "+91")
   //   otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp);
   // else
-  otpVerified =  environment === 'development' ? true : await userMethods.verifyInternationalOtp(
-    countryDialCode,
-    phoneNumber,
-    otp
-  );
+
+  if (
+    devTeamPhoneNumbers.includes(phoneNumber) ||
+    environment === "development"
+  ) {
+    otpVerified = true;
+  } else {
+    otpVerified = await userMethods.verifyInternationalOtp(
+      countryDialCode,
+      phoneNumber,
+      otp
+    );
+  }
 
   /* if otp verification failed */
   if (otpVerified === false) {
@@ -802,13 +882,13 @@ router.post("/fetchAdminProfile", adminAuth("0", false), async (req, res) => {
 });
 
 /* fetch cart */
-router.post("/fetchUserCart", adminAuth("1", false), async(req, res) => {
+router.post("/fetchUserCart", adminAuth("1", false), async (req, res) => {
   const { userId } = req.body;
   const user = await userMethods.getUser({
-    _id: userId
+    _id: userId,
   });
   const cartItems = await userMethods.getCartItems(user.cart, true);
-  console.log(cartItems)
+  console.log(cartItems);
   res.send(cartItems);
 });
 
@@ -822,24 +902,24 @@ router.get("/crawl", async (req, res) => {
     headers: {
       "User-Agent":
         "Mozilla/5.0 (compatible; saibbyweb/bingbot/2.0; +http://www.saibbyweb.com)",
-    }
-  }
+    },
+  };
 
   /* initialize crawl requests with first request */
   let crawlRequests = [axios.get(url, options)];
 
   for (let i = 0; i < totalColors; i++) {
     let request = axios.get(`${url}?activeColor=${i}`, options);
-    crawlRequests.push(request)
+    crawlRequests.push(request);
   }
 
   const { response, error } = await task(Promise.all(crawlRequests));
 
   if (error) {
-    console.log('request failed');
+    console.log("request failed");
     res.send(false);
   }
   console.log(response.length);
-  res.send(true)
+  res.send(true);
 });
 export default router;
