@@ -20,7 +20,9 @@ export const mutations = {
     }
 
     /* check for session cookie */
-    state.authorized = cookies.get("swecom_bounipun_admin") !== undefined;
+    state.authorized = persistedState.authorized || false;
+
+    // state.authorized = true;
     state.persistedStateLoaded = true;
   },
   /* authorize user (admin) */

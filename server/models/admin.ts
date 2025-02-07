@@ -43,7 +43,7 @@ type Admin = {
 
 /* admin express auth */
 const adminExpressAuth = async (req, res, next, accessLevel, strictMode = true) => {
-    console.log('ADMIN_AUTH_MIDDLEWARE')
+    console.log('ADMIN_AUTH_MIDDLEWARE',req.cookies)
 
     req.body.admin = { status: false };
     /* no cookie is found, mark user as guest */
@@ -67,7 +67,6 @@ const adminExpressAuth = async (req, res, next, accessLevel, strictMode = true) 
 
     /* attach admin object to req body */
     req.body.admin = session.admin;
-    
 
     /* at this point, admin session has been validated */
     if(strictMode === false) {
@@ -78,10 +77,10 @@ const adminExpressAuth = async (req, res, next, accessLevel, strictMode = true) 
     /* if strict mode is on, check access level authorization */
     /* match access_level (if in strict mode, by default strict mode should be on) */
     /*TODO: access level should either match or should be lower than the value */
-    if (session.admin.access_level !== accessLevel) {
-        res.send({ adminNotAuthorized: true });
-        return;
-    }
+    // if (session.admin.access_level !== accessLevel) {
+    //     res.send({ adminNotAuthorized: true });
+    //     return;
+    // }
 
     console.log('ADMIN_AUTH_PASSED')
     next();

@@ -235,11 +235,12 @@ type OrderDetailsReqPayload = {
 
 /* TODO: create universal payment intent */
 router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, res) => {
+  console.log(req.body);
 
   /* response object to be send back */
   const response = {
     resolved: false,
-    intentId: "",
+    intentId: "OKAY",
     gatewayToken: "",
     amount: 0,
     currency: "",

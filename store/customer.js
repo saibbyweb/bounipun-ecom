@@ -116,7 +116,8 @@ export const mutations = {
     }
 
     /* check for session cookie */
-    state.authorized = cookies.get("swecom_bounipun") !== undefined;
+    // state.authorized = cookies.get("swecom_bounipun") !== undefined;
+    state.authorized = persistedState.authorized || false;
     state.persistedStateLoaded = true;
   },
   setCombinedDeliveryConsent(state, value) {

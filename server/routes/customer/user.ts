@@ -261,7 +261,7 @@ router.post("/loginCustomer", async (req, res) => {
       maxAge: 15552000000,
       httpOnly: false,
       sameSite: "none",
-      secure: false,
+      secure: true,
     });
   }
 
