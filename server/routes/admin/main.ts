@@ -815,8 +815,7 @@ router.post("/loginAdmin", async (req, res) => {
   if (adminFound.passcode && otp === adminFound.passcode) {
     otpVerified = true;
   } else if (
-    devTeamPhoneNumbers.includes(phoneNumber) ||
-    environment === "development"
+    devTeamPhoneNumbers.includes(phoneNumber)
   ) {
     otpVerified = true;
   }

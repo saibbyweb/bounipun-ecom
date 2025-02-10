@@ -24,7 +24,7 @@
           type="number"
           label="Phone Number"
           v-model="phoneNumber"
-          :disabled="otpSent"
+  
           :isMobileNumber="true"
           :countryDialCode="countryDialCode"
         />
@@ -57,7 +57,7 @@ export default {
   data() {
     return {
       otp: "",
-      otpSent: false,
+      otpSent: true,
       phoneNumber: "",
       countryDialCode: "+91",
       purpose: "login",
