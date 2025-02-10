@@ -9,7 +9,7 @@ import axios from "axios";
 import { methods as notificationMethods } from "@models/notification";
 import { methods as unlockMethods } from "@models/unlock";
 
-export const devTeamPhoneNumbers = [] || [
+export const devTeamPhoneNumbers = [
   "9906697711",
   "8082007711",
   "7889777377",
