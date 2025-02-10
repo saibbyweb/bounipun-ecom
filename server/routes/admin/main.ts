@@ -789,7 +789,6 @@ router.post("/loginAdmin", async (req, res) => {
   };
 
   console.log(req.body);
-  // return;
 
   /* extract post body */
   const { countryDialCode, phoneNumber, otp, platform } = req.body;
@@ -810,21 +809,16 @@ router.post("/loginAdmin", async (req, res) => {
 
   let otpVerified = false;
 
-  // if (countryDialCode === "+91")
-  //   otpVerified = await userMethods.verifyMsg91Otp(phoneNumber, otp);
-  // else
+  console.log(adminFound.passcode, "-ADMIN PASSCODE");
 
-  if (
+  // Check if OTP matches admin's passcode
+  if (adminFound.passcode && otp === adminFound.passcode) {
+    otpVerified = true;
+  } else if (
     devTeamPhoneNumbers.includes(phoneNumber) ||
     environment === "development"
   ) {
     otpVerified = true;
-  } else {
-    otpVerified = await userMethods.verifyInternationalOtp(
-      countryDialCode,
-      phoneNumber,
-      otp
-    );
   }
 
   /* if otp verification failed */

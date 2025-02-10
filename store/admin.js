@@ -20,7 +20,7 @@ export const mutations = {
     }
 
     /* check for session cookie */
-    state.authorized = persistedState.authorized || false;
+    state.authorized = persistedState?.authorized || false;
 
     // state.authorized = true;
     state.persistedStateLoaded = true;

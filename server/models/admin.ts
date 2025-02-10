@@ -19,7 +19,8 @@ const schema = new mongoose.Schema({
     email: typeString,
     gender: typeString,
     address: typeString,
-    status: Boolean
+    status: Boolean,
+    passcode: typeString
 },
     {
         timestamps: true
@@ -38,7 +39,8 @@ type Admin = {
     dob?: string,
     gender?: string,
     address?: string,
-    status: boolean
+    status: boolean,
+    passcode?: string
 }
 
 /* admin express auth */

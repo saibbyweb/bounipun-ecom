@@ -33,9 +33,16 @@
     <SelectBox :options="allGenders" v-model="doc.gender" label="Gender" />
     <!-- gender -->
     <TextBox v-model="doc.address" label="Address" :internal="true" />
+    <!-- passcode field -->
+    <InputBox 
+      label="Admin Passcode" 
+      v-model="doc.passcode" 
+      type="password"
+      placeholder="Enter passcode (optional)"
+    />
     <!-- publish toggle -->
     <Toggle v-model="doc.status" label="Status" />
-
+    <br/>
     <br/>
     
     <!-- update button -->
@@ -79,6 +86,7 @@ export default {
         gender: "male",
         address: "",
         status: false,
+        passcode: "",
       },
       allAccessLevels: [
         { name: "Super Admin", value: "1" },
@@ -147,6 +155,7 @@ export default {
         gender,
         address,
         status,
+        passcode,
       } = details;
       this.doc = {
         _id,
@@ -158,6 +167,7 @@ export default {
         gender,
         address,
         status,
+        passcode,
       };
       this.editMode = true;
     },
@@ -176,6 +186,7 @@ export default {
         gender: "male",
         address: "",
         status: false,
+        passcode: "",
       });
       this.editMode = false;
     },
