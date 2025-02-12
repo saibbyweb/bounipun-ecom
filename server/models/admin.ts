@@ -47,16 +47,26 @@ type Admin = {
 const adminExpressAuth = async (req, res, next, accessLevel, strictMode = true) => {
     console.log('ADMIN_AUTH_MIDDLEWARE',req.cookies)
 
+    let bearerToken;
+    try {
+      bearerToken = req.headers.authorization.split(" ")[1];
+    } catch (e) {
+      bearerToken = null;
+    }
+
+
     req.body.admin = { status: false };
+
+    const token = req.cookies.swecom_bounipun || bearerToken;
+
     /* no cookie is found, mark user as guest */
-    if (req.cookies.swecom_bounipun_admin === undefined) {
+    if (token === undefined) {
         console.log('❌ ADMIN_COOKIE_NOT_PROVIDED');
         res.send({ adminNotAuthorized: true })
         return;
     }
 
     /* if cookie found, validate and return appropriate response */
-    const token = req.cookies.swecom_bounipun_admin;
     const session = await validateSession(token);
 
     /* if session is invalid */
