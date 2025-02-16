@@ -1,14 +1,18 @@
 <template>
   <div class="dashboard center">
     <!-- pages cards -->
-    <div class="pages center" style="height:20vh;">
+    <div class="pages center" style="height: 20vh">
       <!-- <div class="card page center-col" v-for="(card, index) in cards" :key="index">
             <h2 class="name"> {{ card.name }} </h2>
             <span class="desc"> {{ card.desc }} </span>
         </div> -->
-      <p>
-        You are now authorized to use this dashboard.
-      </p>
+      <div class="center-col">
+        <p>You are now authorized to use this dashboard.</p>
+        <button @click="openMasterView" class="master-view-btn">
+          Access Master View
+        </button>
+      </div>
+      
     </div>
 
     <!-- stats cards -->
@@ -24,6 +28,11 @@
 <script>
 export default {
   layout: "admin",
+  methods: {
+    openMasterView() {
+      window.open("/", "_blank");
+    },
+  },
   data() {
     return {
       cards: [
@@ -115,6 +124,24 @@ export default {
   .pages {
     width: 50%;
     flex-wrap: wrap;
+  }
+
+  .master-view-btn {
+    margin-top: 15px;
+    background: #562828;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-family: $font_2_semibold;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+      background: #492727;
+      transform: translateY(-1px);
+    }
   }
 
   .stats {

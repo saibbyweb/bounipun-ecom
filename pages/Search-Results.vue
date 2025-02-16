@@ -200,7 +200,8 @@ export default {
       this.$store.commit("customer/setLoading", true);
       const fetchPaginatedResults = this.$axios.$post("/searchProducts", {
         rawCriterion: this.rawCriterion,
-        lockCheck: true
+        lockCheck: true,
+        forceUnlock: this.$store.state.customer.adminAuthorized
       });
 
       /* wait for request to resolve */

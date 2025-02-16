@@ -258,6 +258,7 @@ export default {
       return this.collectionLocked ? collection.lockedText : mainTextBlock;
     },
     collectionLocked() {
+      if(this.$store.state.customer.adminAuthorized) return false;
       /* if collection is locked */
       if (this.collection.lock === true) {
         const customer = this.$store.state.customer;
@@ -399,6 +400,7 @@ export default {
       const fetchPaginatedResults = this.$axios.$post("/searchProducts", {
         rawCriterion: this.rawCriterion,
         lockCheck: this.collection.lock,
+        forceUnlock: this.$store.state.customer.adminAuthorized
       });
 
       /* wait for request to resolve */

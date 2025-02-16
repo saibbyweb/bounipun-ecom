@@ -235,7 +235,7 @@ router.post(
   userAuth("customer", false),
   async (req, res) => {
     /* destructure data from request body */
-    const { rawCriterion, unlocked } = req.body;
+    const { rawCriterion, unlocked, forceUnlock } = req.body;
 
     // console.log(rawCriterion);
 
@@ -328,7 +328,7 @@ router.post(
     };
 
     /* append lock filter, if user is not unlocked */
-    if (unlocked === false) {
+    if (unlocked === false && !forceUnlock) {
       criterion.match = { ...criterion.match, lock: false };
     }
 
