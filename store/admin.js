@@ -21,18 +21,26 @@ export const mutations = {
 
     /* check for session cookie */
     state.authorized = persistedState?.authorized || false;
+    
+    // Sync with customer store
+    if (this.state.customer) {
+      this.commit('customer/setAdminAuthorization', state.authorized);
+    }
 
-    // state.authorized = true;
     state.persistedStateLoaded = true;
   },
   /* authorize user (admin) */
   setAuthorization(state, value) {
     state.authorized = value;
+    // Sync with customer store
+    this.commit('customer/setAdminAuthorization', value);
   },
   /* unauthorize */
   unauthorize(state) {
     cookies.remove("swecom_bounipun_admin");
     state.authorized = false;
+    // Sync with customer store
+    this.commit('customer/setAdminAuthorization', false);
   },
   setLoading(state, loading) {
     state.loading = loading;
@@ -49,7 +57,11 @@ export const mutations = {
 export const actions = {
   async fetchProfile({ state, commit }) {
     const { response, resolved } = await this.$post("/fetchAdminProfile");
-    if (resolved == false) return;
+    if (resolved == false) {
+      // If profile fetch fails, ensure both stores are unauthorized
+      commit('unauthorize');
+      return;
+    }
     commit("setAdmin", response);
   },
 };

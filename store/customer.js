@@ -7,6 +7,7 @@ export const state = () => ({
   persistedStateLoaded: false,
   loading: false,
   authorized: false,
+  adminAuthorized: false,
   cart: [],
   globalRemoteCart: [],
   globalWishlist: [],
@@ -116,8 +117,9 @@ export const mutations = {
     }
 
     /* check for session cookie */
-    // state.authorized = cookies.get("swecom_bounipun") !== undefined;
+     // state.authorized = cookies.get("swecom_bounipun") !== undefined;
     state.authorized = persistedState?.authorized || false;
+    state.adminAuthorized = cookies.get("swecom_bounipun_admin") !== undefined;
     state.persistedStateLoaded = true;
   },
   setCombinedDeliveryConsent(state, value) {
@@ -129,6 +131,9 @@ export const mutations = {
   /* authorize user (customer) */
   setAuthorization(state, value) {
     state.authorized = value;
+  },
+  setAdminAuthorization(state, value) {
+    state.adminAuthorized = value;
   },
   setGlobalConfig(state, value) {
     state.globalConfig = value;

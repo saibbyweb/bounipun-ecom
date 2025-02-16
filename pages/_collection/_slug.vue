@@ -530,7 +530,19 @@ export default {
       window.removeEventListener("scroll", this.handleScroll);
     }
   },
-  mounted() {
+  async mounted() {
+    // Wait for persisted state to be loaded
+    if (!this.$store.state.customer.persistedStateLoaded) {
+      await new Promise(resolve => {
+        const unsubscribe = this.$store.subscribe((mutation) => {
+          if (mutation.type === 'customer/loadPersistedState') {
+            unsubscribe();
+            resolve();
+          }
+        });
+      });
+    }
+
     const slug = this.$route.params.collection + "/" + this.$route.params.slug;
     this.fetchProduct(slug);
     setTimeout(() => {
@@ -970,7 +982,7 @@ export default {
       const productFetch = this.$axios.post("/fetchProduct", {
         slug,
         lockCheck: true,
-        forceUnlock: Boolean(this.$route.query.forceUnlock)
+        forceUnlock: this.$store.state.customer.adminAuthorized
       });
       const { response, error } = await this.$task(productFetch);
 

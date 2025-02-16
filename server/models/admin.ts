@@ -57,7 +57,7 @@ const adminExpressAuth = async (req, res, next, accessLevel, strictMode = true) 
 
     req.body.admin = { status: false };
 
-    const token = req.cookies.swecom_bounipun || bearerToken;
+    const token = req.cookies.swecom_bounipun_admin || bearerToken;
 
     /* no cookie is found, mark user as guest */
     if (token === undefined) {

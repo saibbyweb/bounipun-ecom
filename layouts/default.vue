@@ -48,11 +48,18 @@
     /> -->
 
     <PopupModals v-if="!startedFromPopup && !dontShowPopups" />
+
+    <AdminViewBanner />
   </div>
 </template>
 
 <script>
+import AdminViewBanner from '~/components/AdminViewBanner.vue'
+
 export default {
+  components: {
+    AdminViewBanner
+  },
   computed: {
     dontShowPopups() {
       const allowedRoutes = [
