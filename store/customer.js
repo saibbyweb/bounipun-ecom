@@ -116,10 +116,17 @@ export const mutations = {
       Object.assign(state, persistedState);
     }
 
+    let adminPersistedState = window.localStorage.getItem("admin_persistedState");
+
+    if (adminPersistedState) {
+      /* clear global cart */
+      adminPersistedState = JSON.parse(adminPersistedState);
+      state.adminAuthorized = adminPersistedState?.authorized || false;
+    }
+
     /* check for session cookie */
-     // state.authorized = cookies.get("swecom_bounipun") !== undefined;
     state.authorized = persistedState?.authorized || false;
-    state.adminAuthorized = cookies.get("swecom_bounipun_admin") !== undefined;
+   
     state.persistedStateLoaded = true;
   },
   setCombinedDeliveryConsent(state, value) {

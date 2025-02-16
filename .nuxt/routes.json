@@ -1,0 +1,392 @@
+[
+  {
+    "name": "about-us",
+    "path": "/about-us",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/about-us.vue",
+    "chunkName": "pages/about-us"
+  },
+  {
+    "name": "admin-panel",
+    "path": "/admin-panel",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/index.vue",
+    "chunkName": "pages/admin-panel/index"
+  },
+  {
+    "name": "Cart",
+    "path": "/Cart",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Cart.vue",
+    "chunkName": "pages/Cart"
+  },
+  {
+    "name": "Checkout",
+    "path": "/Checkout",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Checkout.vue",
+    "chunkName": "pages/Checkout"
+  },
+  {
+    "name": "Checkout[OLD]",
+    "path": "/Checkout[OLD]",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Checkout[OLD].vue",
+    "chunkName": "pages/Checkout[OLD]"
+  },
+  {
+    "name": "Collections",
+    "path": "/Collections",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Collections.vue",
+    "chunkName": "pages/Collections"
+  },
+  {
+    "name": "collections[old]",
+    "path": "/collections[old]",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/collections[old].vue",
+    "chunkName": "pages/collections[old]"
+  },
+  {
+    "name": "contact-us",
+    "path": "/contact-us",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/contact-us.vue",
+    "chunkName": "pages/contact-us"
+  },
+  {
+    "name": "Delivery-Address",
+    "path": "/Delivery-Address",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Delivery-Address.vue",
+    "chunkName": "pages/Delivery-Address"
+  },
+  {
+    "name": "Error",
+    "path": "/Error",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Error.vue",
+    "chunkName": "pages/Error"
+  },
+  {
+    "name": "faq",
+    "path": "/faq",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/faq.vue",
+    "chunkName": "pages/faq"
+  },
+  {
+    "name": "index-old",
+    "path": "/index-old",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/index-old.vue",
+    "chunkName": "pages/index-old"
+  },
+  {
+    "name": "lab",
+    "path": "/lab",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/lab.vue",
+    "chunkName": "pages/lab"
+  },
+  {
+    "name": "Login",
+    "path": "/Login",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Login.vue",
+    "chunkName": "pages/Login"
+  },
+  {
+    "name": "Message-Sent",
+    "path": "/Message-Sent",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Message-Sent.vue",
+    "chunkName": "pages/Message-Sent"
+  },
+  {
+    "name": "My-Account",
+    "path": "/My-Account",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/My-Account/index.vue",
+    "chunkName": "pages/My-Account/index"
+  },
+  {
+    "name": "Order-Placed-Successfully",
+    "path": "/Order-Placed-Successfully",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Order-Placed-Successfully.vue",
+    "chunkName": "pages/Order-Placed-Successfully"
+  },
+  {
+    "name": "our-story",
+    "path": "/our-story",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/our-story.vue",
+    "chunkName": "pages/our-story"
+  },
+  {
+    "name": "Payment-Failed",
+    "path": "/Payment-Failed",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Payment-Failed.vue",
+    "chunkName": "pages/Payment-Failed"
+  },
+  {
+    "name": "payment-link",
+    "path": "/payment-link",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/payment-link.vue",
+    "chunkName": "pages/payment-link"
+  },
+  {
+    "name": "popup-test",
+    "path": "/popup-test",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/popup-test.vue",
+    "chunkName": "pages/popup-test"
+  },
+  {
+    "name": "press",
+    "path": "/press",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/press.vue",
+    "chunkName": "pages/press"
+  },
+  {
+    "name": "Privacy-Policy",
+    "path": "/Privacy-Policy",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Privacy-Policy.vue",
+    "chunkName": "pages/Privacy-Policy"
+  },
+  {
+    "name": "products",
+    "path": "/products",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/products/index.vue",
+    "chunkName": "pages/products/index"
+  },
+  {
+    "name": "Registration",
+    "path": "/Registration",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Registration.vue",
+    "chunkName": "pages/Registration"
+  },
+  {
+    "name": "Search",
+    "path": "/Search",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Search.vue",
+    "chunkName": "pages/Search"
+  },
+  {
+    "name": "Search-Results",
+    "path": "/Search-Results",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Search-Results.vue",
+    "chunkName": "pages/Search-Results"
+  },
+  {
+    "name": "story-test",
+    "path": "/story-test",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/story-test.vue",
+    "chunkName": "pages/story-test"
+  },
+  {
+    "name": "Terms",
+    "path": "/Terms",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Terms.vue",
+    "chunkName": "pages/Terms"
+  },
+  {
+    "name": "Wishlist",
+    "path": "/Wishlist",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/Wishlist.vue",
+    "chunkName": "pages/Wishlist"
+  },
+  {
+    "name": "admin-panel-admins",
+    "path": "/admin-panel/admins",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/admins.vue",
+    "chunkName": "pages/admin-panel/admins"
+  },
+  {
+    "name": "admin-panel-baseColors",
+    "path": "/admin-panel/baseColors",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/baseColors.vue",
+    "chunkName": "pages/admin-panel/baseColors"
+  },
+  {
+    "name": "admin-panel-collectionCategories",
+    "path": "/admin-panel/collectionCategories",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/collectionCategories.vue",
+    "chunkName": "pages/admin-panel/collectionCategories"
+  },
+  {
+    "name": "admin-panel-collections",
+    "path": "/admin-panel/collections",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/collections.vue",
+    "chunkName": "pages/admin-panel/collections"
+  },
+  {
+    "name": "admin-panel-colorCategories",
+    "path": "/admin-panel/colorCategories",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/colorCategories.vue",
+    "chunkName": "pages/admin-panel/colorCategories"
+  },
+  {
+    "name": "admin-panel-colors",
+    "path": "/admin-panel/colors",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/colors.vue",
+    "chunkName": "pages/admin-panel/colors"
+  },
+  {
+    "name": "admin-panel-coupons",
+    "path": "/admin-panel/coupons",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/coupons.vue",
+    "chunkName": "pages/admin-panel/coupons"
+  },
+  {
+    "name": "admin-panel-currency",
+    "path": "/admin-panel/currency",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/currency.vue",
+    "chunkName": "pages/admin-panel/currency"
+  },
+  {
+    "name": "admin-panel-fabrics",
+    "path": "/admin-panel/fabrics",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/fabrics.vue",
+    "chunkName": "pages/admin-panel/fabrics"
+  },
+  {
+    "name": "admin-panel-faq",
+    "path": "/admin-panel/faq",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/faq.vue",
+    "chunkName": "pages/admin-panel/faq"
+  },
+  {
+    "name": "admin-panel-globalConfig",
+    "path": "/admin-panel/globalConfig",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/globalConfig.vue",
+    "chunkName": "pages/admin-panel/globalConfig"
+  },
+  {
+    "name": "admin-panel-homepage",
+    "path": "/admin-panel/homepage",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/homepage.vue",
+    "chunkName": "pages/admin-panel/homepage"
+  },
+  {
+    "name": "admin-panel-homepageLayouts",
+    "path": "/admin-panel/homepageLayouts",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/homepageLayouts.vue",
+    "chunkName": "pages/admin-panel/homepageLayouts"
+  },
+  {
+    "name": "admin-panel-instagram",
+    "path": "/admin-panel/instagram",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/instagram.vue",
+    "chunkName": "pages/admin-panel/instagram"
+  },
+  {
+    "name": "admin-panel-lab",
+    "path": "/admin-panel/lab",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/lab.vue",
+    "chunkName": "pages/admin-panel/lab"
+  },
+  {
+    "name": "admin-panel-login",
+    "path": "/admin-panel/login",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/login.vue",
+    "chunkName": "pages/admin-panel/login"
+  },
+  {
+    "name": "admin-panel-messages",
+    "path": "/admin-panel/messages",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/messages.vue",
+    "chunkName": "pages/admin-panel/messages"
+  },
+  {
+    "name": "admin-panel-orders",
+    "path": "/admin-panel/orders",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/orders.vue",
+    "chunkName": "pages/admin-panel/orders"
+  },
+  {
+    "name": "admin-panel-paymentLinks",
+    "path": "/admin-panel/paymentLinks",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/paymentLinks.vue",
+    "chunkName": "pages/admin-panel/paymentLinks"
+  },
+  {
+    "name": "admin-panel-popup",
+    "path": "/admin-panel/popup",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/popup.vue",
+    "chunkName": "pages/admin-panel/popup"
+  },
+  {
+    "name": "admin-panel-productLists",
+    "path": "/admin-panel/productLists",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/productLists.vue",
+    "chunkName": "pages/admin-panel/productLists"
+  },
+  {
+    "name": "admin-panel-products",
+    "path": "/admin-panel/products",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/products.vue",
+    "chunkName": "pages/admin-panel/products"
+  },
+  {
+    "name": "admin-panel-sales",
+    "path": "/admin-panel/sales",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/sales.vue",
+    "chunkName": "pages/admin-panel/sales"
+  },
+  {
+    "name": "admin-panel-ticker",
+    "path": "/admin-panel/ticker",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/ticker.vue",
+    "chunkName": "pages/admin-panel/ticker"
+  },
+  {
+    "name": "admin-panel-unlock",
+    "path": "/admin-panel/unlock",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/unlock.vue",
+    "chunkName": "pages/admin-panel/unlock"
+  },
+  {
+    "name": "admin-panel-users",
+    "path": "/admin-panel/users",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/users.vue",
+    "chunkName": "pages/admin-panel/users"
+  },
+  {
+    "name": "admin-panel-variantCategories",
+    "path": "/admin-panel/variantCategories",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/variantCategories.vue",
+    "chunkName": "pages/admin-panel/variantCategories"
+  },
+  {
+    "name": "admin-panel-variants",
+    "path": "/admin-panel/variants",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/admin-panel/variants.vue",
+    "chunkName": "pages/admin-panel/variants"
+  },
+  {
+    "name": "My-Account-address-book",
+    "path": "/My-Account/address-book",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/My-Account/address-book.vue",
+    "chunkName": "pages/My-Account/address-book"
+  },
+  {
+    "name": "My-Account-gift-cards",
+    "path": "/My-Account/gift-cards",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/My-Account/gift-cards.vue",
+    "chunkName": "pages/My-Account/gift-cards"
+  },
+  {
+    "name": "My-Account-orders",
+    "path": "/My-Account/orders",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/My-Account/orders.vue",
+    "chunkName": "pages/My-Account/orders"
+  },
+  {
+    "name": "My-Account-profile-details",
+    "path": "/My-Account/profile-details",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/My-Account/profile-details.vue",
+    "chunkName": "pages/My-Account/profile-details"
+  },
+  {
+    "name": "lists-listSlug",
+    "path": "/lists/:listSlug?",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/lists/_listSlug.vue",
+    "chunkName": "pages/lists/_listSlug"
+  },
+  {
+    "name": "index",
+    "path": "/",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/index.vue",
+    "chunkName": "pages/index"
+  },
+  {
+    "name": "collection-slug",
+    "path": "/:collection/:slug?",
+    "component": "/Users/suhaibkhan/Documents/LegacyProjects/bounipun-ecom/pages/_collection/_slug.vue",
+    "chunkName": "pages/_collection/_slug"
+  }
+]
