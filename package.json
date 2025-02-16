@@ -12,6 +12,7 @@
     "buildx": "yarn run frontend:build && yarn run server:build",
     "build": "yarn run server:build",
     "start": "npx nuxt start",
+    "start-server": "NODE_ENV=production node dist/server.js",
     "start-old": "NODE_ENV=production node dist/server.js",
     "start:dev": "yarn run frontend:dev && yarn run server:dev",
     "up": "yarn run build && yarn run start",

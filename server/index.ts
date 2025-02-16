@@ -102,14 +102,14 @@ Object.keys(swaggerSpec.paths).forEach((path) => {
   });
 });
 
-server.applyStaticMiddleware("/frontend");
-app.use(
-  history({
-    disableDotRule: true,
-    verbose: true,
-  })
-);
-server.applyStaticMiddleware("/frontend");
+// server.applyStaticMiddleware("/frontend");
+// app.use(
+//   history({
+//     disableDotRule: true,
+//     verbose: true,
+//   })
+// );
+// server.applyStaticMiddleware("/frontend");
 
 /* connect to mongodb */
 dbConnect();
