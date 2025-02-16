@@ -89,8 +89,10 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // baseUrl: process.env.BASE_URL || ''
-    baseUrl:
-      process.env.NODE_ENV === "development" ? process.env.BASE_URL : "/",
+    // baseUrl:    "https://bounipun.in",
+    baseUrl: process.env.BASE_URL,
+      // baseUrl:
+ 
     credentials: true,
   },
   publicRuntimeConfig: {

@@ -395,20 +395,124 @@ import CurrencyHelper from "../../helpers/currencyHelper.js";
 
 export default {
   mixins: [CurrencyHelper],
+  async asyncData({ $axios, params, query, req, $getImage }) {
+    try {
+      // Fetch product data
+      const { data: result } = await $axios.post("/fetchProduct", {
+        slug: `${params.collection}/${params.slug}`,
+        lockCheck: true,
+        forceUnlock: true
+      });
+
+      // If product not found
+      if (result.resolved === false) {
+        return {
+          preLoadMessage: "Product not found :(",
+          productFetched: false,
+          serverData: {
+            product: { name: "Not Found" },
+            collectionName: "",
+            firstProductImage: "https://bounipun.in/icons/light/logo.png",
+            shareLink: ""
+          }
+        };
+      }
+
+      // Filter out inactive colors
+      result.colors = result.colors.filter(color => color.status === true);
+
+      if (result.colors.length === 0) {
+        return {
+          preLoadMessage: "No active colors found",
+          productFetched: false,
+          serverData: {
+            product: { name: "No Active Colors" },
+            collectionName: "",
+            firstProductImage: "https://bounipun.in/icons/light/logo.png",
+            shareLink: ""
+          }
+        };
+      }
+
+      // Process color data for Bounipun colors
+      if (result.colorData) {
+        result.colorData.forEach(category => {
+          let colors = category.colors;
+          colors.forEach(color => {
+            color.actualIndex = result.colors.findIndex(col => col._id === color._id);
+          });
+          colors = colors.sort((a, b) => b.images.length - a.images.length);
+        });
+      }
+
+      // Get active color index
+      const activeColorIndex = query.activeColor ? parseInt(query.activeColor) : 
+                             result.colors.findIndex(color => color.mainColor === true);
+      
+      // Get collection name
+      const collectionName = !result.thirdParty && result.bounipun_collection ? 
+                           result.bounipun_collection.name : "";
+
+      // Get first product image
+      const activeColor = result.colors[activeColorIndex >= 0 ? activeColorIndex : 0];
+      let firstProductImage = "https://bounipun.in/icons/light/logo.png";
+      
+      if (activeColor) {
+        if (activeColor.images && activeColor.images.length > 0) {
+          // Find main image or use first image
+          const mainImage = activeColor.images.find(img => img.mainImage === true) || activeColor.images[0];
+          firstProductImage = mainImage.path;
+        } else if (activeColor._id !== null && activeColor.image) {
+          firstProductImage = activeColor.image;
+        }
+      }
+
+      // Generate share link
+      const protocol = req ? (req.headers['x-forwarded-proto'] || 'http') : window.location.protocol.replace(':', '');
+      const host = req ? req.headers.host : window.location.host;
+      const shareLink = `${protocol}://${host}/${params.collection}/${params.slug}?activeColor=${activeColorIndex >= 0 ? activeColorIndex : 0}`;
+
+      return {
+        serverData: {
+          product: {
+            name: result.name,
+            description: result.description
+          },
+          collectionName,
+          firstProductImage: $getImage(firstProductImage, "productPages"),
+          shareLink
+        }
+      };
+    } catch (error) {
+      console.error("Error fetching product:", error);
+      return {
+        serverData: {
+          product: { name: "Error" },
+          collectionName: "",
+          firstProductImage: "https://bounipun.in/icons/light/logo.png",
+          shareLink: ""
+        }
+      };
+    }
+  },
   head() {
     return {
-      title: `${this.product.name} | Bounipun Kashmir`,
+      title: `${this.serverData.product.name} | Bounipun Kashmir`,
       meta: [
-        // { property: "og:type", content: "website" },
-        // { property: "description", content: `${this.collectionName} from Bounipun Kashmir` },
-        // { property: "og:title", content: `${this.product.name}` },
-        // { property: "og:description", content: `${this.collectionName} from Bounipun Kashmir` },
-        // { property: "og:image", content: this.firstProductImage },
-        // { property: "og:url", content: this.shareLink },
-        // { property: "og:image:secure_url", content: this.firstProductImage },
-        // { property: "og:image:width", content: "300" },
-        // { property: "og:image:height", content: "300" },
-        // { property: "og:image:type", content: "image/jpeg" },
+        { property: "og:type", content: "website" },
+        { property: "description", content: `${this.serverData.collectionName} from Bounipun Kashmir` },
+        { property: "og:title", content: `${this.serverData.product.name}` },
+        { property: "og:description", content: `${this.serverData.collectionName} from Bounipun Kashmir` },
+        { property: "og:image", content: this.serverData.firstProductImage },
+        { property: "og:url", content: this.serverData.shareLink },
+        { property: "og:image:secure_url", content: this.serverData.firstProductImage },
+        { property: "og:image:width", content: "300" },
+        { property: "og:image:height", content: "300" },
+        { property: "og:image:type", content: "image/jpeg" },
+        { property: "twitter:card", content: "summary_large_image" },
+        { property: "twitter:title", content: `${this.serverData.product.name}` },
+        { property: "twitter:image", content: this.serverData.firstProductImage },
+        { property: "twitter:description", content: `${this.serverData.collectionName} from Bounipun Kashmir` }
       ],
     };
   },
