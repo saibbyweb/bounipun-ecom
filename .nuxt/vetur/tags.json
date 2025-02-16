@@ -137,27 +137,6 @@
   "CouponSuggestion": {
     "description": "Auto imported from components/cart/couponSuggestion.vue"
   },
-  "AddNewItem": {
-    "description": "Auto imported from components/admin/AddNewItem.vue"
-  },
-  "AdminHeader": {
-    "description": "Auto imported from components/admin/AdminHeader.vue"
-  },
-  "CancelUpdate": {
-    "description": "Auto imported from components/admin/CancelUpdate.vue"
-  },
-  "List": {
-    "description": "Auto imported from components/admin/list.vue"
-  },
-  "UpdateCRUD": {
-    "description": "Auto imported from components/admin/updateCRUD.js"
-  },
-  "UploadImage": {
-    "description": "Auto imported from components/admin/uploadImage.vue"
-  },
-  "UploadImageV2": {
-    "description": "Auto imported from components/admin/uploadImageV2.vue"
-  },
   "InvoiceItem": {
     "description": "Auto imported from components/paymentlink/invoiceItem.vue"
   },
@@ -179,8 +158,35 @@
   "VariantBlockLayout": {
     "description": "Auto imported from components/lab/VariantBlockLayout.vue"
   },
+  "AddNewItem": {
+    "description": "Auto imported from components/admin/AddNewItem.vue"
+  },
+  "AdminHeader": {
+    "description": "Auto imported from components/admin/AdminHeader.vue"
+  },
+  "CancelUpdate": {
+    "description": "Auto imported from components/admin/CancelUpdate.vue"
+  },
+  "List": {
+    "description": "Auto imported from components/admin/list.vue"
+  },
+  "UpdateCRUD": {
+    "description": "Auto imported from components/admin/updateCRUD.js"
+  },
+  "UploadImage": {
+    "description": "Auto imported from components/admin/uploadImage.vue"
+  },
+  "UploadImageV2": {
+    "description": "Auto imported from components/admin/uploadImageV2.vue"
+  },
   "UpdateAdmin": {
     "description": "Auto imported from components/admin/admins/updateAdmin.vue"
+  },
+  "UpdateCollectionCategory": {
+    "description": "Auto imported from components/admin/collection/UpdateCollectionCategory.vue"
+  },
+  "UpdateCollection": {
+    "description": "Auto imported from components/admin/collection/updateCollection.vue"
   },
   "UpdateBaseColor": {
     "description": "Auto imported from components/admin/colors/UpdateBaseColor.vue"
@@ -193,12 +199,6 @@
   },
   "ColorPicker": {
     "description": "Auto imported from components/admin/colors/colorPicker.vue"
-  },
-  "UpdateCollectionCategory": {
-    "description": "Auto imported from components/admin/collection/UpdateCollectionCategory.vue"
-  },
-  "UpdateCollection": {
-    "description": "Auto imported from components/admin/collection/updateCollection.vue"
   },
   "UpdateCoupon": {
     "description": "Auto imported from components/admin/coupons/UpdateCoupon.vue"
@@ -266,12 +266,6 @@
   "OrderItem": {
     "description": "Auto imported from components/admin/orders/orderItem.vue"
   },
-  "ProductListCollectionFilter": {
-    "description": "Auto imported from components/admin/productList/ProductListCollectionFilter.vue"
-  },
-  "UpdateProductList": {
-    "description": "Auto imported from components/admin/productList/UpdateProductList.vue"
-  },
   "UpdatePaymentLink": {
     "description": "Auto imported from components/admin/paymentlinks/UpdatePaymentLink.vue"
   },
@@ -280,6 +274,12 @@
   },
   "UpdatePopup": {
     "description": "Auto imported from components/admin/popup/UpdatePopup.vue"
+  },
+  "ProductListCollectionFilter": {
+    "description": "Auto imported from components/admin/productList/ProductListCollectionFilter.vue"
+  },
+  "UpdateProductList": {
+    "description": "Auto imported from components/admin/productList/UpdateProductList.vue"
   },
   "FabricSelector": {
     "description": "Auto imported from components/admin/products/FabricSelector.vue"
