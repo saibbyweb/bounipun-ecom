@@ -23,7 +23,7 @@ export default {
   },
   server: {
     inline: false,
-    port: 8080,
+    port: 3333,
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
