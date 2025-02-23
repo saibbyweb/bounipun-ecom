@@ -5,6 +5,7 @@ export const state = () => ({
   localAuthorized: false,
   persistedStateLoaded: false,
   authorized: false,
+  sessionToken: '',
   admin: {},
 });
 
@@ -35,10 +36,14 @@ export const mutations = {
     // Sync with customer store
     this.commit('customer/setAdminAuthorization', value);
   },
+  setSessionToken(state, token) {
+    state.sessionToken = token;
+  },
   /* unauthorize */
   unauthorize(state) {
     cookies.remove("swecom_bounipun_admin");
     state.authorized = false;
+    state.sessionToken = '';
     // Sync with customer store
     this.commit('customer/setAdminAuthorization', false);
   },

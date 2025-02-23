@@ -3,10 +3,24 @@ export default function ({ $axios, store, router, redirect }) {
     //   console.log('Making request to ' + config.url)
     // })
 
-    // $axios.defaults.withCredentials = true;
+    $axios.defaults.withCredentials = true;
+
+    // Add request interceptor to set headers
+    $axios.onRequest(config => {
+        // Add customer token if exists
+        if (store.state.customer.sessionToken) {
+            config.headers['customer-authorization'] = `Bearer ${store.state.customer.sessionToken}`;
+        }
+
+        // Add admin token if exists
+        if (store.state.admin.sessionToken) {
+            config.headers['admin-authorization'] = `Bearer ${store.state.admin.sessionToken}`;
+        }
+
+        return config;
+    });
 
     $axios.onResponse(response => {
-
         // console.log(response.data,'--ON RESPONSE')
         if(response.data.notAuthorized === true) {
             store.commit("customer/unauthorize");

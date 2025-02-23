@@ -3869,6 +3869,7 @@ const state = () => ({
   localAuthorized: false,
   persistedStateLoaded: false,
   authorized: false,
+  sessionToken: '',
   admin: {}
 });
 const mutations = {
@@ -3902,10 +3903,15 @@ const mutations = {
     this.commit('customer/setAdminAuthorization', value);
   },
 
+  setSessionToken(state, token) {
+    state.sessionToken = token;
+  },
+
   /* unauthorize */
   unauthorize(state) {
     js_cookie__WEBPACK_IMPORTED_MODULE_0___default.a.remove("swecom_bounipun_admin");
-    state.authorized = false; // Sync with customer store
+    state.authorized = false;
+    state.sessionToken = ''; // Sync with customer store
 
     this.commit('customer/setAdminAuthorization', false);
   },
@@ -4017,6 +4023,7 @@ const state = () => ({
   loading: false,
   authorized: false,
   adminAuthorized: false,
+  sessionToken: '',
   cart: [],
   globalRemoteCart: [],
   globalWishlist: [],
@@ -4167,6 +4174,10 @@ const mutations = {
     state.adminAuthorized = value;
   },
 
+  setSessionToken(state, token) {
+    state.sessionToken = token;
+  },
+
   setGlobalConfig(state, value) {
     state.globalConfig = value;
   },
@@ -4175,6 +4186,7 @@ const mutations = {
   unauthorize(state) {
     js_cookie__WEBPACK_IMPORTED_MODULE_16___default.a.remove("swecom_bounipun");
     state.authorized = false;
+    state.sessionToken = '';
     state.user = {};
   },
 
@@ -4740,7 +4752,6 @@ __webpack_require__.d(components_namespaceObject, "DeliveryInput", function() { 
 __webpack_require__.d(components_namespaceObject, "GiftMessage", function() { return GiftMessage; });
 __webpack_require__.d(components_namespaceObject, "OrderTotal", function() { return OrderTotal; });
 __webpack_require__.d(components_namespaceObject, "OrderTotalV2", function() { return OrderTotalV2; });
-__webpack_require__.d(components_namespaceObject, "CouponSuggestion", function() { return CouponSuggestion; });
 __webpack_require__.d(components_namespaceObject, "AddNewItem", function() { return AddNewItem; });
 __webpack_require__.d(components_namespaceObject, "AdminHeader", function() { return AdminHeader; });
 __webpack_require__.d(components_namespaceObject, "CancelUpdate", function() { return CancelUpdate; });
@@ -4748,6 +4759,7 @@ __webpack_require__.d(components_namespaceObject, "List", function() { return Li
 __webpack_require__.d(components_namespaceObject, "UpdateCRUD", function() { return UpdateCRUD; });
 __webpack_require__.d(components_namespaceObject, "UploadImage", function() { return UploadImage; });
 __webpack_require__.d(components_namespaceObject, "UploadImageV2", function() { return UploadImageV2; });
+__webpack_require__.d(components_namespaceObject, "CouponSuggestion", function() { return CouponSuggestion; });
 __webpack_require__.d(components_namespaceObject, "InvoiceItem", function() { return InvoiceItem; });
 __webpack_require__.d(components_namespaceObject, "PayeeDetails", function() { return PayeeDetails; });
 __webpack_require__.d(components_namespaceObject, "ColorBlockLayout", function() { return ColorBlockLayout; });
@@ -4763,11 +4775,11 @@ __webpack_require__.d(components_namespaceObject, "UpdateColor", function() { re
 __webpack_require__.d(components_namespaceObject, "UpdateColorCategory", function() { return UpdateColorCategory; });
 __webpack_require__.d(components_namespaceObject, "ColorPicker", function() { return ColorPicker; });
 __webpack_require__.d(components_namespaceObject, "UpdateCoupon", function() { return UpdateCoupon; });
-__webpack_require__.d(components_namespaceObject, "UpdateFabric", function() { return UpdateFabric; });
 __webpack_require__.d(components_namespaceObject, "UpdateCurrency", function() { return UpdateCurrency; });
+__webpack_require__.d(components_namespaceObject, "UpdateFabric", function() { return UpdateFabric; });
 __webpack_require__.d(components_namespaceObject, "UpdateHomepage", function() { return UpdateHomepage; });
-__webpack_require__.d(components_namespaceObject, "UpdateHomepageLayout", function() { return UpdateHomepageLayout; });
 __webpack_require__.d(components_namespaceObject, "UpdateFAQ", function() { return UpdateFAQ; });
+__webpack_require__.d(components_namespaceObject, "UpdateHomepageLayout", function() { return UpdateHomepageLayout; });
 __webpack_require__.d(components_namespaceObject, "InputBox", function() { return InputBox; });
 __webpack_require__.d(components_namespaceObject, "CBoxes", function() { return CBoxes; });
 __webpack_require__.d(components_namespaceObject, "CheckBoxes", function() { return CheckBoxes; });
@@ -5016,7 +5028,7 @@ async function setContext(app, context) {
       env: {
         "baseAWSURL": "https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/",
         "baseS3URL": "https://bounipun-ecom.s3.ap-south-1.amazonaws.com",
-        "BASE_URL": "http://localhost:3000",
+        "BASE_URL": "https://bounipun-ecom-server.onrender.com",
         "RAZORPAY_KEY_ID_TEST": "rzp_test_LnJPEC0MOtvlSn",
         "RAZORPAY_KEY_ID_PROD": "rzp_live_bzpnf6YPxKKfTh",
         "STRIPE_PK_TEST": "pk_test_Ct9bX6YRz5YItn8gCGGO4ypy00KzN2R4mG",
@@ -7168,7 +7180,6 @@ const DeliveryInput = () => __webpack_require__.e(/* import() | components/deliv
 const GiftMessage = () => __webpack_require__.e(/* import() | components/gift-message */ 31).then(__webpack_require__.bind(null, 249)).then(c => wrapFunctional(c.default || c));
 const OrderTotal = () => __webpack_require__.e(/* import() | components/order-total */ 44).then(__webpack_require__.bind(null, 248)).then(c => wrapFunctional(c.default || c));
 const OrderTotalV2 = () => __webpack_require__.e(/* import() | components/order-total-v2 */ 45).then(__webpack_require__.bind(null, 444)).then(c => wrapFunctional(c.default || c));
-const CouponSuggestion = () => __webpack_require__.e(/* import() | components/coupon-suggestion */ 18).then(__webpack_require__.bind(null, 443)).then(c => wrapFunctional(c.default || c));
 const AddNewItem = () => __webpack_require__.e(/* import() | components/add-new-item */ 3).then(__webpack_require__.bind(null, 157)).then(c => wrapFunctional(c.default || c));
 const AdminHeader = () => Promise.resolve(/* import() */).then(__webpack_require__.bind(null, 100)).then(c => wrapFunctional(c.default || c));
 const CancelUpdate = () => __webpack_require__.e(/* import() | components/cancel-update */ 9).then(__webpack_require__.bind(null, 134)).then(c => wrapFunctional(c.default || c));
@@ -7176,6 +7187,7 @@ const List = () => __webpack_require__.e(/* import() | components/list */ 41).th
 const UpdateCRUD = () => __webpack_require__.e(/* import() | components/update-c-r-u-d */ 65).then(__webpack_require__.bind(null, 429)).then(c => wrapFunctional(c.default || c));
 const UploadImage = () => __webpack_require__.e(/* import() | components/upload-image */ 90).then(__webpack_require__.bind(null, 166)).then(c => wrapFunctional(c.default || c));
 const UploadImageV2 = () => __webpack_require__.e(/* import() | components/upload-image-v2 */ 91).then(__webpack_require__.bind(null, 167)).then(c => wrapFunctional(c.default || c));
+const CouponSuggestion = () => __webpack_require__.e(/* import() | components/coupon-suggestion */ 18).then(__webpack_require__.bind(null, 443)).then(c => wrapFunctional(c.default || c));
 const InvoiceItem = () => __webpack_require__.e(/* import() | components/invoice-item */ 38).then(__webpack_require__.bind(null, 447)).then(c => wrapFunctional(c.default || c));
 const PayeeDetails = () => __webpack_require__.e(/* import() | components/payee-details */ 48).then(__webpack_require__.bind(null, 448)).then(c => wrapFunctional(c.default || c));
 const ColorBlockLayout = () => __webpack_require__.e(/* import() | components/color-block-layout */ 15).then(__webpack_require__.bind(null, 328)).then(c => wrapFunctional(c.default || c));
@@ -7191,11 +7203,11 @@ const UpdateColor = () => __webpack_require__.e(/* import() | components/update-
 const UpdateColorCategory = () => __webpack_require__.e(/* import() | components/update-color-category */ 69).then(__webpack_require__.bind(null, 453)).then(c => wrapFunctional(c.default || c));
 const ColorPicker = () => __webpack_require__.e(/* import() | components/color-picker */ 16).then(__webpack_require__.bind(null, 336)).then(c => wrapFunctional(c.default || c));
 const UpdateCoupon = () => __webpack_require__.e(/* import() | components/update-coupon */ 70).then(__webpack_require__.bind(null, 455)).then(c => wrapFunctional(c.default || c));
-const UpdateFabric = () => __webpack_require__.e(/* import() | components/update-fabric */ 73).then(__webpack_require__.bind(null, 457)).then(c => wrapFunctional(c.default || c));
 const UpdateCurrency = () => __webpack_require__.e(/* import() | components/update-currency */ 71).then(__webpack_require__.bind(null, 456)).then(c => wrapFunctional(c.default || c));
+const UpdateFabric = () => __webpack_require__.e(/* import() | components/update-fabric */ 73).then(__webpack_require__.bind(null, 457)).then(c => wrapFunctional(c.default || c));
 const UpdateHomepage = () => __webpack_require__.e(/* import() | components/update-homepage */ 74).then(__webpack_require__.bind(null, 459)).then(c => wrapFunctional(c.default || c));
-const UpdateHomepageLayout = () => __webpack_require__.e(/* import() | components/update-homepage-layout */ 75).then(__webpack_require__.bind(null, 460)).then(c => wrapFunctional(c.default || c));
 const UpdateFAQ = () => __webpack_require__.e(/* import() | components/update-f-a-q */ 72).then(__webpack_require__.bind(null, 458)).then(c => wrapFunctional(c.default || c));
+const UpdateHomepageLayout = () => __webpack_require__.e(/* import() | components/update-homepage-layout */ 75).then(__webpack_require__.bind(null, 460)).then(c => wrapFunctional(c.default || c));
 const InputBox = () => __webpack_require__.e(/* import() | components/input-box */ 34).then(__webpack_require__.bind(null, 121)).then(c => wrapFunctional(c.default || c));
 const CBoxes = () => __webpack_require__.e(/* import() | components/c-boxes */ 7).then(__webpack_require__.bind(null, 337)).then(c => wrapFunctional(c.default || c));
 const CheckBoxes = () => __webpack_require__.e(/* import() | components/check-boxes */ 11).then(__webpack_require__.bind(null, 630)).then(c => wrapFunctional(c.default || c));
@@ -7445,7 +7457,7 @@ const setupProgress = axios => {
   // runtimeConfig
   const runtimeConfig = ctx.$config && ctx.$config.axios || {}; // baseURL
 
-  const baseURL =  false ? undefined : runtimeConfig.baseURL || runtimeConfig.baseUrl || process.env._AXIOS_BASE_URL_ || 'https://bounipun-ecom-dev.onrender.com'; // Create fresh objects for all default header scopes
+  const baseURL =  false ? undefined : runtimeConfig.baseURL || runtimeConfig.baseUrl || process.env._AXIOS_BASE_URL_ || 'https://bounipun-ecom-server.onrender.com'; // Create fresh objects for all default header scopes
   // Axios creates only one which is shared across SSR requests!
   // https://github.com/mzabriskie/axios/blob/master/lib/defaults.js
 
@@ -7856,7 +7868,21 @@ const task = async promise => {
   // $axios.onRequest(config => {
   //   console.log('Making request to ' + config.url)
   // })
-  // $axios.defaults.withCredentials = true;
+  $axios.defaults.withCredentials = true; // Add request interceptor to set headers
+
+  $axios.onRequest(config => {
+    // Add customer token if exists
+    if (store.state.customer.sessionToken) {
+      config.headers['customer-authorization'] = `Bearer ${store.state.customer.sessionToken}`;
+    } // Add admin token if exists
+
+
+    if (store.state.admin.sessionToken) {
+      config.headers['admin-authorization'] = `Bearer ${store.state.admin.sessionToken}`;
+    }
+
+    return config;
+  });
   $axios.onResponse(response => {
     // console.log(response.data,'--ON RESPONSE')
     if (response.data.notAuthorized === true) {

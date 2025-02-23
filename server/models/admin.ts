@@ -49,7 +49,7 @@ const adminExpressAuth = async (req, res, next, accessLevel, strictMode = true) 
 
     let bearerToken;
     try {
-      bearerToken = req.headers.authorization.split(" ")[1];
+      bearerToken = req.headers['admin-authorization'].split(" ")[1];
     } catch (e) {
       bearerToken = null;
     }
@@ -71,7 +71,6 @@ const adminExpressAuth = async (req, res, next, accessLevel, strictMode = true) 
 
     /* if session is invalid */
     if (session === false || session.valid === false) {
-        console.log('FALSE AAHGAYA')
         /* reset cookie */
         res.send({ adminNotAuthorized: true });
         return;

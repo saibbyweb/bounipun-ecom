@@ -136,6 +136,12 @@ export default {
       /* and move back to homepage */
       this.$store.commit("admin/setAuthorization", true);
 
+        /* store the session token */
+        if (response.sessionToken) {
+        alert(response.sessionToken);
+        this.$store.commit("admin/setSessionToken", response.sessionToken);
+      }
+
       /* fetch profile */
       this.$store.dispatch("admin/fetchProfile");
 

@@ -134,9 +134,6 @@
   "OrderTotalV2": {
     "description": "Auto imported from components/Purchase/OrderTotalV2.vue"
   },
-  "CouponSuggestion": {
-    "description": "Auto imported from components/cart/couponSuggestion.vue"
-  },
   "AddNewItem": {
     "description": "Auto imported from components/admin/AddNewItem.vue"
   },
@@ -157,6 +154,9 @@
   },
   "UploadImageV2": {
     "description": "Auto imported from components/admin/uploadImageV2.vue"
+  },
+  "CouponSuggestion": {
+    "description": "Auto imported from components/cart/couponSuggestion.vue"
   },
   "InvoiceItem": {
     "description": "Auto imported from components/paymentlink/invoiceItem.vue"
@@ -203,20 +203,20 @@
   "UpdateCoupon": {
     "description": "Auto imported from components/admin/coupons/UpdateCoupon.vue"
   },
-  "UpdateFabric": {
-    "description": "Auto imported from components/admin/fabrics/UpdateFabric.vue"
-  },
   "UpdateCurrency": {
     "description": "Auto imported from components/admin/currencies/UpdateCurrency.vue"
+  },
+  "UpdateFabric": {
+    "description": "Auto imported from components/admin/fabrics/UpdateFabric.vue"
   },
   "UpdateHomepage": {
     "description": "Auto imported from components/admin/homepage/updateHomepage.vue"
   },
-  "UpdateHomepageLayout": {
-    "description": "Auto imported from components/admin/homepageLayouts/UpdateHomepageLayout.vue"
-  },
   "UpdateFAQ": {
     "description": "Auto imported from components/admin/faq/updateFAQ.vue"
+  },
+  "UpdateHomepageLayout": {
+    "description": "Auto imported from components/admin/homepageLayouts/UpdateHomepageLayout.vue"
   },
   "InputBox": {
     "description": "Auto imported from components/admin/input/InputBox.vue"

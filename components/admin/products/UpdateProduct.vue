@@ -553,12 +553,13 @@ export default {
     },
     /* update colors array according to collection selection */
     underEscape(newVal, oldVal) {
+      this.doc.colorSource = "custom";
       if (newVal) {
-        this.doc.colorSource = "bounipun-colors";
+        // this.doc.colorSource = "bounipun-colors";
         // this.doc.colorSource = '';
         // this.doc.colors = []
       } else if (!newVal) {
-        this.doc.colorSource = "custom";
+        // this.doc.colorSource = "custom";
       }
     },
   },
@@ -941,6 +942,7 @@ export default {
       this.$forceUpdate();
     },
     populateForm(details) {
+      console.log(details, "PRODUCT DETAILS");
       const {
         _id,
         styleId,

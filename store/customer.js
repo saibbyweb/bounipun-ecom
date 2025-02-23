@@ -8,6 +8,7 @@ export const state = () => ({
   loading: false,
   authorized: false,
   adminAuthorized: false,
+  sessionToken: '',
   cart: [],
   globalRemoteCart: [],
   globalWishlist: [],
@@ -142,6 +143,9 @@ export const mutations = {
   setAdminAuthorization(state, value) {
     state.adminAuthorized = value;
   },
+  setSessionToken(state, token) {
+    state.sessionToken = token;
+  },
   setGlobalConfig(state, value) {
     state.globalConfig = value;
   },
@@ -149,6 +153,7 @@ export const mutations = {
   unauthorize(state) {
     cookies.remove("swecom_bounipun");
     state.authorized = false;
+    state.sessionToken = '';
     state.user = {};
   },
   setUser(state, user) {

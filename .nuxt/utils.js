@@ -200,7 +200,7 @@ export async function setContext (app, context) {
       payload: context.payload,
       error: context.error,
       base: app.router.options.base,
-      env: {"baseAWSURL":"https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/","baseS3URL":"https://bounipun-ecom.s3.ap-south-1.amazonaws.com","BASE_URL":"http://localhost:3000","RAZORPAY_KEY_ID_TEST":"rzp_test_LnJPEC0MOtvlSn","RAZORPAY_KEY_ID_PROD":"rzp_live_bzpnf6YPxKKfTh","STRIPE_PK_TEST":"pk_test_Ct9bX6YRz5YItn8gCGGO4ypy00KzN2R4mG","STRIPE_PK_PROD":"pk_live_51J0qm7SAJnKcquR3JZ1T9qVG8lGA4bIflVcp5TZFWYP06n6XPLWojyNYUc5PMUFEwWCoe62IHW9HsnebRlpl5Scw00LC38Ktxu"}
+      env: {"baseAWSURL":"https://bounipun-ecom.s3.ap-south-1.amazonaws.com/original/","baseS3URL":"https://bounipun-ecom.s3.ap-south-1.amazonaws.com","BASE_URL":"https://bounipun-ecom-server.onrender.com","RAZORPAY_KEY_ID_TEST":"rzp_test_LnJPEC0MOtvlSn","RAZORPAY_KEY_ID_PROD":"rzp_live_bzpnf6YPxKKfTh","STRIPE_PK_TEST":"pk_test_Ct9bX6YRz5YItn8gCGGO4ypy00KzN2R4mG","STRIPE_PK_PROD":"pk_live_51J0qm7SAJnKcquR3JZ1T9qVG8lGA4bIflVcp5TZFWYP06n6XPLWojyNYUc5PMUFEwWCoe62IHW9HsnebRlpl5Scw00LC38Ktxu"}
     }
     // Only set once
 

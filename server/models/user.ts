@@ -142,7 +142,7 @@ const expressAuth = async (req, res, next, usergroup, strictMode) => {
 
   let bearerToken;
   try {
-    bearerToken = req.headers.authorization.split(" ")[1];
+    bearerToken = req.headers['customer-authorization'].split(" ")[1];
   } catch (e) {
     bearerToken = null;
   }

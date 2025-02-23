@@ -361,6 +361,124 @@ router.post(
   }
 );
 
+/* fetch single product with all properties */
+router.get("/product/:id", async (req, res) => {
+  try {
+    const productId = req.params.id;
+    
+    const product = await db.model("products")
+      .findById(productId)
+      .populate("bounipun_collection")
+      .populate("variants._id")
+      .populate("variants.fabrics._id") 
+      .populate("colors._id")
+      .populate("rtsDirectVariant")
+      .populate("rtsDirectFabric")
+      .lean();
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: "Product not found"
+      });
+    }
+
+    res.json({
+      success: true,
+      data: product
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching product",
+      error: error.message
+    });
+  }
+});
+
+/* fetch all colors grouped by categories */
+router.get("/colors-by-categories", async (req, res) => {
+  try {
+    // Fetch all color categories
+    const categories = await db.model("color_categories").find().lean();
+    
+    // Fetch all colors
+    const colors = await db.model("colors")
+      .find()
+      .populate("category")
+      .lean();
+
+    // Group colors by category
+    const colorsByCategory = categories.map(category => {
+      return {
+        _id: category._id,
+        name: category.name,
+        colors: colors.filter(color => 
+          color.category && color.category._id.toString() === category._id.toString()
+        ).map(c => ({
+          _id: c._id,
+          name: c.name,
+          code: c.code,
+
+        }))
+      };
+    });
+
+    res.json({
+      success: true,
+      data: colorsByCategory
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching colors by categories",
+      error: error.message
+    });
+  }
+});
+
+/* clone product */
+router.get("/clone-product/:productId", async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    // Find original product
+    const originalProduct = await db.model("products").findById(productId).lean();
+
+    if (!originalProduct) {
+      return res.status(404).json({
+        success: false,
+        message: "Original product not found"
+      });
+    }
+
+    // Create clone by removing _id
+    const productClone = { ...originalProduct, name: originalProduct.name + " (Clone)" };
+    delete productClone._id;
+
+    // Save cloned product
+    const newProduct = await new (db.model("products"))(productClone).save();
+
+    res.json({
+      success: true,
+      message: "Product cloned successfully",
+      data: newProduct
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false, 
+      message: "Error cloning product",
+      error: error.message
+    });
+  }
+});
+
+
+
+
 /* fetch cart items */
 // router.post('/fetchCartDetails', async (req, res) => {
 //     let response = { resolved: false, cartDetails: [], variants: [], fabrics: [] }

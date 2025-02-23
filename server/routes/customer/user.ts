@@ -266,9 +266,9 @@ router.post("/loginCustomer", async (req, res) => {
     console.log("setting cookie...");
     res.cookie("swecom_bounipun", loginAttempt.token, {
       maxAge: 15552000000,
-      httpOnly: false,
+      httpOnly: true,
       sameSite: "none",
-      secure: true,
+      secure: false,
     });
   }
 
