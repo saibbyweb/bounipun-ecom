@@ -72,8 +72,8 @@ export default {
       otpSent: false,
       countryDialCode: "+91",
       countryIsoCode: "IN",
-      phoneNumber: "9906697711",
-      otp: "1234",
+      phoneNumber: "",
+      otp: "",
       purpose: "login",
       error: {
         status: false,
@@ -145,7 +145,6 @@ export default {
       
       /* store the session token */
       if (response.sessionToken) {
-        alert(response.sessionToken);
         this.$store.commit("customer/setSessionToken", response.sessionToken);
       }
 
