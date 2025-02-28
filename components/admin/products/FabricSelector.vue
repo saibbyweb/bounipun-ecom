@@ -44,9 +44,9 @@
             v-if="option.checked"
             type="text"
             v-model="option.price"
-            placeholder="Price (INR)"
-            @input="basePriceUpdated"
-            :title="allBasePrices[option._id] ? 'Base Price: ' + allBasePrices[option._id]['price'] : ''"
+            placeholderx="Price (INR)"
+            @input="inrPriceUpdated"
+            :title="getBasePriceTitle(option._id)"
           />
         </div>
 
@@ -65,8 +65,44 @@
             type="text"
             v-model="option.pricing[currency.code]"
             :placeholder="`Price (${currency.code})`"
-            :title="allBasePrices[option._id] ? 'Base Price: ' + allBasePrices[option._id]['pricing'][currency.code] : ''"
+            :title="getBasePriceTitle(option._id, currency.code)"
           />
+        </div>
+
+        <!-- Base Price Section -->
+        <div v-if="option.checked" class="base-price-section">
+          <div class="base-price-header">Base Prices</div>
+          <div class="currency-box">
+            <span class="code flex center">Base INR</span>
+            <input
+              class="price shadow base-price-input"
+              type="text"
+              :value="getBasePriceValue(option._id, 'price')"
+              placeholder="Base Price (INR)"
+              @input="baseInrPriceUpdated(option._id, $event.target.value)"
+            />
+          </div>
+          <div
+            v-for="currency in localCurrencies"
+            :key="'base-' + currency.code"
+            class="currency-box"
+          >
+            <span class="code flex center">Base {{ currency.code }}</span>
+            <input
+              class="price shadow base-price-input"
+              type="text"
+              :value="getBasePriceValue(option._id, 'pricing', currency.code)"
+              :placeholder="`Base Price (${currency.code})`"
+              @input="
+                updateBasePrice(
+                  option._id,
+                  'pricing',
+                  $event.target.value,
+                  currency.code
+                )
+              "
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -91,19 +127,18 @@ export default {
       default: 0,
     },
     allBasePrices: Object,
-    setNonINRPrices: Function
+    setNonINRPrices: Function,
+    setNonINRBasePrices: Function,
   },
   watch: {
     selectedFabrics() {
       this.updateSelectionList();
     },
     enableSuggestedPricing(newVal) {
-        if(newVal)
-            this.setSuggestedPricing();
-    }
+      if (newVal) this.setSuggestedPricing();
+    },
   },
-  mounted() {
-  },
+  mounted() {},
   computed: {
     selectedFabrics() {
       const selectedFabrics = this.localVariant.fabrics.filter(
@@ -120,16 +155,46 @@ export default {
     },
   },
   methods: {
-    basePriceUpdated() {
-      if (this.enableSuggestedPricing) 
-      this.setSuggestedPricing();
+    inrPriceUpdated() {
+      if (this.enableSuggestedPricing) this.setSuggestedPricing();
+    },
+    baseInrPriceUpdated(optionId, value) {
+      // First update the INR base price
+      this.updateBasePrice(optionId, "price", value);
+
+      // If auto calculations are enabled, update other currency prices
+      if (this.enableSuggestedPricing) {
+        const keys = Object.keys(this.allBasePrices);
+        for (const key of keys) {
+          this.setNonINRBasePrices(
+            this.allBasePrices[key].pricing,
+            this.allBasePrices[key].price,
+            this.inflationPercentage
+          );
+        }
+      }
+    },
+    getBasePriceTitle(optionId, currencyCode = null) {
+      if (!this.allBasePrices || !this.allBasePrices[optionId]) {
+        return "";
+      }
+      if (currencyCode) {
+        return this.allBasePrices[optionId].pricing?.[currencyCode]
+          ? `Base Price: ${this.allBasePrices[optionId].pricing[currencyCode]}`
+          : "";
+      }
+      return this.allBasePrices[optionId].price
+        ? `Base Price: ${this.allBasePrices[optionId].price}`
+        : "";
     },
     setSuggestedPricing() {
       /* loop through every fabrics */
       this.selectedFabrics.forEach((fabric) => {
-
-      this.setNonINRPrices(fabric.pricing, fabric.price, this.inflationPercentage);
-        
+        this.setNonINRPrices(
+          fabric.pricing,
+          fabric.price,
+          this.inflationPercentage
+        );
       });
 
       this.updateSelectionList();
@@ -158,16 +223,16 @@ export default {
           element.price = selectedFabrics[foundIndex].price;
           const dbPricing = selectedFabrics[foundIndex].pricing;
           element.pricing = {};
-        //   if (dbPricing !== undefined) element.pricing = dbPricing;
-        //   if (dbPricing !== undefined) element.pricing = dbPricing;
+          //   if (dbPricing !== undefined) element.pricing = dbPricing;
+          //   if (dbPricing !== undefined) element.pricing = dbPricing;
           // there can still be active currencies, for which price is not set
-          this.localCurrencies.forEach(currency => {
-            if(dbPricing === undefined) {
-                element.pricing[currency.code] = "";
-                return;
+          this.localCurrencies.forEach((currency) => {
+            if (dbPricing === undefined) {
+              element.pricing[currency.code] = "";
+              return;
             }
             const price = dbPricing[currency.code];
-            element.pricing[currency.code] = price !== undefined ? price : ""
+            element.pricing[currency.code] = price !== undefined ? price : "";
           });
         }
       });
@@ -182,6 +247,36 @@ export default {
     },
     fabricChecked(event) {
       console.log(event.target.value);
+    },
+    getBasePriceValue(optionId, type, currencyCode = null) {
+      if (!this.allBasePrices || !this.allBasePrices[optionId]) {
+        return "";
+      }
+      if (type === "price") {
+        return this.allBasePrices[optionId].price;
+      }
+      if (type === "pricing" && currencyCode) {
+        return this.allBasePrices[optionId].pricing?.[currencyCode] || "";
+      }
+      return "";
+    },
+    updateBasePrice(optionId, type, value, currencyCode = null) {
+      if (!this.allBasePrices[optionId]) {
+        this.$set(this.allBasePrices, optionId, {
+          price: "",
+          pricing: {},
+        });
+      }
+
+      if (type === "price") {
+        this.$set(this.allBasePrices[optionId], "price", value);
+      } else if (type === "pricing" && currencyCode) {
+        if (!this.allBasePrices[optionId].pricing) {
+          this.$set(this.allBasePrices[optionId], "pricing", {});
+        }
+        this.$set(this.allBasePrices[optionId].pricing, currencyCode, value);
+      }
+      this.updateSelectionList();
     },
   },
   data() {
@@ -269,6 +364,39 @@ export default {
       position: absolute;
       font-size: 12px;
       height: 100%;
+    }
+  }
+}
+
+.base-price-section {
+  margin-top: 15px;
+  padding: 12px;
+  background: #f5f1f1;
+  border-radius: 6px;
+  border: 1px dashed #562828;
+
+  .base-price-header {
+    font-family: $font_2_semibold;
+    font-size: 11px;
+    color: #562828;
+    margin-bottom: 10px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .currency-box {
+    margin: 6px 0;
+
+    .base-price-input {
+      background: white;
+      border: 1px solid #e0d5d5;
+      border-radius: 3px;
+
+      &::placeholder {
+        color: #999;
+        font-style: italic;
+      }
     }
   }
 }

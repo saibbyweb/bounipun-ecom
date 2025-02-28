@@ -424,20 +424,22 @@ export default {
       let classes = [];
       const heading = this.headings[propIndex];
 
-
-
-      const slugifiedHeading = slugify(heading, {
-        lower: true,
-      });
-      classes.push(slugifiedHeading);
-      /* if status column, slugify the value and set it as class name for color coding */
-      if (slugifiedHeading === "status") {
-        // const slugifiedValue = slugify(value, {
-        //     lower: true
-        // });
-        // classes.push(slugifiedValue);
+      if (typeof heading === 'string') {
+        const slugifiedHeading = slugify(heading, {
+          lower: true,
+        });
+        classes.push(slugifiedHeading);
+        /* if status column, slugify the value and set it as class name for color coding */
+        if (slugifiedHeading === "status") {
+          // const slugifiedValue = slugify(value, {
+          //     lower: true
+          // });
+          // classes.push(slugifiedValue);
+        }
+      } else {
+        // If heading is not a string, use a safe default class
+        classes.push('column-' + propIndex);
       }
-
   
       return classes;
     },

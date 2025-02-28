@@ -24,26 +24,8 @@
             Preview Product ➚
           </span>
         </a>
-        <button
-          style="
-            background-color: #333;
-            color: white;
-            font-size: 12px;
-            border-radius: 2px;
-            margin: 2px;
-            padding: 2px 6px;
-          "
-          @click="requestPrerender"
-        >
-          Request Pre-render
-        </button>
       </div>
-      <span
-        v-if="prerenderingSuccessful"
-        style="text-align: center; width: 100%; font-size: 12px"
-      >
-        ✅ Product pre-rendered for previews
-      </span>
+
     </div>
 
     <!-- product id -->
@@ -371,6 +353,7 @@
         :currencies="currencies"
         :inflationPercentage="collectionInflationPercentage"
         :setNonINRPrices="setNonINRPrices"
+        :setNonINRBasePrices="setNonINRBasePrices"
         :allBasePrices="doc.allBasePrices"
         @fabricSelectionUpdated="fabricSelectionUpdated"
       />
@@ -527,9 +510,10 @@ const baseDoc = () => ({
 });
 
 import updateProductHelper from "./updateProductHelper.js";
+import CurrencyHelper from "../../../helpers/currencyHelper.js";
 
 export default {
-  mixins: [updateProductHelper],
+  mixins: [updateProductHelper, CurrencyHelper],
   props: {
     model: String,
     collections: Array,
@@ -941,6 +925,42 @@ export default {
       }
       this.$forceUpdate();
     },
+    setNonINRBasePrices(nonINRPricing, INRPrice, inflationPercentage) {
+      /* get all available currencies for fabric */
+      const currencyCodes = Object.keys(nonINRPricing);
+      /* loop through all available currencies */
+      for (const code of currencyCodes) {
+        /* get exchange rate */
+        const foundIndex = this.currencies.findIndex(
+          (cur) => cur.code === code
+        );
+        /* if currency not found  */
+        if (foundIndex === -1) {
+          return;
+        }
+
+        if (INRPrice === undefined) return;
+
+        const currencyDetails = this.currencies[foundIndex];
+        /* if inflation percentage not provide, use default currency inflation */
+        if (inflationPercentage === false) {
+          inflationPercentage = currencyDetails.defaultInflationPercentage;
+          if (typeof inflationPercentage === "String")
+            inflationPercentage = parseInt(inflationPercentage);
+        }
+        /* calculate inflated price */
+        const price =
+          (INRPrice * (1 + inflationPercentage / 100)) /
+          currencyDetails.exchangeRateINR;
+
+        // nonINRPricing[code] = price;
+        // nonINRPricing[code] = currencyDetails.zeroDecimal
+        //   ? parseInt(price)
+        //   : parseFloat(price).toFixed(2);
+        nonINRPricing[code] = parseInt(price);
+      }
+      this.$forceUpdate();
+    },
     populateForm(details) {
       console.log(details, "PRODUCT DETAILS");
       const {
@@ -1112,6 +1132,57 @@ export default {
         padding: 3px 6px;
         border-radius: 4px;
       }
+    }
+  }
+}
+
+.base-prices-section {
+  width: 100%;
+  margin: 20px 0;
+  padding: 15px;
+  background: #f8f8f8;
+  border-radius: 4px;
+
+  h3 {
+    color: #562828;
+    font-family: $font_2_semibold;
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+
+  .base-prices-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .fabric-price,
+  .direct-price {
+    background: white;
+    padding: 12px;
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    min-width: 200px;
+
+    h4 {
+      font-family: $font_2_semibold;
+      font-size: 14px;
+      color: #333;
+      margin: 0 0 8px 0;
+    }
+
+    p {
+      font-family: $font_2;
+      font-size: 13px;
+      color: #666;
+      margin: 4px 0;
+    }
+
+    .currency-prices {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #eee;
     }
   }
 }

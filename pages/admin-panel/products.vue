@@ -412,13 +412,12 @@ export default {
           _id,
           styleId,
           name,
-          //slug,
           colors,
           availabilityType,
           bounipun_collection,
           priceRange,
           order,
-          status,
+          status
         }) => {
           /* resolve category name */
           if (this.collections.length !== 0) {
@@ -460,16 +459,14 @@ export default {
             name,
             colors: `🟢 ${activeColors.length} /  ${colors.length}`,
             preview: fullPreviewImagePath,
-            //slug,
             availabilityType,
-            // bounipun_collection: foundCollection !== undefined ? foundCollection.name : "Third Party",
             bounipun_collection:
               bounipun_collection !== "" && bounipun_collection !== undefined
                 ? bounipun_collection
                 : "N/A",
             priceRangeValue,
             order: order === undefined ? "N/A" : order,
-            status,
+            status
           };
         }
       );
