@@ -43,8 +43,10 @@ export default {
   methods: {
     async fetchPosts() {
       const INSTAGRAM_POSTS =
-        "https://saibbyweb.com/instafeed/actions?username=bounipun&action=getPosts&limit=7";
-      const postsResponse = await this.$axios.get(INSTAGRAM_POSTS);
+        "https://us-central1-nifty-memory-204406.cloudfunctions.net/server/instafeed/actions?username=bounipun&action=getPosts&limit=7";
+      const postsResponse = await this.$axios.get(INSTAGRAM_POSTS, {
+        withCredentials: false
+      });
 
       if (postsResponse.data.payload) {
         // data.posts = [];
