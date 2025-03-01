@@ -286,7 +286,8 @@ export default {
       return this.collectionLocked && customer.authorized === true;
     },
     isEscape() {
-      return this.$route.query.slug.toUpperCase() === "ESCAPE";
+      return false;
+      // return this.$route.query.slug.toUpperCase() === "ESCAPE";
     },
     noFiltersApplied() {
       if (Object.keys(this.rawCriterion.filters).length === 0) return true;

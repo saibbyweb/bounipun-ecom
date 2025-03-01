@@ -38,15 +38,15 @@
     <!-- final footer text -->
     <div class="flex text center">
       <!-- copyright -->
-      <div id="copyright" class="section">
-        <span class="last-footer-item">
-          Copyright © 2022 Bounipun. All Rights Reserved.</span
+      <div id="copyright" style="margin-bottom: 10px;margin-top: 20px;">
+        <span class="last-footer-item" style="color: white; font-size: 12px; margin-bottom: 10px;">
+          Copyright © 2025 Bounipun. All Rights Reserved.</span
         >
       </div>
 
       <!-- crafted in kashmir -->
-      <div id="crafted-in-kashmir" class="section">
-        <span class="last-footer-item flex center"> Crafted with <img src="/icons/light/heart-filled-white.png" />  in Kashmir </span>
+      <div id="crafted-in-kashmir">
+        <span style="color: white; font-size: 12px;" class="last-footer-item flex center"> Crafted with <img src="/icons/light/heart-filled-white.png" />  in Kashmir </span>
       </div>
     </div>
   </div>
