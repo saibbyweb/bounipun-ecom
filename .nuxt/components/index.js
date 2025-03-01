@@ -1,110 +1,110 @@
-export { default as Accordion } from '../../components/Accordion.vue'
-export { default as ActionResponse } from '../../components/ActionResponse.vue'
-export { default as AdminViewBanner } from '../../components/AdminViewBanner.vue'
-export { default as AnimatedButton } from '../../components/AnimatedButton.vue'
-export { default as AnimatedUnlockButton } from '../../components/AnimatedUnlockButton.vue'
-export { default as BounipunFooter } from '../../components/BounipunFooter.vue'
-export { default as BounipunHeader } from '../../components/BounipunHeader.vue'
-export { default as Checkbox } from '../../components/Checkbox.vue'
-export { default as CookieNotice } from '../../components/CookieNotice.vue'
-export { default as CurrencySelector } from '../../components/CurrencySelector.vue'
-export { default as DesktopMenu } from '../../components/DesktopMenu.vue'
-export { default as Dropdown } from '../../components/Dropdown.vue'
-export { default as FAQItem } from '../../components/FAQ-Item.vue'
-export { default as FilterProducts } from '../../components/FilterProducts.vue'
-export { default as FilterSortToggles } from '../../components/FilterSortToggles.vue'
-export { default as InputCredential } from '../../components/InputCredential.vue'
-export { default as InputSlider } from '../../components/InputSlider.vue'
-export { default as InstagramFeed } from '../../components/InstagramFeed.vue'
-export { default as Logo } from '../../components/Logo.vue'
-export { default as OffCanvasMenu } from '../../components/OffCanvasMenu.vue'
-export { default as Pagination } from '../../components/Pagination.vue'
-export { default as Popup } from '../../components/Popup.vue'
-export { default as PopupModals } from '../../components/PopupModals.vue'
-export { default as ProcessPayment } from '../../components/ProcessPayment.vue'
-export { default as RecentlyViewed } from '../../components/RecentlyViewed.vue'
-export { default as RelatedProducts } from '../../components/RelatedProducts.vue'
-export { default as Search } from '../../components/Search.vue'
-export { default as SortProducts } from '../../components/SortProducts.vue'
-export { default as Ticker } from '../../components/Ticker.vue'
-export { default as Toast } from '../../components/Toast.vue'
-export { default as UpdateAddress } from '../../components/UpdateAddress.vue'
-export { default as AddressCard } from '../../components/addressCard.vue'
-export { default as CountrySelect } from '../../components/countrySelect.vue'
-export { default as FeaturedProductCard } from '../../components/featuredProductCard.vue'
-export { default as HomeSectionHeading } from '../../components/homeSectionHeading.vue'
-export { default as ProductCard } from '../../components/productCard.vue'
-export { default as Slideshow } from '../../components/slideshow.vue'
-export { default as UnlockContent } from '../../components/unlockContent.vue'
-export { default as CancelOrder } from '../../components/Purchase/CancelOrder.vue'
-export { default as CartItem } from '../../components/Purchase/CartItem.vue'
-export { default as DeliveryAddressForm } from '../../components/Purchase/DeliveryAddressForm.vue'
-export { default as DeliveryInput } from '../../components/Purchase/DeliveryInput.vue'
-export { default as GiftMessage } from '../../components/Purchase/GiftMessage.vue'
-export { default as OrderTotal } from '../../components/Purchase/OrderTotal.vue'
-export { default as OrderTotalV2 } from '../../components/Purchase/OrderTotalV2.vue'
-export { default as AddNewItem } from '../../components/admin/AddNewItem.vue'
-export { default as AdminHeader } from '../../components/admin/AdminHeader.vue'
-export { default as CancelUpdate } from '../../components/admin/CancelUpdate.vue'
-export { default as List } from '../../components/admin/list.vue'
-export { default as UpdateCRUD } from '../../components/admin/updateCRUD.js'
-export { default as UploadImage } from '../../components/admin/uploadImage.vue'
-export { default as UploadImageV2 } from '../../components/admin/uploadImageV2.vue'
-export { default as CouponSuggestion } from '../../components/cart/couponSuggestion.vue'
-export { default as InvoiceItem } from '../../components/paymentlink/invoiceItem.vue'
-export { default as PayeeDetails } from '../../components/paymentlink/payeeDetails.vue'
-export { default as ColorBlockLayout } from '../../components/lab/ColorBlockLayout.vue'
-export { default as DecideLabBlockLayout } from '../../components/lab/DecideLabBlockLayout.vue'
-export { default as FabricBlockLayout } from '../../components/lab/FabricBlockLayout.vue'
-export { default as LabBlockHeading } from '../../components/lab/LabBlockHeading.vue'
-export { default as VariantBlockLayout } from '../../components/lab/VariantBlockLayout.vue'
-export { default as UpdateAdmin } from '../../components/admin/admins/updateAdmin.vue'
-export { default as UpdateCollectionCategory } from '../../components/admin/collection/UpdateCollectionCategory.vue'
-export { default as UpdateCollection } from '../../components/admin/collection/updateCollection.vue'
-export { default as UpdateCoupon } from '../../components/admin/coupons/UpdateCoupon.vue'
-export { default as UpdateBaseColor } from '../../components/admin/colors/UpdateBaseColor.vue'
-export { default as UpdateColor } from '../../components/admin/colors/UpdateColor.vue'
-export { default as UpdateColorCategory } from '../../components/admin/colors/UpdateColorCategory.vue'
-export { default as ColorPicker } from '../../components/admin/colors/colorPicker.vue'
-export { default as UpdateCurrency } from '../../components/admin/currencies/UpdateCurrency.vue'
-export { default as UpdateFabric } from '../../components/admin/fabrics/UpdateFabric.vue'
-export { default as UpdateFAQ } from '../../components/admin/faq/updateFAQ.vue'
-export { default as UpdateHomepage } from '../../components/admin/homepage/updateHomepage.vue'
-export { default as UpdateHomepageLayout } from '../../components/admin/homepageLayouts/UpdateHomepageLayout.vue'
-export { default as InputBox } from '../../components/admin/input/InputBox.vue'
-export { default as CBoxes } from '../../components/admin/input/cBoxes.vue'
-export { default as CheckBoxes } from '../../components/admin/input/checkBoxes.vue'
-export { default as SelectBox } from '../../components/admin/input/selectBox.vue'
-export { default as TextBox } from '../../components/admin/input/textBox.vue'
-export { default as Toggle } from '../../components/admin/input/toggle.vue'
-export { default as ColorBlock } from '../../components/admin/lab/ColorBlock.vue'
-export { default as DecideLabBlockDetail } from '../../components/admin/lab/DecideLabBlockDetail.vue'
-export { default as FabricBlock } from '../../components/admin/lab/FabricBlock.vue'
-export { default as HeroBlockDetail } from '../../components/admin/lab/HeroBlockDetail.vue'
-export { default as LabColorBoxes } from '../../components/admin/lab/LabColorBoxes.vue'
-export { default as UpdateLab } from '../../components/admin/lab/UpdateLab.vue'
-export { default as VariantBlock } from '../../components/admin/lab/VariantBlock.vue'
-export { default as UpdateMessage } from '../../components/admin/messages/UpdateMessage.vue'
-export { default as UpdateOrder } from '../../components/admin/orders/UpdateOrder.vue'
-export { default as OrderItem } from '../../components/admin/orders/orderItem.vue'
-export { default as UpdatePaymentLink } from '../../components/admin/paymentlinks/UpdatePaymentLink.vue'
-export { default as PaymentLinkItem } from '../../components/admin/paymentlinks/paymentLinkItem.vue'
-export { default as UpdatePopup } from '../../components/admin/popup/UpdatePopup.vue'
-export { default as ProductListCollectionFilter } from '../../components/admin/productList/ProductListCollectionFilter.vue'
-export { default as UpdateProductList } from '../../components/admin/productList/UpdateProductList.vue'
-export { default as FabricSelector } from '../../components/admin/products/FabricSelector.vue'
-export { default as OverrideVariantData } from '../../components/admin/products/OverrideVariantData.vue'
-export { default as UpdateProduct } from '../../components/admin/products/UpdateProduct.vue'
-export { default as VariantsMetaData } from '../../components/admin/products/VariantsMetaData.vue'
-export { default as ChooseFabric } from '../../components/admin/products/chooseFabric.vue'
-export { default as UpdateProductHelper } from '../../components/admin/products/updateProductHelper.js'
-export { default as UpdateSale } from '../../components/admin/sales/UpdateSale.vue'
-export { default as UpdateTicker } from '../../components/admin/ticker/updateTicker.vue'
-export { default as UpdateUnlockCode } from '../../components/admin/unlock/UpdateUnlockCode.vue'
-export { default as UpdateUser } from '../../components/admin/users/UpdateUser.vue'
-export { default as UserCartDetails } from '../../components/admin/users/UserCartDetails.vue'
-export { default as UpdateVariant } from '../../components/admin/variants/UpdateVariant.vue'
-export { default as UpdateVariantCategory } from '../../components/admin/variants/UpdateVariantCategory.vue'
+export const Accordion = () => import('../../components/Accordion.vue' /* webpackChunkName: "components/accordion" */).then(c => wrapFunctional(c.default || c))
+export const ActionResponse = () => import('../../components/ActionResponse.vue' /* webpackChunkName: "components/action-response" */).then(c => wrapFunctional(c.default || c))
+export const AdminViewBanner = () => import('../../components/AdminViewBanner.vue' /* webpackChunkName: "components/admin-view-banner" */).then(c => wrapFunctional(c.default || c))
+export const AnimatedButton = () => import('../../components/AnimatedButton.vue' /* webpackChunkName: "components/animated-button" */).then(c => wrapFunctional(c.default || c))
+export const AnimatedUnlockButton = () => import('../../components/AnimatedUnlockButton.vue' /* webpackChunkName: "components/animated-unlock-button" */).then(c => wrapFunctional(c.default || c))
+export const BounipunFooter = () => import('../../components/BounipunFooter.vue' /* webpackChunkName: "components/bounipun-footer" */).then(c => wrapFunctional(c.default || c))
+export const BounipunHeader = () => import('../../components/BounipunHeader.vue' /* webpackChunkName: "components/bounipun-header" */).then(c => wrapFunctional(c.default || c))
+export const Checkbox = () => import('../../components/Checkbox.vue' /* webpackChunkName: "components/checkbox" */).then(c => wrapFunctional(c.default || c))
+export const CookieNotice = () => import('../../components/CookieNotice.vue' /* webpackChunkName: "components/cookie-notice" */).then(c => wrapFunctional(c.default || c))
+export const CurrencySelector = () => import('../../components/CurrencySelector.vue' /* webpackChunkName: "components/currency-selector" */).then(c => wrapFunctional(c.default || c))
+export const DesktopMenu = () => import('../../components/DesktopMenu.vue' /* webpackChunkName: "components/desktop-menu" */).then(c => wrapFunctional(c.default || c))
+export const Dropdown = () => import('../../components/Dropdown.vue' /* webpackChunkName: "components/dropdown" */).then(c => wrapFunctional(c.default || c))
+export const FAQItem = () => import('../../components/FAQ-Item.vue' /* webpackChunkName: "components/f-a-q-item" */).then(c => wrapFunctional(c.default || c))
+export const FilterProducts = () => import('../../components/FilterProducts.vue' /* webpackChunkName: "components/filter-products" */).then(c => wrapFunctional(c.default || c))
+export const FilterSortToggles = () => import('../../components/FilterSortToggles.vue' /* webpackChunkName: "components/filter-sort-toggles" */).then(c => wrapFunctional(c.default || c))
+export const InputCredential = () => import('../../components/InputCredential.vue' /* webpackChunkName: "components/input-credential" */).then(c => wrapFunctional(c.default || c))
+export const InputSlider = () => import('../../components/InputSlider.vue' /* webpackChunkName: "components/input-slider" */).then(c => wrapFunctional(c.default || c))
+export const InstagramFeed = () => import('../../components/InstagramFeed.vue' /* webpackChunkName: "components/instagram-feed" */).then(c => wrapFunctional(c.default || c))
+export const Logo = () => import('../../components/Logo.vue' /* webpackChunkName: "components/logo" */).then(c => wrapFunctional(c.default || c))
+export const OffCanvasMenu = () => import('../../components/OffCanvasMenu.vue' /* webpackChunkName: "components/off-canvas-menu" */).then(c => wrapFunctional(c.default || c))
+export const Pagination = () => import('../../components/Pagination.vue' /* webpackChunkName: "components/pagination" */).then(c => wrapFunctional(c.default || c))
+export const Popup = () => import('../../components/Popup.vue' /* webpackChunkName: "components/popup" */).then(c => wrapFunctional(c.default || c))
+export const PopupModals = () => import('../../components/PopupModals.vue' /* webpackChunkName: "components/popup-modals" */).then(c => wrapFunctional(c.default || c))
+export const ProcessPayment = () => import('../../components/ProcessPayment.vue' /* webpackChunkName: "components/process-payment" */).then(c => wrapFunctional(c.default || c))
+export const RecentlyViewed = () => import('../../components/RecentlyViewed.vue' /* webpackChunkName: "components/recently-viewed" */).then(c => wrapFunctional(c.default || c))
+export const RelatedProducts = () => import('../../components/RelatedProducts.vue' /* webpackChunkName: "components/related-products" */).then(c => wrapFunctional(c.default || c))
+export const Search = () => import('../../components/Search.vue' /* webpackChunkName: "components/search" */).then(c => wrapFunctional(c.default || c))
+export const SortProducts = () => import('../../components/SortProducts.vue' /* webpackChunkName: "components/sort-products" */).then(c => wrapFunctional(c.default || c))
+export const Ticker = () => import('../../components/Ticker.vue' /* webpackChunkName: "components/ticker" */).then(c => wrapFunctional(c.default || c))
+export const Toast = () => import('../../components/Toast.vue' /* webpackChunkName: "components/toast" */).then(c => wrapFunctional(c.default || c))
+export const UpdateAddress = () => import('../../components/UpdateAddress.vue' /* webpackChunkName: "components/update-address" */).then(c => wrapFunctional(c.default || c))
+export const AddressCard = () => import('../../components/addressCard.vue' /* webpackChunkName: "components/address-card" */).then(c => wrapFunctional(c.default || c))
+export const CountrySelect = () => import('../../components/countrySelect.vue' /* webpackChunkName: "components/country-select" */).then(c => wrapFunctional(c.default || c))
+export const FeaturedProductCard = () => import('../../components/featuredProductCard.vue' /* webpackChunkName: "components/featured-product-card" */).then(c => wrapFunctional(c.default || c))
+export const HomeSectionHeading = () => import('../../components/homeSectionHeading.vue' /* webpackChunkName: "components/home-section-heading" */).then(c => wrapFunctional(c.default || c))
+export const ProductCard = () => import('../../components/productCard.vue' /* webpackChunkName: "components/product-card" */).then(c => wrapFunctional(c.default || c))
+export const Slideshow = () => import('../../components/slideshow.vue' /* webpackChunkName: "components/slideshow" */).then(c => wrapFunctional(c.default || c))
+export const UnlockContent = () => import('../../components/unlockContent.vue' /* webpackChunkName: "components/unlock-content" */).then(c => wrapFunctional(c.default || c))
+export const CancelOrder = () => import('../../components/Purchase/CancelOrder.vue' /* webpackChunkName: "components/cancel-order" */).then(c => wrapFunctional(c.default || c))
+export const CartItem = () => import('../../components/Purchase/CartItem.vue' /* webpackChunkName: "components/cart-item" */).then(c => wrapFunctional(c.default || c))
+export const DeliveryAddressForm = () => import('../../components/Purchase/DeliveryAddressForm.vue' /* webpackChunkName: "components/delivery-address-form" */).then(c => wrapFunctional(c.default || c))
+export const DeliveryInput = () => import('../../components/Purchase/DeliveryInput.vue' /* webpackChunkName: "components/delivery-input" */).then(c => wrapFunctional(c.default || c))
+export const GiftMessage = () => import('../../components/Purchase/GiftMessage.vue' /* webpackChunkName: "components/gift-message" */).then(c => wrapFunctional(c.default || c))
+export const OrderTotal = () => import('../../components/Purchase/OrderTotal.vue' /* webpackChunkName: "components/order-total" */).then(c => wrapFunctional(c.default || c))
+export const OrderTotalV2 = () => import('../../components/Purchase/OrderTotalV2.vue' /* webpackChunkName: "components/order-total-v2" */).then(c => wrapFunctional(c.default || c))
+export const CouponSuggestion = () => import('../../components/cart/couponSuggestion.vue' /* webpackChunkName: "components/coupon-suggestion" */).then(c => wrapFunctional(c.default || c))
+export const ColorBlockLayout = () => import('../../components/lab/ColorBlockLayout.vue' /* webpackChunkName: "components/color-block-layout" */).then(c => wrapFunctional(c.default || c))
+export const DecideLabBlockLayout = () => import('../../components/lab/DecideLabBlockLayout.vue' /* webpackChunkName: "components/decide-lab-block-layout" */).then(c => wrapFunctional(c.default || c))
+export const FabricBlockLayout = () => import('../../components/lab/FabricBlockLayout.vue' /* webpackChunkName: "components/fabric-block-layout" */).then(c => wrapFunctional(c.default || c))
+export const LabBlockHeading = () => import('../../components/lab/LabBlockHeading.vue' /* webpackChunkName: "components/lab-block-heading" */).then(c => wrapFunctional(c.default || c))
+export const VariantBlockLayout = () => import('../../components/lab/VariantBlockLayout.vue' /* webpackChunkName: "components/variant-block-layout" */).then(c => wrapFunctional(c.default || c))
+export const InvoiceItem = () => import('../../components/paymentlink/invoiceItem.vue' /* webpackChunkName: "components/invoice-item" */).then(c => wrapFunctional(c.default || c))
+export const PayeeDetails = () => import('../../components/paymentlink/payeeDetails.vue' /* webpackChunkName: "components/payee-details" */).then(c => wrapFunctional(c.default || c))
+export const AddNewItem = () => import('../../components/admin/AddNewItem.vue' /* webpackChunkName: "components/add-new-item" */).then(c => wrapFunctional(c.default || c))
+export const AdminHeader = () => import('../../components/admin/AdminHeader.vue' /* webpackChunkName: "components/admin-header" */).then(c => wrapFunctional(c.default || c))
+export const CancelUpdate = () => import('../../components/admin/CancelUpdate.vue' /* webpackChunkName: "components/cancel-update" */).then(c => wrapFunctional(c.default || c))
+export const List = () => import('../../components/admin/list.vue' /* webpackChunkName: "components/list" */).then(c => wrapFunctional(c.default || c))
+export const UpdateCRUD = () => import('../../components/admin/updateCRUD.js' /* webpackChunkName: "components/update-c-r-u-d" */).then(c => wrapFunctional(c.default || c))
+export const UploadImage = () => import('../../components/admin/uploadImage.vue' /* webpackChunkName: "components/upload-image" */).then(c => wrapFunctional(c.default || c))
+export const UploadImageV2 = () => import('../../components/admin/uploadImageV2.vue' /* webpackChunkName: "components/upload-image-v2" */).then(c => wrapFunctional(c.default || c))
+export const UpdateAdmin = () => import('../../components/admin/admins/updateAdmin.vue' /* webpackChunkName: "components/update-admin" */).then(c => wrapFunctional(c.default || c))
+export const UpdateBaseColor = () => import('../../components/admin/colors/UpdateBaseColor.vue' /* webpackChunkName: "components/update-base-color" */).then(c => wrapFunctional(c.default || c))
+export const UpdateColor = () => import('../../components/admin/colors/UpdateColor.vue' /* webpackChunkName: "components/update-color" */).then(c => wrapFunctional(c.default || c))
+export const UpdateColorCategory = () => import('../../components/admin/colors/UpdateColorCategory.vue' /* webpackChunkName: "components/update-color-category" */).then(c => wrapFunctional(c.default || c))
+export const ColorPicker = () => import('../../components/admin/colors/colorPicker.vue' /* webpackChunkName: "components/color-picker" */).then(c => wrapFunctional(c.default || c))
+export const UpdateFabric = () => import('../../components/admin/fabrics/UpdateFabric.vue' /* webpackChunkName: "components/update-fabric" */).then(c => wrapFunctional(c.default || c))
+export const UpdateCollectionCategory = () => import('../../components/admin/collection/UpdateCollectionCategory.vue' /* webpackChunkName: "components/update-collection-category" */).then(c => wrapFunctional(c.default || c))
+export const UpdateCollection = () => import('../../components/admin/collection/updateCollection.vue' /* webpackChunkName: "components/update-collection" */).then(c => wrapFunctional(c.default || c))
+export const UpdateFAQ = () => import('../../components/admin/faq/updateFAQ.vue' /* webpackChunkName: "components/update-f-a-q" */).then(c => wrapFunctional(c.default || c))
+export const UpdateCurrency = () => import('../../components/admin/currencies/UpdateCurrency.vue' /* webpackChunkName: "components/update-currency" */).then(c => wrapFunctional(c.default || c))
+export const UpdateHomepageLayout = () => import('../../components/admin/homepageLayouts/UpdateHomepageLayout.vue' /* webpackChunkName: "components/update-homepage-layout" */).then(c => wrapFunctional(c.default || c))
+export const UpdateHomepage = () => import('../../components/admin/homepage/updateHomepage.vue' /* webpackChunkName: "components/update-homepage" */).then(c => wrapFunctional(c.default || c))
+export const UpdateCoupon = () => import('../../components/admin/coupons/UpdateCoupon.vue' /* webpackChunkName: "components/update-coupon" */).then(c => wrapFunctional(c.default || c))
+export const ColorBlock = () => import('../../components/admin/lab/ColorBlock.vue' /* webpackChunkName: "components/color-block" */).then(c => wrapFunctional(c.default || c))
+export const DecideLabBlockDetail = () => import('../../components/admin/lab/DecideLabBlockDetail.vue' /* webpackChunkName: "components/decide-lab-block-detail" */).then(c => wrapFunctional(c.default || c))
+export const FabricBlock = () => import('../../components/admin/lab/FabricBlock.vue' /* webpackChunkName: "components/fabric-block" */).then(c => wrapFunctional(c.default || c))
+export const HeroBlockDetail = () => import('../../components/admin/lab/HeroBlockDetail.vue' /* webpackChunkName: "components/hero-block-detail" */).then(c => wrapFunctional(c.default || c))
+export const LabColorBoxes = () => import('../../components/admin/lab/LabColorBoxes.vue' /* webpackChunkName: "components/lab-color-boxes" */).then(c => wrapFunctional(c.default || c))
+export const UpdateLab = () => import('../../components/admin/lab/UpdateLab.vue' /* webpackChunkName: "components/update-lab" */).then(c => wrapFunctional(c.default || c))
+export const VariantBlock = () => import('../../components/admin/lab/VariantBlock.vue' /* webpackChunkName: "components/variant-block" */).then(c => wrapFunctional(c.default || c))
+export const InputBox = () => import('../../components/admin/input/InputBox.vue' /* webpackChunkName: "components/input-box" */).then(c => wrapFunctional(c.default || c))
+export const CBoxes = () => import('../../components/admin/input/cBoxes.vue' /* webpackChunkName: "components/c-boxes" */).then(c => wrapFunctional(c.default || c))
+export const CheckBoxes = () => import('../../components/admin/input/checkBoxes.vue' /* webpackChunkName: "components/check-boxes" */).then(c => wrapFunctional(c.default || c))
+export const SelectBox = () => import('../../components/admin/input/selectBox.vue' /* webpackChunkName: "components/select-box" */).then(c => wrapFunctional(c.default || c))
+export const TextBox = () => import('../../components/admin/input/textBox.vue' /* webpackChunkName: "components/text-box" */).then(c => wrapFunctional(c.default || c))
+export const Toggle = () => import('../../components/admin/input/toggle.vue' /* webpackChunkName: "components/toggle" */).then(c => wrapFunctional(c.default || c))
+export const UpdateMessage = () => import('../../components/admin/messages/UpdateMessage.vue' /* webpackChunkName: "components/update-message" */).then(c => wrapFunctional(c.default || c))
+export const UpdateOrder = () => import('../../components/admin/orders/UpdateOrder.vue' /* webpackChunkName: "components/update-order" */).then(c => wrapFunctional(c.default || c))
+export const OrderItem = () => import('../../components/admin/orders/orderItem.vue' /* webpackChunkName: "components/order-item" */).then(c => wrapFunctional(c.default || c))
+export const UpdatePaymentLink = () => import('../../components/admin/paymentlinks/UpdatePaymentLink.vue' /* webpackChunkName: "components/update-payment-link" */).then(c => wrapFunctional(c.default || c))
+export const PaymentLinkItem = () => import('../../components/admin/paymentlinks/paymentLinkItem.vue' /* webpackChunkName: "components/payment-link-item" */).then(c => wrapFunctional(c.default || c))
+export const UpdatePopup = () => import('../../components/admin/popup/UpdatePopup.vue' /* webpackChunkName: "components/update-popup" */).then(c => wrapFunctional(c.default || c))
+export const ProductListCollectionFilter = () => import('../../components/admin/productList/ProductListCollectionFilter.vue' /* webpackChunkName: "components/product-list-collection-filter" */).then(c => wrapFunctional(c.default || c))
+export const UpdateProductList = () => import('../../components/admin/productList/UpdateProductList.vue' /* webpackChunkName: "components/update-product-list" */).then(c => wrapFunctional(c.default || c))
+export const FabricSelector = () => import('../../components/admin/products/FabricSelector.vue' /* webpackChunkName: "components/fabric-selector" */).then(c => wrapFunctional(c.default || c))
+export const OverrideVariantData = () => import('../../components/admin/products/OverrideVariantData.vue' /* webpackChunkName: "components/override-variant-data" */).then(c => wrapFunctional(c.default || c))
+export const UpdateProduct = () => import('../../components/admin/products/UpdateProduct.vue' /* webpackChunkName: "components/update-product" */).then(c => wrapFunctional(c.default || c))
+export const VariantsMetaData = () => import('../../components/admin/products/VariantsMetaData.vue' /* webpackChunkName: "components/variants-meta-data" */).then(c => wrapFunctional(c.default || c))
+export const ChooseFabric = () => import('../../components/admin/products/chooseFabric.vue' /* webpackChunkName: "components/choose-fabric" */).then(c => wrapFunctional(c.default || c))
+export const UpdateProductHelper = () => import('../../components/admin/products/updateProductHelper.js' /* webpackChunkName: "components/update-product-helper" */).then(c => wrapFunctional(c.default || c))
+export const UpdateSale = () => import('../../components/admin/sales/UpdateSale.vue' /* webpackChunkName: "components/update-sale" */).then(c => wrapFunctional(c.default || c))
+export const UpdateTicker = () => import('../../components/admin/ticker/updateTicker.vue' /* webpackChunkName: "components/update-ticker" */).then(c => wrapFunctional(c.default || c))
+export const UpdateUnlockCode = () => import('../../components/admin/unlock/UpdateUnlockCode.vue' /* webpackChunkName: "components/update-unlock-code" */).then(c => wrapFunctional(c.default || c))
+export const UpdateUser = () => import('../../components/admin/users/UpdateUser.vue' /* webpackChunkName: "components/update-user" */).then(c => wrapFunctional(c.default || c))
+export const UserCartDetails = () => import('../../components/admin/users/UserCartDetails.vue' /* webpackChunkName: "components/user-cart-details" */).then(c => wrapFunctional(c.default || c))
+export const UpdateVariant = () => import('../../components/admin/variants/UpdateVariant.vue' /* webpackChunkName: "components/update-variant" */).then(c => wrapFunctional(c.default || c))
+export const UpdateVariantCategory = () => import('../../components/admin/variants/UpdateVariantCategory.vue' /* webpackChunkName: "components/update-variant-category" */).then(c => wrapFunctional(c.default || c))
 
 // nuxt/nuxt.js#8607
 function wrapFunctional(options) {
