@@ -399,7 +399,7 @@ export default {
 
       /* if active color provided */
       if (this.activeColorIndex !== -1) {
-        const mImages = this.product.colors[this.activeColorIndex].images;
+        const mImages = this.product.colors[this.activeColorIndex]?.images || [];
         /* if no images, uploaded */
         if (mImages.length === 0) {
           return ["/default-image.png"];

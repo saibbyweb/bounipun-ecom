@@ -1,7 +1,7 @@
 <template>
   <!-- offcanvas filters -->
   <div class="offcanvas-filters shadow" :class="{ visible: filtersOpen }">
-    <div style="position: relative;">
+    <div style="position: relative">
       <br />
       <br />
       <!-- header -->
@@ -9,7 +9,7 @@
         <h3>Filters</h3>
 
         <!-- clear all applied filters -->
-        <span style="font-size:12px; cursor:pointer;" @click="clearAllFilters"
+        <span style="font-size: 12px; cursor: pointer" @click="clearAllFilters"
           >Clear Selection</span
         >
 
@@ -23,7 +23,7 @@
       <br />
       <div
         class="all-options"
-        style="height:80vh; overflow-y:scroll; margin-top:4vh;"
+        style="height: 80vh; overflow-y: scroll; margin-top: 4vh"
       >
         <!-- product type options -->
         <!-- <Accordion heading="Product Type" :expanded="true">
@@ -36,7 +36,11 @@
             </Accordion> -->
 
         <!-- availability type options -->
-        <Accordion v-if="!isEscape" heading="Availability" :expanded="true">
+        <Accordion
+          v-if="!isEscape && showAccordions"
+          heading="Availability"
+          :expanded="accordionStates.availability"
+        >
           <div
             class="option"
             v-for="(type, index) in filterData.availabilityTypes"
@@ -55,25 +59,48 @@
         </Accordion>
 
         <!-- variant options -->
-        <Accordion v-if="!isEscape" heading="Variants" :expanded="true">
+        <Accordion
+          v-if="!isEscape && showAccordions"
+          heading="Variants"
+          :expanded="accordionStates.variants"
+        >
           <div
-            class="option"
-            v-for="(variant, index) in filterData.variants"
-            :key="index"
+            v-for="(categoryGroup, categoryName) in groupedVariants"
+            :key="categoryName"
+            class="variant-category"
           >
-            <label class="label">
+            <div class="category-header">
               <input
                 type="checkbox"
-                name="variants"
-                :value="variant.value"
-                v-model="variant.checked"
+                :checked="isCategoryChecked(categoryName)"
+                @change="toggleCategory(categoryName)"
+                class="category-checkbox"
               />
-              {{ variant.name }}</label
+              <h4 class="category-heading">{{ categoryName }}</h4>
+            </div>
+            <div
+              class="option"
+              v-for="variant in categoryGroup"
+              :key="variant._id"
             >
+              <label class="label">
+                <input
+                  type="checkbox"
+                  name="variants"
+                  :value="variant.value"
+                  v-model="variant.checked"
+                />
+                {{ variant.name }}</label
+              >
+            </div>
           </div>
         </Accordion>
         <!-- collection options -->
-        <Accordion heading="Collection" :expanded="true" v-if="!collectionView">
+        <Accordion
+          heading="Collection"
+          :expanded="accordionStates.collection"
+          v-if="!collectionView && showAccordions"
+        >
           <div
             class="option"
             v-for="(collection, index) in filterData.collections"
@@ -86,13 +113,18 @@
                 :value="collection.value"
                 v-model="collection.checked"
               />
-               {{ collection.lock ? "" : "" }} {{ collection.name.toLowerCase() }}</label
+              {{ collection.lock ? "" : "" }}
+              {{ collection.name.toLowerCase() }}</label
             >
           </div>
         </Accordion>
 
         <!-- base color options -->
-        <Accordion heading="Base Color" :expanded="true">
+        <Accordion 
+          v-if="showAccordions"
+          heading="Base Color" 
+          :expanded="accordionStates.baseColor"
+        >
           <div class="flex wrap colors">
             <div
               class="option flex col center"
@@ -107,7 +139,7 @@
               <label class="label flex start center">
                 {{ color.name.toLowerCase() }}
               </label>
-              
+
               <input
                 class="color-check"
                 type="checkbox"
@@ -120,7 +152,11 @@
         </Accordion>
 
         <!-- TODO: re-enable after verifying USD specific results price range options -->
-        <Accordion heading="Price Range" :expanded="true" v-if="false">
+        <Accordion
+          v-if="showAccordions && false"
+          heading="Price Range"
+          :expanded="accordionStates.priceRange"
+        >
           <div
             class="option"
             v-for="(range, index) in filterData.priceRanges"
@@ -147,38 +183,39 @@ export default {
   props: {
     filtersOpen: {
       type: Boolean,
-      default: false
+      default: false,
     },
     collectionView: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
     isEscape: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
+      showAccordions: true,
       filterData: {
         types: [
           {
             name: "Under Bounipun",
             value: "under-bounipun",
-            checked: false
+            checked: false,
           },
           {
             name: "Third Party",
             value: "third-party",
-            checked: false
-          }
+            checked: false,
+          },
         ],
         availabilityTypes: [
           {
             name: "Ready To Ship",
             value: "ready-to-ship",
-            checkd: false
-          }
+            checkd: false,
+          },
           // {
           //   name: "Made to Order",
           //   value: "made-to-order",
@@ -188,34 +225,41 @@ export default {
         priceRanges: [
           {
             name: "Under ₹ 9999",
-            value: "<9999"
+            value: "<9999",
           },
           {
             name: "Under ₹ 14999",
-            value: "<14999"
+            value: "<14999",
           },
           {
             name: "Under ₹ 19999",
-            value: "<19999"
+            value: "<19999",
           },
           {
             name: "Under ₹ 24999",
-            value: "<24999"
+            value: "<24999",
           },
           {
             name: "Under ₹ 29999",
-            value: "<29999"
+            value: "<29999",
           },
           {
             name: "Under ₹ 34999",
-            value: "<34999"
-          }
+            value: "<34999",
+          },
         ],
         selectedPriceRange: "",
         collections: [],
         variants: [],
-        baseColors: []
-      }
+        baseColors: [],
+      },
+      accordionStates: {
+        availability: true,
+        variants: true,
+        collection: true,
+        baseColor: true,
+        priceRange: true,
+      },
     };
   },
   mounted() {
@@ -227,11 +271,22 @@ export default {
         this.$emit("updated", newValue);
       },
       deep: true,
-      immediate: true
+      immediate: true,
     },
     $route() {
       this.clearAllFilters();
-    }
+    },
+    filtersOpen(newVal) {
+      if (newVal) {
+        // Remove all accordions
+        this.showAccordions = false;
+
+        // Re-render all accordions after 500ms
+        setTimeout(() => {
+          this.showAccordions = true;
+        }, 300);
+      }
+    },
   },
   methods: {
     /* clear all filters */
@@ -241,14 +296,15 @@ export default {
         "availabilityTypes",
         "collections",
         "variants",
-        "baseColors"
+        "baseColors",
       ];
-      filterKeys.forEach(filterKey => {
-        this.filterData[filterKey].forEach(option => (option.checked = false));
+      filterKeys.forEach((filterKey) => {
+        this.filterData[filterKey].forEach(
+          (option) => (option.checked = false)
+        );
       });
       /* reset selected price range */
       this.filterData.selectedPriceRange = "";
-      // this.clearSort();
       this.$emit("clearSort");
     },
     async fetchFilterData() {
@@ -265,28 +321,30 @@ export default {
         return;
       }
 
-      this.filterData.collections = response.collections.map(collection => ({
+      this.filterData.collections = response.collections.map((collection) => ({
         ...collection,
         value: collection._id,
-        checked: false
+        checked: false,
       }));
 
       /* set base colors (for product cards)*/
       this.baseColors = response.baseColors;
 
-      this.filterData.baseColors = response.baseColors.map(color => ({
+      this.filterData.baseColors = response.baseColors.map((color) => ({
         ...color,
         value: color.name,
-        checked: false
+        checked: false,
       }));
-      this.filterData.variants = response.variants.map(variant => ({
+      this.filterData.variants = response.variants.map((variant) => ({
         ...variant,
         value: variant._id,
-        checked: false
+        checked: false,
       }));
 
+      console.log(JSON.stringify(this.filterData.variants), "-VARIANTS-");
+
       /* TODO: temporary fix: filter out decor variants */
-      this.filterData.variants = this.filterData.variants.filter(variant => ['SQUARE', 'SHAWL', 'STOLE'].includes(variant.name.toUpperCase()) );
+      // this.filterData.variants = this.filterData.variants.filter(variant => ['SQUARE', 'SHAWL', 'STOLE'].includes(variant.name.toUpperCase()) );
 
       // this.filterData.variants.forEach(f => {
       //   const name = f.name.toUpperCase();
@@ -297,9 +355,62 @@ export default {
       //   return f
       // })
 
-      this.$emit('dataFetched');
-    }
-  }
+      this.$emit("dataFetched");
+    },
+    groupedVariants() {
+      const grouped = {};
+      this.filterData.variants.forEach((variant) => {
+        const categoryName = variant.category?.name || "Other";
+        if (!grouped[categoryName]) {
+          grouped[categoryName] = [];
+        }
+        grouped[categoryName].push(variant);
+      });
+
+      // Sort variants within each category by name
+      Object.keys(grouped).forEach((category) => {
+        grouped[category].sort((a, b) => a.name.localeCompare(b.name));
+      });
+
+      return grouped;
+    },
+    isCategoryChecked(categoryName) {
+      const categoryGroup = this.groupedVariants[categoryName];
+      return (
+        categoryGroup &&
+        categoryGroup.length > 0 &&
+        categoryGroup.every((variant) => variant.checked)
+      );
+    },
+    toggleCategory(categoryName) {
+      const categoryGroup = this.groupedVariants[categoryName];
+      const newState = !this.isCategoryChecked(categoryName);
+      if (categoryGroup) {
+        categoryGroup.forEach((variant) => {
+          variant.checked = newState;
+        });
+      }
+    },
+  },
+  computed: {
+    groupedVariants() {
+      const grouped = {};
+      this.filterData.variants.forEach((variant) => {
+        const categoryName = variant.category?.name || "Other";
+        if (!grouped[categoryName]) {
+          grouped[categoryName] = [];
+        }
+        grouped[categoryName].push(variant);
+      });
+
+      // Sort variants within each category by name
+      Object.keys(grouped).forEach((category) => {
+        grouped[category].sort((a, b) => a.name.localeCompare(b.name));
+      });
+
+      return grouped;
+    },
+  },
 };
 </script>
 
@@ -387,6 +498,44 @@ export default {
 
     @media (max-width: 768px) {
       width: 6%;
+    }
+  }
+}
+
+.variant-category {
+  margin-bottom: 15px;
+
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+
+    .category-checkbox {
+      width: 14px;
+      height: 14px;
+      cursor: pointer;
+    }
+  }
+
+  .category-heading {
+    font-family: $font_2_bold;
+    color: #333333;
+    font-size: 11px;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .option {
+    padding-left: 22px; // This matches the width of checkbox (14px) + gap (8px)
+    margin-top: 8px;
+
+    .label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
   }
 }

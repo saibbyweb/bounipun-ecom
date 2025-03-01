@@ -206,7 +206,7 @@ router.get("/getSearchFilters", async (req, res) => {
       .find({ status: true })
       .select("name image mainTextBlock lock slug softLock lockedImage lockedImages lockedText")
   );
-  dataFetch.push(db.model("variants").find({ status: true }).select("name"));
+  dataFetch.push(db.model("variants").find({ status: true }).populate("category").select("name category"))
   dataFetch.push(
     db
       .model("base_colors")
