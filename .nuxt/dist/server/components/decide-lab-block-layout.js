@@ -238,7 +238,7 @@ module.exports = ___CSS_LOADER_EXPORT___;
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(350);
+var content = __webpack_require__(349);
 if(content.__esModule) content = content.default;
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
@@ -344,7 +344,7 @@ module.exports = ___CSS_LOADER_EXPORT___;
 
 /***/ }),
 
-/***/ 327:
+/***/ 326:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -454,7 +454,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 
 /***/ }),
 
-/***/ 328:
+/***/ 327:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -533,7 +533,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 
 /***/ }),
 
-/***/ 329:
+/***/ 328:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -606,7 +606,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 
 /***/ }),
 
-/***/ 330:
+/***/ 329:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -667,7 +667,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 
 /***/ }),
 
-/***/ 331:
+/***/ 330:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -728,7 +728,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 
 /***/ }),
 
-/***/ 349:
+/***/ 348:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -740,7 +740,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 350:
+/***/ 349:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Imports
@@ -775,7 +775,7 @@ module.exports = ___CSS_LOADER_EXPORT___;
 
 /***/ }),
 
-/***/ 446:
+/***/ 444:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -790,13 +790,13 @@ var staticRenderFns = []
 // CONCATENATED MODULE: ./components/lab/DecideLabBlockLayout.vue?vue&type=template&id=08a504a0&
 
 // EXTERNAL MODULE: ./components/lab/FabricBlockLayout.vue + 4 modules
-var FabricBlockLayout = __webpack_require__(327);
+var FabricBlockLayout = __webpack_require__(326);
 
 // EXTERNAL MODULE: ./components/lab/ColorBlockLayout.vue + 4 modules
-var ColorBlockLayout = __webpack_require__(328);
+var ColorBlockLayout = __webpack_require__(327);
 
 // EXTERNAL MODULE: ./components/lab/VariantBlockLayout.vue + 4 modules
-var VariantBlockLayout = __webpack_require__(329);
+var VariantBlockLayout = __webpack_require__(328);
 
 // CONCATENATED MODULE: ./node_modules/babel-loader/lib??ref--2-0!./node_modules/@nuxt/components/dist/loader.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./components/lab/DecideLabBlockLayout.vue?vue&type=script&lang=js&
 //
@@ -858,7 +858,7 @@ var componentNormalizer = __webpack_require__(1);
 
 function injectStyles (context) {
   
-  var style0 = __webpack_require__(349)
+  var style0 = __webpack_require__(348)
 if (style0.__inject__) style0.__inject__(context)
 
 }
@@ -879,7 +879,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 /* harmony default export */ var DecideLabBlockLayout = __webpack_exports__["default"] = (component.exports);
 
 /* nuxt-component-imports */
-installComponents(component, {LabBlockHeading: __webpack_require__(330).default,LabColorBoxes: __webpack_require__(331).default})
+installComponents(component, {LabBlockHeading: __webpack_require__(329).default,LabColorBoxes: __webpack_require__(330).default})
 
 
 /***/ })

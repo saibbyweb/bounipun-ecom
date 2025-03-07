@@ -144,7 +144,7 @@
       </div>
     </div>
 
-    <InstagramFeed />
+    <!-- <InstagramFeed /> -->
 
     <div class="press-and-quote flex col">
       <!-- quote -->

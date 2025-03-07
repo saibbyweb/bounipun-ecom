@@ -1725,7 +1725,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(372);
+var content = __webpack_require__(371);
 if(content.__esModule) content = content.default;
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
@@ -1784,7 +1784,7 @@ module.exports = ___CSS_LOADER_EXPORT___;
 
 /***/ }),
 
-/***/ 334:
+/***/ 333:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2231,7 +2231,7 @@ installComponents(component, {Dropdown: __webpack_require__(254).default,InputBo
 
 /***/ }),
 
-/***/ 371:
+/***/ 370:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2243,7 +2243,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 372:
+/***/ 371:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Imports
@@ -2278,7 +2278,7 @@ module.exports = ___CSS_LOADER_EXPORT___;
 
 /***/ }),
 
-/***/ 463:
+/***/ 461:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2981,7 +2981,7 @@ var componentNormalizer = __webpack_require__(1);
 
 function injectStyles (context) {
   
-  var style0 = __webpack_require__(371)
+  var style0 = __webpack_require__(370)
 if (style0.__inject__) style0.__inject__(context)
 
 }
@@ -3002,7 +3002,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 /* harmony default export */ var UpdatePaymentLink = __webpack_exports__["default"] = (component.exports);
 
 /* nuxt-component-imports */
-installComponents(component, {CancelUpdate: __webpack_require__(134).default,InputBox: __webpack_require__(121).default,CountrySelect: __webpack_require__(196).default,DeliveryInput: __webpack_require__(203).default,SelectBox: __webpack_require__(140).default,PaymentLinkItem: __webpack_require__(334).default,Checkbox: __webpack_require__(233).default,TextBox: __webpack_require__(124).default,Toggle: __webpack_require__(129).default,Toast: __webpack_require__(135).default})
+installComponents(component, {CancelUpdate: __webpack_require__(134).default,InputBox: __webpack_require__(121).default,CountrySelect: __webpack_require__(196).default,DeliveryInput: __webpack_require__(203).default,SelectBox: __webpack_require__(140).default,PaymentLinkItem: __webpack_require__(333).default,Checkbox: __webpack_require__(233).default,TextBox: __webpack_require__(124).default,Toggle: __webpack_require__(129).default,Toast: __webpack_require__(135).default})
 
 
 /***/ })

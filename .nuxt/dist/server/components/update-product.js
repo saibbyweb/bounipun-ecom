@@ -2135,7 +2135,7 @@ module.exports.__inject__ = function (context) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(378);
+var content = __webpack_require__(377);
 if(content.__esModule) content = content.default;
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
@@ -2335,7 +2335,7 @@ module.exports = ___CSS_LOADER_EXPORT___;
 
 /***/ }),
 
-/***/ 320:
+/***/ 319:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2600,7 +2600,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 336:
+/***/ 335:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2766,7 +2766,7 @@ installComponents(component, {Accordion: __webpack_require__(159).default})
 
 /***/ }),
 
-/***/ 337:
+/***/ 336:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2967,7 +2967,7 @@ installComponents(component, {Accordion: __webpack_require__(159).default})
 
 /***/ }),
 
-/***/ 338:
+/***/ 337:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3169,7 +3169,7 @@ installComponents(component, {SelectBox: __webpack_require__(140).default,InputB
 
 /***/ }),
 
-/***/ 339:
+/***/ 338:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3522,7 +3522,7 @@ installComponents(component, {Toggle: __webpack_require__(129).default})
 
 /***/ }),
 
-/***/ 377:
+/***/ 376:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3534,7 +3534,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 378:
+/***/ 377:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Imports
@@ -3569,7 +3569,7 @@ module.exports = ___CSS_LOADER_EXPORT___;
 
 /***/ }),
 
-/***/ 466:
+/***/ 464:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3586,7 +3586,7 @@ var staticRenderFns = []
 // CONCATENATED MODULE: ./components/admin/products/UpdateProduct.vue?vue&type=template&id=a39c1880&scoped=true&
 
 // EXTERNAL MODULE: ./components/admin/products/updateProductHelper.js
-var updateProductHelper = __webpack_require__(320);
+var updateProductHelper = __webpack_require__(319);
 
 // EXTERNAL MODULE: ./helpers/currencyHelper.js
 var currencyHelper = __webpack_require__(145);
@@ -4610,7 +4610,7 @@ var componentNormalizer = __webpack_require__(1);
 
 function injectStyles (context) {
   
-  var style0 = __webpack_require__(377)
+  var style0 = __webpack_require__(376)
 if (style0.__inject__) style0.__inject__(context)
 
 }
@@ -4631,7 +4631,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 /* harmony default export */ var UpdateProduct = __webpack_exports__["default"] = (component.exports);
 
 /* nuxt-component-imports */
-installComponents(component, {CancelUpdate: __webpack_require__(134).default,InputBox: __webpack_require__(121).default,SelectBox: __webpack_require__(140).default,TextBox: __webpack_require__(124).default,ColorPicker: __webpack_require__(336).default,UploadImage: __webpack_require__(166).default,Toggle: __webpack_require__(129).default,CBoxes: __webpack_require__(337).default,VariantsMetaData: __webpack_require__(338).default,FabricSelector: __webpack_require__(339).default,Toast: __webpack_require__(135).default})
+installComponents(component, {CancelUpdate: __webpack_require__(134).default,InputBox: __webpack_require__(121).default,SelectBox: __webpack_require__(140).default,TextBox: __webpack_require__(124).default,ColorPicker: __webpack_require__(335).default,UploadImage: __webpack_require__(166).default,Toggle: __webpack_require__(129).default,CBoxes: __webpack_require__(336).default,VariantsMetaData: __webpack_require__(337).default,FabricSelector: __webpack_require__(338).default,Toast: __webpack_require__(135).default})
 
 
 /***/ })

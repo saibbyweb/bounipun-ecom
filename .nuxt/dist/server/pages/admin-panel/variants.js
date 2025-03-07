@@ -2312,7 +2312,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 
 /***/ }),
 
-/***/ 472:
+/***/ 470:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2527,7 +2527,7 @@ installComponents(component, {CancelUpdate: __webpack_require__(134).default,Inp
 
 /***/ }),
 
-/***/ 619:
+/***/ 618:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2721,7 +2721,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 /* harmony default export */ var variants = __webpack_exports__["default"] = (component.exports);
 
 /* nuxt-component-imports */
-installComponents(component, {List: __webpack_require__(152).default,Pagination: __webpack_require__(153).default,UpdateVariant: __webpack_require__(472).default,AddNewItem: __webpack_require__(157).default})
+installComponents(component, {List: __webpack_require__(152).default,Pagination: __webpack_require__(153).default,UpdateVariant: __webpack_require__(470).default,AddNewItem: __webpack_require__(157).default})
 
 
 /***/ })

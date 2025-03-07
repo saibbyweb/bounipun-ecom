@@ -2496,7 +2496,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(358);
+var content = __webpack_require__(357);
 if(content.__esModule) content = content.default;
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
@@ -2508,7 +2508,7 @@ module.exports.__inject__ = function (context) {
 
 /***/ }),
 
-/***/ 357:
+/***/ 356:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2520,7 +2520,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 358:
+/***/ 357:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Imports
@@ -2555,7 +2555,7 @@ module.exports = ___CSS_LOADER_EXPORT___;
 
 /***/ }),
 
-/***/ 452:
+/***/ 450:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2981,7 +2981,7 @@ var componentNormalizer = __webpack_require__(1);
 
 function injectStyles (context) {
   
-  var style0 = __webpack_require__(357)
+  var style0 = __webpack_require__(356)
 if (style0.__inject__) style0.__inject__(context)
 
 }
@@ -3007,7 +3007,7 @@ installComponents(component, {CancelUpdate: __webpack_require__(134).default,Inp
 
 /***/ }),
 
-/***/ 595:
+/***/ 594:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3250,7 +3250,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 /* harmony default export */ var collections = __webpack_exports__["default"] = (component.exports);
 
 /* nuxt-component-imports */
-installComponents(component, {List: __webpack_require__(152).default,Pagination: __webpack_require__(153).default,UpdateCollection: __webpack_require__(452).default,AddNewItem: __webpack_require__(157).default})
+installComponents(component, {List: __webpack_require__(152).default,Pagination: __webpack_require__(153).default,UpdateCollection: __webpack_require__(450).default,AddNewItem: __webpack_require__(157).default})
 
 
 /***/ })

@@ -1654,7 +1654,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(370);
+var content = __webpack_require__(369);
 if(content.__esModule) content = content.default;
 if(typeof content === 'string') content = [[module.i, content, '']];
 if(content.locals) module.exports = content.locals;
@@ -1713,7 +1713,7 @@ module.exports = ___CSS_LOADER_EXPORT___;
 
 /***/ }),
 
-/***/ 333:
+/***/ 332:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2018,7 +2018,7 @@ installComponents(component, {InputBox: __webpack_require__(121).default,SelectB
 
 /***/ }),
 
-/***/ 369:
+/***/ 368:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2030,7 +2030,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 370:
+/***/ 369:
 /***/ (function(module, exports, __webpack_require__) {
 
 // Imports
@@ -2065,7 +2065,7 @@ module.exports = ___CSS_LOADER_EXPORT___;
 
 /***/ }),
 
-/***/ 442:
+/***/ 440:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3484,7 +3484,7 @@ var componentNormalizer = __webpack_require__(1);
 
 function injectStyles (context) {
   
-  var style0 = __webpack_require__(369)
+  var style0 = __webpack_require__(368)
 if (style0.__inject__) style0.__inject__(context)
 
 }
@@ -3505,12 +3505,12 @@ var component = Object(componentNormalizer["a" /* default */])(
 /* harmony default export */ var UpdateOrder = __webpack_exports__["default"] = (component.exports);
 
 /* nuxt-component-imports */
-installComponents(component, {CancelUpdate: __webpack_require__(134).default,InputBox: __webpack_require__(121).default,GiftMessage: __webpack_require__(249).default,OrderItem: __webpack_require__(333).default})
+installComponents(component, {CancelUpdate: __webpack_require__(134).default,InputBox: __webpack_require__(121).default,GiftMessage: __webpack_require__(249).default,OrderItem: __webpack_require__(332).default})
 
 
 /***/ }),
 
-/***/ 609:
+/***/ 608:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3665,7 +3665,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 /* harmony default export */ var orders = __webpack_exports__["default"] = (component.exports);
 
 /* nuxt-component-imports */
-installComponents(component, {List: __webpack_require__(152).default,Pagination: __webpack_require__(153).default,UpdateOrder: __webpack_require__(442).default})
+installComponents(component, {List: __webpack_require__(152).default,Pagination: __webpack_require__(153).default,UpdateOrder: __webpack_require__(440).default})
 
 
 /***/ })

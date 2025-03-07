@@ -155,6 +155,9 @@
   "UploadImageV2": {
     "description": "Auto imported from components/admin/uploadImageV2.vue"
   },
+  "CouponSuggestion": {
+    "description": "Auto imported from components/cart/couponSuggestion.vue"
+  },
   "ColorBlockLayout": {
     "description": "Auto imported from components/lab/ColorBlockLayout.vue"
   },
@@ -170,29 +173,17 @@
   "VariantBlockLayout": {
     "description": "Auto imported from components/lab/VariantBlockLayout.vue"
   },
-  "CouponSuggestion": {
-    "description": "Auto imported from components/cart/couponSuggestion.vue"
-  },
   "InvoiceItem": {
     "description": "Auto imported from components/paymentlink/invoiceItem.vue"
   },
   "PayeeDetails": {
     "description": "Auto imported from components/paymentlink/payeeDetails.vue"
   },
-  "UpdateAdmin": {
-    "description": "Auto imported from components/admin/admins/updateAdmin.vue"
-  },
   "UpdateCollectionCategory": {
     "description": "Auto imported from components/admin/collection/UpdateCollectionCategory.vue"
   },
   "UpdateCollection": {
     "description": "Auto imported from components/admin/collection/updateCollection.vue"
-  },
-  "UpdateCoupon": {
-    "description": "Auto imported from components/admin/coupons/UpdateCoupon.vue"
-  },
-  "UpdateCurrency": {
-    "description": "Auto imported from components/admin/currencies/UpdateCurrency.vue"
   },
   "UpdateBaseColor": {
     "description": "Auto imported from components/admin/colors/UpdateBaseColor.vue"
@@ -206,14 +197,23 @@
   "ColorPicker": {
     "description": "Auto imported from components/admin/colors/colorPicker.vue"
   },
+  "UpdateCurrency": {
+    "description": "Auto imported from components/admin/currencies/UpdateCurrency.vue"
+  },
+  "UpdateCoupon": {
+    "description": "Auto imported from components/admin/coupons/UpdateCoupon.vue"
+  },
   "UpdateFabric": {
     "description": "Auto imported from components/admin/fabrics/UpdateFabric.vue"
   },
-  "UpdateHomepage": {
-    "description": "Auto imported from components/admin/homepage/updateHomepage.vue"
+  "UpdateAdmin": {
+    "description": "Auto imported from components/admin/admins/updateAdmin.vue"
   },
   "UpdateFAQ": {
     "description": "Auto imported from components/admin/faq/updateFAQ.vue"
+  },
+  "UpdateHomepage": {
+    "description": "Auto imported from components/admin/homepage/updateHomepage.vue"
   },
   "UpdateHomepageLayout": {
     "description": "Auto imported from components/admin/homepageLayouts/UpdateHomepageLayout.vue"
@@ -299,11 +299,11 @@
   "UpdateProductHelper": {
     "description": "Auto imported from components/admin/products/updateProductHelper.js"
   },
-  "UpdateTicker": {
-    "description": "Auto imported from components/admin/ticker/updateTicker.vue"
-  },
   "UpdateSale": {
     "description": "Auto imported from components/admin/sales/UpdateSale.vue"
+  },
+  "UpdateTicker": {
+    "description": "Auto imported from components/admin/ticker/updateTicker.vue"
   },
   "UpdateUnlockCode": {
     "description": "Auto imported from components/admin/unlock/UpdateUnlockCode.vue"

@@ -1706,7 +1706,7 @@ module.exports = ___CSS_LOADER_EXPORT___;
 
 /***/ }),
 
-/***/ 340:
+/***/ 339:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1812,7 +1812,7 @@ installComponents(component, {CartItem: __webpack_require__(195).default})
 
 /***/ }),
 
-/***/ 470:
+/***/ 468:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2047,12 +2047,12 @@ var component = Object(componentNormalizer["a" /* default */])(
 /* harmony default export */ var UpdateUser = __webpack_exports__["default"] = (component.exports);
 
 /* nuxt-component-imports */
-installComponents(component, {CancelUpdate: __webpack_require__(134).default,InputBox: __webpack_require__(121).default,UserCartDetails: __webpack_require__(340).default,Toggle: __webpack_require__(129).default})
+installComponents(component, {CancelUpdate: __webpack_require__(134).default,InputBox: __webpack_require__(121).default,UserCartDetails: __webpack_require__(339).default,Toggle: __webpack_require__(129).default})
 
 
 /***/ }),
 
-/***/ 617:
+/***/ 616:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2233,7 +2233,7 @@ var component = Object(componentNormalizer["a" /* default */])(
 /* harmony default export */ var users = __webpack_exports__["default"] = (component.exports);
 
 /* nuxt-component-imports */
-installComponents(component, {List: __webpack_require__(152).default,Pagination: __webpack_require__(153).default,UpdateUser: __webpack_require__(470).default})
+installComponents(component, {List: __webpack_require__(152).default,Pagination: __webpack_require__(153).default,UpdateUser: __webpack_require__(468).default})
 
 
 /***/ })
