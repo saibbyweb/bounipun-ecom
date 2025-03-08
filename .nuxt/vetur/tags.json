@@ -179,11 +179,29 @@
   "PayeeDetails": {
     "description": "Auto imported from components/paymentlink/payeeDetails.vue"
   },
+  "UpdateAdmin": {
+    "description": "Auto imported from components/admin/admins/updateAdmin.vue"
+  },
   "UpdateCollectionCategory": {
     "description": "Auto imported from components/admin/collection/UpdateCollectionCategory.vue"
   },
   "UpdateCollection": {
     "description": "Auto imported from components/admin/collection/updateCollection.vue"
+  },
+  "UpdateCoupon": {
+    "description": "Auto imported from components/admin/coupons/UpdateCoupon.vue"
+  },
+  "UpdateCurrency": {
+    "description": "Auto imported from components/admin/currencies/UpdateCurrency.vue"
+  },
+  "UpdateFAQ": {
+    "description": "Auto imported from components/admin/faq/updateFAQ.vue"
+  },
+  "UpdateHomepage": {
+    "description": "Auto imported from components/admin/homepage/updateHomepage.vue"
+  },
+  "UpdateFabric": {
+    "description": "Auto imported from components/admin/fabrics/UpdateFabric.vue"
   },
   "UpdateBaseColor": {
     "description": "Auto imported from components/admin/colors/UpdateBaseColor.vue"
@@ -196,24 +214,6 @@
   },
   "ColorPicker": {
     "description": "Auto imported from components/admin/colors/colorPicker.vue"
-  },
-  "UpdateCurrency": {
-    "description": "Auto imported from components/admin/currencies/UpdateCurrency.vue"
-  },
-  "UpdateCoupon": {
-    "description": "Auto imported from components/admin/coupons/UpdateCoupon.vue"
-  },
-  "UpdateFabric": {
-    "description": "Auto imported from components/admin/fabrics/UpdateFabric.vue"
-  },
-  "UpdateAdmin": {
-    "description": "Auto imported from components/admin/admins/updateAdmin.vue"
-  },
-  "UpdateFAQ": {
-    "description": "Auto imported from components/admin/faq/updateFAQ.vue"
-  },
-  "UpdateHomepage": {
-    "description": "Auto imported from components/admin/homepage/updateHomepage.vue"
   },
   "UpdateHomepageLayout": {
     "description": "Auto imported from components/admin/homepageLayouts/UpdateHomepageLayout.vue"

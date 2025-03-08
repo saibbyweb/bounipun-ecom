@@ -232,7 +232,7 @@ export default {
     async fetchProductDetails(_id) {
       const productFetch = this.$axios.post("/fetchProduct", {
         _id,
-        lockCheck: false,
+        isAdmin: true
       });
       const { response, error } = await this.$task(productFetch);
 

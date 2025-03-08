@@ -120,13 +120,14 @@ router.post("/productIdToSlug", async (req, res) => {
 
 /* get product */
 router.post("/fetchProduct", userAuth("customer", false), async (req, res) => {
-  const { _id, slug, unlocked, forceUnlock } = req.body;
+  const { _id, slug, unlocked, forceUnlock, isAdmin } = req.body;
   const collection = db.model("products");
   const filters: any = _id ? { _id } : { slug }
 
   /* if user is not unlocked, show only unlocked content */
   if (unlocked === false) filters.lock = false;
-  if(forceUnlock) delete filters.lock;
+  if(forceUnlock || isAdmin) delete filters.lock;
+
 
   let document: any = collection.findOne(filters).lean();
 
