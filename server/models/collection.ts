@@ -49,7 +49,7 @@ export const methods = {
   register: async () => {
     console.log("registered");
   },
-  async updateCollection(details, editMode) {
+  async updateCollection(details, editMode, payload) {
     const collections = model;
     /* if slug not provide, creat one  */
     if (details.slug === "")
@@ -78,13 +78,14 @@ export const methods = {
         details.askForPrice
       );
 
-      await sale.methods.updatePricingForAllProductsUnderCollection(
-        details._id,
-        details.basePriceMultiplier
-      );
+      if (payload?.dontSkipBasePriceMultiplierUpdate) {
+        await sale.methods.updatePricingForAllProductsUnderCollection(
+          details._id,
+          details.basePriceMultiplier
+        );
+      }
 
       /* update ask for price for all products */
-
     }
 
     /* find the last highest order and assign it to the new collection */

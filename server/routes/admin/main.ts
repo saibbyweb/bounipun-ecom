@@ -309,13 +309,14 @@ router.post("/fetchPaginatedResults", async (req, res) => {
 /* update api */
 router.post("/updateDocument", adminAuth("1", true), async (req, res) => {
   /* extracting query details */
-  const { model, details, editMode } = req.body;
+  const { model, details, editMode, payload } = req.body;
 
   /* check if special update is required */
   const specialUpdate: any = await admin.specialUpdate(
     model,
     details,
-    editMode
+    editMode,
+    payload
   );
 
   /* if special update processed */

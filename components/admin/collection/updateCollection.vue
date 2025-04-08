@@ -103,11 +103,15 @@
     <!-- inflation slider -->
     <div class="section">
       <InputSlider
+        :disabled="basePriceMultiplierChanged"
         v-model="doc.inflationPercentage"
+         min="-100"
+        max="100"
         label="Inflation Percentage (for outside India)"
       />
       <!-- base price multiplier -->
       <InputSlider
+        :disabled="inflationChanged"
         min="-100"
         max="100"
         v-model="doc.basePriceMultiplier"
@@ -268,11 +272,16 @@ export default {
       pricesReset: false,
       totalProductsReset: 0,
       fetchedInflationPercentage: -1,
+      fetchedBasePriceMultiplier: 0
     };
   },
   computed: {
     inflationChanged() {
       return this.fetchedInflationPercentage != this.doc.inflationPercentage;
+    },
+    basePriceMultiplierChanged() {
+      console.log(this.fetchedBasePriceMultiplier, this.doc.basePriceMultiplier)
+      return this.fetchedBasePriceMultiplier != this.doc.basePriceMultiplier;
     },
   },
   methods: {
@@ -306,12 +315,20 @@ export default {
           break;
       }
     },
-    async updateDocument(model, details, editMode) {
+    async updateDocument(payload) {
       this.loading = true;
+      /* reset values if needed */
+      // if(this.basePriceMultiplierChanged) {
+      //   this.doc.inflationPercentage = 0;
+      // }
+      // if(this.inflationChanged) {
+      //    this.doc.basePriceMultiplier = 0;
+      // }
       const result = await this.$updateDocument(
         this.model,
         this.doc,
-        this.editMode
+        this.editMode,
+        { dontSkipBasePriceMultiplierUpdate: this.basePriceMultiplierChanged }
       );
       this.loading = false;
 
@@ -377,10 +394,11 @@ export default {
         softLock,
         status,
         category: category === undefined ? "" : category,
-        askForPrice: askForPrice === undefined ? false: askForPrice,
+        askForPrice: askForPrice === undefined ? false : askForPrice,
       };
       /* set initailly fetched percentage */
       this.fetchedInflationPercentage = this.doc.inflationPercentage;
+      this.fetchedBasePriceMultiplier = this.doc.basePriceMultiplier;
       this.editMode = true;
     },
     closeForm() {

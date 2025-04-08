@@ -1,5 +1,5 @@
 import { db, mongoose } from "@helpers/essentials";
-import { methods as productMethods } from "./product";
+import product, { methods as productMethods } from "./product";
 // import allCurrencies from "../../helpers/currencies"
 /* schema */
 const schema = new mongoose.Schema(
@@ -54,6 +54,7 @@ export const methods = {
 
       /* set inflation percentage if not provided */
       if (useDefaultInfaltion) {
+        console.log("default used")
         inflationPercentage = currency.defaultInflationPercentage;
         inflationPercentage = parseInt(inflationPercentage);
       }
@@ -77,6 +78,7 @@ export const methods = {
       //   : parseFloat(price.toString()).toFixed(2);
         nonINRPricing[code] = parseInt(price.toString())
     }
+    console.log(nonINRPricing);
     return nonINRPricing;
   },
   async updateNonINRPricing(filter, inflationPercentage) {
@@ -128,6 +130,8 @@ export const methods = {
         );
       }
     });
+   console.log(products[0].name)
+    products[0].variants.forEach(v => console.log(v.fabrics))
 
     /* re-save all products after pre-processing details */
     for (const product of products) {

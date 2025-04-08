@@ -11,7 +11,7 @@ import {
 } from "@models";
 
 export default {
-  async specialUpdate(model, details, editMode) {
+  async specialUpdate(model, details, editMode, payload) {
     let response;
     switch (model) {
       case "products":
@@ -19,7 +19,7 @@ export default {
         await product.methods.updateProduct(details, editMode);
         break;
       case "collections":
-        await collection.methods.updateCollection(details, editMode);
+        await collection.methods.updateCollection(details, editMode, payload);
         break;
       case "homepage_layouts":
         await homepageLayouts.methods.updateLayouts(details, editMode);

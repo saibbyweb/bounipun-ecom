@@ -223,6 +223,7 @@ export const methods = {
     collectionId: string,
     basePriceMultiplier: number
   ) {
+    console.log(basePriceMultiplier, "BASE_PRICE_MULTIPLIER")
     let matchedProducts: any = await product.methods.getProducts({
       bounipun_collection: collectionId,
     });

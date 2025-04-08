@@ -15,12 +15,13 @@ export default (context, inject) => {
   inject("task", task);
 
   /* update document api */
-  const updateDocument = async (model, details, editMode) => {
+  const updateDocument = async (model, details, editMode, payload) => {
     let result = { updated: false, doc: {} };
     const update = context.$axios.$post("/updateDocument", {
       model,
       details,
-      editMode
+      editMode,
+      payload
     });
 
     $store.commit("admin/setLoading", true);

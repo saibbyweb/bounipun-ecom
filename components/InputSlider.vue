@@ -1,8 +1,9 @@
 <template>
-  <div class="range-slider">
+  <div :class="['range-slider', {'fade-out': disabled}]">
     <label class="label"> {{ label }} </label>
     <div class="pad-10 flex center col">
       <input
+        :disabled="disabled"
         ref="rangeSlider"
         type="range"
         :min="min"
@@ -16,6 +17,7 @@
       />
       <div class="flex">
         <input
+        :disabled={disabled}
         class="alternate-input shadow"
           type="number"
           @input="$emit('input', $event.target.value)"
@@ -35,6 +37,7 @@ export default {
     step: { type: Number, default: 1 },
     min: { type: Number, default: 0 },
     max: { type: Number, default: 100 },
+    disabled: { type: Boolean, default: false }
   },
   computed: {
     percentage() {
@@ -56,6 +59,10 @@ export default {
 <style lang="scss" scoped>
 .range-slider {
   width: 100%; /* Width of the outside container */
+}
+
+.fade-out {
+  opacity: 0.3;
 }
 
 .label {
