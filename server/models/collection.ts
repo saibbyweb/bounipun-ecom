@@ -78,7 +78,7 @@ export const methods = {
         details.askForPrice
       );
 
-      if (payload?.dontSkipBasePriceMultiplierUpdate) {
+      if (payload && payload.dontSkipBasePriceMultiplierUpdate) {
         await sale.methods.updatePricingForAllProductsUnderCollection(
           details._id,
           details.basePriceMultiplier
