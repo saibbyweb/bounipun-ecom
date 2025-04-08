@@ -134,6 +134,9 @@
   "OrderTotalV2": {
     "description": "Auto imported from components/Purchase/OrderTotalV2.vue"
   },
+  "CouponSuggestion": {
+    "description": "Auto imported from components/cart/couponSuggestion.vue"
+  },
   "AddNewItem": {
     "description": "Auto imported from components/admin/AddNewItem.vue"
   },
@@ -155,15 +158,6 @@
   "UploadImageV2": {
     "description": "Auto imported from components/admin/uploadImageV2.vue"
   },
-  "CouponSuggestion": {
-    "description": "Auto imported from components/cart/couponSuggestion.vue"
-  },
-  "InvoiceItem": {
-    "description": "Auto imported from components/paymentlink/invoiceItem.vue"
-  },
-  "PayeeDetails": {
-    "description": "Auto imported from components/paymentlink/payeeDetails.vue"
-  },
   "ColorBlockLayout": {
     "description": "Auto imported from components/lab/ColorBlockLayout.vue"
   },
@@ -178,6 +172,12 @@
   },
   "VariantBlockLayout": {
     "description": "Auto imported from components/lab/VariantBlockLayout.vue"
+  },
+  "InvoiceItem": {
+    "description": "Auto imported from components/paymentlink/invoiceItem.vue"
+  },
+  "PayeeDetails": {
+    "description": "Auto imported from components/paymentlink/payeeDetails.vue"
   },
   "UpdateAdmin": {
     "description": "Auto imported from components/admin/admins/updateAdmin.vue"
