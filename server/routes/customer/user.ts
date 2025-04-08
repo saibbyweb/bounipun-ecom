@@ -655,13 +655,13 @@ router.post("/ipLookup", userAuth("customer", false), async (req, res) => {
   // response.dump = { ip: req.ip, type: typeof req.ip }
 
   /* if user is logged in, fetch country code from account */
-  if (user.status === true) {
-    console.log("🗃  Country IsoCode fetched from user account");
-    response.countryCode = user.countryIsoCode;
-    response.resolved = true;
-    res.send(response);
-    return;
-  }
+  // if (user.status === true) {
+  //   console.log("🗃  Country IsoCode fetched from user account");
+  //   response.countryCode = user.countryIsoCode;
+  //   response.resolved = true;
+  //   res.send(response);
+  //   return;
+  // }
 
   /* validate ip */
   if (req.ip === "::1" || req.ip.includes("::ffff")) {
@@ -670,7 +670,8 @@ router.post("/ipLookup", userAuth("customer", false), async (req, res) => {
     res.send(response);
     return;
   }
-  const usIP = "206.189.205.251";
+  const usIP = "128.199.186.2";
+  // req.ip = usIP;
   console.log(`⌛️ Fetching details from IP Regsitry`);
   /* otherwise do an country lookup */
   const { response: lookupResponse, error } = await task(

@@ -1,84 +1,61 @@
+// Source: @nuxt/vue-app/template/store.js
+
 import Vue from 'vue'
 import Vuex from 'vuex'
+import * as $77068119 from '../store/admin.js'
+import * as $7bcfb5d4 from '../store/customer.js'
+import * as $728cc920 from '../store/customerV2.js'
 
 Vue.use(Vuex)
 
 const VUEX_PROPERTIES = ['state', 'getters', 'actions', 'mutations']
 
-let store = {};
+const storeModules = {
+  ['admin']: $77068119,
+  ['customer']: $7bcfb5d4,
+  ['customerV2']: $728cc920
+}
 
-(function updateModules () {
-  // If store is an exported method = classic mode (deprecated)
-
-  // Enforce store modules
-  store.modules = store.modules || {}
-
-  resolveStoreModules(require('../store/admin.js'), 'admin.js')
-  resolveStoreModules(require('../store/customer.js'), 'customer.js')
-  resolveStoreModules(require('../store/customerV2.js'), 'customerV2.js')
-
-  // If the environment supports hot reloading...
-})()
-
-// createStore
-export const createStore = store instanceof Function ? store : () => {
+export function createStore() {
+  let store = normalizeRoot(storeModules.root || {})
+  delete storeModules.root
+  for (const id in storeModules) {
+    resolveStoreModules(store, storeModules[id], id)
+  }
+  if (typeof store === 'function') {
+    return store
+  }
   return new Vuex.Store(Object.assign({
     strict: (process.env.NODE_ENV !== 'production')
   }, store))
 }
 
-function normalizeRoot (moduleData, filePath) {
+function normalizeRoot (moduleData, id) {
   moduleData = moduleData.default || moduleData
-
   if (moduleData.commit) {
-    throw new Error(`[nuxt] ${filePath} should export a method that returns a Vuex instance.`)
+    throw new Error(`[nuxt] ${id} should export a method that returns a Vuex instance.`)
   }
-
   if (typeof moduleData !== 'function') {
     // Avoid TypeError: setting a property that has only a getter when overwriting top level keys
-    moduleData = Object.assign({}, moduleData)
+    moduleData = { ...moduleData }
   }
-  return normalizeModule(moduleData, filePath)
-}
-
-function normalizeModule (moduleData, filePath) {
-  if (moduleData.state && typeof moduleData.state !== 'function') {
-    console.warn(`'state' should be a method that returns an object in ${filePath}`)
-
-    const state = Object.assign({}, moduleData.state)
-    // Avoid TypeError: setting a property that has only a getter when overwriting top level keys
-    moduleData = Object.assign({}, moduleData, { state: () => state })
-  }
+  moduleData.modules = moduleData.modules || {}
   return moduleData
 }
 
-function resolveStoreModules (moduleData, filename) {
+function resolveStoreModules (store, moduleData, id) {
   moduleData = moduleData.default || moduleData
-  // Remove store src + extension (./foo/index.js -> foo/index)
-  const namespace = filename.replace(/\.(js|mjs)$/, '')
-  const namespaces = namespace.split('/')
-  let moduleName = namespaces[namespaces.length - 1]
-  const filePath = `store/${filename}`
 
-  moduleData = moduleName === 'state'
-    ? normalizeState(moduleData, filePath)
-    : normalizeModule(moduleData, filePath)
+  const namespaces = id.split('/').filter(Boolean)
+  let moduleName = namespaces[namespaces.length - 1]
 
   // If src is a known Vuex property
   if (VUEX_PROPERTIES.includes(moduleName)) {
     const property = moduleName
     const propertyStoreModule = getStoreModule(store, namespaces, { isProperty: true })
-
     // Replace state since it's a function
     mergeProperty(propertyStoreModule, moduleData, property)
     return
-  }
-
-  // If file is foo/index.js, it should be saved as foo
-  const isIndexModule = (moduleName === 'index')
-  if (isIndexModule) {
-    namespaces.pop()
-    moduleName = namespaces[namespaces.length - 1]
   }
 
   const storeModule = getStoreModule(store, namespaces)
@@ -90,15 +67,6 @@ function resolveStoreModules (moduleData, filename) {
   if (moduleData.namespaced === false) {
     delete storeModule.namespaced
   }
-}
-
-function normalizeState (moduleData, filePath) {
-  if (typeof moduleData !== 'function') {
-    console.warn(`${filePath} should export a method that returns an object`)
-    const state = Object.assign({}, moduleData)
-    return () => state
-  }
-  return normalizeModule(moduleData, filePath)
 }
 
 function getStoreModule (storeModule, namespaces, { isProperty = false } = {}) {
@@ -120,10 +88,9 @@ function mergeProperty (storeModule, moduleData, property) {
   if (!moduleData) {
     return
   }
-
   if (property === 'state') {
     storeModule.state = moduleData || storeModule.state
   } else {
-    storeModule[property] = Object.assign({}, storeModule[property], moduleData)
+    storeModule[property] = { ...storeModule[property], ...moduleData }
   }
 }
