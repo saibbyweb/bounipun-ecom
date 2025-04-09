@@ -106,14 +106,14 @@
         :disabled="basePriceMultiplierChanged"
         v-model="doc.inflationPercentage"
          min="-100"
-        max="100"
+        max="200"
         label="Inflation Percentage (for outside India)"
       />
       <!-- base price multiplier -->
       <InputSlider
         :disabled="inflationChanged"
         min="-100"
-        max="100"
+        max="200"
         v-model="doc.basePriceMultiplier"
         label="Base Price Multiplier"
       />

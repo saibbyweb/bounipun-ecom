@@ -137,27 +137,6 @@
   "CouponSuggestion": {
     "description": "Auto imported from components/cart/couponSuggestion.vue"
   },
-  "ColorBlockLayout": {
-    "description": "Auto imported from components/lab/ColorBlockLayout.vue"
-  },
-  "DecideLabBlockLayout": {
-    "description": "Auto imported from components/lab/DecideLabBlockLayout.vue"
-  },
-  "FabricBlockLayout": {
-    "description": "Auto imported from components/lab/FabricBlockLayout.vue"
-  },
-  "LabBlockHeading": {
-    "description": "Auto imported from components/lab/LabBlockHeading.vue"
-  },
-  "VariantBlockLayout": {
-    "description": "Auto imported from components/lab/VariantBlockLayout.vue"
-  },
-  "InvoiceItem": {
-    "description": "Auto imported from components/paymentlink/invoiceItem.vue"
-  },
-  "PayeeDetails": {
-    "description": "Auto imported from components/paymentlink/payeeDetails.vue"
-  },
   "AddNewItem": {
     "description": "Auto imported from components/admin/AddNewItem.vue"
   },
@@ -179,6 +158,27 @@
   "UploadImageV2": {
     "description": "Auto imported from components/admin/uploadImageV2.vue"
   },
+  "InvoiceItem": {
+    "description": "Auto imported from components/paymentlink/invoiceItem.vue"
+  },
+  "PayeeDetails": {
+    "description": "Auto imported from components/paymentlink/payeeDetails.vue"
+  },
+  "ColorBlockLayout": {
+    "description": "Auto imported from components/lab/ColorBlockLayout.vue"
+  },
+  "DecideLabBlockLayout": {
+    "description": "Auto imported from components/lab/DecideLabBlockLayout.vue"
+  },
+  "FabricBlockLayout": {
+    "description": "Auto imported from components/lab/FabricBlockLayout.vue"
+  },
+  "LabBlockHeading": {
+    "description": "Auto imported from components/lab/LabBlockHeading.vue"
+  },
+  "VariantBlockLayout": {
+    "description": "Auto imported from components/lab/VariantBlockLayout.vue"
+  },
   "UpdateAdmin": {
     "description": "Auto imported from components/admin/admins/updateAdmin.vue"
   },
@@ -187,9 +187,6 @@
   },
   "UpdateCollection": {
     "description": "Auto imported from components/admin/collection/updateCollection.vue"
-  },
-  "UpdateCoupon": {
-    "description": "Auto imported from components/admin/coupons/UpdateCoupon.vue"
   },
   "UpdateBaseColor": {
     "description": "Auto imported from components/admin/colors/UpdateBaseColor.vue"
@@ -202,6 +199,9 @@
   },
   "ColorPicker": {
     "description": "Auto imported from components/admin/colors/colorPicker.vue"
+  },
+  "UpdateCoupon": {
+    "description": "Auto imported from components/admin/coupons/UpdateCoupon.vue"
   },
   "UpdateCurrency": {
     "description": "Auto imported from components/admin/currencies/UpdateCurrency.vue"

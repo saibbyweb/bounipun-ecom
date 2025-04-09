@@ -36,7 +36,7 @@ export default {
     unit: { type: String, default: "%" },
     step: { type: Number, default: 1 },
     min: { type: Number, default: 0 },
-    max: { type: Number, default: 100 },
+    max: { type: Number, default: 200 },
     disabled: { type: Boolean, default: false }
   },
   computed: {
