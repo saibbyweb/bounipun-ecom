@@ -349,7 +349,7 @@ router.post("/createPaymentIntent/v2", userAuth("customer", false), async (req, 
     case 'razorpay':
       gatewayResponse = await paymentMethods.createRazorpayOrder({
         amount: amountInSubUnits,
-        currency: "INR",
+        currency: currency,
         receipt: "Bounipun Transaction",
       });
       break;

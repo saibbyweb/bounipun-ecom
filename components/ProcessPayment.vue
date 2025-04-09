@@ -104,10 +104,12 @@ export default {
     /* initialize payment */
     initializePayment() {
       /* finalize gateway */
-      this.gateway =
-        this.prefferedGateway ?? this.currency === "INR"
-          ? "razorpay"
-          : "stripe";
+      // this.gateway =
+      //   this.prefferedGateway ?? this.currency === "INR"
+      //     ? "razorpay"
+      //     : "stripe";
+
+          this.gateway = "razorpay"
 
       /* do gateway related stuff */
       switch (this.gateway) {
@@ -177,7 +179,7 @@ export default {
       let options = {
         key: RAZORPAY_KEY_ID,
         order_id: this.paymentIntent.gatewayToken,
-        currency: "INR",
+        currency: this.currency,
         name: "Bounipun Ecom",
         description: "Transaction",
         image: "https://bounipun.in/icons/light/logo.png",
