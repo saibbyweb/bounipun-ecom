@@ -113,27 +113,6 @@
   "UnlockContent": {
     "description": "Auto imported from components/unlockContent.vue"
   },
-  "AddNewItem": {
-    "description": "Auto imported from components/admin/AddNewItem.vue"
-  },
-  "AdminHeader": {
-    "description": "Auto imported from components/admin/AdminHeader.vue"
-  },
-  "CancelUpdate": {
-    "description": "Auto imported from components/admin/CancelUpdate.vue"
-  },
-  "List": {
-    "description": "Auto imported from components/admin/list.vue"
-  },
-  "UpdateCRUD": {
-    "description": "Auto imported from components/admin/updateCRUD.js"
-  },
-  "UploadImage": {
-    "description": "Auto imported from components/admin/uploadImage.vue"
-  },
-  "UploadImageV2": {
-    "description": "Auto imported from components/admin/uploadImageV2.vue"
-  },
   "CancelOrder": {
     "description": "Auto imported from components/Purchase/CancelOrder.vue"
   },
@@ -179,6 +158,27 @@
   "PayeeDetails": {
     "description": "Auto imported from components/paymentlink/payeeDetails.vue"
   },
+  "AddNewItem": {
+    "description": "Auto imported from components/admin/AddNewItem.vue"
+  },
+  "AdminHeader": {
+    "description": "Auto imported from components/admin/AdminHeader.vue"
+  },
+  "CancelUpdate": {
+    "description": "Auto imported from components/admin/CancelUpdate.vue"
+  },
+  "List": {
+    "description": "Auto imported from components/admin/list.vue"
+  },
+  "UpdateCRUD": {
+    "description": "Auto imported from components/admin/updateCRUD.js"
+  },
+  "UploadImage": {
+    "description": "Auto imported from components/admin/uploadImage.vue"
+  },
+  "UploadImageV2": {
+    "description": "Auto imported from components/admin/uploadImageV2.vue"
+  },
   "UpdateAdmin": {
     "description": "Auto imported from components/admin/admins/updateAdmin.vue"
   },
@@ -218,6 +218,24 @@
   "UpdateHomepageLayout": {
     "description": "Auto imported from components/admin/homepageLayouts/UpdateHomepageLayout.vue"
   },
+  "InputBox": {
+    "description": "Auto imported from components/admin/input/InputBox.vue"
+  },
+  "CBoxes": {
+    "description": "Auto imported from components/admin/input/cBoxes.vue"
+  },
+  "CheckBoxes": {
+    "description": "Auto imported from components/admin/input/checkBoxes.vue"
+  },
+  "SelectBox": {
+    "description": "Auto imported from components/admin/input/selectBox.vue"
+  },
+  "TextBox": {
+    "description": "Auto imported from components/admin/input/textBox.vue"
+  },
+  "Toggle": {
+    "description": "Auto imported from components/admin/input/toggle.vue"
+  },
   "ColorBlock": {
     "description": "Auto imported from components/admin/lab/ColorBlock.vue"
   },
@@ -238,24 +256,6 @@
   },
   "VariantBlock": {
     "description": "Auto imported from components/admin/lab/VariantBlock.vue"
-  },
-  "InputBox": {
-    "description": "Auto imported from components/admin/input/InputBox.vue"
-  },
-  "CBoxes": {
-    "description": "Auto imported from components/admin/input/cBoxes.vue"
-  },
-  "CheckBoxes": {
-    "description": "Auto imported from components/admin/input/checkBoxes.vue"
-  },
-  "SelectBox": {
-    "description": "Auto imported from components/admin/input/selectBox.vue"
-  },
-  "TextBox": {
-    "description": "Auto imported from components/admin/input/textBox.vue"
-  },
-  "Toggle": {
-    "description": "Auto imported from components/admin/input/toggle.vue"
   },
   "UpdateMessage": {
     "description": "Auto imported from components/admin/messages/UpdateMessage.vue"
@@ -305,14 +305,14 @@
   "UpdateTicker": {
     "description": "Auto imported from components/admin/ticker/updateTicker.vue"
   },
+  "UpdateUnlockCode": {
+    "description": "Auto imported from components/admin/unlock/UpdateUnlockCode.vue"
+  },
   "UpdateUser": {
     "description": "Auto imported from components/admin/users/UpdateUser.vue"
   },
   "UserCartDetails": {
     "description": "Auto imported from components/admin/users/UserCartDetails.vue"
-  },
-  "UpdateUnlockCode": {
-    "description": "Auto imported from components/admin/unlock/UpdateUnlockCode.vue"
   },
   "UpdateVariant": {
     "description": "Auto imported from components/admin/variants/UpdateVariant.vue"

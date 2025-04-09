@@ -17,7 +17,7 @@
       />
       <div class="flex">
         <input
-        :disabled={disabled}
+        :disabled="disabled"
         class="alternate-input shadow"
           type="number"
           @input="$emit('input', $event.target.value)"

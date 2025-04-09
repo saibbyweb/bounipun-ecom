@@ -648,7 +648,7 @@ router.post("/setCookie", (req, res) => {
 /* ip lookup */
 router.post("/ipLookup", userAuth("customer", false), async (req, res) => {
   /* response to be sent back */
-  let response = { resolved: false, countryCode: "SG", dump: {} };
+  let response = { resolved: false, countryCode: "IN", dump: {} };
 
   const { user } = req.body;
   console.log("⌛️ IP Lookup requested for: ", req.ip);

@@ -4745,13 +4745,6 @@ __webpack_require__.d(components_namespaceObject, "HomeSectionHeading", function
 __webpack_require__.d(components_namespaceObject, "ProductCard", function() { return ProductCard; });
 __webpack_require__.d(components_namespaceObject, "Slideshow", function() { return Slideshow; });
 __webpack_require__.d(components_namespaceObject, "UnlockContent", function() { return UnlockContent; });
-__webpack_require__.d(components_namespaceObject, "AddNewItem", function() { return AddNewItem; });
-__webpack_require__.d(components_namespaceObject, "AdminHeader", function() { return AdminHeader; });
-__webpack_require__.d(components_namespaceObject, "CancelUpdate", function() { return CancelUpdate; });
-__webpack_require__.d(components_namespaceObject, "List", function() { return List; });
-__webpack_require__.d(components_namespaceObject, "UpdateCRUD", function() { return UpdateCRUD; });
-__webpack_require__.d(components_namespaceObject, "UploadImage", function() { return UploadImage; });
-__webpack_require__.d(components_namespaceObject, "UploadImageV2", function() { return UploadImageV2; });
 __webpack_require__.d(components_namespaceObject, "CancelOrder", function() { return CancelOrder; });
 __webpack_require__.d(components_namespaceObject, "CartItem", function() { return CartItem; });
 __webpack_require__.d(components_namespaceObject, "DeliveryAddressForm", function() { return DeliveryAddressForm; });
@@ -4767,6 +4760,13 @@ __webpack_require__.d(components_namespaceObject, "LabBlockHeading", function() 
 __webpack_require__.d(components_namespaceObject, "VariantBlockLayout", function() { return VariantBlockLayout; });
 __webpack_require__.d(components_namespaceObject, "InvoiceItem", function() { return InvoiceItem; });
 __webpack_require__.d(components_namespaceObject, "PayeeDetails", function() { return PayeeDetails; });
+__webpack_require__.d(components_namespaceObject, "AddNewItem", function() { return AddNewItem; });
+__webpack_require__.d(components_namespaceObject, "AdminHeader", function() { return AdminHeader; });
+__webpack_require__.d(components_namespaceObject, "CancelUpdate", function() { return CancelUpdate; });
+__webpack_require__.d(components_namespaceObject, "List", function() { return List; });
+__webpack_require__.d(components_namespaceObject, "UpdateCRUD", function() { return UpdateCRUD; });
+__webpack_require__.d(components_namespaceObject, "UploadImage", function() { return UploadImage; });
+__webpack_require__.d(components_namespaceObject, "UploadImageV2", function() { return UploadImageV2; });
 __webpack_require__.d(components_namespaceObject, "UpdateAdmin", function() { return UpdateAdmin; });
 __webpack_require__.d(components_namespaceObject, "UpdateCollectionCategory", function() { return UpdateCollectionCategory; });
 __webpack_require__.d(components_namespaceObject, "UpdateCollection", function() { return UpdateCollection; });
@@ -4780,6 +4780,12 @@ __webpack_require__.d(components_namespaceObject, "UpdateFabric", function() { r
 __webpack_require__.d(components_namespaceObject, "UpdateFAQ", function() { return UpdateFAQ; });
 __webpack_require__.d(components_namespaceObject, "UpdateHomepage", function() { return UpdateHomepage; });
 __webpack_require__.d(components_namespaceObject, "UpdateHomepageLayout", function() { return UpdateHomepageLayout; });
+__webpack_require__.d(components_namespaceObject, "InputBox", function() { return InputBox; });
+__webpack_require__.d(components_namespaceObject, "CBoxes", function() { return CBoxes; });
+__webpack_require__.d(components_namespaceObject, "CheckBoxes", function() { return CheckBoxes; });
+__webpack_require__.d(components_namespaceObject, "SelectBox", function() { return SelectBox; });
+__webpack_require__.d(components_namespaceObject, "TextBox", function() { return TextBox; });
+__webpack_require__.d(components_namespaceObject, "Toggle", function() { return Toggle; });
 __webpack_require__.d(components_namespaceObject, "ColorBlock", function() { return ColorBlock; });
 __webpack_require__.d(components_namespaceObject, "DecideLabBlockDetail", function() { return DecideLabBlockDetail; });
 __webpack_require__.d(components_namespaceObject, "FabricBlock", function() { return FabricBlock; });
@@ -4787,12 +4793,6 @@ __webpack_require__.d(components_namespaceObject, "HeroBlockDetail", function() 
 __webpack_require__.d(components_namespaceObject, "LabColorBoxes", function() { return LabColorBoxes; });
 __webpack_require__.d(components_namespaceObject, "UpdateLab", function() { return UpdateLab; });
 __webpack_require__.d(components_namespaceObject, "VariantBlock", function() { return VariantBlock; });
-__webpack_require__.d(components_namespaceObject, "InputBox", function() { return InputBox; });
-__webpack_require__.d(components_namespaceObject, "CBoxes", function() { return CBoxes; });
-__webpack_require__.d(components_namespaceObject, "CheckBoxes", function() { return CheckBoxes; });
-__webpack_require__.d(components_namespaceObject, "SelectBox", function() { return SelectBox; });
-__webpack_require__.d(components_namespaceObject, "TextBox", function() { return TextBox; });
-__webpack_require__.d(components_namespaceObject, "Toggle", function() { return Toggle; });
 __webpack_require__.d(components_namespaceObject, "UpdateMessage", function() { return UpdateMessage; });
 __webpack_require__.d(components_namespaceObject, "UpdateOrder", function() { return UpdateOrder; });
 __webpack_require__.d(components_namespaceObject, "OrderItem", function() { return OrderItem; });
@@ -4809,9 +4809,9 @@ __webpack_require__.d(components_namespaceObject, "ChooseFabric", function() { r
 __webpack_require__.d(components_namespaceObject, "UpdateProductHelper", function() { return UpdateProductHelper; });
 __webpack_require__.d(components_namespaceObject, "UpdateSale", function() { return UpdateSale; });
 __webpack_require__.d(components_namespaceObject, "UpdateTicker", function() { return UpdateTicker; });
+__webpack_require__.d(components_namespaceObject, "UpdateUnlockCode", function() { return UpdateUnlockCode; });
 __webpack_require__.d(components_namespaceObject, "UpdateUser", function() { return UpdateUser; });
 __webpack_require__.d(components_namespaceObject, "UserCartDetails", function() { return UserCartDetails; });
-__webpack_require__.d(components_namespaceObject, "UpdateUnlockCode", function() { return UpdateUnlockCode; });
 __webpack_require__.d(components_namespaceObject, "UpdateVariant", function() { return UpdateVariant; });
 __webpack_require__.d(components_namespaceObject, "UpdateVariantCategory", function() { return UpdateVariantCategory; });
 
@@ -7173,13 +7173,6 @@ const HomeSectionHeading = () => __webpack_require__.e(/* import() | components/
 const ProductCard = () => __webpack_require__.e(/* import() | components/product-card */ 51).then(__webpack_require__.bind(null, 189)).then(c => wrapFunctional(c.default || c));
 const Slideshow = () => __webpack_require__.e(/* import() | components/slideshow */ 56).then(__webpack_require__.bind(null, 174)).then(c => wrapFunctional(c.default || c));
 const UnlockContent = () => __webpack_require__.e(/* import() | components/unlock-content */ 61).then(__webpack_require__.bind(null, 324)).then(c => wrapFunctional(c.default || c));
-const AddNewItem = () => __webpack_require__.e(/* import() | components/add-new-item */ 3).then(__webpack_require__.bind(null, 157)).then(c => wrapFunctional(c.default || c));
-const AdminHeader = () => Promise.resolve(/* import() */).then(__webpack_require__.bind(null, 100)).then(c => wrapFunctional(c.default || c));
-const CancelUpdate = () => __webpack_require__.e(/* import() | components/cancel-update */ 9).then(__webpack_require__.bind(null, 134)).then(c => wrapFunctional(c.default || c));
-const List = () => __webpack_require__.e(/* import() | components/list */ 41).then(__webpack_require__.bind(null, 152)).then(c => wrapFunctional(c.default || c));
-const UpdateCRUD = () => __webpack_require__.e(/* import() | components/update-c-r-u-d */ 65).then(__webpack_require__.bind(null, 426)).then(c => wrapFunctional(c.default || c));
-const UploadImage = () => __webpack_require__.e(/* import() | components/upload-image */ 90).then(__webpack_require__.bind(null, 166)).then(c => wrapFunctional(c.default || c));
-const UploadImageV2 = () => __webpack_require__.e(/* import() | components/upload-image-v2 */ 91).then(__webpack_require__.bind(null, 167)).then(c => wrapFunctional(c.default || c));
 const CancelOrder = () => __webpack_require__.e(/* import() | components/cancel-order */ 8).then(__webpack_require__.bind(null, 472)).then(c => wrapFunctional(c.default || c));
 const CartItem = () => __webpack_require__.e(/* import() | components/cart-item */ 10).then(__webpack_require__.bind(null, 195)).then(c => wrapFunctional(c.default || c));
 const DeliveryAddressForm = () => __webpack_require__.e(/* import() | components/delivery-address-form */ 21).then(__webpack_require__.bind(null, 629)).then(c => wrapFunctional(c.default || c));
@@ -7195,6 +7188,13 @@ const LabBlockHeading = () => __webpack_require__.e(/* import() | components/lab
 const VariantBlockLayout = () => __webpack_require__.e(/* import() | components/variant-block-layout */ 94).then(__webpack_require__.bind(null, 328)).then(c => wrapFunctional(c.default || c));
 const InvoiceItem = () => __webpack_require__.e(/* import() | components/invoice-item */ 38).then(__webpack_require__.bind(null, 445)).then(c => wrapFunctional(c.default || c));
 const PayeeDetails = () => __webpack_require__.e(/* import() | components/payee-details */ 48).then(__webpack_require__.bind(null, 446)).then(c => wrapFunctional(c.default || c));
+const AddNewItem = () => __webpack_require__.e(/* import() | components/add-new-item */ 3).then(__webpack_require__.bind(null, 157)).then(c => wrapFunctional(c.default || c));
+const AdminHeader = () => Promise.resolve(/* import() */).then(__webpack_require__.bind(null, 100)).then(c => wrapFunctional(c.default || c));
+const CancelUpdate = () => __webpack_require__.e(/* import() | components/cancel-update */ 9).then(__webpack_require__.bind(null, 134)).then(c => wrapFunctional(c.default || c));
+const List = () => __webpack_require__.e(/* import() | components/list */ 41).then(__webpack_require__.bind(null, 152)).then(c => wrapFunctional(c.default || c));
+const UpdateCRUD = () => __webpack_require__.e(/* import() | components/update-c-r-u-d */ 65).then(__webpack_require__.bind(null, 426)).then(c => wrapFunctional(c.default || c));
+const UploadImage = () => __webpack_require__.e(/* import() | components/upload-image */ 90).then(__webpack_require__.bind(null, 166)).then(c => wrapFunctional(c.default || c));
+const UploadImageV2 = () => __webpack_require__.e(/* import() | components/upload-image-v2 */ 91).then(__webpack_require__.bind(null, 167)).then(c => wrapFunctional(c.default || c));
 const UpdateAdmin = () => __webpack_require__.e(/* import() | components/update-admin */ 63).then(__webpack_require__.bind(null, 447)).then(c => wrapFunctional(c.default || c));
 const UpdateCollectionCategory = () => __webpack_require__.e(/* import() | components/update-collection-category */ 67).then(__webpack_require__.bind(null, 449)).then(c => wrapFunctional(c.default || c));
 const UpdateCollection = () => __webpack_require__.e(/* import() | components/update-collection */ 66).then(__webpack_require__.bind(null, 450)).then(c => wrapFunctional(c.default || c));
@@ -7208,6 +7208,12 @@ const UpdateFabric = () => __webpack_require__.e(/* import() | components/update
 const UpdateFAQ = () => __webpack_require__.e(/* import() | components/update-f-a-q */ 72).then(__webpack_require__.bind(null, 456)).then(c => wrapFunctional(c.default || c));
 const UpdateHomepage = () => __webpack_require__.e(/* import() | components/update-homepage */ 74).then(__webpack_require__.bind(null, 457)).then(c => wrapFunctional(c.default || c));
 const UpdateHomepageLayout = () => __webpack_require__.e(/* import() | components/update-homepage-layout */ 75).then(__webpack_require__.bind(null, 458)).then(c => wrapFunctional(c.default || c));
+const InputBox = () => __webpack_require__.e(/* import() | components/input-box */ 34).then(__webpack_require__.bind(null, 121)).then(c => wrapFunctional(c.default || c));
+const CBoxes = () => __webpack_require__.e(/* import() | components/c-boxes */ 7).then(__webpack_require__.bind(null, 336)).then(c => wrapFunctional(c.default || c));
+const CheckBoxes = () => __webpack_require__.e(/* import() | components/check-boxes */ 11).then(__webpack_require__.bind(null, 630)).then(c => wrapFunctional(c.default || c));
+const SelectBox = () => __webpack_require__.e(/* import() | components/select-box */ 55).then(__webpack_require__.bind(null, 140)).then(c => wrapFunctional(c.default || c));
+const TextBox = () => __webpack_require__.e(/* import() | components/text-box */ 58).then(__webpack_require__.bind(null, 124)).then(c => wrapFunctional(c.default || c));
+const Toggle = () => __webpack_require__.e(/* import() | components/toggle */ 60).then(__webpack_require__.bind(null, 129)).then(c => wrapFunctional(c.default || c));
 const ColorBlock = () => __webpack_require__.e(/* import() | components/color-block */ 14).then(__webpack_require__.bind(null, 251)).then(c => wrapFunctional(c.default || c));
 const DecideLabBlockDetail = () => __webpack_require__.e(/* import() | components/decide-lab-block-detail */ 19).then(__webpack_require__.bind(null, 331)).then(c => wrapFunctional(c.default || c));
 const FabricBlock = () => __webpack_require__.e(/* import() | components/fabric-block */ 25).then(__webpack_require__.bind(null, 253)).then(c => wrapFunctional(c.default || c));
@@ -7215,12 +7221,6 @@ const HeroBlockDetail = () => __webpack_require__.e(/* import() | components/her
 const LabColorBoxes = () => __webpack_require__.e(/* import() | components/lab-color-boxes */ 40).then(__webpack_require__.bind(null, 330)).then(c => wrapFunctional(c.default || c));
 const UpdateLab = () => __webpack_require__.e(/* import() | components/update-lab */ 76).then(__webpack_require__.bind(null, 459)).then(c => wrapFunctional(c.default || c));
 const VariantBlock = () => __webpack_require__.e(/* import() | components/variant-block */ 93).then(__webpack_require__.bind(null, 252)).then(c => wrapFunctional(c.default || c));
-const InputBox = () => __webpack_require__.e(/* import() | components/input-box */ 34).then(__webpack_require__.bind(null, 121)).then(c => wrapFunctional(c.default || c));
-const CBoxes = () => __webpack_require__.e(/* import() | components/c-boxes */ 7).then(__webpack_require__.bind(null, 336)).then(c => wrapFunctional(c.default || c));
-const CheckBoxes = () => __webpack_require__.e(/* import() | components/check-boxes */ 11).then(__webpack_require__.bind(null, 630)).then(c => wrapFunctional(c.default || c));
-const SelectBox = () => __webpack_require__.e(/* import() | components/select-box */ 55).then(__webpack_require__.bind(null, 140)).then(c => wrapFunctional(c.default || c));
-const TextBox = () => __webpack_require__.e(/* import() | components/text-box */ 58).then(__webpack_require__.bind(null, 124)).then(c => wrapFunctional(c.default || c));
-const Toggle = () => __webpack_require__.e(/* import() | components/toggle */ 60).then(__webpack_require__.bind(null, 129)).then(c => wrapFunctional(c.default || c));
 const UpdateMessage = () => __webpack_require__.e(/* import() | components/update-message */ 77).then(__webpack_require__.bind(null, 460)).then(c => wrapFunctional(c.default || c));
 const UpdateOrder = () => __webpack_require__.e(/* import() | components/update-order */ 78).then(__webpack_require__.bind(null, 440)).then(c => wrapFunctional(c.default || c));
 const OrderItem = () => __webpack_require__.e(/* import() | components/order-item */ 43).then(__webpack_require__.bind(null, 332)).then(c => wrapFunctional(c.default || c));
@@ -7237,9 +7237,9 @@ const ChooseFabric = () => __webpack_require__.e(/* import() | components/choose
 const UpdateProductHelper = () => __webpack_require__.e(/* import() | components/update-product-helper */ 82).then(__webpack_require__.bind(null, 319)).then(c => wrapFunctional(c.default || c));
 const UpdateSale = () => __webpack_require__.e(/* import() | components/update-sale */ 84).then(__webpack_require__.bind(null, 465)).then(c => wrapFunctional(c.default || c));
 const UpdateTicker = () => __webpack_require__.e(/* import() | components/update-ticker */ 85).then(__webpack_require__.bind(null, 466)).then(c => wrapFunctional(c.default || c));
+const UpdateUnlockCode = () => __webpack_require__.e(/* import() | components/update-unlock-code */ 86).then(__webpack_require__.bind(null, 467)).then(c => wrapFunctional(c.default || c));
 const UpdateUser = () => __webpack_require__.e(/* import() | components/update-user */ 87).then(__webpack_require__.bind(null, 468)).then(c => wrapFunctional(c.default || c));
 const UserCartDetails = () => __webpack_require__.e(/* import() | components/user-cart-details */ 92).then(__webpack_require__.bind(null, 339)).then(c => wrapFunctional(c.default || c));
-const UpdateUnlockCode = () => __webpack_require__.e(/* import() | components/update-unlock-code */ 86).then(__webpack_require__.bind(null, 467)).then(c => wrapFunctional(c.default || c));
 const UpdateVariant = () => __webpack_require__.e(/* import() | components/update-variant */ 88).then(__webpack_require__.bind(null, 470)).then(c => wrapFunctional(c.default || c));
 const UpdateVariantCategory = () => __webpack_require__.e(/* import() | components/update-variant-category */ 89).then(__webpack_require__.bind(null, 469)).then(c => wrapFunctional(c.default || c)); // nuxt/nuxt.js#8607
 
